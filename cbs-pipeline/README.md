@@ -17,17 +17,11 @@ This work has been adapted for NNDSS use cases from a serverless data pipeline f
 
 This pipeline ingests CSV and HL7v2 case notifications from the Azure Gen2 Data Lake, validates them for structure, content, and vocabulary, transforms them into a common data model, and then provisions that data model for access by authorized CDC programs.
 
-## Project Repos
-### Pipeline Repos
-* Azure Data Factory (ADF): https://github.com/cdcent/xlr-cs-pipeline-adf
-* HL7 Messages Structural Validator: https://github.com/cdcent/hl7-structural-validator
-* HL7 library: https://github.com/cdcent/hl7-pet
-### Reporting and CSV Pipeline Repo
-* Data, Analytics and Visualization Templates (DAVT): [https://github.com/cdcent/davt](https://github.com/cdcent/davt)
+## Pipeline Libraries
 
-### Other Repos 
-* HL7 Messages Validator API: https://github.com/cdcent/hl7-validator-api
-* HL7 Messages Validator UI: https://github.com/cdcent/hl7-validator-ui
+* HL7 Messages Structural Validator: https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-structural-validator
+* HL7 library: https://github.com/mscaldas2012/HL7-PET
+
 
 ## Pipeline Overall View
  
