@@ -3,6 +3,9 @@
 ## Overview
 
 A repository for the CDC data exchange building block HL7.
+
+### HL7 Messages Structural Validation
+[hl7-structural-validator](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-structural-validator#hl7-messages-structural-validation)
   
 ## Public Domain Standard Notice
 This repository constitutes a work of the United States Government and is not
