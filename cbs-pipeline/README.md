@@ -25,8 +25,8 @@ This pipeline ingests CSV and HL7v2 case notifications from the Azure Gen2 Data 
 
 ## Pipeline Overall View
  
- ![alt text](./wiki/pipelines_overall.PNG)
+ ![alt text](./docs/img/pipelines_overall.PNG)
 
 ## HL7 Pipeline Overall (In Progress)
  
- ![alt text](./wiki/hl7_pipeline.PNG)
+ ![alt text](./docs/img/hl7_pipeline.PNG)
