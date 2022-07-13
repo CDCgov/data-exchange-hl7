@@ -4,5 +4,8 @@
         "CFPB",
         "ISSO",
         "cybersecurity"
-    ]
+    ],
+    "files.watcherExclude": {
+        "**/target": true
+    }
 }
