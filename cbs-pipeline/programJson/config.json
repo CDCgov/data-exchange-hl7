@@ -1,0 +1,8 @@
+{
+    "dbx_repo_folder": "Example",
+    "database_name": "Example",
+    "table_prefix": "Example",
+    "ingress_folder": "Example",
+    "delta_folder":   "Example",
+    "mmg_folder":     "Example"
+}
