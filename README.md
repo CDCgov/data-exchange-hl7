@@ -6,7 +6,11 @@ A repository for the CDC data exchange building block HL7.
 
 ### HL7 Messages Structural Validation
 [hl7-structural-validator](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-structural-validator#hl7-messages-structural-validation)
+
+### Case-based Surveillance Pipeline
+[cbs-pipeline](https://github.com/CDCgov/data-exchange-hl7/tree/master/cbs-pipeline#case-based-surveillance-pipeline)
   
+
 ## Public Domain Standard Notice
 This repository constitutes a work of the United States Government and is not
 subject to domestic copyright protection under 17 USC § 105. This repository is in
