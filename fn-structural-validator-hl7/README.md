@@ -1,11 +1,15 @@
 # Function HL7 Messages Structural Validation
 
-Cloud function for the HL7 Messages Structural Validation: [hl7-structural-validator](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-structural-validator). 
+Cloud function for the HL7 Messages Structural Validation. 
 
-The assembly .jar is used as library.
+### Library
 
+The __assembly__ .jar created from: [hl7-structural-validator](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-structural-validator) is used as library.
 
-### Install hl7-structural-validator assembly .jar
+Example: 
+- Create assembly .jar
+- Copy assembly .jar to /artifacts
+- Install using Maven:
 
 ```scala
 mvn install:install-file \
