@@ -1,6 +1,6 @@
 package gov.cdc.dataexchange.entModel
 
-object TransformerTemp {
+object TransformerSilverTemp {
 
     // returns tuple3 of: ( obxsEpi, obxNonEpi, otherSegments )
     // obxsEpi -> obxs under the Epi obr OBR-4.1 = 68991-9
@@ -70,7 +70,7 @@ object TransformerTemp {
 
     } // .HL7ToObxsAndSegments
 
-} // TransformerTemp 
+} // TransformerSilverTemp 
 
 
 

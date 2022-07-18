@@ -90,7 +90,7 @@ case class MessageHL7 (
   // TODO: remove once MessageHL7 changes
   def transformToObxLake(message: MessageHL7): MessageHL7 = {
 
-    val (obxsEpi, obxsNonEpi, otherSegments) = TransformerTemp.HL7ToObxsAndSegments(message.content) 
+    val (obxsEpi, obxsNonEpi, otherSegments) = TransformerSilverTemp.HL7ToObxsAndSegments(message.content) 
     
     new MessageHL7(message.content, message.structureValidationReport, Option(obxsEpi), Option(obxsNonEpi), Option(otherSegments))
 
