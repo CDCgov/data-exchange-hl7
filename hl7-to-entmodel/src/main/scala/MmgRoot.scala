@@ -82,7 +82,7 @@ case class MmgRoot (
   id: String,
   mmgType: String,
   guideStatus: Option[String],
-  templateStatus: String,
+  templateStatus: Option[String],
   name: String,
   shortName: String,
   // description: String,

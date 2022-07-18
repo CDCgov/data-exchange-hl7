@@ -10,14 +10,14 @@ import spray.json._
 object Main extends App with MmgJsonProtocol {
   println("running app..")
 
-  val hl7MessageLoc = "src/main/resources/" + "Genv2_2-0-1_TC01.txt"
+  val hl7MessageLoc = "src/main/resources/" + "Lyme_TBRD_1.txt"
   val hl7MessageContent = Source.fromFile(hl7MessageLoc).getLines.mkString("\n")
 
   val hl7 = new MessageHL7(hl7MessageContent)
   val hl7WithReport1 = hl7.validateStructure(hl7)
   val hl7AtLake = hl7WithReport1.transformToObxLake(hl7WithReport1)
 
-  val mmgProfile = "Generic_MMG_V2.0" // "RIBD_MMG_V1.1" // 
+  val mmgProfile = "Lyme_TBRD_MMG_V1.0" // "Generic_MMG_V2.0" // "RIBD_MMG_V1.1" // 
   val mmgLoc = "src/main/resources/" + mmgProfile + ".json"
   val mmgJson = Source.fromFile(mmgLoc).getLines.mkString("\n")
 

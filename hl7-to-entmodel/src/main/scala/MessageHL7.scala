@@ -10,6 +10,8 @@ import ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import java.util.concurrent.TimeUnit
 
+import java.util.Base64
+import java.nio.charset.StandardCharsets
 
 case class MessageHL7 (
   /*override*/ val content: String,
@@ -26,7 +28,7 @@ case class MessageHL7 (
 
 
   // Gold
-  val entModel: Option[Map[String, Equals]] = None,
+  val mmgBasedModel: Option[Map[String, Equals]] = None,
 
   // TODO: only keep segments and no loger above 
   val segments:  Option[Seq[Tuple3[String, Seq[String], Seq[String]]]] = None,
@@ -107,7 +109,11 @@ case class MessageHL7 (
 
     val entModel = TransformerGoldTemp.obxsEpiToCDM(message.obxsEpi.get, mmgSeq) 
 
-    new MessageHL7(message.content, 
+
+    val contentBase64 = Base64.getEncoder.encodeToString(message.content.getBytes(StandardCharsets.UTF_8))
+
+
+    new MessageHL7(contentBase64, 
               message.structureValidationReport,
               message.obxsEpi, 
               message.obxsNonEpi, 
