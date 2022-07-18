@@ -29,6 +29,8 @@ libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % 
 
 libraryDependencies += "io.spray" %%  "spray-json" % "1.3.6"
 
+libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.10.5.1"
+libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.0"
 
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the scala-parser-combinators dependency to the set of dependencies

@@ -1,6 +1,9 @@
 package gov.cdc.dataexchange.entModel
 
 import cdc.xlr.structurevalidator._
+import gov.nist.validation.report.{ Report, Entry }
+import scala.collection.JavaConverters._
+
 import scala.util.{Try, Failure, Success}
 import scala.concurrent._
 import ExecutionContext.Implicits.global
@@ -10,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 case class MessageHL7 (
   /*override*/ val content: String,
-  val structureValidationReport: Option[String] = None,
+  val structureValidationReport: Option[Map[String, List[Entry]]] = None,
   val contentValidationReport: Option[String] = None,
 
   // Silver
@@ -36,9 +39,30 @@ case class MessageHL7 (
     
     val validator = StructureValidator()
 
-    Try( Await.result(validator.validate(message.content), Duration(2, TimeUnit.SECONDS)) ) match {
+    Try( Await.result(validator.validateToReport(message.content), Duration(2, TimeUnit.SECONDS)) ) match {
 
-      case Success( report ) => new MessageHL7(message.content, Option(report)) // message with report
+      case Success( report ) => {
+        
+        val reportMap = report.getEntries().asScala.mapValues(_.asScala.toList)
+
+        
+            val errClsf = "Error"
+            val warnClsf = "Warning"
+
+            val reportMapFiltered = Map(
+              // details 
+              "structureErrors" -> reportMap("structure").filter(_.getClassification.equalsIgnoreCase(errClsf))/*.map(_.toText)*/,
+              "structureWarnings" -> reportMap("structure").filter(_.getClassification.equalsIgnoreCase(warnClsf))/*.map(_.toText)*/,
+
+              "valueSetErrors" -> reportMap("value-set").filter(_.getClassification.equalsIgnoreCase(errClsf))/*.map(_.toText)*/,
+              "valueSetWarnings" -> reportMap("value-set").filter(_.getClassification.equalsIgnoreCase(warnClsf))/*.map(_.toText)*/,
+
+              "contentErrors" -> reportMap("content").filter(_.getClassification.equalsIgnoreCase(errClsf))/*.map(_.toText)*/,
+              "contentWarnings" -> reportMap("content").filter(_.getClassification.equalsIgnoreCase(warnClsf))/*.map(_.toText)*/,
+            ) // .Map 
+
+         new MessageHL7(message.content, Option(reportMapFiltered)) // message with report
+      } // .Success
 
       case Failure( err ) => {
         println("Error structure validation: ", err.getMessage )
@@ -65,11 +89,13 @@ case class MessageHL7 (
 } // .MessageHL7
 
 
-import spray.json._
-import DefaultJsonProtocol._ 
+// import spray.json._
+// import DefaultJsonProtocol._ 
 
-trait MessageHL7JsonProtocol extends DefaultJsonProtocol {
 
-  implicit val messageHL7Format: JsonFormat[MessageHL7] = jsonFormat11(MessageHL7)
+// trait MessageHL7JsonProtocol extends DefaultJsonProtocol {
 
-} // .MessageHL7JsonProtocol
+//   implicit val messageHL7Format: JsonFormat[MessageHL7] = jsonFormat11(MessageHL7)
+//   implicit val entryFormat: JsonFormat[Entry] = jsonFormat1(Entry)
+
+// } // .MessageHL7JsonProtocol

@@ -4,11 +4,12 @@ package cdc.xlr.structurevalidator
 import scala.io.Source
 import java.io.{File, PrintWriter}
 
-import scala.util.{Failure, Success}
+import scala.util.{Try, Failure, Success}
 
 import scala.concurrent._
 import ExecutionContext.Implicits.global
-
+import scala.concurrent.duration._
+import java.util.concurrent.TimeUnit
 
 object Main {
 
@@ -27,14 +28,20 @@ object Main {
             time {
                 // the async Validator
                 val validator = StructureValidator()
-                val result = validator.validate(testMsg) onComplete {
-                    case Success(report) => {
-                        // println("report")
+
+                Try( Await.result(validator.validate(testMsg), Duration(2, TimeUnit.SECONDS)) ) match {
+
+                    case Success( report ) => {
+                        println("report", report)
                         println("Structure Validator - writing report to file: src/main/resources/hl7messages/validation_report.json")
-                        writeToFile("src/main/resources/hl7messages/" + fileName + "_validation_report.json", report)
-                    } // .Success
-                    case Failure(err) => println(err.getMessage)
-                } // .result
+                        // writeToFile("src/main/resources/hl7messages/" + fileName + "_validation_report.json", report)
+                    } // .Success 
+
+                    case Failure( err ) => {
+                        println("Error structure validation: ", err.getMessage )
+                    } // .Failure
+
+                } // .Try  
 
                 // // the sync Validator
                 // val validator = StructureValidatorSync()

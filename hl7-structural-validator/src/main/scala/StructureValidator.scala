@@ -14,6 +14,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.util.{Failure, Success}
+import gov.nist.validation.report.Report
 
 
 class StructureValidator(val profile: Profile, val valueSets: ValueSetLibrary, val confContext: ConformanceContext) {
@@ -23,6 +24,16 @@ class StructureValidator(val profile: Profile, val valueSets: ValueSetLibrary, v
 
     // returns Future[String] the JSON validation report or the error
     def validate(hl7Message: String): Future[String] = {
+
+      validateToMap(hl7Message) transform ({
+        case Success(value) => Success(JsonUtil.toJson(value))
+        case Failure( err ) => Failure( err ) // err.getMessage 
+      })
+
+    } // .validate
+
+    // returns Future[Map[String, Any]]  the JSON validation report or the error
+    def validateToMap(hl7Message: String): Future[Map[String, Any]] = {
 
         validator.validate(hl7Message, validator.profile.messages.keySet.head) transform ({
 
@@ -57,14 +68,21 @@ class StructureValidator(val profile: Profile, val valueSets: ValueSetLibrary, v
               "contentWarnings" -> reportMap("content").filter(_.getClassification.equalsIgnoreCase(warnClsf))/*.map(_.toText)*/,
             ) // .Map
 
-           Success( JsonUtil.toJson(reportMapFiltered) )
+           Success(reportMapFiltered)
           } // .Success 
 
           case Failure( err ) => Failure( err ) // err.getMessage
             
         }) // .transform
 
-    } // .validate
+    } // .validateToMap
+
+    // returns Future[Map[String, Any]]  the JSON validation report or the error
+    def validateToReport(hl7Message: String): Future[Report] = {
+
+      validator.validate(hl7Message, validator.profile.messages.keySet.head)
+        
+    } // .validateToReport
 
 } // .StructureValidator
 

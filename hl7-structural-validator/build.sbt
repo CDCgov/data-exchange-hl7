@@ -1,5 +1,5 @@
 name := "cdc.xlr.hl7.structurevalidator"
-version := "0.3.1"
+version := "0.3.3"
 
 organization     := "gov.cdc"
 

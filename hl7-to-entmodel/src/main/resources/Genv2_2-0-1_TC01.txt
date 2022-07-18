@@ -9,7 +9,7 @@ OBX|5|TS|77976-9^Illness End Date^LN||20140302||||||F
 OBX|6|SN|77977-7^Illness Duration^LN||^6|d^day [time]^UCUM|||||F
 OBX|7|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
 OBX|8|TS|77975-1^Diagnosis Date^LN||20140225||||||F
-OBX|9|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|report_test_error|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
 OBX|10|TS|8656-1^Admission Date^LN||20140226||||||F
 OBX|11|TS|8649-6^Discharge Date^LN||20140302||||||F
 OBX|12|SN|78033-8^Duration of Hospital Stay in Days^LN||^4||||||F
