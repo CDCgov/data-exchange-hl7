@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit
 case class MessageHL7 (
   /*override*/ val content: String,
   val structureValidationReport: Option[Map[String, List[Entry]]] = None,
-  val contentValidationReport: Option[String] = None,
 
   // Silver
   // TODO: remove and change to Lake Of Segments
@@ -27,6 +26,9 @@ case class MessageHL7 (
 
   // Gold
   val entModel: Option[Map[String, String]] = None,
+
+  //
+  val contentValidationReport: Option[String] = None,
 
   // Config
   val mmgSeq:  Option[Seq[Seq[String]]] = None,
@@ -73,18 +75,24 @@ case class MessageHL7 (
 
   } // .validateStructure 
 
-  def isValidStructure(message: Message): Option[Message] = Option(message) 
+  def isValidStructure(message: MessageHL7): Option[MessageHL7] = Option(message) 
 
-  def validateContent(message: Message): Message = ???
+  def validateContent(message: MessageHL7): MessageHL7 = ???
 
-  def isValidContent(message: Message): Option[Message] = Option(message) 
+  def isValidContent(message: MessageHL7): Option[MessageHL7] = Option(message) 
 
-  def transformToSegmLake(message: Message): Message = ???
+  def transformToSegmLake(message: MessageHL7): MessageHL7 = ???
 
   // TODO: remove once MessageHL7 changes
-  // def transformToObxLake(message: Message): Message = ???
+  def transformToObxLake(message: MessageHL7): MessageHL7 = {
 
-  def transformToEntModel(message: Message): Message = ???
+    val (obxsEpi, obxsNonEpi, otherSegments) = TransformerTemp.HL7ToObxsAndSegments(message.content) 
+    
+    new MessageHL7(message.content, message.structureValidationReport, Option(obxsEpi), Option(obxsNonEpi), Option(otherSegments))
+
+  } // transformToObxLake
+
+  def transformToEntModel(message: MessageHL7): MessageHL7 = ???
 
 } // .MessageHL7
 

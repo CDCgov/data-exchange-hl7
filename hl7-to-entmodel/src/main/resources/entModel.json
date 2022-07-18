@@ -1,0 +1,312 @@
+{
+    "content": "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO\nPID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302\nOBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND\nOBX|1|ST|32624-9^Other Race Text^LN||Apache||||||F\nOBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\nOBX|3|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\nOBX|4|TS|11368-8^Date of Illness Onset^LN||20140224||||||F\nOBX|5|TS|77976-9^Illness End Date^LN||20140302||||||F\nOBX|6|SN|77977-7^Illness Duration^LN||^6|d^day [time]^UCUM|||||F\nOBX|7|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F\nOBX|8|TS|77975-1^Diagnosis Date^LN||20140225||||||F\nOBX|report_test_error|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F\nOBX|10|TS|8656-1^Admission Date^LN||20140226||||||F\nOBX|11|TS|8649-6^Discharge Date^LN||20140302||||||F\nOBX|12|SN|78033-8^Duration of Hospital Stay in Days^LN||^4||||||F\nOBX|13|CWE|77978-5^Subject Died^LN||Y^Yes^HL70136||||||F\nOBX|14|ST|77993-4^State Case Identifier^LN||TX4321||||||F\nOBX|15|ST|77997-5^Legacy Case Identifier^LN||48432148S012014||||||F\nOBX|16|SN|77998-3^Age at Case Investigation^LN||^49|a^year [time]^UCUM|||||F\nOBX|17|CWE|77982-7^Case Disease Imported Code^LN||C1512888^International^UML||||||F\nOBX|18|CWE|INV153^Imported Country^PHINQUESTION||MEX^MEXICO^ISO3166_1||||||F\nOBX|19|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\nOBX|20|CWE|77985-0^State or Province of Exposure^LN|1|48^Texas^FIPS5_2||||||F\nOBX|21|ST|77986-8^City of Exposure^LN|1|Houston||||||F\nOBX|22|ST|77987-6^County of Exposure^LN|1|Harris||||||F\nOBX|23|CWE|77989-2^Transmission Mode^LN||416086007^Food-borne transmission^SCT||||||F\nOBX|24|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F\nOBX|25|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F\nOBX|26|CWE|77980-1^Case Outbreak Indicator^LN||Y^Yes^HL70136||||||F\nOBX|27|ST|77981-9^Case Outbreak Name^LN||HANSENOUTB1||||||F\nOBX|28|ST|77969-4^Jurisdiction Code^LN||S01||||||F\nOBX|29|CWE|48766-0^Reporting Source Type Code^LN||1^Hospital^HL70406||||||F\nOBX|30|ST|52831-5^Reporting Source ZIP Code^LN||77018||||||F\nOBX|31|CWE|77988-4^Binational Reporting Criteria^LN||PHC1140^Exposure to suspected product from Canada or Mexico^CDCPHINVS||||||F\nOBX|32|ST|74549-7^Person Reporting to CDC - Name^LN||Smith, John||||||F\nOBX|33|ST|74548-9^Person Reporting to CDC - Phone Number^LN||444-321-1234||||||F\nOBX|34|ST|74547-1^Person Reporting to CDC - Email^LN||jsmith@txdoh.org||||||F\nOBX|35|DT|77979-3^Case Investigation Start Date^LN||20140225||||||F\nOBX|36|DT|77995-9^Date Reported^LN||20140225||||||F\nOBX|37|TS|77972-8^Earliest Date Reported to County^LN||20140225||||||F\nOBX|38|TS|77973-6^Earliest Date Reported to State^LN||20140225||||||F\nOBX|39|SN|77991-8^MMWR Week^LN||^9||||||F\nOBX|40|DT|77992-6^MMWR Year^LN||2014||||||F\nOBX|41|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20140225||||||F\nOBX|42|DT|77970-2^Date First Reported to PHD^LN||20140225||||||F\nOBX|43|CWE|77966-0^Reporting State^LN||48^Texas^FIPS5_2||||||F\nOBX|44|CWE|77967-8^Reporting County^LN||48201^Harris, TX^FIPS6_4||||||F\nOBX|45|CWE|77968-6^National Reporting Jurisdiction^LN||48^TX^FIPS5_2||||||F",
+    "structureValidationReport": {
+        "contentWarnings": [],
+        "valueSetErrors": [],
+        "valueSetWarnings": [],
+        "structureWarnings": [],
+        "structureErrors": [
+            {
+                "line": 12,
+                "column": 5,
+                "path": "OBX[9]-1[1]",
+                "description": "report_test_error is not a valid Number. The format should be: [+|-]digits[.digits]",
+                "category": "Format",
+                "classification": "Error",
+                "stackTrace": null,
+                "metaData": null
+            },
+            {
+                "line": 12,
+                "column": 5,
+                "path": "OBX[9]-1[1]",
+                "description": "The length of Field OBX-1 (Set ID - OBX) must be within the range [0, 4]. Value = 'report_test_error'",
+                "category": "Length",
+                "classification": "Error",
+                "stackTrace": null,
+                "metaData": null
+            }
+        ],
+        "contentErrors": []
+    },
+    "obxsEpi": [
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|1|ST|32624-9^Other Race Text^LN||Apache||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|3|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|4|TS|11368-8^Date of Illness Onset^LN||20140224||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|5|TS|77976-9^Illness End Date^LN||20140302||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|6|SN|77977-7^Illness Duration^LN||^6|d^day [time]^UCUM|||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|7|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|8|TS|77975-1^Diagnosis Date^LN||20140225||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|report_test_error|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|10|TS|8656-1^Admission Date^LN||20140226||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|11|TS|8649-6^Discharge Date^LN||20140302||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|12|SN|78033-8^Duration of Hospital Stay in Days^LN||^4||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|13|CWE|77978-5^Subject Died^LN||Y^Yes^HL70136||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|14|ST|77993-4^State Case Identifier^LN||TX4321||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|15|ST|77997-5^Legacy Case Identifier^LN||48432148S012014||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|16|SN|77998-3^Age at Case Investigation^LN||^49|a^year [time]^UCUM|||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|17|CWE|77982-7^Case Disease Imported Code^LN||C1512888^International^UML||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|18|CWE|INV153^Imported Country^PHINQUESTION||MEX^MEXICO^ISO3166_1||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|19|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|20|CWE|77985-0^State or Province of Exposure^LN|1|48^Texas^FIPS5_2||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|21|ST|77986-8^City of Exposure^LN|1|Houston||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|22|ST|77987-6^County of Exposure^LN|1|Harris||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|23|CWE|77989-2^Transmission Mode^LN||416086007^Food-borne transmission^SCT||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|24|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|25|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|26|CWE|77980-1^Case Outbreak Indicator^LN||Y^Yes^HL70136||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|27|ST|77981-9^Case Outbreak Name^LN||HANSENOUTB1||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|28|ST|77969-4^Jurisdiction Code^LN||S01||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|29|CWE|48766-0^Reporting Source Type Code^LN||1^Hospital^HL70406||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|30|ST|52831-5^Reporting Source ZIP Code^LN||77018||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|31|CWE|77988-4^Binational Reporting Criteria^LN||PHC1140^Exposure to suspected product from Canada or Mexico^CDCPHINVS||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|32|ST|74549-7^Person Reporting to CDC - Name^LN||Smith, John||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|33|ST|74548-9^Person Reporting to CDC - Phone Number^LN||444-321-1234||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|34|ST|74547-1^Person Reporting to CDC - Email^LN||jsmith@txdoh.org||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|35|DT|77979-3^Case Investigation Start Date^LN||20140225||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|36|DT|77995-9^Date Reported^LN||20140225||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|37|TS|77972-8^Earliest Date Reported to County^LN||20140225||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|38|TS|77973-6^Earliest Date Reported to State^LN||20140225||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|39|SN|77991-8^MMWR Week^LN||^9||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|40|DT|77992-6^MMWR Year^LN||2014||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|41|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20140225||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|42|DT|77970-2^Date First Reported to PHD^LN||20140225||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|43|CWE|77966-0^Reporting State^LN||48^Texas^FIPS5_2||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|44|CWE|77967-8^Reporting County^LN||48201^Harris, TX^FIPS6_4||||||F"
+        ],
+        [
+            "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC01_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "PID|1||GenV2_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19640502|F||2106-3^White^CDCREC|^^^48^77018^^^^48201|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20140302",
+            "OBR|1||GenV2_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140227170100|||||||||||||||20140227170100|||F||||||11550^Hemolytic uremic syndrome postdiarrheal^NND",
+            "OBX|45|CWE|77968-6^National Reporting Jurisdiction^LN||48^TX^FIPS5_2||||||F"
+        ]
+    ],
+    "obxsNonEpi": [],
+    "otherSegments": [],
+    "segments": null,
+    "entModel": null,
+    "contentValidationReport": null,
+    "mmgSeq": null,
+    "vocabularyEntries": null,
+    "vocabulary": null
+}
