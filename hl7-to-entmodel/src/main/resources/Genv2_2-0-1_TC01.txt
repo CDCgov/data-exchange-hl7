@@ -46,3 +46,6 @@ OBX|42|DT|77970-2^Date First Reported to PHD^LN||20140225||||||F
 OBX|43|CWE|77966-0^Reporting State^LN||48^Texas^FIPS5_2||||||F
 OBX|44|CWE|77967-8^Reporting County^LN||48201^Harris, TX^FIPS6_4||||||F
 OBX|45|CWE|77968-6^National Reporting Jurisdiction^LN||48^TX^FIPS5_2||||||F
+OBR|2|xyz123457|PER9700123-1^Lab^2.16.840.1.113883.19.3.1.6^ISO|9363-3^B pert IgG Ser-aCnc^LN|||20150608170100|||||||||||||||20150608170100|||F
+OBX|1|CWE|9363-3^B pert IgG Ser-aCnc^LN||10828004^Positive^SCT||Negative|POS|||F|||20150607|||0101^Immunoassay^OBSMETHOD||20150607||||Arup Laboratories
+SPM|1|||119364003^Serum specimen (specimen)^SCT||||120579003^Vein part (body structure)^SCT|||P^Patient^HL70369||||||20150607||

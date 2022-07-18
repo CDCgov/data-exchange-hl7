@@ -18,19 +18,24 @@ object Main extends App with MmgJsonProtocol {
   val hl7AtLake = hl7WithReport1.transformToObxLake(hl7WithReport1)
   println(JsonUtil.toJson(hl7AtLake))
 
+  val mmgProfile = "Generic_MMG_V2.0" // "RIBD_MMG_V1.1" // 
 
-   writeToFile("src/main/resources/entModel.json", JsonUtil.toJson(hl7AtLake))
+  val mmgLoc = "src/main/resources/" + mmgProfile + ".json"
+  val mmgJson = Source.fromFile(mmgLoc).getLines.mkString("\n")
+
+  println(mmgJson.parseJson.convertTo[MmgRoot])
+
   
-  // val mmgProfile = "RIBD_MMG_V1.1" // "Generic_MMG_V2.0"
-  // val mmgLoc = "src/main/resources/" + mmgProfile + ".json"
-  // val mmgJson = Source.fromFile(mmgLoc).getLines.mkString("\n")
+  writeToFile("src/main/resources/entModel.json", JsonUtil.toJson(hl7AtLake))
+  
 
-  // println(mmgJson.parseJson.convertTo[MmgRoot])
+
+
   def writeToFile(p: String, s: String): Unit = {
       val pw = new PrintWriter(new File(p))
       try pw.write(s) finally pw.close()
   } // 
-  
+
 } // .App
 
 

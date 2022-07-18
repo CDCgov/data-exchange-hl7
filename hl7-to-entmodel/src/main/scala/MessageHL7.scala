@@ -33,7 +33,11 @@ case class MessageHL7 (
   // Config
   val mmgSeq:  Option[Seq[Seq[String]]] = None,
   val vocabularyEntries: Option[Seq[String]]  = None,
-  val vocabulary: Option[Map[String, Seq[(String, String, String)]]]  = None
+  val vocabulary: Option[Map[String, Seq[(String, String, String)]]]  = None,
+
+  // Last Flag
+  val LastFlag: Option[Boolean] = Option(true),
+  val messageSequencingOrder: Option[Int] = Option(1),
 
 ) /*extends Message*/ {
 
