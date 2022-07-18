@@ -21,17 +21,20 @@ case class MessageHL7 (
   val obxsNonEpi:  Option[Seq[(String, String, (String, Int), (String, Int))]] = None,
   val otherSegments:   Option[Seq[(String, String, (String, Int))]] = None,
 
+  // Config
+  val mmgSeq:  Option[Seq[Seq[String]]] = None,
+
+
+  // Gold
+  val entModel: Option[Map[String, Equals]] = None,
+
   // TODO: only keep segments and no loger above 
   val segments:  Option[Seq[Tuple3[String, Seq[String], Seq[String]]]] = None,
 
-  // Gold
-  val entModel: Option[Map[String, String]] = None,
-
-  //
+  // Gold - Cvr
   val contentValidationReport: Option[String] = None,
 
   // Config
-  val mmgSeq:  Option[Seq[Seq[String]]] = None,
   val vocabularyEntries: Option[Seq[String]]  = None,
   val vocabulary: Option[Map[String, Seq[(String, String, String)]]]  = None,
 
@@ -92,11 +95,27 @@ case class MessageHL7 (
 
     val (obxsEpi, obxsNonEpi, otherSegments) = TransformerSilverTemp.HL7ToObxsAndSegments(message.content) 
     
-    new MessageHL7(message.content, message.structureValidationReport, Option(obxsEpi), Option(obxsNonEpi), Option(otherSegments))
+    new MessageHL7(message.content, 
+                  message.structureValidationReport,
+                  Option(obxsEpi), 
+                  Option(obxsNonEpi), 
+                  Option(otherSegments))
 
   } // transformToObxLake
 
-  def transformToEntModel(message: MessageHL7): MessageHL7 = ???
+  def transformToEntModel(message: MessageHL7, mmgSeq: Seq[Seq[String]]): MessageHL7 = {
+
+    val entModel = TransformerGoldTemp.obxsEpiToCDM(message.obxsEpi.get, mmgSeq) 
+
+    new MessageHL7(message.content, 
+              message.structureValidationReport,
+              message.obxsEpi, 
+              message.obxsNonEpi, 
+              message.otherSegments,
+              Option(mmgSeq),
+              entModel,
+              )
+  } // .transformToEntModel
 
 } // .MessageHL7
 

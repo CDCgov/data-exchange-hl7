@@ -3,7 +3,8 @@ package gov.cdc.dataexchange.entModel
 object TransformerGoldTemp {
 
     // returns: ( obxsEpiNotInMmg, cdm )
-    def obxsEpiToCDM( obxsEpi: Seq[(String, String, String, String)], mmgSeq: Seq[Seq[String]] ) = {
+    def obxsEpiToCDM( obxsEpi: Seq[(String, String, String, String)], mmgSeq: Seq[Seq[String]] ): 
+        Option[Map[String, Equals]] = {
         
         // TODO: guard on existing profiles
     
@@ -13,7 +14,7 @@ object TransformerGoldTemp {
         // 10 elemSetVersionNumber, 11 elemIdentifier, 12 elemSegmentType, 13 elemFieldPosition, 14 elemComponentPosition, 
         // 15 elemCardinality, 16 hl7v2DataType, 17 - codeSystem, 18 blkNameStd, 19 elemNameStd 
 
-
+        if ( mmgSeq == null) { return None }
         // making quick access maps from mmg rows
         val mmgObxIdentifierMap = mmgSeq.map( ml => {
         ( ml(11), ml )  // ml(11) elemIdentifier, ml one mmg line
@@ -36,7 +37,7 @@ object TransformerGoldTemp {
         }) // .val
     
         obxsEpiInMmg.length match {
-        case 0 => ( obxsEpiInMmg, obxsEpiNotInMmg, null, null, null, null, null )
+        case 0 => None //( obxsEpiInMmg, obxsEpiNotInMmg, null, null, null, null, null )
         
         // there is obx info to convert to cdm:
         case _ => {
@@ -306,12 +307,12 @@ object TransformerGoldTemp {
             // .OBX
 
 
-            // val cdm = mshDataElemMap ++ pidDataElemMap ++ obrDataElemMap ++ obxDataElemMapSingles ++ obxDataElemRepBlks 
+            val cdm = mshDataElemMap ++ pidDataElemMap ++ obrDataElemMap ++ obxDataElemMapSingles ++ obxDataElemRepBlks 
 
             // TODO: add element component position to pidDataElemMap and obrDataElemMap -> change type -> UnsupportedOperationException: Schema for type java.io.Serializable is not supported
 
-            ( obxsEpiInMmg, obxsEpiNotInMmg, mshDataElemMap, pidDataElemMap, obrDataElemMap, obxDataElemMapSingles, obxDataElemRepBlks )
-
+            // ( obxsEpiInMmg, obxsEpiNotInMmg, mshDataElemMap, pidDataElemMap, obrDataElemMap, obxDataElemMapSingles, obxDataElemRepBlks )
+            Option(cdm)
         } // .case _ 
         } // .obxsEpiInMmg.length
 

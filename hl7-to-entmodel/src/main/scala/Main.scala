@@ -16,19 +16,29 @@ object Main extends App with MmgJsonProtocol {
   val hl7 = new MessageHL7(hl7MessageContent)
   val hl7WithReport1 = hl7.validateStructure(hl7)
   val hl7AtLake = hl7WithReport1.transformToObxLake(hl7WithReport1)
-  println(JsonUtil.toJson(hl7AtLake))
 
   val mmgProfile = "Generic_MMG_V2.0" // "RIBD_MMG_V1.1" // 
-
   val mmgLoc = "src/main/resources/" + mmgProfile + ".json"
   val mmgJson = Source.fromFile(mmgLoc).getLines.mkString("\n")
 
-  println(mmgJson.parseJson.convertTo[MmgRoot])
+  val mmgRoot = mmgJson.parseJson.convertTo[MmgRoot]
 
-  
-  writeToFile("src/main/resources/entModel.json", JsonUtil.toJson(hl7AtLake))
-  
+  val mmgSeq = mmgRoot.blocks.flatMap( block => {
+    block.elements.map( el => {
+      new Mmg(mmgRoot.profileIdentifier, block.name, block.blockType, block.ordinal, block.id, 
+              el.name, el.ordinal, el.dataType, el.isRepeat, el.valueSetCode, el.valueSetVersionNumber, 
+              el.mappings.hl7v251.identifier, el.mappings.hl7v251.segmentType, el.mappings.hl7v251.fieldPosition, 
+              el.mappings.hl7v251.componentPosition,
+              el.mappings.hl7v251.cardinality, el.mappings.hl7v251.dataType, el.codeSystem ).toSeqLine()
+    })
+  })
 
+  val hl7EntModel = hl7AtLake.transformToEntModel(hl7AtLake, mmgSeq) 
+
+  println(JsonUtil.toJson(hl7EntModel))
+ 
+
+  writeToFile("src/main/resources/entModel.json", JsonUtil.toJson(hl7EntModel))
 
 
   def writeToFile(p: String, s: String): Unit = {

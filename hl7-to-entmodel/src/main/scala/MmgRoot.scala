@@ -52,7 +52,7 @@ case class Elements (
   valueSetCode: Option[String],
   mappings: Mappings,
   // defaultValue: DefaultValue,
-  // valueSetVersionNumber: Option[Int],
+  valueSetVersionNumber: Option[Int],
   // relatedElementId: Option[String],
   // legacyCodeSystem: Option[String]
 )
@@ -145,7 +145,7 @@ trait MmgJsonProtocol extends DefaultJsonProtocol {
 
   implicit val hl7V251Format: JsonFormat[Hl7V251] = jsonFormat10(Hl7V251)
   implicit val mappingsFormat: JsonFormat[Mappings] = jsonFormat1(Mappings)
-  implicit val elementsFormat: JsonFormat[Elements] = jsonFormat19(Elements)
+  implicit val elementsFormat: JsonFormat[Elements] = jsonFormat20(Elements)
 
   implicit val blocksFormat: JsonFormat[Blocks] = jsonFormat6(Blocks)
   implicit val mmgRootFormat: JsonFormat[MmgRoot] = jsonFormat15(MmgRoot)
