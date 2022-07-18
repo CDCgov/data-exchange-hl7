@@ -4,6 +4,7 @@
 
 # metals
 project/metals.sbt
+project/project/metals.sbt
 .metals
 
 # vs code
