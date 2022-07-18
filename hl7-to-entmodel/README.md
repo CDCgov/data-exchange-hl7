@@ -1,0 +1,1 @@
+This is a proof of concept for an HL7 mmg based model and reports.
