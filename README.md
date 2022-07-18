@@ -6,11 +6,11 @@ A repository for the CDC data exchange building block HL7.
 
 #### HL7 Messages Structural Validation
 - Structural validation of HL7 messages:
-[hl7-structural-validator](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-structural-validator#hl7-messages-structural-validation)
+[hl7-structural-validator](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-structural-validator)
 
 #### Function HL7 Messages Structural Validation
 - Structural validation of HL7 messages - cloud function:
-[fn-structural-validator-hl7](https://github.com/CDCgov/data-exchange-hl7/tree/master/fn-structural-validator-hl7)
+[fn-hl7-structural-validator](https://github.com/CDCgov/data-exchange-hl7/tree/master/fn-hl7-structural-validator)
 
 #### Case-based Surveillance Pipeline
 - Code for a case-based surveillance data pipeline proof-of-concept:
