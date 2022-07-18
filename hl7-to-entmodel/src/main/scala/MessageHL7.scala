@@ -1,8 +1,15 @@
 package gov.cdc.dataexchange.entModel
 
+import cdc.xlr.structurevalidator._
+import scala.util.{Try, Failure, Success}
+import scala.concurrent._
+import ExecutionContext.Implicits.global
+import scala.concurrent.duration._
+import java.util.concurrent.TimeUnit
+
 
 case class MessageHL7 (
-  override val content: String,
+  /*override*/ val content: String,
   val structureValidationReport: Option[String] = None,
   val contentValidationReport: Option[String] = None,
 
@@ -23,9 +30,24 @@ case class MessageHL7 (
   val vocabularyEntries: Option[Seq[String]]  = None,
   val vocabulary: Option[Map[String, Seq[(String, String, String)]]]  = None
 
-) extends Message {
+) /*extends Message*/ {
 
-  def validateStructure(message: Message): Message = ??? 
+  def validateStructure(message: MessageHL7): MessageHL7 = {
+    
+    val validator = StructureValidator()
+
+    Try( Await.result(validator.validate(message.content), Duration(2, TimeUnit.SECONDS)) ) match {
+
+      case Success( report ) => new MessageHL7(message.content, Option(report)) // message with report
+
+      case Failure( err ) => {
+        println("Error structure validation: ", err.getMessage )
+        message // return message as is
+      } // .Failure
+
+    } // .Try   
+
+  } // .validateStructure 
 
   def isValidStructure(message: Message): Option[Message] = Option(message) 
 

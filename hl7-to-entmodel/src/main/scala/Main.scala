@@ -12,7 +12,8 @@ object Main extends App with MmgJsonProtocol with MessageHL7JsonProtocol {
   val hl7MessageContent = Source.fromFile(hl7MessageLoc).getLines.mkString("\n")
 
   val hl7 = new MessageHL7(hl7MessageContent)
-  println(hl7.toJson)
+  val hl7WithReport1 = hl7.validateStructure(hl7)
+  println(hl7WithReport1.toJson)
 
   
   // val mmgProfile = "RIBD_MMG_V1.1" // "Generic_MMG_V2.0"
