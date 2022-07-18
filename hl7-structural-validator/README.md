@@ -22,6 +22,8 @@ $ sbt
 ```
 
 # Example Usage
+Add (assembly) .jar as library to the project. The compiled assembly .jar is available in this repo folder.
+
 ```scala
 import cdc.xlr.structurevalidator._
 
