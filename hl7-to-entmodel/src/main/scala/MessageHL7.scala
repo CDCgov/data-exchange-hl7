@@ -44,6 +44,9 @@ case class MessageHL7 (
   val LastFlag: Option[Boolean] = Option(true),
   val messageSequencingOrder: Option[Int] = Option(1),
 
+  // Metadata and Message Info
+  val metadata: Option[Metadata] = None,
+
 ) /*extends Message*/ {
 
   def validateStructure(message: MessageHL7): MessageHL7 = {
