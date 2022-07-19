@@ -46,6 +46,7 @@ case class MessageHL7 (
 
   // Metadata and Message Info
   val metadata: Option[Metadata] = None,
+  val messageInfo: Option[MessageInfo] = None, 
 
 ) /*extends Message*/ {
 
