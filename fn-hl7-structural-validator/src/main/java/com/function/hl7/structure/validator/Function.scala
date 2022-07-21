@@ -11,6 +11,12 @@ import com.microsoft.azure.functions.annotation.HttpTrigger;
 
 import java.util.Optional;
 
+import scala.util.{Try, Failure, Success}
+import scala.concurrent.duration._
+import java.util.concurrent.TimeUnit
+
+import scala.concurrent._
+
 import cdc.xlr.structurevalidator._;
 
 /**
@@ -35,13 +41,30 @@ class Function {
             request.getBody().isPresent match {
               case true => {
 
-                try {
-                  val validator = StructureValidatorSync()
-                  val result = validator.validate(request.getBody().get())
-                  request.createResponseBuilder(HttpStatus.OK).body(result).build
-                } catch {
-                  case _ :Throwable => request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("message bad format").build
-                }
+                // ASYNC
+                val validator = StructureValidator()
+
+                Try( Await.result(validator.validate(request.getBody().get), Duration(2, TimeUnit.SECONDS)) ) match {
+
+                    case Success( report ) => {
+                        request.createResponseBuilder(HttpStatus.OK).body(report).build
+                    } // .Success 
+
+                    case Failure( err ) => {
+                      request.createResponseBuilder(HttpStatus.BAD_REQUEST).body(err.getMessage).build
+
+                    } // .Failure
+
+                } // .Try  
+
+                // SYNC
+                // try {
+                //   val validator = StructureValidatorSync()
+                //   val result = validator.validate(request.getBody().get())
+                //   request.createResponseBuilder(HttpStatus.OK).body(result).build
+                // } catch {
+                //   case _ :Throwable => request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("message bad format").build
+                // }
 
               } // .true
 
