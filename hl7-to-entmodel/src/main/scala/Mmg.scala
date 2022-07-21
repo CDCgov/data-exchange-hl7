@@ -26,21 +26,32 @@ case class Mmg (
     val elemNameStd: String = renameStrHeader(this.elemName)
 
     def toSeqLine(): Seq[String] = {
+        
+        // TODO: remove once GoldTemp changes
+        // mmgSeq
+        // 0 profileID, 1 blkType, 2 blkName, 3 blkOrdinal, 4  blkID, 
+        // 5 elemName,  6 elemOrdinal, 7 elemDataType, 8 elemIsRepeat, 9  elemValueSetCode, 
+        // 10 elemSetVersionNumber, 11 elemIdentifier, 12 elemSegmentType, 13 elemFieldPosition, 14 elemComponentPosition, 
+        // 15 elemCardinality, 16 hl7v2DataType, 17 - codeSystem, 18 blkNameStd, 19 elemNameStd 
+      
         Seq(this.profileIdentifier, 
-            this.blockName,
             this.blockType,
+            this.blockName,
             this.blockOrdinal.toString,
             this.blockID,
+            //
             this.elemName,
             this.elemOrdinal.toString,
             this.elemDataType,
             this.elemIsRepeat.toString,
             this.elemValueSetCode.toString,
+            //
             this.elemValueSetVersionNumber.toString,
             this.elemIdentifier,
             this.elemSegmentType,
             this.elemFieldPosition.toString,
             this.elemComponentPosition.toString,
+            //
             this.elemCardinality,
             this.elemHl7v2DataType,
             this.elemCodeSystem,

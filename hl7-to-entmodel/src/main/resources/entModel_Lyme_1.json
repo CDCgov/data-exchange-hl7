@@ -3784,8 +3784,8 @@
     "mmgSeq": [
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Message Header",
             "Single",
+            "Message Header",
             "1",
             "5ba813c4-3c27-451d-83af-d8881953588a",
             "Message Profile Identifier",
@@ -3806,8 +3806,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Local Subject ID",
@@ -3828,8 +3828,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Birth Date",
@@ -3850,8 +3850,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Subject’s Sex",
@@ -3872,8 +3872,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Race Category",
@@ -3894,8 +3894,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Other Race Text",
@@ -3916,8 +3916,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Ethnic Group",
@@ -3938,8 +3938,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Country of Birth",
@@ -3960,8 +3960,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Other Birth Place",
@@ -3982,8 +3982,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Country of Usual Residence",
@@ -4004,8 +4004,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Subject Address County",
@@ -4026,8 +4026,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Subject Address State",
@@ -4048,8 +4048,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Subject Related",
             "Single",
+            "Subject Related",
             "2",
             "280026b5-43c5-4173-9c62-41aba6d57057",
             "Subject Address ZIP Code",
@@ -4070,8 +4070,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Date of Illness Onset",
@@ -4092,8 +4092,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Illness End Date",
@@ -4114,8 +4114,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Illness Duration",
@@ -4136,8 +4136,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Illness Duration Units",
@@ -4158,8 +4158,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Pregnancy Status",
@@ -4180,8 +4180,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Diagnosis Date",
@@ -4202,8 +4202,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Hospitalized",
@@ -4224,8 +4224,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Admission Date",
@@ -4246,8 +4246,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Discharge Date",
@@ -4268,8 +4268,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Duration of Hospital Stay in Days",
@@ -4290,8 +4290,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Subject Died",
@@ -4312,8 +4312,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Deceased Date",
@@ -4334,8 +4334,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Condition Code",
@@ -4356,8 +4356,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Local Record ID",
@@ -4378,8 +4378,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "State Case Identifier",
@@ -4400,8 +4400,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Legacy Case Identifier",
@@ -4422,8 +4422,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Age at Case Investigation",
@@ -4444,8 +4444,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Age Unit at Case Investigation",
@@ -4466,8 +4466,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Case Disease Imported Code",
@@ -4488,8 +4488,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Imported Country",
@@ -4510,8 +4510,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Imported State",
@@ -4532,8 +4532,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Imported City",
@@ -4554,8 +4554,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "START: Case Related ",
             "Single",
+            "START: Case Related ",
             "4",
             "64c5e4c8-2dee-4ec1-b3f2-141db90e15bf",
             "Imported County",
@@ -4576,8 +4576,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Repeating Variables for Disease Exposure",
             "Repeat",
+            "Repeating Variables for Disease Exposure",
             "5",
             "eac0fcf3-a9e3-4e4a-a731-ec223c4b2ceb",
             "Country of Exposure",
@@ -4598,8 +4598,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Repeating Variables for Disease Exposure",
             "Repeat",
+            "Repeating Variables for Disease Exposure",
             "5",
             "eac0fcf3-a9e3-4e4a-a731-ec223c4b2ceb",
             "State or Province of Exposure",
@@ -4620,8 +4620,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Repeating Variables for Disease Exposure",
             "Repeat",
+            "Repeating Variables for Disease Exposure",
             "5",
             "eac0fcf3-a9e3-4e4a-a731-ec223c4b2ceb",
             "City of Exposure",
@@ -4642,8 +4642,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Repeating Variables for Disease Exposure",
             "Repeat",
+            "Repeating Variables for Disease Exposure",
             "5",
             "eac0fcf3-a9e3-4e4a-a731-ec223c4b2ceb",
             "County of Exposure",
@@ -4664,8 +4664,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Transmission Mode",
@@ -4686,8 +4686,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Case Class Status Code",
@@ -4708,8 +4708,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Immediate National Notifiable Condition",
@@ -4730,8 +4730,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Case Outbreak Indicator",
@@ -4752,8 +4752,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Case Outbreak Name",
@@ -4774,8 +4774,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Notification Result Status",
@@ -4796,8 +4796,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Jurisdiction Code",
@@ -4818,8 +4818,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Reporting Source Type Code",
@@ -4840,8 +4840,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Reporting Source ZIP Code",
@@ -4862,8 +4862,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Binational Reporting Criteria",
@@ -4884,8 +4884,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Person Reporting to CDC - Name",
@@ -4906,8 +4906,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Person Reporting to CDC - Phone Number",
@@ -4928,8 +4928,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Person Reporting to CDC - Email",
@@ -4950,8 +4950,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Case Investigation Start Date",
@@ -4972,8 +4972,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Date First Electronically Submitted",
@@ -4994,8 +4994,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Date of Electronic Case Notification to CDC",
@@ -5016,8 +5016,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Date Reported",
@@ -5038,8 +5038,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Earliest Date Reported to County",
@@ -5060,8 +5060,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Earliest Date Reported to State",
@@ -5082,8 +5082,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "MMWR Week",
@@ -5104,8 +5104,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "MMWR Year",
@@ -5126,8 +5126,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Date CDC Was First Verbally Notified of This Case",
@@ -5148,8 +5148,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Date First Reported to PHD",
@@ -5170,8 +5170,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Reporting State",
@@ -5192,8 +5192,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Reporting County",
@@ -5214,8 +5214,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "National Reporting Jurisdiction",
@@ -5236,8 +5236,8 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Misc",
             "Single",
+            "Misc",
             "6",
             "e4ef9c62-bb10-4908-a218-5381b10dcd2e",
             "Comment",
@@ -5258,16 +5258,16 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Clinical Manifestations Repeating Group",
             "RepeatParentChild",
+            "Clinical Manifestation",
             "3",
-            "159fffa1-f62c-4a25-baaf-203b0952a0f6",
+            "d4bf5e8e-039d-4541-b061-11f33f441055",
             "Clinical Manifestation",
             "1",
             "Coded",
             "false",
-            "Some(PHVS_ClinicalManifestations_Lyme)",
-            "Some(1)",
+            "Some(PHVS_ClinicalManifestation_TBRD)",
+            "Some(2)",
             "INV929",
             "OBX",
             "5",
@@ -5275,15 +5275,15 @@
             "[0..1]",
             "CWE",
             "PHINQUESTION",
-            "clinical_manifestations_repeating_group",
+            "clinical_manifestation",
             "clinical_manifestation"
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Clinical Manifestations Repeating Group",
             "RepeatParentChild",
+            "Clinical Manifestation",
             "3",
-            "159fffa1-f62c-4a25-baaf-203b0952a0f6",
+            "d4bf5e8e-039d-4541-b061-11f33f441055",
             "Clinical Manifestation Indicator",
             "2",
             "Coded",
@@ -5297,21 +5297,131 @@
             "[0..1]",
             "CWE",
             "PHINQUESTION",
-            "clinical_manifestations_repeating_group",
+            "clinical_manifestation",
             "clinical_manifestation_indicator"
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Antibiotics Treatment Repeating Group",
-            "RepeatParentChild",
+            "Single",
+            "Clinical Section",
             "4",
-            "5dd311f6-fa20-4a51-ba8e-bde8b693e61d",
+            "d87e0dd8-c8c7-4003-95ff-728e793276d4",
+            "Experienced Complication",
+            "1",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "INV1265",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "PHINQUESTION",
+            "clinical_section",
+            "experienced_complication"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "Clinical Section",
+            "4",
+            "d87e0dd8-c8c7-4003-95ff-728e793276d4",
+            "Type of Complication",
+            "2",
+            "Coded",
+            "true",
+            "Some(PHVS_Complication_TBRD)",
+            "Some(3)",
+            "67187-5",
+            "OBX",
+            "5",
+            "-1",
+            "[0..*]",
+            "CWE",
+            "LN",
+            "clinical_section",
+            "type_of_complication"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "Clinical Section",
+            "4",
+            "d87e0dd8-c8c7-4003-95ff-728e793276d4",
+            "Patient Immunocompromised",
+            "3",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "370388006",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "SCT",
+            "clinical_section",
+            "patient_immunocompromised"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "Clinical Section",
+            "4",
+            "d87e0dd8-c8c7-4003-95ff-728e793276d4",
+            "Immunocompromised Associated Condition or Treatment",
+            "4",
+            "Text",
+            "false",
+            "Some()",
+            "None",
+            "INV933",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "ST",
+            "PHINQUESTION",
+            "clinical_section",
+            "immunocompromised_associated_condition_or_treatment"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "Clinical Section",
+            "4",
+            "d87e0dd8-c8c7-4003-95ff-728e793276d4",
+            "Treatment Drug Indicator",
+            "5",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "255633001",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "SCT",
+            "clinical_section",
+            "treatment_drug_indicator"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Antibiotics Treatment Repeating Group",
+            "5",
+            "c147db49-212c-4ed3-846d-13d0fe015ae4",
             "Medication Administered",
             "1",
             "Coded",
             "false",
-            "Some(PHVS_MedicationReceived_Lyme)",
-            "Some(3)",
+            "Some(PHVS_MedicationReceived_TBRD)",
+            "Some(2)",
             "29303-5",
             "OBX",
             "5",
@@ -5324,10 +5434,10 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Antibiotics Treatment Repeating Group",
             "RepeatParentChild",
-            "4",
-            "5dd311f6-fa20-4a51-ba8e-bde8b693e61d",
+            "Antibiotics Treatment Repeating Group",
+            "5",
+            "c147db49-212c-4ed3-846d-13d0fe015ae4",
             "Date Treatment or Therapy Started",
             "2",
             "Date",
@@ -5346,10 +5456,10 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Antibiotics Treatment Repeating Group",
             "RepeatParentChild",
-            "4",
-            "5dd311f6-fa20-4a51-ba8e-bde8b693e61d",
+            "Antibiotics Treatment Repeating Group",
+            "5",
+            "c147db49-212c-4ed3-846d-13d0fe015ae4",
             "Treatment Duration",
             "3",
             "Numeric",
@@ -5368,9 +5478,31 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Industry and Occupation Repeating Group",
-            "Repeat",
+            "Single",
+            "Exposure History Section",
+            "6",
+            "faf5c4b0-d874-4473-8b2a-0e10c212d72e",
+            "Occupation Related to Exposure",
+            "1",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "INV1266",
+            "OBX",
             "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "PHINQUESTION",
+            "exposure_history_section",
+            "occupation_related_to_exposure"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Repeat",
+            "Industry and Occupation Repeating Group",
+            "7",
             "0ccae8e2-752d-459a-9d03-8fa893e86693",
             "Current Occupation",
             "1",
@@ -5390,9 +5522,9 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Industry and Occupation Repeating Group",
             "Repeat",
-            "5",
+            "Industry and Occupation Repeating Group",
+            "7",
             "0ccae8e2-752d-459a-9d03-8fa893e86693",
             "Current Occupation Standardized",
             "2",
@@ -5412,9 +5544,9 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Industry and Occupation Repeating Group",
             "Repeat",
-            "5",
+            "Industry and Occupation Repeating Group",
+            "7",
             "0ccae8e2-752d-459a-9d03-8fa893e86693",
             "Current Industry",
             "3",
@@ -5434,9 +5566,9 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Industry and Occupation Repeating Group",
             "Repeat",
-            "5",
+            "Industry and Occupation Repeating Group",
+            "7",
             "0ccae8e2-752d-459a-9d03-8fa893e86693",
             "Current Industry Standardized",
             "4",
@@ -5456,16 +5588,500 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Epidemiology Laboratory Repeating Group",
+            "Single",
+            "Travel",
+            "8",
+            "0fbad450-5163-4ce7-8da2-9ee0d263e71c",
+            "Travel",
+            "1",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "420008001",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "SCT",
+            "travel",
+            "travel"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
             "RepeatParentChild",
-            "6",
+            "Travel History",
+            "9",
+            "c0d568e6-19ce-4328-8347-c10cbbdc14f9",
+            "International Destination(s) of Recent Travel",
+            "1",
+            "Coded",
+            "false",
+            "Some(PHVS_Country_ISO_3166-1)",
+            "Some(6)",
+            "82764-2",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "LN",
+            "travel_history",
+            "international_destinations_of_recent_travel"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Travel History",
+            "9",
+            "c0d568e6-19ce-4328-8347-c10cbbdc14f9",
+            "Travel State",
+            "2",
+            "Coded",
+            "false",
+            "Some(PHVS_State_FIPS_5-2)",
+            "Some(1)",
+            "82754-3",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "LN",
+            "travel_history",
+            "travel_state"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Travel History",
+            "9",
+            "c0d568e6-19ce-4328-8347-c10cbbdc14f9",
+            "Travel County",
+            "3",
+            "Coded",
+            "false",
+            "Some(PHVS_County_FIPS_6-4)",
+            "Some(6)",
+            "82753-5",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "LN",
+            "travel_history",
+            "travel_county"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Travel History",
+            "9",
+            "c0d568e6-19ce-4328-8347-c10cbbdc14f9",
+            "Date of Arrival to Travel Destination",
+            "4",
+            "Date",
+            "false",
+            "Some()",
+            "None",
+            "TRAVEL06",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "DT",
+            "PHINQUESTION",
+            "travel_history",
+            "date_of_arrival_to_travel_destination"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Travel History",
+            "9",
+            "c0d568e6-19ce-4328-8347-c10cbbdc14f9",
+            "Date of Departure from Travel Destination",
+            "5",
+            "Date",
+            "false",
+            "Some()",
+            "None",
+            "TRAVEL07",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "DT",
+            "PHINQUESTION",
+            "travel_history",
+            "date_of_departure_from_travel_destination"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "Tick Bite",
+            "11",
+            "4f628007-c279-4bc1-800a-4881d7d80497",
+            "Tick Bite",
+            "1",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "95898004",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "SCT",
+            "tick_bite",
+            "tick_bite"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Repeat",
+            "Tick Bite Repeating Group",
+            "12",
+            "ffa1c707-587b-4c1d-9289-1603200b0cd9",
+            "Tick Bite Location",
+            "1",
+            "Text",
+            "false",
+            "Some()",
+            "None",
+            "82755-0",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "ST",
+            "LN",
+            "tick_bite_repeating_group",
+            "tick_bite_location"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Repeat",
+            "Tick Bite Repeating Group",
+            "12",
+            "ffa1c707-587b-4c1d-9289-1603200b0cd9",
+            "Tick Bite Date",
+            "2",
+            "Date",
+            "false",
+            "Some()",
+            "None",
+            "45347-2",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "DT",
+            "LN",
+            "tick_bite_repeating_group",
+            "tick_bite_date"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "Blood Transfusion",
+            "14",
+            "4d4666e0-543a-4a04-8b92-1177c59c2aeb",
+            "Blood Transfusion",
+            "1",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "82312-0",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "LN",
+            "blood_transfusion",
+            "blood_transfusion"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "Blood Transfusion",
+            "14",
+            "4d4666e0-543a-4a04-8b92-1177c59c2aeb",
+            "Transfusion Associated",
+            "2",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "418912005",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "SCT",
+            "blood_transfusion",
+            "transfusion_associated"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "Blood Transfusion",
+            "14",
+            "4d4666e0-543a-4a04-8b92-1177c59c2aeb",
+            "Transfused Product",
+            "3",
+            "Coded",
+            "true",
+            "Some(PHVS_BloodProduct_CDC)",
+            "Some(1)",
+            "933-2",
+            "OBX",
+            "5",
+            "-1",
+            "[0..*]",
+            "CWE",
+            "LN",
+            "blood_transfusion",
+            "transfused_product"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Repeat",
+            "Blood Transfusion Date Repeating Group",
+            "15",
+            "652a5904-85bc-4e5e-b7a0-4ac59f4a6f8f",
+            "Blood Transfusion Date",
+            "1",
+            "Date",
+            "false",
+            "Some()",
+            "None",
+            "14687-8",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "DT",
+            "LN",
+            "blood_transfusion_date_repeating_group",
+            "blood_transfusion_date"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "START: Organ Transplant Section",
+            "17",
+            "e3769902-321d-4088-b1fa-136bdea3c179",
+            "Organ Transplant",
+            "1",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "161663000",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "SCT",
+            "start_organ_transplant_section",
+            "organ_transplant"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Repeat",
+            "Organ Transplant Repeating Group",
+            "18",
+            "19349c94-2aa2-4dd9-97ea-b8e96b38710e",
+            "Transplant Type",
+            "1",
+            "Text",
+            "false",
+            "Some()",
+            "None",
+            "74836-8",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "ST",
+            "LN",
+            "organ_transplant_repeating_group",
+            "transplant_type"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Repeat",
+            "Organ Transplant Repeating Group",
+            "18",
+            "19349c94-2aa2-4dd9-97ea-b8e96b38710e",
+            "Transplant Date",
+            "2",
+            "Date",
+            "false",
+            "Some()",
+            "None",
+            "68445-6",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "DT",
+            "LN",
+            "organ_transplant_repeating_group",
+            "transplant_date"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Repeat",
+            "Organ Transplant Repeating Group",
+            "18",
+            "19349c94-2aa2-4dd9-97ea-b8e96b38710e",
+            "Transplant Associated Infection",
+            "3",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "INV1267",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "PHINQUESTION",
+            "organ_transplant_repeating_group",
+            "transplant_associated_infection"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "START: Blood Donation",
+            "21",
+            "ea126c50-932e-4f1a-8c1e-63533788f9d9",
+            "Blood Donor",
+            "1",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "105470007",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "SCT",
+            "start_blood_donation",
+            "blood_donor"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "START: Blood Donation",
+            "21",
+            "ea126c50-932e-4f1a-8c1e-63533788f9d9",
+            "Blood Donor Implicated During Investigation",
+            "2",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "82761-8",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "LN",
+            "start_blood_donation",
+            "blood_donor_implicated_during_investigation"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "START: Blood Donation",
+            "21",
+            "ea126c50-932e-4f1a-8c1e-63533788f9d9",
+            "Donated Product",
+            "3",
+            "Coded",
+            "true",
+            "Some(PHVS_BloodProduct_CDC)",
+            "Some(1)",
+            "INV964",
+            "OBX",
+            "5",
+            "-1",
+            "[0..*]",
+            "CWE",
+            "PHINQUESTION",
+            "start_blood_donation",
+            "donated_product"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Single",
+            "START: Blood Donation",
+            "21",
+            "ea126c50-932e-4f1a-8c1e-63533788f9d9",
+            "Blood Bank Notified",
+            "4",
+            "Coded",
+            "false",
+            "Some(PHVS_YesNoUnknown_CDC)",
+            "Some(1)",
+            "INV1268",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "PHINQUESTION",
+            "start_blood_donation",
+            "blood_bank_notified"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "Repeat",
+            "Blood Donation Date Repeating Group",
+            "22",
+            "de0edf67-0297-49af-b8a1-6781ee46565f",
+            "Blood Donation Date",
+            "1",
+            "Date",
+            "false",
+            "Some()",
+            "None",
+            "82756-8",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "DT",
+            "LN",
+            "blood_donation_date_repeating_group",
+            "blood_donation_date"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Epidemiology Laboratory Repeating Group",
+            "24",
             "ad29daaa-13c2-4402-a3fa-387aa50beea4",
             "Test Type",
             "1",
             "Coded",
             "false",
-            "Some(PHVS_LabTestType_Lyme)",
-            "Some(2)",
+            "Some(PHVS_LabTestType_TBRD)",
+            "Some(3)",
             "INV290",
             "OBX",
             "5",
@@ -5478,9 +6094,9 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Epidemiology Laboratory Repeating Group",
             "RepeatParentChild",
-            "6",
+            "Epidemiology Laboratory Repeating Group",
+            "24",
             "ad29daaa-13c2-4402-a3fa-387aa50beea4",
             "Test Result",
             "2",
@@ -5500,12 +6116,34 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Epidemiology Laboratory Repeating Group",
             "RepeatParentChild",
-            "6",
+            "Epidemiology Laboratory Repeating Group",
+            "24",
+            "ad29daaa-13c2-4402-a3fa-387aa50beea4",
+            "Organism Name",
+            "3",
+            "Coded",
+            "false",
+            "Some(PHVS_Organism_TBRD)",
+            "Some(1)",
+            "LAB278",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "PHINQUESTION",
+            "epidemiology_laboratory_repeating_group",
+            "organism_name"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Epidemiology Laboratory Repeating Group",
+            "24",
             "ad29daaa-13c2-4402-a3fa-387aa50beea4",
             "Test Result Quantitative",
-            "3",
+            "4",
             "Text",
             "false",
             "Some()",
@@ -5522,78 +6160,12 @@
         ],
         [
             "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Epidemiology Laboratory Repeating Group",
             "RepeatParentChild",
-            "6",
-            "ad29daaa-13c2-4402-a3fa-387aa50beea4",
-            "Result Units",
-            "4",
-            "Coded",
-            "false",
-            "Some(PHVS_UnitsOfMeasure_CDC)",
-            "Some(4)",
-            "LAB115",
-            "OBX",
-            "5",
-            "-1",
-            "[0..1]",
-            "CWE",
-            "PHINQUESTION",
-            "epidemiology_laboratory_repeating_group",
-            "result_units"
-        ],
-        [
-            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
             "Epidemiology Laboratory Repeating Group",
-            "RepeatParentChild",
-            "6",
-            "ad29daaa-13c2-4402-a3fa-387aa50beea4",
-            "Organism Name",
-            "5",
-            "Coded",
-            "false",
-            "Some(PHVS_Organism_Lyme)",
-            "Some(2)",
-            "LAB278",
-            "OBX",
-            "5",
-            "-1",
-            "[0..1]",
-            "CWE",
-            "PHINQUESTION",
-            "epidemiology_laboratory_repeating_group",
-            "organism_name"
-        ],
-        [
-            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Epidemiology Laboratory Repeating Group",
-            "RepeatParentChild",
-            "6",
-            "ad29daaa-13c2-4402-a3fa-387aa50beea4",
-            "Specimen Type",
-            "6",
-            "Coded",
-            "false",
-            "Some(PHVS_SpecimenType_Lyme)",
-            "Some(2)",
-            "66746-9",
-            "OBX",
-            "5",
-            "-1",
-            "[0..1]",
-            "CWE",
-            "LN",
-            "epidemiology_laboratory_repeating_group",
-            "specimen_type"
-        ],
-        [
-            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
-            "Epidemiology Laboratory Repeating Group",
-            "RepeatParentChild",
-            "6",
+            "24",
             "ad29daaa-13c2-4402-a3fa-387aa50beea4",
             "Specimen Collection Date/Time",
-            "7",
+            "5",
             "DateTime",
             "false",
             "Some()",
@@ -5607,24 +6179,298 @@
             "LN",
             "epidemiology_laboratory_repeating_group",
             "specimen_collection_datetime"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Epidemiology Laboratory Repeating Group",
+            "24",
+            "ad29daaa-13c2-4402-a3fa-387aa50beea4",
+            "Specimen Type",
+            "6",
+            "Coded",
+            "false",
+            "Some(PHVS_SpecimenType_TBRD)",
+            "Some(1)",
+            "66746-9",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "LN",
+            "epidemiology_laboratory_repeating_group",
+            "specimen_type"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Epidemiology Laboratory Repeating Group",
+            "24",
+            "ad29daaa-13c2-4402-a3fa-387aa50beea4",
+            "Performing Laboratory Name",
+            "7",
+            "Text",
+            "false",
+            "Some()",
+            "None",
+            "68994-3",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "ST",
+            "LN",
+            "epidemiology_laboratory_repeating_group",
+            "performing_laboratory_name"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Epidemiology Laboratory Repeating Group",
+            "24",
+            "ad29daaa-13c2-4402-a3fa-387aa50beea4",
+            "Laboratory State",
+            "8",
+            "Coded",
+            "false",
+            "Some(PHVS_State_FIPS_5-2)",
+            "Some(1)",
+            "INV1269",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "CWE",
+            "PHINQUESTION",
+            "epidemiology_laboratory_repeating_group",
+            "laboratory_state"
+        ],
+        [
+            "Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+            "RepeatParentChild",
+            "Epidemiology Laboratory Repeating Group",
+            "24",
+            "ad29daaa-13c2-4402-a3fa-387aa50beea4",
+            "Performing Laboratory Specimen ID",
+            "9",
+            "Text",
+            "false",
+            "Some()",
+            "None",
+            "LAB202",
+            "OBX",
+            "5",
+            "-1",
+            "[0..1]",
+            "ST",
+            "PHINQUESTION",
+            "epidemiology_laboratory_repeating_group",
+            "performing_laboratory_specimen_id"
         ]
     ],
     "mmgBasedModel": {
+        "reporting_state": [
+            "OBX",
+            "CWE",
+            "77966-0",
+            "16^Idaho^2.16.840.1.113883.6.92"
+        ],
+        "illness_end_date": [
+            "OBX",
+            "TS",
+            "77976-9",
+            "20170922000000.000"
+        ],
+        "subject_died": [
+            "OBX",
+            "CWE",
+            "77978-5",
+            "Y^Yes^2.16.840.1.113883.12.136"
+        ],
+        "transmission_mode": [
+            "OBX",
+            "CWE",
+            "77989-2",
+            "418427004^Vector-borne transmission^2.16.840.1.113883.6.96"
+        ],
+        "age_at_case_investigation": [
+            "OBX",
+            "SN",
+            "77998-3",
+            "^32"
+        ],
+        "earliest_date_reported_to_county": [
+            "OBX",
+            "TS",
+            "77972-8",
+            "20170916000000.000"
+        ],
+        "discharge_date": [
+            "OBX",
+            "TS",
+            "8649-6",
+            "20170922000000.000"
+        ],
+        "case_outbreak_indicator": [
+            "OBX",
+            "CWE",
+            "77980-1",
+            "N^No^2.16.840.1.113883.12.136"
+        ],
+        "national_reporting_jurisdiction": [
+            "OBX",
+            "CWE",
+            "77968-6",
+            "16^Idaho^2.16.840.1.113883.6.92"
+        ],
         "notification_result_status": [
             "OBR",
             "F"
         ],
-        "subject_related": [
+        "clinical_manifestation": [
             {
-                "country_of_birth": [
+                "clinical_manifestation": [
                     "CWE",
-                    "USA^UNITED STATES^1.0.3166.1"
+                    "87319000^Eschar^2.16.840.1.113883.6.96"
                 ],
-                "country_of_usual_residence": [
+                "clinical_manifestation_indicator": [
                     "CWE",
-                    "USA^UNITED STATES^1.0.3166.1"
+                    "N^No^2.16.840.1.113883.12.136"
+                ]
+            },
+            {
+                "clinical_manifestation": [
+                    "CWE",
+                    "302215000^Thrombocytopenia^2.16.840.1.113883.6.96"
+                ],
+                "clinical_manifestation_indicator": [
+                    "CWE",
+                    "Y^Yes^2.16.840.1.113883.12.136"
+                ]
+            },
+            {
+                "clinical_manifestation": [
+                    "CWE",
+                    "271737000^Anemia^2.16.840.1.113883.6.96"
+                ],
+                "clinical_manifestation_indicator": [
+                    "CWE",
+                    "Y^Yes^2.16.840.1.113883.12.136"
+                ]
+            },
+            {
+                "clinical_manifestation": [
+                    "CWE",
+                    "OTH^Other Symptom Indicator^2.16.840.1.113883.5.1008^^^^^^Nausea, vomiting"
+                ],
+                "clinical_manifestation_indicator": [
+                    "CWE",
+                    "Y^Yes^2.16.840.1.113883.12.136"
+                ]
+            },
+            {
+                "clinical_manifestation": [
+                    "CWE",
+                    "386661006^Fever^2.16.840.1.113883.6.96"
+                ],
+                "clinical_manifestation_indicator": [
+                    "CWE",
+                    "Y^Yes^2.16.840.1.113883.12.136"
+                ]
+            },
+            {
+                "clinical_manifestation": [
+                    "CWE",
+                    "25064002^Headache^2.16.840.1.113883.6.96"
+                ],
+                "clinical_manifestation_indicator": [
+                    "CWE",
+                    "Y^Yes^2.16.840.1.113883.12.136"
+                ]
+            },
+            {
+                "clinical_manifestation": [
+                    "CWE",
+                    "419188005^Leukopenia^2.16.840.1.113883.6.96"
+                ],
+                "clinical_manifestation_indicator": [
+                    "CWE",
+                    "Y^Yes^2.16.840.1.113883.12.136"
+                ]
+            },
+            {
+                "clinical_manifestation": [
+                    "CWE",
+                    "PHC2108^Hepatic transaminase elevation^2.16.840.1.114222.4.5.274"
+                ],
+                "clinical_manifestation_indicator": [
+                    "CWE",
+                    "Y^Yes^2.16.840.1.113883.12.136"
+                ]
+            },
+            {
+                "clinical_manifestation": [
+                    "CWE",
+                    "68962001^Myalgia^2.16.840.1.113883.6.96"
+                ],
+                "clinical_manifestation_indicator": [
+                    "CWE",
+                    "Y^Yes^2.16.840.1.113883.12.136"
+                ]
+            },
+            {
+                "clinical_manifestation": [
+                    "CWE",
+                    "271807003^Rash^2.16.840.1.113883.6.96"
+                ],
+                "clinical_manifestation_indicator": [
+                    "CWE",
+                    "N^No^2.16.840.1.113883.12.136"
                 ]
             }
+        ],
+        "duration_of_hospital_stay_in_days": [
+            "OBX",
+            "SN",
+            "78033-8",
+            "^6"
+        ],
+        "tick_bite": [
+            "OBX",
+            "CWE",
+            "95898004",
+            "N^No^2.16.840.1.113883.12.136"
+        ],
+        "illness_duration": [
+            "OBX",
+            "SN",
+            "77977-7",
+            "^7"
+        ],
+        "pregnancy_status": [
+            "OBX",
+            "CWE",
+            "77996-7",
+            "N^No^2.16.840.1.113883.12.136"
+        ],
+        "jurisdiction_code": [
+            "OBX",
+            "ST",
+            "77969-4",
+            "Health District 4"
+        ],
+        "case_investigation_start_date": [
+            "OBX",
+            "DT",
+            "77979-3",
+            "20170916"
+        ],
+        "patient_immunocompromised": [
+            "OBX",
+            "CWE",
+            "370388006",
+            "Y^Yes^2.16.840.1.113883.12.136"
         ],
         "antibiotics_treatment_repeating_group": [
             {
@@ -5646,6 +6492,12 @@
             "OBR",
             "11090^Anaplasma phagocytophilum^2.16.840.1.114222.4.5.277"
         ],
+        "blood_transfusion": [
+            "OBX",
+            "CWE",
+            "82312-0",
+            "Y^Yes^2.16.840.1.113883.12.136"
+        ],
         "repeating_variables_for_disease_exposure": [
             {
                 "country_of_exposure": [
@@ -5666,12 +6518,28 @@
                 ]
             }
         ],
+        "diagnosis_date": [
+            "OBX",
+            "TS",
+            "77975-1",
+            "20170916000000.000"
+        ],
+        "admission_date": [
+            "OBX",
+            "TS",
+            "8656-1",
+            "20170916000000.000"
+        ],
         "subjects_sex": [
             "PID",
             "F"
         ],
         "epidemiology_laboratory_repeating_group": [
             {
+                "performing_laboratory_name": [
+                    "ST",
+                    "CDC RZB Reference Laboratory"
+                ],
                 "specimen_type": [
                     "CWE",
                     "119376003^Tissue^2.16.840.1.113883.6.96"
@@ -5684,6 +6552,10 @@
                     "CWE",
                     "10828004^Positive^2.16.840.1.113883.6.96"
                 ],
+                "laboratory_state": [
+                    "CWE",
+                    "13^Georgia^2.16.840.1.113883.6.92"
+                ],
                 "specimen_collection_datetime": [
                     "TS",
                     "20170918000000.000"
@@ -5691,9 +6563,17 @@
                 "organism_name": [
                     "CWE",
                     "420364006^Anaplasma Phagocytophilum^2.16.840.1.113883.6.96"
+                ],
+                "performing_laboratory_specimen_id": [
+                    "ST",
+                    "33333"
                 ]
             },
             {
+                "performing_laboratory_name": [
+                    "ST",
+                    "CDC RZB Reference Laboratory"
+                ],
                 "specimen_type": [
                     "CWE",
                     "119376003^Tissue^2.16.840.1.113883.6.96"
@@ -5706,6 +6586,10 @@
                     "CWE",
                     "10828004^Positive^2.16.840.1.113883.6.96"
                 ],
+                "laboratory_state": [
+                    "CWE",
+                    "13^Georgia^2.16.840.1.113883.6.92"
+                ],
                 "specimen_collection_datetime": [
                     "TS",
                     "20170918000000.000"
@@ -5713,9 +6597,17 @@
                 "organism_name": [
                     "CWE",
                     "420364006^Anaplasma Phagocytophilum^2.16.840.1.113883.6.96"
+                ],
+                "performing_laboratory_specimen_id": [
+                    "ST",
+                    "33333"
                 ]
             },
             {
+                "performing_laboratory_name": [
+                    "ST",
+                    "IDBOL"
+                ],
                 "test_result_quantitative": [
                     "ST",
                     "<1:64"
@@ -5732,6 +6624,10 @@
                     "CWE",
                     "260385009^Negative^2.16.840.1.113883.6.96"
                 ],
+                "laboratory_state": [
+                    "CWE",
+                    "16^Idaho^2.16.840.1.113883.6.92"
+                ],
                 "specimen_collection_datetime": [
                     "TS",
                     "20170916000000.000"
@@ -5739,16 +6635,76 @@
                 "organism_name": [
                     "CWE",
                     "420364006^Anaplasma Phagocytophilum^2.16.840.1.113883.6.96"
+                ],
+                "performing_laboratory_specimen_id": [
+                    "ST",
+                    "11111"
                 ]
             }
+        ],
+        "state_case_identifier": [
+            "OBX",
+            "ST",
+            "77993-4",
+            "340"
+        ],
+        "mmwr_week": [
+            "OBX",
+            "SN",
+            "77991-8",
+            "^38"
+        ],
+        "blood_donor": [
+            "OBX",
+            "CWE",
+            "105470007",
+            "N^No^2.16.840.1.113883.12.136"
+        ],
+        "earliest_date_reported_to_state": [
+            "OBX",
+            "TS",
+            "77973-6",
+            "20170916000000.000"
         ],
         "subject_address_zip_code": [
             "PID",
             "^^^16^^^^^16001"
         ],
+        "blood_transfusion_date_repeating_group": [
+            {
+                "blood_transfusion_date": [
+                    "DT",
+                    "20170815"
+                ]
+            }
+        ],
         "local_record_id": [
             "OBR",
             "CAS10475000ID01^NBS^2.16.840.1.114222.4.3.4.12.3^ISO"
+        ],
+        "country_of_birth": [
+            "OBX",
+            "CWE",
+            "78746-5",
+            "USA^UNITED STATES^1.0.3166.1"
+        ],
+        "reporting_source_type_code": [
+            "OBX",
+            "CWE",
+            "48766-0",
+            "PHC252^Other State and Local Agencies^2.16.840.1.114222.4.5.274"
+        ],
+        "treatment_drug_indicator": [
+            "OBX",
+            "CWE",
+            "255633001",
+            "Y^Yes^2.16.840.1.113883.12.136"
+        ],
+        "travel": [
+            "OBX",
+            "CWE",
+            "420008001",
+            "N^No^2.16.840.1.113883.12.136"
         ],
         "industry_and_occupation_repeating_group": [
             {
@@ -5770,251 +6726,77 @@
                 ]
             }
         ],
+        "experienced_complication": [
+            "OBX",
+            "CWE",
+            "INV1265",
+            "Y^Yes^2.16.840.1.113883.12.136"
+        ],
+        "legacy_case_identifier": [
+            "OBX",
+            "ST",
+            "77997-5",
+            "3402000000000"
+        ],
+        "person_reporting_to_cdc_name": [
+            "OBX",
+            "ST",
+            "74549-7",
+            "noname"
+        ],
         "date_of_electronic_case_notification_to_cdc": [
             "OBR",
             "20190627111757.667"
         ],
-        "misc": [
-            {
-                "reporting_state": [
-                    "CWE",
-                    "16^Idaho^2.16.840.1.113883.6.92"
-                ],
-                "transmission_mode": [
-                    "CWE",
-                    "418427004^Vector-borne transmission^2.16.840.1.113883.6.96"
-                ],
-                "earliest_date_reported_to_county": [
-                    "TS",
-                    "20170916000000.000"
-                ],
-                "case_outbreak_indicator": [
-                    "CWE",
-                    "N^No^2.16.840.1.113883.12.136"
-                ],
-                "national_reporting_jurisdiction": [
-                    "CWE",
-                    "16^Idaho^2.16.840.1.113883.6.92"
-                ],
-                "jurisdiction_code": [
-                    "ST",
-                    "Health District 4"
-                ],
-                "case_investigation_start_date": [
-                    "DT",
-                    "20170916"
-                ],
-                "mmwr_week": [
-                    "SN",
-                    "^38"
-                ],
-                "earliest_date_reported_to_state": [
-                    "TS",
-                    "20170916000000.000"
-                ],
-                "reporting_source_type_code": [
-                    "CWE",
-                    "PHC252^Other State and Local Agencies^2.16.840.1.114222.4.5.274"
-                ],
-                "person_reporting_to_cdc_name": [
-                    "ST",
-                    "noname"
-                ],
-                "immediate_national_notifiable_condition": [
-                    "CWE",
-                    "N^No^2.16.840.1.113883.12.136"
-                ],
-                "date_first_reported_to_phd": [
-                    "DT",
-                    "20170916"
-                ],
-                "reporting_source_zip_code": [
-                    "ST",
-                    "83703"
-                ],
-                "case_class_status_code": [
-                    "CWE",
-                    "410605003^Confirmed present^2.16.840.1.113883.6.96"
-                ],
-                "date_reported": [
-                    "DT",
-                    "20170916"
-                ],
-                "person_reporting_to_cdc_phone_number": [
-                    "ST",
-                    "208-000-0000"
-                ],
-                "mmwr_year": [
-                    "DT",
-                    "2017"
-                ]
-            }
+        "immediate_national_notifiable_condition": [
+            "OBX",
+            "CWE",
+            "77965-2",
+            "N^No^2.16.840.1.113883.12.136"
+        ],
+        "country_of_usual_residence": [
+            "OBX",
+            "CWE",
+            "77983-5",
+            "USA^UNITED STATES^1.0.3166.1"
+        ],
+        "occupation_related_to_exposure": [
+            "OBX",
+            "CWE",
+            "INV1266",
+            "N^No^2.16.840.1.113883.12.136"
         ],
         "ethnic_group": [
             "PID",
             "2186-5^Not Hispanic or Latino^2.16.840.1.113883.6.238"
         ],
-        "start_case_related": [
-            {
-                "illness_end_date": [
-                    "TS",
-                    "20170922000000.000"
-                ],
-                "subject_died": [
-                    "CWE",
-                    "Y^Yes^2.16.840.1.113883.12.136"
-                ],
-                "age_at_case_investigation": [
-                    "SN",
-                    "^32"
-                ],
-                "discharge_date": [
-                    "TS",
-                    "20170922000000.000"
-                ],
-                "duration_of_hospital_stay_in_days": [
-                    "SN",
-                    "^6"
-                ],
-                "illness_duration": [
-                    "SN",
-                    "^7"
-                ],
-                "pregnancy_status": [
-                    "CWE",
-                    "N^No^2.16.840.1.113883.12.136"
-                ],
-                "diagnosis_date": [
-                    "TS",
-                    "20170916000000.000"
-                ],
-                "admission_date": [
-                    "TS",
-                    "20170916000000.000"
-                ],
-                "state_case_identifier": [
-                    "ST",
-                    "340"
-                ],
-                "legacy_case_identifier": [
-                    "ST",
-                    "3402000000000"
-                ],
-                "hospitalized": [
-                    "CWE",
-                    "Y^Yes^2.16.840.1.113883.12.136"
-                ],
-                "date_of_illness_onset": [
-                    "TS",
-                    "20170915000000.000"
-                ]
-            }
-        ],
         "deceased_date": [
             "PID",
             "20171022000000.000"
         ],
-        "clinical_manifestations_repeating_group": [
-            {
-                "clinical_manifestation": [
-                    "CWE",
-                    "271807003^Rash^2.16.840.1.113883.6.96"
-                ],
-                "clinical_manifestation_indicator": [
-                    "CWE",
-                    "N^No^2.16.840.1.113883.12.136"
-                ]
-            },
-            {
-                "clinical_manifestation": [
-                    "CWE",
-                    "271737000^Anemia^2.16.840.1.113883.6.96"
-                ],
-                "clinical_manifestation_indicator": [
-                    "CWE",
-                    "Y^Yes^2.16.840.1.113883.12.136"
-                ]
-            },
-            {
-                "clinical_manifestation": [
-                    "CWE",
-                    "68962001^Myalgia^2.16.840.1.113883.6.96"
-                ],
-                "clinical_manifestation_indicator": [
-                    "CWE",
-                    "Y^Yes^2.16.840.1.113883.12.136"
-                ]
-            },
-            {
-                "clinical_manifestation": [
-                    "CWE",
-                    "PHC2108^Hepatic transaminase elevation^2.16.840.1.114222.4.5.274"
-                ],
-                "clinical_manifestation_indicator": [
-                    "CWE",
-                    "Y^Yes^2.16.840.1.113883.12.136"
-                ]
-            },
-            {
-                "clinical_manifestation": [
-                    "CWE",
-                    "419188005^Leukopenia^2.16.840.1.113883.6.96"
-                ],
-                "clinical_manifestation_indicator": [
-                    "CWE",
-                    "Y^Yes^2.16.840.1.113883.12.136"
-                ]
-            },
-            {
-                "clinical_manifestation": [
-                    "CWE",
-                    "386661006^Fever^2.16.840.1.113883.6.96"
-                ],
-                "clinical_manifestation_indicator": [
-                    "CWE",
-                    "Y^Yes^2.16.840.1.113883.12.136"
-                ]
-            },
-            {
-                "clinical_manifestation": [
-                    "CWE",
-                    "OTH^Other Symptom Indicator^2.16.840.1.113883.5.1008^^^^^^Nausea, vomiting"
-                ],
-                "clinical_manifestation_indicator": [
-                    "CWE",
-                    "Y^Yes^2.16.840.1.113883.12.136"
-                ]
-            },
-            {
-                "clinical_manifestation": [
-                    "CWE",
-                    "25064002^Headache^2.16.840.1.113883.6.96"
-                ],
-                "clinical_manifestation_indicator": [
-                    "CWE",
-                    "Y^Yes^2.16.840.1.113883.12.136"
-                ]
-            },
-            {
-                "clinical_manifestation": [
-                    "CWE",
-                    "302215000^Thrombocytopenia^2.16.840.1.113883.6.96"
-                ],
-                "clinical_manifestation_indicator": [
-                    "CWE",
-                    "Y^Yes^2.16.840.1.113883.12.136"
-                ]
-            },
-            {
-                "clinical_manifestation": [
-                    "CWE",
-                    "87319000^Eschar^2.16.840.1.113883.6.96"
-                ],
-                "clinical_manifestation_indicator": [
-                    "CWE",
-                    "N^No^2.16.840.1.113883.12.136"
-                ]
-            }
+        "date_first_reported_to_phd": [
+            "OBX",
+            "DT",
+            "77970-2",
+            "20170916"
+        ],
+        "reporting_source_zip_code": [
+            "OBX",
+            "ST",
+            "52831-5",
+            "83703"
+        ],
+        "hospitalized": [
+            "OBX",
+            "CWE",
+            "77974-4",
+            "Y^Yes^2.16.840.1.113883.12.136"
+        ],
+        "immunocompromised_associated_condition_or_treatment": [
+            "OBX",
+            "ST",
+            "INV933",
+            "Cancer, chemotherapy"
         ],
         "local_subject_id": [
             "PID",
@@ -6028,6 +6810,12 @@
             "PID",
             "^^^16^^^^^16001"
         ],
+        "case_class_status_code": [
+            "OBX",
+            "CWE",
+            "77990-0",
+            "410605003^Confirmed present^2.16.840.1.113883.6.96"
+        ],
         "date_first_electronically_submitted": [
             "OBR",
             "20190627111757.667"
@@ -6036,13 +6824,49 @@
             "PID",
             "19920618000000.000"
         ],
+        "date_reported": [
+            "OBX",
+            "DT",
+            "77995-9",
+            "20170916"
+        ],
+        "person_reporting_to_cdc_phone_number": [
+            "OBX",
+            "ST",
+            "74548-9",
+            "208-000-0000"
+        ],
         "subject_address_state": [
             "PID",
             "^^^16^^^^^16001"
         ],
+        "mmwr_year": [
+            "OBX",
+            "DT",
+            "77992-6",
+            "2017"
+        ],
+        "transfusion_associated": [
+            "OBX",
+            "CWE",
+            "418912005",
+            "Y^Yes^2.16.840.1.113883.12.136"
+        ],
         "race_category": [
             "PID",
             "2106-3^White^2.16.840.1.113883.6.238"
+        ],
+        "date_of_illness_onset": [
+            "OBX",
+            "TS",
+            "11368-8",
+            "20170915000000.000"
+        ],
+        "organ_transplant": [
+            "OBX",
+            "CWE",
+            "161663000",
+            "N^No^2.16.840.1.113883.12.136"
         ]
     },
     "segments": null,
@@ -6050,5 +6874,7 @@
     "vocabularyEntries": null,
     "vocabulary": null,
     "LastFlag": true,
-    "messageSequencingOrder": 1
+    "messageSequencingOrder": 1,
+    "metadata": null,
+    "messageInfo": null
 }
