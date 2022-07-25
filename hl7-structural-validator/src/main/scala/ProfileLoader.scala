@@ -1,11 +1,13 @@
 package cdc.xlr.structurevalidator
 
-import java.io.{BufferedInputStream}
+import hl7.v2.validation.vs.ValueSetLibrary
+import hl7.v2.validation.content.ConformanceContext
+import hl7.v2.profile.Profile
 
 trait ProfileLoader {
 
-    def profile(): BufferedInputStream
-    def constraints(): BufferedInputStream
-    def valueSets(): BufferedInputStream
+    def profile(): Profile
+    def valueSets(): ValueSetLibrary
+    def conformanceContext(): ConformanceContext
 
 } // .ProfileLoader

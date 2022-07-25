@@ -1,6 +1,6 @@
 package gov.cdc.dataexchange.entModel
 
-import java.sql.Timestamp
+import java.sql.Timestamp // TODO: java.time.Instant 
 
 case class Metadata (
 

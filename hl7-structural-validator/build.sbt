@@ -1,14 +1,14 @@
 name := "cdc.xlr.hl7.structurevalidator"
-version := "0.3.3"
+version := "0.4.0"
 
 organization     := "gov.cdc"
 
-scalaVersion := "2.12.10"
+scalaVersion := "2.12.16"
 
-libraryDependencies += "com.typesafe" % "config" % "1.4.1"
+libraryDependencies += "com.typesafe" % "config" % "1.4.2"
 
-libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.10.5.1"
-libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.0"
+libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.13.3"
+libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.13.3"
 
 
 assemblyMergeStrategy := {

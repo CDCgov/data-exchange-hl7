@@ -4,7 +4,7 @@ This project is a wrapper around the NIST (https://www.nist.gov/) HL7 validator.
 
 NIST jar's in the **/lib** folder are compiled from source code at https://github.com/usnistgov/v2-validation , to be compatible with Scala 2.12 (Spark).
 
-Default profiles are NNDSS profiles and loaded at start-up but other profiles could be build in or dynamic loaded as enhancement.
+Default profiles (src/main/resources/) are NNDSS profiles and are loaded and used if no other profiles are provided to the structure validator.
 
 # Getting Started
 
@@ -22,28 +22,23 @@ $ sbt
 ```
 
 # Example Usage
-Add (assembly) .jar as library to the project. The compiled assembly .jar is available in this repo folder.
+Add the assembly .jar as library to the project. The compiled assembly .jar is available in this repo / folder.
+
+This example validates uses the custom build in profiles available in src/main/resources.
 
 ```scala
 import cdc.xlr.structurevalidator._
 
-// Async Validator
+val validator = StructureValidatorConc() // the concurrent (async) validator
 
-val validator = StructureValidator()
+// val validator = StructureValidatorSync() // the sync validator
 
-val result = validator.validate(testMsg) onComplete {
-    case Success(report) => //println(report)
-    case Failure(err) => println(err.getMessage)
-} // .result
-```
+validator.reportMap( hl7Message ) match {
 
-```scala
-import cdc.xlr.structurevalidator._
+    case Success(report) => println(report)
+    case Failure(e) => println("error: " + e.getMessage() )
 
-//Sync Validator
-
-val validator = StructureValidatorSync()
-val result = validator.validate(testMsg)
+}
 
 ```
 
