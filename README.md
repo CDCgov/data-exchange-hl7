@@ -17,7 +17,7 @@ A repository for the CDC data exchange building block HL7.
 [cbs-pipeline](https://github.com/CDCgov/data-exchange-hl7/tree/master/cbs-pipeline#case-based-surveillance-pipeline)
  
 #### HL7 Messages to a MMG Based Model and Lakehouse
-- Code for validation and transformation of HL7 messages to MMG Based Model for Lakehouse - proof-of-concept:
+- Code for validation and transformation of HL7 messages to a MMG Based Model for Lakehouse proof-of-concept:
 [hl7-to-entmodel](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-to-entmodel)
 
 ## Public Domain Standard Notice
