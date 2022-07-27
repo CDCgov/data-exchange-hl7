@@ -20,7 +20,7 @@ object Main {
 
         // load test file from resources
         val fileName = "PERT_V1.0.1_TM_TC04"
-        val hl7TestMessage = "src/main/resources/hl7messages/" + fileName + ".txt"
+        val hl7TestMessage = HL7_TEST_MESSAGES_LOCATION + fileName + ".txt"
         val testMsg = Source.fromFile(hl7TestMessage).getLines.mkString("\n")
 
         val validator = StructureValidatorConc()

@@ -13,12 +13,12 @@ class StructureValidatorTest extends AnyFlatSpec with should.Matchers {
 
         // load test file from resources
         val fileName = "PERT_V1.0.1_TM_TC04"
-        val hl7TestMessage = "src/main/resources/hl7messages/" + fileName + ".txt"
-        val testMsg = Source.fromFile(hl7TestMessage).getLines.mkString("\n")
+        val hl7TestMessageLoc = HL7_TEST_MESSAGES_LOCATION + fileName + ".txt"
+        val hl7TestMessage = Source.fromFile(hl7TestMessageLoc).getLines.mkString("\n")
 
         val validator = StructureValidatorConc()
 
-        validator.reportMap(testMsg) match {
+        validator.reportMap(hl7TestMessage) match {
 
             case Success(report) => {
                 report("contentErrors").size shouldBe(0) 
