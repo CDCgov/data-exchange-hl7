@@ -1,4 +1,4 @@
-name: Test hl7-structural-validator
+name: Run Test hl7-structural-validator
 
 on:
   push:
