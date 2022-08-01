@@ -2,6 +2,11 @@
 # VARIABLES
 #############################################################################
 
+variable "environment_name" {
+  type = string
+  default = "dev"
+}
+
 variable "resource_group_name" {
   type = string
   default = "TODO_delete_test_rg"
@@ -21,9 +26,4 @@ variable "vnet_cidr_range" {
 variable "subnet_prefixes" {
   type    = list(string)
   default = ["10.0.0.0/24", "10.0.1.0/24"]
-}
-
-variable "subnet_names" {
-  type    = list(string)
-  default = ["pipeline_hl7", "dbx"]
 }
