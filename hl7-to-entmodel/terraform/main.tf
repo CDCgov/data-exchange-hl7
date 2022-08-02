@@ -54,13 +54,34 @@ resource "azurerm_storage_account" "fn_storage" {
 # APP INSIGHTS
 #############################################################################
 
-resource "azurerm_application_insights" "application_insights" {
+resource "azurerm_application_insights" "app_insights" {
   name                = "${var.project}-app-insights-${var.environment}"
   location            = var.location
   resource_group_name = azurerm_resource_group.main_dx_hl7_rg.name
   application_type    = "java"
 
-    tags = {
+  tags = {
+    environment = var.environment
+    project = var.project
+  }
+}
+
+
+#############################################################################
+# APP SERVICE
+#############################################################################
+
+# Linux Consumption App Service Plan
+
+resource "azurerm_service_plan" "app_service_plan" {
+  name                = "${var.project}-app-service-plan-${var.environment}"
+  resource_group_name = azurerm_resource_group.main_dx_hl7_rg.name
+  location            = var.location
+
+  os_type             = "Linux"
+  sku_name            = "F1" // TODO change Free Tier     
+
+  tags = {
     environment = var.environment
     project = var.project
   }
