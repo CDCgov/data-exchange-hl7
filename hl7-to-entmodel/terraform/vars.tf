@@ -47,3 +47,12 @@ variable "storage_prefix_function" {
   type    = string
   default = "fnstorage"
 }
+
+
+#############################################################################
+# TERRAFORM LOCALS
+#############################################################################
+
+locals {
+  subnet_names = ["pipeline_hl7_${var.environment_name}", "dbx_${var.environment_name}"]
+}
