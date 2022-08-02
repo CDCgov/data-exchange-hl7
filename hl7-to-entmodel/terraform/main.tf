@@ -41,5 +41,4 @@ resource "azurerm_storage_account" "fnstorage" {
   tags = {
     environment = var.environment_name
   }
-
 }
