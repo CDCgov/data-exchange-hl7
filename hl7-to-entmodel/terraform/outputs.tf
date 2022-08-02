@@ -8,13 +8,22 @@ output "vnet_id" {
   description = "Deployed vnet id"
 }
 
-
-output "function_app_name" {
-  value = azurerm_linux_function_app.fn_app.name
-  description = "Deployed function app name"
+output "fn_sv_app_name" {
+  value = azurerm_linux_function_app.fn_app_sv.name
+  description = "Deployed function app structural validator name"
 }
 
-output "function_app_default_hostname" {
-  value = azurerm_linux_function_app.fn_app.default_hostname
-  description = "Deployed function app hostname"
+output "fn_sv_app_hostname" {
+  value = azurerm_linux_function_app.fn_app_sv.default_hostname
+  description = "Deployed function app structural validator hostname"
+}
+
+output "fn_mp_app_name" {
+  value = azurerm_linux_function_app.fn_app_mp.name
+  description = "Deployed function app message processor name"
+}
+
+output "fn_mp_app_hostname" {
+  value = azurerm_linux_function_app.fn_app_mp.default_hostname
+  description = "Deployed function app message processor hostname"
 }
