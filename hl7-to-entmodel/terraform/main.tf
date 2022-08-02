@@ -2,6 +2,10 @@
 # RESOURCES - VNET
 #############################################################################
 
+locals {
+  subnet_names = ["pipeline_hl7_${var.environment_name}", "dbx_${var.environment_name}"]
+}
+
 resource "azurerm_resource_group" "vnet_main_rg" {
   name     = var.resource_group_name
   location = var.location
