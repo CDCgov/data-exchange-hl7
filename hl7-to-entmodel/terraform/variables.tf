@@ -11,6 +11,11 @@ variable "environment_name" {
   default = "dev"
 }
 
+variable "project_name" {
+  type = string
+  default = "dataexchange-hl7"
+}
+
 #############################################################################
 # VARIABLES - RG
 #############################################################################
@@ -43,7 +48,7 @@ variable "subnet_prefixes" {
 # VARIABLES - STORAGE
 #############################################################################
 
-variable "storage_prefix_function" {
+variable "fn_storage" {
   type    = string
   default = "fnstorage"
 }
