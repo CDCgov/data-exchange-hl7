@@ -109,3 +109,28 @@ resource "azurerm_linux_function_app" "fn_app" {
     project = var.project
   }
 }
+
+
+#############################################################################
+# EVENT HUBS
+#############################################################################
+resource "azurerm_eventhub_namespace" "eventhub_namespace" {
+  name                = "${var.project}-eventhub-namespace-${var.environment}"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.main_dx_hl7_rg.name
+  sku                 = "Standard"
+  capacity            = 1
+
+  tags = {
+    environment = var.environment
+    project = var.project
+  }
+}
+
+resource "azurerm_eventhub" "eventhub" {
+  name                = "${var.project}-eventhub-${var.environment}"
+  namespace_name      = azurerm_eventhub_namespace.eventhub_namespace.name
+  resource_group_name = azurerm_resource_group.main_dx_hl7_rg.name
+  partition_count     = 2
+  message_retention   = 2 // 2 days 
+}
