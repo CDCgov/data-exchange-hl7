@@ -1,4 +1,8 @@
 
+#############################################################################
+# TERRAFORM STORAGE
+#############################################################################
+
 resource "azurerm_storage_account" "sa" {
 
   name                     = "${var.storage_prefix_function}${var.environment_name}"
