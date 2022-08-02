@@ -6,14 +6,14 @@
 # VARIABLES - ENV
 #############################################################################
 
-variable "environment_name" {
+variable "environment" {
   type = string
   default = "dev"
 }
 
-variable "project_name" {
+variable "project" {
   type = string
-  default = "dataexchange-hl7"
+  default = "dxhl7"
 }
 
 #############################################################################
@@ -44,12 +44,4 @@ variable "subnet_prefixes" {
   default = ["10.0.0.0/24", "10.0.1.0/24"]
 }
 
-#############################################################################
-# VARIABLES - STORAGE
-#############################################################################
-
-variable "fn_storage" {
-  type    = string
-  default = "fnstorage"
-}
 
