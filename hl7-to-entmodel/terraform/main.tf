@@ -55,8 +55,13 @@ resource "azurerm_storage_account" "fn_storage" {
 #############################################################################
 
 resource "azurerm_application_insights" "application_insights" {
-  name                = "${var.project}-application-insights-${var.environment}"
+  name                = "${var.project}-app-insights-${var.environment}"
   location            = var.location
   resource_group_name = azurerm_resource_group.main_dx_hl7_rg.name
-  application_type    = "Node.JS"
+  application_type    = "java"
+
+    tags = {
+    environment = var.environment
+    project = var.project
+  }
 }
