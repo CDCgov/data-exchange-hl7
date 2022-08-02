@@ -6,10 +6,16 @@ locals {
   subnet_names = ["main_hl7_${var.environment}", "dbx_${var.environment}"]
 }
 
+// creates new RG
 resource "azurerm_resource_group" "main_dx_hl7_rg" {
   name     = var.resource_group_name
   location = var.location
 }
+// for existing RG
+# data "azurerm_resource_group" "vnet_main_rg" {
+#   name     = var.resource_group_name
+# }
+
 
 module "vnet-main" {
   source              = "Azure/vnet/azurerm"
