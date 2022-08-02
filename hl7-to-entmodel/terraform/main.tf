@@ -34,7 +34,7 @@ module "vnet-main" {
 # STORAGE
 #############################################################################
 
-resource "azurerm_storage_account" "fn_storage" {
+resource "azurerm_storage_account" "storage_fn" {
 
   name                     = "${var.project}storage${var.environment}"
   resource_group_name      = azurerm_resource_group.main_dx_hl7_rg.name
@@ -80,6 +80,29 @@ resource "azurerm_service_plan" "app_service_plan" {
 
   os_type             = "Linux"
   sku_name            = "F1" // TODO change Free Tier     
+
+  tags = {
+    environment = var.environment
+    project = var.project
+  }
+}
+
+
+#############################################################################
+# FUNCTION
+#############################################################################
+
+resource "azurerm_linux_function_app" "fn_app" {
+  name                       = "${var.project}-fn-${var.environment}"
+  resource_group_name        = azurerm_resource_group.main_dx_hl7_rg.name
+  location                   = var.location
+  service_plan_id            = azurerm_service_plan.app_service_plan.id
+
+  storage_account_name       = azurerm_storage_account.storage_fn.name
+  storage_account_access_key = azurerm_storage_account.storage_fn.primary_access_key
+
+  site_config {
+  }
 
   tags = {
     environment = var.environment
