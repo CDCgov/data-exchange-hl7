@@ -2,7 +2,7 @@
 
 This project is a wrapper around the NIST (https://www.nist.gov/) HL7 validator.
 
-NIST jar's in the **/lib** folder are compiled from source code at https://github.com/usnistgov/v2-validation , to be compatible with Scala 2.12 (Spark).
+NIST jar's in the **/lib** folder are compiled from source code at https://github.com/usnistgov/v2-validation
 
 Default profiles (src/main/resources/) are NNDSS profiles and are loaded and used if no other profiles are provided to the structure validator.
 
