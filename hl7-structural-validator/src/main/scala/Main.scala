@@ -29,6 +29,7 @@ object Main {
         1 to numMsgs foreach { i => 
             
             time {
+                // validator.reportJSON(testMsg) match TODO: test case
 
                 validator.reportMap(testMsg) match {
 

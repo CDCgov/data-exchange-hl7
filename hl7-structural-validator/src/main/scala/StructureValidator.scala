@@ -43,6 +43,14 @@ trait StructureValidator {
   } // .reportMap 
 
 
-  // def reportJSON: String
+  def reportJSON(hl7Message: String): Try[String] = {
+
+    reportMap(hl7Message) match {
+
+        case Success(report) => Success(JsonUtil.toJson(report))
+        case Failure(e) => Failure(e) 
+    }
+
+  } // .reportJSON
 
 } // .StructureValidator
