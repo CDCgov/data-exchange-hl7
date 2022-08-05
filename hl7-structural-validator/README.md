@@ -2,7 +2,7 @@
 
 This project is a wrapper around the NIST (https://www.nist.gov/) HL7 validator.
 
-NIST jar's in the **/lib** folder are compiled from source code at https://github.com/usnistgov/v2-validation
+NIST jar's in the **/lib** folder are compiled from NIST v2-validation repoo source code available at https://github.com/usnistgov/v2-validation
 
 Default profiles (src/main/resources/) are NNDSS profiles and are loaded and used if no other profiles are provided to the structure validator.
 
@@ -10,12 +10,22 @@ Default profiles (src/main/resources/) are NNDSS profiles and are loaded and use
 
 Project is a Scala project and can run with sbt: https://www.scala-sbt.org/.
 
-# Build and Test
+### Build and Run
 ```bash
 $ sbt
 > clean; compile; run
 ```
-The assembly .jar is used for HL7 validation.
+### Test
+```bash
+$ sbt
+> test
+```
+### Package
+```bash
+$ sbt
+> test
+```
+### Package (Assembly) - The assembly .jar is used for HL7 validation.
 ```bash
 $ sbt 
 > assembly 
@@ -24,10 +34,13 @@ $ sbt
 # Example Usage
 Add the assembly .jar as library to the project. The compiled assembly .jar is available in this repo / folder.
 
-This example validates uses the custom build in profiles available in src/main/resources.
+This example validates using the profiles available in src/main/resources.
 
 ```scala
 import cdc.xlr.structurevalidator._
+
+// 2 validator's ara available: concurrent (async) and synchronous (sync) 
+
 
 val validator = StructureValidatorConc() // the concurrent (async) validator
 
@@ -40,11 +53,11 @@ validator.reportMap( hl7Message ) match {
 
 }
 
+// other validator methods available: 
+
+// validator.reportJSON -> returns a validation report in JSON format
+
+// validator.report -> returns a NIST report (gov.nist.validation.report.{Entry, Report})
+
 ```
 
-# Other
-
-NIST repository:
-https://hit-dev.nist.gov:9001/
-
-However NIST available HL7 jar's at this time are not compatible with Scala 2.12 (Spark).
