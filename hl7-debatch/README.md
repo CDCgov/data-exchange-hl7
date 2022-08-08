@@ -1,1 +1,1 @@
-Debatch folder for HL7 batched messages.
+Debatch for HL7 batch messages.
