@@ -46,7 +46,7 @@
         <dependency>
             <groupId>cdc.xlr.structurevalidator</groupId>
             <artifactId>cdc-xlr-hl7-structurevalidator</artifactId>
-            <version>0.3.1</version>
+            <version>0.4.2</version>
         </dependency>
     </dependencies>
 
