@@ -44,6 +44,12 @@ object ProfileLoaderLocal {
                         PROFILES_LOCAL_LOCATION_1 + PROFILES_PROFILE_DEFAULT_FILE_NAME,
                         PROFILES_LOCAL_LOCATION_1 + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
 
+                        
+  def apply(profilesLocation: String) = new ProfileLoaderLocal(
+                                                profilesLocation + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
+                                                profilesLocation + PROFILES_PROFILE_DEFAULT_FILE_NAME,
+                                                profilesLocation + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+
   def apply(profilesLocation: String, 
             constraintsFileName: String, 
             profileFileName: String,
