@@ -32,7 +32,7 @@ class ProfileLoaderLocal(constraintsFileLoc: String,
 
     def readFileToBufStr(fileLocation:String):BufferedInputStream = {
         new BufferedInputStream( getClass.getResourceAsStream( fileLocation ) )
-    } // .read
+    } // .reads
 
 } // .ProfileLoaderLocal
 
@@ -40,15 +40,25 @@ class ProfileLoaderLocal(constraintsFileLoc: String,
 object ProfileLoaderLocal {
     
   def apply() = new ProfileLoaderLocal(
-                        PROFILES_LOCAL_LOCATION_1 + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
-                        PROFILES_LOCAL_LOCATION_1 + PROFILES_PROFILE_DEFAULT_FILE_NAME,
-                        PROFILES_LOCAL_LOCATION_1 + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_PROFILE_DEFAULT_FILE_NAME,
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
 
                         
-  def apply(profilesLocation: String) = new ProfileLoaderLocal(
-                                                profilesLocation + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
-                                                profilesLocation + PROFILES_PROFILE_DEFAULT_FILE_NAME,
-                                                profilesLocation + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+  def apply(profilesSpecName: String) = {
+
+    profilesSpecName match {
+
+        case PROFILES_PHIN_SPEC_3_1 =>  new ProfileLoaderLocal(
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_PROFILE_DEFAULT_FILE_NAME,
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+
+        case _ => throw new Exception("Profiles for this specification are not available")
+
+    } // .match
+  } // .apply
+
 
   def apply(profilesLocation: String, 
             constraintsFileName: String, 
