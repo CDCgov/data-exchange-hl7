@@ -29,6 +29,6 @@ class StructureValidatorConc(profileLoader: ProfileLoader) extends StructureVali
 
 object StructureValidatorConc {
     
-  def apply() = new StructureValidatorConc(new ProfileLoaderLocal)
+  def apply() = new StructureValidatorConc(ProfileLoaderLocal())
   def apply(profileLoader: ProfileLoader) = new StructureValidatorConc(profileLoader)
 } // .StructureValidatorConc

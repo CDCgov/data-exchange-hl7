@@ -33,7 +33,7 @@ class StructureValidatorSync(profileLoader: ProfileLoader) extends StructureVali
 
 object StructureValidatorSync {
 
-  def apply() = new StructureValidatorSync(new ProfileLoaderLocal)
+  def apply() = new StructureValidatorSync(ProfileLoaderLocal())
   def apply(profileLoader: ProfileLoader) = new StructureValidatorSync(profileLoader)
 } // .StructureValidatorSync
 

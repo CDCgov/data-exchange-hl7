@@ -16,7 +16,7 @@ object Main {
 
     def main(args: Array[String]): Unit = {
 
-        println("Structure Validator - with local profiles...")
+        println("Structure Validator - with local profiles #1 (src/main/resources/profiles1)...")
 
         // load test file from resources
         val fileName = "PERT_V1.0.1_TM_TC04"

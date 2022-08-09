@@ -8,12 +8,9 @@ import hl7.v2.profile.{Profile, XMLDeserializer}
 import java.io.{BufferedInputStream, FileInputStream}
 import scala.io.Source
 
-class ProfileLoaderLocal extends ProfileLoader {
-
-    // local profiles location in src/main/resources
-    val constraintsFileLoc = "/Constraints.xml"
-    val profileFileLoc = "/Profile.xml"
-    val valueSetsFileLoc = "/ValueSets.xml"
+class ProfileLoaderLocal(constraintsFileLoc: String,
+                        profileFileLoc: String,
+                        valueSetsFileLoc: String) extends ProfileLoader {
 
     def conformanceContext(): ConformanceContext= {
         val buff: BufferedInputStream = readFileToBufStr(constraintsFileLoc)
@@ -36,5 +33,23 @@ class ProfileLoaderLocal extends ProfileLoader {
     def readFileToBufStr(fileLocation:String):BufferedInputStream = {
         new BufferedInputStream( getClass.getResourceAsStream( fileLocation ) )
     } // .read
+
+} // .ProfileLoaderLocal
+
+
+object ProfileLoaderLocal {
+    
+  def apply() = new ProfileLoaderLocal(
+                        PROFILES_LOCAL_LOCATION_1 + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
+                        PROFILES_LOCAL_LOCATION_1 + PROFILES_PROFILE_DEFAULT_FILE_NAME,
+                        PROFILES_LOCAL_LOCATION_1 + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+
+  def apply(profilesLocation: String, 
+            constraintsFileName: String, 
+            profileFileName: String,
+            valueSetsFileName: String) = new ProfileLoaderLocal(
+                                                profilesLocation + constraintsFileName,
+                                                profilesLocation + profileFileName,
+                                                profilesLocation + valueSetsFileName)
 
 } // .ProfileLoaderLocal
