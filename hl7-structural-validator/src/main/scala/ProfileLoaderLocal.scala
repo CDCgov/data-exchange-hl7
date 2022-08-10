@@ -8,12 +8,9 @@ import hl7.v2.profile.{Profile, XMLDeserializer}
 import java.io.{BufferedInputStream, FileInputStream}
 import scala.io.Source
 
-class ProfileLoaderLocal extends ProfileLoader {
-
-    // local profiles location in src/main/resources
-    val constraintsFileLoc = "/Constraints.xml"
-    val profileFileLoc = "/Profile.xml"
-    val valueSetsFileLoc = "/ValueSets.xml"
+class ProfileLoaderLocal(constraintsFileLoc: String,
+                        profileFileLoc: String,
+                        valueSetsFileLoc: String) extends ProfileLoader {
 
     def conformanceContext(): ConformanceContext= {
         val buff: BufferedInputStream = readFileToBufStr(constraintsFileLoc)
@@ -35,6 +32,40 @@ class ProfileLoaderLocal extends ProfileLoader {
 
     def readFileToBufStr(fileLocation:String):BufferedInputStream = {
         new BufferedInputStream( getClass.getResourceAsStream( fileLocation ) )
-    } // .read
+    } // .reads
+
+} // .ProfileLoaderLocal
+
+
+object ProfileLoaderLocal {
+    
+  def apply() = new ProfileLoaderLocal(
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_PROFILE_DEFAULT_FILE_NAME,
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+
+                        
+  def apply(profilesSpecName: String) = {
+
+    profilesSpecName match {
+
+        case PROFILES_PHIN_SPEC_3_1 =>  new ProfileLoaderLocal(
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_PROFILE_DEFAULT_FILE_NAME,
+                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+
+        case _ => throw new Exception("Profiles for this specification are not available")
+
+    } // .match
+  } // .apply
+
+
+  def apply(profilesLocation: String, 
+            constraintsFileName: String, 
+            profileFileName: String,
+            valueSetsFileName: String) = new ProfileLoaderLocal(
+                                                profilesLocation + constraintsFileName,
+                                                profilesLocation + profileFileName,
+                                                profilesLocation + valueSetsFileName)
 
 } // .ProfileLoaderLocal

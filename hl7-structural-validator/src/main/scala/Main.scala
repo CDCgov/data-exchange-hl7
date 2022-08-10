@@ -16,14 +16,14 @@ object Main {
 
     def main(args: Array[String]): Unit = {
 
-        println("Structure Validator - with local profiles...")
+        println("Structure Validator - with local profiles #1 (src/main/resources/profiles1)...")
 
         // load test file from resources
         val fileName = "PERT_V1.0.1_TM_TC04"
         val hl7TestMessage = HL7_TEST_MESSAGES_LOCATION + fileName + ".txt"
         val testMsg = Source.fromFile(hl7TestMessage).getLines.mkString("\n")
 
-        val validator = StructureValidatorConc()
+        val validator = StructureValidatorConc(ProfileLoaderLocal(PROFILES_PHIN_SPEC_3_1))
         
         val numMsgs = 1
         1 to numMsgs foreach { i => 

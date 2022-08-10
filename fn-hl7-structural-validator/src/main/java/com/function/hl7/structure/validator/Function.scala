@@ -42,9 +42,9 @@ class Function {
               case true => {
 
                 // ASYNC
-                val validator = StructureValidator()
+                val validator = StructureValidatorConc()
 
-                Try( Await.result(validator.validate(request.getBody().get), Duration(2, TimeUnit.SECONDS)) ) match {
+                validator.reportJSON(request.getBody().get) match {
 
                     case Success( report ) => {
                         request.createResponseBuilder(HttpStatus.OK).body(report).build
@@ -56,15 +56,6 @@ class Function {
                     } // .Failure
 
                 } // .Try  
-
-                // SYNC
-                // try {
-                //   val validator = StructureValidatorSync()
-                //   val result = validator.validate(request.getBody().get())
-                //   request.createResponseBuilder(HttpStatus.OK).body(result).build
-                // } catch {
-                //   case _ :Throwable => request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("message bad format").build
-                // }
 
               } // .true
 
