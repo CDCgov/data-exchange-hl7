@@ -3,12 +3,25 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 	"os"
 )
 
 func uploadFileEvent(w http.ResponseWriter, r *http.Request) {
-    w.Write([]byte("UploadFileEvent route"))
-} // .UploadFileEvent
+
+	switch r.Method {
+		case http.MethodGet: {
+			w.Write([]byte( time.Now().String()))
+			return
+		} // .http.MethodGet
+
+		case http.MethodPost: {
+			w.Write([]byte( time.Now().String()))
+			return
+		} // .http.MethodPost
+	} // .switch
+
+} // .uploadFileEvent
 
 
 func main() {
