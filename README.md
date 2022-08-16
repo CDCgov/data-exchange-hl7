@@ -41,7 +41,6 @@ A repository for the CDC data exchange building block HL7.
 - Code to retrieve and update vocabulary entries into (project) local data store:
 [phin-vocab](https://github.com/CDCgov/data-exchange-hl7/tree/master/phin-vocab)
 
-
 ## Public Domain Standard Notice
 This repository constitutes a work of the United States Government and is not
 subject to domestic copyright protection under 17 USC § 105. This repository is in
