@@ -34,11 +34,11 @@ A repository for the CDC data exchange building block HL7.
 [hl7-to-entmodel](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-to-entmodel)
 
 #### Message Mapping Guide (MMG) 
-- Code to retrieve and update MMGs from MMGAT API) into local storage:
+- Code to retrieve and update MMGs from MMGAT API into (project) local storage:
 [mmg](https://github.com/CDCgov/data-exchange-hl7/tree/master/mmg)
 
 #### PHIN Vocab
-- Code to retrieve and update vocabulary entries into a local data store:
+- Code to retrieve and update vocabulary entries into (project) local data store:
 [phin-vocab](https://github.com/CDCgov/data-exchange-hl7/tree/master/phin-vocab)
 
 
