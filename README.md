@@ -33,6 +33,13 @@ A repository for the CDC data exchange building block HL7.
 - Code for validation and transformation of HL7 messages to a MMG Based Model for Lakehouse proof-of-concept:
 [hl7-to-entmodel](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-to-entmodel)
 
+#### Message Mapping Guide (MMG) 
+- Code to retrieve and update MMGs from MMGAT API into (project) local storage:
+[mmg](https://github.com/CDCgov/data-exchange-hl7/tree/master/mmg)
+
+#### PHIN Vocab
+- Code to retrieve and update vocabulary entries into (project) local data store:
+[phin-vocab](https://github.com/CDCgov/data-exchange-hl7/tree/master/phin-vocab)
 
 ## Public Domain Standard Notice
 This repository constitutes a work of the United States Government and is not
