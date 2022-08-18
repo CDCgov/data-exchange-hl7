@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"strings"
 	"os"
@@ -12,7 +11,7 @@ import (
 
 func main() {
 
-	fmt.Println("starting app..")
+	start := time.Now()
 
 	f, err := os.Open("batch.txt")
 	if err != nil {
@@ -23,7 +22,7 @@ func main() {
 	fstat, err := f.Stat()
 	if err != nil {
 		log.Fatal(err) 
-	}
+	} // .if
 
 	fileSource := "TODO - read from bucket"
 	fileName := fstat.Name()
@@ -31,14 +30,12 @@ func main() {
 	fileSize := fstat.Size()
 	fileIngestUUID := uuid.New().String()
 	fileIngestTime := time.Now().UTC()
-	
-	scanner := bufio.NewScanner(f) 
 
 	var messages []Message
 	var lines []string 
-
 	index := 0
 
+	scanner := bufio.NewScanner(f) 
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 
@@ -77,11 +74,30 @@ func main() {
 			
 		lines = append(lines, line) 
     } // .for scanner.Scan()
+	
+	// append last message
+	message := Message{
+		FileSource: fileSource,
+		FileName: fileName,
+		FileModTime: fileModTime,
+		FileSize: fileSize,
+
+		FileIngestUUID: fileIngestUUID,
+		FileIngestTime: fileIngestTime, 
+		
+		// message metadate
+		MessageUUID: uuid.New().String(),
+
+		MessageIndex: index,
+		MessageContent: strings.Join(lines, "\n"),
+	} // .Message
+	// TODO: do not append and fire off message/s to Event Hub
+	messages = append(messages, message)
 
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	} // .if
 
-	log.Println("hl7 messages found: ", len(messages))
-
+	log.Printf("file has: %d messages", len(messages))
+	log.Printf("execution duration: %v", time.Since(start))
 } // .main
