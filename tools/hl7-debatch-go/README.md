@@ -20,4 +20,5 @@ $ go run main.go
 |    200,000    | 740 MB   | 2.1 sec     |
 |  2,000,000    | 7.45 GB  | 21 sec      |
 | 10,000,000    | 37.26 GB | 1min 50 sec |
+
 Using 1 Machine: 3.4GHz 16 Core CPU, 64GB RAM
