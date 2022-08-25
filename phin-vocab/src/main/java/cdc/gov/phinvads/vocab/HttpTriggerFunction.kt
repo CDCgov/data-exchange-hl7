@@ -26,7 +26,7 @@ class HttpTriggerFunction {
             authLevel = AuthorizationLevel.ANONYMOUS
         ) request: HttpRequestMessage<Optional<String?>?>,
         context: ExecutionContext
-    ): HttpResponseMessage {cd.
+    ): HttpResponseMessage {
         context.logger.info("Java HTTP trigger processed a request.")
         val client = VocabClient()
         println("Calling VocabClient services")
