@@ -2,43 +2,36 @@
 
 A repository for the CDC data exchange building block HL7.
 
-## Tools
 
 #### Case-based Surveillance Pipeline
 - Code for a case-based surveillance data pipeline proof-of-concept:
 [cbs-pipeline](https://github.com/CDCgov/data-exchange-hl7/tree/master/cbs-pipeline#case-based-surveillance-pipeline)
 
-#### Function HL7 Messages Structural Validation
-- Structural validation of HL7 messages - cloud function:
-[fn-hl7-structural-validator](https://github.com/CDCgov/data-exchange-hl7/tree/master/fn-hl7-structural-validator)
 
-#### Functions Project - HL7 Messages Pipeline ( Arbo POC )
+#### Functions Project - HL7 Messages Pipeline
 - Pipeline using functions for HL7 Messages (Debatch, Validate, Transform) - proof-of-concept:
 [fns-hl7-pipeline](https://github.com/CDCgov/data-exchange-hl7/tree/master/fns-hl7-pipeline)
 
-#### HL7 Messages Batch - Messages Debatcher:
-- Debatching of HL7 messages:
-[hl7-debatch](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-debatch)
 
 #### HL7 Messages Structural Validation
 - Structural validation of HL7 messages:
 [hl7-structural-validator](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-structural-validator)
 
-#### HL7 Messages to a MMG Based Model and Lakehouse
-- Code for validation and transformation of HL7 messages to a MMG Based Model for Lakehouse proof-of-concept:
-[hl7-to-entmodel](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-to-entmodel)
 
 #### Message Mapping Guide (MMG) 
 - Code to retrieve and update MMGs from MMGAT API into (project) local storage:
 [mmg](https://github.com/CDCgov/data-exchange-hl7/tree/master/mmg)
 
+
 #### PHIN Vocab
 - Code to retrieve and update vocabulary entries into (project) local data store:
 [phin-vocab](https://github.com/CDCgov/data-exchange-hl7/tree/master/phin-vocab)
 
+
 #### Tools
 - Various HL7 Dev tools or experiments:
 [tools](https://github.com/CDCgov/data-exchange-hl7/tree/master/tools)
+
 
 
 ## Public Domain Standard Notice

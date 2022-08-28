@@ -1,1 +1,1 @@
-HL7 functions project: Debatch, Validate, Transform.
+HL7 pipeline functions project: Receiver-Debatch, Validate, Transform, Validate Content.
