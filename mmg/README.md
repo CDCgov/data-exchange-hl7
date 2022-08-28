@@ -1,1 +1,1 @@
-Tool for retrieve and update [MMGs](https://ndc.services.cdc.gov/message-mapping-guides/) to local blob store.
+Tool for retrieve and update [MMGs](https://ndc.services.cdc.gov/message-mapping-guides/) to local data store.
