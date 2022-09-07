@@ -96,14 +96,14 @@ class Function {
                 val reader = InputStreamReader( blobClient.openInputStream() )
 
                 var index = 0
-                context.logger.info("index: -----> " + index)
+                // context.logger.info("index: -----> " + index)
                 // var hl7MessagesArr = arrayListOf<String>() 
                 var currentLinesArr = arrayListOf<String>() 
 
                 BufferedReader( reader ).use { br ->
                     var line: String?
                     while ( br.readLine().also { line = it } != null ) {
-                        context.logger.info("line: ------> " + line)
+                        // context.logger.info("line: ------> " + line)
 
                         var lineClean = line!!.trim()
                         if ( lineClean.startsWith(UTF_BOM) ) {
@@ -115,7 +115,7 @@ class Function {
                         } else {
 
                             if ( lineClean.startsWith("MSH") ) {
-                                context.logger.info("line.startsWith(MSH): ------> " + line)
+                                // context.logger.info("line.startsWith(MSH): ------> " + line)
                                 if ( index > 0 ) {
                                     // hl7MessagesArr.add( currentLinesArr.joinToString(separator="\n") )
                                     
@@ -129,12 +129,12 @@ class Function {
                                         content = currentLinesArr.joinToString(separator="\n") ,
                                         metadata = hl7MessageMetadata,
                                     )
-                                    context.logger.info("sending to event hub (ongoing): --> " + hl7Message.metadata.messageIndex + ", " + hl7Message.metadata.messageUUID)
+                                    // context.logger.info("sending to event hub (ongoing): --> " + hl7Message.metadata.messageIndex + ", " + hl7Message.metadata.messageUUID)
                                     evHubSender.send(hl7Message=hl7Message)
 
                                 } // .if 
                                 index = index + 1
-                                context.logger.info("index (+1): -----> " + index)
+                                // context.logger.info("index (+1): -----> " + index)
                                 // empty for new message
                                 currentLinesArr.clear()
 
@@ -156,7 +156,7 @@ class Function {
                                         content = currentLinesArr.joinToString(separator="\n") ,
                                         metadata = hl7MessageMetadata,
                                     )
-                    context.logger.info("sending to event hub (last): --> " + hl7Message.metadata.messageIndex + ", " + hl7Message.metadata.messageUUID)
+                    // context.logger.info("sending to event hub (last): --> " + hl7Message.metadata.messageIndex + ", " + hl7Message.metadata.messageUUID)
                     evHubSender.send(hl7Message=hl7Message)
                     // hl7MessagesArr.add(currentLinesArr.joinToString(separator="\n") )
 
