@@ -8,4 +8,7 @@ mvn install:install-file \
  -DgroupId=cdc.gov.vocab \
  -DartifactId=vocab-service-client \
  -Dversion=1.0 -Dpackaging=jar
+
 ```
+
+Add a local.settings.json file for setting up Azure Radis cache properties & add Radis service name & key.

@@ -15,7 +15,7 @@
         <azure.functions.maven.plugin.version>1.16.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>1.4.2</azure.functions.java.library.version>
        <!-- <functionAppName>azure-function-vocab-1661293374619</functionAppName> -->
-        <kotlin.version>1.7.20-Beta</kotlin.version>
+        <kotlin.version>1.7.10</kotlin.version>
 
         <functionRegion>eastus</functionRegion>
         <subscriptionID>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionID>

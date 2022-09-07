@@ -68,7 +68,7 @@ class HttpTriggerFunction {
                jedis.close()
 
            }.start()
-        } catch (re:Exception ) {
+        } catch (re:Exception) {
            println("exception in thread:  $re");
         }
 
