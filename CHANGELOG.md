@@ -12,3 +12,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Docs: How to create development environment for Azure functions project
 - Tools: Various HL7 development tools or experiments
 - Folders for future tools: mmg, phin-vocab, and fns-hl7-pipeline
+- Phin-vocab function for fetching the value sets from phinvads api.
