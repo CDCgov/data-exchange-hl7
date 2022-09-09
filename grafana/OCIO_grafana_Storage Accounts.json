@@ -1,0 +1,6637 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_AZURE_MONITOR",
+      "label": "Azure Monitor",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "grafana-azure-monitor-datasource",
+      "pluginName": "Azure Monitor"
+    },
+    {
+      "name": "VAR_NS",
+      "type": "constant",
+      "label": "Namespace",
+      "value": "Microsoft.Storage/storageAccounts",
+      "description": ""
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "9.0.7"
+    },
+    {
+      "type": "datasource",
+      "id": "grafana-azure-monitor-datasource",
+      "name": "Azure Monitor",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "A dashboard that provides a unified view of Azure Storage services performance, capacity, and availability metrics.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^Availability$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false,
+        "text": {}
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Availability",
+      "transparent": true,
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 3,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "PT5M",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 5,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "SuccessE2ELatency",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 7,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "SuccessServerLatency",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 12,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total",
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Total",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Ingress",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 15,
+        "y": 0
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total",
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Total",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Egress",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "bars": true,
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "fill": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 10,
+        "x": 0,
+        "y": 3
+      },
+      "id": 54,
+      "lines": false,
+      "options": {
+        "graphMode": "none",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "points": false,
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total",
+              "Minimum",
+              "Maximum",
+              "Average",
+              "Count"
+            ],
+            "aggregation": "Average",
+            "alias": "Availability (Average)",
+            "metricDefinition": "microsoft.storage/storageaccounts",
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "ocio-ede-dev-moderate-hl7-rg",
+            "resourceName": "grafanatestraman",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "01f9b1b1-a130-4031-ba25-71771007d3ca",
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          }
+        }
+      ],
+      "title": "Avg Availability for grafanatestraman",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 3
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.0.1",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "alias": "",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ApiName",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Transactions by API Name",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "bars": false,
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "fill": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 10,
+        "x": 0,
+        "y": 8
+      },
+      "id": 56,
+      "lines": true,
+      "options": {
+        "graphMode": "none",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "points": false,
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total",
+              "Minimum",
+              "Maximum",
+              "Average",
+              "Count"
+            ],
+            "aggregation": "Total",
+            "alias": "Transactions (Total)",
+            "metricDefinition": "microsoft.storage/storageaccounts",
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "ocio-ede-dev-moderate-hl7-rg",
+            "resourceName": "grafanatestraman",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "01f9b1b1-a130-4031-ba25-71771007d3ca",
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          }
+        }
+      ],
+      "title": "Sum_Transactions_SG ",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 12,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Table availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/tableservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/tableServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Blob availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/blobservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/blobServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "File availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              },
+              {
+                "text": "File Share",
+                "value": "FileShare"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "C",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Queue availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/queueservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/queueServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "D",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Availability by storage type",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 11,
+        "x": 0,
+        "y": 13
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.0.1",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "alias": "Table transactions",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts/tableservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/tableServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "alias": "Blob transactions",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts/blobservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/blobServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "alias": "File transactions",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              },
+              {
+                "text": "File Share",
+                "value": "FileShare"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "C",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "alias": "Queue transactions",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts/queueservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/queueServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "D",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Transactions by storage type",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 0,
+        "y": 19
+      },
+      "id": 13,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Table capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [],
+            "metricName": "TableCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/tableservices",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/tableServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Blob capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Blob type",
+                "value": "BlobType"
+              },
+              {
+                "text": "Blob tier",
+                "value": "Tier"
+              }
+            ],
+            "metricName": "BlobCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/blobservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/blobServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "File capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "File Share",
+                "value": "FileShare"
+              }
+            ],
+            "metricName": "FileCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "C",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Queue capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [],
+            "metricName": "QueueCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/queueservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/queueServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "D",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Capacity by storage type",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "basic"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 21
+      },
+      "id": 22,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "alias": "",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ApiName",
+                "filters": [],
+                "operator": "eq"
+              },
+              {
+                "dimension": "ResponseType",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              },
+              {
+                "text": "File Share",
+                "value": "FileShare"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "File Services",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "uid": "${ds}"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 29
+      },
+      "id": 52,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "uid": "${ds}"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Failures",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Transactions ClientOtherError"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "ClientOtherError"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Transactions Success"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Success"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 30
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ResponseType",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Transactions Success"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 18,
+        "x": 6,
+        "y": 30
+      },
+      "id": 18,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "alias": "",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ResponseType",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "basic"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 36
+      },
+      "id": 20,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "alias": "",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ApiName",
+                "filters": [],
+                "operator": "eq"
+              },
+              {
+                "dimension": "ResponseType",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts/blobservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/blobServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Blob Services",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "basic"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 44
+      },
+      "id": 24,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Total"
+            ],
+            "aggregation": "Total",
+            "alias": "",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ApiName",
+                "filters": [],
+                "operator": "eq"
+              },
+              {
+                "dimension": "ResponseType",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Response type",
+                "value": "ResponseType"
+              },
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Transactions",
+            "metricNamespace": "microsoft.storage/storageaccounts/tableservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/tableServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Table Services",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "uid": "${ds}"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 52
+      },
+      "id": 50,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "uid": "${ds}"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Performance",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Success Server Latency"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 53
+      },
+      "id": 28,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "SuccessE2ELatency",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "SuccessServerLatency",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Success Server Latency"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 18,
+        "x": 6,
+        "y": 53
+      },
+      "id": 30,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "SuccessE2ELatency",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "SuccessServerLatency",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue"
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Mean"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "lcd-gauge"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-GrYlRd"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Max"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "gradient-gauge"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "continuous-GrYlRd"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Min"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "gradient-gauge"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "continuous-GrYlRd"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Field"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Latency"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 59
+      },
+      "id": 32,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ApiName",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "SuccessE2ELatency",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ApiName",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "SuccessServerLatency",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "seriesToRows",
+            "reducers": [
+              "mean",
+              "max",
+              "min"
+            ]
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "Mean"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "uid": "${ds}"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 70
+      },
+      "id": 48,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "uid": "${ds}"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Availability",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "description": "The data comes from Storage metrics. It measures the availability of requests on Storage accounts.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "red"
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 71
+      },
+      "id": 34,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false,
+        "text": {}
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Account Availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Blob Availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/blobservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/blobServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Table Availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/tableservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/tableServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "C",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "File Availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              },
+              {
+                "text": "File Share",
+                "value": "FileShare"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "D",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Queue Availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/queueservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/queueServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "E",
+          "subscription": "$sub"
+        }
+      ],
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Mean"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-RdYlGr"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 79
+      },
+      "id": 36,
+      "maxDataPoints": 1,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": false
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ApiName",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/blobservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/blobServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ApiName",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/tableservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/tableServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ApiName",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              },
+              {
+                "text": "File Share",
+                "value": "FileShare"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "C",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [
+              {
+                "dimension": "ApiName",
+                "filters": [],
+                "operator": "eq"
+              }
+            ],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/queueservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/queueServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "D",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Availability by API name",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "seriesToRows",
+            "reducers": [
+              "mean"
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 79
+      },
+      "id": 38,
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.0.1",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Blob Availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/blobservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/blobServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Table Availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/tableservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/tableServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "File Availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              },
+              {
+                "text": "File Share",
+                "value": "FileShare"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "C",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average",
+              "Minimum",
+              "Maximum"
+            ],
+            "aggregation": "Average",
+            "alias": "Queue Availability",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Geo type",
+                "value": "GeoType"
+              },
+              {
+                "text": "API name",
+                "value": "ApiName"
+              },
+              {
+                "text": "Authentication",
+                "value": "Authentication"
+              }
+            ],
+            "metricName": "Availability",
+            "metricNamespace": "microsoft.storage/storageaccounts/queueservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/queueServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 minute",
+                "value": "PT1M"
+              },
+              {
+                "text": "5 minutes",
+                "value": "PT5M"
+              },
+              {
+                "text": "15 minutes",
+                "value": "PT15M"
+              },
+              {
+                "text": "30 minutes",
+                "value": "PT30M"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              },
+              {
+                "text": "6 hours",
+                "value": "PT6H"
+              },
+              {
+                "text": "12 hours",
+                "value": "PT12H"
+              },
+              {
+                "text": "1 day",
+                "value": "P1D"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "D",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Availability Trend",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "uid": "${ds}"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 87
+      },
+      "id": 46,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "uid": "${ds}"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Capacity",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-blue"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 88
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.7",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Account Capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [],
+            "metricName": "UsedCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Blob Capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Blob type",
+                "value": "BlobType"
+              },
+              {
+                "text": "Blob tier",
+                "value": "Tier"
+              }
+            ],
+            "metricName": "BlobCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/blobservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/blobServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Table Capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [],
+            "metricName": "TableCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/tableservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/tableServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "C",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "File Capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "File Share",
+                "value": "FileShare"
+              }
+            ],
+            "metricName": "FileCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "D",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Queue Capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [],
+            "metricName": "QueueCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/queueservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/queueServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "E",
+          "subscription": "$sub"
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 96
+      },
+      "id": 42,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.0.1",
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Blob Capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Blob type",
+                "value": "BlobType"
+              },
+              {
+                "text": "Blob tier",
+                "value": "Tier"
+              }
+            ],
+            "metricName": "BlobCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/blobservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/blobServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Table Capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [],
+            "metricName": "TableCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/tableservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/tableServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "C",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "File Capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "File Share",
+                "value": "FileShare"
+              }
+            ],
+            "metricName": "FileCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "D",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Queue Capacity",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [],
+            "metricName": "QueueCapacity",
+            "metricNamespace": "microsoft.storage/storageaccounts/queueservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/queueServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "E",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Storage capacity",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "${DS_AZURE_MONITOR}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 96
+      },
+      "id": 44,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [
+            "mean"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Blob Count",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "Blob type",
+                "value": "BlobType"
+              },
+              {
+                "text": "Blob tier",
+                "value": "Tier"
+              }
+            ],
+            "metricName": "BlobCount",
+            "metricNamespace": "microsoft.storage/storageaccounts/blobservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/blobServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "B",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Table Count",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [],
+            "metricName": "TableCount",
+            "metricNamespace": "microsoft.storage/storageaccounts/tableservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/tableServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "C",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "File Count",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [
+              {
+                "text": "File Share",
+                "value": "FileShare"
+              }
+            ],
+            "metricName": "FileCount",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "D",
+          "subscription": "$sub"
+        },
+        {
+          "azureMonitor": {
+            "aggOptions": [
+              "Average"
+            ],
+            "aggregation": "Average",
+            "alias": "Queue Count",
+            "allowedTimeGrainsMs": [
+              3600000
+            ],
+            "dimensionFilter": "*",
+            "dimensionFilters": [],
+            "dimensions": [],
+            "metricName": "FileCount",
+            "metricNamespace": "microsoft.storage/storageaccounts/fileservices",
+            "resourceGroup": "$rg",
+            "resourceName": "$resource/default",
+            "resourceUri": "/subscriptions/$sub/resourceGroups/$rg/providers/$ns/$resource/fileServices/default",
+            "timeGrain": "auto",
+            "timeGrains": [
+              {
+                "text": "auto",
+                "value": "auto"
+              },
+              {
+                "text": "1 hour",
+                "value": "PT1H"
+              }
+            ],
+            "top": "10"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "${DS_AZURE_MONITOR}"
+          },
+          "hide": false,
+          "queryType": "Azure Monitor",
+          "refId": "E",
+          "subscription": "$sub"
+        }
+      ],
+      "title": "Storage count",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Azure Monitor",
+          "value": "Azure Monitor"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "ds",
+        "options": [],
+        "query": "grafana-azure-monitor-datasource",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "grafana-azure-monitor-datasource",
+          "uid": "${DS_AZURE_MONITOR}"
+        },
+        "definition": "subscriptions()",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Subscription",
+        "multi": false,
+        "name": "sub",
+        "options": [],
+        "query": "subscriptions()",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "hide": 2,
+        "label": "Namespace",
+        "name": "ns",
+        "query": "${VAR_NS}",
+        "skipUrlSync": false,
+        "type": "constant",
+        "current": {
+          "value": "${VAR_NS}",
+          "text": "${VAR_NS}",
+          "selected": false
+        },
+        "options": [
+          {
+            "value": "${VAR_NS}",
+            "text": "${VAR_NS}",
+            "selected": false
+          }
+        ]
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "grafana-azure-monitor-datasource",
+          "uid": "${DS_AZURE_MONITOR}"
+        },
+        "definition": "ResourceGroups($sub)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Resource Group",
+        "multi": false,
+        "name": "rg",
+        "options": [],
+        "query": "ResourceGroups($sub)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "grafana-azure-monitor-datasource",
+          "uid": "${DS_AZURE_MONITOR}"
+        },
+        "definition": "ResourceNames($sub, $rg, $ns)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Resource",
+        "multi": false,
+        "name": "resource",
+        "options": [],
+        "query": "ResourceNames($sub, $rg, $ns)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Azure / Insights / Storage Accounts",
+  "uid": "2022",
+  "version": 13,
+  "weekStart": ""
+}
