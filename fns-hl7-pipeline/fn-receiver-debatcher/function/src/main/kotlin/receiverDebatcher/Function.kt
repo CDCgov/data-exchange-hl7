@@ -20,7 +20,7 @@ const val UTF_BOM = "\uFEFF"
  * Azure Functions with Event Hub Trigger.
  */
 class Function {
-    @FunctionName("ehprocessor001kt")
+    @FunctionName("receiverdebatcher001")
     fun eventHubProcessor(
             @EventHubTrigger(
                 name = "msg", 
