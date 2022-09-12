@@ -23,7 +23,7 @@ class TimerTriggerFunction {
         @TimerTrigger(name = "timerInfo", schedule = "0 30 16 * * FRI") timerInfo: String?,
         context: ExecutionContext
    ) {
-               context.logger.info("Java HTTP trigger processed a request.")
+               context.logger.info("Java time trigger processed a request.")
                val redisCacheName = System.getenv("REDISCACHEHOSTNAME")
                val rediscachekey = System.getenv("REDISCACHEKEY")
                // redisCacheName = "temedehl7.redis.cache.windows.net"
