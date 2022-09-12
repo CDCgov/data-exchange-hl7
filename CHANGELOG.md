@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Unreleased
 - Fns-pipeline - first function for POC: Receiver-Debatcher
 
-## [0.0.2] - 2022-09-12
- - Developed Receiver-Debatcher funtion
- - Deploy phin-vads function
+## [0.0.2] - 2022-09-12 
+ - Developed Receiver-Debatcher function
+ - Developed phin-vads function
  - First Graphana dashboard with basic infrastructure metrics
+
+commit #96
 
 ## [0.0.1] - 2022-08-29
 
