@@ -14,8 +14,14 @@
         <java.version>1.8</java.version>
         <azure.functions.maven.plugin.version>1.16.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>1.4.2</azure.functions.java.library.version>
-        <functionAppName>azure-function-vocab-1661293374619</functionAppName>
-        <kotlin.version>1.7.20-Beta</kotlin.version>
+       <!-- <functionAppName>azure-function-vocab-1661293374619</functionAppName> -->
+        <kotlin.version>1.7.10</kotlin.version>
+
+        <functionRegion>eastus</functionRegion>
+        <subscriptionID>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionID>
+        <functionAppName>hl7-pipeline-functions</functionAppName>
+        <functionResourceGroup>ocio-ede-dev-moderate-hl7-rg</functionResourceGroup>
+        <functionServicePlan>ASP-ocioededevmoderatehl7rg-8a9e</functionServicePlan>
     </properties>
 
     <dependencies>
@@ -56,14 +62,19 @@
             <version>3.1.3</version>
         </dependency>
         <dependency>
-            <groupId>cdc.gov.vocab</groupId>
-            <artifactId>vocab-service-client</artifactId>
-            <version>1.0</version>
+            <groupId>gov.cdc.vocab</groupId>
+            <artifactId>phinvads-client</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>4.1.0</version>
         </dependency>
     </dependencies>
 
@@ -77,13 +88,14 @@
                     <!-- function app name -->
                     <appName>${functionAppName}</appName>
                     <!-- function app resource group -->
-                    <resourceGroup>java-functions-group</resourceGroup>
+                    <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <!-- function app service plan name -->
-                    <appServicePlanName>java-functions-app-service-plan</appServicePlanName>
+                    <appServicePlanName>${functionServicePlan}</appServicePlanName>
                     <!-- function app region-->
                     <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details#supported-regions for all valid values -->
-                    <region>westus</region>
+                    <region>${functionRegion}</region>
                     <!-- function pricingTier, default to be consumption if not specified -->
+                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details#supported-pricing-tiers for all valid values -->
                     <!-- <pricingTier></pricingTier> -->
 
@@ -92,8 +104,8 @@
                     <!-- <disableAppInsights></disableAppInsights> -->
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
-                        <os>windows</os>
-                        <javaVersion>8</javaVersion>
+                        <os>linux</os>
+                        <javaVersion>11</javaVersion>
                         <!-- for docker function, please set the following parameters -->
                         <!-- <image>[hub-user/]repo-name[:tag]</image> -->
                         <!-- <serverId></serverId> -->
@@ -101,8 +113,7 @@
                     </runtime>
                     <appSettings>
                         <property>
-                            <name>FUNCTIONS_EXTENSION_VERSION</name>
-                            <value>~3</value>
+                            <value>~4</value>
                         </property>
                     </appSettings>
                 </configuration>
