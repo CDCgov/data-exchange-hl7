@@ -5,25 +5,27 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>gov.cdc.dataexchange</groupId>
-    <artifactId>receiverDebatcher</artifactId>
+    <artifactId>receiver-debatcher-message-processor</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Azure Kotlin Function :: function</name>
+    <name>DEX Fns-Pipeline :: rdmp</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.7.10</kotlin.version>
-        <functions.version>1.3.0</functions.version>
-        <functions.plugin.version>1.3.2</functions.plugin.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <functions.version>1.4.2</functions.version>
+        <functions.plugin.version>1.16.0</functions.plugin.version>
+        <!-- <azure.functions.maven.plugin.version>1.16.0</azure.functions.maven.plugin.version>
+        <azure.functions.java.library.version>1.4.2</azure.functions.java.library.version> -->
+        <maven.compiler.source>1.11</maven.compiler.source>
+        <maven.compiler.target>1.11</maven.compiler.target>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <functionRegion>eastus</functionRegion>
         <subscriptionID>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionID>
         <functionResourceGroup>ocio-ede-dev-moderate-hl7-rg</functionResourceGroup>
-        <functionServicePlan>ASP-ocioededevmoderatehl7rg-8a9e</functionServicePlan>
-        <functionAppName>fn-app-receiver-debatcher-message-processor</functionAppName>
+        <functionServicePlan>tf-hl7-app-service-plan</functionServicePlan>
+        <functionAppName>tf-hl7-dev-rdmp</functionAppName>
         <slf4j.version>2.0.0</slf4j.version>
         <azevhub.version>5.13.0</azevhub.version>
         <azstblob.version>12.19.0</azstblob.version>
