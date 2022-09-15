@@ -8,6 +8,8 @@ import scala.io.Source
 import scala.util.{Try, Failure, Success}
 
 class StructureValidatorTest extends AnyFlatSpec with should.Matchers {
+    
+    val profileLoaderLoc = ProfileLoaderLocal(PROFILES_PHIN_SPEC_3_1)
 
     "Test message: PERT_V1.0.1_TM_TC04" should "have 6 structure errors, no content and no value set errors with concurrent validator" in {
 
@@ -16,7 +18,7 @@ class StructureValidatorTest extends AnyFlatSpec with should.Matchers {
         val hl7TestMessageLoc = HL7_TEST_MESSAGES_LOCATION + fileName + ".txt"
         val hl7TestMessage = Source.fromFile(hl7TestMessageLoc).getLines.mkString("\n")
 
-        val validator = StructureValidatorConc()
+        val validator = StructureValidatorConc(profileLoaderLoc)
 
         validator.reportMap(hl7TestMessage) match {
 
@@ -41,7 +43,7 @@ class StructureValidatorTest extends AnyFlatSpec with should.Matchers {
         val hl7TestMessageLoc = HL7_TEST_MESSAGES_LOCATION + fileName + ".txt"
         val hl7TestMessage = Source.fromFile(hl7TestMessageLoc).getLines.mkString("\n")
 
-        val validator = StructureValidatorSync()
+        val validator = StructureValidatorSync(profileLoaderLoc)
 
         validator.reportMap(hl7TestMessage) match {
 
@@ -61,7 +63,7 @@ class StructureValidatorTest extends AnyFlatSpec with should.Matchers {
 
     "Test message empty or without MSH segment" should "throw with message: No MSH Segment found in the message." in {
 
-        val validator = StructureValidatorConc()
+        val validator = StructureValidatorConc(profileLoaderLoc)
 
         validator.reportMap("some not valid message") match {
 

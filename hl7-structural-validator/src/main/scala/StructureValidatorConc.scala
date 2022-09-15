@@ -17,7 +17,7 @@ class StructureValidatorConc(profileLoader: ProfileLoader) extends StructureVali
 
     val validator = new HL7Validator(profile = profile, valueSetLibrary = valueSets, conformanceContext = confContext)
 
-        // returns Future[Map[String, Any]]  the JSON validation report or the error
+    // returns Future[Map[String, Any]]  the JSON validation report or the error
     def report(hl7Message: String): Try[Report] = {
 
       val reportFuture: Future[Report] = validator.validate(hl7Message, validator.profile.messages.keySet.head) 
@@ -29,6 +29,5 @@ class StructureValidatorConc(profileLoader: ProfileLoader) extends StructureVali
 
 object StructureValidatorConc {
     
-  def apply() = new StructureValidatorConc(ProfileLoaderLocal())
   def apply(profileLoader: ProfileLoader) = new StructureValidatorConc(profileLoader)
 } // .StructureValidatorConc

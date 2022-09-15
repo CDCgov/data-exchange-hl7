@@ -41,12 +41,8 @@ import cdc.xlr.structurevalidator._
 
 // 2 validator's ara available: concurrent (async) and synchronous (sync) 
 
-
-val validator = val validator = StructureValidatorConc() // the concurrent (async) validator with default local profiles
-// which is same as:
-// val validator = StructureValidatorConc(ProfileLoaderLocal(PROFILES_PHIN_SPEC_3_1))  
-
-// val validator = StructureValidatorSync() // the sync validator
+val validator = StructureValidatorConc(ProfileLoaderLocal(PROFILES_PHIN_SPEC_3_1))   // the concurrent (async) validator 
+// val validator = StructureValidatorSync(PROFILES_PHIN_SPEC_3_1) // the sync validator
 
 validator.reportMap( hl7Message ) match {
 

@@ -38,34 +38,36 @@ class ProfileLoaderLocal(constraintsFileLoc: String,
 
 
 object ProfileLoaderLocal {
-    
-  def apply() = new ProfileLoaderLocal(
-                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
-                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_PROFILE_DEFAULT_FILE_NAME,
-                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
 
                         
   def apply(profilesSpecName: String) = {
 
     profilesSpecName match {
 
+        case PROFILES_PHIN_SPEC_2_0 =>  new ProfileLoaderLocal(
+                        "/" + PROFILES_PHIN_SPEC_2_0 + "/" + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
+                        "/" + PROFILES_PHIN_SPEC_2_0 + "/" + PROFILES_PROFILE_DEFAULT_FILE_NAME,
+                        "/" + PROFILES_PHIN_SPEC_2_0 + "/" + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+
+        case PROFILES_PHIN_SPEC_3_0 =>  new ProfileLoaderLocal(
+                        "/" + PROFILES_PHIN_SPEC_3_0 + "/" + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
+                        "/" + PROFILES_PHIN_SPEC_3_0 + "/" + PROFILES_PROFILE_DEFAULT_FILE_NAME,
+                        "/" + PROFILES_PHIN_SPEC_3_0 + "/" + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+
         case PROFILES_PHIN_SPEC_3_1 =>  new ProfileLoaderLocal(
-                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
-                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_PROFILE_DEFAULT_FILE_NAME,
-                        PROFILES_LOCAL_PHIN_SPEC_3_1_FOLDER + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+                        "/" + PROFILES_PHIN_SPEC_3_1 + "/" + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
+                        "/" + PROFILES_PHIN_SPEC_3_1 + "/" + PROFILES_PROFILE_DEFAULT_FILE_NAME,
+                        "/" + PROFILES_PHIN_SPEC_3_1 + "/" + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
+
+        // case PROFILES_PHIN_SPEC_3_2 =>  new ProfileLoaderLocal(
+        //                 "/" + PROFILES_PHIN_SPEC_3_2 + "/" + PROFILES_CONSTRAINTS_DEFAULT_FILE_NAME,
+        //                 "/" + PROFILES_PHIN_SPEC_3_2 + "/" + PROFILES_PROFILE_DEFAULT_FILE_NAME,
+        //                 "/" + PROFILES_PHIN_SPEC_3_2 + "/" + PROFILES_VALUESETS_DEFAULT_FILE_NAME)
 
         case _ => throw new Exception("Profiles for this specification are not available")
 
     } // .match
   } // .apply
 
-
-  def apply(profilesLocation: String, 
-            constraintsFileName: String, 
-            profileFileName: String,
-            valueSetsFileName: String) = new ProfileLoaderLocal(
-                                                profilesLocation + constraintsFileName,
-                                                profilesLocation + profileFileName,
-                                                profilesLocation + valueSetsFileName)
 
 } // .ProfileLoaderLocal
