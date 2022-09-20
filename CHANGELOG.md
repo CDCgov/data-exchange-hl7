@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Unreleased
-- Fns-pipeline - first function for POC: Receiver-Debatcher
+- HL7 Structural Validator: added PHIN 2.0 and 3.0 profiles, updated to validate based on profile requested
 
 ## [0.0.2] - 2022-09-12 
  - Developed Receiver-Debatcher function

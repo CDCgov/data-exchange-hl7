@@ -12,6 +12,7 @@ trait StructureValidator {
 
   def report(hl7Message: String): Try[Report]
 
+  // provides a report with warnings and errors in a map format: String->List[Entry]
   def reportMap(hl7Message: String): Try[Map[String, List[Entry]]] = {
 
     report(hl7Message) match {

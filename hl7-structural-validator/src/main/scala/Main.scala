@@ -23,7 +23,7 @@ object Main {
         val hl7TestMessage = HL7_TEST_MESSAGES_LOCATION + fileName + ".txt"
         val testMsg = Source.fromFile(hl7TestMessage).getLines.mkString("\n")
 
-        val validator = StructureValidatorConc(ProfileLoaderLocal(PROFILES_PHIN_SPEC_3_1))
+        val validator = StructureValidatorAsync(ProfileLoaderLocal(PROFILES_PHIN_SPEC_3_1))
         
         val numMsgs = 1
         1 to numMsgs foreach { i => 
