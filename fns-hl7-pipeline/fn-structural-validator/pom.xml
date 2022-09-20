@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.function.hl7.structure.validator.01</groupId>
+    <groupId>cdc.ede.hl7.structuralvalidator.01</groupId>
     <artifactId>fn-structural-validator-hl7</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -15,7 +15,17 @@
         <azure.functions.maven.plugin.version>1.19.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>2.0.1</azure.functions.java.library.version>
         <functionAppName>fn-structural-validator-hl7-1657735942388</functionAppName>
+        <azevhub.version>5.13.0</azevhub.version>
+        <slf4j.version>2.0.0</slf4j.version>
+        <liftweb.version>3.5.0</liftweb.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>gazelle</id>
+            <url>https://gazelle.ihe.net/nexus/content/repositories/releases/</url>
+        </repository>     
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -48,6 +58,26 @@
             <artifactId>cdc-xlr-hl7-structurevalidator</artifactId>
             <version>0.4.2</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.liftweb/lift-json -->
+        <dependency>
+            <groupId>net.liftweb</groupId>
+            <artifactId>lift-json_2.12</artifactId>
+            <version>${liftweb.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-messaging-eventhubs</artifactId>
+            <version>${azevhub.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
