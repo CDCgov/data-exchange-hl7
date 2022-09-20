@@ -39,10 +39,9 @@ This example validates using the profiles available in src/main/resources.
 ```scala
 import cdc.xlr.structurevalidator._
 
-// 2 validator's ara available: concurrent (async) and synchronous (sync) 
+// 2 validator's ara available: async (concurrent) and sync (synchronous) 
 
-val validator = StructureValidatorConc(ProfileLoaderLocal(PROFILES_PHIN_SPEC_3_1))   // the concurrent (async) validator 
-// val validator = StructureValidatorSync(PROFILES_PHIN_SPEC_3_1) // the sync validator
+val validator = StructureValidatorAsync(ProfileLoaderLocal(PROFILES_PHIN_SPEC_3_1))   // the async validator 
 
 validator.reportMap( hl7Message ) match {
 

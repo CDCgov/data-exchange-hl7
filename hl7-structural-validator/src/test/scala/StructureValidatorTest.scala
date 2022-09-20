@@ -18,7 +18,7 @@ class StructureValidatorTest extends AnyFlatSpec with should.Matchers {
         val hl7TestMessageLoc = HL7_TEST_MESSAGES_LOCATION + fileName + ".txt"
         val hl7TestMessage = Source.fromFile(hl7TestMessageLoc).getLines.mkString("\n")
 
-        val validator = StructureValidatorConc(profileLoaderLoc)
+        val validator = StructureValidatorAsync(profileLoaderLoc)
 
         validator.reportMap(hl7TestMessage) match {
 
@@ -63,7 +63,7 @@ class StructureValidatorTest extends AnyFlatSpec with should.Matchers {
 
     "Test message empty or without MSH segment" should "throw with message: No MSH Segment found in the message." in {
 
-        val validator = StructureValidatorConc(profileLoaderLoc)
+        val validator = StructureValidatorAsync(profileLoaderLoc)
 
         validator.reportMap("some not valid message") match {
 

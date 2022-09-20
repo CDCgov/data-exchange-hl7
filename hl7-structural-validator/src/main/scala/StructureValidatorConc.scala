@@ -9,7 +9,7 @@ import hl7.v2.validation.HL7Validator
 import gov.nist.validation.report.{Report}
 
 
-class StructureValidatorConc(profileLoader: ProfileLoader) extends StructureValidator {
+class StructureValidatorAsync(profileLoader: ProfileLoader) extends StructureValidator {
 
     val profile = profileLoader.profile()
     val valueSets = profileLoader.valueSets()
@@ -24,10 +24,10 @@ class StructureValidatorConc(profileLoader: ProfileLoader) extends StructureVali
       Try( Await.result(reportFuture, Duration(1, TimeUnit.SECONDS)) ) 
     } // .report
 
-} // .StructureValidatorConc
+} // .StructureValidatorAsync
 
 
-object StructureValidatorConc {
+object StructureValidatorAsync {
     
-  def apply(profileLoader: ProfileLoader) = new StructureValidatorConc(profileLoader)
-} // .StructureValidatorConc
+  def apply(profileLoader: ProfileLoader) = new StructureValidatorAsync(profileLoader)
+} // .StructureValidatorAsync
