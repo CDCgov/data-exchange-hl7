@@ -13,8 +13,6 @@ import com.azure.messaging.eventhubs.*
 import java.util.UUID
 import java.io.*
 
-const val BLOB_CREATED = "Microsoft.Storage.BlobCreated"
-const val UTF_BOM = "\uFEFF"
 
 /**
  * Azure Functions with Event Hub Trigger.
@@ -32,6 +30,20 @@ class Function {
 
         context.logger.info("message: --> " + message)
 
+        // TODO:...
+        // // 
+        // // Event Hub -> receive events
+        // // -------------------------------------
+        // val eventArr = Gson().fromJson(message, Array<HL7Message>::class.java)
+       
+        // // 
+        // // For each Event received
+        // // -------------------------------------
+        // for (event in eventArr) { 
+
+        //     context.logger.info("event received: --> " + event)
+
+        // } // .for 
 
     } // .eventHubProcessor
 
