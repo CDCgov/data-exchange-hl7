@@ -24,7 +24,8 @@ class Function {
     fun eventHubProcessor(
             @EventHubTrigger(
                 name = "msg", 
-                eventHubName = "eventhub001", 
+                // eventHubName = "hl7-file-dropped", 
+                eventHubName = "eventhub001",
                 connection = "EventHubConnectionString") 
                 message: String?,
             context: ExecutionContext) {

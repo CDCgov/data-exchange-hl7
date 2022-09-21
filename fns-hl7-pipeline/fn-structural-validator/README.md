@@ -1,5 +1,4 @@
-# HL7 Validator function
-
+# Function HL7 Messages Structural Validation
 
 ## Example install local dependency 
 
