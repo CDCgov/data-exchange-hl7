@@ -39,45 +39,57 @@ class Function {
             val evHubNameErrs = System.getenv("EventHubSendErrsName")
             val evHubConnStr = System.getenv("EventHubConnectionString")
 
-
             implicit val formats = DefaultFormats
 
             val hl7Messages = parse(message).children
 
-            val validator = StructureValidatorConc()
-
+            // for each message received from event hub:
             for (hl7MessageJ <- hl7Messages) {
 
                 val hl7Message = hl7MessageJ.extract[HL7Message]
 
-                val report = validator.reportMap(hl7Message.content) 
+                val phinProfile = PhinProfileUtil.extract(hl7Message.content)
+                context.getLogger.info("Message received PHIN Profile: " + phinProfile.getOrElse("Failure"))
 
-                report match {
+                phinProfile match {
 
-                    case Success(report) => {
-                        //  context.getLogger.info(s"validation report: --> ${report}")
+                    case Success(phinProfile) => {
 
-                        val msgOut = new HL7MessageOut(hl7Message.content, hl7Message.metadata, report)
+                        val validator = StructureValidatorAsync(ProfileLoaderLocal(phinProfile))
+                        val report = validator.reportMap(hl7Message.content) 
 
-                        // context.getLogger.info(s"msgOut: --> ${msgOut}")
+                        report match {
 
-                        val json = JsonAST.compactRender(Extraction.decompose(msgOut) )
+                            case Success(report) => {
+                                //  context.getLogger.info(s"validation report: --> ${report}")
 
-                         EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message=json)
+                                val msgOut = new HL7MessageOut(hl7Message.content, hl7Message.metadata, report)
+                                // context.getLogger.info(s"msgOut: --> ${msgOut}")
 
+                                val json = JsonAST.compactRender(Extraction.decompose(msgOut) )
+
+                                EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message=json)
+                            } // .Success
+
+                            case Failure(e) => {
+
+                                context.getLogger.warning(s"validation error: --> ${e.getMessage()}")
+                                EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameErrs, message=e.getMessage())
+                            } // .Failure
+                                
+                        } // .match  
                     } // .Success
 
                     case Failure(e) => {
-                         context.getLogger.warning(s"validation error: --> ${e.getMessage()}")
 
-                         EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameErrs, message=e.getMessage())
+                        context.getLogger.warning(s"validation error: --> ${e.getMessage()}")
+                        EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameErrs, message=e.getMessage())
                     } // .Failure
-                        
-                } // .match  
 
+                } // .phinProfile match
 
             } // .for
-          
         
     } // .EventHubTrigger
-}
+
+} // .Function

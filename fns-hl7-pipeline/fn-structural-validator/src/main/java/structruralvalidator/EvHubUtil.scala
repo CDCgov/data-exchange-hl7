@@ -44,6 +44,6 @@ object EvHubUtil {
   } // .evHubSend
 
 
-} // .EvHub
+} // .EvHubUtil
 
 
