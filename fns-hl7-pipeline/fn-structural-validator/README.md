@@ -1,6 +1,5 @@
 # Function HL7 Messages Structural Validation
 
-
 ## Example install local dependency 
 
 - .jar available in /hl7-structural-validator
