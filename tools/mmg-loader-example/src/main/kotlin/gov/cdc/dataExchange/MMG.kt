@@ -34,7 +34,31 @@ data class Element(
     val valueSetVersionNumber: Int?,
     val codeSystem: String?,
     val mappings: Mapping,
-)
+
+){
+    val path = when (mappings.hl7v251.segmentType) {
+        "OBX" -> {
+            var p = "${mappings.hl7v251.segmentType}[@3.1='${mappings.hl7v251.identifier}']-5"
+            if ("CE".equals(mappings.hl7v251.dataType) || "CWE".equals(mappings.hl7v251.dataType) )
+                p += ".1"
+            else if  ("SN".equals(mappings.hl7v251.dataType))
+                p += ".2"
+            p
+        }
+//              "MSH"| "PID"-> {
+//                  val regex = "[A-Z]{3}\\-[0-9]*".toRegex()
+//                  val path = regex.find(identifier)
+//                  path?.value
+//              }
+        else ->  {
+            var path = "$mappings.hl7v251.segmentType-${mappings.hl7v251.fieldPosition}"
+            if (mappings.hl7v251.componentPosition != -1)
+                path += ".${mappings.hl7v251.componentPosition}"
+            path
+        }
+    }
+
+}
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Mapping(
@@ -55,28 +79,4 @@ data class HL7Mapping (
     val cardinality: String,
     val repeatingGroupElementType: String
 
-) {
-    val path = when (segmentType) {
-             "OBX" -> {
-                 var p = "$segmentType[@3.1='${identifier}']-5"
-                 if ("CE".equals(dataType) || "CWE".equals(dataType) )
-                     p += ".1"
-                 else if  ("SN".equals(dataType))
-                     p += ".2"
-                 p
-             }
-//              "MSH"| "PID"-> {
-//                  val regex = "[A-Z]{3}\\-[0-9]*".toRegex()
-//                  val path = regex.find(identifier)
-//                  path?.value
-//              }
-              else ->  {
-                  var path = "$segmentType-$fieldPosition"
-                  if (componentPosition != -1)
-                      path += ".$componentPosition"
-                  path
-              }
-        }
-
-//    validate(message)
-}
+)
