@@ -7,7 +7,7 @@ class LoadMMGTest {
 
     @Test
     fun loadMMG() {
-        val mmg = this::class.java.getResource("/lyme.json").readText()
+        val mmg = this::class.java.getResource("/tbrd.json").readText()
 
         val mapper = jacksonObjectMapper()
         val mmgFromJson = mapper.readValue(mmg, MMG::class.java)

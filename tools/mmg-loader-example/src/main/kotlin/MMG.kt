@@ -76,4 +76,6 @@ data class HL7Mapping (
                   path
               }
         }
+
+//    validate(message)
 }
