@@ -7,7 +7,7 @@ class EventCodeUtil () {
   fun getMmgName(eventCode: String): String {
 
     return when( eventCode ) {
-      // "11089" -> "LYME"
+      "11089" -> "LYME"
       "11080" -> "TBRD" 
       "11088" -> "TBRD"
       "11090" -> "TBRD"
