@@ -4,7 +4,7 @@ import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
 
-import com.google.gson.Gson 
+// TODO: check if needed
 import com.azure.storage.blob.*
 import com.azure.storage.blob.models.*
 
@@ -13,6 +13,8 @@ import com.azure.messaging.eventhubs.*
 import java.util.UUID
 import java.io.*
 
+
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 /**
  * Azure Functions with Event Hub Trigger.
@@ -23,12 +25,40 @@ class Function {
             @EventHubTrigger(
                 name = "msg", 
                 // TODO:
-                eventHubName = "eventhub004",
+                eventHubName = "eventhub001",
                 connection = "EventHubConnectionString") 
                 message: String?,
             context: ExecutionContext) {
 
-        context.logger.info("message: --> " + message)
+        // context.logger.info("message: --> " + message)
+
+        // read the local MMGs
+        val mmgGenV2Json = this::class.java.getResource("/genV2.json").readText()
+        val mmgTbrdJson = this::class.java.getResource("/tbrd.json").readText()
+
+        val mapper = jacksonObjectMapper()
+        val mmgGenV2 = mapper.readValue(mmgGenV2Json, MMG::class.java)
+        val mmgTbrd = mapper.readValue(mmgTbrdJson, MMG::class.java) 
+
+        val mmgFullBlocks = mmgGenV2.result.blocks + mmgTbrd.result.blocks
+
+        // val validator = MMGValidator()
+        // val report= validator.validate(msg, mmgFromJson)
+        // context.logger.info("TYPE: --> " + mmgGenV2::class.java.typeName)
+        context.logger.info("mmgGenV2Blocks BLOCKS: --> " + mmgGenV2.result.blocks.size)
+        context.logger.info("mmgTbrdBlocks BLOCKS: --> " + mmgTbrd.result.blocks.size)
+
+        context.logger.info("mmgFullBlocks BLOCKS: --> " + mmgFullBlocks.size)
+
+
+        val hl7TestMessage = this::class.java.getResource("/testMessage.hl7").readText()
+
+        val profileID = HL7Util().getProfileID(hl7TestMessage)
+        
+        context.logger.info("profile ID: --> " + profileID)
+        // push to JSON
+
+
 
         // TODO:...
         // // 
