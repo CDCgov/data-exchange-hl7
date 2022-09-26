@@ -18,12 +18,12 @@ import java.io.*
  * Azure Functions with Event Hub Trigger.
  */
 class Function {
-    @FunctionName("messageprocessor001")
+    @FunctionName("mmgvalidator001")
     fun eventHubProcessor(
             @EventHubTrigger(
                 name = "msg", 
                 // TODO:
-                eventHubName = "eventhub006",
+                eventHubName = "eventhub004",
                 connection = "EventHubConnectionString") 
                 message: String?,
             context: ExecutionContext) {
