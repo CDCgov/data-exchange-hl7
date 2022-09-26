@@ -53,9 +53,11 @@ class Function {
 
         val hl7TestMessage = this::class.java.getResource("/testMessage.hl7").readText()
 
-        val profileID = HL7Util().getProfileID(hl7TestMessage)
+        val eventCode = HL7Util().getEventCode(hl7TestMessage)
+        val profileIdentifier = HL7Util().getProfileIdentifier(hl7TestMessage)
         
-        context.logger.info("profile ID: --> " + profileID)
+        context.logger.info("event code: --> " + eventCode)
+        context.logger.info("profile identifier: --> " + profileIdentifier)
         // push to JSON
 
 
