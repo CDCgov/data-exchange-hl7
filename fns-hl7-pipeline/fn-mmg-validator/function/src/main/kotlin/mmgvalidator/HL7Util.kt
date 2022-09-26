@@ -10,8 +10,7 @@ class HL7Util () {
     if (msgValue.isDefined)
       return msgValue.get()
     else
-      return "No value found"
-
+      return HL7Error.PROFILE_ID_ERROR.message
 
   } // .getProfileIdentifier
 
@@ -21,7 +20,7 @@ class HL7Util () {
     if (msgValue.isDefined)
       return msgValue.get()
     else
-      return "No value found"
+      return HL7Error.EVENT_CODE_ERROR.message
 
 
   } // .getEventCode

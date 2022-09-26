@@ -10,7 +10,10 @@ import java.util.UUID
 import java.io.*
 
 import com.google.gson.*
-// import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+
+const val GENV2 = "Generic_MMG_V2.0"
+const val GENV1 = "Generic_MMG_V1.0"
+
 
 /**
  * Azure Functions with Event Hub Trigger.
@@ -27,37 +30,63 @@ class Function {
             context: ExecutionContext) {
 
         // context.logger.info("message: --> " + message)
+        // TODO: change to read message from Even Hub, validate hl7Message.content
 
-        // read the local MMGs
-        val mmgGenV2Json = this::class.java.getResource("/genV2.json").readText()
-        val mmgTbrdJson = this::class.java.getResource("/tbrd.json").readText()
+        val hl7TestMessage = this::class.java.getResource("/testMessage.hl7").readText() 
 
-        // val mapper = jacksonObjectMapper()
-        val mmgGenV2 =  Gson().fromJson(mmgGenV2Json, MMG::class.java)//  mapper.readValue(mmgGenV2Json, MMG::class.java)
-        val mmgTbrd = Gson().fromJson(mmgTbrdJson, MMG::class.java) // mapper.readValue(mmgTbrdJson, MMG::class.java) 
+        // get profile identifier for the message:
+        val hl7Util = HL7Util()
+        val profileIdentifier = hl7Util.getProfileIdentifier(hl7TestMessage)
 
-        val mmgFullBlocks = mmgGenV2.result.blocks + mmgTbrd.result.blocks
+        when ( profileIdentifier ) {
+            GENV1 -> {
+                // TODO:
+                context.logger.info("message profile identifier GENV1: --> " + profileIdentifier) 
 
-        // val validator = MMGValidator()
-        // val report= validator.validate(msg, mmgFromJson)
-        // context.logger.info("TYPE: --> " + mmgGenV2::class.java.typeName)
-        context.logger.info("mmgGenV2Blocks BLOCKS: --> " + mmgGenV2.result.blocks.size)
-        context.logger.info("mmgTbrdBlocks BLOCKS: --> " + mmgTbrd.result.blocks.size)
+            } // GENV1
 
-        context.logger.info("mmgFullBlocks BLOCKS: --> " + mmgFullBlocks.size)
+            GENV2 -> {
+                context.logger.info("message profile identifier GENV2: --> " + profileIdentifier) 
+                val genV2Mmg = MmgUtil().getGenV2()
 
-        context.logger.info("BLOCKS: --> " + mmgFullBlocks)
+                // get event code:
+                val eventCode = hl7Util.getEventCode(hl7TestMessage)
+
+                when ( eventCode ) {
+                    HL7Error.EVENT_CODE_ERROR.message -> {
+                        context.logger.warning("message event code missing: --> " + eventCode) 
+                        // TODO: send to Error event hub
+                    }
+                    else -> {
 
 
-        val hl7TestMessage = this::class.java.getResource("/testMessage.hl7").readText()
+                        val conditionMmgName = EventCodeUtil().getMmgName(eventCode) 
 
-        val eventCode = HL7Util().getEventCode(hl7TestMessage)
-        val profileIdentifier = HL7Util().getProfileIdentifier(hl7TestMessage)
-        
-        context.logger.info("event code: --> " + eventCode)
-        context.logger.info("profile identifier: --> " + profileIdentifier)
-        // push to JSON
+                        when( conditionMmgName ) {
+                            HL7Error.EVENT_CODE_NOT_SUPPORTED_ERROR.message -> {
+                                context.logger.warning("message event code not supported: --> " + eventCode) 
+                                // TODO: send to Error event hub
+                            }
+                            else -> {
+                                // Finally GenV2 and Condition Mmg:
+                                val conditionMmg = MmgUtil().getMmg(conditionMmgName) 
 
+                                context.logger.info("genV2Mmg BLOCKS: --> " + genV2Mmg.result.blocks.size)
+                                context.logger.info("conditionMmg BLOCKS: --> " + conditionMmg.result.blocks.size)
+                            }
+                        }
+
+                    } // .else
+                } // .when( eventCode )
+
+            } // .GENV2
+
+            else -> {
+                // unknown profile identifier, send to error event hub
+                // TODO:
+                context.logger.warning("message profile identifie missing: --> " + profileIdentifier) 
+            } // .else
+        } // .when( profilIdenfier )
 
 
         // TODO:...

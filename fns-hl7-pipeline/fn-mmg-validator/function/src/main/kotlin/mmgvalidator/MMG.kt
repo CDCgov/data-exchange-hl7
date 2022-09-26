@@ -5,9 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class MMG (@SerializedName("result") val result: Result)
 
-
 data class Result(val id: String, val guideStatus: String, val name: String, val shortName: String, val blocks: List<Block>)
-
 
 data class Block(
     val id: String,
