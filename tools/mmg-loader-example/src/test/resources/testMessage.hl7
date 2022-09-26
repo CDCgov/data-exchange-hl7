@@ -1,0 +1,104 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.nnnn^ISO|Sending-Facility^2.16.840.1.114222.nnnn^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20150830120030.1234-0500||ORU^R01^ORU_R01|PERT_V1_TM_TC03|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Pertussis_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||Pertussis_TC04^^^CDCNBS01&2.16.840.1.114222.GENv2&ISO||~^^^^^^S||19900710|F||2106-3^White^CDCREC|^^Millbrae^06^94030^^^^06081|||||||||||2186-5^Not Hispanic or Latino^CDCREC
+OBR|1||Pertussis_TC04^SendAppName^2.16.840.1.114222^ISO|68991-9^Epidemiologic Information^LN|||20150109170100|||||||||||||||20150109170100|||F||||||10190^Pertussis^NND
+OBX|1|CWE|78746-5^Country of Birth^LN||BBB^United Kingdom^ISO3166_1||||||F
+OBX|2|CWE|77983-5^Country of Usual Residence^LN||USA^United States^ISO3166_1||||||F
+OBX|3|TS|11368-8^Date of Illness Onset^LN||20150101||||||F
+OBX|4|CWE|77996-7^Pregnancy Status^LN||UNK^Unknown^NULLFL||||||F
+OBX|5|TS|77975-1^Diagnosis Date^LN||20150108||||||F
+OBX|6|CWE|77974-4^Hospitalized^LN||N^No^HL70136||||||F
+OBX|7|ST|77993-4^State Case Identifier^LN||2741~23||||||F
+OBX|7.1|ST|77993-4^State Case Identifier^LN||24~25||||||F
+OBX|8|ST|77997-5^Legacy Case Identifier^LN||784135432102015||||||F
+OBX|9|SN|77998-3^Age at Case Investigation^LN||^23|a^year^UCUM|||||F
+OBX|10|CWE|77982-7^Case Disease Imported Code^LN||UNK^Unknown^NULLFL||||||F
+OBX|11|CWE|77984-3^Country of Exposure^LN|1|USA^United States^ISO3166_1||||||F
+OBX|12|CWE|77985-0^State or Province of Exposure^LN|1|06^California^FIPS5_2||||||F
+OBX|13|ST|77986-8^City of Exposure^LN|1|Millbrae||||||F
+OBX|14|ST|77987-6^County of Exposure^LN|1|San Mateo||||||F
+OBX|15|CWE|77989-2^Transmission Mode^LN||416380006^Airborne transmission^SCT||||||F
+OBX|16|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|17|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136~P^Po^HL770136||||||F
+OBX|17.5|CWE|77965-2^Immediate National Notifiable Condition^LN||Y^Yes^HL70136~Q^Qo^HL770136||||||F
+OBX|18|CWE|77980-1^Case Outbreak Indicator^LN||UNK^Unknown^NULLFL||||||F
+OBX|19|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|20|CWE|48766-0^Reporting Source Type Code^LN||PHC250^Other treatment center^CDCPHINVS||||||F
+OBX|21|ST|52831-5^Reporting Source Zip Code^LN||94030||||||F
+OBX|22|ST|74549-7^Person Reporting to CDC - Name^LN||Darvin, Tom||||||F
+OBX|23|ST|74548-9^Person Reporting to CDC-Phone Number^LN||(404)555-1234||||||F
+OBX|24|ST|74547-1^Person Reporting to CDC-Email^LN||tdarvin@pertussis.com||||||F
+OBX|25|DT|77979-3^Case Investigation Start Date^LN||20150108||||||F
+OBX|26|DT|77995-9^Date Reported^LN||20150108||||||F
+OBX|27|TS|77972-8^Earliest Date Reported to County^LN||20150108||||||F
+OBX|28|TS|77973-6^Earliest Date Reported to State^LN||20150108||||||F
+OBX|29|SN|77991-8^MMWR Week^LN||^1||||||F
+OBX|30|DT|77992-6^MMWR Year^LN||2015||||||F
+OBX|31|DT|77970-2^Date First Reported to PHD^LN||20150108||||||F
+OBX|32|CWE|77966-0^Reporting State^LN||06^California^FIPS5_2||||||F
+OBX|33|CWE|77967-8^Reporting County^LN||06081^San Mateo^FIPS6_4||||||F
+OBX|34|CWE|77968-6^National Reporting Jurisdiction^LN||06^California^FIPS5_2||||||F
+OBX|35|CWE|56831-1^Signs and Symptoms^LN|2|49727002^Cough^SCT||||||F
+OBX|36|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|37|CWE|56831-1^Signs and Symptoms^LN|3|43025008^Paroxysmal Cough^SCT||||||F
+OBX|38|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|39|CWE|56831-1^Signs and Symptoms^LN|4|3415004^Cyanosis^SCT||||||F
+OBX|40|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|41|CWE|56831-1^Signs and Symptoms^LN|5|424580008^Post-tussive Vomiting^SCT||||||F
+OBX|42|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|43|DT|INV555^Date of Final Interview^PHINQUESTION||20150117||||||F
+OBX|44|CWE|PRT008^Cough at Final Interview^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|45|DT|85932-2^Cough Onset Date^LN||20150101||||||F
+OBX|46|SN|85933-0^Total Cough Duration^LN||^16|d^Day^UCUM|||||F
+OBX|47|SN|85934-8^Age at Cough Onset^LN||^23|a^year^UCUM|||||F
+OBX|48|CWE|INV923^Chest X-Ray Result^PHINQUESTION||385660001^Not done^SCT||||||F
+OBX|49|CWE|67187-5^Type of Complication^LN|6|91175000^Seizures^SCT||||||F
+OBX|50|CWE|INV920^Type of Complications Indicator^PHINQUESTION|6|UNK^Unknown^NULLFL||||||F
+OBX|51|CWE|67187-5^Type of Complication^LN|7|81308009^Encephalopathy^SCT||||||F
+OBX|52|CWE|INV920^Type of Complications Indicator^PHINQUESTION|7|N^No^HL70136||||||F
+OBX|53|CWE|INV559^Antibiotics Given^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|54|CWE|29303-5^Medication Administered^LN|8|21212^Clarithromycin^RXNORM||||||F
+OBX|55|DT|86948-7^Date Treatment or Therapy Started^LN|8|20150106||||||F
+OBX|56|SN|67453-1^Treatment Duration^LN|8|^5|d^Day^UCUM|||||F
+OBX|57|CWE|INV561^Setting (Outside Household) of Further Documented Spread From This Case^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|58|SN|INV562^Number of Contacts Recommended Prophylaxis^PHINQUESTION||^4||||||F
+OBX|59|CWE|81267-7^Transmission Setting^LN||OTH^Other^NULLFL||||||F
+OBX|60|CWE|INV927^Epi-linked to a laboratory confirmed case^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|61|ST|85658-3^Current Occupation^LN|9|Physical therapist||||||F
+OBX|62|CE|85659-1^Current Occupation Standardized^LN|9|3160^Physical therapist^CDCOCCUPATION2010||||||F
+OBX|63|ST|85078-4^Current Industry^LN|9|Hospital||||||F
+OBX|64|CE|85657-5^Current Industry Standardized^LN|9|8190^Hospitals^CDCINDUSTRY2010||||||F
+OBX|65|CWE|LAB630^Laboratory Testing Performed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|66|CWE|82314-6^Specimen Sent to CDC^LN||Y^Yes^HL70136||||||F
+OBX|67|CWE|INV290^Test Type^PHINQUESTION|10|23826-1^Pertussis PCR^LN||||||F
+OBX|68|CWE|INV291^Test Result^PHINQUESTION|10|10828004^Positive^SCT||||||F
+OBX|69|CWE|31208-2^Specimen Source^LN|10|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|70|DT|68963-8^Specimen Collection Date/Time^LN|10|20150106||||||F
+OBX|71|CWE|82771-7^Performing Laboratory Type^LN|10|PHC1318^Other clinical^CDCPHINVS||||||F
+OBX|72|CWE|INV290^Test Type^PHINQUESTION|11|549-6^Pertussis Culture^LN||||||F
+OBX|73|CWE|INV291^Test Result^PHINQUESTION|11|10828004^Positive^SCT||||||F
+OBX|74|CWE|31208-2^Specimen Source^LN|11|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|75|DT|68963-8^Specimen Collection Date/Time^LN|11|20150106||||||F
+OBX|76|CWE|82771-7^Performing Laboratory Type^LN|11|PHC1318^Other clinical^CDCPHINVS||||||F
+OBX|77|CWE|INV290^Test Type^PHINQUESTION|12|23826-1^Pertussis PCR^LN||||||F
+OBX|78|CWE|INV291^Test Result^PHINQUESTION|12|10828004^Positive^SCT||||||F
+OBX|79|CWE|31208-2^Specimen Source^LN|12|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|80|DT|68963-8^Specimen Collection Date/Time^LN|12|20150106||||||F
+OBX|81|DT|85930-6^Date Specimen Sent to CDC^LN|12|20150107||||||F
+OBX|82|CWE|82771-7^Performing Laboratory Type^LN|12|PHC412^CDC laboratory^CDCPHINVS||||||F
+OBX|83|CWE|VAC126^Did the Subject Ever Receive a Vaccine Against this Disease^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|84|DT|VAC142^Date of Last Dose Prior to Illness Onset^PHINQUESTION||20050821||||||F
+OBX|85|SN|82745-1^Vaccination Doses Prior to Onset^LN||^5||||||F
+OBX|86|CWE|30956-7^Vaccine Type^LN|13|01^DTP^CVX||||||F
+OBX|87|DT|30952-6^Vaccine Administered Date^LN|13|19910417||||||F
+OBX|88|SN|30973-2^Vaccine Dose Number^LN|13|^1||||||F
+OBX|89|CWE|30957-5^Vaccine Manufacturer^LN|13|PMC^sanofi pasteur^MVX||||||F
+OBX|90|CWE|VAC147^Vaccine Event Information Source^PHINQUESTION|13|01^Historical information source - source unspecified^IIS||||||F
+OBX|91|CWE|30956-7^Vaccine Type^LN|14|20^DTaP^CVX||||||F
+OBX|92|DT|30952-6^Vaccine Administered Date^LN|14|20030821||||||F
+OBX|93|SN|30973-2^Vaccine Dose Number^LN|14|^2||||||F
+OBX|94|CWE|30957-5^Vaccine Manufacturer^LN|14|SKB^GlaxoSmithKline^MVX||||||F
+OBX|95|CWE|VAC147^Vaccine Event Information Source^PHINQUESTION|14|01^ Historical information source - source unspecified^IIS||||||F
+OBR|2|xyz123458|PER234|23826-1^B pert DNA XXX Ql PCR^LN|||201501062100|||||||||||||||201501062100|||F
+OBX|1|CWE|23826-1^B pert DNA XXX Ql PCR^LN||10828004^Positive^SCT||Negative|POS|||F|||20150106|||||20150106||||Mayo clinic
+OBR|3|xyz123478|PER9700123-1^Lab^2.16.840.1.113883.19.3.1.6^ISO|9363-3^Bordetella pertussis IgA Ab [Units/â€‹volume] in Serum^LN|||201501282100||||G|||||||||||201501282100|||F|23826-1&B pert DNA XXX Ql PCR&LN^^Bordetella pertussis (organism)|||xyz123458&EHR&2.16.840.1.113883.19.3.2.3&ISO^PER234&Lab&2.16.840.1.113883.19.3.1.6&ISO
+OBX|1|SN|9363-3^Bordetella pertussis IgA Ab [Units/â€‹volume] in Serum^LN|1|^15|ug/dL^microgram per deciliter^UCUM|0.0-10.0|H|||F|||20150128|||||20150128||||Mayo clinic
