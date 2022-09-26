@@ -1,17 +1,14 @@
 package com.example
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class MMG (@JsonProperty("result") val result: Result)
+import com.google.gson.annotations.SerializedName
 
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+data class MMG (@SerializedName("result") val result: Result)
+
+
 data class Result(val id: String, val guideStatus: String, val name: String, val shortName: String, val blocks: List<Block>)
 
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class Block(
     val id: String,
     val ordinal: Int,
@@ -20,7 +17,6 @@ data class Block(
     val elements: List<Element>
 )
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class Element(
     val ordinal: Int,
     val name: String,
@@ -60,13 +56,11 @@ data class Element(
 
 }
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class Mapping(
     val hl7v251: HL7Mapping
 
 )
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class HL7Mapping (
     val legacyIdentifier: String,
     val identifier: String,

@@ -4,17 +4,13 @@ import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
 
-// TODO: check if needed
-import com.azure.storage.blob.*
-import com.azure.storage.blob.models.*
-
 import com.azure.messaging.eventhubs.*
 
 import java.util.UUID
 import java.io.*
 
-
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.google.gson.*
+// import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 /**
  * Azure Functions with Event Hub Trigger.
@@ -36,9 +32,9 @@ class Function {
         val mmgGenV2Json = this::class.java.getResource("/genV2.json").readText()
         val mmgTbrdJson = this::class.java.getResource("/tbrd.json").readText()
 
-        val mapper = jacksonObjectMapper()
-        val mmgGenV2 = mapper.readValue(mmgGenV2Json, MMG::class.java)
-        val mmgTbrd = mapper.readValue(mmgTbrdJson, MMG::class.java) 
+        // val mapper = jacksonObjectMapper()
+        val mmgGenV2 =  Gson().fromJson(mmgGenV2Json, MMG::class.java)//  mapper.readValue(mmgGenV2Json, MMG::class.java)
+        val mmgTbrd = Gson().fromJson(mmgTbrdJson, MMG::class.java) // mapper.readValue(mmgTbrdJson, MMG::class.java) 
 
         val mmgFullBlocks = mmgGenV2.result.blocks + mmgTbrd.result.blocks
 
@@ -49,6 +45,8 @@ class Function {
         context.logger.info("mmgTbrdBlocks BLOCKS: --> " + mmgTbrd.result.blocks.size)
 
         context.logger.info("mmgFullBlocks BLOCKS: --> " + mmgFullBlocks.size)
+
+        context.logger.info("BLOCKS: --> " + mmgFullBlocks)
 
 
         val hl7TestMessage = this::class.java.getResource("/testMessage.hl7").readText()
