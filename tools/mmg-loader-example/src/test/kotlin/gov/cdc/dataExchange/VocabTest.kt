@@ -1,9 +1,14 @@
 package gov.cdc.dataExchange
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import open.HL7PET.tools.HL7StaticParser
 import org.junit.jupiter.api.Test
 import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.Jedis
+import scala.Enumeration.Value
+import kotlin.test.DefaultAsserter.assertTrue
 
 class VocabTest {
 
@@ -19,8 +24,9 @@ class VocabTest {
     @Test
     fun testLoadVocab() {
         val conceptStr = jedis.get("PHVS_County_FIPS_6-4")
-        val mapper = jacksonObjectMapper()
-        val concepts = mapper.readValue(conceptStr, List::class.java)
+
+        val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
+        val concepts:List<ValueSetConcept> = Gson().fromJson(conceptStr, listType)
         println(concepts)
     }
     @Test
@@ -35,4 +41,31 @@ class VocabTest {
         val keys = jedis.keys("*")
         println(keys)
     }
+    @Test
+    fun testInvalidKey() {
+        val mmgValidator = MMGValidator()
+        try {
+            val unknownKey = mmgValidator.retrieveValueSetConcepts("Unknown_key")
+            println(unknownKey)
+        } catch (e: InvalidConceptKey) {
+            assertTrue("Exception properly thrown", true)
+        }
+    }
+
+    @Test
+    fun testMultipleKeys() {
+        val result = jedis.mget("PHVS_YesNoUnkNA_NND", "unknwon",  "PHVS_ReasonForHospitalization_VZ")
+        println(result)
+    }
+
+    @Test
+    fun testGetFirtValue() {
+        val msg = this::class.java.getResource("/testMessage.hl7").readText()
+        val msgValue = HL7StaticParser.getFirstValue(msg, "MSH-21[3].1")
+        if (msgValue.isDefined)
+            println(msgValue.get())
+        else
+            println("No value found")
+    }
+
 }
