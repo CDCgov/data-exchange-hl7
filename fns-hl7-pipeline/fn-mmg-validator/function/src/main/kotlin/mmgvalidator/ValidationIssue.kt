@@ -28,7 +28,7 @@ data class ValidationIssue(
     val fieldName: String,                          // mmg field Name
     val hl7Path: String,                            // HL7 path to extract value
     val lineNumber: Int,
-    val errorMessage: ValidationErrorMessage,        / error message
+    val errorMessage: ValidationErrorMessage,        // error message
     val message: String,                            // custom message to add value in question
 
 ) // .ValidationIssue
