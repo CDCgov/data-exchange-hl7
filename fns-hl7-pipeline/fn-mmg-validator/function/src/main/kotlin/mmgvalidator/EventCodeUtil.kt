@@ -7,6 +7,7 @@ class EventCodeUtil () {
   fun getMmgName(eventCode: String): String {
 
     return when( eventCode ) {
+      // Event Code | MMG Name (Key in Redis) | MMG UUID
       "11089" -> "LYME" // | MMG UUID
       "11080" -> "TBRD" // | MMG UUID
       "11088" -> "TBRD" // | MMG UUID
