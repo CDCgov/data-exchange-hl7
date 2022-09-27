@@ -17,6 +17,7 @@ class MmgUtil () {
 
   fun getMmg(mmgName: String): MMG {
 
+        // TODO: get from Redis
         val mmgJson = this::class.java.getResource("/" + mmgName + ".json" ).readText()
         
         return Gson().fromJson(mmgJson, MMG::class.java)
