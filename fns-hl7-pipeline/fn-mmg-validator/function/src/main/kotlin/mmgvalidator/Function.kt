@@ -81,9 +81,11 @@ class Function {
                                 context.logger.info("genV2Mmg BLOCKS: --> " + genV2Mmg.result.blocks.size)
                                 context.logger.info("conditionMmg BLOCKS: --> " + conditionMmg.result.blocks.size)
 
-                                val mmgValidator = MmgValidator()
-                                val validationReport = mmgValidator.validate(context, hl7TestMessage, genV2Mmg.result.blocks)
-                                context.logger.info("validationReport: --> " + validationReport)
+                                val mmgValidator = MmgValidator( context, hl7TestMessage, genV2Mmg.result.blocks + conditionMmg.result.blocks )
+                                val validationReport = mmgValidator.validate() 
+                                // EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message=json)
+
+                                // context.logger.info("validationReport: --> " + validationReport)
                             }
                         }
 
