@@ -36,22 +36,34 @@ class MmgValidator(val context: ExecutionContext, val hl7Message: String, val bl
 
                     if (msgValues.isDefined && msgValues?.get() != null) {
 
-                        context.logger.info("msgValues: --> " + msgValues)
+                        msgValues.get().forEachIndexed { _, outArray ->
+                          outArray.forEachIndexed { _, elementData ->
 
-                        //checkDataType()
-                        // checkVocab() 
-                        // checkCardinality()
+                            val vic = checkCardinality(element, elementData)
+                            if (vic != null) {
+                                report.add(vic)
+                            } // .if
+                            
+                            // TODO: 
+                            //checkDataType()
+
+                            // TODO: 
+                            // checkVocab() 
+                            
+
+                          }//.forEach Inner Array
+                      } //.forEach Outer Array
 
 
                     } else { 
-                        val vi = checkCardinality()
-                        if (vi != null) {
-                            report.add(vi)
+
+                        val vic = checkCardinality(element, null)
+                        if (vic != null) {
+                            report.add(vic)
                         } // .if
 
                     } // .else
                     
-
 
             } // .for element
 
@@ -60,7 +72,18 @@ class MmgValidator(val context: ExecutionContext, val hl7Message: String, val bl
         return report 
     } // .validate 
 
-    fun checkCardinality(): ValidationIssue? {
+    fun checkCardinality(element: Element, elementData: String?): ValidationIssue? {
+
+
+        val cardinality = element.mappings.hl7v251.cardinality
+
+        val card1Re = """\d+""".toRegex()
+        val card2Re = """..\d+""".toRegex() // TODO:
+    
+        val card1 = card1Re.find(cardinality)?.value
+        val card2 = card2Re.find(cardinality)?.value 
+
+        println("cardinality: $cardinality -- found card1: $card1 -- card2: $card2 -- element data: $elementData")
 
         // TODO:
         val vi = ValidationIssue(
