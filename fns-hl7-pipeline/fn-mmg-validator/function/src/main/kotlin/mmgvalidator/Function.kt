@@ -29,6 +29,12 @@ class Function {
                 message: String?,
             context: ExecutionContext) {
 
+        // set up the 2 out event hubs
+        val evHubConnStr = System.getenv("EventHubConnectionString")
+        val evHubNameOk = System.getenv("EventHubSendOkName")
+        val evHubNameErrs = System.getenv("EventHubSendErrsName")
+        
+
         // context.logger.info("message: --> " + message)
         // TODO: change to read message from Even Hub, validate hl7Message.content
 
@@ -56,6 +62,7 @@ class Function {
                     HL7Error.EVENT_CODE_ERROR.message -> {
                         context.logger.warning("message event code missing: --> " + eventCode) 
                         // TODO: send to Error event hub
+                        // EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameErrs, message=json)
                     }
                     else -> {
 
@@ -66,6 +73,7 @@ class Function {
                             HL7Error.EVENT_CODE_NOT_SUPPORTED_ERROR.message -> {
                                 context.logger.warning("message event code not supported: --> " + eventCode) 
                                 // TODO: send to Error event hub
+                                // EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameErrs, message=json)
                             }
                             else -> {
                                 // Finally GenV2 and Condition Mmg:
@@ -85,6 +93,7 @@ class Function {
                 // unknown profile identifier, send to error event hub
                 // TODO:
                 context.logger.warning("message profile identifie missing: --> " + profileIdentifier) 
+                // EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameErrs, message=json)
             } // .else
         } // .when( profilIdenfier )
 
