@@ -85,7 +85,7 @@ class Function {
                                 val validationReport = mmgValidator.validate() 
                                 // EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message=json)
 
-                                // context.logger.info("validationReport: --> " + validationReport)
+                                context.logger.info("validationReport: --> " + validationReport.size)
                             }
                         }
 
