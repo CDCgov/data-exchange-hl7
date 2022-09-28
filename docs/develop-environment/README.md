@@ -9,7 +9,7 @@
  If you prefer to install those manually, follow the next steps:
  
  ## Azure support
-  - Download and install [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli
+  - Download and install [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)
   - Download and install [Azure functions core tools 4.x](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=v4%2Cwindows%2Ccsharp%2Cportal%2Cbash)
 
 ## Github
