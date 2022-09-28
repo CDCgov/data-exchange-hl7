@@ -25,12 +25,12 @@ class Function {
             @EventHubTrigger(
                 name = "msg", 
                 // eventHubName = "hl7-file-dropped", 
-                eventHubName = "eventhub001",
-                connection = "EventHubConnectionString") 
+                eventHubName = "hl7-file-dropped",
+                connection = "EventHubConnectionString")
                 message: String?,
             context: ExecutionContext) {
 
-        // context.logger.info("message: --> " + message)
+         context.logger.info("message: --> " + message)
 
         // 
         // Event Hub Sender

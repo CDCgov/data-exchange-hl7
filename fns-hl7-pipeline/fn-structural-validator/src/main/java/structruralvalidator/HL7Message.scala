@@ -2,6 +2,8 @@ package cdc.ede.hl7.structuralvalidator
 
 import gov.nist.validation.report.Entry
 
+import scala.collection.mutable
+
 case class HL7MessageMetadata(filePath: String,
                                 fileName: String, 
                                 fileTimestamp: String, 
@@ -16,4 +18,6 @@ case class HL7MessageMetadata(filePath: String,
 case class HL7Message(content: String, metadata: HL7MessageMetadata)
 
                      
-case class HL7MessageOut(content: String, metadata: HL7MessageMetadata, structuralValidationReport: Map[String,List[Entry]])
+//case class HL7MessageOut(content: String, metadata: HL7MessageMetadata, structuralValidationReport: Map[String,List[Entry]])
+case class HL7MessageOut(content: String, metadata: HL7MessageMetadata, structuralValidationReport: String)
+

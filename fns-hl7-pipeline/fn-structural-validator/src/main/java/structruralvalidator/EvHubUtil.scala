@@ -5,7 +5,7 @@ import com.azure.messaging.eventhubs._
 import net.liftweb.json.DefaultFormats
 import net.liftweb.json._
 
-
+import scala.collection.mutable.ListBuffer
 object EvHubUtil {
 
   def evHubSend(evHubConnStr: String, evHubName: String, message: String ) = {
@@ -42,7 +42,6 @@ object EvHubUtil {
       producer.close()
 
   } // .evHubSend
-
 
 } // .EvHubUtil
 
