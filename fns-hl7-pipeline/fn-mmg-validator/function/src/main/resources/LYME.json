@@ -1,6 +1,4 @@
 {
-  "statusCode": 200,
-  "result": {
       "id": "4fc00027-e9d5-435c-a53e-8f21a9ed40e6",
       "type": "Guide",
       "guideStatus": "UserAcceptanceTesting",
@@ -62745,6 +62743,4 @@
               ]
           }
       ]
-  },
-  "message": "Guide 'Lyme Disease' retrieved successfully"
 }

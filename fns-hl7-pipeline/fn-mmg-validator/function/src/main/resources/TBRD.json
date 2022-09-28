@@ -1,6 +1,4 @@
-{
-  "statusCode": 200,
-  "result": {
+ {
     "id": "3e213c98-5480-4760-9527-12690d49e6c9",
     "type": "Guide",
     "guideStatus": "UserAcceptanceTesting",
@@ -62190,6 +62188,4 @@
         ]
       }
     ]
-  },
-  "message": "Guide 'TBRD' retrieved successfully"
 }

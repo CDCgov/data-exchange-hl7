@@ -152,6 +152,12 @@
             <artifactId>hl7-pet</artifactId>
             <version>${hl7pet.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.13.1</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 

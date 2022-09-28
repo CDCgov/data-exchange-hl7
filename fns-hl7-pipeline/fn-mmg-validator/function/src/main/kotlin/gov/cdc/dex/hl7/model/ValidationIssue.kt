@@ -1,4 +1,4 @@
-package com.example
+package gov.cdc.dex.hl7.model
 
 enum class ValidationIssueCategoryType(val message: String) {
     ERROR("Error"), 
