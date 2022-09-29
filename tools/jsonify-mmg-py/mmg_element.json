@@ -1,0 +1,40 @@
+      {
+        "id": "",
+        "guideId": "",
+        "guideInternalVersion": 0,
+        "blockId": "",
+        "ordinal": 0,
+        "name": "",
+        "description": "",
+        "comments": "",
+        "status": "Final",
+        "dataType": "",
+        "businessRules": "",
+        "isUnitOfMeasure": false,
+        "legacyCodeSystem": "PHINQUESTION",        
+        "codeSystem": "",
+        "legacyPriority": "",
+        "priority": "",
+        "isRepeat": false,
+        "mayRepeat": "",
+        "valueSetCode": "",
+        "mappings": {
+          "hl7v251": {
+            "legacyIdentifier": "",
+            "identifier": "",
+            "messageContext": "",
+            "dataType": "",
+            "segmentType": "",
+            "obrPosition": 1,
+            "fieldPosition": 5,
+            "componentPosition": -1,
+            "usage": "",
+            "cardinality": "[0..1]",
+            "literalFieldValues": {},
+            "repeatingGroupElementType": "NO",
+            "implementationNotes": "",
+            "sampleSegment": ""
+          }
+        }
+
+      }
