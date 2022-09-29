@@ -28,7 +28,7 @@ class Function {
         
 
         // context.logger.info("message: --> " + message)
-        // TODO: change to read message from Even Hub, validate hl7Message.content
+        // TODO: change to read message from Even Hub, validate hl7Message.content and move Lyme msg to /test/resources folder.
         val hl7TestMessage = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
 
         try {
@@ -38,7 +38,7 @@ class Function {
                 context.logger.info("${it.name} BLOCKS: --> ${it.blocks.size}")
             }
 
-            val mmgValidator = MmgValidator(context, hl7TestMessage, mmgs)
+            val mmgValidator = MmgValidator( hl7TestMessage, mmgs)
             val validationReport = mmgValidator.validate()
             // EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message=json)
 

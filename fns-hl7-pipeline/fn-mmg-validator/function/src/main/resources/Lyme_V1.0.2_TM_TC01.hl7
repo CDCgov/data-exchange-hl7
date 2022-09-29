@@ -49,7 +49,7 @@ OBX|45|CWE|77966-0^Reporting State^LN||47^Tennessee^FIPS5_2||||||F
 OBX|46|CWE|77967-8^Reporting County^LN||47003^Bedford, TN^FIPS6_4||||||F
 OBX|47|CWE|77968-6^National Reporting Jurisdiction^LN||47^TN^FIPS5_2||||||F
 OBX|48|TX|77999-1^Comment^LN||Patient was bitten by a tick during European backpacking trip||||||F
-OBX|49|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|69588003^Erythema Migrans^SCT||||||F
+OBX|49|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|69588003^Erythema Migrans^SCT~193093009^Bell's palsy^SCT||||||F
 OBX|50|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
 OBX|51|CWE|INV929^Clinical Manifestation^PHINQUESTION|2|193093009^Bell's palsy^SCT||||||F
 OBX|52|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|2|N^No^HL70136||||||F
@@ -57,8 +57,9 @@ OBX|53|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|233917008^Atrioventricul
 OBX|54|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
 OBX|55|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|48780006^Other cranial neuritis^SCT||||||F
 OBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|UNK^Unknown^HL70136||||||F
 OBX|57|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|72274001^Radiculoneuropathy^SCT||||||F
-OBX|58|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|58|ST|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|N^No^HL70136||||||F
 OBX|59|CWE|INV929^Clinical Manifestation^PHINQUESTION|6|45170000^Encephalitis^SCT||||||F
 OBX|60|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|6|N^No^HL70136||||||F
 OBX|61|CWE|INV929^Clinical Manifestation^PHINQUESTION|7|62950007^Encephalomyelitis^SCT||||||F

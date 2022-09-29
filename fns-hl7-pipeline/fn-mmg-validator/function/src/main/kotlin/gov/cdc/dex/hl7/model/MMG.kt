@@ -24,13 +24,24 @@ data class Element(
     val mappings: Mapping,
 
     ) {
+    fun getSegmentPath() =  when (mappings.hl7v251.segmentType) {
+        "OBX" -> {
+            val obxIdentifier = if (mappings.hl7v251.fieldPosition == 6) { //Units o
+                val regex = """[0-9]{5}\-[0-9]""".toRegex()
+                regex.find(mappings.hl7v251.identifier)?.value
+            } else mappings.hl7v251.identifier
+             "${mappings.hl7v251.segmentType}[@3.1='$obxIdentifier']"
+        }
+
+        else -> {
+            mappings.hl7v251.segmentType
+        }
+    }
     fun getValuePath() = when (mappings.hl7v251.segmentType) {
         "OBX" -> {
-            var p = "${mappings.hl7v251.segmentType}[@3.1='${mappings.hl7v251.identifier}']-${mappings.hl7v251.fieldPosition}"
-            if ("CE".equals(mappings.hl7v251.dataType) || "CWE".equals(mappings.hl7v251.dataType) )
-                p += ".1"
-            else if  ("SN".equals(mappings.hl7v251.dataType))
-                p += ".2"
+            var p ="${getSegmentPath()}-${mappings.hl7v251.fieldPosition}"
+            p += if ("SN" == mappings.hl7v251.dataType) ".2"
+                 else ".1"
             p
         }
         else ->  {
@@ -41,7 +52,13 @@ data class Element(
         }
     }
 
-    fun getDataTypePath() = "${mappings.hl7v251.segmentType}[@3.1='${mappings.hl7v251.identifier}']-2"
+    fun getDataTypePath(): String {
+        val obxIdentifier = if (mappings.hl7v251.fieldPosition == 6) { //Units o
+            val regex = """[0-9]{5}\-[0-9]""".toRegex()
+            regex.find(mappings.hl7v251.identifier)?.value
+        } else mappings.hl7v251.identifier
+        return "${mappings.hl7v251.segmentType}[@3.1='${obxIdentifier}']-2"
+    }
 
 
 }
