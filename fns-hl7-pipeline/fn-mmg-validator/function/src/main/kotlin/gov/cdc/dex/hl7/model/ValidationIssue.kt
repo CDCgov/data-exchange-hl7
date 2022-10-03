@@ -13,10 +13,10 @@ enum class ValidationIssueType(val message: String) {
 
 enum class ValidationErrorMessage(val message: String) {
     DATA_TYPE_NOT_FOUND("Element data type not found"),
-    DATA_TYPE_MISMATCH("Element data type is not matching the mmg data type"), 
-    CARDINALITY_NOT_FOUND("Element is required but not found"),
-    CARDINALITY_OVER("Element has more repeats that allowed by mmg cardinality"),
-    VOCAB_NOT_AVAILABLE("vocabulary not available for code system code"),
+    DATA_TYPE_MISMATCH("Element data type is not matching the MMG data type"),
+    CARDINALITY_UNDER("Element has less repeats than allowed by MMG cardinality"),
+    CARDINALITY_OVER("Element has more repeats than allowed by MMG cardinality"),
+    VOCAB_NOT_AVAILABLE("Vocabulary not available for code system code"),
     VOCAB_ISSUE("Vocabulary code system code and code concept not found in vocabulary entries");
 }
 

@@ -11,30 +11,34 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
     private val logger = LoggerFactory.getLogger(MmgValidator::class.java.simpleName)
     fun validate(): List<ValidationIssue> {
         val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
-        logger.debug("validate started blocks.size: --> " + allBlocks)
+        logger.debug("validate started blocks.size: --> $allBlocks")
 //
         val report = mutableListOf<ValidationIssue>()
         mmgs.forEach { mmg ->
             mmg.blocks.forEach { block ->
                 block.elements.forEach { element ->
+                    //TODO:: DO not validate GenV2 MSH-21 if you have a Condition Specific MMG.
+
                     //Cardinality Check!
                     val msgValues = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
                     val valueList = if(msgValues.isDefined)
                         msgValues.get().flatten()
                     else listOf()
                     checkCardinality(block.type in listOf("Repeat", "RepeatParentChild"), element, valueList, report)
-                    // Data type check: (Don't check Data type for Units of measure - fieldPosition is 6, not 5)
+                    // Data type check: (Don't check Data type for Units of measure - fieldPosition is 6, not 5 - can't use isUnitOfMeasure field.)
                     if ("OBX" == element.mappings.hl7v251.segmentType && 5 == element.mappings.hl7v251.fieldPosition) {
                         val dataTypeSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))
                         for ( k in dataTypeSegments.keys().toList()) {
-                           checkDataType(hl7Message, element, dataTypeSegments[k].get()[2], report, k.toString().toInt() )
+                           checkDataType(hl7Message, element, dataTypeSegments[k].get()[2], k.toString().toInt(), report )
                         }
                     }
                    // TODO: Vocab Check
                     // checkVocab()
                 } // .for element
             } // .for block
-        }
+        }// .for mmg
+        //TODO::Check for extra OBXs
+//        checkExtraOBX()
         
         return report 
     } // .validate
@@ -67,37 +71,37 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
         }
     }
     private fun checkSingleGroupCardinaltiy(minCardinality: String, maxCardinality: String, element: Element, values: List<String>, report: MutableList<ValidationIssue>) {
-        when (minCardinality) {
-            "0" ->  "free pass"
-            else -> if (values.size < minCardinality.toInt()) {
-                report += ValidationIssue(
-                    category= getCategory(element.mappings.hl7v251.usage),
-                    type= ValidationIssueType.CARDINALITY,
-                    fieldName=element.name,
-                    hl7Path=element.getValuePath(),
-                    lineNumber=1,
-                    errorMessage= ValidationErrorMessage.CARDINALITY_NOT_FOUND, // CARDINALITY_OVER
-                    message="Minimum required value not present. Requires $minCardinality, Found ${values.size}",
-                ) // .ValidationIssue
-            }
+        if (minCardinality.toInt() > 0 && values.size < minCardinality.toInt()) {
+            val matchingSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))
+            report += ValidationIssue(
+                category= getCategory(element.mappings.hl7v251.usage),
+                type= ValidationIssueType.CARDINALITY,
+                fieldName=element.name,
+                hl7Path=element.getValuePath(),
+                lineNumber=matchingSegments.keys().toList().last().toString().toInt(), //Get the last Occurrence of line number
+                errorMessage= ValidationErrorMessage.CARDINALITY_UNDER, // CARDINALITY_OVER
+                message="Minimum required value not present. Requires $minCardinality, Found ${values.size}",
+            ) // .ValidationIssue
         }
+
         when (maxCardinality) {
             "*" -> "Unbounded"
             else -> if (values.size > maxCardinality.toInt()) {
+                val matchingSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))
                 report += ValidationIssue(
                     category= getCategory(element.mappings.hl7v251.usage),
                     type= ValidationIssueType.CARDINALITY,
                     fieldName=element.name,
                     hl7Path=element.getValuePath(),
-                    lineNumber=1,
-                    errorMessage= ValidationErrorMessage.CARDINALITY_NOT_FOUND, // CARDINALITY_OVER
+                    lineNumber=matchingSegments.keys().toList().last().toString().toInt(),
+                    errorMessage= ValidationErrorMessage.CARDINALITY_OVER, // CARDINALITY_OVER
                     message="Maximum values surpassed requirements. Max allowed: $maxCardinality, Found ${values.size}",
                 ) // .ValidationIssue
             }
         }
     } // .checkCardinality 
 
-    private fun checkDataType(message: String, element: Element, msgDataType: String?, report: MutableList<ValidationIssue>, lineNbr: Int) {
+    private fun checkDataType(message: String, element: Element, msgDataType: String?, lineNbr: Int, report: MutableList<ValidationIssue>) {
         if (msgDataType != null && msgDataType != element.mappings.hl7v251.dataType) {
                 report += ValidationIssue(
                     category= getCategory(element.mappings.hl7v251.usage),
@@ -105,7 +109,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
                     fieldName=element.name,
                     hl7Path=element.getDataTypePath(),
                     lineNumber=lineNbr, //Data types only have single value.
-                    errorMessage= ValidationErrorMessage.DATA_TYPE_NOT_FOUND, // DATA_TYPE_MISMATCH
+                    errorMessage= ValidationErrorMessage.DATA_TYPE_MISMATCH, // DATA_TYPE_MISMATCH
                     message="Data type on message does not match expected data type on MMG. Expected: ${element.mappings.hl7v251.dataType}, Found: ${msgDataType}",
                 )
         }
@@ -136,7 +140,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
     private fun getSegIdx(elem: Element): String {
         return when (elem.mappings.hl7v251.segmentType) {
             "OBX" -> "@3.1='${elem.mappings.hl7v251.identifier}'"
-            else -> ""
+            else -> "1"
         }
     }
     private fun getLineNumber(message: String, elem: Element, outArrayIndex: Int): Int {

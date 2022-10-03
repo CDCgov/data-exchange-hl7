@@ -57,7 +57,7 @@ OBX|53|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|233917008^Atrioventricul
 OBX|54|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
 OBX|55|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|48780006^Other cranial neuritis^SCT||||||F
 OBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F
-OBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|UNK^Unknown^HL70136||||||F
+OBX|56.1|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|UNK^Unknown^HL70136||||||F
 OBX|57|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|72274001^Radiculoneuropathy^SCT||||||F
 OBX|58|ST|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|N^No^HL70136||||||F
 OBX|59|CWE|INV929^Clinical Manifestation^PHINQUESTION|6|45170000^Encephalitis^SCT||||||F
