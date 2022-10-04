@@ -9,6 +9,6 @@ data class HL7Message (
   @SerializedName("metadata" ) var metadata : HL7MessageMetadata,
   @SerializedName("structure_validation_report" ) var structuralValidationReport : Map<String,List<Entry>>,
   // added in this fn
-  @SerializedName("content_validation_report" ) var contentValidationReport : Map<String,String>? = null,
+  @SerializedName("content_validation_report" ) var contentValidationReport : List<ValidationIssue>? = null,
 
   ) // .HL7Message

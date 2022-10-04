@@ -1,8 +1,7 @@
 package gov.cdc.dex.hl7
 
 import com.azure.messaging.eventhubs.*
-import com.google.gson.Gson
-import gov.cdc.dex.hl7.model.HL7Message
+
 
 class EvHubSender(val evHubName: String, val evHubConnStr: String) {
     private val producer: EventHubProducerClient = EventHubClientBuilder()
@@ -11,12 +10,12 @@ class EvHubSender(val evHubName: String, val evHubConnStr: String) {
             evHubName
         )
         .buildProducerClient()
-    private val gson = Gson()
-    fun send(hl7Message: HL7Message) {
-        val hl7MessageJson = gson.toJson(hl7Message)
-        val hl7EventData = EventData(hl7MessageJson)
 
-        val allEvents = arrayOf(hl7EventData)
+    fun send(message: String) {
+
+        val messages = EventData(message)
+
+        val allEvents = arrayOf(messages)
 
         var eventDataBatch = producer.createBatch()
 
