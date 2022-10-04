@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory
 import scala.Option
 
 
-class OtherSegments(private val hl7Message: String, private val mmgs: Array<MMG>) {
-    private val logger = LoggerFactory.getLogger(OtherSegments::class.java.simpleName)
+class MmgValidatorOtherSegments(private val hl7Message: String, private val mmgs: Array<MMG>) {
+    private val logger = LoggerFactory.getLogger(MmgValidatorOtherSegments::class.java.simpleName)
 
     private val OBR_4_1_EPI_ID = "68991-9"
 
 
-    fun check(): List<ValidationIssue> {
+    fun validate(): List<ValidationIssue> {
         // val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
         // logger.debug("check other segments started blocks.size: --> $allBlocks")
 
@@ -66,7 +66,7 @@ class OtherSegments(private val hl7Message: String, private val mmgs: Array<MMG>
 
         
         return report 
-    } // .check
+    } // .validate
 
 
-} // .OtherSegments
+} // .MmgValidatorOtherSegments

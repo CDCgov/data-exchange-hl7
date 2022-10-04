@@ -44,8 +44,8 @@ class Function {
 
             context.logger.info("validationReport: --> " + validationReport.size)
 
-            val otherSegments = OtherSegments( hl7TestMessage, mmgs )
-            val validationReportOtherSegments = otherSegments.check()
+            val otherSegmentsValidator = MmgValidatorOtherSegments( hl7TestMessage, mmgs )
+            val validationReportOtherSegments = otherSegmentsValidator.validate()
             // EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message=json)
 
             context.logger.info("validationReportOtherSegments: --> " + validationReportOtherSegments.size)
