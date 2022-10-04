@@ -12,10 +12,11 @@ class MmgValidatorOtherSegments(private val hl7Message: String, private val mmgs
 
     private val OBR_4_1_EPI_ID = "68991-9"
 
-
     fun validate(): List<ValidationIssue> {
         // val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
         // logger.debug("check other segments started blocks.size: --> $allBlocks")
+
+        val elementsByObxID = makeMMGsMapByObxID()
 
         val report = mutableListOf<ValidationIssue>()
         
@@ -45,6 +46,18 @@ class MmgValidatorOtherSegments(private val hl7Message: String, private val mmgs
                     // TODO: check for extra OBX vs. MMG 
                     // TODO:
                     val segmentID = lineParts[3].split("^")[0]
+
+                    if ( !elementsByObxID.containsKey(segmentID) ) {
+                        report += ValidationIssue(
+                                category= ValidationIssueCategoryType.WARNING,
+                                type= ValidationIssueType.SEGMENT_NOT_IN_MMG,
+                                fieldName=segmentName, 
+                                hl7Path="N/A",
+                                lineNumber=lineNum + 1, 
+                                errorMessage= ValidationErrorMessage.SEGMENT_NOT_IN_MMG,
+                                message="OBX segment identifier not found in the MMG. Found: ${segmentID}", 
+                            )
+                    } // .if 
                     //logger.info("hl7 segmentName: --> " + segmentName + " -- " + "segmentID: --> " + segmentID)
                 } // .OBX
                 else -> {
@@ -67,6 +80,24 @@ class MmgValidatorOtherSegments(private val hl7Message: String, private val mmgs
         
         return report 
     } // .validate
+
+    
+    fun makeMMGsMapByObxID(): HashMap<String, Element> {
+
+        val elementsByObxID = HashMap<String, Element>()
+
+        mmgs.forEach { mmg ->
+            mmg.blocks.forEach { block ->
+                block.elements.forEach { element ->
+
+                    elementsByObxID.put( element.mappings.hl7v251.identifier, element )
+
+                } // .for element
+            } // .for block
+        }// .for mmg
+
+        return elementsByObxID
+    } // .makeMMGsMapByObxID
 
 
 } // .MmgValidatorOtherSegments

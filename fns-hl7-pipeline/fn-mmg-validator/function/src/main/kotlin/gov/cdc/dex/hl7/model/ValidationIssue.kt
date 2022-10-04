@@ -19,7 +19,7 @@ enum class ValidationErrorMessage(val message: String) {
     CARDINALITY_OVER("Element has more repeats than allowed by MMG cardinality"),
     VOCAB_NOT_AVAILABLE("Vocabulary not available for code system code"),
     VOCAB_ISSUE("Vocabulary code system code and code concept not found in vocabulary entries"),
-    SEGMENT_NOT_IN_MMG("HL7 segment found in the message that is part of the MMG");
+    SEGMENT_NOT_IN_MMG("HL7 segment found in the message that is part of the MMG definitions");
 }
 
 
