@@ -5,7 +5,7 @@ We provide _snapshots_ of a subset of our architecture diagrams for convenience.
 Developers, please refer to LucidChart for diagram source, diagram directory and most current revisions.
 
 ## Conceptual Architecture
-![DEX Conceptual Architecture](docs/DEX-Conceptual.png)
+![DEX Conceptual Architecture](DEX-Conceptual.png)
 Source: Sharepoint > Data Exchange v7.pptx > Slide 69
 
 Notes
@@ -15,5 +15,5 @@ Notes
 
 ## Logical Architecture
 ### DEX Validation > HL7v2
-![DEX Logical Architecture for HL7v2 Case Notifications](docs/DEX-Logical-HL7v2Case.png)
+![DEX Logical Architecture for HL7v2 Case Notifications](DEX-Logical-HL7v2Case.png)
 Source: LucidChart > Logical Component Diagram for HL7v2 Case Notifications
