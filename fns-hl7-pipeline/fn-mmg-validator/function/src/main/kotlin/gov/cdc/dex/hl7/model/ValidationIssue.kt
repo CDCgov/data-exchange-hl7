@@ -8,7 +8,8 @@ enum class ValidationIssueCategoryType(val message: String) {
 enum class ValidationIssueType(val message: String) {
     DATA_TYPE("data_type"), 
     CARDINALITY("cardinality"), 
-    VOCAB("vocabulary");
+    VOCAB("vocabulary"),
+    SEGMENT_NOT_IN_MMG("segment_not_in_mmg");
 }
 
 enum class ValidationErrorMessage(val message: String) {
@@ -17,7 +18,8 @@ enum class ValidationErrorMessage(val message: String) {
     CARDINALITY_UNDER("Element has less repeats than allowed by MMG cardinality"),
     CARDINALITY_OVER("Element has more repeats than allowed by MMG cardinality"),
     VOCAB_NOT_AVAILABLE("Vocabulary not available for code system code"),
-    VOCAB_ISSUE("Vocabulary code system code and code concept not found in vocabulary entries");
+    VOCAB_ISSUE("Vocabulary code system code and code concept not found in vocabulary entries"),
+    SEGMENT_NOT_IN_MMG("HL7 segment found in the message that is part of the MMG");
 }
 
 

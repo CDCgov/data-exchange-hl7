@@ -38,12 +38,20 @@ class Function {
                 context.logger.info("${it.name} BLOCKS: --> ${it.blocks.size}")
             }
 
-            val mmgValidator = MmgValidator( hl7TestMessage, mmgs)
+            val mmgValidator = MmgValidator( hl7TestMessage, mmgs )
             val validationReport = mmgValidator.validate()
             // EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message=json)
 
             context.logger.info("validationReport: --> " + validationReport.size)
 
+            val otherSegments = OtherSegments( hl7TestMessage, mmgs )
+            val validationReportOtherSegments = otherSegments.check()
+            // EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message=json)
+
+            context.logger.info("validationReportOtherSegments: --> " + validationReportOtherSegments.size)
+
+            val validationReportFull = validationReport + validationReportOtherSegments
+            context.logger.info("validationReportFull: --> " + validationReportFull.size)
             // TODO:...
             // //
             // // Event Hub -> receive events

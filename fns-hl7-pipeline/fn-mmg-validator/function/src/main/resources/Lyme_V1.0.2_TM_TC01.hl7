@@ -81,3 +81,5 @@ OBX|76|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F
 OBX|77|CWE|LAB278^Organism Name^PHINQUESTION|2|76327009^Borrelia burgdorferi^SCT||||||F
 OBX|78|CWE|66746-9^Specimen Type^LN|2|119325001^Skin^SCT||||||F
 OBX|79|TS|68963-8^Specimen Collection Date/Time^LN|2|20180705||||||F
+OBR|1||TickborneLyme_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9_not_epi^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND
+XTR|79|TS|68963-8^Specimen Collection Date/Time^LN|2|20180705||||||F
