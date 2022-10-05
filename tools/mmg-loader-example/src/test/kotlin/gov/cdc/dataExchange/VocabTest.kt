@@ -7,6 +7,7 @@ import open.HL7PET.tools.HL7StaticParser
 import org.junit.jupiter.api.Test
 import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.Jedis
+import scala.Enumeration.Value
 import kotlin.test.DefaultAsserter.assertTrue
 
 class VocabTest {
@@ -22,42 +23,34 @@ class VocabTest {
 
     @Test
     fun testLoadVocab() {
-//        val conceptStr = jedis.get("PHVS_County_FIPS_6-4")
-//
-//        val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
-//        val concepts:List<ValueSetConcept> = Gson().fromJson(conceptStr, listType)
-//        println(concepts)
-        val conceptStr = jedis.hgetAll("PHVS_County_FIPS_6-4")
-//        println(conceptStr)
+        val conceptStr = jedis.get("PHVS_County_FIPS_6-4")
 
-        val oneFips = jedis.hget("PHVS_County_FIPS_6-4", "31113")
-        println(oneFips)
-        
-        val fipsExists = jedis.hexists("PHVS_County_FIPS_6-4", "31113")
-        println("fipsExist? $fipsExists")
+        val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
+        val concepts:List<ValueSetConcept> = Gson().fromJson(conceptStr, listType)
+        println(concepts)
     }
-//    @Test
-//    fun testLoadVocabFromMMGValidator() {
-//        val mmgValidator = MMGValidator()
-//        val concepts = mmgValidator.retrieveValueSetConcepts("PHVS_State_FIPS_5-2")
-//        println(concepts)
-//    }
+    @Test
+    fun testLoadVocabFromMMGValidator() {
+        val mmgValidator = MMGValidator()
+        val concepts = mmgValidator.retrieveValueSetConcepts("PHVS_State_FIPS_5-2")
+        println(concepts)
+    }
 
     @Test
     fun testGetRedisKeys() {
         val keys = jedis.keys("*")
         println(keys)
     }
-//    @Test
-//    fun testInvalidKey() {
-//        val mmgValidator = MMGValidator()
-//        try {
-//            val unknownKey = mmgValidator.retrieveValueSetConcepts("Unknown_key")
-//            println(unknownKey)
-//        } catch (e: InvalidConceptKey) {
-//            assertTrue("Exception properly thrown", true)
-//        }
-//    }
+    @Test
+    fun testInvalidKey() {
+        val mmgValidator = MMGValidator()
+        try {
+            val unknownKey = mmgValidator.retrieveValueSetConcepts("Unknown_key")
+            println(unknownKey)
+        } catch (e: InvalidConceptKey) {
+            assertTrue("Exception properly thrown", true)
+        }
+    }
 
     @Test
     fun testMultipleKeys() {
@@ -73,20 +66,6 @@ class VocabTest {
             println(msgValue.get())
         else
             println("No value found")
-    }
-
-    @Test
-    fun testGetMultipleValuesFlat() {
-        val msg =this::class.java.getResource("/testMessage.hl7").readText()
-        val msgValue = HL7StaticParser.getValue(msg, "OBX[@3.1='74549-7']-5")
-
-        val valueList = if(msgValue.isDefined() )
-                            msgValue.get().flatten()
-                        else listOf()
-
-
-        valueList.forEach { println("\t$it")}
-
     }
 
 }

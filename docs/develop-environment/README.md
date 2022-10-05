@@ -1,6 +1,25 @@
 # Local Dev Environment Set-up
 
-## Java 11
+## IntelliJ 
+ - Download the Ultimate edition of IntelliJ from [JetBrains](https://www.jetbrains.com/idea/download/#section=windows) and install it locally.
+ - Licenses are provided to each individual that needs one. Please contact [Jodi Mann](mailto:rgi5@cdc.gov)
+ - within IntelliJ, you can download Java JDKs/SDKs, Kotlin, scala, etc.
+ - Install Azure Toolkit plugin.
+ 
+ If you prefer to install those manually, follow the next steps:
+ 
+ ## Azure support
+  - Download and install [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)
+  - Download and install [Azure functions core tools 4.x](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=v4%2Cwindows%2Ccsharp%2Cportal%2Cbash)
+
+## Github
+ - Download and install [github client](https://git-scm.com/downloads)  (optional)
+ - you can use github cli as well if you choose to do so [Download here](https://cli.github.com/)
+  
+  
+ 
+## Manual Installs 
+### Java 11
 
 - Install Java 11, if not available already, such as from: [https://docs.microsoft.com/en-us/java/openjdk/download](https://docs.microsoft.com/en-us/java/openjdk/download)
   
@@ -11,8 +30,9 @@ openjdk version "11.0.15"
 $ javac -version
 javac 11.0.15
 ```
-## Kotlin
+### Kotlin
 
+**(Needed if not Using IntelliJ)**
 - Install the compiler for Kotlin such as from the Assets section of a release: [https://github.com/JetBrains/kotlin/releases](https://github.com/JetBrains/kotlin/releases)
 - Download file and unzip into a folder with write access 
 - Update sytem PATH with the bin location of the Kotlin compiler, such as: ```C:/Kotlin-compiler/bin```

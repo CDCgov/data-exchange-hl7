@@ -2,9 +2,6 @@ package cdc.ede.hl7.structuralvalidator
 
 import com.azure.messaging.eventhubs._
 
-import net.liftweb.json.DefaultFormats
-import net.liftweb.json._
-
 
 object EvHubUtil {
 

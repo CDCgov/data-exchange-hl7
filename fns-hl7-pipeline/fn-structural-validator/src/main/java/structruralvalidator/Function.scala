@@ -15,9 +15,6 @@ import scala.concurrent._
 import cdc.xlr.structurevalidator._
 
 
-import net.liftweb.json.DefaultFormats
-import net.liftweb.json._
-
 /**
  * Azure Functions with Event Hub Trigger.
  */
@@ -39,14 +36,13 @@ class Function {
             val evHubNameErrs = System.getenv("EventHubSendErrsName")
             val evHubConnStr = System.getenv("EventHubConnectionString")
 
-            implicit val formats = DefaultFormats
 
-            val hl7Messages = parse(message).children
+            val hl7Messages = JsonUtil.fromJson[List[HL7Message]](message)
+            // context.getLogger.info(s"hl7Messages: --> ${hl7Messages}")
+
 
             // for each message received from event hub:
-            for (hl7MessageJ <- hl7Messages) {
-
-                val hl7Message = hl7MessageJ.extract[HL7Message]
+            for (hl7Message <- hl7Messages) {
 
                 val phinProfile = PhinProfileUtil.extract(hl7Message.content)
                 context.getLogger.info("Message received PHIN Profile: " + phinProfile.getOrElse("Failure"))
@@ -56,7 +52,7 @@ class Function {
                     case Success(phinProfile) => {
 
                         val validator = StructureValidatorAsync(ProfileLoaderLocal(phinProfile))
-                        val report = validator.reportMap(hl7Message.content) 
+                        val report = validator.report(hl7Message.content) 
 
                         report match {
 
@@ -64,9 +60,9 @@ class Function {
                                 //  context.getLogger.info(s"validation report: --> ${report}")
 
                                 val msgOut = new HL7MessageOut(hl7Message.content, hl7Message.metadata, report)
-                                // context.getLogger.info(s"msgOut: --> ${msgOut}")
 
-                                val json = JsonAST.compactRender(Extraction.decompose(msgOut) )
+                                val json = JsonUtil.toJson(msgOut)
+                                // context.getLogger.info(s"validation msg json: --> ${json}")
 
                                 EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message=json)
                             } // .Success

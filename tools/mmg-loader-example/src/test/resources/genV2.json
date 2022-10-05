@@ -1,4 +1,6 @@
- {
+{
+  "statusCode": 200,
+  "result": {
     "id": "88e35837-86b3-4166-ade9-ee4bc2b9bee3",
     "type": "Template",
     "templateStatus": "U",
@@ -47647,4 +47649,6 @@
         ]
       }
     ]
-  }
+  },
+  "message": "Guide 'Generic Version 2.0.1' retrieved successfully"
+}

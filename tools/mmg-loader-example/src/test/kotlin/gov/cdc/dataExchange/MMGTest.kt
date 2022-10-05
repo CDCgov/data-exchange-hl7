@@ -10,16 +10,16 @@ class MMGTest {
 
     @Test
     fun loadMMG() {
-        val mmg = this::class.java.getResource("/generic_case_notification_message_mapping_guide_v1_0.json").readText()
-//         val mmg = this::class.java.getResource("/tbrd.json").readText()
+        val mmg = this::class.java.getResource("/tbrd.json").readText()
+
          val mmgFromJson = Gson().fromJson(mmg, MMG::class.java)
 //        println(mmgFromJson)
 
         var count = 0
-        mmgFromJson.blocks.forEach {block ->
+        mmgFromJson.result.blocks.forEach {block ->
             println("Block: ${block.name} -  ${block.elements.count()}")
             block.elements.forEach { elem ->
-                println("\t${elem.name}: ${elem.getPath()}" )
+                println("\t${elem.name}: ${elem.path}" )
                 count++
             }
         }
@@ -28,19 +28,18 @@ class MMGTest {
     }
     @Test
     fun testValidateVocab() {
-        var report:List<ValidationIssue>? = null
-
+        val time = measureTimeMillis {
             val msg = this::class.java.getResource("/testMessage.hl7").readText()
             val mmg = this::class.java.getResource("/genV2.json").readText()
 
             val mmgFromJson = Gson().fromJson(mmg, MMG::class.java)
-            val time = measureTimeMillis {
-                val validator = MMGValidator()
-                 report = validator.validate(msg, mmgFromJson)
 
-    //            println(report)
-            }
-        println("Validation took $time. Found ${report!!.size} errors")
+            val validator = MMGValidator()
+            val report = validator.validate(msg, mmgFromJson)
+
+//            println(report)
+        }
+        println("Validation took $time")
 
     }
 
