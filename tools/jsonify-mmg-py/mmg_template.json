@@ -1,0 +1,52 @@
+{
+  "id": "",
+  "type": "Guide",
+  "guideStatus": "Final",
+  "name": "",
+  "shortName": "",
+  "description": "",
+  "isActive": true,
+  "createdBy": "",
+  "ownedBy": "",
+  "internalVersion": 1,
+  "createdDate": "",
+  "lastUpdatedDate": "",
+  "publishVersion": "",
+  "publishDate":"",
+  "profileIdentifier": "^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
+  "blocks": [
+    {
+        "id": "1",
+        "guideId": "",
+        "ordinal": 1,
+        "type": "Single",
+        "name": "Message Header",
+        "startingDescription": "",
+        "endingDescription": "",
+        "shouldDisplayName": false,
+        "elements": []
+    },
+    {
+        "id": "2",
+        "guideId": "",
+        "ordinal": 2,
+        "type": "Single",
+        "name": "Subject Related",
+        "startingDescription": "",
+        "endingDescription": "",
+        "shouldDisplayName": false,
+        "elements": []
+    },
+    {
+        "id": "3",
+        "guideId": "",
+        "ordinal": 3,
+        "type": "Single",
+        "name": "Case Related",
+        "startingDescription": "",
+        "endingDescription": "",
+        "shouldDisplayName": false,
+        "elements": []
+    }        
+  ]
+}
