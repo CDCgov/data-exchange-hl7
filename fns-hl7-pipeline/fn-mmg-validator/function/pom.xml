@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>gov.cdc.dataexchange</groupId>
-    <artifactId>message-processor</artifactId>
+    <artifactId>mmg-validator</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>DEX Fns-Pipeline :: message-processor</name>
+    <name>DEX Fns-Pipeline :: mmg-validator</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,6 +29,8 @@
         <azstblob.version>12.19.0</azstblob.version>
         <gson.version>2.9.1</gson.version>
         <validationreport.version>1.0.0</validationreport.version>
+        <hl7pet.version>1.2.6</hl7pet.version>
+        <!-- <jackson.version>2.13.4</jackson.version> -->
     </properties>
 
     <repositories>
@@ -118,6 +120,12 @@
             <version>${gson.version}</version>
         </dependency>
 
+        <!-- <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <version>${jackson.version}</version>
+        </dependency> -->
+
         <!-- https://mvnrepository.com/artifact/com.azure/azure-storage-blob -->
         <dependency>
             <groupId>com.azure</groupId>
@@ -138,7 +146,18 @@
             <version>${validationreport.version}</version>
         </dependency>
 
-
+        <!-- https://mvnrepository.com/artifact/io.github.mscaldas2012/hl7-pet -->
+        <dependency>
+            <groupId>io.github.mscaldas2012</groupId>
+            <artifactId>hl7-pet</artifactId>
+            <version>${hl7pet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.13.1</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
