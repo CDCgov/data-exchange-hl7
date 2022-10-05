@@ -24,7 +24,8 @@ OBX|18|CWE|77980-1^Case Outbreak Indicator^LN||UNK^Unknown^NULLFL||||||F
 OBX|19|ST|77969-4^Jurisdiction Code^LN||S01||||||F
 OBX|20|CWE|48766-0^Reporting Source Type Code^LN||PHC250^Other treatment center^CDCPHINVS||||||F
 OBX|21|ST|52831-5^Reporting Source Zip Code^LN||94030||||||F
-OBX|22|ST|74549-7^Person Reporting to CDC - Name^LN||Darvin, Tom||||||F
+OBX|22|ST|74549-7^Person Reporting to CDC - Name^LN||Darvin, Tom~Caldas, Mike||||||F
+OBX|22.1|ST|74549-7^Person Reporting to CDC - Name^LN||Potocean, Cosmos~Shults, Marcos||||||F
 OBX|23|ST|74548-9^Person Reporting to CDC-Phone Number^LN||(404)555-1234||||||F
 OBX|24|ST|74547-1^Person Reporting to CDC-Email^LN||tdarvin@pertussis.com||||||F
 OBX|25|DT|77979-3^Case Investigation Start Date^LN||20150108||||||F

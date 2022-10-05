@@ -1,7 +1,5 @@
 package gov.cdc.dataExchange
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import open.HL7PET.tools.HL7StaticParser
 import org.slf4j.LoggerFactory
 import redis.clients.jedis.DefaultJedisClientConfig
@@ -22,9 +20,9 @@ class MMGValidator {
     // Simple P
     fun validate(message: String, mmg: MMG): List<ValidationIssue> {
         val report = mutableListOf<ValidationIssue>()
-        mmg.result.blocks.forEach { block ->
+        mmg.blocks.forEach { block ->
           block.elements.forEach { elem ->
-              val msgValues = HL7StaticParser.getValue(message, elem.path)
+              val msgValues = HL7StaticParser.getValue(message, elem.getPath())
               if (msgValues.isDefined && msgValues?.get() != null) {
                   if (!elem.valueSetCode.isNullOrEmpty() && !"N/A".equals(elem.valueSetCode)) {
                       logger.debug("Validating ${elem.valueSetCode}")
@@ -32,9 +30,9 @@ class MMGValidator {
                       msgValues.get().forEachIndexed { outIdx, outArray ->
                           outArray.forEachIndexed { inIdx, inElem ->
                               //if (concepts.filter { it.conceptCode == inElem }.isEmpty()) {
-                              if (checkConcept(elem.valueSetCode, inElem)) {
+                              if (!isConceptValid(elem.valueSetCode, inElem)) {
                                  val lineNbr = getLineNumber(message, elem, outIdx)
-                                  val issue = ValidationIssue(getCategory(elem.mappings.hl7v251.usage), VALIDATION_ISSUE_TYPE.VOCAB, elem.name, elem.path, lineNbr,"Unable to find $inElem on ${elem.valueSetCode} on line $lineNbr" )
+                                  val issue = ValidationIssue(getCategory(elem.mappings.hl7v251.usage), VALIDATION_ISSUE_TYPE.VOCAB, elem.name, elem.getPath(), lineNbr,"Unable to find $inElem on ${elem.valueSetCode} on line $lineNbr" )
                                   report.add(issue)
                                   //println("Warning: Unable to find $inElem on ${elem.valueSetCode} on line $lineNbr")
                               } else {
@@ -59,7 +57,7 @@ class MMGValidator {
     private fun getSegIdx(elem: Element): String {
         return when (elem.mappings.hl7v251.segmentType) {
             "OBX" -> "@3.1='${elem.mappings.hl7v251.identifier}'"
-            else -> ""
+            else -> "1"
         }
     }
 
@@ -75,25 +73,23 @@ class MMGValidator {
         return line
     }
 
-    //Some Look ps are reused - storing them so no need to re-download them from Redis.
-    private val valueSetMap = mutableMapOf<String, List<ValueSetConcept>>()
-//    private val mapper = jacksonObjectMapper()
-    @Throws(InvalidConceptKey::class)
-    fun retrieveValueSetConcepts(key: String): List<ValueSetConcept> {
-        if (valueSetMap[key] == null) {
-            logger.debug("Retrieving $key from Redis")
-            val conceptStr = jedis.get(key)
-            if (conceptStr == null) {
-                throw InvalidConceptKey("Unable to retrieve concept values for $key")
-            }
-            val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
-            valueSetMap[key] = Gson().fromJson(conceptStr, listType)
-        }
-        return valueSetMap[key]!!
-    }
+//    //Some Look ps are reused - storing them so no need to re-download them from Redis.
+//    private val valueSetMap = mutableMapOf<String, List<ValueSetConcept>>()
+////    private val mapper = jacksonObjectMapper()
+//    @Throws(InvalidConceptKey::class)
+//    fun retrieveValueSetConcepts(key: String): List<ValueSetConcept> {
+//        if (valueSetMap[key] == null) {
+//            logger.debug("Retrieving $key from Redis")
+//            val conceptStr = jedis.get(key) ?: throw InvalidConceptKey("Unable to retrieve concept values for $key")
+//            val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
+//            valueSetMap[key] = Gson().fromJson(conceptStr, listType)
+//        }
+//        return valueSetMap[key]!!
+//    }
 
-    fun checkConcept(key: String, concept: String):Boolean {
-
-        return jedis.hexists(key, concept)
+    fun isConceptValid(key: String, concept: String):Boolean {
+        return if (concept.isNotEmpty()) {
+             jedis.hexists(key, concept)
+        } else  true
     }
 }
