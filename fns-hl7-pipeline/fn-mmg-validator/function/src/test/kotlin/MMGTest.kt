@@ -7,7 +7,7 @@ class MMGTest {
 
     @Test
     fun testLoadMMG() {
-        val mmgName = "TBRD"
+        val mmgName = "GEN_SUMMARY_CASE_MAP_v1.0"
         val mmgJson = MmgUtil::class.java.getResource("/" + mmgName + ".json" ).readText()
         println(mmgJson)
     }
@@ -52,7 +52,10 @@ class MMGTest {
         for ( k in dataTypeSegments.keys().toList()) {
            println(dataTypeSegments[k].get()[5])
         }
+        //Reduce to 4th group>
+        val subList = dataTypeSegments.filter {it._2[4] == "4"}
 
+        println(subList.size())
     }
 
     @Test

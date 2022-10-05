@@ -18,7 +18,6 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
             mmg.blocks.forEach { block ->
                 block.elements.forEach { element ->
                     //TODO:: DO not validate GenV2 MSH-21 if you have a Condition Specific MMG.
-
                     //Cardinality Check!
                     val msgValues = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
                     val valueList = if(msgValues.isDefined)
@@ -33,14 +32,11 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
                         }
                     }
                    // TODO: Vocab Check
-                    // checkVocab()
+                   // checkVocab()
                 } // .for element
             } // .for block
         }// .for mmg
-        //TODO::Check for extra OBXs
-//        checkExtraOBX()
-        
-        return report 
+        return report
     } // .validate
 
 
@@ -59,26 +55,30 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
             if (uniqueGroups.isDefined) {
                 uniqueGroups.get().flatten().distinct().forEach { groupID ->
                     val groupOBX = HL7StaticParser.getValue(allOBXs, "OBX[@4='$groupID']-5")
-                    checkSingleGroupCardinaltiy(minCardinality, maxCardinality, element, groupOBX.get().flatten(), report)
+                    checkSingleGroupCardinaltiy(minCardinality, maxCardinality, groupID, element, groupOBX, report)
                 }
             }
         } else {
             val allSegs = msgValues.joinToString("\n") //join all segments to extract all Values.
             val segValues = HL7StaticParser.getValue(allSegs, element.getValuePath())
-            val segValuesFlat = if (segValues.isDefined) segValues.get().flatten() else listOf()
-            checkSingleGroupCardinaltiy(minCardinality, maxCardinality, element, segValuesFlat, report)
+//            val segValuesFlat = if (segValues.isDefined) segValues.get().flatten() else listOf()
+            checkSingleGroupCardinaltiy(minCardinality, maxCardinality, null, element, segValues, report)
 
         }
     }
-    private fun checkSingleGroupCardinaltiy(minCardinality: String, maxCardinality: String, element: Element, values: List<String>, report: MutableList<ValidationIssue>) {
+    private fun checkSingleGroupCardinaltiy(minCardinality: String, maxCardinality: String, groupID: String?,  element: Element, matchingSegs: Option<Array<Array<String>>>, report: MutableList<ValidationIssue>) {
+        val values = if (matchingSegs.isDefined) matchingSegs.get().flatten() else listOf()
         if (minCardinality.toInt() > 0 && values.size < minCardinality.toInt()) {
             val matchingSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))
+            val subList = if (groupID != null) {
+                matchingSegments.filter { it._2[4] == groupID}
+            } else matchingSegments
             report += ValidationIssue(
                 category= getCategory(element.mappings.hl7v251.usage),
                 type= ValidationIssueType.CARDINALITY,
                 fieldName=element.name,
                 hl7Path=element.getValuePath(),
-                lineNumber=matchingSegments.keys().toList().last().toString().toInt(), //Get the last Occurrence of line number
+                lineNumber=subList.keys().toList().last().toString().toInt(), //Get the last Occurrence of line number
                 errorMessage= ValidationErrorMessage.CARDINALITY_UNDER, // CARDINALITY_OVER
                 message="Minimum required value not present. Requires $minCardinality, Found ${values.size}",
             ) // .ValidationIssue
@@ -88,12 +88,15 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
             "*" -> "Unbounded"
             else -> if (values.size > maxCardinality.toInt()) {
                 val matchingSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))
+                val subList = if (groupID != null) {
+                     matchingSegments.filter { it._2[4] == groupID}
+                } else matchingSegments
                 report += ValidationIssue(
                     category= getCategory(element.mappings.hl7v251.usage),
                     type= ValidationIssueType.CARDINALITY,
                     fieldName=element.name,
                     hl7Path=element.getValuePath(),
-                    lineNumber=matchingSegments.keys().toList().last().toString().toInt(),
+                    lineNumber=subList.keys().toList().last().toString().toInt(),
                     errorMessage= ValidationErrorMessage.CARDINALITY_OVER, // CARDINALITY_OVER
                     message="Maximum values surpassed requirements. Max allowed: $maxCardinality, Found ${values.size}",
                 ) // .ValidationIssue

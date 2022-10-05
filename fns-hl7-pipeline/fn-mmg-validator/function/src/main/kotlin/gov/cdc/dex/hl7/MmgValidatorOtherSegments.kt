@@ -26,25 +26,23 @@ class MmgValidatorOtherSegments(private val hl7Message: String, private val mmgs
             val segmentName = lineParts[0]
 
             when (segmentName) {
-                "MSH", "PID" -> {}// nothing to do
-                "OBR" -> {
-                    val segmentID = lineParts[4].split("^")[0]
-                    //logger.info("hl7 segmentName: --> " + segmentName + " -- " + "segmentID: --> " + segmentID)
-                    if ( segmentID != OBR_4_1_EPI_ID ) {
-                        report += ValidationIssue(
-                            category= ValidationIssueCategoryType.WARNING,
-                            type= ValidationIssueType.SEGMENT_NOT_IN_MMG,
-                            fieldName=segmentName, 
-                            hl7Path="N/A",
-                            lineNumber=lineNum + 1, 
-                            errorMessage= ValidationErrorMessage.SEGMENT_NOT_IN_MMG,
-                            message="OBR segment 4.1 does not match the EPI identifier. Expected: ${OBR_4_1_EPI_ID}, Found: ${segmentID}",
-                        )
-                    }
-                } // .OBR
+                "MSH", "PID", "OBR" -> {}// nothing to do
+//                "OBR" -> {
+//                    val segmentID = lineParts[4].split("^")[0]
+//                    //logger.info("hl7 segmentName: --> " + segmentName + " -- " + "segmentID: --> " + segmentID)
+//                    if ( segmentID != OBR_4_1_EPI_ID ) {
+//                        report += ValidationIssue(
+//                            category= ValidationIssueCategoryType.WARNING,
+//                            type= ValidationIssueType.SEGMENT_NOT_IN_MMG,
+//                            fieldName=segmentName,
+//                            hl7Path="N/A",
+//                            lineNumber=lineNum + 1,
+//                            errorMessage= ValidationErrorMessage.SEGMENT_NOT_IN_MMG,
+//                            message="OBR segment 4.1 does not match the EPI identifier. Expected: ${OBR_4_1_EPI_ID}, Found: ${segmentID}",
+//                        )
+//                    }
+//                } // .OBR
                 "OBX" -> {
-                    // TODO: check for extra OBX vs. MMG 
-                    // TODO:
                     val segmentID = lineParts[3].split("^")[0]
 
                     if ( !elementsByObxID.containsKey(segmentID) ) {
@@ -82,21 +80,19 @@ class MmgValidatorOtherSegments(private val hl7Message: String, private val mmgs
     } // .validate
 
     
-    fun makeMMGsMapByObxID(): HashMap<String, Element> {
+    fun makeMMGsMapByObxID(): Map<String, Element> {
 
-        val elementsByObxID = HashMap<String, Element>()
+        val elementsByObxID = mutableMapOf<String, Element>()
 
         mmgs.forEach { mmg ->
             mmg.blocks.forEach { block ->
                 block.elements.forEach { element ->
-
-                    elementsByObxID.put( element.mappings.hl7v251.identifier, element )
-
+                    elementsByObxID[element.mappings.hl7v251.identifier] = element
                 } // .for element
             } // .for block
         }// .for mmg
 
-        return elementsByObxID
+        return elementsByObxID.toMap()
     } // .makeMMGsMapByObxID
 
 

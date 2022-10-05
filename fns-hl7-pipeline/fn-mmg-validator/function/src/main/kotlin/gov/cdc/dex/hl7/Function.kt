@@ -67,13 +67,13 @@ class Function {
                 val json = Gson().toJson(hl7Message)
                 eventHubSenderOk.send(message=json)
 
-            // } catch (e: MessageNotRecognizableException) {
-            //     //Handle error - send Message to Dead Letter.
-            //     eventHubSenderErrs.send( message=e.msg )
-            // } catch (e: InvalidMessageException) {
-            //     eventHubSenderErrs.send( message=e.msg )
+//             } catch (e: MessageNotRecognizableException) {
+//                 //Handle error - send Message to Dead Letter.
+//                 eventHubSenderErrs.send( message=e.msg )
+//             } catch (e: InvalidMessageException) {
+//                 eventHubSenderErrs.send( message=e.msg )
             } catch (e: Exception) {
-
+                //TODO:: Define Error Information to be pushed to error queues.
                 e.message ?.let{
                     eventHubSenderErrs.send( message=e.message!!)
                 }
