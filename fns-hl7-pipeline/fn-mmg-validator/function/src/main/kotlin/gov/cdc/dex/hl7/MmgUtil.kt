@@ -15,7 +15,7 @@ class MmgUtil  {
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
         const val GENV2 = "GENERIC_MMG_V2.0"
         const val GENV1_CASE = "GEN_CASE_MAP_v1.0"
-        const val GENV1_SUMMARY = "Gen_SUMMARY_MAP_v1.0"
+        const val GENV1_SUMMARY = "GEN_SUMMARY_MAP_v1.0"
 
         const val GENVx_PROFILE_PATH = "MSH-21[2].1"
         const val CONDITION_PROFILE_PATH = "MSH-21[3].1"

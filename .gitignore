@@ -1,3 +1,5 @@
+
+local.settings.*
 # Mac
 .DS_Store
 

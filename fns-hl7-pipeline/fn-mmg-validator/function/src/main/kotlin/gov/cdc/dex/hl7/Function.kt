@@ -17,7 +17,7 @@ class Function {
             @EventHubTrigger(
                 name = "msg", 
                 // TODO:
-                eventHubName = "eventhub004",
+                eventHubName = "%event_hub_receiver_name%",
                 connection = "EventHubConnectionString") 
                 message: String?,
             context: ExecutionContext) {
@@ -66,7 +66,7 @@ class Function {
                 hl7Message.contentValidationReport = validationReportFull 
                 val json = Gson().toJson(hl7Message)
                 eventHubSenderOk.send(message=json)
-
+               // println("ValidationReport:\t  $validationReportFull")
 //             } catch (e: MessageNotRecognizableException) {
 //                 //Handle error - send Message to Dead Letter.
 //                 eventHubSenderErrs.send( message=e.msg )
