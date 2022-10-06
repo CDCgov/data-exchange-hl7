@@ -33,7 +33,7 @@ class VocabClient {
 
     fun getValueSetConcepts(valueSet: ValueSet): MutableList<ValueSetConcept>? {
         val valueSetVersionResult = service!!.getValueSetVersionByValueSetOidAndVersionNumber(valueSet.oid, 0)
-        val concepts = service!!.getValueSetConceptsByValueSetVersionId(valueSetVersionResult.valueSetVersion?.id, 1, 3500)
+        val concepts = service!!.getValueSetConceptsByValueSetVersionId(valueSetVersionResult.valueSetVersion?.id, 1, 95000)
         return concepts.valueSetConcepts
     }
 
