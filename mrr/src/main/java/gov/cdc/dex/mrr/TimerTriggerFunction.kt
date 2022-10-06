@@ -48,7 +48,7 @@ import java.time.LocalDateTime
                            jedis.del(key.toString())
                        jedis.set(key.toString(), gson.toJson(valueSetConcepts))
                    }
-                   context.logger.info("END OF VocabClient services")
+                   context.logger.info("END OF VocabClient services1111")
 
                }
                else
