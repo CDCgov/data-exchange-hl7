@@ -21,7 +21,7 @@ import java.util.concurrent.Executors
      */
     @FunctionName("PhinVocabRead")
     fun runVocab(
-        @TimerTrigger(name = "timerInfo", schedule = "0 0 10 * * *") timerInfo: String?,
+        @TimerTrigger(name = "timerInfo", schedule = "0 0 9 * * MON") timerInfo: String?,
         context: ExecutionContext
     ) {
         context.logger.info("PhinVocabRead time trigger processed a request.")
@@ -44,22 +44,17 @@ import java.util.concurrent.Executors
                    if(client.getValueSetConcepts(e) != null) {
                        valueSetConcepts = (client.getValueSetConcepts(e) as List<ValueSetConcept>?)!!
                    }
-
-                   exe.submit {
+                  exe.submit {
                        //  context.logger.info("KEY: ${key.toString()} ")
                        // context.logger.info("KEY count: ${vsCount} ")
                        client.setValueSetConcepts(valueSetConcepts,key.toString())
                    }
 
                    context.logger.info("Key: ${key.toString()} + count of ${vsCount}")
-
-
-               }
+              }
                context.logger.info("END OF VocabClient services")
         } catch(e:Exception){
             context.logger.info("Failure in PhinVocabRead function : ${e.printStackTrace()} ")
-        } finally {
-
         }
     }
 
@@ -69,20 +64,15 @@ import java.util.concurrent.Executors
         context: ExecutionContext
     ) {
         context.logger.info("MMGATRead time trigger processed a request.")
-        var jedis: Jedis? = null
-        //String mmgat ="";
+        var jedis = Jedis()
         val parser = JsonParser()
-        try {
-            jedis = RedisUtility().redisConnection()
-            if(jedis != null) {
-                // throw RuntimeException("Radis Connection failed")
-                // else {
+
+        RedisUtility().redisConnection().use { jedis ->
+            try {
                 context.logger.info("Cache Response : " + jedis.ping())
                 val mmgaClient = MmgatClient()
                 context.logger.info("STARTING MMGATRead services")
                 val mmgaGuide = mmgaClient.getGuideAll()
-                // gson = new GsonBuilder().create();
-                //  mmgat = gson.toJson(sb.toString());
                 val elem: JsonElement = parser.parse(mmgaGuide.toString())
                 context.logger.info("Json Array size:" + elem.asJsonObject.getAsJsonArray("result").size())
                 val mmgatJArray = elem.asJsonObject.getAsJsonArray("result")
@@ -91,10 +81,11 @@ import java.util.concurrent.Executors
 
                 for (mmgatjson in mmgatJArray) {
                     val mj = mmgatjson.asJsonObject
-                    if (mj.get("guideStatus").getAsString().equals("UserAcceptanceTesting") || mj.get("guideStatus")
-                            .getAsString().equals("Final")
+                    if (mj.get("guideStatus").getAsString()
+                            .equals(mmgaClient.guidanceStatusUAT,true) || mj.get("guideStatus")
+                            .getAsString().equals(mmgaClient.guidanceStatusFINAL,true)
                     ) {
-                        val id = (mj.get("id").getAsString())
+                        val id = (mj.get("id").asString)
                         context.logger.info("MMGAT id:" + id)
                         val mGuide = mmgaClient.getGuideById(id)
                         val key = mj.get("name").getAsString()
@@ -104,15 +95,12 @@ import java.util.concurrent.Executors
 
                     }
                 }
-
-
+            } catch (e: Exception) {
+                context.logger.info("Failure in MMGATREAD function : ${e.printStackTrace()} ")
+            } finally {
+                jedis.close()
             }
-        }catch(e:Exception){
-            context.logger.info("Failure in MMGATREAD function : ${e.printStackTrace()} ")
-        }finally{
-            jedis?.close()
+            context.logger.info("MMGATREAD Function executed at: " + LocalDateTime.now())
         }
-
-        context.logger.info("MMGATREAD Function executed at: " + LocalDateTime.now())
     }
 }

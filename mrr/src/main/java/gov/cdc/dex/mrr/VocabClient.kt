@@ -47,22 +47,21 @@ class VocabClient {
         return vocabKey
     }
 
+    @Throws(Exception::class)
     fun  setValueSetConcepts(valuesetConcepts: List<ValueSetConcept>,  key: String) {
-
-        var jedis = RedisUtility().redisConnection()
-        if(jedis != null) {
-            println("Cache Response : " + jedis.ping())
+        var jedis =Jedis()
+        RedisUtility().redisConnection().use { jedis ->
             try {
-                valuesetConcepts?.let {
-                    for (i in valuesetConcepts) {
-                        var vkey = i.conceptCode
-                        jedis.hset(key.toString(), vkey, i.toString())
-                        // println("Valueset in Radis:" + key.toString() + "-" + vkey + "-" + i.toString())
+                 println("Cache Response : " + jedis.ping())
+                 valuesetConcepts?.let {
+                        for (i in valuesetConcepts) {
+                            var vkey = i.conceptCode
+                            jedis.hset(key.toString(), vkey, i.toString())
+                            // println("Valueset in Radis:" + key.toString() + "-" + vkey + "-" + i.toString())
+                        }
                     }
-                }
-
             } catch (e: Exception) {
-                e.printStackTrace()
+                throw Exception("Problem in setting ValuesetConcepts to Radis:${e.printStackTrace()}")
             } finally {
                 jedis.close()
             }
