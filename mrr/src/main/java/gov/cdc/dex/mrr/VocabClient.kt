@@ -4,11 +4,19 @@ import com.caucho.hessian.client.HessianProxyFactory
 import gov.cdc.vocab.service.VocabService
 import gov.cdc.vocab.service.bean.ValueSet
 import gov.cdc.vocab.service.bean.ValueSetConcept
+import redis.clients.jedis.DefaultJedisClientConfig
+import redis.clients.jedis.Jedis
 import java.net.MalformedURLException
 
 class VocabClient {
      private var service: VocabService? = null
      private val serviceUrl = "https://phinvads.cdc.gov/vocabService/v2"
+    val redisCacheName = System.getenv("REDISCACHEHOSTNAME")
+    val rediscachekey = System.getenv("REDISCACHEKEY")
+//    val pool = JedisPool(
+//        getPoolConfig(), redisCacheName, 6380, 3000,
+//        rediscachekey
+//    )
 
     init {
         try {
@@ -37,5 +45,27 @@ class VocabClient {
        // vocabKey.append("_").append("$version")
        // println("VocabKey :${vocabKey}")
         return vocabKey
+    }
+
+    fun  setValueSetConcepts(valuesetConcepts: List<ValueSetConcept>,  key: String) {
+
+        var jedis = RedisUtility().redisConnection()
+        if(jedis != null) {
+            println("Cache Response : " + jedis.ping())
+            try {
+                valuesetConcepts?.let {
+                    for (i in valuesetConcepts) {
+                        var vkey = i.conceptCode
+                        jedis.hset(key.toString(), vkey, i.toString())
+                        // println("Valueset in Radis:" + key.toString() + "-" + vkey + "-" + i.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                jedis.close()
+            }
+        }
     }
 }
