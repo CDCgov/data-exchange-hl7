@@ -11,6 +11,8 @@ import javax.net.ssl.*
 class MmgatClient {
     var url: URL? = null
     var conn : HttpURLConnection ? = null
+    val guidanceStatusUAT = "UserAcceptanceTesting"
+    val guidanceStatusFINAL = "Final"
 
     private fun trustAllHosts() {
         try {

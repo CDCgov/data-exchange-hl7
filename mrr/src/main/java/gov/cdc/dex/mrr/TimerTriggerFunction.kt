@@ -10,6 +10,7 @@ import gov.cdc.vocab.service.bean.ValueSet
 import gov.cdc.vocab.service.bean.ValueSetConcept
 import redis.clients.jedis.Jedis
 import java.time.LocalDateTime
+import java.util.concurrent.Executors
 
 /**
  * Azure Functions with Timer trigger.
@@ -20,99 +21,86 @@ import java.time.LocalDateTime
      */
     @FunctionName("PhinVocabRead")
     fun runVocab(
-        @TimerTrigger(name = "timerInfo", schedule = "0 */10 * * * *") timerInfo: String?,
+        @TimerTrigger(name = "timerInfo", schedule = "0 0 9 * * MON") timerInfo: String?,
         context: ExecutionContext
     ) {
         context.logger.info("PhinVocabRead time trigger processed a request.")
-        var jedis: Jedis? = null
+
            try {
-                jedis = RedisUtility().redisConnection()
+               val client = VocabClient()
+               val exe  = Executors.newCachedThreadPool()
+               context.logger.info("STARTING VocabClient services")
+               val valueSets = client.getAllValueSets() as List<ValueSet>?
 
-            // Simple PING command
-            context.logger.info("\nCache Command  : Ping")
-               if (jedis != null) {
-                   context.logger.info("Cache Response : " + jedis.ping())
-                   val client = VocabClient()
-                   context.logger.info("STARTING VocabClient services")
-                   val valueSets = client.getAllValueSets() as List<ValueSet>?
-
-                   valueSets?.let { context.logger.info("Count of ValueSets:  ${valueSets.size}") }
-
-                   val vocabMap: MutableMap<StringBuilder, Any> = HashMap()
-                   val gson = GsonBuilder().create()
-                   for (e in valueSets!!) {
-                       val valueSetConcepts = client.getValueSetConcepts(e) as List<ValueSetConcept>?
-                       val key = client.getValueSetKey(e)
-                       vocabMap[key] = gson.toJson(valueSetConcepts)
-                       if (jedis.exists(key.toString()))
-                           jedis.del(key.toString())
-                       jedis.set(key.toString(), gson.toJson(valueSetConcepts))
-                   }
-                   context.logger.info("END OF VocabClient services")
-
+               if (valueSets != null) {
+                   context.logger.info("Count of ValueSets:  ${valueSets.size}")
                }
-               else
-                context.logger.info("Failure in getting  Radis connection ")
+               var vsCount =0
+               var valueSetConcepts = listOf<ValueSetConcept>()
+
+               for (e in valueSets!!) {
+                   vsCount += 1
+                   val key = client.getValueSetKey(e)
+                   if(client.getValueSetConcepts(e) != null) {
+                       valueSetConcepts = (client.getValueSetConcepts(e) as List<ValueSetConcept>?)!!
+                   }
+                  exe.submit {
+                       //  context.logger.info("KEY: ${key.toString()} ")
+                       // context.logger.info("KEY count: ${vsCount} ")
+                       client.setValueSetConcepts(valueSetConcepts,key.toString())
+                   }
+
+                   context.logger.info("Key: ${key.toString()} + count of ${vsCount}")
+              }
+               context.logger.info("END OF VocabClient services")
         } catch(e:Exception){
-            context.logger.log(error("Failure in PhinVocabRead function : ${e.printStackTrace()} "))
-        } finally {
-               jedis?.close()
+            context.logger.info("Failure in PhinVocabRead function : ${e.printStackTrace()} ")
         }
     }
 
     @FunctionName("MMGATRead")
     fun runMmgat(
-        @TimerTrigger(name = "timerInfo", schedule = "0 */5 * * * *") timerInfo: String?,
+        @TimerTrigger(name = "timerInfo", schedule = "0 0 9 * * FRI") timerInfo: String?,
         context: ExecutionContext
     ) {
         context.logger.info("MMGATRead time trigger processed a request.")
-        var jedis: Jedis? = null
-        //String mmgat ="";
+        var jedis = Jedis()
         val parser = JsonParser()
-        try {
-            jedis = RedisUtility().redisConnection()
-            if(jedis != null) {
-                // throw RuntimeException("Radis Connection failed")
-                // else {
+
+        RedisUtility().redisConnection().use { jedis ->
+            try {
                 context.logger.info("Cache Response : " + jedis.ping())
                 val mmgaClient = MmgatClient()
                 context.logger.info("STARTING MMGATRead services")
-                var mmgaGuide = mmgaClient.getGuideAll()
-                // gson = new GsonBuilder().create();
-                //  mmgat = gson.toJson(sb.toString());
-                if (mmgaGuide != null) {
-                    val elem: JsonElement = parser.parse(mmgaGuide.toString())
-                    context.logger.info("Json Array size:" + elem.asJsonObject.getAsJsonArray("result").size())
-                    val mmgatJArray = elem.asJsonObject.getAsJsonArray("result")
-                    context.logger.info("Json Array size:" + mmgatJArray.size());
-                    val mmgatMap = mapOf<String, String>()
-                    val gson = GsonBuilder().create()
+                val mmgaGuide = mmgaClient.getGuideAll()
+                val elem: JsonElement = parser.parse(mmgaGuide.toString())
+                context.logger.info("Json Array size:" + elem.asJsonObject.getAsJsonArray("result").size())
+                val mmgatJArray = elem.asJsonObject.getAsJsonArray("result")
+                context.logger.info("Json Array size:" + mmgatJArray.size())
+                val gson = GsonBuilder().create()
 
-                    for (mmgatjson in mmgatJArray) {
-                        val mj = mmgatjson.asJsonObject
-                        if (mj.get("guideStatus").getAsString().equals("UserAcceptanceTesting") || mj.get("guideStatus")
-                                .getAsString().equals("Final")
-                        ) {
-                            val id = (mj.get("id").getAsString())
-                            context.logger.info("MMGAT id:" + id)
-                            var mGuide = mmgaClient.getGuideById(id)
-                            var key = mj.get("name").getAsString()
-                            if (jedis.exists(key.toString()))
-                                jedis.del(key.toString())
-                            jedis.set(key.toString(), gson.toJson(mGuide))
+                for (mmgatjson in mmgatJArray) {
+                    val mj = mmgatjson.asJsonObject
+                    if (mj.get("guideStatus").getAsString()
+                            .equals(mmgaClient.guidanceStatusUAT,true) || mj.get("guideStatus")
+                            .getAsString().equals(mmgaClient.guidanceStatusFINAL,true)
+                    ) {
+                        val id = (mj.get("id").asString)
+                        context.logger.info("MMGAT id:" + id)
+                        val mGuide = mmgaClient.getGuideById(id)
+                        val key = mj.get("name").getAsString()
+                        if (jedis.exists(key.toString()))
+                            jedis.del(key.toString())
+                        jedis.set(key.toString(), gson.toJson(mGuide))
 
-                        }
                     }
-
-
                 }
+            } catch (e: Exception) {
+                context.logger.info("Failure in MMGATREAD function : ${e.printStackTrace()} ")
+            } finally {
+                jedis.close()
             }
-        }catch(e:Exception){
-
-        }finally{
-            jedis?.close()
+            context.logger.info("MMGATREAD Function executed at: " + LocalDateTime.now())
         }
-
-        context.logger.info("MMGATREAD Function executed at: " + LocalDateTime.now());
     }
 }
