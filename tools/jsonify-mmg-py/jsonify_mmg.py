@@ -1,5 +1,6 @@
 '''
 Script that will take a csv MMG and output JSON MMG that adheres to the MMGAT JSON format.
+
 Header line should use the same column labels as listed below, with minor variations allowed
   (e.g., 'PHIN Variable' instead of 'PHIN Variable ID' but not 'HL7 Usage' instead of 'HL7 Optionality').
 The column labels do not need to be in the same order as below.
@@ -16,6 +17,7 @@ of the CSV, before the header line.
 If the MMG contains START and END block labels, these will be recognized by the script.
 Corresponding blocks will be added to the JSON MMG if the START label topic is not included already in the base 
 template, which has pre-existing blocks for Message Header, Subject Related, and Case Related fields.
+
 '''
 import csv
 import json
@@ -26,7 +28,9 @@ from copy import deepcopy
 from uuid import uuid4
 from datetime import datetime
 '''
+
 MMG fields (usually appear in this order) in the CSV:
+
 0 PHIN Variable ID
 1 Label/Short Name
 2 Description
@@ -61,12 +65,15 @@ BLOCK = './mmg_block.json'        # in case we need additional blocks beyond Mes
 PRIORITIES = {"R": 1, "P": 2, "O": 3}
 LABELS = ["Message Header", "Subject Related", "Case Related"]
 
+
 def output_mmg_json(csv_filename):
     outfile = csv_filename.replace(".csv", ".json")
     json_mmg = {}
     metadata = []
     msh_block, pid_block, case_block = (None, None, None)
+
     obr_4_count = 0
+
 
     # load the template building blocks
     with open(TEMPLATE, 'r') as t:

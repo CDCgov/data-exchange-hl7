@@ -19,6 +19,10 @@
         <slf4j.version>2.0.0</slf4j.version>
         <liftweb.version>3.5.0</liftweb.version>
         <structurevalidator.version>0.4.4</structurevalidator.version>
+        <jackson.version>2.13.4</jackson.version>
+        <scalalang.version>2.12.16</scalalang.version>
+        <mavenscalaplugin.version>2.15.2</mavenscalaplugin.version>
+        <apachemavenplugin.version>3.8.1</apachemavenplugin.version>
     </properties>
 
     <repositories>
@@ -36,7 +40,7 @@
         </dependency>
 
         <!-- Test -->
-        <dependency>
+        <!-- <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.4.2</version>
@@ -48,11 +52,12 @@
             <artifactId>mockito-core</artifactId>
             <version>2.23.4</version>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
+
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.12.12</version>
+            <version>${scalalang.version}</version>
         </dependency>
         <dependency>
             <groupId>cdc.xlr.structurevalidator</groupId>
@@ -60,12 +65,6 @@
             <version>${structurevalidator.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/net.liftweb/lift-json -->
-        <dependency>
-            <groupId>net.liftweb</groupId>
-            <artifactId>lift-json_2.12</artifactId>
-            <version>${liftweb.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.azure</groupId>
@@ -79,6 +78,22 @@
             <version>${slf4j.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-scala -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-scala_2.12</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+
+
     </dependencies>
 
     <build>
@@ -86,7 +101,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>${apachemavenplugin.version}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -149,7 +164,7 @@
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
-                <version>2.15.2</version>
+                <version>${mavenscalaplugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
