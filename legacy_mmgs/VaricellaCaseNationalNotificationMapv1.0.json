@@ -1,4 +1,5 @@
 {
+
   "id": "880e7fe9-c82e-4359-b70a-cd741338de49",
   "type": "Guide",
   "guideStatus": "Final",
@@ -13,6 +14,7 @@
   "lastUpdatedDate": "",
   "publishVersion": "1.0",
   "publishDate": "2007-08-17T00:00:00",
+
   "profileIdentifier": "Var_Case_Map_v1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO",
   "blocks": [
     {
@@ -1611,7 +1613,6 @@
         },
         {
           "id": "b7dc62c9-931d-44bd-9aa5-8731d9aaf17a",
-          "guideId": "880e7fe9-c82e-4359-b70a-cd741338de49",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 30,
