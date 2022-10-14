@@ -1,12 +1,10 @@
 package gov.cdc.dex.hl7
 
+import com.google.gson.Gson
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
-import gov.cdc.dex.hl7.exception.InvalidMessageException
-import gov.cdc.dex.hl7.exception.MessageNotRecognizableException
 import gov.cdc.dex.hl7.model.HL7Message
-import com.google.gson.Gson 
 
 /**
  * Azure Functions with Event Hub Trigger.
