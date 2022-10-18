@@ -39,7 +39,16 @@ class VocabTest {
     @Test
     fun testGetRedisKeys() {
         val keys = jedis.keys("*")
+        println(keys.size)
         println(keys)
+    }
+
+    @Test
+    fun testGetConcpets() {
+        val concepts = jedis.hgetAll("PHVS_ClinicalManifestation_TBRD")
+        println(concepts.keys)
+        assertTrue("is M in there?" , concepts.keys.contains("M"))
+
     }
     @Test
     fun testInvalidKey() {

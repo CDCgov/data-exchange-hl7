@@ -1,7 +1,9 @@
 
+import com.google.gson.Gson
+import gov.cdc.dataExchange.MMG
 import org.junit.jupiter.api.Test
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+//import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 class LoadMMGTest {
 
@@ -9,8 +11,8 @@ class LoadMMGTest {
     fun loadMMG() {
         val mmg = this::class.java.getResource("/lyme.json").readText()
 
-        val mapper = jacksonObjectMapper()
-        val mmgFromJson = mapper.readValue(mmg, MMG::class.java)
+//        val mapper = jacksonObjectMapper()
+        val mmgFromJson = Gson().fromJson(mmg, MMG::class.java)
 
 //        println(mmgFromJson)
 
