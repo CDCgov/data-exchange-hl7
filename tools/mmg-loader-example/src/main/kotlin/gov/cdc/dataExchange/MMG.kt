@@ -75,4 +75,26 @@ data class HL7Mapping (
     val cardinality: String,
     val repeatingGroupElementType: String
 
-)
+) {
+    val path = when (segmentType) {
+             "OBX" -> {
+                 var p = "$segmentType[@3.1='${identifier}']-5"
+                 if ("CE".equals(dataType) || "CWE".equals(dataType) )
+                     p += ".1"
+                 else if  ("SN".equals(dataType))
+                     p += ".2"
+                 p
+             }
+//              "MSH"| "PID"-> {
+//                  val regex = "[A-Z]{3}\\-[0-9]*".toRegex()
+//                  val path = regex.find(identifier)
+//                  path?.value
+//              }
+              else ->  {
+                  var path = "$segmentType-$fieldPosition"
+                  if (componentPosition != -1)
+                      path += ".$componentPosition"
+                  path
+              }
+        }
+}

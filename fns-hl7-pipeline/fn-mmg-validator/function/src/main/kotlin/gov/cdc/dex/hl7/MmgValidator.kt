@@ -1,13 +1,25 @@
 package gov.cdc.dex.hl7
 
+import gov.cdc.dex.hl7.exception.InvalidConceptKey
 import gov.cdc.dex.hl7.model.*
+import gov.cdc.hl7.HL7StaticParser
 
-import open.HL7PET.tools.HL7StaticParser
+
 import org.slf4j.LoggerFactory
 import scala.Option
-
+import redis.clients.jedis.DefaultJedisClientConfig
+import redis.clients.jedis.Jedis
 
 class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>) {
+    companion object {
+        val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD =        System.getenv("REDIS_CACHE_KEY")
+    }
+    val jedis = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
+        .password(REDIS_PWD)
+        .ssl(true)
+        .build()
+    )
     private val logger = LoggerFactory.getLogger(MmgValidator::class.java.simpleName)
     fun validate(): List<ValidationIssue> {
         val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
@@ -19,20 +31,25 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
                 block.elements.forEach { element ->
                     //TODO:: DO not validate GenV2 MSH-21 if you have a Condition Specific MMG.
                     //Cardinality Check!
-                    val msgValues = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
-                    val valueList = if(msgValues.isDefined)
-                        msgValues.get().flatten()
+                    val msgSegments = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
+                    val valueList = if(msgSegments.isDefined)
+                        msgSegments.get().flatten()
                     else listOf()
                     checkCardinality(block.type in listOf("Repeat", "RepeatParentChild"), element, valueList, report)
                     // Data type check: (Don't check Data type for Units of measure - fieldPosition is 6, not 5 - can't use isUnitOfMeasure field.)
                     if ("OBX" == element.mappings.hl7v251.segmentType && 5 == element.mappings.hl7v251.fieldPosition) {
                         val dataTypeSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))
                         for ( k in dataTypeSegments.keys().toList()) {
-                           checkDataType(hl7Message, element, dataTypeSegments[k].get()[2], k.toString().toInt(), report )
+                           checkDataType(element, dataTypeSegments[k].get()[2], k.toString().toInt(), report )
                         }
                     }
                    // TODO: Vocab Check
-                   // checkVocab()
+                    if (msgSegments.isDefined)  {
+                        val msgValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
+                        if (msgValues.isDefined)
+                            checkVocab(element,msgValues.get(), hl7Message, report)
+                    }
+
                 } // .for element
             } // .for block
         }// .for mmg
@@ -68,7 +85,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
     }
     private fun checkSingleGroupCardinaltiy(minCardinality: String, maxCardinality: String, groupID: String?,  element: Element, matchingSegs: Option<Array<Array<String>>>, report: MutableList<ValidationIssue>) {
         val values = if (matchingSegs.isDefined) matchingSegs.get().flatten() else listOf()
-        if (minCardinality.toInt() > 0 && values.size < minCardinality.toInt()) {
+        if (minCardinality.toInt() > 0 && values.distinct().size < minCardinality.toInt()) {
             val matchingSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))
             val subList = if (groupID != null) {
                 matchingSegments.filter { it._2[4] == groupID}
@@ -86,7 +103,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
 
         when (maxCardinality) {
             "*" -> "Unbounded"
-            else -> if (values.size > maxCardinality.toInt()) {
+            else -> if (values.distinct().size > maxCardinality.toInt()) {
                 val matchingSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))
                 val subList = if (groupID != null) {
                      matchingSegments.filter { it._2[4] == groupID}
@@ -104,7 +121,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
         }
     } // .checkCardinality 
 
-    private fun checkDataType(message: String, element: Element, msgDataType: String?, lineNbr: Int, report: MutableList<ValidationIssue>) {
+    private fun checkDataType(element: Element, msgDataType: String?, lineNbr: Int, report: MutableList<ValidationIssue>) {
         if (msgDataType != null && msgDataType != element.mappings.hl7v251.dataType) {
                 report += ValidationIssue(
                     category= getCategory(element.mappings.hl7v251.usage),
@@ -119,19 +136,49 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
 
     } // .checkDataType
 
-    fun checkVocab(report: MutableList<ValidationIssue>) {
-        // TODO:
-//        val vi = ValidationIssue(
-//            category= getCategory(element.mappings.hl7v251.usage),
-//            type= ValidationIssueType.VOCAB,
-//            fieldName="fieldName",
-//            hl7Path="hl7Path",
-//            lineNumber=1,
-//            errorMessage= ValidationErrorMessage.VOCAB_NOT_AVAILABLE, // VOCAB_ISSUE
-//            message="Element mmg cardinality is: ... , found cardinality is: ...",
-//        ) // .ValidationIssue
+    private fun checkVocab(elem: Element, msgValues: Array<Array<String>>, message: String, report:MutableList<ValidationIssue> ) {
+        if (!elem.valueSetCode.isNullOrEmpty() && !"N/A".equals(elem.valueSetCode)) {
+            logger.debug("Validating ${elem.valueSetCode}")
+            //val concepts = retrieveValueSetConcepts(elem.valueSetCode)
+            msgValues.forEachIndexed { outIdx, outArray ->
+                outArray.forEachIndexed { _, inElem ->
+                    //if (concepts.filter { it.conceptCode == inElem }.isEmpty()) {
+                    if (!isConceptValid2(elem.valueSetCode, inElem)) {
+                        val lineNbr = getLineNumber(message, elem, outIdx)
+                        val issue = ValidationIssue(
+                            getCategory(elem.mappings.hl7v251.usage),
+                            ValidationIssueType.VOCAB,
+                            elem.name,
+                            elem.getValuePath(),
+                            lineNbr,
+                            ValidationErrorMessage.VOCAB_ISSUE,
+                            "Unable to find '$inElem' on '${elem.valueSetCode}' on line $lineNbr"
+                        )
+                        report.add(issue)
+                    }
+                }//.forEach Inner Array
+            } //.forEach Outer Array
+        }
+    }
 
-    } // .checkVocab 
+    //Some Look ps are reused - storing them so no need to re-download them from Redis.
+    private val valueSetMap = mutableMapOf<String, List<String>>()
+    //    private val mapper = jacksonObjectMapper()
+    @Throws(InvalidConceptKey::class)
+    fun isConceptValid2(key: String, concept: String): Boolean {
+        if (valueSetMap[key] == null) {
+            logger.debug("Retrieving $key from Redis")
+            val conceptStr = jedis.hgetAll(key) ?: throw InvalidConceptKey("Unable to retrieve concept values for $key")
+//            val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
+            valueSetMap[key] = conceptStr.keys.toList()
+
+        }
+        return valueSetMap[key]?.filter { it == concept }?.isNotEmpty() ?: false
+    }
+    fun isConceptValid(key: String, concept: String):Boolean {
+        //TODO::Check if Key is truly valid (configuration issue)
+        return jedis.hexists(key, concept)
+    }
 
     private fun getCategory(usage: String): ValidationIssueCategoryType {
         return when (usage) {

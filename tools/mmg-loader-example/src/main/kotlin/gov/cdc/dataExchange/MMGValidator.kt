@@ -26,27 +26,31 @@ class MMGValidator {
           block.elements.forEach { elem ->
               val msgValues = HL7StaticParser.getValue(message, elem.path)
               if (msgValues.isDefined && msgValues?.get() != null) {
-                  if (!elem.valueSetCode.isNullOrEmpty() && !"N/A".equals(elem.valueSetCode)) {
-                      logger.debug("Validating ${elem.valueSetCode}")
-                      //val concepts = retrieveValueSetConcepts(elem.valueSetCode)
-                      msgValues.get().forEachIndexed { outIdx, outArray ->
-                          outArray.forEachIndexed { inIdx, inElem ->
-                              //if (concepts.filter { it.conceptCode == inElem }.isEmpty()) {
-                              if (checkConcept(elem.valueSetCode, inElem)) {
-                                 val lineNbr = getLineNumber(message, elem, outIdx)
-                                  val issue = ValidationIssue(getCategory(elem.mappings.hl7v251.usage), VALIDATION_ISSUE_TYPE.VOCAB, elem.name, elem.path, lineNbr,"Unable to find $inElem on ${elem.valueSetCode} on line $lineNbr" )
-                                  report.add(issue)
-                                  //println("Warning: Unable to find $inElem on ${elem.valueSetCode} on line $lineNbr")
-                              } else {
-                                  logger.debug("$inElem is valid for ${elem.valueSetCode}")
-                              }
-                          }//.forEach Inner Array
-                      } //.forEach Outer Array
-                  } //value Set code is empty
+                  checkVocab(elem, msgValues.get(), message, report)
               } //Found value in message
           }
         }
         return report
+    }
+
+    private fun checkVocab(elem: Element, msgValues: Array<Array<String>>, message: String, report:MutableList<ValidationIssue> ) {
+        if (!elem.valueSetCode.isNullOrEmpty() && !"N/A".equals(elem.valueSetCode)) {
+            logger.debug("Validating ${elem.valueSetCode}")
+            //val concepts = retrieveValueSetConcepts(elem.valueSetCode)
+            msgValues.forEachIndexed { outIdx, outArray ->
+                outArray.forEachIndexed { inIdx, inElem ->
+                    //if (concepts.filter { it.conceptCode == inElem }.isEmpty()) {
+                    if (!checkConcept(elem.valueSetCode, inElem)) {
+                        val lineNbr = getLineNumber(message, elem, outIdx)
+                        val issue = ValidationIssue(getCategory(elem.mappings.hl7v251.usage), VALIDATION_ISSUE_TYPE.VOCAB, elem.name, elem.path, lineNbr,"Unable to find $inElem on ${elem.valueSetCode} on line $lineNbr" )
+                        report.add(issue)
+                        //println("Warning: Unable to find $inElem on ${elem.valueSetCode} on line $lineNbr")
+                    } else {
+                        logger.debug("$inElem is valid for ${elem.valueSetCode}")
+                    }
+                }//.forEach Inner Array
+            } //.forEach Outer Array
+        } //value Set code is empty
     }
 
     private fun getCategory(usage: String): String {
@@ -93,7 +97,6 @@ class MMGValidator {
     }
 
     fun checkConcept(key: String, concept: String):Boolean {
-
         return jedis.hexists(key, concept)
     }
 }

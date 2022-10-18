@@ -2,9 +2,9 @@ package gov.cdc.dex.hl7
 
 import gov.cdc.dex.hl7.model.*
 
-import open.HL7PET.tools.HL7StaticParser
+
 import org.slf4j.LoggerFactory
-import scala.Option
+
 
 
 class MmgValidatorOtherSegments(private val hl7Message: String, private val mmgs: Array<MMG>) {
