@@ -3,9 +3,13 @@ package cdc.ede.hl7.structuralvalidator
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
+
 import scala.util.{Failure, Success, Try}
 import cdc.xlr.structurevalidator._
 import com.google.gson.{Gson, GsonBuilder, JsonElement, JsonParser}
+
+import java.util
+import scala.collection.BitSet.empty.to
 
 /**
  * Azure Functions with Event Hub Trigger.
@@ -30,58 +34,59 @@ class Function {
 
 
     val elem = JsonParser.parseString(message.toString())
-    //context.getLogger.info("Json Array size:" + elem.getAsJsonArray.size())
-
-    var msgObj = elem.getAsJsonArray.get(0).getAsJsonObject.get("content").getAsString
-    var metadataObj = elem.getAsJsonArray.get(0).getAsJsonObject.get("metadata").toString
+    // context.getLogger.info("Json Array size:" + elem.getAsJsonArray)
+    val elemArray = elem.getAsJsonArray()
+    // var msgObj = elem.getAsJsonArray.get(0).getAsJsonObject.get("content").getAsString
+    // var metadataObj = elem.getAsJsonArray.get(0).getAsJsonObject.get("metadata").toString
     // context.getLogger.info(s"metadataObj : ${metadataObj}")
 
     // for each message received from event hub:
-    // for (hl7Message <- hl7Messages) {
+    var itor: util.Iterator[JsonElement] = elemArray.iterator()
+    while (itor.hasNext) {
+      var msgElem = itor.next()
+      var msgObj = msgElem.getAsJsonObject.get("content").getAsString
+      var metadataObj = msgElem.getAsJsonObject.get("metadata").toString
 
-    val phinProfile = PhinProfileUtil.extract(msgObj)
-    context.getLogger.info("Message received PHIN Profile: " + phinProfile.getOrElse("Failure"))
+      val phinProfile = PhinProfileUtil.extract(msgObj)
+      context.getLogger.info("Message received PHIN Profile: " + phinProfile.getOrElse("Failure"))
 
-    phinProfile match {
+      phinProfile match {
 
-      case Success(phinProfile) => {
+        case Success(phinProfile) => {
 
-        val validator = StructureValidatorAsync(ProfileLoaderLocal(phinProfile))
-        val report = validator.report(msgObj)
-        // context.getLogger.info(s"hl7Message.content: --> ${hl7Message.content}")
-        // context.getLogger.info(s"validation report: --> ${report}")
+          val validator = StructureValidatorAsync(ProfileLoaderLocal(phinProfile))
+          val report = validator.report(msgObj)
 
-        report match {
+          report match {
 
-          case Success(report) => {
-            //context.getLogger.info(s"validation report: --> ${report}")
-            val msgOut = new HL7MessageOut(msgObj, metadataObj, report)
+            case Success(report) => {
+              //context.getLogger.info(s"validation report: --> ${report}")
+              val msgOut = new HL7MessageOut(msgObj, metadataObj, report)
 
-            var json = new Gson().toJson(msgOut)
-            context.getLogger.info(s"validation msg json: --> ${json}")
+              var json = new Gson().toJson(msgOut)
+              //context.getLogger.info(s"validation msg json: --> ${json}")
 
-            EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message = json)
-          } // .Success
+              EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameOk, message = json)
+            } // .Success
 
-          case Failure(e) => {
+            case Failure(e) => {
 
-            context.getLogger.warning(s"validation error1: --> ${e.getMessage()}")
-            EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameErrs, message = e.getMessage())
-          } // .Failure
+              context.getLogger.warning(s"validation error1: --> ${e.getMessage()}")
+              EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameErrs, message = e.getMessage())
+            } // .Failure
 
-        } // .match
-      } // .Success
+          } // .match
+        } // .Success
 
-      case Failure(e) => {
+        case Failure(e) => {
 
-        context.getLogger.warning(s"validation error2: --> ${e.getMessage()}")
-        EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameErrs, message = e.getMessage())
-      } // .Failure
+          context.getLogger.warning(s"validation error2: --> ${e.getMessage()}")
+          EvHubUtil.evHubSend(evHubConnStr = evHubConnStr, evHubName = evHubNameErrs, message = e.getMessage())
+        } // .Failure
 
-    } // .phinProfile match
+      } // .phinProfile match
 
-    //  } // .for
-
+    } // while
   } // .EventHubTrigger
 
 } // .Function
