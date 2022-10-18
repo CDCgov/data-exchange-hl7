@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class MMG (@JsonProperty("result") val result: Result)
-
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class Result(val id: String, val guideStatus: String, val name: String, val shortName: String, val blocks: List<Block>)
+data class MMG (val id: String, val guideStatus: String, val name: String, val shortName: String, val blocks: List<Block>)
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)

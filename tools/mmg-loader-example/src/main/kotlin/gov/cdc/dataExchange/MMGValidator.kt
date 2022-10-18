@@ -22,7 +22,7 @@ class MMGValidator {
     // Simple P
     fun validate(message: String, mmg: MMG): List<ValidationIssue> {
         val report = mutableListOf<ValidationIssue>()
-        mmg.result.blocks.forEach { block ->
+        mmg.blocks.forEach { block ->
           block.elements.forEach { elem ->
               val msgValues = HL7StaticParser.getValue(message, elem.path)
               if (msgValues.isDefined && msgValues?.get() != null) {
