@@ -783,8 +783,8 @@
                 "componentPosition": -1,
                 "usage": "O",
                 "cardinality": "[1..1]",
-                "literalFieldValues": {},
                 "repeatingGroupElementType": "NO",
+                "literalFieldValues": {},
                 "implementationNotes": "Two digit numeric FIPS code",
                 "sampleSegment": ""
               }

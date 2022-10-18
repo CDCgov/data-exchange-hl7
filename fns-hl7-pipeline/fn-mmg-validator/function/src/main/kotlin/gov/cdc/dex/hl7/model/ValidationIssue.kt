@@ -24,7 +24,6 @@ enum class ValidationErrorMessage(val message: String) {
 
 
 data class ValidationIssue(
-
     val category: ValidationIssueCategoryType,         // ERROR (for required fields) or WARNING
     val type: ValidationIssueType,                  // DATA_TYPE, CARDINALITY, VOCAB
     val fieldName: String,                          // mmg field Name
