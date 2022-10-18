@@ -20,7 +20,7 @@ class Function {
   def run(
            @EventHubTrigger(
              name = "msg",
-             eventHubName = "hl7-recdeb-ok",
+             eventHubName = "%EventHubReceiveName%",
              connection = "EventHubConnectionString")
            message: String,
            context: ExecutionContext): Unit = {
