@@ -2,8 +2,9 @@ package gov.cdc.dex.hl7
 
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
 import gov.cdc.dex.hl7.model.*
+import gov.cdc.hl7.HL7StaticParser
 
-import open.HL7PET.tools.HL7StaticParser
+
 import org.slf4j.LoggerFactory
 import scala.Option
 import redis.clients.jedis.DefaultJedisClientConfig

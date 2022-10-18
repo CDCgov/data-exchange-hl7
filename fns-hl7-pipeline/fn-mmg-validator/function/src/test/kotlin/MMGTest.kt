@@ -1,6 +1,6 @@
 
 import gov.cdc.dex.hl7.MmgUtil
-import open.HL7PET.tools.HL7StaticParser
+import gov.cdc.hl7.HL7StaticParser
 import org.testng.annotations.Test
 
 class MMGTest {

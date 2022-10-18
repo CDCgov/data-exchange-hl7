@@ -1,12 +1,11 @@
 package gov.cdc.dex.hl7
 
 import com.google.gson.Gson
-import gov.cdc.dex.hl7.exception.InvalidMessageException
+
 import gov.cdc.dex.hl7.exception.MessageNotRecognizableException
 import gov.cdc.dex.hl7.model.MMG
 import gov.cdc.dex.hl7.temp.EventCodeUtil
-import open.HL7PET.tools.HL7StaticParser
-
+import gov.cdc.hl7.HL7StaticParser
 import org.slf4j.LoggerFactory
 import java.util.*
 

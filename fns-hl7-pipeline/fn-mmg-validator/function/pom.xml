@@ -153,9 +153,9 @@
 
         <!-- https://mvnrepository.com/artifact/io.github.mscaldas2012/hl7-pet -->
         <dependency>
-            <groupId>io.github.mscaldas2012</groupId>
+            <groupId>gov.cdc.hl7</groupId>
             <artifactId>hl7-pet</artifactId>
-            <version>${hl7pet.version}</version>
+            <version>1.2.7</version>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
