@@ -32,6 +32,12 @@ data class Element(
             } else mappings.hl7v251.identifier
              "${mappings.hl7v251.segmentType}[@3.1='$obxIdentifier']"
         }
+        "OBR" -> {
+            if (mappings.hl7v251.obrPosition > 0)
+                "${mappings.hl7v251.segmentType}[${mappings.hl7v251.obrPosition}]"
+            else
+                mappings.hl7v251.segmentType
+        }
 
         else -> {
             mappings.hl7v251.segmentType
@@ -48,6 +54,9 @@ data class Element(
             var path = "${mappings.hl7v251.segmentType}-${mappings.hl7v251.fieldPosition}"
             if (mappings.hl7v251.componentPosition != -1)
                 path += ".${mappings.hl7v251.componentPosition}"
+            else if (listOf("CE", "CWE").contains(mappings.hl7v251.dataType)) {
+                path += ".1"
+            }
             path
         }
     }
@@ -73,7 +82,7 @@ data class HL7Mapping (
     val identifier: String,
     val dataType: String,
     val segmentType: String,
-    val orbPosition: Int,
+    val obrPosition: Int,
     val fieldPosition: Int,
     val componentPosition: Int,
     val usage: String,

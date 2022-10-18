@@ -16,7 +16,7 @@ class MMGTest {
 //        println(mmgFromJson)
 
         var count = 0
-        mmgFromJson.result.blocks.forEach {block ->
+        mmgFromJson.blocks.forEach {block ->
             println("Block: ${block.name} -  ${block.elements.count()}")
             block.elements.forEach { elem ->
                 println("\t${elem.name}: ${elem.path}" )
@@ -30,7 +30,7 @@ class MMGTest {
     fun testValidateVocab() {
         val time = measureTimeMillis {
             val msg = this::class.java.getResource("/testMessage.hl7").readText()
-            val mmg = this::class.java.getResource("/genV2.json").readText()
+            val mmg = this::class.java.getResource("/mmgs/GENERIC_MMG_V2.0.json").readText()
 
             val mmgFromJson = Gson().fromJson(mmg, MMG::class.java)
 
@@ -42,6 +42,7 @@ class MMGTest {
         println("Validation took $time")
 
     }
+
 
     @Test
     fun extractPath() {
