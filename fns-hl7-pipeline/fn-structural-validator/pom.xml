@@ -19,7 +19,7 @@
         <slf4j.version>2.0.0</slf4j.version>
         <liftweb.version>3.5.0</liftweb.version>
         <structurevalidator.version>0.4.4</structurevalidator.version>
-        <jackson.version>2.13.4</jackson.version>
+        <jackson.version>2.13.4.1</jackson.version>
         <scalalang.version>2.12.16</scalalang.version>
         <mavenscalaplugin.version>2.15.2</mavenscalaplugin.version>
         <apachemavenplugin.version>3.8.1</apachemavenplugin.version>
