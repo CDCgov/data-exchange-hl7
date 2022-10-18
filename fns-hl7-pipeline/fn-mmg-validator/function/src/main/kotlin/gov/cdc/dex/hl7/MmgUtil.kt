@@ -29,7 +29,7 @@ class MmgUtil  {
         fun getMMG(genVxMMG: String, conditionMMG: String?, eventCode: String?): Array<MMG> {
             when (genVxMMG.uppercase(Locale.getDefault())) {
                GENV1_CASE.uppercase(Locale.getDefault()), GENV1_SUMMARY.uppercase(Locale.getDefault()) ->  {
-                   val genV1 = this::class.java.getResource("/${genVxMMG.toUpperCase(Locale.getDefault())}.json").readText()
+                   val genV1 = this::class.java.getResource("/${genVxMMG.uppercase(Locale.getDefault())}.json").readText()
                    return arrayOf(gson.fromJson(genV1, MMG::class.java))
                }
                GENV2.uppercase(Locale.getDefault()) -> {

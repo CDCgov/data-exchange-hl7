@@ -40,7 +40,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
                     if ("OBX" == element.mappings.hl7v251.segmentType && 5 == element.mappings.hl7v251.fieldPosition) {
                         val dataTypeSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))
                         for ( k in dataTypeSegments.keys().toList()) {
-                           checkDataType(hl7Message, element, dataTypeSegments[k].get()[2], k.toString().toInt(), report )
+                           checkDataType(element, dataTypeSegments[k].get()[2], k.toString().toInt(), report )
                         }
                     }
                    // TODO: Vocab Check
@@ -121,7 +121,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
         }
     } // .checkCardinality 
 
-    private fun checkDataType(message: String, element: Element, msgDataType: String?, lineNbr: Int, report: MutableList<ValidationIssue>) {
+    private fun checkDataType(element: Element, msgDataType: String?, lineNbr: Int, report: MutableList<ValidationIssue>) {
         if (msgDataType != null && msgDataType != element.mappings.hl7v251.dataType) {
                 report += ValidationIssue(
                     category= getCategory(element.mappings.hl7v251.usage),
@@ -141,7 +141,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
             logger.debug("Validating ${elem.valueSetCode}")
             //val concepts = retrieveValueSetConcepts(elem.valueSetCode)
             msgValues.forEachIndexed { outIdx, outArray ->
-                outArray.forEachIndexed { inIdx, inElem ->
+                outArray.forEachIndexed { _, inElem ->
                     //if (concepts.filter { it.conceptCode == inElem }.isEmpty()) {
                     if (!isConceptValid2(elem.valueSetCode, inElem)) {
                         val lineNbr = getLineNumber(message, elem, outIdx)
