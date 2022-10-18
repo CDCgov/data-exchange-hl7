@@ -79,17 +79,23 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-databind</artifactId>-->
+<!--            <version>${jackson.version}</version>-->
+<!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-scala -->
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.module</groupId>-->
+<!--            <artifactId>jackson-module-scala_2.12</artifactId>-->
+<!--            <version>${jackson.version}</version>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-scala_2.12</artifactId>
-            <version>${jackson.version}</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.9.0</version>
         </dependency>
 
 
