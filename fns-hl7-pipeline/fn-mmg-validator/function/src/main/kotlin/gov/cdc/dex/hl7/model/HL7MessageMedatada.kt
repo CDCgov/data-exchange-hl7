@@ -7,7 +7,7 @@ data class HL7MessageMetadata (
   @SerializedName("file_timestamp"     ) var fileTimestamp       : String,
   @SerializedName("file_size"          ) var fileSize            : Long,
   @SerializedName("file_uuid"          ) var fileUUID            : String,
-  @SerializedName("file_event_idD"     ) var fileEventID         : String,
+  @SerializedName("file_event_id"     ) var fileEventID         : String,
   @SerializedName("file_event_timestamp") var fileEventTimestamp  : String,
   @SerializedName("message_uuid"       ) var messageUUID         : String? = null,
   @SerializedName("message_index"      ) var messageIndex        : Int? = null,

@@ -16,4 +16,5 @@ case class HL7MessageMetadata(filePath: String,
 case class HL7Message(content: String, metadata: HL7MessageMetadata)
 
                      
-case class HL7MessageOut(content: String, metadata: HL7MessageMetadata, structuralValidationReport: Report)
+//case class HL7MessageOut(content: String, metadata: HL7MessageMetadata, structuralValidationReport: Report)
+case class HL7MessageOut(content: String, metadata: String, structuralValidationReport: Report)

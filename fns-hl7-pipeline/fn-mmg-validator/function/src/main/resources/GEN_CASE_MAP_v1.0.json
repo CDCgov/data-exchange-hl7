@@ -782,9 +782,9 @@
                 "fieldPosition": 5,
                 "componentPosition": -1,
                 "usage": "O",
-                "cardinality": "[1.. ]",
-                "literalFieldValues": {},
+                "cardinality": "[1..1]",
                 "repeatingGroupElementType": "NO",
+                "literalFieldValues": {},
                 "implementationNotes": "Two digit numeric FIPS code",
                 "sampleSegment": ""
               }

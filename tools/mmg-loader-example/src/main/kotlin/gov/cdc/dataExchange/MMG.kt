@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class MMG (@JsonProperty("result") val result: Result)
-
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class Result(val id: String, val guideStatus: String, val name: String, val shortName: String, val blocks: List<Block>)
+data class MMG (val id: String, val guideStatus: String, val name: String, val shortName: String, val blocks: List<Block>)
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -79,4 +75,26 @@ data class HL7Mapping (
     val cardinality: String,
     val repeatingGroupElementType: String
 
-)
+) {
+    val path = when (segmentType) {
+             "OBX" -> {
+                 var p = "$segmentType[@3.1='${identifier}']-5"
+                 if ("CE".equals(dataType) || "CWE".equals(dataType) )
+                     p += ".1"
+                 else if  ("SN".equals(dataType))
+                     p += ".2"
+                 p
+             }
+//              "MSH"| "PID"-> {
+//                  val regex = "[A-Z]{3}\\-[0-9]*".toRegex()
+//                  val path = regex.find(identifier)
+//                  path?.value
+//              }
+              else ->  {
+                  var path = "$segmentType-$fieldPosition"
+                  if (componentPosition != -1)
+                      path += ".$componentPosition"
+                  path
+              }
+        }
+}
