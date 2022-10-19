@@ -24,7 +24,7 @@ class Function {
     fun eventHubProcessor(
             @EventHubTrigger(
                 name = "msg", 
-                 eventHubName = "hl7-file-dropped",
+                 eventHubName = "%EventHubReceiveName%",
 //                eventHubName = "hl7-dropped-files",
                 connection = "EventHubConnectionString") 
                 message: String?,
@@ -74,7 +74,7 @@ class Function {
                 val blobName = event.evHubData.url.split("/").last()
                 val blobClient = blobContainerClient.getBlobClient(blobName)
 
-                val blobContentType = blobClient.getProperties().getContentType()
+                // val blobContentType = blobClient.getProperties().getContentType()
                 val blobLastModified = blobClient.getProperties().getLastModified()
                 val blobSize = blobClient.getProperties().getBlobSize()
 
