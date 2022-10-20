@@ -467,6 +467,46 @@
           }
         },
         {
+          "id": "aad08b79-947f-5ebe-8b84-7b1e69e5c149",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
+          "guideInternalVersion": 0,
+          "blockId": "2",
+          "ordinal": 8,
+          "name": "Race Category",
+          "description": "Field containing one or more codes that broadly refer to the patient\u2019s race(s).",
+          "comments": "",
+          "status": "Final",
+          "dataType": "Coded",
+          "businessRules": "",
+          "isUnitOfMeasure": false,
+          "legacyCodeSystem": "PHINQUESTION",
+          "codeSystem": "PHINQUESTION",
+          "legacyPriority": "R",
+          "priority": 1,
+          "isRepeat": true,
+          "mayRepeat": "Y",
+          "valueSetCode": "PHVS_RaceCategory_CDC_Unk",
+          "mappings": {
+            "hl7v251": {
+              "legacyIdentifier": "DEM152",
+              "identifier": "DEM152",
+              "messageContext": "PID-10 Race",
+              "dataType": "CE",
+              "segmentType": "PID",
+              "obrPosition": 2,
+              "fieldPosition": 10,
+              "componentPosition": -1,
+              "usage": "O",
+              "cardinality": "[1..*]",
+              "literalFieldValues": {},
+              "repeatingGroupElementType": "NO",
+              "implementationNotes": "",
+              "sampleSegment": ""
+            }
+          }
+        },
+        {
+
           "id": "c9c2d601-3d9b-579b-a273-0ab012459b3c",
           "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
