@@ -1,5 +1,5 @@
 {
-  "id": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+  "id": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
   "type": "Guide",
   "guideStatus": "Final",
   "name": "Arboviral_v1.3.2_MMG_20210721",
@@ -17,7 +17,7 @@
   "blocks": [
     {
       "id": "1",
-      "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+      "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
       "ordinal": 1,
       "type": "Single",
       "name": "Message Header",
@@ -26,8 +26,8 @@
       "shouldDisplayName": false,
       "elements": [
         {
-          "id": "98ad403c-c487-406c-a78c-e369f4bb1046",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "7ae2a601-1554-539d-898e-1d1d2d5bb6ff",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "1",
           "ordinal": 1,
@@ -65,8 +65,8 @@
           }
         },
         {
-          "id": "7249cea4-3331-491f-ad67-d899bee66311",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "666b9adb-e20d-582d-849a-15c2a7c3ff0a",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "1",
           "ordinal": 2,
@@ -104,8 +104,8 @@
           }
         },
         {
-          "id": "f323c943-919c-43a6-8177-057262bbf33f",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "afba510a-5d29-59ab-91fb-f4a21ec9ff2a",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "1",
           "ordinal": 3,
@@ -146,7 +146,7 @@
     },
     {
       "id": "2",
-      "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+      "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
       "ordinal": 2,
       "type": "Single",
       "name": "Subject Related",
@@ -155,8 +155,8 @@
       "shouldDisplayName": false,
       "elements": [
         {
-          "id": "b62f29c4-f2a2-4942-961e-cee0b6c072dc",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "75d291c8-684c-52e3-8ae1-7bd3c346b187",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "2",
           "ordinal": 1,
@@ -183,7 +183,7 @@
               "segmentType": "PID",
               "obrPosition": 0,
               "fieldPosition": 5,
-              "componentPosition": -1,
+              "componentPosition": 7,
               "usage": "R",
               "cardinality": "[1..2]",
               "literalFieldValues": {},
@@ -194,8 +194,8 @@
           }
         },
         {
-          "id": "fb379643-7fe6-493c-bf41-9dbde0ebfefe",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "84a8112d-c27b-52ab-a244-0762ec25e95a",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "2",
           "ordinal": 2,
@@ -233,8 +233,8 @@
           }
         },
         {
-          "id": "c456ad06-ef0b-490a-9692-c7fe356cab8c",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "887f63dd-2728-5841-ae1f-78d1bc86d9e9",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "2",
           "ordinal": 3,
@@ -272,8 +272,8 @@
           }
         },
         {
-          "id": "34db13ad-675f-4be6-bdb3-ac89fa14ca66",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "e8ccde04-4d80-576f-a41a-9e9d46ab69af",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "2",
           "ordinal": 4,
@@ -311,8 +311,8 @@
           }
         },
         {
-          "id": "8c78935b-8ff6-4d69-9ea0-90bf80dba54a",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "2601e060-2e7a-51f2-8f56-5747b38e7104",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "2",
           "ordinal": 5,
@@ -350,8 +350,8 @@
           }
         },
         {
-          "id": "0fb0a649-a876-48e5-87c5-65237c165e09",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "1659bb92-8248-55eb-96db-413ac9e2370a",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "2",
           "ordinal": 6,
@@ -389,8 +389,8 @@
           }
         },
         {
-          "id": "58106f24-2fb1-4fcf-b61a-62891f18d255",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "3695322b-56c1-523f-9242-d22fbce1db4e",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "2",
           "ordinal": 7,
@@ -428,8 +428,8 @@
           }
         },
         {
-          "id": "f4f6fa02-60cd-4953-9eed-2a52771ab4cc",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "aad08b79-947f-5ebe-8b84-7b1e69e5c149",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "2",
           "ordinal": 8,
@@ -467,8 +467,8 @@
           }
         },
         {
-          "id": "ca618506-5113-4e3d-b354-7de1df30d892",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "c9c2d601-3d9b-579b-a273-0ab012459b3c",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "2",
           "ordinal": 9,
@@ -509,7 +509,7 @@
     },
     {
       "id": "3",
-      "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+      "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
       "ordinal": 3,
       "type": "Single",
       "name": "Case Related",
@@ -518,8 +518,8 @@
       "shouldDisplayName": false,
       "elements": [
         {
-          "id": "f77d2da2-af15-42c8-8a93-92c20d4739d3",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "010ba52b-e091-55cd-85d2-f50108e0ef86",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 1,
@@ -557,8 +557,8 @@
           }
         },
         {
-          "id": "7dbcd938-b1a5-4951-9642-b20ece424bde",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "ce4ee0bc-0f49-5226-98bf-4656d55fe296",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 2,
@@ -596,8 +596,8 @@
           }
         },
         {
-          "id": "2a5c0f51-2673-4d26-a7f7-7dd41ddcef24",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "1cdee9cd-9641-5df6-bd13-1a26b7e38cd6",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 3,
@@ -635,8 +635,8 @@
           }
         },
         {
-          "id": "4577e4f9-d56b-4f6f-9278-8ac83905aed7",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "d6f32bd9-21f7-570e-99d1-96269cfd5cd9",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 4,
@@ -674,8 +674,8 @@
           }
         },
         {
-          "id": "eaf75a2e-afea-4781-9d97-0d1e10735599",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "74e7e188-99ad-5904-8e08-b3be7e4442db",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 5,
@@ -713,8 +713,8 @@
           }
         },
         {
-          "id": "5cfc6226-e3a8-4813-b8e7-1be9ea275c87",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "75640924-1195-5933-8c92-a87d64ac86d3",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 6,
@@ -752,8 +752,8 @@
           }
         },
         {
-          "id": "51c0a591-df99-4775-954b-fc104590b508",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "04d03244-d793-5100-b2ea-ed855f77d862",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 7,
@@ -791,8 +791,8 @@
           }
         },
         {
-          "id": "15841a1a-a73f-4900-ae3e-cefb5fca8d11",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "00f3aaf2-7d00-55e3-8a7b-c22717c9ce44",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 8,
@@ -830,8 +830,8 @@
           }
         },
         {
-          "id": "d58def0f-de74-47bb-8dda-7c64f3bd2fbe",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "8294a65d-89a5-5849-be32-8cc7b8766266",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 9,
@@ -869,8 +869,8 @@
           }
         },
         {
-          "id": "289eab80-1db5-446b-bbb8-5b4df40b3f1e",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "cc81f7ff-e90c-50db-9b64-f9bcaf053517",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 10,
@@ -908,8 +908,8 @@
           }
         },
         {
-          "id": "827903f1-ded7-4cee-8652-1ba96aa6a81a",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "2c1638f4-21cf-5f26-bfc5-f72c2912da44",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 11,
@@ -947,8 +947,8 @@
           }
         },
         {
-          "id": "a96f873e-cc75-46b9-80d8-f18e075f65b8",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "6ca0b35d-bb84-56f8-97a1-ec31e7e97370",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 12,
@@ -986,8 +986,8 @@
           }
         },
         {
-          "id": "cb56f1b2-dac4-44e9-b0fe-3f0a0a86296a",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "ec0e231d-49c2-5759-be1e-4b5fbf5fff42",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 13,
@@ -1025,8 +1025,8 @@
           }
         },
         {
-          "id": "7e33833b-d8c5-4d0e-9dcf-0294da8cd34f",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "88fa27bb-4541-5c25-9da3-260023032602",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 14,
@@ -1064,8 +1064,8 @@
           }
         },
         {
-          "id": "9a8025a8-088b-46c7-b606-8e5d706f936a",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "633c1b3d-750a-565d-8c41-d07334d96ae4",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 15,
@@ -1103,8 +1103,8 @@
           }
         },
         {
-          "id": "bf590ba7-a7de-4e3b-aea7-ca7604700661",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "e8236f4e-c967-5581-9059-d164f682a221",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 16,
@@ -1142,8 +1142,8 @@
           }
         },
         {
-          "id": "72359439-8ff6-4b51-9891-cfc37e89c2a0",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "e8c25b49-7283-5ea6-b5e5-9eddb02f5be6",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 17,
@@ -1181,8 +1181,8 @@
           }
         },
         {
-          "id": "793c3294-4028-4e77-bc82-f026728ca24f",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "c15644ec-d6da-5954-96c5-8b835450d66b",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 18,
@@ -1220,8 +1220,8 @@
           }
         },
         {
-          "id": "c1b7bbbe-c5c8-436a-9854-b283fc66d61c",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "cda1717f-b91d-50a2-aa57-ff8585a40391",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 19,
@@ -1259,8 +1259,8 @@
           }
         },
         {
-          "id": "d14816bf-369e-4b6b-ad91-319f2a83bc5b",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "66319f3c-9ff7-5f15-b10c-b7922cd097c5",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 20,
@@ -1298,8 +1298,8 @@
           }
         },
         {
-          "id": "f4b894af-7435-4f13-afa1-b047460fa19c",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "9d852b6d-1774-5b9d-88e9-11cf77b09a6a",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 21,
@@ -1337,8 +1337,8 @@
           }
         },
         {
-          "id": "9a4cf8bf-93b4-411c-b5ad-f4db41d1b742",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "04ab68e7-2131-5eb1-9c8b-5c64a4033f22",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 22,
@@ -1376,8 +1376,8 @@
           }
         },
         {
-          "id": "b1320505-b17c-473a-a5da-eb79f0dcc8dd",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "7637abaf-f910-5888-9443-82f9e4d766f3",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 23,
@@ -1415,8 +1415,8 @@
           }
         },
         {
-          "id": "7a664861-e82d-4a40-bd7a-2db6c2f3d12f",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "0636f034-7031-5955-b140-65c3d116c3d3",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 24,
@@ -1454,8 +1454,8 @@
           }
         },
         {
-          "id": "ab801fcb-aa93-46c2-b862-340d09d47987",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "26cc4cda-3efa-5436-826b-81769d493baf",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 25,
@@ -1493,8 +1493,8 @@
           }
         },
         {
-          "id": "f15358e6-5c0c-4b8c-9368-0d50febf0750",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "826eb872-ec05-54bb-88fc-16b9a6cef28b",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 26,
@@ -1532,8 +1532,8 @@
           }
         },
         {
-          "id": "070d3e41-2267-4a2a-8a23-ce9d6efd7b0f",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "6249b67a-2b61-5bac-9605-f4f73e9f77b1",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 27,
@@ -1571,8 +1571,8 @@
           }
         },
         {
-          "id": "4dbed57a-32f8-4d96-8a68-ee0f0332ba8b",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "c288091e-6fde-517c-87ca-3300717d93bb",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 28,
@@ -1610,8 +1610,8 @@
           }
         },
         {
-          "id": "aa1c53f0-6d56-4261-9594-027941aaf701",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "d584517a-e311-547f-9351-71ec780bd271",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 29,
@@ -1649,8 +1649,8 @@
           }
         },
         {
-          "id": "ac47c077-4d1c-4949-bbcf-dd8f647948a2",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "8de4f8ea-ee86-50d6-a29c-18957fc0f931",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 30,
@@ -1688,8 +1688,8 @@
           }
         },
         {
-          "id": "b8760602-6dd1-4422-a2d6-35f11f541466",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "3de6a52c-05bf-52d8-87cf-31a3f3075b3d",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 31,
@@ -1727,8 +1727,8 @@
           }
         },
         {
-          "id": "5b0a33ca-685d-4ea9-9b46-a15a3b0d5ae2",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "06e4e0b9-257c-55ec-bd1c-c36f4a8ad425",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 32,
@@ -1766,8 +1766,8 @@
           }
         },
         {
-          "id": "839b8218-8a32-412e-b604-6c680b67cc22",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "89b6dea7-2c83-58d6-9f5c-2a57327c59a4",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 33,
@@ -1805,8 +1805,8 @@
           }
         },
         {
-          "id": "249fda8e-d0b1-442e-9867-f8ba907df00a",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "dc2c054f-524e-506c-a66e-55fd085c3501",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 34,
@@ -1844,8 +1844,8 @@
           }
         },
         {
-          "id": "c78bac68-32d4-4274-9498-5b6cc2396c2e",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "a9f57c70-5c42-5f7e-905f-6186f2fcf3cd",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 35,
@@ -1883,8 +1883,8 @@
           }
         },
         {
-          "id": "5a8f8df0-d0a2-44f0-8fcd-a0778af46536",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "33cc368e-41c6-5e1f-aec4-660a5d62961c",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 36,
@@ -1922,8 +1922,8 @@
           }
         },
         {
-          "id": "54549dc7-7d5b-4676-9cde-ce2fe594c8d1",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "f28dc9a7-612c-5b77-bcbd-861d5a4c1404",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 37,
@@ -1961,8 +1961,8 @@
           }
         },
         {
-          "id": "8dfc8382-2e29-4565-b85d-9a68ab3c7de6",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "c8c62fc4-5233-5779-b0c2-f99be48d7d7d",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 38,
@@ -2000,8 +2000,8 @@
           }
         },
         {
-          "id": "2890e960-3353-4094-8845-84e8f62733cb",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "bd1b699d-0a35-5379-9b3e-e240fb54d004",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 39,
@@ -2039,8 +2039,8 @@
           }
         },
         {
-          "id": "fb2edea5-82c2-4dff-82dd-cd39a89eeb6f",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "23f96217-bbbe-51ad-945d-4e3d258a9241",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 40,
@@ -2078,8 +2078,8 @@
           }
         },
         {
-          "id": "72fe3689-407d-4821-8ac5-c13ebf735246",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "a2447d6c-a6b3-5bb4-a87a-656a4f362414",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 41,
@@ -2117,8 +2117,8 @@
           }
         },
         {
-          "id": "81cd01e8-ee9c-4ed7-b439-f265e6b90998",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "d0afec96-9498-5f21-aeec-01a53bfce11e",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 42,
@@ -2156,8 +2156,8 @@
           }
         },
         {
-          "id": "577a8c02-d428-429c-acb8-7f1498139f54",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "c26020b0-665f-540b-bc57-12a298a58722",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 43,
@@ -2195,8 +2195,8 @@
           }
         },
         {
-          "id": "987a0c74-add5-45c3-bb83-798984975748",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "0651b3f7-9eb1-5a26-b9b4-bab04a1259f9",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 44,
@@ -2234,8 +2234,8 @@
           }
         },
         {
-          "id": "20daf326-efa0-49af-912b-c0eb3bc5ec06",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "86c7ca00-d424-510d-930f-920d1e351d5d",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 45,
@@ -2273,8 +2273,8 @@
           }
         },
         {
-          "id": "0aa39521-af0d-4c9e-8291-0de32cceba8d",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "fbfc28ee-8b6f-5800-a7d3-e366c61ec96f",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 46,
@@ -2312,8 +2312,8 @@
           }
         },
         {
-          "id": "4c085b7d-7802-4609-a22e-5771c6891f3e",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "05ccf2df-c20d-5861-a713-e9e8c33f9e84",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 47,
@@ -2351,8 +2351,8 @@
           }
         },
         {
-          "id": "6e6afc3a-fdb5-4fca-ab8d-03eec997fad4",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "97b4b1ad-dd74-56c8-bc09-1bd3c1ad5158",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 48,
@@ -2390,8 +2390,8 @@
           }
         },
         {
-          "id": "e8607265-b303-4e4e-b301-c3fe83579ac9",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "4d336b9d-d1e2-544a-9cac-1f1ac1a4fd47",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 49,
@@ -2429,8 +2429,8 @@
           }
         },
         {
-          "id": "ba6e25b4-dfbc-4e87-a418-f260a05ea3f2",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "1a82c6f7-18a1-5f57-a3c7-726184d7259f",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 50,
@@ -2468,8 +2468,8 @@
           }
         },
         {
-          "id": "b00f0323-c5ea-4454-8370-a140813d9660",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "167a00a1-b799-5474-8bf1-60c5d2bf3458",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 51,
@@ -2507,8 +2507,8 @@
           }
         },
         {
-          "id": "1bb8a04e-eaf6-48ec-a1ec-bd6e7f44ed6a",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "bccc66c9-6898-5d2b-8e41-7a4e2df780f4",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 52,
@@ -2546,8 +2546,8 @@
           }
         },
         {
-          "id": "4b47d28f-2a2d-4909-aa9d-6049cd9c64be",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "2616326d-9f1b-5db8-af29-c0b1a608d6ec",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 53,
@@ -2585,8 +2585,8 @@
           }
         },
         {
-          "id": "900e79cc-0e2b-4cfa-b390-2a0c0fe12884",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "cf519fae-1af0-56ad-8a43-66191b5b1e9c",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 54,
@@ -2624,8 +2624,8 @@
           }
         },
         {
-          "id": "b1cc81bf-b960-4fe0-a597-ae183047b742",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "cbb4e534-af13-5ae8-bc27-d5dc58454120",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 55,
@@ -2663,8 +2663,8 @@
           }
         },
         {
-          "id": "17db6fce-cd6c-473e-b996-f32f3870934d",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "4dfec231-e42e-5ac0-888a-ec6251ba65fa",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 56,
@@ -2702,8 +2702,8 @@
           }
         },
         {
-          "id": "18f957dc-4709-4f0e-bc9c-1c0767f9ff32",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "47a008da-1012-5be7-b011-fe624a1f5e72",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 57,
@@ -2741,8 +2741,8 @@
           }
         },
         {
-          "id": "b877b9f4-9c12-46dc-bf9a-10a778e0bd22",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "7917b64b-fbf1-5406-b7ae-5c7c886d320a",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 58,
@@ -2780,8 +2780,8 @@
           }
         },
         {
-          "id": "7aaac947-f666-4bc7-88cf-218570d10a4a",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "972b2716-4651-577b-9b32-d3e7cc872a74",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 59,
@@ -2819,8 +2819,8 @@
           }
         },
         {
-          "id": "f21e56f3-c36c-4b98-8333-e2ef983291cf",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "fd849fcd-ebaa-525a-b3ea-e337a8aee5cb",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 60,
@@ -2858,8 +2858,8 @@
           }
         },
         {
-          "id": "869d2502-b395-4177-b857-b7d6bcb6c61d",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "eeaa8215-8a78-595b-99f2-0d1db79b6d24",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 61,
@@ -2897,8 +2897,8 @@
           }
         },
         {
-          "id": "1522d1a7-2ea2-4214-9eff-df2984f94222",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "e1fde8c4-adc0-5612-a734-7fa78d78441a",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 62,
@@ -2936,8 +2936,8 @@
           }
         },
         {
-          "id": "8e360308-5ce5-41bd-be49-9c02a108989a",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "44c5c17c-dbe4-552d-8e6b-9d2de41758ee",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 63,
@@ -2975,8 +2975,8 @@
           }
         },
         {
-          "id": "99e76eaa-cbea-470b-bba3-e32c0ef59905",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "2817c4ad-a441-5779-a190-adc4e829c6cd",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 64,
@@ -3014,8 +3014,8 @@
           }
         },
         {
-          "id": "721fe650-483c-468d-b302-60967304ff71",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "0e839303-31e5-5363-b22d-025bc1b9ce54",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 65,
@@ -3053,8 +3053,8 @@
           }
         },
         {
-          "id": "55b7aef6-5ca3-415e-a3d5-f5025c61ec4a",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "c5ec79ad-cf91-597d-9cb0-13183ea8117c",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 66,
@@ -3092,8 +3092,8 @@
           }
         },
         {
-          "id": "880c1449-7eb5-4fca-b93c-1f178be32c23",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "6b8d577c-0212-53a5-b78d-38d4cd4d1630",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 67,
@@ -3131,8 +3131,8 @@
           }
         },
         {
-          "id": "760a6ea2-c3a4-43ac-9882-4ba8e161fcad",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "354c1017-c11d-5a00-92e2-1f58ad5a9797",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 68,
@@ -3170,8 +3170,8 @@
           }
         },
         {
-          "id": "91f1cde7-d388-4707-824d-f389c16b85fb",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "b44ecf29-7069-575a-8c7e-d06263ef2231",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 69,
@@ -3209,8 +3209,8 @@
           }
         },
         {
-          "id": "320f3569-a66d-45cb-b1e7-61c4b3e3fc16",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "fa21cef3-9981-5804-8053-81c7a8b246a0",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 70,
@@ -3248,8 +3248,8 @@
           }
         },
         {
-          "id": "825c58fd-26a4-448d-b357-a08b434de113",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "ed0c2e45-50e6-5587-baf9-b081006b13b3",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 71,
@@ -3287,8 +3287,8 @@
           }
         },
         {
-          "id": "d4e9cf43-3bf2-4e6f-9585-5534bb61d2a5",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "f0838d43-61b3-5adc-b51c-bce8ba7e8068",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 72,
@@ -3326,8 +3326,8 @@
           }
         },
         {
-          "id": "2e84057e-9a6f-490c-a63d-28e373d8cfe3",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "80fca94d-61ed-515c-b4c9-b025840657c4",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 73,
@@ -3365,8 +3365,8 @@
           }
         },
         {
-          "id": "924e3442-546e-43db-b63a-baa3934e9760",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "b1ab972d-af63-53f8-9ff9-dc1a59c6a824",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
           "blockId": "3",
           "ordinal": 74,
@@ -3406,8 +3406,8 @@
       ]
     },
     {
-      "id": "356a6145-a887-404b-b034-0b2c6f6784d0",
-      "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+      "id": "4",
+      "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
       "ordinal": 4,
       "type": "Single",
       "name": "Reporter",
@@ -3416,10 +3416,10 @@
       "shouldDisplayName": false,
       "elements": [
         {
-          "id": "d1b76fa3-c994-4206-b48c-929c724b4ae9",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "38c2b0eb-2aaa-58bb-a2af-6f9fd6bd7ecb",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
-          "blockId": "356a6145-a887-404b-b034-0b2c6f6784d0",
+          "blockId": "4",
           "ordinal": 1,
           "name": "Reporting State",
           "description": "State reporting the notification.",
@@ -3455,10 +3455,10 @@
           }
         },
         {
-          "id": "fa8ce814-62b8-4747-9a47-1b34a1eeddc5",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "7927ef5f-d2fb-543a-a9ba-44a00afcceb9",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
-          "blockId": "356a6145-a887-404b-b034-0b2c6f6784d0",
+          "blockId": "4",
           "ordinal": 2,
           "name": "National Reporting Jurisdiction",
           "description": "National jurisdiction reporting the notification to CDC.  This will be the same value as NOT109 Reporting State for all reporting jurisdictions except New York City.",
@@ -3494,10 +3494,10 @@
           }
         },
         {
-          "id": "a10ffc68-d296-40ca-b466-ef21f1fc1197",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "71bcfe7e-7f43-5ef9-b526-79b01e14edb5",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
-          "blockId": "356a6145-a887-404b-b034-0b2c6f6784d0",
+          "blockId": "4",
           "ordinal": 3,
           "name": "Publish Flag",
           "description": "Published indicator\nThis allows jurisdictions to let Arboviral program know if it is ready to be published in MMWR.",
@@ -3535,8 +3535,8 @@
       ]
     },
     {
-      "id": "df18bc77-525c-4cec-8754-59102c164f17",
-      "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+      "id": "5",
+      "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
       "ordinal": 5,
       "type": "RepeatParentChild",
       "name": "Lab Test Repeating Group",
@@ -3545,10 +3545,10 @@
       "shouldDisplayName": false,
       "elements": [
         {
-          "id": "8662e8d5-c484-4e36-9ef1-8f6a7e0d21b9",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "ad2f69d4-263c-51fc-a23c-6d191bf5c6b9",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
-          "blockId": "df18bc77-525c-4cec-8754-59102c164f17",
+          "blockId": "5",
           "ordinal": 1,
           "name": "Test Type",
           "description": "List of Arboviral tests - PCR, PRNT, IgM, Immunohistochemical staining",
@@ -3584,10 +3584,10 @@
           }
         },
         {
-          "id": "61f71fe8-3f27-48bd-a87e-d5955509dbfa",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "db2793d5-3c3f-5966-9591-3937e4b0ca0b",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
-          "blockId": "df18bc77-525c-4cec-8754-59102c164f17",
+          "blockId": "5",
           "ordinal": 2,
           "name": "Test Result / Interpretation",
           "description": "Interpretation of test results associated with the lab tests such as positive, negative, equivocal, test not done.",
@@ -3623,10 +3623,10 @@
           }
         },
         {
-          "id": "d2c05160-122f-4971-a225-a4ab05e41c8f",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "9ed99b3f-8922-5295-b1c9-cc059ffb6f69",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
-          "blockId": "df18bc77-525c-4cec-8754-59102c164f17",
+          "blockId": "5",
           "ordinal": 3,
           "name": "Specimen Type",
           "description": "If \"Other Arbovirus PCR (Not serum / CSF) was selected as test type, specify the specimen type.\n\nList of specimens that are used for Arboviral lab tests - Serum, CSF, Amniotic Fluid, Urine, Semen, Cord blood,",
@@ -3662,10 +3662,10 @@
           }
         },
         {
-          "id": "f2350104-8889-418e-9f21-f08130d6592d",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "c7ef89df-565f-5a23-8de0-db6895b1d645",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
-          "blockId": "df18bc77-525c-4cec-8754-59102c164f17",
+          "blockId": "5",
           "ordinal": 4,
           "name": "Specimen Collection Date",
           "description": "Specimen collection date would be used to identify the first or second specimen and would be useful for Serum Paired Antibody result too.",
@@ -3701,10 +3701,10 @@
           }
         },
         {
-          "id": "6693d35e-236d-42c9-be99-d35da53669a1",
-          "guideId": "83b39d3a-a9f9-400b-8808-cdcf58775505",
+          "id": "733aaa05-bef9-5181-ace2-0c6d1356bd7b",
+          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
-          "blockId": "df18bc77-525c-4cec-8754-59102c164f17",
+          "blockId": "5",
           "ordinal": 5,
           "name": "Performing Lab Type",
           "description": "Type of labs that were used to test for Arboviral lab tests - CDC Lab, State Public Health Lab, Commercial Lab",
