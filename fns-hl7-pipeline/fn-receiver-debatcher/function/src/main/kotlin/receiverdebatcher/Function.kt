@@ -66,7 +66,7 @@ class Function {
 
             if ( event.eventType == BLOB_CREATED) {
                 
-                context.logger.info( "event: --> " + event.toString() )
+                context.logger.info( "received event: --> " + event.toString() )
 
                 // 
                 // Pick up blob metadata
@@ -130,8 +130,9 @@ class Function {
                                         content = currentLinesArr.joinToString(separator="\n") ,
                                         metadata = hl7MessageMetadata,
                                     )
-                                    // context.logger.info("sending to event hub (ongoing): --> " + hl7Message.metadata.messageIndex + ", " + hl7Message.metadata.messageUUID)
+                                    
                                     evHubSender.send(hl7Message=hl7Message)
+                                    context.logger.info("sent to event hub: --> messageIndex: " + hl7Message.metadata.messageIndex + ", messageUUID: " + hl7Message.metadata.messageUUID)
 
                                 } // .if 
                                 index = index + 1
@@ -159,6 +160,7 @@ class Function {
                                     )
                     // context.logger.info("sending to event hub (last): --> " + hl7Message.metadata.messageIndex + ", " + hl7Message.metadata.messageUUID)
                     evHubSender.send(hl7Message=hl7Message)
+                    context.logger.info("sent to event hub: --> messageIndex: " + hl7Message.metadata.messageIndex + ", messageUUID: " + hl7Message.metadata.messageUUID)
                     // hl7MessagesArr.add(currentLinesArr.joinToString(separator="\n") )
 
                 } // .BufferedReader 
