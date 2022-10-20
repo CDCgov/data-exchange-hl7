@@ -1,0 +1,83 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||RZB_LAB_27^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19580205|M||2028-9^Asian^CDCREC|^^^51^22030|||||||||||2186-5^Not Hispanic or Latino^CDCREC
+OBR|1||RZB_LAB_27^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20180602150000|||||||||||||||20180602150000|||F||||||11091^Ehrlichiosis/Anaplasmosis, undetermined^NND
+OBX|1|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|2|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|TS|11368-8^Date of Illness Onset^LN||20180531||||||F
+OBX|4|TS|77976-9^Illness End Date^LN||20180610||||||F
+OBX|5|SN|77977-7^Illness Duration^LN||^11|d^day [time]^UCUM|||||F
+OBX|6|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|7|TS|77975-1^Diagnosis Date^LN||20180602||||||F
+OBX|8|CWE|77974-4^Hospitalized^LN||N^No^HL70136||||||F
+OBX|9|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|10|ST|77993-4^State Case Identifier^LN||340227||||||F
+OBX|11|ST|77997-5^Legacy Case Identifier^LN||34022713S012018||||||F
+OBX|12|SN|77998-3^Age at Case Investigation^LN||^60|a^year [time]^UCUM|||||F
+OBX|13|CWE|77982-7^Case Disease Imported Code^LN||C1512888^International^UML||||||F
+OBX|14|CWE|INV153^Imported Country^PHINQUESTION||VNM^VIET NAM^ISO3166_1||||||F
+OBX|15|CWE|77989-2^Transmission Mode^LN||418427004^Vector-borne transmission^SCT||||||F
+OBX|16|CWE|77990-0^Case Class Status Code^LN||2931005^Probable diagnosis^SCT||||||F
+OBX|17|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|18|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|19|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|20|CWE|48766-0^Reporting Source Type Code^LN||PHC252^Other State and Local Agencies^CDCPHINVS||||||F
+OBX|21|ST|52831-5^Reporting Source ZIP Code^LN||22030||||||F
+OBX|22|ST|74549-7^Person Reporting to CDC - Name^LN||Bob Cord||||||F
+OBX|23|ST|74548-9^Person Reporting to CDC - Phone Number^LN||258-888-3636||||||F
+OBX|24|ST|74547-1^Person Reporting to CDC - Email^LN||cord@email.com||||||F
+OBX|25|DT|77979-3^Case Investigation Start Date^LN||20180602||||||F
+OBX|26|DT|77995-9^Date Reported^LN||20180602||||||F
+OBX|27|TS|77972-8^Earliest Date Reported to County^LN||20180602||||||F
+OBX|28|TS|77973-6^Earliest Date Reported to State^LN||20180602||||||F
+OBX|29|SN|77991-8^MMWR Week^LN||^22||||||F
+OBX|30|DT|77992-6^MMWR Year^LN||2018||||||F
+OBX|31|DT|77970-2^Date First Reported to PHD^LN||20180602||||||F
+OBX|32|CWE|77966-0^Reporting State^LN||51^Virginia^FIPS5_2||||||F
+OBX|33|CWE|77968-6^National Reporting Jurisdiction^LN||51^VA^FIPS5_2||||||F
+OBX|34|TX|77999-1^Comment^LN||Acquisition in Vietnam suspect||||||F
+OBX|35|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|386661006^Fever^SCT||||||F
+OBX|36|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|37|CWE|INV929^Clinical Manifestation^PHINQUESTION|2|271807003^Rash^SCT||||||F
+OBX|38|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|39|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|87319000^Eschar^SCT||||||F
+OBX|40|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|N^No^HL70136||||||F
+OBX|41|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|25064002^Headache^SCT||||||F
+OBX|42|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|43|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|68962001^Myalgia^SCT||||||F
+OBX|44|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|53|CWE|INV1265^Experienced Complication^PHINQUESTION||N^No^HL70136||||||F
+OBX|54|CWE|370388006^Patient Immunocompromised^SCT||N^No^HL70136||||||F
+OBX|55|CWE|255633001^Treatment Drug Indicator^SCT||Y^Yes^HL70136||||||F
+OBX|56|CWE|29303-5^Medication Administered^LN|1|3640^Doxycycline^RXNORM||||||F
+OBX|57|DT|86948-7^Date Treatment or Therapy Started^LN|1|20180602||||||F
+OBX|58|SN|67453-1^Treatment Duration^LN|1|^14|d^day^UCUM|||||F
+OBX|56|CWE|29303-5^Medication Administered^LN|2|18631^Azithromycin^RXNORM||||||F
+OBX|57|DT|86948-7^Date Treatment or Therapy Started^LN|2|20180602||||||F
+OBX|58|SN|67453-1^Treatment Duration^LN|2|^14|d^day^UCUM|||||F
+OBX|59|CWE|INV1266^Occupation Related to Exposure^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|60|ST|85658-3^Current Occupation^LN|1|Lawn care specialist||||||F
+OBX|61|CE|85659-1^Current Occupation Standardized^LN|1|4210^First-line supervisors of landscaping, lawn service, and groundskeeping workers [4210]^CDCOCCUPATION2010||||||F
+OBX|62|ST|85078-4^Current Industry^LN|1|Landscaping||||||F
+OBX|63|CE|85657-5^Current Industry Standardized^LN|1|7770^Landscaping services [7770]^CDCINDUSTRY2010||||||F
+OBX|64|CWE|420008001^Travel^SCT||Y^Yes^HL70136||||||F
+OBX|65|CWE|82764-2^International Destination(s) of Recent Travel^LN|1|VNM^VIET NAM^ISO3166_1||||||F
+OBX|66|DT|TRAVEL06^Date of Arrival to Travel Destination^PHINQUESTION|1|20180525||||||F
+OBX|67|DT|TRAVEL07^Date of Departure from Travel Destination^PHINQUESTION|1|20180528||||||F
+OBX|68|CWE|95898004^Tick Bite^SCT||N^No^HL70136||||||F
+OBX|69|CWE|82312-0^Blood Transfusion^LN||N^No^HL70136||||||F
+OBX|70|CWE|418912005^Transfusion Associated^SCT||N^No^HL70136||||||F
+OBX|71|CWE|INV1267^Transplant Associated Infection^PHINQUESTION|1|N^No^HL70136||||||F
+OBX|72|CWE|105470007^Blood Donor^SCT||Y^Yes^HL70136||||||F
+OBX|73|CWE|82761-8^Blood Donor Implicated During Investigation^LN||Y^Yes^HL70136||||||F
+OBX|74|CWE|INV964^Donated Product^PHINQUESTION||126242007^Red blood cells, blood product^SCT||||||F
+OBX|75|CWE|INV1268^Blood Bank Notified^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|76|DT|82756-8^Blood Donation Date^LN|1|20180415||||||F
+OBX|77|CWE|INV290^Test Type^PHINQUESTION|1|LAB608^Other Test Type^PHINQUESTION^^^^^^IFA IgG||||||F
+OBX|78|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|79|CWE|LAB278^Organism Name^PHINQUESTION|1|PHC2110^Ehrlichia/Anaplasma species^CDCPHINVS||||||F
+OBX|80|ST|LAB628^Test Result Quantitative^PHINQUESTION|1|>1:512||||||F
+OBX|81|TS|68963-8^Specimen Collection Date/Time^LN|1|20180602||||||F
+OBX|82|CWE|66746-9^Specimen Type^LN|1|119364003^Serum^SCT||||||F
+OBX|83|ST|68994-3^Performing Laboratory Name^LN|1|Commercial laboratory||||||F
+OBX|84|CWE|INV1269^Laboratory State^PHINQUESTION|1|51^Virginia^FIPS5_2||||||F
+OBX|85|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|1|55555||||||F
