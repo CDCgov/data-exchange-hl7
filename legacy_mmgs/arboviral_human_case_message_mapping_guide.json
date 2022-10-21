@@ -1121,7 +1121,7 @@
           "priority": 3,
           "isRepeat": false,
           "mayRepeat": "N",
-          "valueSetCode": "PHVS_Country_3166-1",
+          "valueSetCode": "PHVS_Country_ISO_3166-1",
           "mappings": {
             "hl7v251": {
               "legacyIdentifier": "INV153",
