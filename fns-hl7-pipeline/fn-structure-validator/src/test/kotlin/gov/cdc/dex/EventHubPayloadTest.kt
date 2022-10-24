@@ -14,10 +14,8 @@ class EventHubPayloadTest {
     fun testGeneratePayload() {
         val eventInput = this::class.java.getResource("/mockEventHubPayload.json").readText()
         val root: JsonObject = JsonParser.parseString(eventInput) as JsonObject
-        val eventId = root["id"]
-        val eventTimestamp = root["eventTime"]
-//println(root)
-        val processMD = ProcessMetadata("MOCK", "0.0.1", eventId.asString, eventTimestamp.asString, "SUCCESS")
+
+        val processMD = ProcessMetadata("MOCK", "0.0.1","SUCCESS")
         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
 
@@ -34,7 +32,7 @@ class EventHubPayloadTest {
         newPayload.addArrayElement("processes", processMD)
         println(newPayload)
 
-        val secondProcessMD = ProcessMetadata("SECOND", "0.0.2", "noEvent", "noTime", "SUCCESS")
+        val secondProcessMD = ProcessMetadata("SECOND", "0.0.2", "SUCCESS")
         secondProcessMD.startProcessTime = Date().toIsoString()
         secondProcessMD.endProcessTime = Date().toIsoString()
 

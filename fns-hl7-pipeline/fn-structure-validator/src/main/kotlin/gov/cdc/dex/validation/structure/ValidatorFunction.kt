@@ -53,20 +53,19 @@ class ValidatorFunction {
         val ehSender = EventHubSender(evHubConnStr)
         message.forEach { singleMessage: String? ->
             try {
-//                context.logger.info("singleMessage: $singleMessage")
+                context.logger.info("singleMessage: $singleMessage")
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-                // context.getLogger.info("Json Array size:" + elem.getAsJsonArray)
-
                 val hl7Content = inputEvent["content"].asString
 
                 val phinSpec = hl7Content.split("\n")[0].split("|")[20].split("^")[0]
-                context.logger.fine("Processing Structure Validation for profile $phinSpec")
+                context.logger.info("Processing Structure Validation for profile $phinSpec")
                 val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
                 val report = nistValidator.validate(hl7Content)
+//                val eventId = if(inputEvent["id"] != null) inputEvent["id"].asString else "n/a"
+//                val eventTimeStamp = if ( inputEvent["eventTime"] != null)  inputEvent["eventTime"].asString else "n/a"
                 val processMD = ProcessMetadata(
                     STRUCTURE_VALIDATOR, STRUCTURE_VERSION,
-                    inputEvent["id"].asString, inputEvent["eventTime"].asString,
-                    report.status!!
+                    report.status
                 )
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
@@ -81,8 +80,10 @@ class ValidatorFunction {
                 ehSender.send(Gson().toJson(inputEvent), ehDestination)
                 context.logger.info("Message successfully Structure Validated")
             } catch (e: Exception) {
+
                 //TODO:: Create appropriate payload for Exception:
                 context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                e.printStackTrace()
                 ehSender.send(Gson().toJson(e), evHubNameErrs)
             }
         }
