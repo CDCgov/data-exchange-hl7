@@ -1,0 +1,46 @@
+package gov.cdc.dex
+
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
+import gov.cdc.dex.util.DateHelper.toIsoString
+import gov.cdc.dex.util.JsonHelper.addArrayElement
+import org.junit.jupiter.api.Test
+import java.util.*
+
+class EventHubPayloadTest {
+
+    @Test
+    fun testGeneratePayload() {
+        val eventInput = this::class.java.getResource("/mockEventHubPayload.json").readText()
+        val root: JsonObject = JsonParser.parseString(eventInput) as JsonObject
+        val eventId = root["id"]
+        val eventTimestamp = root["eventTime"]
+//println(root)
+        val processMD = ProcessMetadata("MOCK", "0.0.1", eventId.asString, eventTimestamp.asString, "SUCCESS")
+        processMD.startProcessTime = Date().toIsoString()
+        processMD.endProcessTime = Date().toIsoString()
+
+        //Validate a message to test report to Json
+//        val testMessage = this::class.java.getResource("/Invalid-GenV1-0-Case-Notification.hl7").readText()
+////        val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get()
+//        val phinSpec = "NND_ORU_V2.0"
+//        val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
+//
+//        processMD.report =  nistValidator.validate(testMessage)
+
+        val newPayload = JsonObject()
+        newPayload.add("metadata", JsonPrimitive("abc"))
+        newPayload.addArrayElement("processes", processMD)
+        println(newPayload)
+
+        val secondProcessMD = ProcessMetadata("SECOND", "0.0.2", "noEvent", "noTime", "SUCCESS")
+        secondProcessMD.startProcessTime = Date().toIsoString()
+        secondProcessMD.endProcessTime = Date().toIsoString()
+
+//        val currentProcessPayload = newPayload["processes"].asJsonArray
+        newPayload.addArrayElement("processes", secondProcessMD)
+        println("After second Process\n==========")
+        println(newPayload)
+    }
+}
