@@ -46,16 +46,16 @@ class ValidatorFunction {
         ) message: List<String?>,
         context: ExecutionContext
     ) {
+        context.logger.info("Event Hub trigger function executed. Received message.size: ${message.size}")
+
         // TODO: remove log
-        context.logger.info("received from event hub: $message")
+        context.logger.info("received event: --> $message") 
 
         val startTime =  Date().toIsoString()
 
         val evHubNameOk = System.getenv("EventHubSendOkName")
         val evHubNameErrs = System.getenv("EventHubSendErrsName")
         val evHubConnStr = System.getenv("EventHubConnectionString")
-
-        context.logger.info("Java Event Hub trigger function executed. Received message.size: ${message.size}")
 
         val ehSender = EventHubSender(evHubConnStr)
 
@@ -64,6 +64,7 @@ class ValidatorFunction {
             try {
 //                context.logger.info("singleMessage: $singleMessage")
                 val hl7Content = inputEvent["content"].asString
+
                 var phinSpec: String? = null
                 try {
                     phinSpec = hl7Content.split("\n")[0].split("|")[20].split("^")[0]
@@ -94,6 +95,7 @@ class ValidatorFunction {
                 } catch (e: InvalidFileException) {
                     throw InvalidMessageException("Unable to find Phin Spec for ${phinSpec}")
                 }
+
             } catch (e: Exception) {
                 //TODO::  - update retry counts
                 context.logger.severe("Unable to process Message due to exception: ${e.message}")
