@@ -15,5 +15,19 @@ class ProfileManagerTest {
             throw RuntimeException(e)
         }
     }
+    @Test
+    fun testTryCatch() {
+        try {
+            try {
+                val array = arrayOf("")
+                array[3]
+            } catch (e: ArrayIndexOutOfBoundsException) {
+                println("got ArrayIndexOutOfBoundException")
+                throw e
+            }
+        } catch (e: Exception) {
+            println("got Exception")
+        }
+    }
 
 }

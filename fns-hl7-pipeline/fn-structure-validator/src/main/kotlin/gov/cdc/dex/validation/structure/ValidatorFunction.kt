@@ -7,10 +7,14 @@ import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.Cardinality
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
+import gov.cdc.dex.Problem
 import gov.cdc.dex.ProcessMetadata
+import gov.cdc.dex.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.EventHubSender
 import gov.cdc.dex.util.JsonHelper.addArrayElement
+import gov.cdc.dex.util.JsonHelper.toJsonElement
+import gov.cdc.nist.validator.InvalidFileException
 
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
@@ -54,44 +58,50 @@ class ValidatorFunction {
         context.logger.info("Java Event Hub trigger function executed. Received message.size: ${message.size}")
 
         val ehSender = EventHubSender(evHubConnStr)
+
         message.forEach { singleMessage: String? ->
+            val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             try {
 //                context.logger.info("singleMessage: $singleMessage")
-                val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
                 val hl7Content = inputEvent["content"].asString
+                var phinSpec: String? = null
+                try {
+                    phinSpec = hl7Content.split("\n")[0].split("|")[20].split("^")[0]
+                    context.logger.fine("Processing Structure Validation for profile $phinSpec")
+                    val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
+                    val report = nistValidator.validate(hl7Content)
+                    val processMD = ProcessMetadata(
+                        STRUCTURE_VALIDATOR, STRUCTURE_VERSION,
+                        report.status
+                    )
+                    processMD.startProcessTime = startTime
+                    processMD.endProcessTime = Date().toIsoString()
+                    processMD.report = report
 
-                val phinSpec = hl7Content.split("\n")[0].split("|")[20].split("^")[0]
-                context.logger.fine("Processing Structure Validation for profile $phinSpec")
-                val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
-                val report = nistValidator.validate(hl7Content)
-//                val eventId = if(inputEvent["id"] != null) inputEvent["id"].asString else "n/a"
-//                val eventTimeStamp = if ( inputEvent["eventTime"] != null)  inputEvent["eventTime"].asString else "n/a"
-                val processMD = ProcessMetadata(
-                    STRUCTURE_VALIDATOR, STRUCTURE_VERSION,
-                    report.status
-                )
-                processMD.startProcessTime = startTime
-                processMD.endProcessTime = Date().toIsoString()
-                processMD.report = report
+                    inputEvent.addArrayElement("processes", processMD)
+                    //TODO:: Update Summary element.
 
-                inputEvent.addArrayElement("processes", processMD)
-                //TODO:: Update Summary element.
+                    //Send event
+                    val ehDestination = if ("STRUCTURE_VALID" == report.status) evHubNameOk else evHubNameErrs
 
-                //Send event
-                val ehDestination = if ("STRUCTURE_VALID" == report.status) evHubNameOk else evHubNameErrs
+                    ehSender.send(Gson().toJson(inputEvent), ehDestination)
 
-                ehSender.send(Gson().toJson(inputEvent), ehDestination)
-
-                val metadata = inputEvent["metadata"].asJsonObject
-                val messageUUID = metadata["messageUUID"].asString
-
-                context.logger.info("Message successfully Structure Validated and sent to next event hub messageUUID: $messageUUID")
+                    val metadata = inputEvent["metadata"].asJsonObject
+                    val messageUUID = metadata["messageUUID"].asString
+                    context.logger.info("Message successfully Structure Validated and sent to next event hub messageUUID: $messageUUID")
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    throw  InvalidMessageException("Unable to retrieve Phin Specification from message. Could Not find MSH-21[1].1")
+                } catch (e: InvalidFileException) {
+                    throw InvalidMessageException("Unable to find Phin Spec for ${phinSpec}")
+                }
             } catch (e: Exception) {
-
-                //TODO:: Create appropriate payload for Exception:
+                //TODO::  - update retry counts
                 context.logger.severe("Unable to process Message due to exception: ${e.message}")
                 e.printStackTrace()
-                ehSender.send(Gson().toJson(e), evHubNameErrs)
+                val problem = Problem(STRUCTURE_VALIDATOR, e, false, 0, 0)
+                val summary = SummaryInfo("STRUCTURE_ERROR", problem)
+                inputEvent.add("summary", summary.toJsonElement())
+                ehSender.send(Gson().toJson(inputEvent), evHubNameErrs)
             }
         }
     }

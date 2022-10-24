@@ -3,7 +3,7 @@ package gov.cdc.dex.util
 import com.azure.messaging.eventhubs.*
 import com.google.gson.Gson
 
-class EventHubSender (  val evHubConnStr: String, ) {
+class EventHubSender (val evHubConnStr: String, ) {
     fun send( message: String, evHubTopicName: String  ) {
         val producer = EventHubClientBuilder()
             .connectionString(evHubConnStr,  evHubTopicName)
