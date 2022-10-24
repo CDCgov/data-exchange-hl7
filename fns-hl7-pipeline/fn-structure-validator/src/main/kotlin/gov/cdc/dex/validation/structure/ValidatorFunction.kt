@@ -24,6 +24,8 @@ class ValidatorFunction {
         private const val STRUCTURE_VERSION = "1.0.0"
         private const val STATUS_SUCCESS = "SUCCESS"
         private const val STATUS_ERROR = "ERROR"
+
+//        private logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
     }
     /**
      * This function will be invoked when an event is received from Event Hub.
@@ -32,9 +34,9 @@ class ValidatorFunction {
     fun run(
         @EventHubTrigger(
             name = "message",
-            eventHubName = "myeventhub",
-            connection = "MyStorageConnectionAppSetting",
-            consumerGroup = "\$Default",
+            eventHubName = "%EventHubReceiveName%",
+            connection = "EventHubConnectionString",
+            consumerGroup = "%EventHubConsumerGroup%",
             cardinality = Cardinality.MANY
         ) message: List<String?>,
         context: ExecutionContext
@@ -47,32 +49,38 @@ class ValidatorFunction {
 
         context.logger.info("Java Event Hub trigger function executed.")
         context.logger.info("Length:" + message.size)
+        val ehSender = EventHubSender(evHubConnStr)
         message.forEach { singleMessage: String? ->
-            val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-            // context.getLogger.info("Json Array size:" + elem.getAsJsonArray)
+            try {
+                val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+                // context.getLogger.info("Json Array size:" + elem.getAsJsonArray)
 
-            val hl7Content = inputEvent["content"].asString
+                val hl7Content = inputEvent["content"].asString
 
-            val phinSpec =  hl7Content.split("\n")[0].split("\\|")[20].split("\\^")[0]
-            val nistValidator = ProfileManager(ResourceFileFetcher(), phinSpec )
-            val report = nistValidator.validate(hl7Content)
-            val processMD = ProcessMetadata(
-                STRUCTURE_VALIDATOR, STRUCTURE_VERSION,
-                inputEvent["id"].asString, inputEvent["eventTime"].asString,
-                report.status!!
-            )
-            processMD.startProcessTime = startTime
-            processMD.endProcessTime = Date().toIsoString()
-            processMD.report = report
+                val phinSpec = hl7Content.split("\n")[0].split("\\|")[20].split("\\^")[0]
+                val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
+                val report = nistValidator.validate(hl7Content)
+                val processMD = ProcessMetadata(
+                    STRUCTURE_VALIDATOR, STRUCTURE_VERSION,
+                    inputEvent["id"].asString, inputEvent["eventTime"].asString,
+                    report.status!!
+                )
+                processMD.startProcessTime = startTime
+                processMD.endProcessTime = Date().toIsoString()
+                processMD.report = report
 
-            inputEvent.addArrayElement("processes", processMD)
-            //TODO:: Update Summary element.
+                inputEvent.addArrayElement("processes", processMD)
+                //TODO:: Update Summary element.
 
-            //Send event
-            val ehDestination = if ("STRUCTURE_VALID" == report.status) evHubNameOk else evHubNameErrs
-            val sender = EventHubSender(evHubConnStr)
-            sender.send(Gson().toJson(inputEvent), ehDestination)
+                //Send event
+                val ehDestination = if ("STRUCTURE_VALID" == report.status) evHubNameOk else evHubNameErrs
 
+                ehSender.send(Gson().toJson(inputEvent), ehDestination)
+            } catch (e: Exception) {
+                //TODO:: Create appropriate payload for Exception:
+                //logger.error("Unable to process Message")
+                ehSender.send(Gson().toJson(e), evHubNameErrs)
+            }
         }
     }
 
