@@ -38,18 +38,21 @@ class ValidatorFunction {
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
             consumerGroup = "%EventHubConsumerGroup%",
-            cardinality = Cardinality.MANY
+            // cardinality = Cardinality.MANY
         ) message: List<String?>,
         context: ExecutionContext
     ) {
+        // TODO: remove log
+        context.logger.info("received from event hub: $message")
+
         val startTime =  Date().toIsoString()
 
         val evHubNameOk = System.getenv("EventHubSendOkName")
         val evHubNameErrs = System.getenv("EventHubSendErrsName")
         val evHubConnStr = System.getenv("EventHubConnectionString")
 
-        context.logger.info("Java Event Hub trigger function executed.")
-        context.logger.info("Length:" + message.size)
+        context.logger.info("Java Event Hub trigger function executed. Received message.size: ${message.size}")
+
         val ehSender = EventHubSender(evHubConnStr)
         message.forEach { singleMessage: String? ->
             try {
@@ -78,7 +81,11 @@ class ValidatorFunction {
                 val ehDestination = if ("STRUCTURE_VALID" == report.status) evHubNameOk else evHubNameErrs
 
                 ehSender.send(Gson().toJson(inputEvent), ehDestination)
-                context.logger.info("Message successfully Structure Validated")
+
+                val metadata = inputEvent["metadata"].asJsonObject
+                val messageUUID = metadata["messageUUID"].asString
+
+                context.logger.info("Message successfully Structure Validated and sent to next event hub messageUUID: $messageUUID")
             } catch (e: Exception) {
 
                 //TODO:: Create appropriate payload for Exception:
