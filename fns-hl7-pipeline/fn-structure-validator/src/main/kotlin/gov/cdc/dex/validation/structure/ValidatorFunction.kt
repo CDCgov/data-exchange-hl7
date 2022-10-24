@@ -53,15 +53,15 @@ class ValidatorFunction {
         val ehSender = EventHubSender(evHubConnStr)
         message.forEach { singleMessage: String? ->
             try {
-                context.logger.info("singleMessage: $singleMessage")
+//                context.logger.info("singleMessage: $singleMessage")
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
                 // context.getLogger.info("Json Array size:" + elem.getAsJsonArray)
 
                 val hl7Content = inputEvent["content"].asString
 
                 val phinSpec = hl7Content.split("\n")[0].split("|")[20].split("^")[0]
-                logger.debug("Processing Structure Validation for profile $phinSpec")
-                val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
+                context.logger.fine("Processing Structure Validation for profile $phinSpec")
+                val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
                 val report = nistValidator.validate(hl7Content)
                 val processMD = ProcessMetadata(
                     STRUCTURE_VALIDATOR, STRUCTURE_VERSION,
