@@ -14,6 +14,7 @@ import gov.cdc.dex.util.JsonHelper.addArrayElement
 
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
+import org.slf4j.LoggerFactory
 import java.util.*
 
 
@@ -25,7 +26,7 @@ class ValidatorFunction {
         private const val STATUS_SUCCESS = "SUCCESS"
         private const val STATUS_ERROR = "ERROR"
 
-//        private logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
+        private val logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
     }
     /**
      * This function will be invoked when an event is received from Event Hub.
@@ -58,6 +59,7 @@ class ValidatorFunction {
                 val hl7Content = inputEvent["content"].asString
 
                 val phinSpec = hl7Content.split("\n")[0].split("\\|")[20].split("\\^")[0]
+                logger.debug("Processing Structure Validation for profile $phinSpec")
                 val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
                 val report = nistValidator.validate(hl7Content)
                 val processMD = ProcessMetadata(
@@ -76,20 +78,12 @@ class ValidatorFunction {
                 val ehDestination = if ("STRUCTURE_VALID" == report.status) evHubNameOk else evHubNameErrs
 
                 ehSender.send(Gson().toJson(inputEvent), ehDestination)
+                context.logger.info("Message successfully Structure Validated")
             } catch (e: Exception) {
                 //TODO:: Create appropriate payload for Exception:
-                //logger.error("Unable to process Message")
+                context.logger.severe("Unable to process Message due to exception: ${e.message}")
                 ehSender.send(Gson().toJson(e), evHubNameErrs)
             }
         }
     }
-
-//     fun addArrayToEvent(inputEvent: JsonObject, arrayName: String, processMD: ProcessMetadata) {
-//        val currentProcessPayload = inputEvent[arrayName]
-//        if (currentProcessPayload == null) {
-//            inputEvent.add(arrayName,  JsonArray())
-//        }
-//        val currentArray = inputEvent[arrayName].asJsonArray
-//        currentArray.add(processMD.toJsonElement())
-//    }
 }
