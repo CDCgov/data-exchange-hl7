@@ -94,7 +94,7 @@ class Function {
                 // 
                 // Read Blob File by Lines
                 // -------------------------------------
-                val reader = InputStreamReader( blobClient.openInputStream() )
+                val reader = InputStreamReader( blobClient.openInputStream(), Charsets.UTF_8 )
 
                 var index = 0
                 // context.logger.info("index: -----> " + index)
