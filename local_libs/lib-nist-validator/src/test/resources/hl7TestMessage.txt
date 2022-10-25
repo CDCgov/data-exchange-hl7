@@ -1,0 +1,106 @@
+MSH|^~\&|MDSS^2.16.840.1.114222.4.3.2.2.3.161.1.1000.1^ISO|MDCH^2.16.840.1.114222.4.1.3660^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20150630162510||ORU^R01^ORU_R01|5276074519_20150626162510529|P|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Hepatitis_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||5276074529^^^MDCH&2.16.840.1.114222.4.1.3660&ISO||~^^^^^^S||19600101|F||2106-3^Caucasian^CDCREC~1002-5^American Indian^CDCREC|^^ANN ARBOR^26^48105^USA^^^26161|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20141031
+OBR|1||5276074519^MDCH^2.16.840.1.114222.4.1.3660^ISO|68991-9^Epidemiologic Information^LN|||20150626162510|||||||||||||||20150626162510|||F||||||10110^Hepatitis A^NND
+OBX|1|CWE|NOT116^National Reporting Jurisdiction^PHINQUESTION||26^Michigan^FIPS5_2||||||F
+OBX|2|CWE|NOT109^Reporting State^PHINQUESTION||26^Michigan^FIPS5_2||||||F
+OBX|3|CWE|INV163^Case Class Status Code^PHINQUESTION||410605003^Confirmed present (qualifier value)^SCT||||||F
+OBX|4|SN|INV165^MMWR Week^PHINQUESTION||^45||||||F
+OBX|5|DT|INV166^MMWR Year^PHINQUESTION||2014||||||F
+OBX|6|DT|INV176^Date of First Report to CDC^PHINQUESTION||20150626||||||F
+OBX|7|ST|DEM154^Other Race Text^PHINQUESTION||||||||F
+OBX|8|CWE|66477-1^Country of Usual Residence^LN||USA^United States^ISO3166_1||||||F
+OBX|9|TS|11368-8^Date of Illness Onset^LN||20141001||||||F
+OBX|12|CWE|INV145^Subject Died^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|13|ST|INV173^State Case ID^PHINQUESTION||5276074519||||||F
+OBX|14|ST|INV200^Legacy Case ID^PHINQUESTION||074519260002015||||||F
+OBX|15|SN|INV2001^Age at Case Investigation^PHINQUESTION||^52|a^Year^UCUM|||||F
+OBX|16|CWE|INV150^Case Outbreak Indicator^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|17|ST|INV151^Case Outbreak Name^PHINQUESTION||HANSENOUTB1||||||F
+OBX|18|ST|INV107^Jurisdiction Code^PHINQUESTION||44||||||F
+OBX|19|ST|INV118^Reporting Source ZIP Code^PHINQUESTION||48105||||||F
+OBX|20|ST|INV191^Person Reporting to CDC - Phone Number^PHINQUESTION||517-335-8165||||||F
+OBX|21|DT|INV147^Case Investigation Start Date^PHINQUESTION||20141102||||||F
+OBX|22|DT|INV111^Date of Report/Referral^PHINQUESTION||20141102||||||F
+OBX|23|TS|INV121^Earliest Date Reported to State^PHINQUESTION||20141020||||||F
+OBX|24|DT|INV177^Date First Reported to PHD^PHINQUESTION||20141102||||||F
+OBX|25|CWE|NOT113^Reporting County^PHINQUESTION||26161^Washtenaw^FIPS6_4||||||F
+OBX|26|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|27|TS|8656-1^Admission Date^LN||20141026||||||F
+OBX|28|TS|8649-6^Discharge Date^LN||20141030||||||F
+OBX|29|SN|INV134^Duration of Hospital Stay in days^PHINQUESTION||^4||||||F
+OBX|30|CWE|INV145^Subject Died^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|31|CWE|21842-0^Country of Birth^LN||USA^United States^ISO3166_1||||||F
+OBX|32|ST|DEM304^Other Birth Place^PHINQUESTION||||||||F
+OBX|33|CWE|11449-6^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|34|CWE|LP38316-3^total anti-HAV^LN||10828004^Positive^SCT||||||F
+OBX|35|CWE|LP38318-9^IgM anti-HAV^LN||10828004^Positive^SCT||||||F
+OBX|36|CWE|LP38323-9^total anti-HBc^LN||260385009^Negative^SCT||||||F
+OBX|37|CWE|LP38325-4^IgM anti-HBc^LN||260385009^Negative^SCT||||||F
+OBX|38|CWE|LP38320-5^HEP B Nucleic Acid Test (NAT)^LN||UNK^Unknown^NULLFL||||||F
+OBX|39|CWE|LP38331-2^HBsAg^LN||260385009^Negative^SCT||||||F
+OBX|40|CWE|LP38329-6^HBeAg^LN||260385009^Negative^SCT||||||F
+OBX|41|CWE|LP38332-0^total anti-HCV^LN||260385009^Negative^SCT||||||F
+OBX|42|ST|48159-8^Anti-HCV signal to cut-off ratio^LN||1:800||||||F
+OBX|43|CWE|5199-5^supplemental anti-HCV assay (RIBA)^LN||260385009^Negative^SCT||||||F
+OBX|44|CWE|LP38335-3^HCV RNA^LN||260385009^Negative^SCT||||||F
+OBX|45|CWE|LP38345-2^total anti-HDV^LN||UNK^Unknown^NULLFL||||||F
+OBX|46|CWE|LP38350-2^total anti-HEV^LN||UNK^Unknown^NULLFL||||||F
+OBX|47|CWE|67098-4^Reason for Testing^LN||PHC307^Symptoms of acute hepatitis^CDCPHINVS~PHC309^Evaluation of elevated liver enzymes^CDCPHINVS||||||F
+OBX|48|ST|INV901^Other Reason for Testing^PHINQUESTION||||||||F
+OBX|49|CWE|INV576^Symptomatic^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|50|CWE|INV578^Jaundiced (Symptom)^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|51|DT|11778-8^Pregnancy Due Date^LN||20150930||||||F
+OBX|52|CWE|INV650^Previously Aware of Condition^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|53|CWE|INV651^Provider of Care for Condition^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|54|SN|1742-6^ALT/SGPT^LN|1|^1||||||F
+OBX|55|SN|INV827^Liver Enzyme Upper Limit Normal^PHINQUESTION|1|^1||||||F
+OBX|56|DT|INV826^Liver Enzyme Test Result Date^PHINQUESTION|1|20150615||||||F
+OBX|57|SN|1920-8^AST/SGOT^LN|2|=||||||F
+OBX|58|SN|INV827^Liver Enzyme Upper Limit Normal^PHINQUESTION|2|=||||||F
+OBX|59|DT|INV826^Liver Enzyme Test Result Date^PHINQUESTION|2|20150615||||||F
+OBX|60|DT|INV842^Diabetes Diagnosis Date^PHINQUESTION||20150630||||||F
+OBX|61|CWE|INV887^Diabetes^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|62|CWE|INV217^Epi-linked to another confirmed or probable case^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|63|CWE|INV602^Contact With Confirmed or Suspected Case^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|64|CWE|PHC300^Household member (non-sexual)^CDCPHINVS||UNK^Unknown^NULLFL||||||F
+OBX|65|CWE|225517006^Sexual partners^SCT||Y^Yes^HL70136||||||F
+OBX|66|CWE|43018001^Babysitter^SCT||UNK^Unknown^NULLFL||||||F
+OBX|67|CWE|PHC301^Playmate^CDCPHINVS||N^No^HL70136||||||F
+OBX|68|CWE|PHC299^Child cared for by this patient^CDCPHINVS||UNK^Unknown^NULLFL||||||F
+OBX|69|CWE|PHC1304^Other Contact Type^CDCPHINVS||Y^Yes^HL70136||||||F
+OBX|70|ST|INV897^Other Contact Type^PHINQUESTION||||||||F
+OBX|71|CWE|INV896^Identified Hepatitis A case in the child care facility^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|72|CWE|INV607^Inject drugs not prescribed by a doctor^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|73|CWE|INV608^Use Street drugs but not inject^PHINQUESTION||N^No^HL70136||||||F
+OBX|74|CWE|INV609^Foodborne Outbreak-  infected food handler^PHINQUESTION||N^No^HL70136||||||F
+OBX|75|CWE|INV610^Foodborne Outbreak - NOT an infected food handler^PHINQUESTION||N^No^HL70136||||||F
+OBX|76|CWE|TRAVEL30^Travel or Live Outside US or Canada^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|77|CWE|TRAVEL32^Household Travel Outside US or Canada^PHINQUESTION||N^No^HL70136||||||F
+OBX|78|CWE|INV592^Sexual Preference^PHINQUESTION||20430005^Heterosexual^SCT||||||F
+OBX|79|CWE|INV618^Common-Source Outbreak^PHINQUESTION||N^No^HL70136||||||F
+OBX|80|CWE|INV612^Waterborne Outbreak^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|81|CWE|INV613^Unidentified Source Outbreak^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|82|CWE|INV621^Food Handler^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|83|CWE|INV615^In Day Care^PHINQUESTION||N^No^HL70136||||||F
+OBX|84|CWE|INV616^Day Care Contact^PHINQUESTION||N^No^HL70136||||||F
+OBX|85|CWE|VAC126^Did the subject ever receive a vaccine?^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|86|CWE|VAC143^Ever Receive Immune Globulin^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|87|ST|INV611^Food Item of Associated Outbreak^PHINQUESTION||Seafood||||||F
+OBX|88|SN|VAC132^Total Doses of Vaccine^PHINQUESTION||^2||||||F
+OBX|89|DT|VAC142^Date of Last Dose^PHINQUESTION||2010||||||F
+OBX|90|DT|VAC144^Date the child received HBIG^PHINQUESTION||201205||||||F
+OBX|91|CWE|TRAVEL16^Principal Reason for Travel^PHINQUESTION||PHC386^Business^CDCPHINVS||||||F
+OBX|92|CWE|TRAVEL31^Countries Traveled or Lived outside US or Canada^PHINQUESTION||TWN^TAIWAN, PROVINCE OF CHINA^ISO3166_1~MDV^MALDIVES^ISO3166_1~YEM^YEMEN^ISO3166_1||||||F
+OBX|93|CWE|TRAVEL33^Household Countries Traveled to Outside U.S. or Canada^PHINQUESTION||DZA^ALGERIA^ISO3166_1||||||F
+OBX|94|SN|INV605^Number of Male Sexual Partners^PHINQUESTION||^2||||||F
+OBX|95|SN|INV606^Number of Female Sexual Partners^PHINQUESTION||^1||||||F
+OBX|96|TS|63931-0^Diagnosis Date^LN||20140401||||||F
+OBX|97|CWE|INV152^Case Disease Imported Code^PHINQUESTION||PHC246^Out of State^CDCPHINVS||||||F
+OBX|98|CWE|INV153^Imported Country^PHINQUESTION||MEX^Mesico^ISO3166_1||||||F
+OBX|99|CWE|INV154^Imported State^PHINQUESTION||48^Texas^FIPS5_2||||||F
+OBX|100|CWE|INV155^Imported City^PHINQUESTION||1350851^Abernathy^USGSGNIS||||||F
+OBX|101|CWE|NOT120^Immediate National Notifiable Condition^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|102|CWE|INV515^Binational Reporting Criteria^PHINQUESTION||PHC1140^Exposure to a suspected product from Mexico or Canada^CDCPHINVS||||||F
+OBX|103|ST|INV190^Person Reporting to CDC - Name^PHINQUESTION||Smith, John||||||F
+OBX|104|ST|INV193^Person Reporting to CDC - Email^PHINQUESTION||xxx@yyy.org||||||F
+OBX|105|TX|77999-1^Comment Field^LN||Comment to communicate something unusual about this case which is not already covered with other data elements||||||F
