@@ -14,13 +14,13 @@ class Function {
     fun eventHubProcessor(
             @EventHubTrigger(
                 name = "msg", 
-                // TODO:
-                eventHubName = "%event_hub_receiver_name%",
-                connection = "EventHubConnectionString") 
+                eventHubName = "%EventHubReceiveName%",
+                connection = "EventHubConnectionString",
+                consumerGroup = "%EventHubConsumerGroup%",) 
                 message: String?,
-            context: ExecutionContext) {
+                context: ExecutionContext) {
         
-        // context.logger.info("message: --> " + message)
+        context.logger.info("received event: --> $message") 
 
         // set up the 2 out event hubs
         val evHubConnStr = System.getenv("EventHubConnectionString")
@@ -64,6 +64,11 @@ class Function {
                 hl7Message.contentValidationReport = validationReportFull 
                 val json = Gson().toJson(hl7Message)
                 eventHubSenderOk.send(message=json)
+
+                val messageUUID = hl7Message.metadata.messageUUID
+
+                context.logger.info("Message successfully MMG Validated and sent to next event hub messageUUID: $messageUUID")
+
                // println("ValidationReport:\t  $validationReportFull")
 //             } catch (e: MessageNotRecognizableException) {
 //                 //Handle error - send Message to Dead Letter.
