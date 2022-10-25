@@ -29,26 +29,26 @@ class DebatcherTest {
         }
     }
 
-    @Test
-    fun testRemoveBomFromBlob() {
-        val blobContainerClient = BlobServiceClientBuilder()
-            .connectionString("DefaultEndpointsProtocol=https;AccountName=tfedemessagestoragedev;AccountKey=aQdC1eVh+c0xiYFjXKAbBO2Dj+cBTu4R/yEFyFShW4o90D9fpUpaC4TxD3b+Z11Y/VxNDXMsBGGw+AStlIuNyQ==;EndpointSuffix=core.windows.net")
-            .buildClient()
-            .getBlobContainerClient("hl7ingress")
-
-        val blobClient = blobContainerClient.getBlobClient("Genv2_2-0-1_TC08.txt")
-        val reader = InputStreamReader( blobClient.openInputStream(), Charsets.UTF_8 )
-        BufferedReader( reader ).use { br ->
-            br.forEachLine { line ->
-                var lineClean = line.trim()
-                while (lineClean.startsWith(UTF_BOM)) {
-                    //if (lineClean.startsWith(UTF_BOM)) {
-                    println("Found BOM...")
-                    lineClean = lineClean.substring(1)
-                    println(line.length)
-                    println(lineClean.length)
-                }
-            }
-        }
-    }
+//    @Test
+//    fun testRemoveBomFromBlob() {
+//        val blobContainerClient = BlobServiceClientBuilder()
+//            .connectionString(System.getEnv("BLOB_STORAGE"))
+//            .buildClient()
+//            .getBlobContainerClient("hl7ingress")
+//
+//        val blobClient = blobContainerClient.getBlobClient("Genv2_2-0-1_TC08.txt")
+//        val reader = InputStreamReader( blobClient.openInputStream(), Charsets.UTF_8 )
+//        BufferedReader( reader ).use { br ->
+//            br.forEachLine { line ->
+//                var lineClean = line.trim()
+//                while (lineClean.startsWith(UTF_BOM)) {
+//                    //if (lineClean.startsWith(UTF_BOM)) {
+//                    println("Found BOM...")
+//                    lineClean = lineClean.substring(1)
+//                    println(line.length)
+//                    println(lineClean.length)
+//                }
+//            }
+//        }
+//    }
 }
