@@ -66,7 +66,8 @@ class ValidatorFunction {
 
                 val metadata = inputEvent["metadata"].asJsonObject
                 val messageUUID = metadata["messageUUID"].asString
-                context.logger.info("Received and processing messageUUID: $messageUUID")
+                val fileName = metadata["fileName"].asString
+                context.logger.info("Received and Processing messageUUID: $messageUUID, fileName: $fileName")
 
                 var phinSpec: String? = null
                 try {
@@ -91,12 +92,12 @@ class ValidatorFunction {
 
                     ehSender.send(Gson().toJson(inputEvent), ehDestination)
 
-                    context.logger.info("Message successfully processed for structure validated messageUUID: $messageUUID, ehDestination: $ehDestination, report.status: ${report.status}")
+                    context.logger.info("Processed for structure validated messageUUID: $messageUUID, fileName: $fileName, ehDestination: $ehDestination, report.status: ${report.status}")
 
                 } catch (e: ArrayIndexOutOfBoundsException) {
-                    throw  InvalidMessageException("Unable to process Message messageUUID: $messageUUID. Unable to retrieve Phin Specification from message, MSH-21[1].1 Not found")
+                    throw  InvalidMessageException("Unable to process Message messageUUID: $messageUUID, fileName: $fileName. Unable to retrieve Phin Specification from message, MSH-21[1].1 Not found")
                 } catch (e: InvalidFileException) {
-                    throw InvalidMessageException("Unable to process Message messageUUID: $messageUUID due to not found Phin Spec: ${phinSpec}")
+                    throw InvalidMessageException("Unable to process Message messageUUID: $messageUUID, fileName: $fileName due to not found Phin Spec: ${phinSpec}")
                 }
 
             } catch (e: Exception) {
