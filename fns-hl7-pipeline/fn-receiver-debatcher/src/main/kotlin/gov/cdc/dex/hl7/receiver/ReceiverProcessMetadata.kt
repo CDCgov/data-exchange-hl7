@@ -4,7 +4,6 @@ import gov.cdc.dex.metadata.ProcessMetadata
 
 data class ReceiverProcessMetadata (override val status: String?): ProcessMetadata(RECEIVER_PROCESS, RECEIVER_VERSION , status) {
     companion object  {
-        const val STATUS_COMPLETE = "COMPLETE_SUCCESS"
         const val RECEIVER_PROCESS = "RECEIVER"
         const val RECEIVER_VERSION = "1.0.0"
     }

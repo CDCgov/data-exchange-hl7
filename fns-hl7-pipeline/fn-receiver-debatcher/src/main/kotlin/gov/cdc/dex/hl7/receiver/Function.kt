@@ -30,7 +30,7 @@ class Function {
                 eventHubName = "%EventHubReceiveName%",
                 consumerGroup = "%EventHubConsumerGroup%",
                 connection = "EventHubConnectionString") 
-                message: String?,
+                messages: List<String>?,
             context: ExecutionContext) {
 
         // context.logger.info("message: --> " + message)
@@ -49,66 +49,74 @@ class Function {
         // 
         // Event Hub -> receive events
         // -------------------------------------
-        val eventArrArr = Gson().fromJson(message, Array<Array<AzBlobCreateEventMessage>>::class.java)
-        val eventArr = eventArrArr[0]
+//        val eventArrArr = Gson().fromJson(message, Array<Array<AzBlobCreateEventMessage>>::class.java)
+//        val eventArr = eventArrArr[0]
+//
+//        //
+//        // For each Event received
+//        // -------------------------------------
+//        for (event in eventArr) {
+        if (messages != null) {
+            for (message in messages) {
+//                context.logger.info("@@@@@@@@@@@@@@@@@@@")
+//                context.logger.info(message)
+                val eventArr = Gson().fromJson(message, Array<AzBlobCreateEventMessage>::class.java)
+                val event = eventArr[0]
+                if ( event.eventType == BLOB_CREATED) {
+                    context.logger.info("Received BLOB_CREATED event: --> $event")
+                    //
+                    // Pick up blob metadata
+                    // -------------------------------------
+                    val blobName = event.evHubData.url.split("/").last()
+                    val blobClient = azBlobProxy.getBlobClient(blobName)
+                    //
+                    // Create HL7 Message Metadata for Provenance
+                    // -------------------------------------
+                    val provenance = Provenance(
+                        filePath=event.evHubData.url,
+                        fileTimestamp=blobClient.properties.lastModified.toIsoString(),
+                        fileSize=blobClient.properties.blobSize,
+                        singleOrBatch=Provenance.SINGLE_FILE,
+                        eventId=event.id,
+                        eventTimestamp=event.eventTime,
+                        originalFileName =blobName,
+                        systemProvider = "BLOB"
+                    ) // .hl7MessageMetadata
+                    val summary = SummaryInfo("RECEIVED")
+                    val processMD = ReceiverProcessMetadata(ProcessMetadata.STATUS_COMPLETE)
+                    val metadata = DexMetadata(provenance, listOf(processMD))
 
-        // 
-        // For each Event received
-        // -------------------------------------
-        for (event in eventArr) {
-            if ( event.eventType == BLOB_CREATED) {
-                context.logger.info("Received BLOB_CREATED event: --> $event")
-                //
-                // Pick up blob metadata
-                // -------------------------------------
-                val blobName = event.evHubData.url.split("/").last()
-                val blobClient = azBlobProxy.getBlobClient(blobName)
-                //
-                // Create HL7 Message Metadata for Provenance
-                // -------------------------------------
-                val provenance = Provenance(
-                    filePath=event.evHubData.url,
-                    fileTimestamp=blobClient.properties.lastModified.toIsoString(),
-                    fileSize=blobClient.properties.blobSize,
-                    singleOrBatch=Provenance.SINGLE_FILE,
-                    eventId=event.id,
-                    eventTimestamp=event.eventTime,
-                    originalFileName =blobName,
-                    systemProvider = "BLOB"
-                ) // .hl7MessageMetadata
-                val summary = SummaryInfo("RECEIVED")
-                val processMD = ReceiverProcessMetadata(ProcessMetadata.STATUS_COMPLETE)
-                val metadata = DexMetadata(provenance, listOf(processMD))
+                    // Read Blob File by Lines
+                    // -------------------------------------
+                    val reader = InputStreamReader( blobClient.openInputStream(), Charsets.UTF_8 )
+                    val currentLinesArr = arrayListOf<String>()
 
-                // Read Blob File by Lines
-                // -------------------------------------
-                val reader = InputStreamReader( blobClient.openInputStream(), Charsets.UTF_8 )
-                val currentLinesArr = arrayListOf<String>()
+                    BufferedReader(reader).use { br ->
+                        br.forEachLine {line ->
+                            val lineClean = line.trim().let { if ( it.startsWith(UTF_BOM) )  it.substring(1)  else it}
+                            if ( lineClean.startsWith("FHS") || lineClean.startsWith("BHS") || lineClean.startsWith("BTS") || lineClean.startsWith("BHS")  ) {
+                                // batch line --Nothing to do here
+                                provenance.singleOrBatch = Provenance.BATCH_FILE
+                            } else {
+                                if ( lineClean.startsWith("MSH") ) {
+                                    // context.logger.info("line.startsWith(MSH): ------> " + line)
+                                    if ( provenance.messageIndex > 1 ) {
+                                        provenance.singleOrBatch = Provenance.BATCH_FILE
+                                        prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
+                                        provenance.messageIndex++
+                                    } // .if
+                                    currentLinesArr.clear()
 
-                BufferedReader(reader).use { br ->
-                    br.forEachLine {line ->
-                        val lineClean = line.trim().let { if ( it.startsWith(UTF_BOM) )  it.substring(1)  else it}
-                        if ( lineClean.startsWith("FHS") || lineClean.startsWith("BHS") || lineClean.startsWith("BTS") || lineClean.startsWith("BHS")  ) {
-                            // batch line --Nothing to do here
-                            provenance.singleOrBatch = Provenance.BATCH_FILE
-                        } else {
-                            if ( lineClean.startsWith("MSH") ) {
-                                // context.logger.info("line.startsWith(MSH): ------> " + line)
-                                if ( provenance.messageIndex > 1 ) {
-                                    provenance.singleOrBatch = Provenance.BATCH_FILE
-                                    prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
-                                    provenance.messageIndex++
-                                } // .if 
-                                currentLinesArr.clear()
+                                } // .if
+                                currentLinesArr.add(lineClean)
+                            } // .else
+                        } // .forEachLine
+                        // Send last message
+                        prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
 
-                            } // .if 
-                            currentLinesArr.add(lineClean)
-                        } // .else
-                    } // .forEachLine
-                    // Send last message
-                    prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
-                } // .BufferedReader
-            } // .if
+                    } // .BufferedReader
+                } // .if
+            }
         } // .for
     } // .eventHubProcessor
 
@@ -119,7 +127,7 @@ class Function {
         val jsonMessage = gson.toJson(msgEvent)
         eventHubSender.send(eventHubName, jsonMessage)
         context.logger.info("Processed and Sent to event hub Message: --> messageIndex: ${msgEvent.metadata.provenance.messageIndex}, messageUUID: ${msgEvent.messageUUID}, fileName: ${msgEvent.metadata.provenance.filePath}")
-
+        println(msgEvent)
     }
 } // .class  Function
 
