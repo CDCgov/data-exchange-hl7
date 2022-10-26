@@ -29,6 +29,7 @@ class ValidatorFunction {
         private const val STRUCTURE_VERSION = "1.0.0"
         private const val STATUS_SUCCESS = "SUCCESS"
         private const val STATUS_ERROR = "ERROR"
+        private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
 
         private val logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
     }
@@ -88,7 +89,7 @@ class ValidatorFunction {
                     //TODO:: Update Summary element.
 
                     //Send event
-                    val ehDestination = if ("STRUCTURE_VALID" == report.status) evHubNameOk else evHubNameErrs
+                    val ehDestination = if (NIST_VALID_MESSAGE == report.status) evHubNameOk else evHubNameErrs
 
                     ehSender.send(Gson().toJson(inputEvent), ehDestination)
 
