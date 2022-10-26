@@ -1,10 +1,9 @@
-package com.example
+package gov.cdc.dex.hl7.receiver
 
 import com.google.gson.annotations.SerializedName
 
 
-data class EvHubMessage (
-
+data class AzBlobCreateEventMessage (
   @SerializedName("topic"           ) var topic           : String,
   @SerializedName("subject"         ) var subject         : String,
   @SerializedName("eventType"       ) var eventType       : String,

@@ -1,4 +1,4 @@
-package com.example
+package gov.cdc.dex.hl7.receiver
 
 import com.google.gson.annotations.SerializedName
 
@@ -14,6 +14,5 @@ data class EvHubData (
   @SerializedName("blobType"           ) var blobType                : String,
   @SerializedName("url"                ) var url                     : String,
   @SerializedName("sequencer"          ) var sequencer               : String,
-  @SerializedName("storageDiagnostics" ) var evHubstorageDiagnostics : EvHubStorageDiagnostics
 
 )
