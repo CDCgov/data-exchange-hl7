@@ -46,10 +46,10 @@ class ValidatorFunction {
         ) message: List<String?>,
         context: ExecutionContext
     ) {
-        context.logger.info("Event Hub trigger function executed. Received message.size: ${message.size}")
+        context.logger.info("Event received message.size: ${message.size}")
 
         // TODO: remove log
-        context.logger.info("received event: --> $message") 
+        // context.logger.info("received event: --> $message") 
 
         val startTime =  Date().toIsoString()
 
@@ -62,11 +62,16 @@ class ValidatorFunction {
         message.forEach { singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             try {
-//                context.logger.info("singleMessage: $singleMessage")
                 val hl7Content = inputEvent["content"].asString
+
+                val metadata = inputEvent["metadata"].asJsonObject
+                val messageUUID = metadata["messageUUID"].asString
+                val fileName = metadata["fileName"].asString
+                context.logger.info("Received and Processing messageUUID: $messageUUID, fileName: $fileName")
 
                 var phinSpec: String? = null
                 try {
+
                     phinSpec = hl7Content.split("\n")[0].split("|")[20].split("^")[0]
                     context.logger.fine("Processing Structure Validation for profile $phinSpec")
                     val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
@@ -87,13 +92,12 @@ class ValidatorFunction {
 
                     ehSender.send(Gson().toJson(inputEvent), ehDestination)
 
-                    val metadata = inputEvent["metadata"].asJsonObject
-                    val messageUUID = metadata["messageUUID"].asString
-                    context.logger.info("Message successfully Structure Validated and sent to next event hub messageUUID: $messageUUID")
+                    context.logger.info("Processed for structure validated messageUUID: $messageUUID, fileName: $fileName, ehDestination: $ehDestination, report.status: ${report.status}")
+
                 } catch (e: ArrayIndexOutOfBoundsException) {
-                    throw  InvalidMessageException("Unable to retrieve Phin Specification from message. Could Not find MSH-21[1].1")
+                    throw  InvalidMessageException("Unable to process Message messageUUID: $messageUUID, fileName: $fileName. Unable to retrieve Phin Specification from message, MSH-21[1].1 Not found")
                 } catch (e: InvalidFileException) {
-                    throw InvalidMessageException("Unable to find Phin Spec for ${phinSpec}")
+                    throw InvalidMessageException("Unable to process Message messageUUID: $messageUUID, fileName: $fileName due to not found Phin Spec: ${phinSpec}")
                 }
 
             } catch (e: Exception) {

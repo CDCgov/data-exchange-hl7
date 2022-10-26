@@ -14,18 +14,21 @@ class Function {
     fun eventHubProcessor(
             @EventHubTrigger(
                 name = "msg", 
-                // TODO:
-                eventHubName = "%event_hub_receiver_name%",
-                connection = "EventHubConnectionString") 
+                eventHubName = "%EventHubReceiveName%",
+                connection = "EventHubConnectionString",
+                consumerGroup = "%EventHubConsumerGroup%",) 
                 message: String?,
-            context: ExecutionContext) {
+                context: ExecutionContext) {
         
-        // context.logger.info("message: --> " + message)
+        // context.logger.info("received event: --> $message") 
 
         // set up the 2 out event hubs
         val evHubConnStr = System.getenv("EventHubConnectionString")
-        val eventHubSenderOk = EvHubSender(evHubName=System.getenv("EventHubSendOkName"), evHubConnStr=evHubConnStr)
-        val eventHubSenderErrs = EvHubSender(evHubName=System.getenv("EventHubSendErrsName"), evHubConnStr=evHubConnStr)
+        val eventHubSendOkName = System.getenv("EventHubSendOkName")
+        val eventHubSendErrsName = System.getenv("EventHubSendOkName")
+
+        val eventHubSenderOk = EvHubSender(evHubName=eventHubSendOkName, evHubConnStr=evHubConnStr)
+        val eventHubSenderErrs = EvHubSender(evHubName=eventHubSendErrsName, evHubConnStr=evHubConnStr)
 
         // when testing local message for dev
         // val hl7TestMessage = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
@@ -39,6 +42,11 @@ class Function {
         // For each Event received
         // -------------------------------------
         for (hl7Message in eventArr) {
+
+            val messageUUID = hl7Message.metadata.messageUUID
+            val fileName = hl7Message.metadata.fileName
+
+            context.logger.info("Received and Processing Message: messageUUID $messageUUID, fileName: $fileName")
 
 
             try {
@@ -63,7 +71,11 @@ class Function {
                 // and sending to next event hub
                 hl7Message.contentValidationReport = validationReportFull 
                 val json = Gson().toJson(hl7Message)
+
                 eventHubSenderOk.send(message=json)
+                // TODO: are MMG validation errors ok and message still goes to 
+                context.logger.info("Processed for MMG validated messageUUID: $messageUUID, fileName: $fileName, ehDestination: $eventHubSendOkName")
+
                // println("ValidationReport:\t  $validationReportFull")
 //             } catch (e: MessageNotRecognizableException) {
 //                 //Handle error - send Message to Dead Letter.
@@ -74,6 +86,7 @@ class Function {
                 //TODO:: Define Error Information to be pushed to error queues.
                 e.message ?.let{
                     eventHubSenderErrs.send( message=e.message!!)
+                    context.logger.info("Processed for MMG validated with Exception, messageUUID: $messageUUID, fileName: $fileName, ehDestination: $eventHubSendErrsName")
                 }
                
             } // .catch

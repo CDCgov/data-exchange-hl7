@@ -66,7 +66,7 @@ class Function {
 
             if ( event.eventType == BLOB_CREATED) {
                 
-                context.logger.info( "received event: --> " + event.toString() )
+                context.logger.info( "Received BLOB_CREATED event: --> " + event.toString() )
 
                 // 
                 // Pick up blob metadata
@@ -132,7 +132,7 @@ class Function {
                                     )
                                     
                                     evHubSender.send(hl7Message=hl7Message)
-                                    context.logger.info("sent to event hub: --> messageIndex: " + hl7Message.metadata.messageIndex + ", messageUUID: " + hl7Message.metadata.messageUUID)
+                                    context.logger.info("Processed and Sent to event hub Message: --> messageIndex: ${hl7Message.metadata.messageIndex}, messageUUID: ${hl7Message.metadata.messageUUID}, fileName: ${hl7Message.metadata.fileName}")
 
                                 } // .if 
                                 index = index + 1
@@ -160,7 +160,8 @@ class Function {
                                     )
                     // context.logger.info("sending to event hub (last): --> " + hl7Message.metadata.messageIndex + ", " + hl7Message.metadata.messageUUID)
                     evHubSender.send(hl7Message=hl7Message)
-                    context.logger.info("sent to event hub: --> messageIndex: " + hl7Message.metadata.messageIndex + ", messageUUID: " + hl7Message.metadata.messageUUID)
+                    context.logger.info("Processed and Sent to event hub Message: --> messageIndex: ${hl7Message.metadata.messageIndex}, messageUUID: ${hl7Message.metadata.messageUUID}, fileName: ${hl7Message.metadata.fileName}")
+                    
                     // hl7MessagesArr.add(currentLinesArr.joinToString(separator="\n") )
 
                 } // .BufferedReader 
