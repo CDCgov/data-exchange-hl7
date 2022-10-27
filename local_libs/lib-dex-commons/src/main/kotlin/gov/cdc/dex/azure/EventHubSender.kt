@@ -3,7 +3,7 @@ package gov.cdc.dex.azure
 import com.azure.messaging.eventhubs.*
 
 class EventHubSender (val evHubConnStr: String, ) {
-    fun send( message: String, evHubTopicName: String  ) {
+    fun send(  evHubTopicName: String, message: String ) {
         val producer = EventHubClientBuilder()
             .connectionString(evHubConnStr,  evHubTopicName)
             .buildProducerClient()
