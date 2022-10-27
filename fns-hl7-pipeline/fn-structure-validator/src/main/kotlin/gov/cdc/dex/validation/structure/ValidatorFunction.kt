@@ -62,7 +62,7 @@ class ValidatorFunction {
 
         message.forEach { singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-            context.logger.info("singleMessage: --> $singleMessage")
+            // context.logger.info("singleMessage: --> $singleMessage")
 
             try {
                 val hl7ContentBase64 = inputEvent["content"].asString
