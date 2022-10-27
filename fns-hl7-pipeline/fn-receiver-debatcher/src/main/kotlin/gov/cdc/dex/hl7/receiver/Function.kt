@@ -101,10 +101,10 @@ class Function {
     private fun prepareAndSend(messageContent: ArrayList<String>, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String, context: ExecutionContext) {
         val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString(separator="\n").toByteArray())
         val msgEvent = DexEventPayload(contentBase64, metadata, summary)
-        context.logger.fine("Sending new Event...  messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
+        context.logger.info("Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
         val jsonMessage = gson.toJson(msgEvent)
         eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
-        context.logger.info("Processed and Sent to event hub $eventHubName ; Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex},  fileName: ${msgEvent.metadata.provenance.filePath}")
+        context.logger.info("Processed and Sent to event hub $eventHubName Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
         println(msgEvent)
     }
 } // .class  Function
