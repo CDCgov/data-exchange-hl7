@@ -62,13 +62,21 @@ class ValidatorFunction {
 
         message.forEach { singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+            context.logger.info("singleMessage: --> $singleMessage")
+
             try {
-                val hl7Content = inputEvent["content"].asString
+                val hl7ContentBase64 = inputEvent["content"].asString
+
+                val hl7ContentDecodedBytes = Base64.getDecoder().decode(hl7ContentBase64)
+                val hl7Content = String(hl7ContentDecodedBytes)
 
                 val metadata = inputEvent["metadata"].asJsonObject
-                val messageUUID = metadata["messageUUID"].asString
-                val fileName = metadata["fileName"].asString
-                context.logger.info("Received and Processing messageUUID: $messageUUID, fileName: $fileName")
+                val provenance = metadata["provenance"].asJsonObject
+
+                val filePath = provenance["file_path"].asString
+                val messageUUID = inputEvent["message_uuid"].asString
+                
+                context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 var phinSpec: String? = null
                 try {
@@ -93,12 +101,12 @@ class ValidatorFunction {
 
                     ehSender.send(Gson().toJson(inputEvent), ehDestination)
 
-                    context.logger.info("Processed for structure validated messageUUID: $messageUUID, fileName: $fileName, ehDestination: $ehDestination, report.status: ${report.status}")
+                    context.logger.info("Processed for structure validated messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
 
                 } catch (e: ArrayIndexOutOfBoundsException) {
-                    throw  InvalidMessageException("Unable to process Message messageUUID: $messageUUID, fileName: $fileName. Unable to retrieve Phin Specification from message, MSH-21[1].1 Not found")
+                    throw  InvalidMessageException("Unable to process Message messageUUID: $messageUUID, filePath: $filePath. Unable to retrieve Phin Specification from message, MSH-21[1].1 Not found")
                 } catch (e: InvalidFileException) {
-                    throw InvalidMessageException("Unable to process Message messageUUID: $messageUUID, fileName: $fileName due to not found Phin Spec: ${phinSpec}")
+                    throw InvalidMessageException("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to not found Phin Spec: ${phinSpec}")
                 }
 
             } catch (e: Exception) {
