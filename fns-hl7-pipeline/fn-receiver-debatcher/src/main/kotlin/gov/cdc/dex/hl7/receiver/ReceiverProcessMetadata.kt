@@ -7,5 +7,4 @@ data class ReceiverProcessMetadata (override val status: String?): ProcessMetada
         const val RECEIVER_PROCESS = "RECEIVER"
         const val RECEIVER_VERSION = "1.0.0"
     }
-    var oneMoreProperty: String? = null
 }

@@ -35,7 +35,7 @@ class TestLineCleanup {
         val processMD = ReceiverProcessMetadata("SUCCESS")
         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
-        processMD.oneMoreProperty = "Test Metadata ONE"
+//        processMD.oneMoreProperty = "Test Metadata ONE"
 
 
         val metadata = DexMetadata(provenance, listOf(processMD))

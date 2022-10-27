@@ -34,44 +34,25 @@ class Function {
             context: ExecutionContext) {
 
         // context.logger.info("message: --> " + message)
-
-        // 
-        // Event Hub Sender
-        // -------------------------------------
         val evHubName = System.getenv("EventHubSendOkName")
         val evHubConnStr = System.getenv("EventHubConnectionString")
         val blobIngestContName = System.getenv("BlobIngestContainerName")
         val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
 
-        val evHubSender = EventHubSender( evHubConnStr=evHubConnStr)
+        val evHubSender = EventHubSender(evHubConnStr)
         val azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
 
-        // 
-        // Event Hub -> receive events
-        // -------------------------------------
-//        val eventArrArr = Gson().fromJson(message, Array<Array<AzBlobCreateEventMessage>>::class.java)
-//        val eventArr = eventArrArr[0]
-//
-//        //
-//        // For each Event received
-//        // -------------------------------------
-//        for (event in eventArr) {
         if (messages != null) {
             for (message in messages) {
-//                context.logger.info("@@@@@@@@@@@@@@@@@@@")
-//                context.logger.info(message)
                 val eventArr = Gson().fromJson(message, Array<AzBlobCreateEventMessage>::class.java)
                 val event = eventArr[0]
                 if ( event.eventType == BLOB_CREATED) {
                     context.logger.info("Received BLOB_CREATED event: --> $event")
-                    //
                     // Pick up blob metadata
-                    // -------------------------------------
                     val blobName = event.evHubData.url.split("/").last()
+                    context.logger.fine("Reading blob $blobName")
                     val blobClient = azBlobProxy.getBlobClient(blobName)
-                    //
-                    // Create HL7 Message Metadata for Provenance
-                    // -------------------------------------
+                    // Create Metadata for Provenance
                     val provenance = Provenance(
                         filePath=event.evHubData.url,
                         fileTimestamp=blobClient.properties.lastModified.toIsoString(),
@@ -99,21 +80,18 @@ class Function {
                                 provenance.singleOrBatch = Provenance.BATCH_FILE
                             } else {
                                 if ( lineClean.startsWith("MSH") ) {
-                                    // context.logger.info("line.startsWith(MSH): ------> " + line)
                                     if ( provenance.messageIndex > 1 ) {
                                         provenance.singleOrBatch = Provenance.BATCH_FILE
                                         prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
                                         provenance.messageIndex++
                                     } // .if
                                     currentLinesArr.clear()
-
                                 } // .if
                                 currentLinesArr.add(lineClean)
                             } // .else
                         } // .forEachLine
                         // Send last message
                         prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
-
                     } // .BufferedReader
                 } // .if
             }
@@ -123,10 +101,10 @@ class Function {
     private fun prepareAndSend(messageContent: ArrayList<String>, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String, context: ExecutionContext) {
         val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString(separator="\n").toByteArray())
         val msgEvent = DexEventPayload(contentBase64, metadata, summary)
-
+        context.logger.fine("Sending new Event...  messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
         val jsonMessage = gson.toJson(msgEvent)
         eventHubSender.send(eventHubName, jsonMessage)
-        context.logger.info("Processed and Sent to event hub Message: --> messageIndex: ${msgEvent.metadata.provenance.messageIndex}, messageUUID: ${msgEvent.messageUUID}, fileName: ${msgEvent.metadata.provenance.filePath}")
+        context.logger.info("Processed and Sent to event hub $eventHubName ; Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex},  fileName: ${msgEvent.metadata.provenance.filePath}")
         println(msgEvent)
     }
 } // .class  Function
