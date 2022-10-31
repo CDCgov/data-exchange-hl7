@@ -14,15 +14,17 @@ class MMGTest {
 
     @Test
     fun testMMGUtilGetMMG() {
-        val testMsg = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg)
+        val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
         mmgs.forEach { println(it)}
     }
 
     @Test
     fun testGetSegments() {
-        val testMsg = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg)
+        val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
         mmgs.forEach { mmg ->
             mmg.blocks.forEach { block ->
                 block.elements.forEach { element ->

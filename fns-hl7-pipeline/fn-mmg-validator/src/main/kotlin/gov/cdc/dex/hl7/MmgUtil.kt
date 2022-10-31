@@ -58,14 +58,13 @@ class MmgUtil  {
 
         }
         @Throws(InvalidMessageException::class)
-        fun getMMGFromMessage(message: String): Array<MMG> {
+        fun getMMGFromMessage(message: String, filePath: String, messageUUID: String): Array<MMG> {
             val genVProfile = extractValue(message, GENVx_PROFILE_PATH)
             val conditionProfile = extractValue(message, CONDITION_PROFILE_PATH)
             val eventCode = extractValue(message, EVENT_CODE_PATH)
-            logger.info("Profiles:\nGenV2: $genVProfile\nCondition Specific: $conditionProfile\nEvent Code:$eventCode")
+            logger.info("Profiles for Message filePath ${filePath}, messageUUID: ${messageUUID} --> GenV2: $genVProfile, Condition Specific: $conditionProfile, Event Code:$eventCode")
 
             return getMMG(genVProfile, conditionProfile, eventCode)
-
         }
 
         private fun extractValue(msg: String, path: String):String  {

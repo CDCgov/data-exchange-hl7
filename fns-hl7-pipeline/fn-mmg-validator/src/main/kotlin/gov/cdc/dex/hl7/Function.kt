@@ -3,13 +3,26 @@ package gov.cdc.dex.hl7
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
-import gov.cdc.dex.hl7.model.HL7Message
-import com.google.gson.Gson 
+
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+
+import java.util.*
+
+import gov.cdc.dex.util.JsonHelper.addArrayElement
+import gov.cdc.dex.util.JsonHelper.toJsonElement
+import gov.cdc.dex.azure.EventHubSender
+import gov.cdc.dex.metadata.*
+import gov.cdc.dex.util.DateHelper.toIsoString
+
+import gov.cdc.dex.hl7.model.ReportStatus
 
 /**
  * Azure Functions with Event Hub Trigger.
  */
 class Function {
+
     @FunctionName("mmgvalidator001")
     fun eventHubProcessor(
             @EventHubTrigger(
@@ -17,81 +30,92 @@ class Function {
                 eventHubName = "%EventHubReceiveName%",
                 connection = "EventHubConnectionString",
                 consumerGroup = "%EventHubConsumerGroup%",) 
-                message: String?,
+                message: List<String?>,
                 context: ExecutionContext) {
-        
+
+
+        val startTime =  Date().toIsoString()
         // context.logger.info("received event: --> $message") 
 
-        // set up the 2 out event hubs
+        // set up the 2 out event hubs, TODO: change to library
         val evHubConnStr = System.getenv("EventHubConnectionString")
         val eventHubSendOkName = System.getenv("EventHubSendOkName")
-        val eventHubSendErrsName = System.getenv("EventHubSendOkName")
+        val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
 
-        val eventHubSenderOk = EvHubSender(evHubName=eventHubSendOkName, evHubConnStr=evHubConnStr)
-        val eventHubSenderErrs = EvHubSender(evHubName=eventHubSendErrsName, evHubConnStr=evHubConnStr)
+        val evHubSender = EventHubSender(evHubConnStr)
+        val ehSender = EventHubSender(evHubConnStr)
 
-        // when testing local message for dev
-        // val hl7TestMessage = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
-
-        //
-        // Event Hub -> receive events
-        // -------------------------------------
-        val eventArr = Gson().fromJson(message, Array<HL7Message>::class.java)
-
-        //
-        // For each Event received
-        // -------------------------------------
-        for (hl7Message in eventArr) {
-
-            val messageUUID = hl7Message.metadata.messageUUID
-            val fileName = hl7Message.metadata.fileName
-
-            context.logger.info("Received and Processing Message: messageUUID $messageUUID, fileName: $fileName")
-
+        message.forEach { singleMessage: String? ->
+            val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+            // context.logger.info("singleMessage: --> $singleMessage")
 
             try {
-                // get MMG(s) for the message:
-                val mmgs = MmgUtil.getMMGFromMessage(hl7Message.content)
-                mmgs.forEach {
-                    context.logger.info("${it.name} BLOCKS: --> ${it.blocks.size}")
-                }
+                val hl7ContentBase64 = inputEvent["content"].asString
 
-                val mmgValidator = MmgValidator( hl7Message.content, mmgs )
-                val validationReport = mmgValidator.validate()
-                context.logger.info("validationReport: --> " + validationReport.size)
+                val hl7ContentDecodedBytes = Base64.getDecoder().decode(hl7ContentBase64)
+                val hl7Content = String(hl7ContentDecodedBytes)
 
-                val otherSegmentsValidator = MmgValidatorOtherSegments( hl7Message.content, mmgs )
-                val validationReportOtherSegments = otherSegmentsValidator.validate()
-                context.logger.info("validationReportOtherSegments: --> " + validationReportOtherSegments.size)
+                val metadata = inputEvent["metadata"].asJsonObject
+                val provenance = metadata["provenance"].asJsonObject
 
-                val validationReportFull = validationReport + validationReportOtherSegments
-                context.logger.info("validationReportFull: --> " + validationReportFull.size)
+                val filePath = provenance["file_path"].asString
+                val messageUUID = inputEvent["message_uuid"].asString
+                
+                context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+    
+                try {
+                    // get MMG(s) for the message:
+                    val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
+                    // mmgs.forEach {
+                    //     context.logger.info("MMG blocks found for messageUUID: $messageUUID, filePath: $filePath, BLOCKS: --> ${it.blocks.size}")
+                    // }
 
-                // adding the content validation report to received message 
-                // and sending to next event hub
-                hl7Message.contentValidationReport = validationReportFull 
-                val json = Gson().toJson(hl7Message)
+                    val mmgValidator = MmgValidator( hl7Content, mmgs )
+                    val validationReport = mmgValidator.validate()
 
-                eventHubSenderOk.send(message=json)
-                // TODO: are MMG validation errors ok and message still goes to 
-                context.logger.info("Processed for MMG validated messageUUID: $messageUUID, fileName: $fileName, ehDestination: $eventHubSendOkName")
+                    val otherSegmentsValidator = MmgValidatorOtherSegments( hl7Content, mmgs )
+                    val validationReportOtherSegments = otherSegmentsValidator.validate()
 
-               // println("ValidationReport:\t  $validationReportFull")
-//             } catch (e: MessageNotRecognizableException) {
-//                 //Handle error - send Message to Dead Letter.
-//                 eventHubSenderErrs.send( message=e.msg )
-//             } catch (e: InvalidMessageException) {
-//                 eventHubSenderErrs.send( message=e.msg )
+                    val validationReportFull = validationReport + validationReportOtherSegments
+                    context.logger.info("MMG Validation Report size for for messageUUID: $messageUUID, filePath: $filePath, size --> " + validationReportFull.size)
+
+                    // adding the content validation report to received message 
+                    // and sending to next event hub
+
+                    // get report status 
+                    var reportStatus = MmgReport(validationReportFull).getReportStatus()
+                    
+
+                    val processMD = MmgValidatorProcessMetadata(reportStatus.toString(), validationReportFull)
+                    processMD.startProcessTime = startTime
+                    processMD.endProcessTime = Date().toIsoString()
+
+                    inputEvent.addArrayElement("processes", processMD)
+                    //TODO:: Update Summary element.
+
+                    // context.logger.info("INPUT EVENT OUT: --> ${inputEvent}")
+
+                    //Send event
+                    val ehDestination = if (reportStatus == ReportStatus.MMG_ERRORS) eventHubSendErrsName else eventHubSendOkName
+                    evHubSender.send(evHubTopicName=ehDestination, message=Gson().toJson(inputEvent))
+                    context.logger.info("Processed for MMG validated messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, reportStatus: ${reportStatus}")
+
+                } catch (e: Exception) {
+                    context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                    // throw  Exception("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to exception: ${e.message}")
+                } 
+
             } catch (e: Exception) {
-                //TODO:: Define Error Information to be pushed to error queues.
-                e.message ?.let{
-                    eventHubSenderErrs.send( message=e.message!!)
-                    context.logger.info("Processed for MMG validated with Exception, messageUUID: $messageUUID, fileName: $fileName, ehDestination: $eventHubSendErrsName")
-                }
-               
-            } // .catch
+                //TODO::  - update retry counts
+                context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                // e.printStackTrace()
+                // val problem = Problem(STRUCTURE_VALIDATOR, e, false, 0, 0)
+                // val summary = SummaryInfo("STRUCTURE_ERROR", problem)
+                // inputEvent.add("summary", summary.toJsonElement())
+                // ehSender.send(Gson().toJson(inputEvent), evHubNameErrs)
+            }
+        } // .message.forEach
 
-        } // .for
 
     } // .eventHubProcessor
 
