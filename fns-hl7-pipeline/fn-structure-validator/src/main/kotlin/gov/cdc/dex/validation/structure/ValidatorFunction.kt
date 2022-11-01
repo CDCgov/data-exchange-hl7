@@ -92,8 +92,8 @@ class ValidatorFunction {
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
                     processMD.report = report
-
-                    inputEvent.addArrayElement("processes", processMD)
+                    val metadata = inputEvent["metadata"] as JsonObject
+                    metadata.addArrayElement("processes", processMD)
                     //TODO:: Update Summary element.
 
                     //Send event
