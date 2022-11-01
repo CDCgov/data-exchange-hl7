@@ -97,10 +97,11 @@ class Function {
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
 
-                    inputEvent.addArrayElement("processes", processMD)
+                    val metadata = inputEvent["metadata"].asJsonObject
+                    metadata.addArrayElement("processes", processMD)
                     //TODO:: Update Summary element.
 
-                    // context.logger.info("INPUT EVENT OUT: --> ${inputEvent}")
+                    context.logger.info("INPUT EVENT OUT: --> ${ Gson().toJson(inputEvent) }")
 
                     //Send event
                     val ehDestination = if (reportStatus == ReportStatus.MMG_ERRORS) eventHubSendErrsName else eventHubSendOkName
