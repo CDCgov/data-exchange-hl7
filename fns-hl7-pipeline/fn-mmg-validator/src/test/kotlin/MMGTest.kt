@@ -13,16 +13,30 @@ class MMGTest {
     }
 
     @Test
+    fun testRemoveMSH21FromGenV2() {
+        val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        val genV2 = mmgs[0]
+        val genV2NoMSH = genV2
+        println(genV2NoMSH.blocks.size)
+        genV2NoMSH.blocks = genV2.blocks.filter {it.name != "Message Header"}
+        println(genV2NoMSH.blocks.size)
+    }
+
+    @Test
     fun testMMGUtilGetMMG() {
-        val testMsg = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg)
+        val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
         mmgs.forEach { println(it)}
     }
 
     @Test
     fun testGetSegments() {
-        val testMsg = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg)
+        val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
         mmgs.forEach { mmg ->
             mmg.blocks.forEach { block ->
                 block.elements.forEach { element ->

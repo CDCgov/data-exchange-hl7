@@ -8,8 +8,9 @@ import java.nio.file.Paths
 class MMGValidatorTest {
     @Test
     fun testMMGValidator() {
-        val testMsg = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg)
+        val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
         val mmgValidator = MmgValidator( testMsg, mmgs)
         val validationReport = mmgValidator.validate()
 
@@ -43,8 +44,9 @@ class MMGValidatorTest {
     @Test
     fun testInvalidMMG() {
         try {
-            val testMsg = this::class.java.getResource("/tbrd/BDB_LAB_13.txt").readText()
-            val mmgs = MmgUtil.getMMGFromMessage(testMsg)
+            val filePath = "/tbrd/BDB_LAB_13.txt"
+            val testMsg = this::class.java.getResource(filePath).readText()
+            val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
             val mmgValidator = MmgValidator(testMsg, mmgs)
             val validationReport = mmgValidator.validate()
         } catch (e: InvalidMessageException) {
@@ -60,7 +62,7 @@ class MMGValidatorTest {
                 println("==================  ${it.fileName} ")
                 try {
                     val testMsg = this::class.java.getResource("/$folderName/${it.fileName.toString()}").readText()
-                    val mmgs = MmgUtil.getMMGFromMessage(testMsg)
+                    val mmgs = MmgUtil.getMMGFromMessage(testMsg, it.fileName.toString(), "")
                     val mmgValidator = MmgValidator(testMsg, mmgs)
                     val validationReport = mmgValidator.validate()
 

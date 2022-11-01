@@ -13,8 +13,8 @@ class MmgUtil  {
     companion object {
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
         const val GENV2 = "GENERIC_MMG_V2.0"
-        const val GENV1_CASE = "GEN_CASE_MAP_v1.0"
-        const val GENV1_SUMMARY = "GEN_SUMMARY_MAP_v1.0"
+        const val GENV1_CASE = "GEN_CASE_MAP_V1.0"
+        const val GENV1_SUMMARY = "GEN_SUMMARY_MAP_V1.0"
 
         const val ARBO = "ARBO_CASE_MAP_V1.0"
         const val GENVx_PROFILE_PATH = "MSH-21[2].1"
@@ -44,6 +44,9 @@ class MmgUtil  {
                        if (condition ===null) {
                            throw InvalidMessageException("Unable to find MMG for event code $eventCode")
                        }
+                       //REMOVE MSH-21 from GenV2: because condition specific is also defining it with new cardinality of [3..3]
+                       val genV2NoMMG = genV2
+                       genV2NoMMG.blocks = genV2.blocks.filter {it.name != "Message Header"}
                        return arrayOf(genV2, condition)
                    }
                    return arrayOf(genV2)
@@ -58,14 +61,13 @@ class MmgUtil  {
 
         }
         @Throws(InvalidMessageException::class)
-        fun getMMGFromMessage(message: String): Array<MMG> {
+        fun getMMGFromMessage(message: String, filePath: String, messageUUID: String): Array<MMG> {
             val genVProfile = extractValue(message, GENVx_PROFILE_PATH)
             val conditionProfile = extractValue(message, CONDITION_PROFILE_PATH)
             val eventCode = extractValue(message, EVENT_CODE_PATH)
-            logger.info("Profiles:\nGenV2: $genVProfile\nCondition Specific: $conditionProfile\nEvent Code:$eventCode")
+            logger.info("Profiles for Message filePath ${filePath}, messageUUID: ${messageUUID} --> GenV2: $genVProfile, Condition Specific: $conditionProfile, Event Code:$eventCode")
 
             return getMMG(genVProfile, conditionProfile, eventCode)
-
         }
 
         private fun extractValue(msg: String, path: String):String  {
