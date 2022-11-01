@@ -18,10 +18,17 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 
 import gov.cdc.dex.hl7.model.ReportStatus
 
+import gov.cdc.dex.metadata.Problem
+
 /**
  * Azure Functions with Event Hub Trigger.
  */
 class Function {
+    
+    companion object {
+        private const val MMG_VALIDATOR = "MMG-VALIDATOR"
+        private const val STATUS_ERROR = "ERROR"
+    } // .companion
 
     @FunctionName("mmgvalidator001")
     fun eventHubProcessor(
@@ -102,17 +109,25 @@ class Function {
 
                 } catch (e: Exception) {
                     context.logger.severe("Unable to process Message due to exception: ${e.message}")
+
+                    val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
+                    val summary = SummaryInfo(STATUS_ERROR, problem)
+                    inputEvent.add("summary", summary.toJsonElement())
+
+                    evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
                     // throw  Exception("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to exception: ${e.message}")
                 } 
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
                 context.logger.severe("Unable to process Message due to exception: ${e.message}")
+
+                val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
+                val summary = SummaryInfo(STATUS_ERROR, problem)
+                inputEvent.add("summary", summary.toJsonElement())
+
+                evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
                 // e.printStackTrace()
-                // val problem = Problem(STRUCTURE_VALIDATOR, e, false, 0, 0)
-                // val summary = SummaryInfo("STRUCTURE_ERROR", problem)
-                // inputEvent.add("summary", summary.toJsonElement())
-                // ehSender.send(Gson().toJson(inputEvent), evHubNameErrs)
             }
         } // .message.forEach
 
