@@ -30,7 +30,6 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
         mmgs.forEach { mmg ->
             mmg.blocks.forEach { block ->
                 block.elements.forEach { element ->
-                    //TODO:: DO not validate GenV2 MSH-21 if you have a Condition Specific MMG.
                     //Cardinality Check!
                     val msgSegments = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
                     val valueList = if(msgSegments.isDefined)

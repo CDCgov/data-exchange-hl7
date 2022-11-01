@@ -13,8 +13,8 @@ class MmgUtil  {
     companion object {
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
         const val GENV2 = "GENERIC_MMG_V2.0"
-        const val GENV1_CASE = "GEN_CASE_MAP_v1.0"
-        const val GENV1_SUMMARY = "GEN_SUMMARY_MAP_v1.0"
+        const val GENV1_CASE = "GEN_CASE_MAP_V1.0"
+        const val GENV1_SUMMARY = "GEN_SUMMARY_MAP_V1.0"
 
         const val ARBO = "ARBO_CASE_MAP_V1.0"
         const val GENVx_PROFILE_PATH = "MSH-21[2].1"
