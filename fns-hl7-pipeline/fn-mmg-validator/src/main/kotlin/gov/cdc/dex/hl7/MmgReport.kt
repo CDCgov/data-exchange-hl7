@@ -18,10 +18,10 @@ class MmgReport(private val report: List<ValidationIssue>) {
                       reportStatus = ReportStatus.MMG_ERRORS
                       return@reportStatusCheck
                   }
-                  ValidationIssueCategoryType.WARNING -> {
-                      reportStatus = ReportStatus.MMG_WARNINGS
-                      return@reportStatusCheck
-                  }
+                //   ValidationIssueCategoryType.WARNING -> {
+                //       reportStatus = ReportStatus.MMG_WARNINGS
+                //       return@reportStatusCheck
+                //   }
                   else -> { /* keep looking */ }
               }
           } // .validationReportFull.forEach
