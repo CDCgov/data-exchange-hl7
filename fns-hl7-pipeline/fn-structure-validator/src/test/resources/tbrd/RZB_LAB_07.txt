@@ -1,0 +1,112 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.444^ISO|Sending-Facility^2.16.840.1.114222.444^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||RZB_LAB_07^^^SendAppName&2.16.840.1.114222.3333&ISO||~^^^^^^S||20000405|M||2054-5^Black or African American^CDCREC|^^^47^37011^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC
+OBR|1||RZB_LAB_07^SendAppName^2.16.840.1.114222.3333^ISO|68991-9^Epidemiologic Information^LN|||20180620150000|||||||||||||||20180620150000|||F||||||11089^Ehrlichia ewingii^NND
+OBX|1|ST|32624-9^Other Race Text^LN||Botswanan||||||F
+OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|4|TS|11368-8^Date of Illness Onset^LN||20190720||||||F
+OBX|5|TS|77976-9^Illness End Date^LN||20190730||||||F
+OBX|6|SN|77977-7^Illness Duration^LN||^15|d^day [time]^UCUM|||||F
+OBX|7|TS|77975-1^Diagnosis Date^LN||20180617||||||F
+OBX|8|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|9|TS|8656-1^Admission Date^LN||20190720||||||F
+OBX|10|TS|8649-6^Discharge Date^LN||20190730||||||F
+OBX|11|SN|78033-8^Duration of Hospital Stay in Days^LN||^10||||||F
+OBX|12|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|13|ST|77993-4^State Case Identifier^LN||550227||||||F
+OBX|14|ST|77997-5^Legacy Case Identifier^LN||55022713S012017||||||F
+OBX|15|SN|77998-3^Age at Case Investigation^LN||^18|a^year [time]^UCUM|||||F
+OBX|16|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F
+OBX|17|CWE|INV154^Imported State^PHINQUESTION||48^Texas^FIPS5_2||||||F
+OBX|18|CWE|INV155^Imported City^PHINQUESTION||1350851^Abernathy, TX, Lubbock^USGSGNIS||||||F
+OBX|19|CWE|INV156^Imported County^PHINQUESTION||48189^Hale, TX^FIPS6_4||||||F
+OBX|20|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|21|CWE|77985-0^State or Province of Exposure^LN|1|48^Texas^FIPS5_2||||||F
+OBX|22|ST|77986-8^City of Exposure^LN|1|Abernathy||||||F
+OBX|23|ST|77987-6^County of Exposure^LN|1|Hale||||||F
+OBX|24|CWE|77989-2^Transmission Mode^LN||418427004^Vector-borne transmission^SCT||||||F
+OBX|25|CWE|77990-0^Case Class Status Code^LN||2931005^Probable diagnosis^SCT||||||F
+OBX|26|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|27|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|28|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|29|CWE|48766-0^Reporting Source Type Code^LN||PHC252^Other State and Local Agencies^CDCPHINVS||||||F
+OBX|30|ST|52831-5^Reporting Source ZIP Code^LN||37011||||||F
+OBX|31|ST|74549-7^Person Reporting to CDC - Name^LN||No Name||||||F
+OBX|32|ST|74548-9^Person Reporting to CDC - Phone Number^LN||444-555-4545||||||F
+OBX|33|ST|74547-1^Person Reporting to CDC - Email^LN||NoName@emailaddress.com||||||F
+OBX|34|DT|77979-3^Case Investigation Start Date^LN||20190720||||||F
+OBX|35|DT|77995-9^Date Reported^LN||20190728||||||F
+OBX|36|TS|77972-8^Earliest Date Reported to County^LN||20190725||||||F
+OBX|37|TS|77973-6^Earliest Date Reported to State^LN||20190725||||||F
+OBX|38|SN|77991-8^MMWR Week^LN||^25||||||F
+OBX|39|DT|77992-6^MMWR Year^LN||2019||||||F
+OBX|40|DT|77970-2^Date First Reported to PHD^LN||20190725||||||F
+OBX|41|CWE|77966-0^Reporting State^LN||47^Tennessee^FIPS5_2||||||F
+OBX|42|CWE|77968-6^National Reporting Jurisdiction^LN||47^TN^FIPS5_2||||||F
+OBX|43|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|386661006^Fever^SCT||||||F
+OBX|44|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|45|CWE|INV929^Clinical Manifestation^PHINQUESTION|2|271807003^Rash^SCT||||||F
+OBX|46|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|47|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|87319000^Eschar^SCT||||||F
+OBX|48|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|49|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|25064002^Headache^SCT||||||F
+OBX|50|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|51|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|68962001^Myalgia^SCT||||||F
+OBX|52|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|53|CWE|INV929^Clinical Manifestation^PHINQUESTION|6|271737000^Anemia^SCT||||||F
+OBX|54|CWE|INV929^Clinical Manifestation^PHINQUESTION|7|419188005^Leukopenia^SCT||||||F
+OBX|55|CWE|INV929^Clinical Manifestation^PHINQUESTION|8|302215000^Thrombocytopenia^SCT||||||F
+OBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|8|N^No^HL70136||||||F
+OBX|57|CWE|INV929^Clinical Manifestation^PHINQUESTION|9|PHC2108^Hepatic transaminase elevation^CDCPHINVS||||||F
+OBX|58|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|9|N^No^HL70136||||||F
+OBX|59|CWE|INV929^Clinical Manifestation^PHINQUESTION|10|OTH^other^NULLFL^^^^^^Chills, nausea||||||F
+OBX|60|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|10|Y^Yes^HL70136||||||F
+OBX|61|CWE|INV1265^Experienced Complication^PHINQUESTION||N^No^HL70136||||||F
+OBX|62|CWE|370388006^Patient Immunocompromised^SCT||Y^Yes^HL70136||||||F
+OBX|63|ST|INV933^Immunocompromised Associated Condition or Treatment^PHINQUESTION||immunosuppressive drugs post-organ transplant||||||F
+OBX|64|CWE|255633001^Treatment Drug Indicator^SCT||Y^Yes^HL70136||||||F
+OBX|65|CWE|29303-5^Medication Administered^LN|1|4053^Erythromycin^RXNORM||||||F
+OBX|66|DT|86948-7^Date Treatment or Therapy Started^LN|1|20180620||||||F
+OBX|67|SN|67453-1^Treatment Duration^LN|1|^10|d^day^UCUM|||||F
+OBX|71|CWE|INV1266^Occupation Related to Exposure^PHINQUESTION||N^No^HL70136||||||F
+OBX|72|ST|85658-3^Current Occupation^LN|1|Health Scientist||||||F
+OBX|73|CE|85659-1^Current Occupation Standardized^LN|1|1005^Computer and information research scientists [1005]^CDCOCCUPATION2010||||||F
+OBX|74|ST|85078-4^Current Industry^LN|1|Public Health||||||F
+OBX|75|CE|85657-5^Current Industry Standardized^LN|1|9990^Insufficient Information [9990]^CDCINDUSTRY2010||||||F
+OBX|76|CWE|420008001^Travel^SCT||Y^Yes^HL70136||||||F
+OBX|77|CWE|82764-2^International Destination(s) of Recent Travel^LN|1|CAN^CANADA^ISO3166_1||||||F
+OBX|78|DT|TRAVEL06^Date of Arrival to Travel Destination^PHINQUESTION|1|20180525||||||F
+OBX|79|DT|TRAVEL07^Date of Departure from Travel Destination^PHINQUESTION|1|20180611||||||F
+OBX|80|CWE|95898004^Tick Bite^SCT||N^No^HL70136||||||F
+OBX|81|CWE|82312-0^Blood Transfusion^LN||N^No^HL70136||||||F
+OBX|82|CWE|418912005^Transfusion Associated^SCT||N^No^HL70136||||||F
+OBX|83|CWE|161663000^Organ Transplant^SCT||N^No^HL70136||||||F
+OBX|86|CWE|105470007^Blood Donor^SCT||N^No^HL70136||||||F
+OBX|87|CWE|82761-8^Blood Donor Implicated During Investigation^LN||N^No^HL70136||||||F
+OBX|88|CWE|INV290^Test Type^PHINQUESTION|1|32011-9^IFA IgG Ehrlichia sp^LN||||||F
+OBX|89|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|90|CWE|LAB278^Organism Name^PHINQUESTION|1|243360008^Ehrlichia ewingii^SCT||||||F
+OBX|91|ST|LAB628^Test Result Quantitative^PHINQUESTION|1|1:64||||||F
+OBX|92|TS|68963-8^Specimen Collection Date/Time^LN|1|20180620||||||F
+OBX|93|CWE|66746-9^Specimen Type^LN|1|119364003^Serum^SCT||||||F
+OBX|94|ST|68994-3^Performing Laboratory Name^LN|1|Commercial Laboratory||||||F
+OBX|95|CWE|INV1269^Laboratory State^PHINQUESTION|1|47^Tennessee^FIPS5_2||||||F
+OBX|96|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|1|77777||||||F
+OBX|97|CWE|INV290^Test Type^PHINQUESTION|2|32011-9^IFA IgG Ehrlichia sp^LN||||||F
+OBX|98|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F
+OBX|99|CWE|LAB278^Organism Name^PHINQUESTION|2|243360008^Ehrlichia ewingii^SCT||||||F
+OBX|100|ST|LAB628^Test Result Quantitative^PHINQUESTION|2|1:64||||||F
+OBX|101|TS|68963-8^Specimen Collection Date/Time^LN|2|20180620||||||F
+OBX|102|CWE|66746-9^Specimen Type^LN|2|119364003^Serum^SCT||||||F
+OBX|103|ST|68994-3^Performing Laboratory Name^LN|2|Commercial Laboratory||||||F
+OBX|104|CWE|INV1269^Laboratory State^PHINQUESTION|2|47^Tennessee^FIPS5_2||||||F
+OBX|105|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|2|33333||||||F
+OBX|97|CWE|INV290^Test Type^PHINQUESTION|3|32011-9^IFA IgG Ehrlichia sp^LN||||||F
+OBX|98|CWE|INV291^Test Result^PHINQUESTION|3|10828004^Positive^SCT||||||F
+OBX|99|CWE|LAB278^Organism Name^PHINQUESTION|3|243360008^Ehrlichia ewingii^SCT||||||F
+OBX|100|ST|LAB628^Test Result Quantitative^PHINQUESTION|3|1:64||||||F
+OBX|101|TS|68963-8^Specimen Collection Date/Time^LN|3|20180620||||||F
+OBX|102|CWE|66746-9^Specimen Type^LN|3|119364003^Serum^SCT||||||F
+OBX|103|ST|68994-3^Performing Laboratory Name^LN|3|Commercial Laboratory||||||F
+OBX|104|CWE|INV1269^Laboratory State^PHINQUESTION|3|47^Tennessee^FIPS5_2||||||F
+OBX|105|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|3|33333||||||F
