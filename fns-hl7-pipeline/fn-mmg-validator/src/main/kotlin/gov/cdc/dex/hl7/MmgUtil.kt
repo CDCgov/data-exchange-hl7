@@ -44,6 +44,9 @@ class MmgUtil  {
                        if (condition ===null) {
                            throw InvalidMessageException("Unable to find MMG for event code $eventCode")
                        }
+                       //REMOVE MSH-21 from GenV2: because condition specific is also defining it with new cardinality of [3..3]
+                       val genV2NoMMG = genV2
+                       genV2NoMMG.blocks = genV2.blocks.filter {it.name != "Message Header"}
                        return arrayOf(genV2, condition)
                    }
                    return arrayOf(genV2)

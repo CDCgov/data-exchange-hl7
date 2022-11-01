@@ -13,6 +13,18 @@ class MMGTest {
     }
 
     @Test
+    fun testRemoveMSH21FromGenV2() {
+        val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        val genV2 = mmgs[0]
+        val genV2NoMSH = genV2
+        println(genV2NoMSH.blocks.size)
+        genV2NoMSH.blocks = genV2.blocks.filter {it.name != "Message Header"}
+        println(genV2NoMSH.blocks.size)
+    }
+
+    @Test
     fun testMMGUtilGetMMG() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
