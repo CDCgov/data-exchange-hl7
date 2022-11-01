@@ -44,7 +44,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
                            checkDataType(element, dataTypeSegments[k].get()[2], k.toString().toInt(), report )
                         }
                     }
-                   // TODO: Vocab Check
+
                     if (msgSegments.isDefined)  {
                         val msgValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
                         if (msgValues.isDefined)
