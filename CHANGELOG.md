@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.0.6] - 2022-11-02
+  - Created Databricks notebooks to ingest Event Hub messages.
+  - Updated all functions (fn-structure-validator, fn-mmg-validator, fn-receiver-debatcher) to be deployed and running on AZ
+  - Updated metadata on all functions (see above) based on design - #105 .
+  - Created lib-dex-commons library for sharing code among functions/services.
+  - Updated fn-structure-validator to be kotlin (instead of scala)
+  - Replaced hl7-structure-validator (scala) with lib-nist-validator (Kotlin)
+  - Updated PhinVads for error management.
+  - Created Azure Data Explorer to ingest Event Hub messages for monitoring and debugging.
+  - Updated Legacy Arbo MMG.
+  - Created Unit tests for structure and mmg validation.
+  
 ## [0.0.5] - 2022-10-19
  - Added Vocabulary validation to MMG Validator.
  - Added all Legacy MMGs and both GenV1.
