@@ -21,14 +21,21 @@ import java.util.concurrent.Executors
      */
     @FunctionName("PhinVocabRead")
     fun runVocab(
-        @TimerTrigger(name = "timerInfo", schedule = "0 0 9 * * MON") timerInfo: String?,
+        @TimerTrigger(name = "timerInfo", schedule = "%PHINVOCAB_TIME_TRIGGER%") timerInfo: String?,
         context: ExecutionContext
     ) {
         context.logger.info("PhinVocabRead time trigger processed a request.")
+        val exe = Executors.newCachedThreadPool()
+        //checking Redis Connection
+        try {
+            var jedis = RedisUtility().redisConnection()
+        } catch (e: Exception) {
+            context.logger.info("Redis Connection failure:${e.printStackTrace()}")
+            throw Exception("PhinVocab Function failure")
+        }
 
-           try {
+        try {
                val client = VocabClient()
-               val exe  = Executors.newCachedThreadPool()
                context.logger.info("STARTING VocabClient services")
                val valueSets = client.getAllValueSets() as List<ValueSet>?
 
@@ -45,22 +52,24 @@ import java.util.concurrent.Executors
                        valueSetConcepts = (client.getValueSetConcepts(e) as List<ValueSetConcept>?)!!
                    }
                   exe.submit {
-                       //  context.logger.info("KEY: ${key.toString()} ")
-                       // context.logger.info("KEY count: ${vsCount} ")
-                       client.setValueSetConcepts(valueSetConcepts,key.toString())
+                        client.setValueSetConcepts(valueSetConcepts,key.toString())
                    }
 
-                   context.logger.info("Key: ${key.toString()} + count of ${vsCount}")
+                   context.logger.info("Key: $key + count of $vsCount")
               }
                context.logger.info("END OF VocabClient services")
         } catch(e:Exception){
             context.logger.info("Failure in PhinVocabRead function : ${e.printStackTrace()} ")
+            throw Exception("Failure in PhinVocabRead function ::${e.printStackTrace()}")
+        }
+        finally{
+            exe.shutdown()
         }
     }
 
     @FunctionName("MMGATRead")
     fun runMmgat(
-        @TimerTrigger(name = "timerInfo", schedule = "0 0 9 * * FRI") timerInfo: String?,
+        @TimerTrigger(name = "timerInfo", schedule = "%MMGAT_TIME_TRIGGER%") timerInfo: String?,
         context: ExecutionContext
     ) {
         context.logger.info("MMGATRead time trigger processed a request.")
