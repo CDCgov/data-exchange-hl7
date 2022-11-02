@@ -1,0 +1,1 @@
+This folder holds projects that are not deployable on their own. At best they are used by other projects. Most of these projects end up as jar files (libraries) on a local Nexus repository, or docker images to be deployed by another helm or similar project.

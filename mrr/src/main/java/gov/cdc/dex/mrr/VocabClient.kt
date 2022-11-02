@@ -11,18 +11,12 @@ import java.net.MalformedURLException
 class VocabClient {
      private var service: VocabService? = null
      private val serviceUrl = "https://phinvads.cdc.gov/vocabService/v2"
-    val redisCacheName = System.getenv("REDISCACHEHOSTNAME")
-    val rediscachekey = System.getenv("REDISCACHEKEY")
-//    val pool = JedisPool(
-//        getPoolConfig(), redisCacheName, 6380, 3000,
-//        rediscachekey
-//    )
 
     init {
         try {
             service = HessianProxyFactory().create(VocabService::class.java, serviceUrl) as VocabService
         } catch (e: MalformedURLException) {
-            e.printStackTrace()
+            throw Exception("Problem in getting Hessian service:${e.printStackTrace()}")
         }
     }
 
@@ -57,11 +51,11 @@ class VocabClient {
                         for (i in valuesetConcepts) {
                             var vkey = i.conceptCode
                             jedis.hset(key.toString(), vkey, i.toString())
-                            // println("Valueset in Radis:" + key.toString() + "-" + vkey + "-" + i.toString())
+                            // println("Valueset in Redis:" + key.toString() + "-" + vkey + "-" + i.toString())
                         }
                     }
             } catch (e: Exception) {
-                throw Exception("Problem in setting ValuesetConcepts to Radis:${e.printStackTrace()}")
+                throw Exception("Problem in setting ValuesetConcepts to Redis:${e.printStackTrace()}")
             } finally {
                 jedis.close()
             }

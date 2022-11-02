@@ -1,0 +1,89 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||RZB_LAB_09^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19520618|F||2106-3^White^CDCREC|^^^48^75001|||||||||||2186-5^Not Hispanic or Latino^CDCREC|||||||20170922
+OBR|1||RZB_LAB_09^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20170917150000|||||||||||||||20170917150000|||F||||||11090^Anaplasma phagocytophilum^NND
+OBX|1|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|2|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|TS|11368-8^Date of Illness Onset^LN||20170915||||||F
+OBX|4|TS|77976-9^Illness End Date^LN||20170922||||||F
+OBX|5|SN|77977-7^Illness Duration^LN||^7|d^day [time]^UCUM|||||F
+OBX|6|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|7|TS|77975-1^Diagnosis Date^LN||20170916||||||F
+OBX|8|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|9|TS|8656-1^Admission Date^LN||20170916||||||F
+OBX|10|TS|8649-6^Discharge Date^LN||20170922||||||F
+OBX|11|SN|78033-8^Duration of Hospital Stay in Days^LN||^6||||||F
+OBX|12|CWE|77978-5^Subject Died^LN||Y^Yes^HL70136||||||F
+OBX|13|ST|77993-4^State Case Identifier^LN||340227||||||F
+OBX|14|ST|77997-5^Legacy Case Identifier^LN||34022713S012017||||||F
+OBX|15|SN|77998-3^Age at Case Investigation^LN||^65|a^year [time]^UCUM|||||F
+OBX|16|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|17|CWE|77985-0^State or Province of Exposure^LN|1|48^Texas^FIPS5_2||||||F
+OBX|18|ST|77986-8^City of Exposure^LN|1|Irving||||||F
+OBX|19|ST|77987-6^County of Exposure^LN|1|Dallas||||||F
+OBX|20|CWE|77989-2^Transmission Mode^LN||418427004^Vector-borne transmission^SCT||||||F
+OBX|21|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|22|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|23|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|24|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|25|CWE|48766-0^Reporting Source Type Code^LN||PHC252^Other State and Local Agencies^CDCPHINVS||||||F
+OBX|26|ST|52831-5^Reporting Source ZIP Code^LN||75001||||||F
+OBX|27|ST|74549-7^Person Reporting to CDC - Name^LN||Michael Rock||||||F
+OBX|28|ST|74548-9^Person Reporting to CDC - Phone Number^LN||444-444-4444||||||F
+OBX|29|ST|74547-1^Person Reporting to CDC - Email^LN||someone@email.com||||||F
+OBX|30|DT|77979-3^Case Investigation Start Date^LN||20170916||||||F
+OBX|31|DT|77995-9^Date Reported^LN||20170916||||||F
+OBX|32|TS|77972-8^Earliest Date Reported to County^LN||20170916||||||F
+OBX|33|TS|77973-6^Earliest Date Reported to State^LN||20170916||||||F
+OBX|34|SN|77991-8^MMWR Week^LN||^38||||||F
+OBX|35|DT|77992-6^MMWR Year^LN||2017||||||F
+OBX|36|DT|77970-2^Date First Reported to PHD^LN||20170916||||||F
+OBX|37|CWE|77966-0^Reporting State^LN||48^Texas^FIPS5_2||||||F
+OBX|38|CWE|77968-6^National Reporting Jurisdiction^LN||48^TX^FIPS5_2||||||F
+OBX|39|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|386661006^Fever^SCT||||||F
+OBX|40|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|41|CWE|INV929^Clinical Manifestation^PHINQUESTION|2|271807003^Rash^SCT||||||F
+OBX|42|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|2|N^No^HL70136||||||F
+OBX|43|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|87319000^Eschar^SCT||||||F
+OBX|44|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|45|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|25064002^Headache^SCT||||||F
+OBX|46|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|47|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|68962001^Myalgia^SCT||||||F
+OBX|48|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|Y^Yes^HL70136||||||F
+OBX|49|CWE|INV929^Clinical Manifestation^PHINQUESTION|6|271737000^Anemia^SCT||||||F
+OBX|50|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|6|Y^Yes^HL70136||||||F
+OBX|51|CWE|INV929^Clinical Manifestation^PHINQUESTION|7|419188005^Leukopenia^SCT||||||F
+OBX|52|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|7|Y^Yes^HL70136||||||F
+OBX|53|CWE|INV929^Clinical Manifestation^PHINQUESTION|8|302215000^Thrombocytopenia^SCT||||||F
+OBX|54|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|8|Y^Yes^HL70136||||||F
+OBX|55|CWE|INV929^Clinical Manifestation^PHINQUESTION|9|PHC2108^Hepatic transaminase elevation^CDCPHINVS||||||F
+OBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|9|Y^Yes^HL70136||||||F
+OBX|57|CWE|INV929^Clinical Manifestation^PHINQUESTION|10|OTH^other^NULLFL^^^^^^Nausea, vomiting||||||F
+OBX|58|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|10|Y^Yes^HL70136||||||F
+OBX|59|CWE|INV1265^Experienced Complication^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|60|CWE|67187-5^Type of Complication^LN||67406007^Disseminated intravascular coagulation (DIC)^SCT||||||F
+OBX|61|CWE|370388006^Patient Immunocompromised^SCT||Y^Yes^HL70136||||||F
+OBX|62|ST|INV933^Immunocompromised Associated Condition or Treatment^PHINQUESTION||Cancer, chemotherapy||||||F
+OBX|63|CWE|255633001^Treatment Drug Indicator^SCT||Y^Yes^HL70136||||||F
+OBX|64|CWE|29303-5^Medication Administered^LN|1|3640^Doxycycline^RXNORM||||||F
+OBX|65|DT|86948-7^Date Treatment or Therapy Started^LN|1|20170916||||||F
+OBX|66|SN|67453-1^Treatment Duration^LN|1|^10|d^day^UCUM|||||F
+OBX|64|CWE|29303-5^Medication Administered^LN|2|18631^Azithromycin^RXNORM||||||F
+OBX|65|DT|86948-7^Date Treatment or Therapy Started^LN|2|20170916||||||F
+OBX|66|SN|67453-1^Treatment Duration^LN|2|^10|d^day^UCUM|||||F
+OBX|67|CWE|INV1266^Occupation Related to Exposure^PHINQUESTION||N^No^HL70136||||||F
+OBX|68|ST|85658-3^Current Occupation^LN|1|Teacher||||||F
+OBX|69|ST|85078-4^Current Industry^LN|1|Education||||||F
+OBX|70|CE|85657-5^Current Industry Standardized^LN|1|7860^Elementary and secondary schools [7860]^CDCINDUSTRY2010||||||F
+OBX|71|CWE|420008001^Travel^SCT||N^No^HL70136||||||F
+OBX|72|CWE|95898004^Tick Bite^SCT||N^No^HL70136||||||F
+OBX|73|CWE|82312-0^Blood Transfusion^LN||N^No^HL70136||||||F
+OBX|74|CWE|418912005^Transfusion Associated^SCT||N^No^HL70136||||||F
+OBX|77|CWE|105470007^Blood Donor^SCT||N^No^HL70136||||||F
+OBX|78|CWE|INV290^Test Type^PHINQUESTION|1|87558-3^PCR Anaplasma phagocytophilum^LN||||||F
+OBX|79|CWE|LAB278^Organism Name^PHINQUESTION|1|420364006^Anaplasma phagocytophilum^SCT||||||F
+OBX|80|ST|LAB628^Test Result Quantitative^PHINQUESTION|1|<1:64||||||F
+OBX|81|TS|68963-8^Specimen Collection Date/Time^LN|1|20170916||||||F
+OBX|82|CWE|66746-9^Specimen Type^LN|1|119364003^Serum^SCT||||||F
+OBX|83|ST|68994-3^Performing Laboratory Name^LN|1|CDC RZB Reference Laboratory, GA||||||F
+OBX|84|CWE|INV1269^Laboratory State^PHINQUESTION|1|13^Georgia^FIPS5_2||||||F
+OBX|85|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|1|11111||||||F

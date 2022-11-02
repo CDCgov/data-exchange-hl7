@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConformanceContext UUID="xxx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ConformanceContext.xsd"
+	>
+	
+	<MetaData>
+		<Description>Conformance context sample</Description>
+	</MetaData>
+	
+	<Predicates>
+		<Datatype>
+			
+			<ByName Name="HD">
+				<Predicate Target="1[1]" TrueUsage="R" FalseUsage="X">
+					<Description># If HD.2 is valued 'XX'</Description>
+					<Condition>
+						<PlainText Path="2[1]" Text="XXX" IgnoreCase="true"/>
+					</Condition>
+				</Predicate>
+				
+				<Predicate Target="1[1]" TrueUsage="R" FalseUsage="O">
+					<Description>## If HD.2 is valued 'XX'</Description>
+					<Condition>
+						<PlainText Path="2[1]" Text="XXX" IgnoreCase="true"/>
+					</Condition>
+				</Predicate>
+				
+				<Predicate Target="1[1].1[1]" TrueUsage="R" FalseUsage="X">
+					<Description>### If HD.2 is valued 'XX'</Description>
+					<Condition>
+						<PlainText Path="2[1]" Text="XXX" IgnoreCase="true"/>
+					</Condition>
+				</Predicate>
+				
+			</ByName>
+			
+		</Datatype>
+		
+	</Predicates>
+	
+	
+	
+</ConformanceContext>

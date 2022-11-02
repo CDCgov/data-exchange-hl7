@@ -1,0 +1,44 @@
+﻿MSH|^~\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|TM_CN_TC08_GENV2|T|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||GenV2_TC08^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19980406|M||2054-5^Black or African American^CDCREC|^^^35^87004^^^^35043|||||||||||2186-5^Not Hispanic or Latino^CDCREC|||||||
+OBR|1||GenV2_TC08^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20140116170100|||||||||||||||20140128170100|||C||||||10530^Botulism, foodborne^NND
+OBX|1|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|2|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|TS|11368-8^Date of Illness Onset^LN||20140112||||||F
+OBX|4|TS|77976-9^Illness End Date^LN||20140120||||||F
+OBX|5|SN|77977-7^Illness Duration^LN||^8|d^day [time]^UCUM|||||F
+OBX|6|TS|77975-1^Diagnosis Date^LN||20140114||||||F
+OBX|7|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|8|TS|8656-1^Admission Date^LN||20140114||||||F
+OBX|9|TS|8649-6^Discharge Date^LN||20140120||||||F
+OBX|10|SN|78033-8^Duration of Hospital Stay in Days^LN||^6||||||F
+OBX|11|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|12|SN|77998-3^Age at Case Investigation^LN||^15|a^year [time]^UCUM|||||F
+OBX|13|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F
+OBX|14|CWE|INV154^Imported State^PHINQUESTION||48^Texas^FIPS5_2||||||F
+OBX|15|CWE|INV155^Imported City^PHINQUESTION||1350851^Abernathy^USGSGNIS||||||F
+OBX|16|CWE|INV156^Imported County^PHINQUESTION||48189^Hale^FIPS6_4||||||F
+OBX|17|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|18|CWE|77985-0^State or Province of Exposure^LN|1|48^Texas^FIPS5_2||||||F
+OBX|19|ST|77986-8^City of Exposure^LN|1|Abernathy||||||F
+OBX|20|ST|77987-6^County of Exposure^LN|1|Hale||||||F
+OBX|21|CWE|77989-2^Transmission Mode^LN||416086007^Food-borne transmission^SCT||||||F
+OBX|22|CWE|77990-0^Case Class Status Code^LN||PHC178^Not a Case^CDCPHINVS||||||F
+OBX|23|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|24|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|25|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|26|CWE|48766-0^Reporting Source Type Code^LN||1^Hospital^HL70406||||||F
+OBX|27|ST|52831-5^Reporting Source ZIP Code^LN||87004||||||F
+OBX|28|ST|74549-7^Person Reporting to CDC - Name^LN||Davis, Jane||||||F
+OBX|29|ST|74548-9^Person Reporting to CDC - Phone Number^LN||666-321-1234||||||F
+OBX|30|ST|74547-1^Person Reporting to CDC - Email^LN||jdavis@nmdoh.org||||||F
+OBX|31|DT|77979-3^Case Investigation Start Date^LN||20140114||||||F
+OBX|32|DT|77995-9^Date Reported^LN||20140114||||||F
+OBX|33|TS|77972-8^Earliest Date Reported to County^LN||20140114||||||F
+OBX|34|TS|77973-6^Earliest Date Reported to State^LN||20140114||||||F
+OBX|35|SN|77991-8^MMWR Week^LN||^3||||||F
+OBX|36|DT|77992-6^MMWR Year^LN||2014||||||F
+OBX|37|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20140114||||||F
+OBX|38|DT|77970-2^Date First Reported to PHD^LN||20140114||||||F
+OBX|39|CWE|77966-0^Reporting State^LN||35^New Mexico^FIPS5_2||||||F
+OBX|40|CWE|77967-8^Reporting County^LN||35043^Sandoval, NM^FIPS6_4||||||F
+OBX|41|CWE|77968-6^National Reporting Jurisdiction^LN||35^NM^FIPS5_2||||||F
