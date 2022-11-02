@@ -16,7 +16,7 @@ class VocabClient {
         try {
             service = HessianProxyFactory().create(VocabService::class.java, serviceUrl) as VocabService
         } catch (e: MalformedURLException) {
-            e.printStackTrace()
+            throw Exception("Problem in getting Hessian service:${e.printStackTrace()}")
         }
     }
 
