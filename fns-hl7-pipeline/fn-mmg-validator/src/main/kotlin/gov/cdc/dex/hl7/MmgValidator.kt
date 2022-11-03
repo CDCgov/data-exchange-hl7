@@ -168,7 +168,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
     //    private val mapper = jacksonObjectMapper()
     @Throws(InvalidConceptKey::class)
     fun isConceptValid2(key: String, concept: String): Boolean {
-        if (valueSetMap[key] == null) {
+        if (valueSetMap[key] === null) {
             // logger.debug("Retrieving $key from Redis")
             val conceptStr = jedis.hgetAll(key) ?: throw InvalidConceptKey("Unable to retrieve concept values for $key")
 //            val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
