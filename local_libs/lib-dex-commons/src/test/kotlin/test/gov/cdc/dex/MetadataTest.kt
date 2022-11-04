@@ -21,15 +21,18 @@ class MetadataTest {
         processMD.oneMoreProperty = "Test Metadata ONE"
 
         val newPayload = JsonObject()
-        newPayload.add("metadata", JsonPrimitive("abc"))
-        newPayload.addArrayElement("processes", processMD)
+        val md = JsonObject()
+        md.addProperty("prop", "abc")
+        newPayload.add("metadata", md)
+        val metadata = newPayload["metadata"] as JsonObject
+        metadata.addArrayElement("processes", processMD)
 
         val secondProcessMD = MockMetadata( "SUCCESS")
         secondProcessMD.startProcessTime = Date().toIsoString()
         secondProcessMD.endProcessTime = Date().toIsoString()
 
 //        val currentProcessPayload = newPayload["processes"].asJsonArray
-        newPayload.addArrayElement("processes", secondProcessMD)
+        metadata.addArrayElement("processes", secondProcessMD)
         println("After second Process\n==========")
     }
 
