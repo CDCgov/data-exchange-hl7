@@ -8,7 +8,7 @@ internal class StringUtilsTest {
 
     @Test
     fun normalizeString() {
-        val newName = StringUtils.normalizeString("Fn 2.0-V1.0 & Typhi/S")
+        val newName = StringUtils.normalizeString("Fn 2.0-V1.0 & (Typhi/S)")
         println(newName)
 
     }
