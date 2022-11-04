@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.1-SNAPSHOT"
 
 repositories {
     maven {
@@ -21,7 +21,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.9.1")
     //Azure:
     implementation("com.azure:azure-messaging-eventhubs:5.14.0")
-
+    implementation("redis.clients:jedis:4.3.1")
 }
 
 tasks.test {
