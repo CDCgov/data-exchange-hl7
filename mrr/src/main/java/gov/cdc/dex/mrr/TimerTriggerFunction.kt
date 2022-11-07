@@ -6,6 +6,7 @@ import com.google.gson.JsonParser
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.FunctionName
 import com.microsoft.azure.functions.annotation.TimerTrigger
+import gov.cdc.dex.util.StringUtils
 import gov.cdc.vocab.service.bean.ValueSet
 import gov.cdc.vocab.service.bean.ValueSetConcept
 import redis.clients.jedis.Jedis
@@ -24,6 +25,7 @@ import java.util.concurrent.Executors
         @TimerTrigger(name = "timerInfo", schedule = "%PHINVOCAB_TIME_TRIGGER%") timerInfo: String?,
         context: ExecutionContext
     ) {
+
         context.logger.info("PhinVocabRead time trigger processed a request.")
         val exe = Executors.newCachedThreadPool()
         //checking Redis Connection
@@ -65,6 +67,7 @@ import java.util.concurrent.Executors
         finally{
             exe.shutdown()
         }
+
     }
 
     @FunctionName("MMGATRead")
@@ -72,16 +75,19 @@ import java.util.concurrent.Executors
         @TimerTrigger(name = "timerInfo", schedule = "%MMGAT_TIME_TRIGGER%") timerInfo: String?,
         context: ExecutionContext
     ) {
+
         context.logger.info("MMGATRead time trigger processed a request.")
         var jedis = Jedis()
         val parser = JsonParser()
-
+        //load legacy MMGAT'S
+        MmgatClient().loadLegacyMmgat()
         RedisUtility().redisConnection().use { jedis ->
             try {
                 context.logger.info("Cache Response : " + jedis.ping())
                 val mmgaClient = MmgatClient()
                 context.logger.info("STARTING MMGATRead services")
-                val mmgaGuide = mmgaClient.getGuideAll()
+                val mmgaGuide = mmgaClient.getGuideAll().toString()
+
                 val elem: JsonElement = parser.parse(mmgaGuide.toString())
                 context.logger.info("Json Array size:" + elem.asJsonObject.getAsJsonArray("result").size())
                 val mmgatJArray = elem.asJsonObject.getAsJsonArray("result")
@@ -90,17 +96,19 @@ import java.util.concurrent.Executors
 
                 for (mmgatjson in mmgatJArray) {
                     val mj = mmgatjson.asJsonObject
-                    if (mj.get("guideStatus").getAsString()
+                    if (mj.get("guideStatus").asString
                             .equals(mmgaClient.guidanceStatusUAT,true) || mj.get("guideStatus")
-                            .getAsString().equals(mmgaClient.guidanceStatusFINAL,true)
+                            .asString.equals(mmgaClient.guidanceStatusFINAL,true)
                     ) {
                         val id = (mj.get("id").asString)
-                        context.logger.info("MMGAT id:" + id)
+                       // context.logger.info("MMGAT id:$id")
                         val mGuide = mmgaClient.getGuideById(id)
-                        val key = mj.get("name").getAsString()
-                        if (jedis.exists(key.toString()))
-                            jedis.del(key.toString())
-                        jedis.set(key.toString(), gson.toJson(mGuide))
+                        //val version1 = mj.get("publishVersion").asString
+                        val key = "mmg:"+ StringUtils.normalizeString(mj.get("name").asString)
+                       context.logger.info("MMGAT name:$key")
+                        if (jedis.exists(key))
+                            jedis.del(key)
+                        jedis.set(key, gson.toJson(mGuide))
 
                     }
                 }
@@ -110,6 +118,6 @@ import java.util.concurrent.Executors
                 jedis.close()
             }
             context.logger.info("MMGATREAD Function executed at: " + LocalDateTime.now())
-        }
+         }
     }
 }

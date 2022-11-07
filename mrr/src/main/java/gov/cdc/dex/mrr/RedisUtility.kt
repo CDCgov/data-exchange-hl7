@@ -7,11 +7,11 @@ import redis.clients.jedis.Jedis
 class RedisUtility {
     @Throws(Exception::class)
     fun redisConnection(): Jedis {
-        val redisCacheName = System.getenv("REDISCACHEHOSTNAME")
-        val rediscachekey = System.getenv("REDISCACHEKEY")
+        val redisCacheName = System.getenv("REDIS_CACHE_NAME")
+        val rediscachekey = System.getenv("REDIS_CACHE_KEY")
         var jedis = Jedis()
 
-         println("cacheHostname :\${redisCacheName} ")
+         println("cacheHostname :${redisCacheName} ")
         try {
             // Connect to the Azure Cache for Redis over the TLS/SSL port using the key.
               jedis = Jedis(
@@ -22,7 +22,7 @@ class RedisUtility {
             )
 
         } catch (e: Exception) {
-            throw Exception("Radis Connection Failure: ${e.printStackTrace()}")
+            throw Exception("Redis Connection Failure: ${e.printStackTrace()}")
         }
         return jedis;
     }
