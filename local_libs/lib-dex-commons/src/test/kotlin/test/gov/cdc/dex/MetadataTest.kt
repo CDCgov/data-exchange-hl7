@@ -14,7 +14,6 @@ class MetadataTest {
     @Test
     fun testGeneratePayloadJson() {
 
-
         val processMD = MockMetadata("SUCCESS")
         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
@@ -34,6 +33,16 @@ class MetadataTest {
 //        val currentProcessPayload = newPayload["processes"].asJsonArray
         metadata.addArrayElement("processes", secondProcessMD)
         println("After second Process\n==========")
+
+        val summaryOne = JsonObject()
+        summaryOne.addProperty("current_status", "Test One")
+        metadata.add("summary", summaryOne)
+
+        val summaryTwo = JsonObject()
+        summaryTwo.addProperty("current_status", "Test TWO")
+        metadata.add("summary", summaryTwo)
+
+        println(metadata)
     }
 
     @Test
