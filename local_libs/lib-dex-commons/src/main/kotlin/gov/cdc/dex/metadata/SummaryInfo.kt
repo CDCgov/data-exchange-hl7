@@ -19,4 +19,7 @@ data class Problem(
 ) {
     constructor( processName:String,   exception:Throwable,   shouldRetry:Boolean,   retryCount: Int,   maxRetries: Int):
         this(processName, exception::class.java.name, exception.stackTraceToString(), exception.message, shouldRetry, retryCount, maxRetries)
+
+    //Constructor with simple error and No Retries...
+    constructor(processName: String, errorMessage:String): this(processName, null, null, errorMessage, false, 0, 0)
 }
