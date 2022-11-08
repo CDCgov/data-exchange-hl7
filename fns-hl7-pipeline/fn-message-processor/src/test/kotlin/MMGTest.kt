@@ -47,6 +47,14 @@ class MMGTest {
         logger.info("name: ${mmg.name}, blocks: ${mmg.blocks.size}")
     } // .testLoadMMG
 
+    
+    @Test
+    fun testRedisRead() {
+
+        val mmg = jedis.get("mmg:tbrd").substring(0, 100)
+        logger.info("mmg: ${mmg}")
+    } // .testLoadMMG
+
 
     @Test
     fun testRedisMMGToClass() {
