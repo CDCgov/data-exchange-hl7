@@ -68,10 +68,18 @@ class MmgUtil  {
             // get the condition code entry 
             val eventCodeEntry = gson.fromJson(jedis.get(REDIS_CONDITION_PREFIX + eventCode.toString()), ConditionCode::class.java)
 
-            val mmg2KeyName = eventCodeEntry.mmgMaps.get( msh21_3 )
-            val mmg2 = gson.fromJson(jedis.get(mmg2KeyName), MMG::class.java)
+            val mmgsKeyList = eventCodeEntry.mmgMaps.get( msh21_3 )
 
-            return arrayOf( mmg1, mmg2 )
+            var mmgList = arrayOf(mmg1)
+
+            if ( !mmgsKeyList.isNullOrEmpty() ) {
+                mmgsKeyList.forEach { key -> 
+                    mmgList += gson.fromJson(jedis.get(key), MMG::class.java)
+                } // forEach
+            } // .if 
+    
+
+            return mmgList
         } // .getMMG 
 
     } // .companion
