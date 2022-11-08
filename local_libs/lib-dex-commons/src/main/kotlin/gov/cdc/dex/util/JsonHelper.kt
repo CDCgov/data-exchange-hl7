@@ -17,4 +17,17 @@ object JsonHelper {
         val currentArray = this[arrayName].asJsonArray
         currentArray.add(processMD.toJsonElement())
     }
+    @Throws(UnknownPropertyError::class)
+    fun getValueFromJson(path: String, element: JsonElement): JsonElement {
+        val paths = path.split(".")
+        var e:JsonElement = element
+        paths.forEach {
+            try {
+                e = e.asJsonObject[it]
+            } catch (e: NullPointerException) {
+                throw UnknownPropertyError("Property $it not recognized in json")
+            }
+        }
+        return e
+    }
 }
