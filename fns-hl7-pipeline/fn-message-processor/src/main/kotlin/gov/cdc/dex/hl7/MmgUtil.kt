@@ -68,23 +68,21 @@ class MmgUtil  {
                 l_msh_21_3 = l_msh_21_2
             } else {
                 // get the generic MMG:
-                mmg1 = gson.fromJson(jedis.get(l_msh_21_2), MMG::class.java)
+                mmg1 = gson.fromJson(jedis.get(REDIS_CONDITION_PREFIX + l_msh_21_2), MMG::class.java)
                 mmgs.add(mmg1)
             }
 
-            if ( msh21_3.isNullOrEmpty() ) {
-                // Only the generic MMG
-                 return arrayOf( mmg1 )
-            } // .if 
-            
-            // get the condition code entry 
-            val eventCodeEntry = gson.fromJson(jedis.get(REDIS_CONDITION_PREFIX + eventCode.toString()), ConditionCode::class.java)
-            // get the mmg:<name> redis keys for the msh-21 profile for this condition
-            var mmg2KeyNames = eventCodeEntry.mmgMaps[l_msh_21_3]  //returns a list of mmg keys
-            // add the condition-specific mmgs to the list
-            if (mmg2KeyNames != null) {
-                for (keyName : String in mmg2KeyNames) {
-                    mmgs.add(gson.fromJson(jedis.get(keyName), MMG::class.java))
+            if ( !l_msh_21_3.isNullOrEmpty() ) {
+                // get the condition code entry
+                val eventCodeEntry =
+                    gson.fromJson(jedis.get(REDIS_CONDITION_PREFIX + eventCode.toString()), ConditionCode::class.java)
+                // get the mmg:<name> redis keys for the msh-21 profile for this condition
+                var mmg2KeyNames = eventCodeEntry.mmgMaps[l_msh_21_3]  //returns a list of mmg keys
+                // add the condition-specific mmgs to the list
+                if (mmg2KeyNames != null) {
+                    for (keyName: String in mmg2KeyNames) {
+                        mmgs.add(gson.fromJson(jedis.get(keyName), MMG::class.java))
+                    }
                 }
             }
             return mmgs.toTypedArray()
