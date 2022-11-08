@@ -66,9 +66,9 @@ class MmgUtil  {
             } // .if 
             
             // get the condition code entry 
-            val conditionCodeEntry = gson.fromJson(jedis.get(REDIS_CONDITION_PREFIX + eventCode.toString()), ConditionCode::class.java)
+            val eventCodeEntry = gson.fromJson(jedis.get(REDIS_CONDITION_PREFIX + eventCode.toString()), ConditionCode::class.java)
 
-            val mmg2KeyName = conditionCodeEntry.mmgMaps.get( msh21_3 )
+            val mmg2KeyName = eventCodeEntry.mmgMaps.get( msh21_3 )
             val mmg2 = gson.fromJson(jedis.get(mmg2KeyName), MMG::class.java)
 
             return arrayOf( mmg1, mmg2 )
