@@ -4,14 +4,14 @@ import org.slf4j.LoggerFactory
 import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.Jedis
 
-class RedisProxy {
+class RedisProxy(val redisName: String, val redisKey:String, val redisPort: Int = 6380) {
     companion object {
-        val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
-        val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
-        val REDIS_PORT: String   =     System.getenv("REDIS_PORT") ?: "6380"
+        val REDIS_CACHE_NAME_PROP_NAME: String = "REDIS_CACHE_NAME"
+        val REDIS_PWD_PROP_NAME: String =        "REDIS_CACHE_KEY"
+        val REDIS_PORT_PROP_NAME: String   =     "REDIS_PORT"
     }
-    private val jedis = Jedis(REDIS_CACHE_NAME, REDIS_PORT.toInt(), DefaultJedisClientConfig.builder()
-        .password(REDIS_PWD)
+    private val jedis = Jedis(redisName, redisPort.toInt(), DefaultJedisClientConfig.builder()
+        .password(redisKey)
         .ssl(true)
         .build()
     )
