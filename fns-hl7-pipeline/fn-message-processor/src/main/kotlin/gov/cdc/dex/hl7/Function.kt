@@ -77,7 +77,7 @@ class Function {
                     // get MMG(s) for the message:
                     val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
                     mmgs.forEach {
-                        context.logger.info("MMG blocks found for messageUUID: $messageUUID, filePath: $filePath, BLOCKS: --> ${it.blocks.size}")
+                        context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
                     }
                 } catch (e: Exception) {
                     
