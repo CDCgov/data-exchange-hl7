@@ -57,8 +57,17 @@ class MmgUtil  {
         @Throws(Exception::class)
         fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?): Array<MMG> {
 
-            // get the generic MMG:
-            val mmg1 = gson.fromJson(jedis.get(msh21_2), MMG::class.java)
+            // make sure the profile names we have received are lowercase
+            val l_msh_21_2 = msh21_2.lowercase(Locale.getDefault())
+            var l_msh_21_3 = msh21_3?.lowercase(Locale.getDefault())
+            val mmg1 : MMG
+
+            if (l_msh_21_2.contains("arbo_case_map_v1.0")) {
+                l_msh_21_3 = l_msh_21_2
+            } else {
+                // get the generic MMG:
+                mmg1 = gson.fromJson(jedis.get(l_msh_21_2), MMG::class.java)
+            }
 
             if ( msh21_3.isNullOrEmpty() ) {
                 // Only the generic MMG
@@ -67,11 +76,19 @@ class MmgUtil  {
             
             // get the condition code entry 
             val eventCodeEntry = gson.fromJson(jedis.get(REDIS_CONDITION_PREFIX + eventCode.toString()), ConditionCode::class.java)
+            // get the mmg:<name> redis keys for the msh-21 profile for this condition
+            var mmg2KeyNames = eventCodeEntry.mmgMaps[l_msh_21_3]  //returns a list of mmg keys
 
-            val mmg2KeyName = eventCodeEntry.mmgMaps.get( msh21_3 )
-            val mmg2 = gson.fromJson(jedis.get(mmg2KeyName), MMG::class.java)
-
-            return arrayOf( mmg1, mmg2 )
+            // make a list to hold all the mmgs we need and add the generic one to it
+            val mmgs : MutableList<MMG>
+            mmgs.add(mmg1)
+            // add the condition-specific mmgs to the list
+            if (mmg2KeyNames != null) {
+                for (keyName : String in mmg2KeyNames) {
+                    mmgs.add(gson.fromJson(jedis.get(keyName), MMG::class.java))
+                }
+            }
+            return mmgs.toTypedArray()
         } // .getMMG 
 
     } // .companion
