@@ -38,15 +38,22 @@ class MMGTest {
 
 
     @Test
-    fun testLoadOneMMG() {
+    fun testLocalMMGToClass() {
 
-        val mmgKeyName = "mmg:tbrd" 
+        val mmgPath = "/Generic Version 2.0.1.json"
+        val mmgJson = this::class.java.getResource(mmgPath).readText()
 
-        val mmgString = jedis.get( mmgKeyName )
-        logger.info("mmg: ${mmgString}")
+        val mmg = gson.fromJson(mmgJson, MMG::class.java)
+        logger.info("name: ${mmg.name}, blocks: ${mmg.blocks.size}")
+    } // .testLoadMMG
 
-        val mmg = gson.fromJson(mmgString, MMG::class.java)
-        logger.info("mmgKeyName: ${mmgKeyName}, blocks: ${mmg.blocks.size}")
+
+    @Test
+    fun testRedisMMGToClass() {
+
+        val mmg = gson.fromJson(jedis.get("mmg:tbrd"), MMG::class.java)
+        logger.info("name: ${mmg.name}, blocks: ${mmg.blocks.size}")
+
     } // .testLoadMMG
 
     // @Test
