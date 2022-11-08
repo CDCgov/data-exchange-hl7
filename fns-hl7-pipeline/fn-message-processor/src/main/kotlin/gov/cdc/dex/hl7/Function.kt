@@ -49,6 +49,9 @@ class Function {
         // val evHubSender = EventHubSender(evHubConnStr)
         // val ehSender = EventHubSender(evHubConnStr)
 
+        // 
+        // Process each Event Hub Message
+        // ----------------------------------------------
         message.forEach { singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             // context.logger.info("singleMessage: --> $singleMessage")
@@ -66,6 +69,27 @@ class Function {
                 val messageUUID = inputEvent["message_uuid"].asString
                 
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+                
+                // 
+                // Process Message 
+                // ----------------------------------------------
+                try {
+                    // get MMG(s) for the message:
+                    val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
+                    mmgs.forEach {
+                        context.logger.info("MMG blocks found for messageUUID: $messageUUID, filePath: $filePath, BLOCKS: --> ${it.blocks.size}")
+                    }
+                } catch (e: Exception) {
+                    
+                    context.logger.severe("Unable to process Message due to exception: ${e.message}")
+
+                    // val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
+                    // val summary = SummaryInfo(STATUS_ERROR, problem)
+                    // inputEvent.add("summary", summary.toJsonElement())
+
+                    // evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
+                    // throw  Exception("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to exception: ${e.message}")
+                } 
     
 
 
