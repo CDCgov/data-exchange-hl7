@@ -8,6 +8,6 @@ data class ConditionCode(
   @SerializedName("name") val name: String, 
   @SerializedName("program") val program: String,
   @SerializedName("category") val category: String,
-  @SerializedName("mmg_maps") val mmgMaps: Map<String, String>,
+  @SerializedName("mmg_maps") val mmgMaps: Map<String, List<String>>,
 
 ) // .ConditionCode
