@@ -25,7 +25,6 @@ import java.util.*
 class MMGValidationFunction {
     
     companion object {
-        private const val MMG_VALIDATOR = "MMG-VALIDATOR"
         private const val STATUS_ERROR = "ERROR"
 
         val gson = Gson()
@@ -43,9 +42,7 @@ class MMGValidationFunction {
 
 
         val startTime =  Date().toIsoString()
-        // context.logger.info("received event: --> $message") 
-
-        // set up the 2 out event hubs, TODO: change to library
+        // context.logger.info("received event: --> $message")
         val evHubConnStr = System.getenv("EventHubConnectionString")
         val eventHubSendOkName = System.getenv("EventHubSendOkName")
         val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
@@ -99,11 +96,7 @@ class MMGValidationFunction {
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
 
-//                    val metadata = inputEvent["metadata"].asJsonObject
                     metadata.addArrayElement("processes", processMD)
-                    //TODO:: Update Summary element.
-
-
                     //Prepare Summary:
                     val summary = SummaryInfo(mmgReport.status.toString())
                     if (ReportStatus.MMG_ERRORS == mmgReport.status ) {
