@@ -22,6 +22,9 @@ dependencies {
     //Azure:
     implementation("com.azure:azure-messaging-eventhubs:5.14.0")
     implementation("redis.clients:jedis:4.3.1")
+
+    testImplementation("org.apache.logging.log4j:log4j-slf4j18-impl:2.18.0")
+
 }
 
 tasks.test {
@@ -45,10 +48,11 @@ publishing {
             val snapshotsRepoUrl = "https://imagehub.cdc.gov/repository/maven-ede-snapshot/"
             url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
             name = "nexus"
-            credentials {
-                username="mcq1"
-                password="Brasil2025"
-            }
+            credentials(PasswordCredentials::class) //{
+            //Add this to ~/.gradle/gradle.properties
+//                username="$nexusUsername"
+//                password="$nexusPassword"
+//            }
         }
 
 
