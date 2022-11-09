@@ -5,6 +5,7 @@ plugins {
 //    application
     `java-library`
     `maven-publish`
+    jacoco
 }
 
 group = "gov.cdc.dex"
@@ -29,11 +30,19 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    environment (mapOf("REDIS_CACHE_NAME" to "tf-vocab-cache-dev.redis.cache.windows.net",
+                       "REDIS_CACHE_KEY"  to findProperty("redisDevKey")
+    ))
+    finalizedBy(tasks.jacocoTestReport)
+}
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
 }
+
 
 publishing {
     publications {
@@ -54,8 +63,6 @@ publishing {
 //                password="$nexusPassword"
 //            }
         }
-
-
     }
 }
 
