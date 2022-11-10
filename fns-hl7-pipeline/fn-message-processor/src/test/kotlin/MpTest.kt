@@ -76,7 +76,7 @@ class MpTest {
     fun testGetMMGFromMessage() {
 
         
-        val filePath = "/TBRD_V1.0.2_TM_TC01.hl7"
+        val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val hl7Content = this::class.java.getResource(filePath).readText()
 
         val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, "messageUUID")
@@ -130,7 +130,7 @@ class MpTest {
     @Test
     fun testLoadMMGfromMessage() {
 
-        val filePath = "/TBRD_V1.0.2_TM_TC01.hl7"
+        val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
 
         val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")

@@ -80,12 +80,11 @@ class Function {
                     }
                 } catch (e: Exception) {
                     
-                    context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                    context.logger.severe("Unable to process Message (MMGUtil) due to exception: ${e.message}")
 
                     // val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
                     // val summary = SummaryInfo(STATUS_ERROR, problem)
                     // inputEvent.add("summary", summary.toJsonElement())
-
                     // evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
                     // throw  Exception("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to exception: ${e.message}")
                 } 
