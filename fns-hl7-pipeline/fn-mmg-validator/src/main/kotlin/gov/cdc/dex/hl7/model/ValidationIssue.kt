@@ -24,13 +24,13 @@ enum class ValidationErrorMessage(val message: String) {
 
 
 data class ValidationIssue(
-    val category: ValidationIssueCategoryType,         // ERROR (for required fields) or WARNING
-    val type: ValidationIssueType,                  // DATA_TYPE, CARDINALITY, VOCAB
+    val classification: ValidationIssueCategoryType,         // ERROR (for required fields) or WARNING
+    val category: ValidationIssueType,                  // DATA_TYPE, CARDINALITY, VOCAB
     val fieldName: String,                          // mmg field Name
-    val hl7Path: String,                            // HL7 path to extract value
-    val lineNumber: Int,
+    val path: String,                            // HL7 path to extract value
+    val line: Int,
     val errorMessage: ValidationErrorMessage,        // error message
-    val message: String,                            // custom message to add value in question
+    val description: String,                            // custom message to add value in question
 
 ) // .ValidationIssue
 

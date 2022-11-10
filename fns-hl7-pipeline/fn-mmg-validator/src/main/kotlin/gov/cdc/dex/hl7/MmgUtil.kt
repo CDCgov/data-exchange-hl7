@@ -3,8 +3,10 @@ package gov.cdc.dex.hl7
 import com.google.gson.Gson
 import gov.cdc.dex.hl7.exception.InvalidMessageException
 
-import gov.cdc.dex.hl7.model.MMG
+
 import gov.cdc.dex.hl7.temp.EventCodeUtil
+
+import gov.cdc.dex.redisModels.MMG
 import gov.cdc.hl7.HL7StaticParser
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -17,6 +19,7 @@ class MmgUtil  {
         const val GENV1_SUMMARY = "GEN_SUMMARY_MAP_V1.0"
 
         const val ARBO = "ARBO_CASE_MAP_V1.0"
+
         const val GENVx_PROFILE_PATH = "MSH-21[2].1"
         const val CONDITION_PROFILE_PATH = "MSH-21[3].1"
         const val EVENT_CODE_PATH = "OBR[@4.1='68991-9']-31.1"
@@ -39,14 +42,14 @@ class MmgUtil  {
                    val genV2 = gson.fromJson(genV2Config, MMG::class.java)
                    if (conditionMMG != null) {
                        val conditionSpecificConfig =
-                           this::class.java.getResource("/${eventCode?.let { EventCodeUtil.getMMGName(it) }}.json")?.readText()
+                           this::class.java.getResource("/${eventCode?.let { EventCodeUtil.getMMGName(it) }}.json")
+                               ?.readText()
                        val condition = gson.fromJson(conditionSpecificConfig, MMG::class.java)
-                       if (condition ===null) {
+                       if (condition === null) {
                            throw InvalidMessageException("Unable to find MMG for event code $eventCode")
                        }
                        //REMOVE MSH-21 from GenV2: because condition specific is also defining it with new cardinality of [3..3]
-                       val genV2NoMMG = genV2
-                       genV2NoMMG.blocks = genV2.blocks.filter {it.name != "Message Header"}
+                       genV2.blocks = genV2.blocks.filter { it.name != "Message Header" }
                        return arrayOf(genV2, condition)
                    }
                    return arrayOf(genV2)
