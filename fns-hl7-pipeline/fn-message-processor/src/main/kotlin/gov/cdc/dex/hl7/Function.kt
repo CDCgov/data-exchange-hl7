@@ -13,7 +13,6 @@ import java.util.*
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.azure.EventHubSender
-import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
 
 import gov.cdc.dex.metadata.Problem

@@ -2,8 +2,12 @@ package gov.cdc.dex.hl7
 
 import com.google.gson.Gson
 
-import gov.cdc.dex.hl7.model.MMG
+import gov.cdc.dex.redisModels.MMG
+
+import gov.cdc.dex.metadata.Problem
+
 import gov.cdc.dex.hl7.model.ConditionCode
+
 import gov.cdc.dex.hl7.temp.EventCodeUtil
 import gov.cdc.hl7.HL7StaticParser
 import org.slf4j.LoggerFactory

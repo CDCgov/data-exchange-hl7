@@ -10,8 +10,9 @@ import java.util.*
 import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.Jedis
 
-import gov.cdc.dex.hl7.model.MMG
+import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.hl7.model.ConditionCode
+
 import com.google.gson.Gson
 
 class MMGTest {
