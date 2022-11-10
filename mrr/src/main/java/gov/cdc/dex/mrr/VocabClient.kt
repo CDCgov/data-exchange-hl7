@@ -10,6 +10,7 @@ class VocabClient {
      private var service: VocabService? = null
      private val serviceUrl = "https://phinvads.cdc.gov/vocabService/v2"
 
+
     init {
         try {
             service = HessianProxyFactory().create(VocabService::class.java, serviceUrl) as VocabService
@@ -41,14 +42,15 @@ class VocabClient {
 
     @Throws(Exception::class)
     fun  setValueSetConcepts(valuesetConcepts: List<ValueSetConcept>,  key: String) {
-
+        val vocabKey = "vocab:$key"
         RedisUtility().redisConnection().use { jedis ->
             try {
                  println("Cache Response : " + jedis.ping())
                 valuesetConcepts.let {
                     for (i in valuesetConcepts) {
                         val vkey = i.conceptCode
-                        jedis.hset(key, vkey, i.toString())
+                        jedis.hset(vocabKey, vkey, i.toString())
+                        //jedis.del(vocabKey)
                         // println("Valueset in Redis:" + key.toString() + "-" + vkey + "-" + i.toString())
                     }
                 }

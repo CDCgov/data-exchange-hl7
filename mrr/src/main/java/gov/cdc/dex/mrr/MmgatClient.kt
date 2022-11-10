@@ -20,8 +20,8 @@ import javax.net.ssl.*
 class MmgatClient {
     var url: URL? = null
     var conn: HttpURLConnection? = null
-    val guidanceStatusUAT = "UserAcceptanceTesting"
-    val guidanceStatusFINAL = "Final"
+    val GUIDANCE_STATUS_UAT  = "UserAcceptanceTesting"
+    val GUIDANCE_STATUS_FINAL  = "Final"
 
     private fun trustAllHosts() {
         try {
@@ -132,7 +132,7 @@ class MmgatClient {
                     val entries: Enumeration<JarEntry> = jar.entries()
                     while (entries.hasMoreElements()) {
                         val entry: JarEntry = entries.nextElement()
-                        val name: String = entry.getName()
+                        val name: String = entry.name
 
                         if (name.startsWith(dirname) && dirname != name) {
                             val resource = Thread.currentThread().contextClassLoader.getResource(name)
@@ -143,8 +143,8 @@ class MmgatClient {
                             var filename = StringUtils.normalizeString(
                                 resource.toString().substring(resource.toString().lastIndexOf("/") + 1)
                             )
-                            filename = "mmg:" + filename.split(".")[0]
-                            println("MMGAT name:$filename");
+                            filename = "mmg:" + filename.substring(0,filename.lastIndexOf("."))
+                            //println("MMGAT name2:$filename");
                             RedisUtility().redisConnection().use { jedis ->
                                 try {
                                     if (jedis.exists(filename))

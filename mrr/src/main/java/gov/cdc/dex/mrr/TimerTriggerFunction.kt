@@ -25,7 +25,6 @@ import java.util.concurrent.Executors
         @TimerTrigger(name = "timerInfo", schedule = "%PHINVOCAB_TIME_TRIGGER%") timerInfo: String?,
         context: ExecutionContext
     ) {
-
         context.logger.info("PhinVocabRead time trigger processed a request.")
         val exe = Executors.newCachedThreadPool()
         //checking Redis Connection
@@ -75,7 +74,6 @@ import java.util.concurrent.Executors
         @TimerTrigger(name = "timerInfo", schedule = "%MMGAT_TIME_TRIGGER%") timerInfo: String?,
         context: ExecutionContext
     ) {
-
         context.logger.info("MMGATRead time trigger processed a request.")
         var jedis = Jedis()
         val parser = JsonParser()
@@ -86,38 +84,62 @@ import java.util.concurrent.Executors
                 context.logger.info("Cache Response : " + jedis.ping())
                 val mmgaClient = MmgatClient()
                 context.logger.info("STARTING MMGATRead services")
+
                 val mmgaGuide = mmgaClient.getGuideAll().toString()
 
                 val elem: JsonElement = parser.parse(mmgaGuide.toString())
-                context.logger.info("Json Array size:" + elem.asJsonObject.getAsJsonArray("result").size())
+                //context.logger.info("Json Array size:" + elem.asJsonObject.getAsJsonArray("result").size())
                 val mmgatJArray = elem.asJsonObject.getAsJsonArray("result")
                 context.logger.info("Json Array size:" + mmgatJArray.size())
                 val gson = GsonBuilder().create()
 
                 for (mmgatjson in mmgatJArray) {
                     val mj = mmgatjson.asJsonObject
-                    if (mj.get("guideStatus").asString
-                            .equals(mmgaClient.guidanceStatusUAT,true) || mj.get("guideStatus")
-                            .asString.equals(mmgaClient.guidanceStatusFINAL,true)
+                     if (mj.get("guideStatus").asString
+                            .equals(mmgaClient.GUIDANCE_STATUS_UAT,true) || mj.get("guideStatus")
+                            .asString.equals(mmgaClient.GUIDANCE_STATUS_FINAL,true)
                     ) {
                         val id = (mj.get("id").asString)
                        // context.logger.info("MMGAT id:$id")
                         val mGuide = mmgaClient.getGuideById(id)
+                        val melement = parser.parse(mGuide.toString())
+                        val mresult = melement.asJsonObject.get("result")
+//                          var kSet =  mresult.asJsonObject.keySet()
+//                        var i :Iterator<String>  = kSet.iterator()
+//                         while(i.hasNext()){
+//                             var kName = i.next().toString()
+//                             context.logger.info("Kname---- -- $kName")
+//
+//                         }
+                         mresult.asJsonObject.remove("testScenarios")
+                         mresult.asJsonObject.remove("testCaseScenarioWorksheetColumns")
+                         mresult.asJsonObject.remove("columns")
+                         mresult.asJsonObject.remove("templates")
+                         mresult.asJsonObject.remove("valueSets")
+
+                        //var mresult1 = mresult.toString().substring(0, 1000)
+                        //context.logger.info("MMGAT result---- -- $mresult")
+
                         //val version1 = mj.get("publishVersion").asString
                         val key = "mmg:"+ StringUtils.normalizeString(mj.get("name").asString)
-                       context.logger.info("MMGAT name:$key")
+                       context.logger.info("MMGAT name1:$key")
                         if (jedis.exists(key))
                             jedis.del(key)
-                        jedis.set(key, gson.toJson(mGuide))
+                        jedis.set(key, gson.toJson(mresult))
 
                     }
+                    //jedis.del("mmg:arboviral_v1")
+                    //context.logger.info("json reslut:" + jedis.get("mmg:babesiosis_v1.1"))
                 }
+              //  context.logger.info("json reslut:" + jedis.get("mmg:babesiosis_v1.1"))
             } catch (e: Exception) {
                 context.logger.info("Failure in MMGATREAD function : ${e.printStackTrace()} ")
+                throw e
             } finally {
                 jedis.close()
             }
             context.logger.info("MMGATREAD Function executed at: " + LocalDateTime.now())
+
          }
     }
 }

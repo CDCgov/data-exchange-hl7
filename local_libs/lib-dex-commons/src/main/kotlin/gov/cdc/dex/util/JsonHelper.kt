@@ -2,7 +2,6 @@ package gov.cdc.dex.util
 
 import com.google.gson.*
 import gov.cdc.dex.metadata.ProcessMetadata
-import java.util.*
 
 object JsonHelper {
     fun Any.toJsonElement():JsonElement {
@@ -30,9 +29,5 @@ object JsonHelper {
             }
         }
         return e
-    }
-    fun getValueFromJsonAndBase64Decode(path: String, element: JsonElement): String {
-        val encodedValue= getValueFromJson(path,element).asString
-        return String(Base64.getDecoder().decode(encodedValue))
     }
 }
