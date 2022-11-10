@@ -11,6 +11,7 @@ import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.Jedis
 
 import gov.cdc.dex.hl7.model.MMG
+import gov.cdc.dex.hl7.model.ConditionCode
 import com.google.gson.Gson
 
 class MMGTest {
@@ -47,13 +48,60 @@ class MMGTest {
         logger.info("name: ${mmg.name}, blocks: ${mmg.blocks.size}")
     } // .testLoadMMG
 
-    
+    @Test
+    fun testRedisReadGeneric() {
+
+        val mmg = jedis.get("mmg:generic_mmg_v2.0").substring(0, 100)
+        logger.info("mmg: ${mmg}")
+    } // .testLoadMMG
+
+
     @Test
     fun testRedisRead() {
 
         val mmg = jedis.get("mmg:tbrd").substring(0, 100)
         logger.info("mmg: ${mmg}")
     } // .testLoadMMG
+
+    @Test
+    fun testGetMMGFromMessage() {
+
+        
+        val filePath = "/TBRD_V1.0.2_TM_TC01.hl7"
+        val hl7Content = this::class.java.getResource(filePath).readText()
+
+        val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, "messageUUID")
+        mmgs.forEach {
+            logger.info("MMG Info for filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
+
+    } // .testLoadMMG
+
+    @Test
+    fun testGetRedisConditionCode() {
+
+        val ccJson = jedis.get( "condition:" + "10250" )
+        logger.info("Redis JSON: --> $ccJson")
+
+        val cc = gson.fromJson(ccJson, ConditionCode::class.java)
+
+        logger.info("Redis condition code entry: --> $cc")
+
+    } // .testLoadMMG
+
+    
+    @Test
+    fun testGetMMG() {
+       // fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
+
+        val mmgs = MmgUtil.getMMG("generic_mmg_v2.0", "lyme_tbrd_mmg_v1.0", "10250", "42")
+
+        mmgs.forEach {
+            logger.info("MMG Info for filePath: filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
+
+    } // .testLoadMMG
+
 
 
     @Test
@@ -64,19 +112,19 @@ class MMGTest {
 
     } // .testLoadMMG
 
-    // @Test
-    // fun testLoadMMGfromMessage() {
+    @Test
+    fun testLoadMMGfromMessage() {
 
-    //     val filePath = "/TBRD_V1.0.2_TM_TC01.hl7"
-    //     val testMsg = this::class.java.getResource(filePath).readText()
+        val filePath = "/TBRD_V1.0.2_TM_TC01.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
 
-    //     val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
 
-    //     mmgs.forEach {
-    //         logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-    //     }
+        mmgs.forEach {
+            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
 
-    // } // .testLoadMMGfromMessage
+    } // .testLoadMMGfromMessage
 
     // @Test
     // fun testMMGUtilGetMMG() {

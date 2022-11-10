@@ -20,6 +20,8 @@ class MmgUtil  {
         const val PATH_MSH_21_3_1 = "MSH-21[3].1" // Condition
         const val EVENT_CODE_PATH = "OBR[@4.1='68991-9']-31.1"
 
+        const val PATH_JURISDICTION_CODE = "" // TODO: complete path
+
         val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
         val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
 
@@ -37,13 +39,14 @@ class MmgUtil  {
         @Throws(Exception::class)
         fun getMMGFromMessage(message: String, filePath: String, messageUUID: String): Array<MMG> {
 
-            val msh21_2 = extractValue(message, PATH_MSH_21_2_1)
-            val msh21_3 = extractValue(message, PATH_MSH_21_3_1)
+            val msh21_2 = extractValue(message, PATH_MSH_21_2_1).lowercase(Locale.getDefault())
+            val msh21_3 = extractValue(message, PATH_MSH_21_3_1).lowercase(Locale.getDefault())
             val eventCode = extractValue(message, EVENT_CODE_PATH)
+            val jurisdictionCode = "23" // TODO: ..  extractValue(message, PATH_JURISDICTION_CODE)
 
             logger.info("Info for message filePath ${filePath}, messageUUID: ${messageUUID} --> msh21_2: $msh21_2, msh21_3: $msh21_3, eventCode: $eventCode")
 
-            return getMMG(msh21_2, msh21_3, eventCode)
+            return getMMG(msh21_2, msh21_3, eventCode, jurisdictionCode)
         } // .getMMGFromMessage
 
         private fun extractValue(msg: String, path: String):String  {
@@ -55,36 +58,71 @@ class MmgUtil  {
 
         //TODO:: Add support for others MMG edge cases such as: Foodnet vs FoodBorne MMGs based on reporting jurisdiction, etc..
         @Throws(Exception::class)
-        fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?): Array<MMG> {
+        fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
+            // TODO : include jurisdictionCode logic 
 
-            // get the generic MMG:
-            val mmg1 = gson.fromJson(jedis.get(msh21_2), MMG::class.java)
+            val mmg1 : MMG
+            // make a list to hold all the mmgs we need
+            val mmgs : MutableList<MMG> = mutableListOf()
 
-            if ( msh21_3.isNullOrEmpty() ) {
-                // Only the generic MMG
-                 return arrayOf( mmg1 )
-            } // .if 
-            
-            // get the condition code entry 
-            val eventCodeEntry = gson.fromJson(jedis.get(REDIS_CONDITION_PREFIX + eventCode.toString()), ConditionCode::class.java)
+            var msh21_3In = msh21_3
 
-            val mmgsKeyList = eventCodeEntry.mmgMaps.get( msh21_3 )
+            if (msh21_2.contains("arbo_case_map_v1.0")) {
+                // msh_21_3 is empty, make it same as msh_21_2
+                msh21_3In = msh21_2 
 
-            var mmgList = arrayOf(mmg1)
+            } else {
+                // get the generic MMG:
 
-            if ( !mmgsKeyList.isNullOrEmpty() ) {
-                mmgsKeyList.forEach { key -> 
-                    mmgList += gson.fromJson(jedis.get(key), MMG::class.java)
-                } // forEach
-            } // .if 
-    
+                    val rKey = REDIS_MMG_PREFIX + msh21_2
+                    logger.info("Pulling MMG: key: ${rKey}")
+                    mmg1 = gson.fromJson(jedis.get(rKey), MMG::class.java)
+                    mmgs.add(mmg1)
 
-            return mmgList
+            } // .else
+
+            if ( !msh21_3In.isNullOrEmpty() ) { 
+                // get the condition code entry
+                val eventCodeEntry =
+                    gson.fromJson( jedis.get(REDIS_CONDITION_PREFIX + eventCode.toString()) , ConditionCode::class.java)
+                // get the mmg:<name> redis keys for the msh-21 profile for this condition
+
+                if ( ! eventCodeEntry.mmgMaps.isNullOrEmpty() ) {
+
+                    var mmg2KeyNames = eventCodeEntry.mmgMaps[msh21_3In]  //returns a list of mmg keys
+                    // add the condition-specific mmgs to the list
+                    if (mmg2KeyNames != null) {
+                        for (keyName: String in mmg2KeyNames) {
+                            mmgs.add(gson.fromJson(jedis.get(keyName), MMG::class.java))
+                        }
+                    }
+
+                } // .if 
+
+ 
+            } // .if
+
+            return mmgs.toTypedArray()
         } // .getMMG 
 
     } // .companion
 
 } // .MmgUtil
+
+
+
+// val mmgsKeyList = eventCodeEntry.mmgMaps.get( msh21_3 )
+
+// var mmgList = arrayOf(mmg1)
+
+// if ( !mmgsKeyList.isNullOrEmpty() ) {
+//     mmgsKeyList.forEach { key -> 
+//         mmgList += gson.fromJson(jedis.get(key), MMG::class.java)
+//     } // forEach
+// } // .if 
+
+
+// return mmgList
 
 
 /* 
