@@ -23,8 +23,12 @@
     </properties>
 
     <dependencies>
-     
 
+        <dependency>
+            <groupId>gov.cdc.dex</groupId>
+            <artifactId>lib-dex-commons</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- Test -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

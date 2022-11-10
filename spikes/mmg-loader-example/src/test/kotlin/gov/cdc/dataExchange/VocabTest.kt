@@ -13,7 +13,7 @@ import kotlin.test.DefaultAsserter.assertTrue
 class VocabTest {
 
 
-    val REDIS_PWD = System.getenv("REDISCACHEKEY")
+    val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
 
     val jedis = Jedis(MMGValidator.REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
         .password(REDIS_PWD)
@@ -23,11 +23,12 @@ class VocabTest {
 
     @Test
     fun testLoadVocab() {
-        val conceptStr = jedis.get("PHVS_County_FIPS_6-4")
+        val conceptStr = jedis.hgetAll("PHVS_State_FIPS_5-2")
 
-        val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
-        val concepts:List<ValueSetConcept> = Gson().fromJson(conceptStr, listType)
-        println(concepts)
+//        val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
+//        val concepts:List<ValueSetConcept> = Gson().fromJson(conceptStr, listType)
+        println( conceptStr.keys.toList())
+//        println(concepts)
     }
     @Test
     fun testLoadVocabFromMMGValidator() {

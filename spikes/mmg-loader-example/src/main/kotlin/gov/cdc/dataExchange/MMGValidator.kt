@@ -10,8 +10,8 @@ import redis.clients.jedis.Jedis
 
 class MMGValidator {
     companion object {
-        val REDIS_CACHE_NAME = "temedehl7.redis.cache.windows.net"
-        val REDIS_PWD = System.getenv("REDISCACHEKEY")
+        val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
         val logger = LoggerFactory.getLogger(MMGValidator::class.simpleName)
     }
     val jedis = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
