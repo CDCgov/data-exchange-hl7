@@ -8,7 +8,6 @@ import gov.cdc.dex.metadata.Problem
 
 import gov.cdc.dex.hl7.model.ConditionCode
 
-import gov.cdc.dex.hl7.temp.EventCodeUtil
 import gov.cdc.hl7.HL7StaticParser
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -79,7 +78,7 @@ class MmgUtil  {
                 // get the generic MMG:
 
                     val rKey = REDIS_MMG_PREFIX + msh21_2
-                    logger.info("Pulling MMG: key: ${rKey}")
+                    // TODO: add exceptions // logger.info("Pulling MMG: key: ${rKey}")
                     mmg1 = gson.fromJson(jedis.get(rKey), MMG::class.java)
                     mmgs.add(mmg1)
 

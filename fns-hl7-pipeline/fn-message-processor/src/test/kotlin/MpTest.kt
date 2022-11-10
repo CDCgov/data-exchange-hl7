@@ -3,6 +3,7 @@ import gov.cdc.dex.hl7.MmgUtil
 import gov.cdc.hl7.HL7StaticParser
 import org.testng.annotations.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -15,7 +16,7 @@ import gov.cdc.dex.hl7.model.ConditionCode
 
 import com.google.gson.Gson
 
-class MMGTest {
+class MpTest {
 
     companion object {
 
@@ -47,13 +48,18 @@ class MMGTest {
 
         val mmg = gson.fromJson(mmgJson, MMG::class.java)
         logger.info("name: ${mmg.name}, blocks: ${mmg.blocks.size}")
+
+        assertEquals(mmg.name, "Generic Version 2.0.1")
+        assertEquals(mmg.blocks.size, 8)
     } // .testLoadMMG
 
     @Test
     fun testRedisReadGeneric() {
 
         val mmg = jedis.get("mmg:generic_mmg_v2.0").substring(0, 100)
-        logger.info("mmg: ${mmg}")
+        logger.info("mmg: ${mmg}...")
+
+        assertEquals(mmg.length, 100)
     } // .testLoadMMG
 
 
@@ -61,7 +67,9 @@ class MMGTest {
     fun testRedisRead() {
 
         val mmg = jedis.get("mmg:tbrd").substring(0, 100)
-        logger.info("mmg: ${mmg}")
+        logger.info("mmg: ${mmg}...")
+
+        assertEquals(mmg.length, 100)
     } // .testLoadMMG
 
     @Test
@@ -76,6 +84,7 @@ class MMGTest {
             logger.info("MMG Info for filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
         }
 
+        assertEquals(mmgs.size, 2)
     } // .testLoadMMG
 
     @Test
@@ -83,11 +92,12 @@ class MMGTest {
 
         val ccJson = jedis.get( "condition:" + "10250" )
         logger.info("Redis JSON: --> $ccJson")
+        assertTrue(ccJson.length > 0 )
 
         val cc = gson.fromJson(ccJson, ConditionCode::class.java)
 
         logger.info("Redis condition code entry: --> $cc")
-
+        assertEquals(cc.mmgMaps!!.size, 1)
     } // .testLoadMMG
 
     
@@ -101,6 +111,8 @@ class MMGTest {
             logger.info("MMG Info for filePath: filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
         }
 
+        assertEquals(mmgs.size, 2)
+        assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 34)
     } // .testLoadMMG
 
 
@@ -111,6 +123,8 @@ class MMGTest {
         val mmg = gson.fromJson(jedis.get("mmg:tbrd"), MMG::class.java)
         logger.info("name: ${mmg.name}, blocks: ${mmg.blocks.size}")
 
+        assertEquals(mmg.name, "TBRD")
+        assertEquals(mmg.blocks.size, 34)
     } // .testLoadMMG
 
     @Test
@@ -125,7 +139,11 @@ class MMGTest {
             logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
         }
 
+        assertEquals(mmgs.size, 2)
+        assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 34)
     } // .testLoadMMGfromMessage
+
+
 
     // @Test
     // fun testMMGUtilGetMMG() {
