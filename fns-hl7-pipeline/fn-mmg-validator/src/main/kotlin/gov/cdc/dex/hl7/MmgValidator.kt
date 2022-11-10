@@ -17,6 +17,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
 
     val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
     val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+    val REDIS_VOCAB_NAMESPACE = "vocab:"
 
     private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     fun validate(): List<ValidationIssue> {
@@ -166,7 +167,7 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
     fun isConceptValid(key: String, concept: String): Boolean {
         if (valueSetMap[key] === null) {
             // logger.debug("Retrieving $key from Redis")
-            val conceptStr = redisProxy.getJedisClient().hgetAll(key) ?: throw InvalidConceptKey("Unable to retrieve concept values for $key")
+            val conceptStr = redisProxy.getJedisClient().hgetAll(REDIS_VOCAB_NAMESPACE + key) ?: throw InvalidConceptKey("Unable to retrieve concept values for $key")
 //            val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
             valueSetMap[key] = conceptStr.keys.toList()
 
