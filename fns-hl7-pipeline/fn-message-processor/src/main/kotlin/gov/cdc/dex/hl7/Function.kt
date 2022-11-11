@@ -78,6 +78,10 @@ class Function {
                     mmgs.forEach {
                         context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
                     }
+
+                    Transformer.hl7ToJsonModel(hl7Content, mmgs)
+
+
                 } catch (e: Exception) {
                     
                     context.logger.severe("Unable to process Message (MMGUtil) due to exception: ${e.message}")
