@@ -1,4 +1,4 @@
-package gov.cdc.dex.hl7.model
+package gov.cdc.dex.redisModels
 data class MMG (val id: String, val guideStatus: String, val name: String, val shortName: String, var blocks: List<Block>)
 
 data class Block(

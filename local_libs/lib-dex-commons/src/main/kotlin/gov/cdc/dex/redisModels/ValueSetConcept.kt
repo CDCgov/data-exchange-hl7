@@ -1,4 +1,4 @@
-package gov.cdc.dex.hl7.model
+package gov.cdc.dex.redisModels
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

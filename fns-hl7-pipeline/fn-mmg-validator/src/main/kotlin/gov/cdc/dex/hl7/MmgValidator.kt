@@ -1,27 +1,25 @@
 package gov.cdc.dex.hl7
 
+import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
 import gov.cdc.dex.hl7.model.*
-import gov.cdc.hl7.HL7StaticParser
 
+import gov.cdc.dex.redisModels.Element
+import gov.cdc.dex.redisModels.MMG
+import gov.cdc.hl7.HL7StaticParser
 
 import org.slf4j.LoggerFactory
 import scala.Option
-import redis.clients.jedis.DefaultJedisClientConfig
-import redis.clients.jedis.Jedis
+
 
 class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>) {
-    companion object {
-        val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
-        val REDIS_PWD =        System.getenv("REDIS_CACHE_KEY")
-    }
-    val jedis = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
-        .password(REDIS_PWD)
-        .ssl(true)
-        .build()
-    )
     private val logger = LoggerFactory.getLogger(MmgValidator::class.java.simpleName)
 
+    val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
+    val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+    val REDIS_VOCAB_NAMESPACE = "vocab:"
+
+    private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     fun validate(): List<ValidationIssue> {
         val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
         // logger.debug("validate started blocks.size: --> $allBlocks")
@@ -93,13 +91,13 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
                 subList.keys().toList().last().toString().toInt()
             } else 0
             report += ValidationIssue(
-                category= getCategory(element.mappings.hl7v251.usage),
-                type= ValidationIssueType.CARDINALITY,
+                classification= getCategory(element.mappings.hl7v251.usage),
+                category= ValidationIssueType.CARDINALITY,
                 fieldName=element.name,
-                hl7Path=element.getValuePath(),
-                lineNumber=lineNbr, //Get the last Occurrence of line number
+                path=element.getValuePath(),
+                line=lineNbr, //Get the last Occurrence of line number
                 errorMessage= ValidationErrorMessage.CARDINALITY_UNDER, // CARDINALITY_OVER
-                message="Minimum required value not present. Requires $minCardinality, Found ${values.size}",
+                description="Minimum required value not present. Requires $minCardinality, Found ${values.size}",
             ) // .ValidationIssue
         }
 
@@ -111,13 +109,13 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
                      matchingSegments.filter { it._2[4] == groupID}
                 } else matchingSegments
                 report += ValidationIssue(
-                    category= getCategory(element.mappings.hl7v251.usage),
-                    type= ValidationIssueType.CARDINALITY,
+                    classification= getCategory(element.mappings.hl7v251.usage),
+                    category= ValidationIssueType.CARDINALITY,
                     fieldName=element.name,
-                    hl7Path=element.getValuePath(),
-                    lineNumber=subList.keys().toList().last().toString().toInt(),
+                    path=element.getValuePath(),
+                    line=subList.keys().toList().last().toString().toInt(),
                     errorMessage= ValidationErrorMessage.CARDINALITY_OVER, // CARDINALITY_OVER
-                    message="Maximum values surpassed requirements. Max allowed: $maxCardinality, Found ${values.size}",
+                    description="Maximum values surpassed requirements. Max allowed: $maxCardinality, Found ${values.size}",
                 ) // .ValidationIssue
             }
         }
@@ -126,13 +124,13 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
     private fun checkDataType(element: Element, msgDataType: String?, lineNbr: Int, report: MutableList<ValidationIssue>) {
         if (msgDataType != null && msgDataType != element.mappings.hl7v251.dataType) {
                 report += ValidationIssue(
-                    category= getCategory(element.mappings.hl7v251.usage),
-                    type= ValidationIssueType.DATA_TYPE,
+                    classification= getCategory(element.mappings.hl7v251.usage),
+                    category= ValidationIssueType.DATA_TYPE,
                     fieldName=element.name,
-                    hl7Path=element.getDataTypePath(),
-                    lineNumber=lineNbr, //Data types only have single value.
+                    path=element.getDataTypePath(),
+                    line=lineNbr, //Data types only have single value.
                     errorMessage= ValidationErrorMessage.DATA_TYPE_MISMATCH, // DATA_TYPE_MISMATCH
-                    message="Data type on message does not match expected data type on MMG. Expected: ${element.mappings.hl7v251.dataType}, Found: ${msgDataType}",
+                    description="Data type on message does not match expected data type on MMG. Expected: ${element.mappings.hl7v251.dataType}, Found: ${msgDataType}",
                 )
         }
 
@@ -140,12 +138,11 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
 
     private fun checkVocab(elem: Element, msgValues: Array<Array<String>>, message: String, report:MutableList<ValidationIssue> ) {
         if (!elem.valueSetCode.isNullOrEmpty() && !"N/A".equals(elem.valueSetCode)) {
-            // logger.debug("Validating ${elem.valueSetCode}")
-            //val concepts = retrieveValueSetConcepts(elem.valueSetCode)
+
             msgValues.forEachIndexed { outIdx, outArray ->
                 outArray.forEachIndexed { _, inElem ->
                     //if (concepts.filter { it.conceptCode == inElem }.isEmpty()) {
-                    if (!isConceptValid2(elem.valueSetCode, inElem)) {
+                    if (!isConceptValid(elem.valueSetCode!!, inElem)) {
                         val lineNbr = getLineNumber(message, elem, outIdx)
                         val issue = ValidationIssue(
                             getCategory(elem.mappings.hl7v251.usage),
@@ -167,19 +164,15 @@ class MmgValidator(private val hl7Message: String, private val mmgs: Array<MMG>)
     private val valueSetMap = mutableMapOf<String, List<String>>()
     //    private val mapper = jacksonObjectMapper()
     @Throws(InvalidConceptKey::class)
-    fun isConceptValid2(key: String, concept: String): Boolean {
+    fun isConceptValid(key: String, concept: String): Boolean {
         if (valueSetMap[key] === null) {
             // logger.debug("Retrieving $key from Redis")
-            val conceptStr = jedis.hgetAll(key) ?: throw InvalidConceptKey("Unable to retrieve concept values for $key")
+            val conceptStr = redisProxy.getJedisClient().hgetAll(REDIS_VOCAB_NAMESPACE + key) ?: throw InvalidConceptKey("Unable to retrieve concept values for $key")
 //            val listType = object : TypeToken<List<ValueSetConcept>>() {}.type
             valueSetMap[key] = conceptStr.keys.toList()
 
         }
         return valueSetMap[key]?.filter { it == concept }?.isNotEmpty() ?: false
-    }
-    fun isConceptValid(key: String, concept: String):Boolean {
-        //TODO::Check if Key is truly valid (configuration issue)
-        return jedis.hexists(key, concept)
     }
 
     private fun getCategory(usage: String): ValidationIssueCategoryType {
