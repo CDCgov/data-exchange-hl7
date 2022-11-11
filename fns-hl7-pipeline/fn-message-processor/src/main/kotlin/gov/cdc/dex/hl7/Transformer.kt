@@ -30,12 +30,12 @@ class Transformer  {
 
             val mshMap = mmgMsh.map { el -> 
 
-                val dataFieldPosition = el.mappings.hl7v251.fieldPosition
+                val dataFieldPosition = el.mappings.hl7v251.fieldPosition - 1
                 // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
 
                 val mshLineParts = messageLines.filter { it.startsWith("MSH|") }[0].split("|") // there would be only one MSH
 
-                val segmentData = if (mshLineParts.size >= dataFieldPosition) mshLineParts[dataFieldPosition - 1] else ""   
+                val segmentData = if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition] else ""   
 
                 el.name to segmentData 
             }.toMap() // .mmgMsh.map
@@ -51,7 +51,7 @@ class Transformer  {
 
                 val pidLineParts = messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
 
-                val segmentData = if (pidLineParts.size >= dataFieldPosition) pidLineParts[dataFieldPosition - 1] else ""  
+                val segmentData = if (pidLineParts.size > dataFieldPosition) pidLineParts[dataFieldPosition] else ""  
 
                 el.name to segmentData 
             }.toMap() // .mmgPid.map
@@ -67,13 +67,43 @@ class Transformer  {
 
                 val obrLineParts = messageLines.filter { it.startsWith("OBR|") && it.contains(OBR_4_1_EPI_ID) }[0].split("|") // there would be only one Epi Obr
                 // logger.info("obrLineParts: $obrLineParts")
-                val segmentData = if (obrLineParts.size >= dataFieldPosition) obrLineParts[dataFieldPosition - 1] else ""  
+                val segmentData = if (obrLineParts.size > dataFieldPosition) obrLineParts[dataFieldPosition] else ""  
 
                 el.name to segmentData 
+            }.toMap() // .mmgObr.map
+
+            
+            //  ------------- OBX
+            // ----------------------------------------------------
+            val mmgObx = elemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBX" }
+            val obxMap = mmgObx.map { el -> 
+
+                val dataFieldPosition = el.mappings.hl7v251.fieldPosition
+                // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
+                val mmgObxIdentifier = el.mappings.hl7v251.identifier
+
+                val obxLines = messageLines.filter { it.startsWith("OBX|") }
+
+                val obxLine = obxLines.filter { line -> 
+                    val lineParts = line.split("|")
+                    val obxIdentifier = lineParts[3].split("^")[0]
+                    //logger.info("obxIdentifier: $obxIdentifier, mmgObxIdentifier: $mmgObxIdentifier") 
+                    mmgObxIdentifier == obxIdentifier
+                } // .obxLine
+
+                logger.info("obxLine: --> $obxLine\n")
+                
+                val obxParts = if (obxLine.size > 0) obxLine[0].split("|") else listOf<String>()
+                
+                val segmentData = if (obxParts.size > dataFieldPosition) obxParts[dataFieldPosition] else ""  
+
+                logger.info("obxParts: --> $obxParts\n")
+
+                el.name to segmentData
             }.toMap() // .mmgPid.map
 
             
-            val model = /*mshMap + pidMap +*/ obrMap
+            val model = mshMap + pidMap + obrMap + obxMap
 
             logger.info("model: --> ${model}")
             return model
