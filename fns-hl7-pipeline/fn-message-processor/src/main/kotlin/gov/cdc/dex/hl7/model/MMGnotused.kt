@@ -1,6 +1,6 @@
 package gov.cdc.dex.hl7.model
 
-data class MMG (val id: String, val guideStatus: String, val name: String, val shortName: String, var blocks: List<Block>)
+data class MMGnotused (val id: String, val guideStatus: String, val name: String, val shortName: String, var blocks: List<Block>)
 
 data class Block(
     val id: String,
