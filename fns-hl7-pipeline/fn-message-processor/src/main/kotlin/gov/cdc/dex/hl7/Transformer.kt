@@ -21,6 +21,11 @@ class Transformer  {
 
             val (blocksSingle, blocksNonSingle) = blocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
+            
+            // ----------------------------------------------------
+            //  ------------- BLOCKS SINGLE
+            // ----------------------------------------------------
+
             val elemsBlocksSingle = blocksSingle.flatMap { it.elements } // .elemsBlocksSingle
             
 
@@ -87,26 +92,27 @@ class Transformer  {
                 val obxLine = obxLines.filter { line -> 
                     val lineParts = line.split("|")
                     val obxIdentifier = lineParts[3].split("^")[0]
-                    //logger.info("obxIdentifier: $obxIdentifier, mmgObxIdentifier: $mmgObxIdentifier") 
                     mmgObxIdentifier == obxIdentifier
                 } // .obxLine
-
-                logger.info("obxLine: --> $obxLine\n")
                 
                 val obxParts = if (obxLine.size > 0) obxLine[0].split("|") else listOf<String>()
                 
                 val segmentData = if (obxParts.size > dataFieldPosition) obxParts[dataFieldPosition] else ""  
 
-                logger.info("obxParts: --> $obxParts\n")
-
                 el.name to segmentData
             }.toMap() // .mmgPid.map
 
-            
-            val model = mshMap + pidMap + obrMap + obxMap
 
-            logger.info("model: --> ${model}")
-            return model
+            // ----------------------------------------------------
+            //  ------------- BLOCKS NON SINGLE
+            // ----------------------------------------------------
+            // TODO....
+
+            
+            val mmgModel = mshMap + pidMap + obrMap + obxMap
+
+            logger.info("MMG Model: --> ${mmgModel}")
+            return mmgModel
         } // .hl7ToJsonModel 
 
         private fun getMessageLines(hl7Content: String): List<String> {
