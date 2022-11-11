@@ -13,6 +13,7 @@ import redis.clients.jedis.Jedis
 
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.hl7.model.ConditionCode
+import gov.cdc.dex.hl7.Transformer
 
 import com.google.gson.Gson
 
@@ -20,18 +21,18 @@ class MpTest {
 
     companion object {
 
-        val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
-        val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
+        // val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
+        // val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
 
-        val jedis = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
-        .password(REDIS_PWD)
-        .ssl(true)
-        .build())
+        // val jedis = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
+        // .password(REDIS_PWD)
+        // .ssl(true)
+        // .build())
 
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
         private val gson = Gson()
     } // .companion 
-
+/* 
     @Test
     fun testRedisInstanceUsed() {
 
@@ -72,9 +73,9 @@ class MpTest {
         assertEquals(mmg.length, 100)
     } // .testLoadMMG
 
+
     @Test
     fun testGetMMGFromMessage() {
-
         
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val hl7Content = this::class.java.getResource(filePath).readText()
@@ -86,6 +87,7 @@ class MpTest {
 
         assertEquals(mmgs.size, 2)
     } // .testLoadMMG
+
 
     @Test
     fun testGetRedisConditionCode() {
@@ -116,7 +118,6 @@ class MpTest {
     } // .testLoadMMG
 
 
-
     @Test
     fun testRedisMMGToClass() {
 
@@ -126,6 +127,7 @@ class MpTest {
         assertEquals(mmg.name, "TBRD")
         assertEquals(mmg.blocks.size, 34)
     } // .testLoadMMG
+
 
     @Test
     fun testLoadMMGfromMessage() {
@@ -143,15 +145,48 @@ class MpTest {
         assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 34)
     } // .testLoadMMGfromMessage
 
-
-
-    // @Test
+        // @Test
     // fun testMMGUtilGetMMG() {
     //     val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
     //     val testMsg = this::class.java.getResource(filePath).readText()
     //     val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
     //     mmgs.forEach { println(it)}
-    // }
+    // } // .testMMGUtilGetMMG
+
+*/
+
+    @Test
+    fun testTransformerHl7ToJsonModel() {
+
+        // mmg1
+        val mmg1Path = "/Generic Version 2.0.1.json"
+        val mmg1Json = this::class.java.getResource(mmg1Path).readText()
+        val mmg1 = gson.fromJson(mmg1Json, MMG::class.java)
+
+        // mmg2
+        // TODO
+
+        val mmgs = arrayOf(mmg1)
+
+        // hl7
+        val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
+        
+
+        Transformer.hl7ToJsonModel(hl7Content, mmgs)
+
+    } // .testTransformerHl7ToJsonModel
+
+
+
+
+
+
+
+
+
+
+
 
     // @Test
     // fun testGetSegments() {
