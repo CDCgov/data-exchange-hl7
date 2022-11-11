@@ -8,6 +8,7 @@ class Transformer  {
     companion object {
         val logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
+        private val OBR_4_1_EPI_ID = "68991-9"
     
         //? @Throws(Exception::class) 
 
@@ -29,12 +30,12 @@ class Transformer  {
 
             val mshMap = mmgMsh.map { el -> 
 
-                val dataFieldPosition = el.mappings.hl7v251.fieldPosition -1 
+                val dataFieldPosition = el.mappings.hl7v251.fieldPosition
                 // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
 
                 val mshLineParts = messageLines.filter { it.startsWith("MSH|") }[0].split("|") // there would be only one MSH
 
-                val segmentData = if (mshLineParts.size - 1 >= dataFieldPosition) mshLineParts[dataFieldPosition] else ""   
+                val segmentData = if (mshLineParts.size >= dataFieldPosition) mshLineParts[dataFieldPosition - 1] else ""   
 
                 el.name to segmentData 
             }.toMap() // .mmgMsh.map
@@ -45,18 +46,34 @@ class Transformer  {
             val mmgPid = elemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "PID" }
             val pidMap = mmgPid.map { el -> 
 
-                val dataFieldPosition = el.mappings.hl7v251.fieldPosition - 1 // for array position
+                val dataFieldPosition = el.mappings.hl7v251.fieldPosition
                 // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
 
                 val pidLineParts = messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
 
-                val segmentData = if (pidLineParts.size -1 >= dataFieldPosition) pidLineParts[dataFieldPosition] else ""   
+                val segmentData = if (pidLineParts.size >= dataFieldPosition) pidLineParts[dataFieldPosition - 1] else ""  
+
+                el.name to segmentData 
+            }.toMap() // .mmgPid.map
+
+
+            //  ------------- OBR
+            // ----------------------------------------------------
+            val mmgObr = elemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBR" }
+            val obrMap = mmgObr.map { el -> 
+
+                val dataFieldPosition = el.mappings.hl7v251.fieldPosition
+                // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
+
+                val obrLineParts = messageLines.filter { it.startsWith("OBR|") && it.contains(OBR_4_1_EPI_ID) }[0].split("|") // there would be only one Epi Obr
+                // logger.info("obrLineParts: $obrLineParts")
+                val segmentData = if (obrLineParts.size >= dataFieldPosition) obrLineParts[dataFieldPosition - 1] else ""  
 
                 el.name to segmentData 
             }.toMap() // .mmgPid.map
 
             
-            val model = mshMap + pidMap 
+            val model = /*mshMap + pidMap +*/ obrMap
 
             logger.info("model: --> ${model}")
             return model
