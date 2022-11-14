@@ -4,9 +4,8 @@ import com.google.gson.Gson
 
 import gov.cdc.dex.redisModels.MMG
 
-import gov.cdc.dex.metadata.Problem
-
 import gov.cdc.dex.hl7.model.ConditionCode
+import gov.cdc.dex.hl7.model.SpecialCase
 
 import gov.cdc.hl7.HL7StaticParser
 import org.slf4j.LoggerFactory
@@ -89,12 +88,28 @@ class MmgUtil  {
                 val eventCodeEntry =
                     gson.fromJson( jedis.get(REDIS_CONDITION_PREFIX + eventCode.toString()) , ConditionCode::class.java)
                 // get the mmg:<name> redis keys for the msh-21 profile for this condition
-
                 if ( ! eventCodeEntry.mmgMaps.isNullOrEmpty() ) {
+                    var mmg2KeyNames: List<String>? = null
+                    // check for special cases first
+                    if (! eventCodeEntry.specialCases.isNullOrEmpty()) {
+                        // specialCases is a list
+                        for (case: SpecialCase in eventCodeEntry.specialCases) {
+                            // see if the jurisdiction code is a member of the group to which this case applies
+                            val appliesHere = jedis.sismember(case.appliesTo, jurisdictionCode)
+                            if (appliesHere && !case.mmgMaps[msh21_3In].isNullOrEmpty()) {
+                                mmg2KeyNames = case.mmgMaps[msh21_3In] //returns a list of mmg keys
+                            }
 
-                    var mmg2KeyNames = eventCodeEntry.mmgMaps[msh21_3In]  //returns a list of mmg keys
+                        } // .for
+                    } // .if
+
+                    if (mmg2KeyNames.isNullOrEmpty()) {
+                        // no special case matched this jurisdiction, so get the regular mmg map list
+                        mmg2KeyNames = eventCodeEntry.mmgMaps[msh21_3In]  //returns a list of mmg keys
+                    }
+
                     // add the condition-specific mmgs to the list
-                    if (mmg2KeyNames != null) {
+                    if (! mmg2KeyNames.isNullOrEmpty()) {
                         for (keyName: String in mmg2KeyNames) {
                             mmgs.add(gson.fromJson(jedis.get(keyName), MMG::class.java))
                         }
