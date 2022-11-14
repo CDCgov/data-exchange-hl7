@@ -87,10 +87,10 @@ class MmgUtil  {
                 // get the condition code entry
                 val eventCodeEntry =
                     gson.fromJson( jedis.get(REDIS_CONDITION_PREFIX + eventCode.toString()) , ConditionCode::class.java)
-                // get the mmg:<name> redis keys for the msh-21 profile for this condition
+                // check if there are mmg:<name> maps for this condition
                 if ( ! eventCodeEntry.mmgMaps.isNullOrEmpty() ) {
                     var mmg2KeyNames: List<String>? = null
-                    // check for special cases first
+                    // look at special cases first, if any exist
                     if (! eventCodeEntry.specialCases.isNullOrEmpty()) {
                         // specialCases is a list
                         for (case: SpecialCase in eventCodeEntry.specialCases) {
@@ -104,7 +104,7 @@ class MmgUtil  {
                     } // .if
 
                     if (mmg2KeyNames.isNullOrEmpty()) {
-                        // no special case matched this jurisdiction, so get the regular mmg map list
+                        // no special case matched this jurisdiction, so get the regular mmg map list for the profile
                         mmg2KeyNames = eventCodeEntry.mmgMaps[msh21_3In]  //returns a list of mmg keys
                     }
 
