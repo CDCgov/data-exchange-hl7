@@ -128,10 +128,9 @@ import java.util.concurrent.Executors
                         jedis.set(key, gson.toJson(mresult))
 
                     }
-                    //jedis.del("mmg:arboviral_v1")
-                    //context.logger.info("json reslut:" + jedis.get("mmg:babesiosis_v1.1"))
+
                 }
-              //  context.logger.info("json reslut:" + jedis.get("mmg:babesiosis_v1.1"))
+
             } catch (e: Exception) {
                 context.logger.info("Failure in MMGATREAD function : ${e.printStackTrace()} ")
                 throw e
