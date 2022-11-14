@@ -46,7 +46,7 @@ class MmgatClient {
             HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid)
             /* End of certificates fix*/
         } catch (e: Exception) {
-            println(e.printStackTrace())
+            throw Exception("Error in trustAllHosts method: +${e.printStackTrace()}")
         }
     }
 
