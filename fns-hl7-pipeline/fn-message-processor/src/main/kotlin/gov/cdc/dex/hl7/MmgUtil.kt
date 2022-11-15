@@ -65,7 +65,7 @@ class MmgUtil  {
 
             val mmg1 : MMG
             // make a list to hold all the mmgs we need
-            val mmgs : MutableList<MMG> = mutableListOf()
+            var mmgs : Array<MMG> = arrayOf()
 
             var msh21_3In = msh21_3
 
@@ -79,7 +79,7 @@ class MmgUtil  {
                     val rKey = REDIS_MMG_PREFIX + msh21_2
                     // TODO: add exceptions // logger.info("Pulling MMG: key: ${rKey}")
                     mmg1 = gson.fromJson(jedis.get(rKey), MMG::class.java)
-                    mmgs.add(mmg1)
+                    mmgs += mmg1
 
             } // .else
 
@@ -111,7 +111,7 @@ class MmgUtil  {
                     // add the condition-specific mmgs to the list
                     if (! mmg2KeyNames.isNullOrEmpty()) {
                         for (keyName: String in mmg2KeyNames) {
-                            mmgs.add(gson.fromJson(jedis.get(keyName), MMG::class.java))
+                            mmgs += gson.fromJson(jedis.get(keyName), MMG::class.java)
                         }
                     }
 
@@ -120,7 +120,7 @@ class MmgUtil  {
  
             } // .if
 
-            return mmgs.toTypedArray()
+            return mmgs
         } // .getMMG 
 
     } // .companion
