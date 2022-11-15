@@ -30,4 +30,8 @@ object JsonHelper {
         }
         return e
     }
+	 fun getValueFromJsonAndBase64Decode(path: String, element: JsonElement): String {
+        val encodedValue= getValueFromJson(path,element).asString
+        return String(Base64.getDecoder().decode(encodedValue))
+    }
 }
