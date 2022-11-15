@@ -17,21 +17,21 @@ class Transformer  {
 
             val messageLines = getMessageLines(hl7Content)
 
-            val blocks = mmgs.flatMap { it.blocks } // .blocks
+            val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
 
-            val (blocksSingle, blocksNonSingle) = blocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+            val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             
             // ----------------------------------------------------
             //  ------------- BLOCKS SINGLE
             // ----------------------------------------------------
 
-            val elemsBlocksSingle = blocksSingle.flatMap { it.elements } // .elemsBlocksSingle
+            val mmgElemsBlocksSingle = mmgBlocksSingle.flatMap { it.elements } // .mmgElemsBlocksSingle
             
 
             //  ------------- MSH
             // ----------------------------------------------------
-            val mmgMsh = elemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "MSH" }
+            val mmgMsh = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "MSH" }
 
             val mshMap = mmgMsh.map { el -> 
 
@@ -48,7 +48,8 @@ class Transformer  {
 
             //  ------------- PID
             // ----------------------------------------------------
-            val mmgPid = elemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "PID" }
+            val mmgPid = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "PID" }
+
             val pidMap = mmgPid.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
@@ -64,7 +65,8 @@ class Transformer  {
 
             //  ------------- OBR
             // ----------------------------------------------------
-            val mmgObr = elemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBR" }
+            val mmgObr = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBR" }
+
             val obrMap = mmgObr.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
@@ -80,7 +82,8 @@ class Transformer  {
             
             //  ------------- OBX
             // ----------------------------------------------------
-            val mmgObx = elemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBX" }
+            val mmgObx = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBX" }
+
             val obxMap = mmgObx.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
@@ -107,12 +110,13 @@ class Transformer  {
             //  ------------- BLOCKS NON SINGLE
             // ----------------------------------------------------
             // TODO....
+            //val mmgBlocksNonSingle = blocksNonSingle.flatMap { it.elements } // .elemsBlocksSingle
 
             
-            val mmgModel = mshMap + pidMap + obrMap + obxMap
+            val mmgModelBlocksSingle = mshMap + pidMap + obrMap + obxMap
 
-            logger.info("MMG Model: --> ${mmgModel}")
-            return mmgModel
+            logger.info("MMG Model (mmgModelBlocksSingle): --> ${mmgModelBlocksSingle}")
+            return mmgModelBlocksSingle
         } // .hl7ToJsonModel 
 
         private fun getMessageLines(hl7Content: String): List<String> {
