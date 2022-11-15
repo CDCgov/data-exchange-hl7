@@ -7,8 +7,9 @@ import gov.cdc.vocab.service.bean.ValueSetConcept
 import java.net.MalformedURLException
 
 class VocabClient {
-     private var service: VocabService? = null
-     private val serviceUrl = "https://phinvads.cdc.gov/vocabService/v2"
+    private var service: VocabService? = null
+    private val serviceUrl = "https://phinvads.cdc.gov/vocabService/v2"
+
 
     init {
         try {
@@ -32,23 +33,24 @@ class VocabClient {
     fun getValueSetKey(valueSet: ValueSet): StringBuilder {
         val vocabKey = StringBuilder()
         vocabKey.append(valueSet.code)
-      //  val valueSetVersionResult = service!!.getValueSetVersionByValueSetOidAndVersionNumber(valueSet.oid, 0)
-       // val version = valueSetVersionResult.valueSetVersion ?.versionNumber
-       // vocabKey.append("_").append("$version")
-       // println("VocabKey :${vocabKey}")
+        //  val valueSetVersionResult = service!!.getValueSetVersionByValueSetOidAndVersionNumber(valueSet.oid, 0)
+        // val version = valueSetVersionResult.valueSetVersion ?.versionNumber
+        // vocabKey.append("_").append("$version")
+        // println("VocabKey :${vocabKey}")
         return vocabKey
     }
 
     @Throws(Exception::class)
     fun  setValueSetConcepts(valuesetConcepts: List<ValueSetConcept>,  key: String) {
-
+        val vocabKey = "vocab:$key"
         RedisUtility().redisConnection().use { jedis ->
             try {
-                 println("Cache Response : " + jedis.ping())
+                println("Cache Response : " + jedis.ping())
                 valuesetConcepts.let {
                     for (i in valuesetConcepts) {
                         val vkey = i.conceptCode
-                        jedis.hset(key, vkey, i.toString())
+                        jedis.hset(vocabKey, vkey, i.toString())
+                        //jedis.del(vocabKey)
                         // println("Valueset in Redis:" + key.toString() + "-" + vkey + "-" + i.toString())
                     }
                 }
