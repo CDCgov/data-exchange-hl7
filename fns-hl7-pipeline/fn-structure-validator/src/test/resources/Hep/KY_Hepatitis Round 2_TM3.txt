@@ -1,0 +1,78 @@
+MSH|^~\&|NBS^2.16.840.1.114222.4.5.1^ISO|KYDOH^2.16.840.1.114222.4.1.3655^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20220318151646.684||ORU^R01^ORU_R01|NOT10083001KY012022|P|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Hepatitis_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||PSN10252008KY01^^^NBS&2.16.840.1.114222.4.5.1&ISO||~^^^^^^S||20210115000000.000|M||2054-5^Black or African American^2.16.840.1.113883.6.238|^^^21^42001^^^^21145|||||||||||2186-5^Not Hispanic or Latino^2.16.840.1.113883.6.238
+NK1|1|||||||||||||||||||||||||||2186-5^Not Hispanic or Latino^2.16.840.1.113883.6.238|||||||2106-3^White^2.16.840.1.113883.6.238~2131-1^Other Race^2.16.840.1.113883.6.238
+OBR|1|123^456^789^1011|CAS10168004KY01^NBS^2.16.840.1.114222.4.5.1^ISO|68991-9^Epidemiologic Information^LN|||20210222135150.667|||||||||||||||20220318151645.308|||C||||||10104^Hepatitis B Viral Infection, Perinatal^2.16.840.1.114222.4.5.277
+OBX|1|SN|1920-8^AST/SGOT (LN)^2.16.840.1.113883.6.1^11920_8^AST [SGOT] Result^L|2|^100||||||F
+OBX|2|SN|1742-6^ALT/SGPT (LN)^2.16.840.1.113883.6.1^1742_6^ALT [SGPT] Result^L|1|^100||||||F
+OBX|3|CWE|5199-5^supplemental anti-HCV assay (RIBA)^2.16.840.1.113883.6.1^5199_5^Supplemental anti-HCV Assay Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|4|CWE|78746-5^Country of Birth^2.16.840.1.113883.6.1^DEM126^Country of Birth^L||USA^UNITED STATES^1.0.3166.1||||||F
+OBX|5|ST|77969-4^Jurisdiction Code^2.16.840.1.113883.6.1^INV107^Jurisdiction^L||McCracken County||||||F
+OBX|6|DT|77995-9^Date Reported^2.16.840.1.113883.6.1^INV111^Date of Report^L||20210116||||||F
+OBX|7|CWE|48766-0^Reporting Source Type Code^2.16.840.1.113883.6.1^INV112^Reporting Source Type^L||1^Hospital^2.16.840.1.113883.12.406||||||F
+OBX|8|ST|52831-5^Reporting Source Zip Code^2.16.840.1.113883.6.1^INV118^Zip^L||42003||||||F
+OBX|9|TS|77972-8^Earliest Date Reported to County^2.16.840.1.113883.6.1^INV120^Earliest Date Reported to County^L||20210116000000.000||||||F
+OBX|10|TS|77973-6^Earliest Date Reported to State^2.16.840.1.113883.6.1^INV121^Earliest Date Reported to State^L||20210116000000.000||||||F
+OBX|11|CWE|77974-4^Hospitalized^2.16.840.1.113883.6.1^INV128^Was the patient hospitalized for this illness?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|12|TS|8656-1^Admission Date^2.16.840.1.113883.6.1^INV132^Admission Date^L||20210115000000.000||||||F
+OBX|13|TS|8649-6^Discharge Date^2.16.840.1.113883.6.1^INV133^Discharge Date^L||20210124000000.000||||||F
+OBX|14|SN|78033-8^Duration of Hospital Stay in Days^2.16.840.1.113883.6.1^INV134^Total Duration of Stay in the Hospital (in days)^L||^9||||||F
+OBX|15|TS|77975-1^Diagnosis Date^2.16.840.1.113883.6.1^INV136^Diagnosis Date^L||20210116000000.000||||||F
+OBX|16|TS|11368-8^Date of Illness Onset^2.16.840.1.113883.6.1^INV137^Illness Onset Date^L||20210116000000.000||||||F
+OBX|17|TS|77976-9^Illness End Date^2.16.840.1.113883.6.1^INV138^Illness End Date^L||20210124000000.000||||||F
+OBX|18|SN|77977-7^Illness Duration^2.16.840.1.113883.6.1^INV139^Illness Duration^L||^8|d^Day^2.16.840.1.113883.6.8|||||F
+OBX|19|CWE|77978-5^Subject Died^2.16.840.1.113883.6.1^INV145^Did the patient die from this illness?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|20|DT|77979-3^Case Investigation Start Date^2.16.840.1.113883.6.1^INV147^Investigation Start Date^L||20210116||||||F
+OBX|21|CWE|77980-1^Case Outbreak Indicator^2.16.840.1.113883.6.1^INV150^Is this case part of an outbreak?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|22|CWE|77982-7^Case Disease Imported Code^2.16.840.1.113883.6.1^INV152^Where was the disease acquired?^L||PHC244^Indigenous^2.16.840.1.114222.4.5.274||||||F
+OBX|23|CWE|77989-2^Transmission Mode^2.16.840.1.113883.6.1^INV157^Transmission Mode^L||417409004^Transplacental transmission^2.16.840.1.113883.6.96||||||F
+OBX|24|CWE|77990-0^Case Class Status Code^2.16.840.1.113883.6.1^INV163^Case Status^L||PHC178^Not a Case^2.16.840.1.114222.4.5.274||||||F
+OBX|25|SN|77991-8^MMWR Week^2.16.840.1.113883.6.1^INV165^MMWR Week^L||^03||||||F
+OBX|26|DT|77992-6^MMWR Year^2.16.840.1.113883.6.1^INV166^MMWR Year^L||2021||||||F
+OBX|27|ST|77993-4^State Case Identifier^2.16.840.1.113883.6.1^INV173^State Case ID^L||HEPBPERTC03||||||F
+OBX|28|DT|77994-2^Date CDC Was First Verbally Notified of This Case^2.16.840.1.113883.6.1^INV176^Date CDC Was First Verbally Notified of This Case^L||20210220||||||F
+OBX|29|ST|74549-7^Person Reporting to CDC - Name^2.16.840.1.113883.6.1^INV190^Person Reporting to CDC - Name^L||Kristy Bolen||||||F
+OBX|30|ST|74548-9^Person Reporting to CDC - Phone Number^2.16.840.1.113883.6.1^INV191^Person Reporting to CDC - Phone Number^L||606-571-2802||||||F
+OBX|31|ST|77997-5^Legacy Case Identifier^2.16.840.1.113883.6.1^INV200^Legacy Case ID^L||HEP_B_PER_TC03_20210215||||||F
+OBX|32|SN|77998-3^Age at case investigation^2.16.840.1.113883.6.1^INV2001^Reported Age^L||^1|mo^month [time]^2.16.840.1.113883.6.8|||||F
+OBX|33|CWE|77983-5^Country of Usual Residence^2.16.840.1.113883.6.1^INV501^Country of Usual Residence^L||USA^UNITED STATES^1.0.3166.1||||||F
+OBX|34|CWE|67098-4^Reason for Testing^2.16.840.1.113883.6.1^INV575^Reason for Testing (check all that apply)^L||PHC311^Prenatal screening^2.16.840.1.114222.4.5.274||||||F
+OBX|35|CWE|INV576^Symptomatic^2.16.840.1.114222.4.5.232^INV576^Is patient symptomatic?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|36|CWE|INV578^Jaundiced (Symptom)^2.16.840.1.114222.4.5.232^INV578^Was the patient jaundiced?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|37|CWE|INV650^Previously Aware of Condition^2.16.840.1.114222.4.5.232^INV650^Was the patient aware s/he had hepatitis prior to lab testing?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|38|CWE|INV651^Provider of Care for Condition^2.16.840.1.114222.4.5.232^INV651^Does the patient have a provider of care for hepatitis?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|39|DT|INV826^Liver Enzyme Test Result Date^2.16.840.1.114222.4.5.232^INV826^Specimen Collection Date (ALT)^L|1|20210202||||||F
+OBX|40|DT|INV826^Liver Enzyme Test Result Date^2.16.840.1.114222.4.5.232^INV826b^Specimen Collection Date (AST)^L|2|20210220||||||F
+OBX|41|SN|INV827^Liver Enzyme Upper Limit Normal^2.16.840.1.114222.4.5.232^INV827^Test Result Upper Limit Normal (ALT)^L|1|^100||||||F
+OBX|42|SN|INV827^Liver Enzyme Upper Limit Normal^2.16.840.1.114222.4.5.232^INV827b^Test Result Upper Limit Normal (AST)^L|2|^100||||||F
+OBX|43|CWE|INV887^Diabetes^2.16.840.1.114222.4.5.232^INV887^Does the patient have diabetes?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|44|CWE|LP38316-3^total anti-HAV^2.16.840.1.113883.6.1^LP38316_3^total anti-HAV Result^L||260385009^Negative^2.16.840.1.113883.6.96||||||F
+OBX|45|CWE|LP38318-9^IgM anti-HAV^2.16.840.1.113883.6.1^LP38318_9^IgM anti-HAV Result^L||260385009^Negative^2.16.840.1.113883.6.96||||||F
+OBX|46|CWE|LP38320-5^HEP B Nucleic Acid Test (NAT)^2.16.840.1.113883.6.1^LP38320_5^HEP B DNA/(NAT) Result^L||10828004^Positive^2.16.840.1.113883.6.96||||||F
+OBX|47|CWE|LP38323-9^total anti-HBc^2.16.840.1.113883.6.1^LP38323_9^total anti-HBc Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|48|CWE|LP38325-4^IgM anti-HBc^2.16.840.1.113883.6.1^LP38325_4^IgM anti-HBc Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|49|CWE|LP38329-6^HBeAg^2.16.840.1.113883.6.1^LP38329_6^HBeAg Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|50|CWE|LP38331-2^HBsAg^2.16.840.1.113883.6.1^LP38331_2^HBsAg Result^L||10828004^Positive^2.16.840.1.113883.6.96||||||F
+OBX|51|CWE|LP38332-0^total anti-HCV^2.16.840.1.113883.6.1^LP38332_0^total anti-HCV Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|52|CWE|LP38335-3^HCV RNA^2.16.840.1.113883.6.1^LP38335_3^HCV RNA Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|53|CWE|LP38345-2^total anti-HDV^2.16.840.1.113883.6.1^LP38345_2^anti-HDV Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|54|CWE|LP38350-2^total anti-HEV^2.16.840.1.113883.6.1^LP38350_2^anti-HEV Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|55|CWE|MTH109^Mothers Birth Country^2.16.840.1.114222.4.5.232^MTH109^What is the birth country of the mother?^L||MYS^MALAYSIA^1.0.3166.1||||||F
+OBX|56|CWE|MTH161^Mother Born Outside U.S.^2.16.840.1.114222.4.5.232^MTH161^Was Mother born outside of United States?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|57|CWE|MTH162^Mother Confirmed Positive Prior to Delivery^2.16.840.1.114222.4.5.232^MTH162^Was the mother confirmed positive prior to or at the time of delivery?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|58|DT|MTH164^Mother Confirmed Positive Date^2.16.840.1.114222.4.5.232^MTH164^Date of Earliest Positive Test Result^L||20190119||||||F
+OBX|59|ST|MTH171^Other Race for Mother^2.16.840.1.114222.4.5.232^MTH171^Other Race for Mother (specify)^L||West Indian||||||F
+OBX|60|CWE|77966-0^Reporting State^2.16.840.1.113883.6.1^NOT109^Reporting State^L||21^Kentucky^2.16.840.1.113883.6.92||||||F
+OBX|61|CWE|77967-8^Reporting County^2.16.840.1.113883.6.1^NOT113^Reporting County^L||21145^McCracken, KY^2.16.840.1.113883.6.93||||||F
+OBX|62|CWE|77968-6^National Reporting Jurisdiction^2.16.840.1.113883.6.1^NOT116^National Reporting Jurisdiction^L||21^Kentucky^2.16.840.1.113883.6.92||||||F
+OBX|63|CWE|77965-2^Immediate National Notifiable Condition^2.16.840.1.113883.6.1^NOT120^Immediate National Notifiable Condition^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|64|SN|VAC132^Total Doses of Vaccine^2.16.840.1.114222.4.5.232^VAC132^How many doses of Hepatitis B vaccine did the child receive?^L||^2||||||F
+OBX|65|CWE|VAC143^Ever Receive Immune Globulin^2.16.840.1.114222.4.5.232^VAC143^Did the child receive hepatitis B immune globulin (HBIG)?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|66|DT|VAC144^Date of Last IG Dose^2.16.840.1.114222.4.5.232^VAC144^If yes, on what date did the child receive HBIG?^L||20210116||||||F
+OBX|67|CWE|77984-3^Country of Exposure^2.16.840.1.113883.6.1^INV502^Country of Exposure^L|1|USA^UNITED STATES^1.0.3166.1||||||F
+OBX|68|CWE|77985-0^State or Province of Exposure^2.16.840.1.113883.6.1^INV503^State or Province of Exposure^L|1|35^New Mexico^2.16.840.1.113883.6.92||||||F
+OBX|69|ST|77986-8^City of Exposure^2.16.840.1.113883.6.1^INV504^City of Exposure^L|1|Albuquerque||||||F
+OBX|70|DT|VAC103^Vaccine Administered Date^2.16.840.1.114222.4.5.232^VAC103^Date of Vaccination^L|1|20210115||||||F
+OBX|71|SN|VAC120^Vaccine Dose Number^2.16.840.1.114222.4.5.232^VAC120^Dose Number^L|1|^1||||||F
+OBX|72|DT|VAC103^Vaccine Administered Date^2.16.840.1.114222.4.5.232^VAC103^Date of Vaccination^L|2|20210115||||||F
+OBX|73|SN|VAC120^Vaccine Dose Number^2.16.840.1.114222.4.5.232^VAC120^Dose Number^L|2|^2||||||F
+OBX|74|DT|77970-2^Date First Reported PHD^2.16.840.1.113883.6.1^INV177^Date First Reported PHD^L||20210116||||||F
