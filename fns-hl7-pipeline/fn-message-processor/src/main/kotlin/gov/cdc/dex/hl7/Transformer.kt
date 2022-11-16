@@ -2,6 +2,7 @@ package gov.cdc.dex.hl7
 
 import org.slf4j.LoggerFactory
 import gov.cdc.dex.redisModels.MMG
+import gov.cdc.dex.util.StringUtils
 
 class Transformer  {
 
@@ -13,14 +14,24 @@ class Transformer  {
         //? @Throws(Exception::class) 
 
         fun hl7ToJsonModel(hl7Content: String, mmgs: Array<MMG>): Map<String, String> {
-            // TODO: could there be multiple MSH, PID ? -> TODO: filter out and keep the one's from the condition MMG 
 
-            val messageLines = getMessageLines(hl7Content)
+            // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
+            if ( mmgs.size > 1 ) { 
+                for ( index in 0..mmgs.size - 2) { // except the last one
+                    mmgs[index].blocks = mmgs[index].blocks.filter { block ->
+                        block.type == MMG_BLOCK_TYPE_SINGLE && block.elements.any { it ->
+                            it.mappings.hl7v251.segmentType == "MSH" || it.mappings.hl7v251.segmentType == "PID"
+                        } // .it
+                    } // .filter
+                } // .for
+            } // .if
+ 
 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
 
             val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
+            val messageLines = getMessageLines(hl7Content)
             
             // ----------------------------------------------------
             //  ------------- BLOCKS SINGLE
@@ -42,7 +53,7 @@ class Transformer  {
 
                 val segmentData = if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition] else ""   
 
-                el.name to segmentData 
+                StringUtils.normalizeString(el.name) to segmentData 
             }.toMap() // .mmgMsh.map
 
 
@@ -59,7 +70,7 @@ class Transformer  {
 
                 val segmentData = if (pidLineParts.size > dataFieldPosition) pidLineParts[dataFieldPosition] else ""  
 
-                el.name to segmentData 
+                StringUtils.normalizeString(el.name) to segmentData 
             }.toMap() // .mmgPid.map
 
 
@@ -76,7 +87,7 @@ class Transformer  {
                 // logger.info("obrLineParts: $obrLineParts")
                 val segmentData = if (obrLineParts.size > dataFieldPosition) obrLineParts[dataFieldPosition] else ""  
 
-                el.name to segmentData 
+                StringUtils.normalizeString(el.name) to segmentData 
             }.toMap() // .mmgObr.map
 
             
@@ -102,7 +113,7 @@ class Transformer  {
                 
                 val segmentData = if (obxParts.size > dataFieldPosition) obxParts[dataFieldPosition] else ""  
 
-                el.name to segmentData
+                StringUtils.normalizeString(el.name) to segmentData
             }.toMap() // .mmgPid.map
 
 

@@ -117,7 +117,6 @@ class MmgUtil  {
 
                 } // .if 
 
- 
             } // .if
 
             return mmgs
