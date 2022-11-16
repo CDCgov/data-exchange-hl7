@@ -169,11 +169,13 @@ class MpTest {
         val mmgs = arrayOf(mmg1)
 
         // hl7
-        val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val hl7FilePath = "/TBRD_V1.0.2_TM_TC01.hl7"
         val hl7Content = this::class.java.getResource(hl7FilePath).readText()
         
 
-        Transformer.hl7ToJsonModel(hl7Content, mmgs)
+        Transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+
+        Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
 
     } // .testTransformerHl7ToJsonModel
 

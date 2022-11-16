@@ -79,7 +79,10 @@ class Function {
                         context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
                     }
 
-                    Transformer.hl7ToJsonModel(hl7Content, mmgs)
+                    
+                    Transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+
+                    Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
 
 
                 } catch (e: Exception) {
