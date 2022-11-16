@@ -6,6 +6,8 @@ import gov.cdc.dex.redisModels.Block
 // import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.util.StringUtils
 
+import com.google.gson.Gson
+
 class Transformer  {
 
     companion object {
@@ -23,15 +25,17 @@ class Transformer  {
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
+            logger.info("mmgs.size: --> ${mmgs.size}")
 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
+            logger.info("mmgBlocks.size: --> ${mmgBlocks.size}")
 
             val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             val messageLines = getMessageLines(hl7Content)
 
             val mmgElemsBlocksSingle = mmgBlocksSingle.flatMap { it.elements } // .mmgElemsBlocksSingle
-            
+            logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}")
 
             //  ------------- MSH
             // ----------------------------------------------------
@@ -111,8 +115,9 @@ class Transformer  {
 
             
             val mmgModelBlocksSingle = mshMap + pidMap + obrMap + obxMap
-
-            logger.info("MMG Model (mmgModelBlocksSingle): --> ${mmgModelBlocksSingle}")
+            
+            logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}")
+            logger.info("MMG Model (mmgModelBlocksSingle): --> ${Gson().toJson(mmgModelBlocksSingle)}")
             return mmgModelBlocksSingle
         } // .hl7ToJsonModelBlocksSingle 
         
@@ -160,7 +165,7 @@ class Transformer  {
                 }.groupBy( { it.first }, { it.second } )
 
 
-                val blockElementsNameDataMap = msgLinesByBlockNumMap.flatMap { (_, lines) -> 
+                val blockElementsNameDataTupMap = msgLinesByBlockNumMap.flatMap { (_, lines) -> 
                     lines.map { line -> 
                         val lineParts = line.split("|")
                         val dataFieldPosition = 5 //element.mappings.hl7v251.fieldPosition
@@ -171,8 +176,8 @@ class Transformer  {
 
                         StringUtils.normalizeString(elName) to segmentData
                     } // .lines
-                } // .blockElementsNameDataMap
-                // blockElementsNameDataMap:
+                } // .blockElementsNameDataTupMap
+                // blockElementsNameDataTupMap:
                 // {
                 //      repeating_variables_for_disease_exposure=[
                 //          (country_of_exposure, USA^UNITED STATES OF AMERICA^ISO3166_1), 
@@ -182,18 +187,34 @@ class Transformer  {
                 //      ]
                 // }
 
-                // blockElementsNameDataMap.map TODO:...
+                // val result = blockElementsNameDataTupMap.map { (block, elemsTupArr) -> 
+
+                //     val elemsArrOfMaps = elemsTupArr.map { elNameDataTup -> 
+                //         val (elName, elData) = elNameDataTup()
+                //         Map(elName, elData)
+                //     }.reduce { acc, map ->
+                //         val res = acc.toMutableMap()
+                //         map.forEach { (key, value) ->
+                //             res[key] = res.getOrDefault(key, 0) + value
+                //         }
+                //         res
+                //     } // .reduce
+
+                //     block to elemsArrOfMaps
+                // }//.toMap() // .blockElementsNameDataTupMap
+
+                // logger.info("result: --> ${result}")
 
 
 
-                StringUtils.normalizeString(block.name) to blockElementsNameDataMap
+                StringUtils.normalizeString(block.name) to blockElementsNameDataTupMap
             }.toMap() // .blocksNonSingleModel
 
             
             // for ((key, value) in blocksNonSingleModel) {
             //     logger.info("value --> ${value}")
             // }
-            logger.info("blocksNonSingleModel: --> ${blocksNonSingleModel}")
+            logger.info("blocksNonSingleModel: --> ${Gson().toJson(blocksNonSingleModel)}\n")
 
             return blocksNonSingleModel
         } // .hl7ToJsonModelBlocksNonSingle 
@@ -221,7 +242,7 @@ class Transformer  {
 
 
         private fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
-        // TODO test 
+        // TODO FIX as is not removing the MSH from the mmgs
 
             if ( mmgs.size > 1 ) { 
                 for ( index in 0..mmgs.size - 2) { // except the last one

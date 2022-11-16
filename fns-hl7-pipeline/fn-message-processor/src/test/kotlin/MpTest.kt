@@ -164,11 +164,11 @@ class MpTest {
         val mmg1 = gson.fromJson(mmg1Json, MMG::class.java)
 
         // mmg2 TODO:
-        // val mmg1Path = "/Generic Version 2.0.1.json"
-        // val mmg1Json = this::class.java.getResource(mmg1Path).readText()
-        // val mmg1 = gson.fromJson(mmg1Json, MMG::class.java)
+        val mmg2Path = "/TBRD.json"
+        val mmg2Json = this::class.java.getResource(mmg2Path).readText()
+        val mmg2 = gson.fromJson(mmg2Json, MMG::class.java)
 
-        val mmgs = arrayOf(mmg1)
+        val mmgs = arrayOf(mmg1, mmg2)
 
         // hl7
         val hl7FilePath = "/TBRD_V1.0.2_TM_TC01.hl7"
