@@ -19,19 +19,10 @@ class Transformer  {
         // --------------------------------------------------------------------------------------------------------
         //? @Throws(Exception::class) 
         
-        fun hl7ToJsonModelBlocksSingle(hl7Content: String, mmgs: Array<MMG>): Map<String, String> {
+        fun hl7ToJsonModelBlocksSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, String> {
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
-            // TODO test 
-            if ( mmgs.size > 1 ) { 
-                for ( index in 0..mmgs.size - 2) { // except the last one
-                    mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                        block.type == MMG_BLOCK_TYPE_SINGLE && block.elements.any { it ->
-                            it.mappings.hl7v251.segmentType != "MSH" || it.mappings.hl7v251.segmentType != "PID"
-                        } // .it
-                    } // .filter
-                } // .for
-            } // .if
+            val mmgs = getMmgsFiltered(mmgsArr)
  
 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
@@ -135,19 +126,10 @@ class Transformer  {
         //  ------------- hl7ToJsonModelBlocksNonSingle ------------- BLOCKS SINGLE
         // --------------------------------------------------------------------------------------------------------
         
-        fun hl7ToJsonModelBlocksNonSingle(hl7Content: String, mmgs: Array<MMG>): Map<String, List<Pair<String, String>>> {
+        fun hl7ToJsonModelBlocksNonSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, List<Pair<String, String>>> {
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
-            // TODO test 
-            if ( mmgs.size > 1 ) { 
-                for ( index in 0..mmgs.size - 2) { // except the last one
-                    mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                        block.type == MMG_BLOCK_TYPE_SINGLE && block.elements.any { it ->
-                            it.mappings.hl7v251.segmentType != "MSH" || it.mappings.hl7v251.segmentType != "PID"
-                        } // .it
-                    } // .filter
-                } // .for
-            } // .if
+            val mmgs = getMmgsFiltered(mmgsArr)
  
 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
@@ -221,8 +203,10 @@ class Transformer  {
         // --------------------------------------------------------------------------------------------------------
 
         private fun getMessageLines(hl7Content: String): List<String> {
+
             return hl7Content.split("\n")
         } // .getMessageLines
+
 
         private fun getObxIdToElNameMap(blocks: List<Block>): Map<String, String> {
 
@@ -233,21 +217,32 @@ class Transformer  {
             }.toMap()
         } // .getObxIdToElNameMap
 
-        // TODO:
-        // private fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
 
+        private fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
+        // TODO test 
 
-        // } // .getMmgsFiltered
+            if ( mmgs.size > 1 ) { 
+                for ( index in 0..mmgs.size - 2) { // except the last one
+                    mmgs[index].blocks = mmgs[index].blocks.filter { block ->
+                        block.type == MMG_BLOCK_TYPE_SINGLE && block.elements.any { it ->
+                            it.mappings.hl7v251.segmentType != "MSH" || it.mappings.hl7v251.segmentType != "PID"
+                        } // .it
+                    } // .filter
+                } // .for
+            } // .if
+
+            return mmgs
+        } // .getMmgsFiltered
 
     } // .companion object
 } // .Transformer
 
 
 
-    /*
-    Element(ordinal=1, name=Message Profile Identifier, dataType=Text, isUnitOfMeasure=false, priority=R, 
-    isRepeat=true, repetitions=2, mayRepeat=Y/2, valueSetCode=, valueSetVersionNumber=null, codeSystem=N/A, 
-    mappings=Mapping(hl7v251=HL7Mapping(
-    legacyIdentifier=NOT115, identifier=N/A: MSH-21, dataType=EI, segmentType=MSH, obrPosition=1, fieldPosition=21, componentPosition=-1, 
-    usage=R, cardinality=[2..2], repeatingGroupElementType=NO)))
-    */
+/*
+Element(ordinal=1, name=Message Profile Identifier, dataType=Text, isUnitOfMeasure=false, priority=R, 
+isRepeat=true, repetitions=2, mayRepeat=Y/2, valueSetCode=, valueSetVersionNumber=null, codeSystem=N/A, 
+mappings=Mapping(hl7v251=HL7Mapping(
+legacyIdentifier=NOT115, identifier=N/A: MSH-21, dataType=EI, segmentType=MSH, obrPosition=1, fieldPosition=21, componentPosition=-1, 
+usage=R, cardinality=[2..2], repeatingGroupElementType=NO)))
+*/
