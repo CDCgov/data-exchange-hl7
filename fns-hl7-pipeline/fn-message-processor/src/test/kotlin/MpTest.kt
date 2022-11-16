@@ -163,8 +163,10 @@ class MpTest {
         val mmg1Json = this::class.java.getResource(mmg1Path).readText()
         val mmg1 = gson.fromJson(mmg1Json, MMG::class.java)
 
-        // mmg2
-        // TODO
+        // mmg2 TODO:
+        // val mmg1Path = "/Generic Version 2.0.1.json"
+        // val mmg1Json = this::class.java.getResource(mmg1Path).readText()
+        // val mmg1 = gson.fromJson(mmg1Json, MMG::class.java)
 
         val mmgs = arrayOf(mmg1)
 
@@ -178,15 +180,6 @@ class MpTest {
         Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
 
     } // .testTransformerHl7ToJsonModel
-
-
-
-
-
-
-
-
-
 
 
 

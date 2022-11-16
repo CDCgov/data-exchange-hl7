@@ -160,20 +160,33 @@ class Transformer  {
                 }.groupBy( { it.first }, { it.second } )
 
 
-                val elemsDataTup = msgLinesByBlockNumMap.flatMap { (_, lines) -> 
+                val blockElementsNameDataMap = msgLinesByBlockNumMap.flatMap { (_, lines) -> 
                     lines.map { line -> 
                         val lineParts = line.split("|")
                         val dataFieldPosition = 5 //element.mappings.hl7v251.fieldPosition
-                        val segmentData = if (lineParts.size > dataFieldPosition) lineParts[dataFieldPosition] else "" 
-                        val obxIdentifier = lineParts[3].split("^")[0]
+                        val segmentData = if (lineParts.size > dataFieldPosition) lineParts[dataFieldPosition] else ""
 
+                        val obxIdentifier = lineParts[3].split("^")[0]
                         val elName = obxIdToElNameMap.getOrElse(obxIdentifier) { "TODO:throw_error?" }
 
                         StringUtils.normalizeString(elName) to segmentData
                     } // .lines
-                } // .elemsDataTup
+                } // .blockElementsNameDataMap
+                // blockElementsNameDataMap:
+                // {
+                //      repeating_variables_for_disease_exposure=[
+                //          (country_of_exposure, USA^UNITED STATES OF AMERICA^ISO3166_1), 
+                //          (state_or_province_of_exposure, 13^Georgia^FIPS5_2), 
+                //          (city_of_exposure, Wadley), 
+                //          (county_of_exposure, Jefferson)
+                //      ]
+                // }
 
-                StringUtils.normalizeString(block.name) to elemsDataTup
+                // blockElementsNameDataMap.map TODO:...
+
+
+
+                StringUtils.normalizeString(block.name) to blockElementsNameDataMap
             }.toMap() // .blocksNonSingleModel
 
             
