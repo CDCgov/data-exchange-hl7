@@ -36,7 +36,7 @@ class Transformer  {
 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
 
-            val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+            val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             val messageLines = getMessageLines(hl7Content)
             
@@ -152,7 +152,7 @@ class Transformer  {
 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
 
-            val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+            val (_, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             val messageLines = getMessageLines(hl7Content)
 
@@ -188,7 +188,7 @@ class Transformer  {
                 }.groupBy( { it.first }, { it.second } )
 
 
-                val elemsDataTup = msgLinesByBlockNumMap.flatMap { (blockNum, lines) -> 
+                val elemsDataTup = msgLinesByBlockNumMap.flatMap { (_, lines) -> 
                     lines.map { line -> 
                         val lineParts = line.split("|")
                         val dataFieldPosition = 5 //element.mappings.hl7v251.fieldPosition

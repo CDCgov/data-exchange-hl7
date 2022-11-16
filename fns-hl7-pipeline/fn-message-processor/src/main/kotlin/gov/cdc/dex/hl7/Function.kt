@@ -41,12 +41,11 @@ class Function {
         // context.logger.info("received event: --> $message") 
 
         // set up the 2 out event hubs
-        // val evHubConnStr = System.getenv("EventHubConnectionString")
-        // val eventHubSendOkName = System.getenv("EventHubSendOkName")
+        val evHubConnStr = System.getenv("EventHubConnectionString")
+        val eventHubSendOkName = System.getenv("EventHubSendOkName")
         // val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
 
-        // val evHubSender = EventHubSender(evHubConnStr)
-        // val ehSender = EventHubSender(evHubConnStr)
+        val evHubSender = EventHubSender(evHubConnStr)
 
         // 
         // Process each Event Hub Message
@@ -75,14 +74,27 @@ class Function {
                 try {
                     // get MMG(s) for the message:
                     val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
-                    mmgs.forEach {
-                        context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
-                    }
+                    // mmgs.forEach {
+                    //     context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
+                    // }
 
                     
-                    Transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+                    val mmgModelBlocksSingle = Transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
 
-                    Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+                    val mmgModelBlocksNonSingle = Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+
+                    val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 
+                    context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${mmgModel}")
+
+                    val processMD = MpProcessMetadata(status="MMG_MODEL_OK", report=mmgModel) // TODO: MMG_MODEL_OK
+                    processMD.startProcessTime = startTime
+                    processMD.endProcessTime = Date().toIsoString()
+
+                    metadata.addArrayElement("processes", processMD)
+                    
+                    val ehDestination = eventHubSendOkName
+                    evHubSender.send(evHubTopicName=ehDestination, message=Gson().toJson(inputEvent))
+                    context.logger.info("Processed for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
 
 
                 } catch (e: Exception) {
