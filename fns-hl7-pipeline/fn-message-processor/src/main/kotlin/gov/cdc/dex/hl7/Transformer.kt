@@ -23,7 +23,6 @@ class Transformer  {
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
- 
 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
 
@@ -121,13 +120,12 @@ class Transformer  {
         // --------------------------------------------------------------------------------------------------------
         //  ------------- hl7ToJsonModelBlocksNonSingle ------------- BLOCKS NON SINGLE
         // --------------------------------------------------------------------------------------------------------
-        
+        //? @Throws(Exception::class) 
         fun hl7ToJsonModelBlocksNonSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, List<Pair<String, String>>> {
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
  
-
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
 
             val (_, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
@@ -179,7 +177,7 @@ class Transformer  {
             }.toMap() // .blocksNonSingleModel
 
             
-            // for ((key, value) in blockToLinesMap) {
+            // for ((key, value) in blocksNonSingleModel) {
             //     logger.info("value --> ${value}")
             // }
             logger.info("blocksNonSingleModel: --> ${blocksNonSingleModel}")
@@ -187,7 +185,6 @@ class Transformer  {
             return blocksNonSingleModel
         } // .hl7ToJsonModelBlocksNonSingle 
         
-
 
 
         // --------------------------------------------------------------------------------------------------------
