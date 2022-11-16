@@ -116,8 +116,8 @@ class Transformer  {
             
             val mmgModelBlocksSingle = mshMap + pidMap + obrMap + obxMap
             
-            logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}")
-            logger.info("MMG Model (mmgModelBlocksSingle): --> ${Gson().toJson(mmgModelBlocksSingle)}")
+            logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
+            logger.info("MMG Model (mmgModelBlocksSingle): --> ${Gson().toJson(mmgModelBlocksSingle)}\n")
             return mmgModelBlocksSingle
         } // .hl7ToJsonModelBlocksSingle 
         
@@ -126,7 +126,7 @@ class Transformer  {
         //  ------------- hl7ToJsonModelBlocksNonSingle ------------- BLOCKS NON SINGLE
         // --------------------------------------------------------------------------------------------------------
         //? @Throws(Exception::class) 
-        fun hl7ToJsonModelBlocksNonSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, List<Pair<String, String>>> {
+        fun hl7ToJsonModelBlocksNonSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, List<Map<String, String>>> {
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
@@ -164,8 +164,7 @@ class Transformer  {
                     blockNum to line
                 }.groupBy( { it.first }, { it.second } )
 
-
-                val blockElementsNameDataTupMap = msgLinesByBlockNumMap.flatMap { (_, lines) -> 
+                val blockElementsNameDataTupMap = msgLinesByBlockNumMap.map { (_, lines) -> 
                     lines.map { line -> 
                         val lineParts = line.split("|")
                         val dataFieldPosition = 5 //element.mappings.hl7v251.fieldPosition
@@ -175,37 +174,9 @@ class Transformer  {
                         val elName = obxIdToElNameMap.getOrElse(obxIdentifier) { "TODO:throw_error?" }
 
                         StringUtils.normalizeString(elName) to segmentData
-                    } // .lines
+                    }.toMap() // .lines
                 } // .blockElementsNameDataTupMap
-                // blockElementsNameDataTupMap:
-                // {
-                //      repeating_variables_for_disease_exposure=[
-                //          (country_of_exposure, USA^UNITED STATES OF AMERICA^ISO3166_1), 
-                //          (state_or_province_of_exposure, 13^Georgia^FIPS5_2), 
-                //          (city_of_exposure, Wadley), 
-                //          (county_of_exposure, Jefferson)
-                //      ]
-                // }
-
-                // val result = blockElementsNameDataTupMap.map { (block, elemsTupArr) -> 
-
-                //     val elemsArrOfMaps = elemsTupArr.map { elNameDataTup -> 
-                //         val (elName, elData) = elNameDataTup()
-                //         Map(elName, elData)
-                //     }.reduce { acc, map ->
-                //         val res = acc.toMutableMap()
-                //         map.forEach { (key, value) ->
-                //             res[key] = res.getOrDefault(key, 0) + value
-                //         }
-                //         res
-                //     } // .reduce
-
-                //     block to elemsArrOfMaps
-                // }//.toMap() // .blockElementsNameDataTupMap
-
-                // logger.info("result: --> ${result}")
-
-
+                // logger.info("\nblockElementsNameDataTupMap: --> ${Gson().toJson(blockElementsNameDataTupMap)}\n\n")
 
                 StringUtils.normalizeString(block.name) to blockElementsNameDataTupMap
             }.toMap() // .blocksNonSingleModel
