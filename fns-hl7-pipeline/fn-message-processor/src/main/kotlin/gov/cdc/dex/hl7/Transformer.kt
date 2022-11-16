@@ -17,8 +17,8 @@ class Transformer  {
         // --------------------------------------------------------------------------------------------------------
         //  ------------- hl7ToJsonModelBlocksSingle ------------- BLOCKS SINGLE
         // --------------------------------------------------------------------------------------------------------
-        //? @Throws(Exception::class) 
         
+        //? @Throws(Exception::class) 
         fun hl7ToJsonModelBlocksSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, String> {
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
@@ -30,10 +30,6 @@ class Transformer  {
             val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             val messageLines = getMessageLines(hl7Content)
-            
-            // ----------------------------------------------------
-            //  ------------- BLOCKS SINGLE
-            // ----------------------------------------------------
 
             val mmgElemsBlocksSingle = mmgBlocksSingle.flatMap { it.elements } // .mmgElemsBlocksSingle
             
@@ -123,7 +119,7 @@ class Transformer  {
         
 
         // --------------------------------------------------------------------------------------------------------
-        //  ------------- hl7ToJsonModelBlocksNonSingle ------------- BLOCKS SINGLE
+        //  ------------- hl7ToJsonModelBlocksNonSingle ------------- BLOCKS NON SINGLE
         // --------------------------------------------------------------------------------------------------------
         
         fun hl7ToJsonModelBlocksNonSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, List<Pair<String, String>>> {
@@ -139,10 +135,6 @@ class Transformer  {
             val messageLines = getMessageLines(hl7Content)
 
             val obxLines = messageLines.filter { it.startsWith("OBX|") }
-
-            // ----------------------------------------------------
-            //  ------------- BLOCKS NON SINGLE
-            // ----------------------------------------------------
 
             val obxIdToElNameMap = getObxIdToElNameMap(mmgBlocksNonSingle)
 
