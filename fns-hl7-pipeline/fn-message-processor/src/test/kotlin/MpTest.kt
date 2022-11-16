@@ -145,7 +145,7 @@ class MpTest {
         assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 34)
     } // .testLoadMMGfromMessage
 
-        // @Test
+    // @Test
     // fun testMMGUtilGetMMG() {
     //     val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
     //     val testMsg = this::class.java.getResource(filePath).readText()
@@ -154,6 +154,7 @@ class MpTest {
     // } // .testMMGUtilGetMMG
 
 */
+
 
     @Test
     fun testTransformerHl7ToJsonModel() {
@@ -171,7 +172,7 @@ class MpTest {
         val mmgs = arrayOf(mmg1, mmg2)
 
         // hl7
-        val hl7FilePath = "/TBRD_V1.0.2_TM_TC01.hl7"
+        val hl7FilePath = "/Genv2_2-0-1_TC01.hl7" // "/TBRD_V1.0.2_TM_TC01.hl7"
         val hl7Content = this::class.java.getResource(hl7FilePath).readText()
         
 
@@ -180,6 +181,29 @@ class MpTest {
         Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
 
     } // .testTransformerHl7ToJsonModel
+
+/* TODO: in Redis we need the condition MMGs without (No) GenV2 included
+
+    @Test
+    fun testTransformerHl7ToJsonModelwithRedisMmg() {
+        
+        // hl7
+        val hl7FilePath = "/TBRD_V1.0.2_TM_TC01.hl7"
+        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
+
+        val mmgs = MmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
+
+        mmgs.forEach {
+            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
+
+        Transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+
+        Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+
+    } // .testTransformerHl7ToJsonModelwithRedisMmg
+
+ */
 
 
 
