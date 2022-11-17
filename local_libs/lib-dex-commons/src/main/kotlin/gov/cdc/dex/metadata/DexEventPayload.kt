@@ -8,5 +8,5 @@ data class DexEventPayload (
     val metadata: DexMetadata,
     @SerializedName("summary") val summary: SummaryInfo,
     @SerializedName("message_uuid") val messageUUID: String = UUID.randomUUID().toString(),
-    val metadataVersion: String = "1.0.0"
+    @SerializedName("metadata_version") val metadataVersion: String = "1.0.0"
 )
