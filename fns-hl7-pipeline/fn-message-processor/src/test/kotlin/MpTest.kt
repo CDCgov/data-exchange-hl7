@@ -1,7 +1,9 @@
 
 import gov.cdc.dex.hl7.MmgUtil
 import gov.cdc.hl7.HL7StaticParser
-import org.testng.annotations.Test
+
+import org.junit.jupiter.api.Test
+
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

@@ -29,6 +29,7 @@
         <azstblob.version>12.19.1</azstblob.version>
         <gson.version>2.9.1</gson.version>
         <redis.version>4.2.3</redis.version>
+        <junit.version>5.9.0</junit.version>
         <hl7pet.version>1.2.6</hl7pet.version>
         <libdexcommon.version>1.0.1-SNAPSHOT</libdexcommon.version>
 
@@ -89,13 +90,13 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.github.mscaldas2012/hl7-pet -->
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.6.1</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
@@ -258,5 +259,7 @@
             </plugin>
         </plugins>
     </build>
+
+    
 
 </project>
