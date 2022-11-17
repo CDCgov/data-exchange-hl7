@@ -49,13 +49,13 @@ class MetadataTest {
     fun testFullMetadataObject() {
         //Provenance:
         val provenance= Provenance(
-            "abfss://container@storage/folder/file.txt",
-            "2022-10-01T12:00:00.0Z",
-            1000,
-            Provenance.SINGLE_FILE,
-            12345,
-            "Unit Test",
-            "localFile.txt"
+            filePath= "abfss://container@storage/folder/file.txt",
+            fileTimestamp = "2022-10-01T12:00:00.0Z",
+            fileSize = 1000,
+            singleOrBatch = Provenance.SINGLE_FILE,
+            messageHash = "1234",
+            systemProvider = "Unit Test",
+            originalFileName = "localFile.txt"
         )
 
         val problem = Problem("UNIT-TEST", "java.lang.Exception", null, "Mock error for unit test", false, 0, 1)
