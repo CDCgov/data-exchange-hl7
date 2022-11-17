@@ -1,0 +1,85 @@
+MSH|^~\&|NBS^2.16.840.1.114222.4.5.1^ISO|KYDOH^2.16.840.1.114222.4.1.3655^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20220318151646.715||ORU^R01^ORU_R01|NOT10083002KY012022|P|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Hepatitis_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||PSN10252010KY01^^^NBS&2.16.840.1.114222.4.5.1&ISO||~^^^^^^S||19650610000000.000|M||1002-5^American Indian or Alaska Native^2.16.840.1.113883.6.238~2028-9^Asian^2.16.840.1.113883.6.238~2106-3^White^2.16.840.1.113883.6.238|^^^21^40522^^^^21067|||||||||||2186-5^Not Hispanic or Latino^2.16.840.1.113883.6.238
+OBR|1|123^456^789^1011|CAS10168005KY01^NBS^2.16.840.1.114222.4.5.1^ISO|68991-9^Epidemiologic Information^LN|||20210222134045.667|||||||||||||||20220318151645.073|||C||||||10105^Hepatitis B virus infection, Chronic^2.16.840.1.114222.4.5.277
+OBX|1|SN|1920-8^AST/SGOT (LN)^2.16.840.1.113883.6.1^11920_8^AST [SGOT] Result^L|2|^300||||||F
+OBX|2|SN|1742-6^ALT/SGPT (LN)^2.16.840.1.113883.6.1^1742_6^ALT [SGPT] Result^L|1|^400||||||F
+OBX|3|CWE|5199-5^supplemental anti-HCV assay (RIBA)^2.16.840.1.113883.6.1^5199_5^Supplemental anti-HCV Assay Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|4|CWE|78746-5^Country of Birth^2.16.840.1.113883.6.1^DEM126^Country of Birth^L||CHN^CHINA^1.0.3166.1||||||F
+OBX|5|ST|77969-4^Jurisdiction Code^2.16.840.1.113883.6.1^INV107^Jurisdiction^L||Fayette County||||||F
+OBX|6|DT|77995-9^Date Reported^2.16.840.1.113883.6.1^INV111^Date of Report^L||20210116||||||F
+OBX|7|CWE|48766-0^Reporting Source Type Code^2.16.840.1.113883.6.1^INV112^Reporting Source Type^L||PHC250^Other Treatment Center^2.16.840.1.114222.4.5.274||||||F
+OBX|8|ST|52831-5^Reporting Source Zip Code^2.16.840.1.113883.6.1^INV118^Zip^L||40509||||||F
+OBX|9|TS|77972-8^Earliest Date Reported to County^2.16.840.1.113883.6.1^INV120^Earliest Date Reported to County^L||20210116000000.000||||||F
+OBX|10|TS|77973-6^Earliest Date Reported to State^2.16.840.1.113883.6.1^INV121^Earliest Date Reported to State^L||20210116000000.000||||||F
+OBX|11|CWE|77974-4^Hospitalized^2.16.840.1.113883.6.1^INV128^Was the patient hospitalized for this illness?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|12|TS|77975-1^Diagnosis Date^2.16.840.1.113883.6.1^INV136^Diagnosis Date^L||20210109000000.000||||||F
+OBX|13|TS|11368-8^Date of Illness Onset^2.16.840.1.113883.6.1^INV137^Illness Onset Date^L||20210108000000.000||||||F
+OBX|14|TS|77976-9^Illness End Date^2.16.840.1.113883.6.1^INV138^Illness End Date^L||20210122000000.000||||||F
+OBX|15|SN|77977-7^Illness Duration^2.16.840.1.113883.6.1^INV139^Illness Duration^L||^14|d^Day^2.16.840.1.113883.6.8|||||F
+OBX|16|CWE|77978-5^Subject Died^2.16.840.1.113883.6.1^INV145^Did the patient die from this illness?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|17|DT|77979-3^Case Investigation Start Date^2.16.840.1.113883.6.1^INV147^Investigation Start Date^L||20210116||||||F
+OBX|18|CWE|77980-1^Case Outbreak Indicator^2.16.840.1.113883.6.1^INV150^Is this case part of an outbreak?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|19|ST|77981-9^Case Outbreak Name^2.16.840.1.113883.6.1^INV151^Outbreak Name^L||KY20-1000||||||F
+OBX|20|CWE|77982-7^Case Disease Imported Code^2.16.840.1.113883.6.1^INV152^Where was the disease acquired?^L||PHC246^Out of State^2.16.840.1.114222.4.5.274||||||F
+OBX|21|CWE|INV153^Imported Country^2.16.840.1.114222.4.5.232^INV153^Imported Country^L||USA^UNITED STATES^1.0.3166.1||||||F
+OBX|22|CWE|INV154^Imported State^2.16.840.1.114222.4.5.232^INV154^Imported State^L||04^Arizona^2.16.840.1.113883.6.92||||||F
+OBX|23|CWE|INV155^Imported City^2.16.840.1.114222.4.5.232^INV155^Imported City^L||^^^^^^^^Phoenix||||||F
+OBX|24|CWE|INV156^Imported County^2.16.840.1.114222.4.5.232^INV156^Imported County^L||04013^Maricopa, AZ^2.16.840.1.113883.6.93||||||F
+OBX|25|CWE|77989-2^Transmission Mode^2.16.840.1.113883.6.1^INV157^Transmission Mode^L||417564009^Sexual transmission^2.16.840.1.113883.6.96||||||F
+OBX|26|CWE|77990-0^Case Class Status Code^2.16.840.1.113883.6.1^INV163^Case Status^L||410605003^Confirmed present^2.16.840.1.113883.6.96||||||F
+OBX|27|SN|77991-8^MMWR Week^2.16.840.1.113883.6.1^INV165^MMWR Week^L||^07||||||F
+OBX|28|DT|77992-6^MMWR Year^2.16.840.1.113883.6.1^INV166^MMWR Year^L||2021||||||F
+OBX|29|ST|77993-4^State Case Identifier^2.16.840.1.113883.6.1^INV173^State Case ID^L||HEPBCHRNTC04||||||F
+OBX|30|ST|74549-7^Person Reporting to CDC - Name^2.16.840.1.113883.6.1^INV190^Person Reporting to CDC - Name^L||Kristy Bolen||||||F
+OBX|31|ST|74548-9^Person Reporting to CDC - Phone Number^2.16.840.1.113883.6.1^INV191^Person Reporting to CDC - Phone Number^L||606-571-2802||||||F
+OBX|32|ST|77997-5^Legacy Case Identifier^2.16.840.1.113883.6.1^INV200^Legacy Case ID^L||HEP_B_CHRN_TC04_20210216||||||F
+OBX|33|SN|77998-3^Age at case investigation^2.16.840.1.113883.6.1^INV2001^Reported Age^L||^55|a^year [time]^2.16.840.1.113883.6.8|||||F
+OBX|34|CWE|77983-5^Country of Usual Residence^2.16.840.1.113883.6.1^INV501^Country of Usual Residence^L||USA^UNITED STATES^1.0.3166.1||||||F
+OBX|35|CWE|77988-4^Binational Reporting Criteria^2.16.840.1.113883.6.1^INV515^Binational Reporting Criteria^L||PHC1139^Has case contacts in or from Mexico or Canada^2.16.840.1.114222.4.5.274||||||F
+OBX|36|CWE|67098-4^Reason for Testing^2.16.840.1.113883.6.1^INV575^Reason for Testing (check all that apply)^L||PHC309^Evaluation of elevated liver enzymes^2.16.840.1.114222.4.5.274~PHC312^Follow-up testing (prior viral hepatitis marker)^2.16.840.1.114222.4.5.274~PHC307^Symptoms of acute hepatitis^2.16.840.1.114222.4.5.274~OTH^Other (specify)^2.16.840.1.113883.5.1008||||||F
+OBX|37|CWE|INV576^Symptomatic^2.16.840.1.114222.4.5.232^INV576^Is patient symptomatic?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|38|CWE|INV578^Jaundiced (Symptom)^2.16.840.1.114222.4.5.232^INV578^Was the patient jaundiced?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|39|CWE|PHC300^Household member (non-sexual)^2.16.840.1.114222.4.5.232^INV603_3^Household Member (Non-Sexual) (Contact Type)^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|40|CWE|225517006^Sexual partners^2.16.840.1.113883.6.96^INV603_5^Sex Partner (Contact Type)^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|41|CWE|PHC1304^Other Contact Type^2.16.840.1.114222.4.5.232^INV603_6^Other (Contact Type)^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|42|SN|INV642^Number of Sex Partners^2.16.840.1.114222.4.5.232^INV642^How many sex partners has the patient had?^L||^36||||||F
+OBX|43|CWE|INV643^Injected Drug Use (IDU)^2.16.840.1.114222.4.5.232^INV643^Has the patient ever injected drugs not prescribed by a doctor?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|44|CWE|INV644^Long-Term Hemodialysis^2.16.840.1.114222.4.5.232^INV644^Was the patient ever on long-term hemodialysis?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|45|CWE|INV647^Clotting Factor before 1987^2.16.840.1.114222.4.5.232^INV647^Did the patient receive clotting factor concentrates prior to 1987?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|46|CWE|INV648^Ever a Medical/Dental Blood Worker^2.16.840.1.114222.4.5.232^INV648^Patient ever employed in a medical or dental field involving direct contact with human blood?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|47|CWE|INV649^Ever Incarcerated^2.16.840.1.114222.4.5.232^INV649^Was the patient ever incarcerated?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|48|CWE|INV650^Previously Aware of Condition^2.16.840.1.114222.4.5.232^INV650^Was the patient aware s/he had hepatitis prior to lab testing?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|49|CWE|INV651^Provider of Care for Condition^2.16.840.1.114222.4.5.232^INV651^Does the patient have a provider of care for hepatitis?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|50|CWE|INV652^Received Medication for Condition^2.16.840.1.114222.4.5.232^INV652^Has the patient received medication for the type of hepatitis being reported?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|51|CWE|INV653^Treated for STD^2.16.840.1.114222.4.5.232^INV653b^Was the patient ever treated for a sexually transmitted disease?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|52|DT|INV826^Liver Enzyme Test Result Date^2.16.840.1.114222.4.5.232^INV826^Specimen Collection Date (ALT)^L|1|20210116||||||F
+OBX|53|DT|INV826^Liver Enzyme Test Result Date^2.16.840.1.114222.4.5.232^INV826b^Specimen Collection Date (AST)^L|2|20210116||||||F
+OBX|54|SN|INV827^Liver Enzyme Upper Limit Normal^2.16.840.1.114222.4.5.232^INV827^Test Result Upper Limit Normal (ALT)^L|1|^300||||||F
+OBX|55|SN|INV827^Liver Enzyme Upper Limit Normal^2.16.840.1.114222.4.5.232^INV827b^Test Result Upper Limit Normal (AST)^L|2|^100||||||F
+OBX|56|CWE|INV829^Ever Had Contact with Hepatitis^2.16.840.1.114222.4.5.232^INV829^Was the patient ever a contact of a person who had hepatitis?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|57|ST|48159-8^anti-HCV signal to cut-off ratio^2.16.840.1.113883.6.1^INV841^anti-HCV signal to cut-off ratio^L||2.5||||||F
+OBX|58|DT|INV842^Diabetes Diagnosis Date^2.16.840.1.114222.4.5.232^INV842^Diabetes Diagnosis Date^L||19960918||||||F
+OBX|59|CWE|INV887^Diabetes^2.16.840.1.114222.4.5.232^INV887^Does the patient have diabetes?^L||Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|60|ST|INV897^Specify Other Contact Type^2.16.840.1.114222.4.5.232^INV897^Other Contact Type (Specify)^L||coroner||||||F
+OBX|61|ST|INV901^Other Reason for Testing^2.16.840.1.114222.4.5.232^INV901^Other Reason for Testing^L||other||||||F
+OBX|62|CWE|LP38316-3^total anti-HAV^2.16.840.1.113883.6.1^LP38316_3^total anti-HAV Result^L||260385009^Negative^2.16.840.1.113883.6.96||||||F
+OBX|63|CWE|LP38318-9^IgM anti-HAV^2.16.840.1.113883.6.1^LP38318_9^IgM anti-HAV Result^L||260385009^Negative^2.16.840.1.113883.6.96||||||F
+OBX|64|CWE|LP38320-5^HEP B Nucleic Acid Test (NAT)^2.16.840.1.113883.6.1^LP38320_5^HEP B DNA/NAT Result^L||260385009^Negative^2.16.840.1.113883.6.96||||||F
+OBX|65|CWE|LP38323-9^total anti-HBc^2.16.840.1.113883.6.1^LP38323_9^total anti-HBc Result^L||260385009^Negative^2.16.840.1.113883.6.96||||||F
+OBX|66|CWE|LP38325-4^IgM anti-HBc^2.16.840.1.113883.6.1^LP38325_4^IgM anti-HBc Result^L||260385009^Negative^2.16.840.1.113883.6.96||||||F
+OBX|67|CWE|LP38329-6^HBeAg^2.16.840.1.113883.6.1^LP38329_6^HBeAg Result^L||10828004^Positive^2.16.840.1.113883.6.96||||||F
+OBX|68|CWE|LP38331-2^HBsAg^2.16.840.1.113883.6.1^LP38331_2^HBsAg Result^L||10828004^Positive^2.16.840.1.113883.6.96||||||F
+OBX|69|CWE|LP38332-0^total anti-HCV^2.16.840.1.113883.6.1^LP38332_0^total anti-HCV Result^L||260385009^Negative^2.16.840.1.113883.6.96||||||F
+OBX|70|CWE|LP38335-3^HCV RNA^2.16.840.1.113883.6.1^LP38335_3^HCV RNA Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|71|CWE|LP38345-2^total anti-HDV^2.16.840.1.113883.6.1^LP38345_2^anti-HDV Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|72|CWE|LP38350-2^total anti-HEV^2.16.840.1.113883.6.1^LP38350_2^anti-HEV Result^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|73|CWE|MTH109^Mothers Birth Country^2.16.840.1.114222.4.5.232^MTH109^What is the birth country of the mother?^L||THA^THAILAND^1.0.3166.1||||||F
+OBX|74|CWE|77966-0^Reporting State^2.16.840.1.113883.6.1^NOT109^Reporting State^L||21^Kentucky^2.16.840.1.113883.6.92||||||F
+OBX|75|CWE|77967-8^Reporting County^2.16.840.1.113883.6.1^NOT113^Reporting County^L||21067^Fayette, KY^2.16.840.1.113883.6.93||||||F
+OBX|76|CWE|77968-6^National Reporting Jurisdiction^2.16.840.1.113883.6.1^NOT116^National Reporting Jurisdiction^L||21^Kentucky^2.16.840.1.113883.6.92||||||F
+OBX|77|CWE|77965-2^Immediate National Notifiable Condition^2.16.840.1.113883.6.1^NOT120^Immediate National Notifiable Condition^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|78|CWE|77984-3^Country of Exposure^2.16.840.1.113883.6.1^INV502^Country of Exposure^L|1|USA^UNITED STATES^1.0.3166.1||||||F
+OBX|79|CWE|77985-0^State or Province of Exposure^2.16.840.1.113883.6.1^INV503^State or Province of Exposure^L|1|04^Arizona^2.16.840.1.113883.6.92||||||F
+OBX|80|ST|77986-8^City of Exposure^2.16.840.1.113883.6.1^INV504^City of Exposure^L|1|Phoenix||||||F
+OBX|81|ST|77987-6^County of Exposure^2.16.840.1.113883.6.1^INV505^County of Exposure^L|1|Maricopa, AZ||||||F
+OBX|82|DT|77970-2^Date First Reported PHD^2.16.840.1.113883.6.1^INV177^Date First Reported PHD^L||20210116||||||F

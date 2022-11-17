@@ -69,4 +69,10 @@ class ValidationTest {
     fun testADBMessages() {
         testFolder("adb")
     }
+
+
+    @Test
+    fun testHep10Messages() {
+        testFolder("Hep")
+    }
 }

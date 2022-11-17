@@ -28,6 +28,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>gov.cdc.dex</groupId>
+            <artifactId>lib-dex-commons</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.microsoft.azure.functions</groupId>
             <artifactId>azure-functions-java-library</artifactId>
             <version>${azure.functions.java.library.version}</version>
@@ -81,6 +86,8 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>

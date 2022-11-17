@@ -1,0 +1,88 @@
+{
+  "clinical_manifestation": [
+    {
+      "clinical_manifestation": "386661006^Fever^SCT",
+      "clinical_manifestation_indicator": "Y^Yes^HL70136"
+    },
+    {
+      "clinical_manifestation": "271807003^Rash^SCT",
+      "clinical_manifestation_indicator": "N^No^HL70136"
+    },
+    {
+      "clinical_manifestation": "87319000^Eschar^SCT",
+      "clinical_manifestation_indicator": "Y^Yes^HL70136"
+    },
+    {
+      "clinical_manifestation": "25064002^Headache^SCT",
+      "clinical_manifestation_indicator": "Y^Yes^HL70136"
+    },
+    {
+      "clinical_manifestation": "68962001^Myalgia^SCT",
+      "clinical_manifestation_indicator": "Y^Yes^HL70136"
+    },
+    {
+      "clinical_manifestation": "271737000^Anemia^SCT",
+      "clinical_manifestation_indicator": "N^No^HL70136"
+    },
+    {
+      "clinical_manifestation": "419188005^Leukopenia^SCT",
+      "clinical_manifestation_indicator": "N^No^HL70136"
+    },
+    {
+      "clinical_manifestation": "302215000^Thrombocytopenia^SCT",
+      "clinical_manifestation_indicator": "N^No^HL70136"
+    },
+    {
+      "clinical_manifestation": "PHC2108^Hepatic transaminase elevation^CDCPHINVS",
+      "clinical_manifestation_indicator": "N^No^HL70136"
+    }
+  ],
+  "antibiotics_treatment_repeating_group": [
+    {
+      "medication_administered": "3640^Doxycycline^RXNORM",
+      "date_treatment_or_therapy_started": "20170713",
+      "treatment_duration": "^10"
+    }
+  ],
+  "industry_and_occupation_repeating_group": [
+    {
+      "current_occupation": "Musician",
+      "current_industry": "Entertainment",
+      "current_industry_standardized": "8560^Independent artists, performing arts, spectator sports, and related industries [8560]^CDCINDUSTRY2010"
+    }
+  ],
+  "travel_history": [],
+  "tick_bite_repeating_group": [
+    {
+      "tick_bite_location": "Unknown",
+      "tick_bite_date": "20170704"
+    }
+  ],
+  "blood_transfusion_date_repeating_group": [],
+  "organ_transplant_repeating_group": [],
+  "blood_donation_date_repeating_group": [],
+  "epidemiology_laboratory_repeating_group": [
+    {
+      "test_type": "5313-2^IFA IgG Rickettsia spotted fever group^LN",
+      "test_result": "10828004^Positive^SCT",
+      "organism_name": "18054009^Rickettsia rickettsii^SCT",
+      "test_result_quantitative": "1:128",
+      "specimen_collection_date_time": "20170713",
+      "specimen_type": "119364003^Serum^SCT",
+      "performing_laboratory_name": "CDC RZB Reference Laboratory",
+      "laboratory_state": "13^Georgia^FIPS5_2",
+      "performing_laboratory_specimen_id": "55555"
+    },
+    {
+      "test_type": "5313-2^IFA IgG Rickettsia spotted fever group^LN",
+      "test_result": "10828004^Positive^SCT",
+      "organism_name": "18054009^Rickettsia rickettsii^SCT",
+      "test_result_quantitative": ">1:1024",
+      "specimen_collection_date_time": "20170805",
+      "specimen_type": "119364003^Serum^SCT",
+      "performing_laboratory_name": "CDC RZB Reference Laboratory",
+      "laboratory_state": "13^Georgia^FIPS5_2",
+      "performing_laboratory_specimen_id": "77777"
+    }
+  ]
+}

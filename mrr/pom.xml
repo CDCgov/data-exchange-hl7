@@ -79,6 +79,11 @@
             <artifactId>jedis</artifactId>
             <version>4.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>gov.cdc.dex</groupId>
+            <artifactId>lib-dex-commons</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
