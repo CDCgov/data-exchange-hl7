@@ -1,0 +1,23 @@
+{
+  "topic": "/sub/{sub-id}/rg/Storage/...",
+  "subject": "/blobServices/default/containers/test-container/blobs/new-file.txt",
+  "eventType": "Microsoft.Storage.BlobCreated",
+  "eventTime": "2017-06-26T18:41:00.9584103Z",
+  "id": "831e1650-001e-001b-66ab-eeb76e069631",
+  "data": {
+    "api": "PutBlockList",
+    "clientRequestId": "6d79dbfb-0e37-...",
+    "requestId": "831e1650-001e-001b-...",
+    "eTag": "\"0x8D4BCC2E4835CD0\"",
+    "contentType": "text/plain",
+    "contentLength": 524288,
+    "blobType": "BlockBlob",
+    "url": "https://my-st-acct...new-file.txt",
+    "sequencer": "000000000000044200000...",
+    "storageDiagnostics": {
+      "batchId": "b68529f3-68cd-4744-..."
+    }
+  },
+  "dataVersion": "",
+  "metadataVersion": "1"
+}
