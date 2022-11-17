@@ -2,7 +2,7 @@ package gov.cdc.dex.redisModels
 
 import com.google.gson.annotations.SerializedName
 
-data class ConditionCode(
+data class Condition2MMGMapping(
   @SerializedName("event_code") val eventCode: Long,
   @SerializedName("name") val name: String, 
   @SerializedName("program") val program: String,

@@ -7,14 +7,37 @@ import org.junit.jupiter.api.Test
 internal class MmgUtilTest {
 
     @Test
-    fun testQueryTableFor() {
+    fun testGetMMGs() {
         val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
         val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
 
         val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
 
-        val mmgs = MmgUtil(redisProxy).queryTableFor("10065", "arbo_case_map_v1.0") //"lyme_tbrd_mmg_v1.0")
-       // println(mmgs)
-        mmgs.forEach { println(it.name)}
+        val mmgUtil = MmgUtil(redisProxy)
+
+        println("GenV2")
+       val genV2mmgs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, null, null, null)
+        genV2mmgs.forEach {println(it.name)}
+
+        println("----\nLyme")
+        val lymeMMGs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "10250", "13")
+        lymeMMGs.forEach {println(it.name)}
+
+        println("----\nHepA")
+        val hepAMMgs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, "Hepatitis_MMG_V1.0", "10110", "21")
+        hepAMMgs.forEach {println(it.name)}
+    }
+
+    @Test
+    fun testRedisKeys() {
+        val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
+
+        val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
+
+        val keys = redisProxy.getJedisClient().keys("mmg:*")
+        println(keys)
+        val mapping = redisProxy.getJedisClient().get("condition:10110")
+        println(mapping)
     }
 }
