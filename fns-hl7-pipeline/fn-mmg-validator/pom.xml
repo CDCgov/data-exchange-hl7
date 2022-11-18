@@ -26,8 +26,8 @@
         <functionAppName>tf-hl7-dev-mp</functionAppName>
         <slf4j.version>2.0.3</slf4j.version>
         <azevhub.version>5.13.1</azevhub.version>
-        <azstblob.version>12.19.1</azstblob.version>
-        <gson.version>2.9.1</gson.version>
+        <azstblob.version>12.20.0</azstblob.version>
+        <gson.version>2.10</gson.version>
         <validationreport.version>1.0.0</validationreport.version>
         <hl7pet.version>1.2.6</hl7pet.version>
         <redis.version>4.3.1</redis.version>
@@ -112,6 +112,12 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>${redis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

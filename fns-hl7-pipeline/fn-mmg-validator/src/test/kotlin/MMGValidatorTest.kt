@@ -1,7 +1,10 @@
 import gov.cdc.dex.hl7.MmgUtil
 import gov.cdc.dex.hl7.MmgValidator
 import gov.cdc.dex.hl7.exception.InvalidMessageException
-import org.testng.annotations.Test
+
+
+import org.junit.jupiter.api.Test
+
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -38,6 +41,11 @@ class MMGValidatorTest {
     @Test
     fun testADBMessages() {
         testFolder("adb")
+    }
+
+    @Test
+    fun testHepMessages() {
+        testFolder("Hep")
     }
 
 

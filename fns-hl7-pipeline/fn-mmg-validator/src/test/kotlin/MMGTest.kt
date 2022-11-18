@@ -1,7 +1,10 @@
 
+import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.MmgUtil
+import gov.cdc.dex.hl7.exception.InvalidConceptKey
 import gov.cdc.hl7.HL7StaticParser
-import org.testng.annotations.Test
+
+import org.junit.jupiter.api.Test
 
 class MMGTest {
 
@@ -74,6 +77,20 @@ class MMGTest {
 
     @Test
     fun testInvalidCode() {
-
+        try {
+            val REDIS_CACHE_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
+            val REDIS_CACHE_KEY = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+            val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_CACHE_KEY)
+            val vocabKey = "vocab:UNKNOWN_KEY"
+            val conceptStr = redisProxy.getJedisClient()
+                .hgetAll(vocabKey) //?: throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
+            if (conceptStr.isNullOrEmpty()) {
+                throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
+            }
+            println(conceptStr)
+        } catch (e: InvalidConceptKey) {
+            assert(true)
+            println("Exception properly thrown: ${e.message}")
+        }
     }
 }
