@@ -55,7 +55,6 @@ class TimerTriggerFunction {
                 exe.submit {
                     client.setValueSetConcepts(valueSetConcepts,key.toString())
                 }
-
                 context.logger.info("Key: $key + count of $vsCount")
             }
             context.logger.info("END OF VocabClient services")
@@ -104,33 +103,20 @@ class TimerTriggerFunction {
                         val mGuide = mmgaClient.getGuideById(id)
                         val melement = parser.parse(mGuide.toString())
                         val mresult = melement.asJsonObject.get("result")
-//                          var kSet =  mresult.asJsonObject.keySet()
-//                        var i :Iterator<String>  = kSet.iterator()
-//                         while(i.hasNext()){
-//                             var kName = i.next().toString()
-//                             context.logger.info("Kname---- -- $kName")
-//
-//                         }
+
                         mresult.asJsonObject.remove("testScenarios")
                         mresult.asJsonObject.remove("testCaseScenarioWorksheetColumns")
                         mresult.asJsonObject.remove("columns")
                         mresult.asJsonObject.remove("templates")
                         mresult.asJsonObject.remove("valueSets")
 
-                        //var mresult1 = mresult.toString().substring(0, 1000)
-                        //context.logger.info("MMGAT result---- -- $mresult")
-
-                        //val version1 = mj.get("publishVersion").asString
                         val key = "mmg:"+ StringUtils.normalizeString(mj.get("name").asString)
-                        context.logger.info("MMGAT name1:$key")
+                        context.logger.info("MMGAT name:$key")
                         if (jedis.exists(key))
                             jedis.del(key)
                         jedis.set(key, gson.toJson(mresult))
-
                     }
-
                 }
-
             } catch (e: Exception) {
                 context.logger.info("Failure in MMGATREAD function : ${e.printStackTrace()} ")
                 throw e
@@ -138,7 +124,6 @@ class TimerTriggerFunction {
                 jedis.close()
             }
             context.logger.info("MMGATREAD Function executed at: " + LocalDateTime.now())
-
         }
-    }
+   }
 }
