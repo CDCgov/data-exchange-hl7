@@ -77,7 +77,6 @@ class MmgatClient {
                         line = it
                     }
                 } != null) {
-                // System.out.println(line );
                 sb.append(line)
             }
 
@@ -94,7 +93,7 @@ class MmgatClient {
     fun getGuideById(id: String): StringBuilder {
         val sb = StringBuilder()
         try {
-            url = URL("https://mmgat.services.cdc.gov/api/guide/$id?includeGenV2=true")
+            url = URL("https://mmgat.services.cdc.gov/api/guide/$id?includeGenV2=false")
             conn = url!!.openConnection() as HttpURLConnection
             conn!!.requestMethod = "GET"
             conn!!.setRequestProperty("Accept", "application/json")
@@ -109,9 +108,6 @@ class MmgatClient {
 
             var line: String?
 
-            // System.out.println("Output from Server mmgat1.... \n");
-
-            // System.out.println("Output from Server mmgat1.... \n");
             while ((br.readLine().also { line = it }) != null) {
                 sb.append(line)
             }

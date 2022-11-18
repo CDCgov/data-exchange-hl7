@@ -19,14 +19,14 @@ class TestLineCleanup {
     fun testFullMetadataObject() {
         //Provenance:
         val provenance= Provenance(
-            "1",
-            "2022-10-01",
-            "abfss://container@storage/folder/file.txt",
-            "2022-10-01T12:00:00.0Z",
-            1000,
-            Provenance.SINGLE_FILE,
-            "Unit Test",
-            "localFile.txt"
+            eventId ="123",
+            eventTimestamp = "2022-11-17",
+            filePath="abfss://container@storage/folder/file.txt",
+            fileTimestamp="2022-10-01T12:00:00.0Z",
+            fileSize=1000,
+            singleOrBatch = Provenance.SINGLE_FILE,
+            systemProvider = "Unit Test",
+            originalFileName = "localFile.txt"
         )
 
         val problem = Problem("UNIT-TEST", "java.lang.Exception", null, "Mock error for unit test", false, 0, 1)
@@ -43,6 +43,6 @@ class TestLineCleanup {
 
         println(event)
         println("------")
-        println(event.messageHash)
+        println(provenance.messageHash)
     }
 }
