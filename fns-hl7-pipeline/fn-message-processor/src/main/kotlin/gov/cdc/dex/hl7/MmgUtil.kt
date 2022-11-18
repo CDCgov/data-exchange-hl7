@@ -60,7 +60,7 @@ class MmgUtil  {
 
         //TODO:: Add support for others MMG edge cases such as: Foodnet vs FoodBorne MMGs based on reporting jurisdiction, etc..
         @Throws(Exception::class)
-        fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
+        /* private */ fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
             // TODO : include jurisdictionCode logic 
 
             val mmg1 : MMG

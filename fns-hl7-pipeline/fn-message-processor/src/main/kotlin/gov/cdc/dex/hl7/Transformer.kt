@@ -212,7 +212,7 @@ class Transformer  {
         } // .getObxIdToElNameMap
 
 
-        private fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
+        /* private */ fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
         // TODO FIX as is not removing the MSH from the mmgs
 
             if ( mmgs.size > 1 ) { 

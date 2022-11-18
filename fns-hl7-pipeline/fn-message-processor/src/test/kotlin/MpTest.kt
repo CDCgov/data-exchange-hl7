@@ -23,13 +23,13 @@ class MpTest {
 
     companion object {
 
-        // val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
-        // val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
+        val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
 
-        // val jedis = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
-        // .password(REDIS_PWD)
-        // .ssl(true)
-        // .build())
+        val jedis = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
+        .password(REDIS_PWD)
+        .ssl(true)
+        .build())
 
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
         private val gson = Gson()
@@ -147,16 +147,6 @@ class MpTest {
         assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 34)
     } // .testLoadMMGfromMessage
 
-    // @Test
-    // fun testMMGUtilGetMMG() {
-    //     val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
-    //     val testMsg = this::class.java.getResource(filePath).readText()
-    //     val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
-    //     mmgs.forEach { println(it)}
-    // } // .testMMGUtilGetMMG
-
-*/
-
 
     @Test
     fun testTransformerHl7ToJsonModel() {
@@ -184,7 +174,6 @@ class MpTest {
 
     } // .testTransformerHl7ToJsonModel
 
-/* TODO: in Redis we need the condition MMGs without (No) GenV2 included
 
     @Test
     fun testTransformerHl7ToJsonModelwithRedisMmg() {
@@ -205,7 +194,29 @@ class MpTest {
 
     } // .testTransformerHl7ToJsonModelwithRedisMmg
 
- */
+*/
+
+
+    @Test
+    fun testMMGUtilGetMMG() {
+        val filePath = "/TBRD_V1.0.2_TM_TC01.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+
+        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        logger.info("mmgs.size: --> ${mmgs.size}")
+        mmgs.forEach { mmg ->
+            logger.info("mmg.name: --> ${mmg.name}, mmg.blocks.size: --> ${mmg.blocks.size}")
+        } // mmgs
+        
+        logger.info("----------------------------")
+
+        val mmgsFiltered = Transformer.getMmgsFiltered(mmgs)
+        logger.info("mmgsFiltered.size: --> ${mmgsFiltered.size}")
+        mmgsFiltered.forEach { mmgFiltered ->
+            logger.info("mmgFiltered.name: --> ${mmgFiltered.name}, mmgFiltered.blocks.size: --> ${mmgFiltered.blocks.size}")
+        } // mmgs
+
+    } // .testMMGUtilGetMMG
 
 
 
