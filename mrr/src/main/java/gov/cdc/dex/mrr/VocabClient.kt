@@ -33,10 +33,6 @@ class VocabClient {
     fun getValueSetKey(valueSet: ValueSet): StringBuilder {
         val vocabKey = StringBuilder()
         vocabKey.append(valueSet.code)
-        //  val valueSetVersionResult = service!!.getValueSetVersionByValueSetOidAndVersionNumber(valueSet.oid, 0)
-        // val version = valueSetVersionResult.valueSetVersion ?.versionNumber
-        // vocabKey.append("_").append("$version")
-        // println("VocabKey :${vocabKey}")
         return vocabKey
     }
 
