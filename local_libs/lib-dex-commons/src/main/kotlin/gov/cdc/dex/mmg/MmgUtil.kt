@@ -34,22 +34,25 @@ class MmgUtil(val redisProxy: RedisProxy)  {
     fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
         // TODO : include jurisdictionCode logic
 
-        val mmg1 : MMG
+        //val mmg1 : MMG
         // make a list to hold all the mmgs we need
         var mmgs : Array<MMG> = arrayOf()
 
         var msh21_3In = msh21_3?.normalize()
 
-        if (msh21_2.contains(ARBO_MMG_v1_0)) {
+        if (msh21_2.normalize().contains(ARBO_MMG_v1_0)) {
             // msh_21_3 is empty, make it same as msh_21_2
             msh21_3In = msh21_2.normalize()
 
         } else {
             // get the generic MMG:
-
-//            val rKey = REDIS_MMG_PREFIX + msh21_2
             // TODO: add exceptions // logger.info("Pulling MMG: key: ${rKey}")
-            mmg1 = gson.fromJson(redisProxy.getJedisClient().get(REDIS_MMG_PREFIX + msh21_2.normalize()), MMG::class.java)
+            val mmg1 = gson.fromJson(redisProxy.getJedisClient().get(REDIS_MMG_PREFIX + msh21_2.normalize()), MMG::class.java)
+
+            //REMOVE MSH-21 from GenV2: when condition specific is also defining it with new cardinality of [3..3]
+            if (GEN_V2_MMG == msh21_2.normalize() && eventCode != null) {
+                mmg1.blocks = mmg1.blocks.filter { it.name != "Message Header" }
+            }
             mmgs += mmg1
 
         } // .else
@@ -59,7 +62,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
             val eventCodeEntry =
                 gson.fromJson( redisProxy.getJedisClient().get(REDIS_CONDITION_PREFIX + eventCode) , Condition2MMGMapping::class.java)
             // check if there are mmg:<name> maps for this condition
-            if ( ! eventCodeEntry.mmgMaps.isNullOrEmpty() ) {
+            if ( eventCodeEntry != null && !eventCodeEntry.mmgMaps.isNullOrEmpty() ) {
                 var mmg2KeyNames: List<String>? = null
                 // look at special cases first, if any exist
                 if (! eventCodeEntry.specialCases.isNullOrEmpty()) {

@@ -20,7 +20,7 @@ internal class MmgUtilTest {
         genV2mmgs.forEach {println(it.name)}
 
         println("----\nLyme")
-        val lymeMMGs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "10250", "13")
+        val lymeMMGs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "11080", "13")
         lymeMMGs.forEach {println(it.name)}
 
         println("----\nHepA")
