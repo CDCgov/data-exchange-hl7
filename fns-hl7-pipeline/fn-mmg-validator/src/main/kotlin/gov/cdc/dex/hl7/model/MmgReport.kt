@@ -2,9 +2,9 @@ package gov.cdc.dex.hl7.model
 
 import com.google.gson.annotations.SerializedName
 
-data class MmgReport(@SerializedName("error-count") private val errorCount:Int,
-                @SerializedName("warning-count") private val warningCount: Int,
-                private val entries: List<ValidationIssue>) {
+data class MmgReport( private val entries: List<ValidationIssue>) {
+    @SerializedName("error-count") val errorCount = entries.count { it.classification == ValidationIssueCategoryType.ERROR}
+    @SerializedName("warning-count")val warningCount = entries.count{ it.classification == ValidationIssueCategoryType.WARNING}
     val status = if (errorCount == 0) ReportStatus.MMG_VALID else ReportStatus.MMG_ERRORS
 
 } // .MmgReporter

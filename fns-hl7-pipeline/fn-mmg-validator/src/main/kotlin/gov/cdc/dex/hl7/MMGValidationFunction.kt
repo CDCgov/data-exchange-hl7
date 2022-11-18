@@ -7,19 +7,15 @@ import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
 import gov.cdc.dex.azure.EventHubSender
-import gov.cdc.dex.hl7.exception.InvalidMessageException
 import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.MmgValidatorProcessMetadata
 import gov.cdc.dex.hl7.model.ReportStatus
-import gov.cdc.dex.hl7.model.ValidationIssueCategoryType
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
-import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-import gov.cdc.hl7.HL7StaticParser
 import java.util.*
 
 /**
@@ -90,9 +86,8 @@ class MMGValidationFunction {
                     // and sending to next event hub
 
                     // get report status
-                    val errorCount = validationReport.count { it.classification == ValidationIssueCategoryType.ERROR}
-                    val warningCount = validationReport.count{ it.classification == ValidationIssueCategoryType.WARNING}
-                    val mmgReport = MmgReport(errorCount, warningCount, validationReport)
+
+                    val mmgReport = MmgReport( validationReport)
                     
 
                     val processMD = MmgValidatorProcessMetadata(mmgReport.toString(), mmgReport)

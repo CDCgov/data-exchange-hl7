@@ -2,7 +2,7 @@ package gov.cdc.dex.hl7
 
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
-import gov.cdc.dex.hl7.exception.InvalidMessageException
+
 import gov.cdc.dex.hl7.model.*
 import gov.cdc.dex.mmg.MmgUtil
 
@@ -102,7 +102,7 @@ class MmgValidator {
                             path ="N/A",
                             line=lineNum + 1,
                             errorMessage= ValidationErrorMessage.SEGMENT_NOT_IN_MMG,
-                            description="OBX segment identifier not found in the MMG. Found: ${segmentID}",
+                            description="OBX segment identifier ${segmentID} not found in the MMG.",
                         )
                     } // .if
                     //logger.info("hl7 segmentName: --> " + segmentName + " -- " + "segmentID: --> " + segmentID)
@@ -284,7 +284,7 @@ class MmgValidator {
         return line
     }
 
-    private fun getMMGFromMessage(message: String): Array<MMG> {
+    fun getMMGFromMessage(message: String): Array<MMG> {
         val genVProfile = this.extractValue(message, GENVx_PROFILE_PATH)
         val conditionProfile = this.extractValue(message, CONDITION_PROFILE_PATH)
         val eventCode = this.extractValue(message, EVENT_CODE_PATH)

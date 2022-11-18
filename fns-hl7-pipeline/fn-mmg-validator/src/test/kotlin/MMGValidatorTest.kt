@@ -1,4 +1,4 @@
-import gov.cdc.dex.hl7.MmgUtil
+
 import gov.cdc.dex.hl7.MmgValidator
 import gov.cdc.dex.hl7.exception.InvalidMessageException
 
@@ -13,9 +13,9 @@ class MMGValidatorTest {
     fun testMMGValidator() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
-        val mmgValidator = MmgValidator( testMsg, mmgs)
-        val validationReport = mmgValidator.validate()
+
+        val mmgValidator = MmgValidator( )
+        val validationReport = mmgValidator.validate(testMsg)
 
         println(validationReport);
     }
@@ -54,14 +54,16 @@ class MMGValidatorTest {
         try {
             val filePath = "/tbrd/BDB_LAB_13.txt"
             val testMsg = this::class.java.getResource(filePath).readText()
-            val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
-            val mmgValidator = MmgValidator(testMsg, mmgs)
-            val validationReport = mmgValidator.validate()
+            //val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
+            val mmgValidator = MmgValidator()
+            val validationReport = mmgValidator.validate(testMsg)
+//            assert(false)
         } catch (e: InvalidMessageException) {
             println("Exception properly thrown - can't validate this message lacking event code")
+            assert(true)
         }
     }
-    fun testFolder(folderName: String) {
+    private fun testFolder(folderName: String) {
         val dir = "src/test/resources/$folderName"
 
         Files.walk(Paths.get(dir))
@@ -70,9 +72,9 @@ class MMGValidatorTest {
                 println("==================  ${it.fileName} ")
                 try {
                     val testMsg = this::class.java.getResource("/$folderName/${it.fileName.toString()}").readText()
-                    val mmgs = MmgUtil.getMMGFromMessage(testMsg, it.fileName.toString(), "")
-                    val mmgValidator = MmgValidator(testMsg, mmgs)
-                    val validationReport = mmgValidator.validate()
+                    //val mmgs = MmgUtil.getMMGFromMessage(testMsg, it.fileName.toString(), "")
+                    val mmgValidator = MmgValidator()
+                    val validationReport = mmgValidator.validate(testMsg)
 
                     println(validationReport)
                 } catch(e: InvalidMessageException) {
