@@ -34,7 +34,7 @@ class DebatcherTest {
     @Test
     fun testDebatching() {
 
-        val testFileIS = this::class.java.getResource("/genV1/GenV1_Batch_no_headers.txt").openStream()
+        val testFileIS = this::class.java.getResource("/genV1/GenV1_Batch_no_headers_eightMSHs.txt").openStream()
 //        val testFileIS = this::class.java.getResource("/genV1/Genv1-Case-TestMessage1.HL7").openStream()
         val provenance = Provenance(
             eventId="123",
