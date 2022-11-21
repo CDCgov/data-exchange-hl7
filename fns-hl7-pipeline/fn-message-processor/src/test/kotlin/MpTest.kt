@@ -203,18 +203,56 @@ class MpTest {
         val testMsg = this::class.java.getResource(filePath).readText()
 
         val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
-        logger.info("mmgs.size: --> ${mmgs.size}")
-        mmgs.forEach { mmg ->
-            logger.info("mmg.name: --> ${mmg.name}, mmg.blocks.size: --> ${mmg.blocks.size}")
-        } // mmgs
-        
-        logger.info("----------------------------")
 
-        val mmgsFiltered = Transformer.getMmgsFiltered(mmgs)
-        logger.info("mmgsFiltered.size: --> ${mmgsFiltered.size}")
-        mmgsFiltered.forEach { mmgFiltered ->
-            logger.info("mmgFiltered.name: --> ${mmgFiltered.name}, mmgFiltered.blocks.size: --> ${mmgFiltered.blocks.size}")
-        } // mmgs
+        logger.info("mmgs[0].name: --> ${mmgs[0].name}, mmgs[0].blocks.size: --> ${mmgs[0].blocks.size}")
+        val mmgs2 = mmgs.copyOf()
+        val mmgsFiltered = Transformer.getMmgsFiltered(mmgs2)
+        logger.info("mmgs[0].name: --> ${mmgs[0].name}, mmgs[0].blocks.size: --> ${mmgs[0].blocks.size}")
+
+
+        // when (mmgs.size) {
+        //     1 -> assertEquals(mmgs[0].blocks.size, mmgsFiltered[0].blocks.size)
+        //     2 -> {
+        //         logger.info("mmgs[0].name: --> ${mmgs[0].name}, mmgs[0].blocks.size: --> ${mmgs[0].blocks.size}")
+        //         logger.info("mmgsFiltered[0].name: --> ${mmgsFiltered[0].name}, mmgsFiltered[0].blocks.size: --> ${mmgsFiltered[0].blocks.size}")
+
+
+        //         logger.info("mmgs[1].name: --> ${mmgs[1].name}, mmgs[1].blocks.size: --> ${mmgs[1].blocks.size}")
+        //         logger.info("mmgsFiltered[1].name: --> ${mmgsFiltered[1].name}, mmgsFiltered[1].blocks.size: --> ${mmgsFiltered[1].blocks.size}")
+
+        //         assertEquals(mmgs[1].blocks.size, mmgsFiltered[1].blocks.size)
+        //         assertTrue( mmgs[0].blocks.size > mmgsFiltered[0].blocks.size, "fail to filter out duplicate MSH, PID from MMGs")
+        //     } 
+        //     3 -> {
+        //         assertEquals(mmgs[2].blocks.size, mmgsFiltered[2].blocks.size)
+        //         assertTrue( mmgs[1].blocks.size > mmgsFiltered[1].blocks.size, "fail to filter out duplicate MSH, PID from MMGs")
+        //         assertTrue( mmgs[0].blocks.size > mmgsFiltered[0].blocks.size, "fail to filter out duplicate MSH, PID from MMGs")
+        //     }
+        //     else -> { 
+        //         throw Exception("more than 3 MMGs found")
+        //     }
+        // } // .when       
+
+        // logger.info("mmgs.size: --> ${mmgs.size}")
+        // mmgs.forEach { mmg ->
+        //     logger.info("mmg.name: --> ${mmg.name}, mmg.blocks.size: --> ${mmg.blocks.size}")
+        //     mmg.blocks.forEach { block -> 
+        //         logger.info("block.name: --> ${block.name}")
+        //     }   
+        // } // mmgs
+
+        // val mmgsFiltered = Transformer.getMmgsFiltered(mmgs)
+        
+        // logger.info("----------------------------")
+
+        
+        // logger.info("mmgsFiltered.size: --> ${mmgsFiltered.size}")
+        // mmgsFiltered.forEach { mmgFiltered ->
+        //     logger.info("mmgFiltered.name: --> ${mmgFiltered.name}, mmgFiltered.blocks.size: --> ${mmgFiltered.blocks.size}")
+        //     mmgFiltered.blocks.forEach { block -> 
+        //         logger.info("block.name: --> ${block.name}")
+        //     }   
+        // } // mmgs
 
     } // .testMMGUtilGetMMG
 

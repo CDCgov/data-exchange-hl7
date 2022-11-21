@@ -218,9 +218,10 @@ class Transformer  {
             if ( mmgs.size > 1 ) { 
                 for ( index in 0..mmgs.size - 2) { // except the last one
                     mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                        block.type == MMG_BLOCK_TYPE_SINGLE && block.elements.any { it ->
-                            it.mappings.hl7v251.segmentType != "MSH" || it.mappings.hl7v251.segmentType != "PID"
-                        } // .it
+                        !(block.name == "Message Header" || block.name == "Subject Related")
+                        // block.type == MMG_BLOCK_TYPE_SINGLE && block.elements.any { it ->
+                        //     it.mappings.hl7v251.segmentType != "MSH" || it.mappings.hl7v251.segmentType != "PID"
+                        // } // .it
                     } // .filter
                 } // .for
             } // .if
