@@ -4,17 +4,25 @@ import org.slf4j.LoggerFactory
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.redisModels.Block
 // import gov.cdc.dex.redisModels.Element
+
+import gov.cdc.dex.hl7.model.PhinDataType
+
 import gov.cdc.dex.util.StringUtils
 
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 
 class Transformer  {
 
     companion object {
         val logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
+        private val gson = Gson()
+
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         private val OBR_4_1_EPI_ID = "68991-9"
-    
+        private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
+        private val MMG_BLOCK_NAME_SUBJECT_RELATED = "Subject Related"
 
         // --------------------------------------------------------------------------------------------------------
         //  ------------- hl7ToJsonModelBlocksSingle ------------- BLOCKS SINGLE
@@ -215,21 +223,31 @@ class Transformer  {
 
 
         /* private */ fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
-        // TODO FIX as is not removing the MSH from the mmgs
 
             if ( mmgs.size > 1 ) { 
                 for ( index in 0..mmgs.size - 2) { // except the last one
                     mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                        !(block.name == "Message Header" || block.name == "Subject Related")
-                        // block.type == MMG_BLOCK_TYPE_SINGLE && block.elements.any { it ->
-                        //     it.mappings.hl7v251.segmentType != "MSH" || it.mappings.hl7v251.segmentType != "PID"
-                        // } // .it
+                        !( block.name == MMG_BLOCK_NAME_MESSAGE_HEADER || block.name == MMG_BLOCK_NAME_SUBJECT_RELATED )
                     } // .filter
                 } // .for
             } // .if
 
             return mmgs
         } // .getMmgsFiltered
+
+        
+        /* private */ fun getPhinDataTypes(): Map<String, List<PhinDataType>> {
+
+            val dataTypesFilePath = "/DefaultFieldsProfile.json"
+            val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+
+            // val dataTypesMap = Map<String, List<PhinDataType>>
+            val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
+
+            val dataTypesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+
+            return dataTypesMap
+        } // .getPhinDataTypes
 
     } // .companion object
 } // .Transformer

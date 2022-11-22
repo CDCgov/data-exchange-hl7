@@ -262,14 +262,8 @@ class MpTest {
 
     @Test
     fun testPhinDataTypes() {
-        
-        val dataTypesFilePath = "/DefaultFieldsProfile.json"
-        val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
 
-        // val dataTypesMap = Map<String, List<PhinDataType>>
-        val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
-
-        val dataTypesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+        val dataTypesMap: Map<String, List<PhinDataType>> = Transformer.getPhinDataTypes()
 
         logger.info("dataTypesMap: --> ${dataTypesMap}")
 
