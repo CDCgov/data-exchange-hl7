@@ -57,25 +57,32 @@ class Transformer  {
                 val mshLineParts = messageLines.filter { it.startsWith("MSH|") }[0].split("|") // there would be only one MSH
 
                 val segmentDataFull = if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition].trim() else ""  
-                logger.info("segmentDataFull: --> ${segmentDataFull}")
+                //logger.info("segmentDataFull: --> ${segmentDataFull}")
                 // NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
 
                 val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
-                logger.info("segmentDataArr: --> ${segmentDataArr}")
+                //logger.info("segmentDataArr: --> ${segmentDataArr}")
                 //[ NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO, 
                 //  Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO, 
                 //  Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO ]
 
-                val segmentData = segmentDataArr.map { dt ->
-                    val dtParts = dt.split("^")
-                    logger.info("dtParts: --> ${dtParts}")
-                    // dtParts // ["NOTF_ORU_v3.0","PHINProfileID","2.16.840.1.114222.4.10.3","ISO"]
-                    phinDataTypesMap[el.mappings.hl7v251.dataType]!!.map { phDt -> 
+                val segmentData = segmentDataArr.map { oneRepeat ->
+                    val oneRepeatParts = oneRepeat.split("^")
+                    //logger.info("oneRepeatParts: --> ${oneRepeatParts}")
+                    // oneRepeatParts // ["NOTF_ORU_v3.0","PHINProfileID","2.16.840.1.114222.4.10.3","ISO"]
+                    if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType) ) {
+                        phinDataTypesMap[el.mappings.hl7v251.dataType]!!.map { phinDataTypeEntry -> 
 
-                        val filedNumber = phDt.fieldNumber.toInt() - 1
-                        
-                        StringUtils.normalizeString(phDt.name) to if (dtParts.size > filedNumber) dtParts[filedNumber] else null 
-                    }.toMap()
+                            val filedNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
+
+                            val dt = if (oneRepeatParts.size > filedNumber) oneRepeatParts[filedNumber] else null
+                            StringUtils.normalizeString(phinDataTypeEntry.name) to dt
+                        }.toMap()
+                    } else {
+                        // not available in the default fields profile, return plain data from hl7
+                        oneRepeat 
+                    } // .else
+
                 } // .segmentData
 
                 StringUtils.normalizeString(el.name) to segmentData
