@@ -33,17 +33,17 @@ class Transformer  {
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
-            logger.info("mmgs.size: --> ${mmgs.size}")
 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
-            logger.info("mmgBlocks.size: --> ${mmgBlocks.size}")
 
             val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             val messageLines = getMessageLines(hl7Content)
 
             val mmgElemsBlocksSingle = mmgBlocksSingle.flatMap { it.elements } // .mmgElemsBlocksSingle
-            logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}")
+            // logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}")
+
+            val phinDataTypesMap = getPhinDataTypes()
 
             //  ------------- MSH
             // ----------------------------------------------------
@@ -58,7 +58,12 @@ class Transformer  {
 
                 val segmentData = if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition] else ""   
 
-                // TODO: el.mappings.hl7v251.dataType 
+                if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType)) {
+                    // TODO: el.mappings.hl7v251.dataType 
+                    logger.info("\nphinDataTypesMap[el.mappings.hl7v251.dataType]: --> ${phinDataTypesMap[el.mappings.hl7v251.dataType]}\n") 
+                } // .if 
+
+
 
                 StringUtils.normalizeString(el.name) to segmentData
             }.toMap() // .mmgMsh.map
@@ -192,11 +197,8 @@ class Transformer  {
             }.toMap() // .blocksNonSingleModel
 
             
-            // for ((key, value) in blocksNonSingleModel) {
-            //     logger.info("value --> ${value}")
-            // }
-            logger.info("blocksNonSingleModel: --> ${Gson().toJson(blocksNonSingleModel)}\n")
-
+            logger.info("blocksNonSingleModel.size: --> ${blocksNonSingleModel.size}\n")
+            logger.info("MMG Model (blocksNonSingleModel): --> ${Gson().toJson(blocksNonSingleModel)}\n")
             return blocksNonSingleModel
         } // .hl7ToJsonModelBlocksNonSingle 
         
@@ -244,9 +246,7 @@ class Transformer  {
             // val dataTypesMap = Map<String, List<PhinDataType>>
             val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
 
-            val dataTypesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
-
-            return dataTypesMap
+            return gson.fromJson(dataTypesMapJson, dataTypesMapType)
         } // .getPhinDataTypes
 
     } // .companion object
