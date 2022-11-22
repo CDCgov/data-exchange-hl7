@@ -37,7 +37,7 @@ class MpTest {
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
         private val gson = Gson()
     } // .companion 
-
+/* 
     @Test
     fun testRedisInstanceUsed() {
 
@@ -107,21 +107,6 @@ class MpTest {
         assertEquals(cc.mmgMaps!!.size, 1)
     } // .testLoadMMG
 
-    
-    // @Test
-    // fun testGetMMG() {
-    //    // fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
-
-    //     val mmgs = MmgUtil.getMMG("generic_mmg_v2.0", "lyme_tbrd_mmg_v1.0", "10250", "42")
-
-    //     mmgs.forEach {
-    //         logger.info("MMG Info for filePath: filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
-    //     }
-
-    //     assertEquals(mmgs.size, 2)
-    //     assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 34)
-    // } // .testLoadMMG
-
 
     @Test
     fun testRedisMMGToClass() {
@@ -174,7 +159,6 @@ class MpTest {
         Transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
 
         Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
-
     } // .testTransformerHl7ToJsonModel
 
 
@@ -194,7 +178,6 @@ class MpTest {
         Transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
 
         Transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
-
     } // .testTransformerHl7ToJsonModelwithRedisMmg
 
 
@@ -269,7 +252,6 @@ class MpTest {
 
 
 
-
     @Test
     fun testTransformerHl7ToJsonModelwithRedisMmgTC01() {
         
@@ -289,7 +271,31 @@ class MpTest {
 
     } // .testTransformerHl7ToJsonModelwithRedisMmgTC01
 
+
+*/
+
+    @Test
+    fun testTransformerHl7ToJsonModelwithRedisMmg() {
+        
+        // hl7
+        val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
+
+        val mmgs = MmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
+
+        mmgs.forEach {
+            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
+
+        Transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
+
+        // Transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
+    } // .testTransformerHl7ToJsonModelwithRedisMmg
+
 } // .MpTest
+
+
+
 /* 
     // @Test
     // fun testGetSegments() {

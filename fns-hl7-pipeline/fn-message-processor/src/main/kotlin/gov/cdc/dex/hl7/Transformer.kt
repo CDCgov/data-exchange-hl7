@@ -43,7 +43,7 @@ class Transformer  {
             val mmgElemsBlocksSingle = mmgBlocksSingle.flatMap { it.elements } // .mmgElemsBlocksSingle
             // logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}")
 
-            // val phinDataTypesMap = getPhinDataTypes()
+            val phinDataTypesMap = getPhinDataTypes()
 
             //  ------------- MSH
             // ----------------------------------------------------
@@ -57,60 +57,28 @@ class Transformer  {
                 val mshLineParts = messageLines.filter { it.startsWith("MSH|") }[0].split("|") // there would be only one MSH
 
                 val segmentDataFull = if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition].trim() else ""  
+                logger.info("segmentDataFull: --> ${segmentDataFull}")
+                // NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
 
-                // logger.info("\nel.isRepeat: --> ${el.isRepeat}\n")  
+                val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
+                logger.info("segmentDataArr: --> ${segmentDataArr}")
+                //[ NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO, 
+                //  Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO, 
+                //  Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO ]
 
-                // val segmentDataArr = if ( el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
+                val segmentData = segmentDataArr.map { dt ->
+                    val dtParts = dt.split("^")
+                    logger.info("dtParts: --> ${dtParts}")
+                    // dtParts // ["NOTF_ORU_v3.0","PHINProfileID","2.16.840.1.114222.4.10.3","ISO"]
+                    phinDataTypesMap[el.mappings.hl7v251.dataType]!!.map { phDt -> 
 
-                // val segmentData = segmentDataArr.flatMap { dt ->
-                //     val dtParts = dt.split("^")
-                //     // dtParts // ["NOTF_ORU_v3.0","PHINProfileID","2.16.840.1.114222.4.10.3","ISO"]
-                //     phinDataTypesMap[el.mappings.hl7v251.dataType]!!.map { phDt -> 
-                //         val n = phDt.fieldNumber.toInt()
-                //         val nn = if (dtParts.size > n) dtParts[n] else null 
-                //         mapOf(
-                //             phDt.name to nn
-                //         )
+                        val filedNumber = phDt.fieldNumber.toInt() - 1
                         
-                //         /*
-                //           @SerializedName("fieldNumber") val fieldNumber: Long, 
-                //             @SerializedName("name") val name: String, 
-                //             @SerializedName("dataType") val dataType: String,
-                //             @SerializedName("maxLength") val maxLength: String,
-                //             @SerializedName("usage") val usage: String,
-                //             @SerializedName("cardinality") val cardinality: String,
-                //             @SerializedName("conformance") val conformance: String,
-                //         */
+                        StringUtils.normalizeString(phDt.name) to if (dtParts.size > filedNumber) dtParts[filedNumber] else null 
+                    }.toMap()
+                } // .segmentData
 
-                //     }
-
-
-                    // var resultMap = mutableMapOf<String, String>()
-
-                    // phinDataTypesMap[el.mappings.hl7v251.dataType]!!.forEachIndexed { index: Int, phinDt: PhinDataType ->
-                    //     resultMap.put( phinDt.name, dtParts[index] )
-                    // mapOf(
-                    //     "1" to dtParts[0],
-                    //     "2" to dtParts[1],
-                    //     "3" to dtParts[2],
-                    // ) // .mapOf
-                    // }
-                // }
-                // .map { dt -> 
-                //     dt[0]
-                // } // .map
-
-                // if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType)) {
-                //     // TODO: el.mappings.hl7v251.dataType 
-                //     logger.info("\nphinDataTypesMap[el.mappings.hl7v251.dataType]: --> ${phinDataTypesMap[el.mappings.hl7v251.dataType]}\n") 
-                //     // val segmentDataParts = segmentData.split()
-                //     // val phinEntries = phinDataTypesMap[el.mappings.hl7v251.dataType]
-
-                // } // .if 
-
-
-
-                StringUtils.normalizeString(el.name) to segmentDataFull
+                StringUtils.normalizeString(el.name) to segmentData
             }.toMap() // .mmgMsh.map
 
 
@@ -174,7 +142,7 @@ class Transformer  {
             }.toMap() // .mmgPid.map
 
             
-            val mmgModelBlocksSingle = mshMap + pidMap + obrMap + obxMap
+            val mmgModelBlocksSingle = mshMap // + pidMap + obrMap + obxMap
             
             logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
             logger.info("MMG Model (mmgModelBlocksSingle): --> ${Gson().toJson(mmgModelBlocksSingle)}\n")
