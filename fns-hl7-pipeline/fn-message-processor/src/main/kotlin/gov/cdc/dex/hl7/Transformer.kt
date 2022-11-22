@@ -50,7 +50,9 @@ class Transformer  {
 
                 val segmentData = if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition] else ""   
 
-                StringUtils.normalizeString(el.name) to segmentData 
+                // TODO: el.mappings.hl7v251.dataType 
+
+                StringUtils.normalizeString(el.name) to segmentData
             }.toMap() // .mmgMsh.map
 
 

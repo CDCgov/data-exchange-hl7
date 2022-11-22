@@ -15,9 +15,12 @@ import redis.clients.jedis.Jedis
 
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.hl7.model.ConditionCode
+import gov.cdc.dex.hl7.model.PhinDataType
+
 import gov.cdc.dex.hl7.Transformer
 
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class MpTest {
 
@@ -188,13 +191,12 @@ class MpTest {
             logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
         }
 
-        Transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+        Transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
 
-        Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+        //Transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
 
     } // .testTransformerHl7ToJsonModelwithRedisMmg
 
-*/
 
 
     @Test
@@ -256,8 +258,26 @@ class MpTest {
 
     } // .testMMGUtilGetMMG
 
+*/
 
+    @Test
+    fun testPhinDataTypes() {
+        
+        val dataTypesFilePath = "/DefaultFieldsProfile.json"
+        val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
 
+        // val dataTypesMap = Map<String, List<PhinDataType>>
+        val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
+
+        val dataTypesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+
+        logger.info("dataTypesMap: --> ${dataTypesMap}")
+
+    } // .testTransformerHl7ToJsonModelwithRedisMmg
+
+} // .MpTest
+
+/* 
     // @Test
     // fun testGetSegments() {
     //     val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
@@ -302,4 +322,4 @@ class MpTest {
     // fun testInvalidCode() {
 
     // }
-}
+    */
