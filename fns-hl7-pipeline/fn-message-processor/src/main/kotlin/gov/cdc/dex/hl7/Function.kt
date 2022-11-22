@@ -74,9 +74,9 @@ class Function {
                 try {
                     // get MMG(s) for the message:
                     val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
-                    // mmgs.forEach {
-                    //     context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
-                    // }
+                    mmgs.forEach {
+                        context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
+                    }
 
                     
                     val mmgModelBlocksSingle = Transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
@@ -99,7 +99,8 @@ class Function {
 
                 } catch (e: Exception) {
                     
-                    context.logger.severe("Unable to process Message (MMGUtil) due to exception: ${e.message}")
+                    
+                    context.logger.severe("Try 1: Unable to process Message due to exception: ${e.message}")
 
                     // val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
                     // val summary = SummaryInfo(STATUS_ERROR, problem)
@@ -112,7 +113,7 @@ class Function {
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
-                context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                context.logger.severe("Try 2: Unable to process Message due to exception: ${e.message}")
 
                 // val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
                 // val summary = SummaryInfo(STATUS_ERROR, problem)
