@@ -714,7 +714,7 @@
   "IS": [
     {
       "fieldNumber": 1,
-      "name": "Coded Value for HL7-Defnited Table",
+      "name": "Coded Value for HL7-Defined Table",
       "dataType": "ST",
       "maxLength": "20",
       "usage": "R",

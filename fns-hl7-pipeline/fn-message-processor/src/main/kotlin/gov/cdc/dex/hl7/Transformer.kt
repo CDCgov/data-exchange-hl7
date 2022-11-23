@@ -244,6 +244,7 @@ class Transformer  {
             return gson.fromJson(dataTypesMapJson, dataTypesMapType)
         } // .getPhinDataTypes
 
+
         /* private */ fun getSegmentData(el: Element, segmentDataFull: String): Any {
             
             val phinDataTypesMap = getPhinDataTypes()
@@ -257,7 +258,7 @@ class Transformer  {
             //  Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO, 
             //  Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO ]
 
-            return segmentDataArr.map { oneRepeat ->
+            val segmentData = segmentDataArr.map { oneRepeat ->
                 val oneRepeatParts = oneRepeat.split("^")
                 //logger.info("oneRepeatParts: --> ${oneRepeatParts}")
                 // oneRepeatParts // ["NOTF_ORU_v3.0","PHINProfileID","2.16.840.1.114222.4.10.3","ISO"]
@@ -271,12 +272,12 @@ class Transformer  {
                     }.toMap()
                 } else {
                     // not available in the default fields profile, return plain data from hl7
-                    listOf(mapOf("segment_data" to oneRepeat))
+                    oneRepeat
                 } // .else
 
-            } // .return 
+            } // .segmentData 
 
-
+            return if (el.isRepeat) segmentData else segmentData[0]
         } // .getPhinDataTypes
 
     } // .companion object
