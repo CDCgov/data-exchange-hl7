@@ -248,30 +248,23 @@ class Transformer  {
         /* private */ fun getSegmentData(el: Element, segmentDataFull: String): Any {
             
             val phinDataTypesMap = getPhinDataTypes()
-        
-            //logger.info("segmentDataFull: --> ${segmentDataFull}")
-            // NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
 
             val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
-            //logger.info("segmentDataArr: --> ${segmentDataArr}")
-            //[ NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO, 
-            //  Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO, 
-            //  Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO ]
 
             val segmentData = segmentDataArr.map { oneRepeat ->
                 val oneRepeatParts = oneRepeat.split("^")
-                //logger.info("oneRepeatParts: --> ${oneRepeatParts}")
-                // oneRepeatParts // ["NOTF_ORU_v3.0","PHINProfileID","2.16.840.1.114222.4.10.3","ISO"]
+
                 if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType) ) {
                     phinDataTypesMap[el.mappings.hl7v251.dataType]!!.map { phinDataTypeEntry -> 
 
-                        val filedNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
+                        val fieldNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
 
-                        val dt = if (oneRepeatParts.size > filedNumber) oneRepeatParts[filedNumber] else null
+                        val dt = if (oneRepeatParts.size > fieldNumber) oneRepeatParts[fieldNumber] else null
                         StringUtils.normalizeString(phinDataTypeEntry.name) to dt
                     }.toMap()
                 } else {
-                    // not available in the default fields profile, return plain data from hl7
+                    // not available in the default fields profile (DefaultFieldsProfile.json)
+                    // returns segment data as is in hl7 message
                     oneRepeat
                 } // .else
 
@@ -283,12 +276,3 @@ class Transformer  {
     } // .companion object
 } // .Transformer
 
-
-
-/*
-Element(ordinal=1, name=Message Profile Identifier, dataType=Text, isUnitOfMeasure=false, priority=R, 
-isRepeat=true, repetitions=2, mayRepeat=Y/2, valueSetCode=, valueSetVersionNumber=null, codeSystem=N/A, 
-mappings=Mapping(hl7v251=HL7Mapping(
-legacyIdentifier=NOT115, identifier=N/A: MSH-21, dataType=EI, segmentType=MSH, obrPosition=1, fieldPosition=21, componentPosition=-1, 
-usage=R, cardinality=[2..2], repeatingGroupElementType=NO)))
-*/
