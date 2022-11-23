@@ -16,6 +16,9 @@ import redis.clients.jedis.Jedis
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.hl7.model.ConditionCode
 import gov.cdc.dex.hl7.model.PhinDataType
+// import gov.cdc.dex.redisModels.ValueSetConcept
+import gov.cdc.dex.hl7.model.ValueSetConcept
+
 
 import gov.cdc.dex.hl7.Transformer
 
@@ -274,23 +277,56 @@ class MpTest {
 
 */
 
-    @Test
-    fun testTransformerHl7ToJsonModelwithRedisMmg() {
+    // @Test
+    // fun testTransformerHl7ToJsonModelwithRedisMmg() {
         
-        // hl7
-        val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
-        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
+    //     // hl7
+    //     val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+    //     val hl7Content = this::class.java.getResource(hl7FilePath).readText()
 
-        val mmgs = MmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
+    //     val mmgs = MmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
 
-        mmgs.forEach {
-            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-        }
+    //     mmgs.forEach {
+    //         logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+    //     }
 
-        Transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
+    //     Transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
 
-        // Transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
-    } // .testTransformerHl7ToJsonModelwithRedisMmg
+    //     // Transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
+    // } // .testTransformerHl7ToJsonModelwithRedisMmg
+
+    @Test
+    fun testRedisConcepts() {
+
+        val REDIS_VOCAB_NAMESPACE = "vocab:"
+        val key = "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
+        val conceptCode = "N"
+
+        // val valueSetMap = mutableMapOf<String, List<String>>()
+
+        // val conceptStr: ValueSetConcept = (jedis.hget(REDIS_VOCAB_NAMESPACE + key, conceptCode) ?: "") as ValueSetConcept
+        val conceptStr = jedis.hget(REDIS_VOCAB_NAMESPACE + key, conceptCode)
+
+        // val json = Gson().toJson(conceptStr)
+        // val cobj:ValueSetConcept =Gson().fromJson(json, ValueSetConcept::class.java)
+
+        //?: throw Exception("Unable to retrieve concept values for $key") 
+
+        // val concept = gson.fromJson(conceptStr, ValueSetConcept)
+
+        // TODO: code system code -> value set code e.g. HL70136 -> PHVS_YesNoUnknown_CDC
+
+        // val concept =  gson.fromJson(conceptStr, ValueSetConcept::class.java)
+
+        // val conceptType = object : TypeToken< Map<String, ValueSetConcept> >() {}.type
+
+        // return gson.fromJson(conceptType, dataTypesMapType)
+
+        // valueSetMap[key] = conceptStr.keys.toList()
+
+        logger.info("cobj: --> ${conceptStr}")
+    } // .testRedisConcepts
+
 
 } // .MpTest
 
