@@ -22,7 +22,7 @@ class Transformer  {
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         private val OBR_4_1_EPI_ID = "68991-9"
         private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
-        private val MMG_BLOCK_NAME_SUBJECT_RELATED = "Subject Related"
+        // private val MMG_BLOCK_NAME_SUBJECT_RELATED = "Subject Related"
 
         // --------------------------------------------------------------------------------------------------------
         //  ------------- hl7ToJsonModelBlocksSingle ------------- BLOCKS SINGLE
@@ -73,9 +73,9 @@ class Transformer  {
 
                 val pidLineParts = messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
 
-                val segmentDataFull = if (pidLineParts.size > dataFieldPosition) pidLineParts[dataFieldPosition].trim() else "null"  
+                val segmentDataFull = if (pidLineParts.size > dataFieldPosition) pidLineParts[dataFieldPosition].trim() else null 
 
-                val segmentData = if ( segmentDataFull.isNullOrEmpty() ) "null" else getSegmentData(el, segmentDataFull)
+                val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
 
                 StringUtils.normalizeString(el.name) to segmentData 
             }.toMap() // .mmgPid.map
@@ -91,8 +91,10 @@ class Transformer  {
                 // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
 
                 val obrLineParts = messageLines.filter { it.startsWith("OBR|") && it.contains(OBR_4_1_EPI_ID) }[0].split("|") // there would be only one Epi Obr
-                // logger.info("obrLineParts: $obrLineParts")
-                val segmentData = if (obrLineParts.size > dataFieldPosition) obrLineParts[dataFieldPosition] else ""  
+
+                val segmentDataFull = if (obrLineParts.size > dataFieldPosition) obrLineParts[dataFieldPosition].trim() else null  
+
+                val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
 
                 StringUtils.normalizeString(el.name) to segmentData 
             }.toMap() // .mmgObr.map
@@ -124,7 +126,7 @@ class Transformer  {
             }.toMap() // .mmgPid.map
 
             
-            val mmgModelBlocksSingle = mshMap + pidMap //+ obrMap + obxMap
+            val mmgModelBlocksSingle = mshMap + pidMap + obrMap // + obxMap
             
             logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
             logger.info("MMG Model (mmgModelBlocksSingle): --> ${Gson().toJson(mmgModelBlocksSingle)}\n")
@@ -271,7 +273,7 @@ class Transformer  {
             } // .segmentData 
 
             return if (el.isRepeat) segmentData else segmentData[0]
-        } // .getPhinDataTypes
+        } // .getSegmentData
 
     } // .companion object
 } // .Transformer
