@@ -83,7 +83,7 @@ class Function {
 
                     val mmgModelBlocksNonSingle = Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
 
-                    val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 
+                    val mmgModel = mmgModelBlocksSingle // + mmgModelBlocksNonSingle 
                     context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${mmgModel}")
 
                     val processMD = MpProcessMetadata(status="MMG_MODEL_OK", report=mmgModel) // TODO: MMG_MODEL_OK

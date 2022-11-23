@@ -3,7 +3,7 @@ package gov.cdc.dex.hl7
 import org.slf4j.LoggerFactory
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.redisModels.Block
-// import gov.cdc.dex.redisModels.Element
+import gov.cdc.dex.redisModels.Element
 
 import gov.cdc.dex.hl7.model.PhinDataType
 
@@ -29,7 +29,7 @@ class Transformer  {
         // --------------------------------------------------------------------------------------------------------
         
         //? @Throws(Exception::class) 
-        fun hl7ToJsonModelBlocksSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, Any> {
+        fun hl7ToJsonModelBlocksSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, Any?> {
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
@@ -43,8 +43,6 @@ class Transformer  {
             val mmgElemsBlocksSingle = mmgBlocksSingle.flatMap { it.elements } // .mmgElemsBlocksSingle
             // logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}")
 
-            val phinDataTypesMap = getPhinDataTypes()
-
             //  ------------- MSH
             // ----------------------------------------------------
             val mmgMsh = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "MSH" }
@@ -56,35 +54,10 @@ class Transformer  {
 
                 val mshLineParts = messageLines.filter { it.startsWith("MSH|") }[0].split("|") // there would be only one MSH
 
-                val segmentDataFull = if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition].trim() else ""  
-                //logger.info("segmentDataFull: --> ${segmentDataFull}")
-                // NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+                val segmentDataFull = if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition].trim() else null 
 
-                val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
-                //logger.info("segmentDataArr: --> ${segmentDataArr}")
-                //[ NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO, 
-                //  Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO, 
-                //  Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO ]
-
-                val segmentData = segmentDataArr.map { oneRepeat ->
-                    val oneRepeatParts = oneRepeat.split("^")
-                    //logger.info("oneRepeatParts: --> ${oneRepeatParts}")
-                    // oneRepeatParts // ["NOTF_ORU_v3.0","PHINProfileID","2.16.840.1.114222.4.10.3","ISO"]
-                    if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType) ) {
-                        phinDataTypesMap[el.mappings.hl7v251.dataType]!!.map { phinDataTypeEntry -> 
-
-                            val filedNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
-
-                            val dt = if (oneRepeatParts.size > filedNumber) oneRepeatParts[filedNumber] else null
-                            StringUtils.normalizeString(phinDataTypeEntry.name) to dt
-                        }.toMap()
-                    } else {
-                        // not available in the default fields profile, return plain data from hl7
-                        oneRepeat 
-                    } // .else
-
-                } // .segmentData
-
+                val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
+                
                 StringUtils.normalizeString(el.name) to segmentData
             }.toMap() // .mmgMsh.map
 
@@ -267,6 +240,41 @@ class Transformer  {
             val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
 
             return gson.fromJson(dataTypesMapJson, dataTypesMapType)
+        } // .getPhinDataTypes
+
+        /* private */ fun getSegmentData(el: Element, segmentDataFull: String): Any {
+            
+            val phinDataTypesMap = getPhinDataTypes()
+        
+            //logger.info("segmentDataFull: --> ${segmentDataFull}")
+            // NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+
+            val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
+            //logger.info("segmentDataArr: --> ${segmentDataArr}")
+            //[ NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO, 
+            //  Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO, 
+            //  Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO ]
+
+            return segmentDataArr.map { oneRepeat ->
+                val oneRepeatParts = oneRepeat.split("^")
+                //logger.info("oneRepeatParts: --> ${oneRepeatParts}")
+                // oneRepeatParts // ["NOTF_ORU_v3.0","PHINProfileID","2.16.840.1.114222.4.10.3","ISO"]
+                if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType) ) {
+                    phinDataTypesMap[el.mappings.hl7v251.dataType]!!.map { phinDataTypeEntry -> 
+
+                        val filedNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
+
+                        val dt = if (oneRepeatParts.size > filedNumber) oneRepeatParts[filedNumber] else null
+                        StringUtils.normalizeString(phinDataTypeEntry.name) to dt
+                    }.toMap()
+                } else {
+                    // not available in the default fields profile, return plain data from hl7
+                    listOf(mapOf("segment_data" to oneRepeat))
+                } // .else
+
+            } // .return 
+
+
         } // .getPhinDataTypes
 
     } // .companion object
