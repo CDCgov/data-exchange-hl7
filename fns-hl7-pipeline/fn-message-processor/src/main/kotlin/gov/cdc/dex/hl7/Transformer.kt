@@ -73,7 +73,9 @@ class Transformer  {
 
                 val pidLineParts = messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
 
-                val segmentData = if (pidLineParts.size > dataFieldPosition) pidLineParts[dataFieldPosition] else ""  
+                val segmentDataFull = if (pidLineParts.size > dataFieldPosition) pidLineParts[dataFieldPosition].trim() else "null"  
+
+                val segmentData = if ( segmentDataFull.isNullOrEmpty() ) "null" else getSegmentData(el, segmentDataFull)
 
                 StringUtils.normalizeString(el.name) to segmentData 
             }.toMap() // .mmgPid.map
@@ -122,7 +124,7 @@ class Transformer  {
             }.toMap() // .mmgPid.map
 
             
-            val mmgModelBlocksSingle = mshMap // + pidMap + obrMap + obxMap
+            val mmgModelBlocksSingle = mshMap + pidMap //+ obrMap + obxMap
             
             logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
             logger.info("MMG Model (mmgModelBlocksSingle): --> ${Gson().toJson(mmgModelBlocksSingle)}\n")
@@ -222,7 +224,7 @@ class Transformer  {
             if ( mmgs.size > 1 ) { 
                 for ( index in 0..mmgs.size - 2) { // except the last one
                     mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                        !( block.name == MMG_BLOCK_NAME_MESSAGE_HEADER || block.name == MMG_BLOCK_NAME_SUBJECT_RELATED )
+                        !( block.name == MMG_BLOCK_NAME_MESSAGE_HEADER ) //|| block.name == MMG_BLOCK_NAME_SUBJECT_RELATED )
                     } // .filter
                 } // .for
             } // .if
