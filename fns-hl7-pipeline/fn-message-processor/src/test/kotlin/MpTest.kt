@@ -16,8 +16,8 @@ import redis.clients.jedis.Jedis
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.hl7.model.ConditionCode
 import gov.cdc.dex.hl7.model.PhinDataType
-// import gov.cdc.dex.redisModels.ValueSetConcept
-import gov.cdc.dex.hl7.model.ValueSetConcept
+import gov.cdc.dex.redisModels.ValueSetConcept
+// import gov.cdc.dex.hl7.model.ValueSetConcept
 
 
 import gov.cdc.dex.hl7.Transformer
@@ -302,29 +302,12 @@ class MpTest {
         val key = "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
         val conceptCode = "N"
 
-        // val valueSetMap = mutableMapOf<String, List<String>>()
+        val conceptJson = jedis.hget(REDIS_VOCAB_NAMESPACE + key, conceptCode)
 
-        // val conceptStr: ValueSetConcept = (jedis.hget(REDIS_VOCAB_NAMESPACE + key, conceptCode) ?: "") as ValueSetConcept
-        val conceptStr = jedis.hget(REDIS_VOCAB_NAMESPACE + key, conceptCode)
+        val cobj:ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
 
-        // val json = Gson().toJson(conceptStr)
-        // val cobj:ValueSetConcept =Gson().fromJson(json, ValueSetConcept::class.java)
+        logger.info("cobj: --> ${cobj.codeSystemConceptName}, ${cobj.cdcPreferredDesignation}")
 
-        //?: throw Exception("Unable to retrieve concept values for $key") 
-
-        // val concept = gson.fromJson(conceptStr, ValueSetConcept)
-
-        // TODO: code system code -> value set code e.g. HL70136 -> PHVS_YesNoUnknown_CDC
-
-        // val concept =  gson.fromJson(conceptStr, ValueSetConcept::class.java)
-
-        // val conceptType = object : TypeToken< Map<String, ValueSetConcept> >() {}.type
-
-        // return gson.fromJson(conceptType, dataTypesMapType)
-
-        // valueSetMap[key] = conceptStr.keys.toList()
-
-        logger.info("cobj: --> ${conceptStr}")
     } // .testRedisConcepts
 
 
