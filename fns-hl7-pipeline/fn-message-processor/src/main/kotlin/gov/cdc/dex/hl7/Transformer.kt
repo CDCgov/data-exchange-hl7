@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.redisModels.Block
 import gov.cdc.dex.redisModels.Element
+import gov.cdc.dex.redisModels.ValueSetConcept
 
 import gov.cdc.dex.hl7.model.PhinDataType
 
@@ -12,6 +13,8 @@ import gov.cdc.dex.util.StringUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+import redis.clients.jedis.DefaultJedisClientConfig
+import redis.clients.jedis.Jedis
 
 class Transformer  {
 
@@ -19,10 +22,24 @@ class Transformer  {
         val logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
         private val gson = Gson()
 
+        val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
+
+        val jedis = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
+        .password(REDIS_PWD)
+        .ssl(true)
+        .build())
+
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         private val OBR_4_1_EPI_ID = "68991-9"
         private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
         // private val MMG_BLOCK_NAME_SUBJECT_RELATED = "Subject Related"
+        private val REDIS_VOCAB_NAMESPACE = "vocab:"
+        private val ELEMENT_CE = "CE"
+        private val ELEMENT_CWE = "CWE"
+        private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type"
+        private val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
+        private val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
 
         // --------------------------------------------------------------------------------------------------------
         //  ------------- hl7ToJsonModelBlocksSingle ------------- BLOCKS SINGLE
@@ -257,13 +274,46 @@ class Transformer  {
                 val oneRepeatParts = oneRepeat.split("^")
 
                 if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType) ) {
-                    phinDataTypesMap[el.mappings.hl7v251.dataType]!!.map { phinDataTypeEntry -> 
+
+                    val map1 = phinDataTypesMap[el.mappings.hl7v251.dataType]!!.map { phinDataTypeEntry -> 
 
                         val fieldNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
 
                         val dt = if (oneRepeatParts.size > fieldNumber) oneRepeatParts[fieldNumber] else null
                         StringUtils.normalizeString(phinDataTypeEntry.name) to dt
                     }.toMap()
+                    
+                    val map2 = mapOf( PHIN_DATA_TYPE_KEY_NAME to el.mappings.hl7v251.dataType)
+
+                    // call vocab for preferred name and cdc preffered name
+                    if ( el.mappings.hl7v251.dataType == ELEMENT_CE || el.mappings.hl7v251.dataType == ELEMENT_CWE ) {
+                        // TODO: check if both CE and CWE !!
+
+                            val valueSetCode = el.valueSetCode// "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
+                            val conceptCode = map1["text"]
+                            
+                            val conceptJson = jedis.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
+
+                            map1 + map2 + if ( conceptJson.isNullOrEmpty() ) {
+                                // logger.info("conceptJson: isNullOrEmpty --> $conceptJson")
+
+                                // No Redis entry!! for this value set code, concept code
+                                mapOf(
+                                    CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to null,
+                                    CDC_PREFERRED_DESIGNATION_KEY_NAME to null ) 
+                            } else { // 
+                                // logger.info("conceptJson: --> $conceptJson")
+                                val cobj:ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
+                                mapOf(
+                                   CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.codeSystemConceptName,
+                                   CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.cdcPreferredDesignation )
+                            } // .else 
+
+                        } else {
+                            // this is not an ELEMENT_CE || ELEMENT_CWE
+                            map1 + map2 
+                        } // .else
+
                 } else {
                     // not available in the default fields profile (DefaultFieldsProfile.json)
                     // returns segment data as is in hl7 message
