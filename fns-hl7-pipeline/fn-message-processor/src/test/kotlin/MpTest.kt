@@ -292,7 +292,7 @@ class MpTest {
 
         Transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
 
-        // Transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
+        Transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
     } // .testTransformerHl7ToJsonModelwithRedisMmg
 
     // @Test

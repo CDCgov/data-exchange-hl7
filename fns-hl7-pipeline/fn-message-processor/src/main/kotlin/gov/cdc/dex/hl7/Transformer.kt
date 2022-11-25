@@ -157,12 +157,16 @@ class Transformer  {
         //  ------------- hl7ToJsonModelBlocksNonSingle ------------- BLOCKS NON SINGLE
         // --------------------------------------------------------------------------------------------------------
         //? @Throws(Exception::class) 
-        fun hl7ToJsonModelBlocksNonSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, List<Map<String, String>>> {
+        fun hl7ToJsonModelBlocksNonSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, List<Map<String, Any?>>> {
+
+          
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
  
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
+
+            val obxIdToElementMap = getObxIdToElementMap(mmgBlocks)
 
             val (_, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
@@ -199,9 +203,13 @@ class Transformer  {
                     lines.map { line -> 
                         val lineParts = line.split("|")
                         val dataFieldPosition = 5 //element.mappings.hl7v251.fieldPosition
-                        val segmentData = if (lineParts.size > dataFieldPosition) lineParts[dataFieldPosition] else ""
+
+                        val segmentDataFull = if (lineParts.size > dataFieldPosition) lineParts[dataFieldPosition].trim() else null
 
                         val obxIdentifier = lineParts[3].split("^")[0]
+
+                        val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(obxIdToElementMap[obxIdentifier]!!, segmentDataFull)
+
                         val elName = obxIdToElNameMap.getOrElse(obxIdentifier) { "TODO:throw_error?" }
 
                         StringUtils.normalizeString(elName) to segmentData
@@ -238,6 +246,15 @@ class Transformer  {
                 elem.mappings.hl7v251.identifier to elem.name
             }.toMap()
         } // .getObxIdToElNameMap
+
+        private fun getObxIdToElementMap(blocks: List<Block>): Map<String, Element> {
+
+            val elems = blocks.flatMap { it.elements } // .mmgElemsBlocksSingle
+
+            return elems.map{ elem -> 
+                elem.mappings.hl7v251.identifier to elem
+            }.toMap()
+        } // .getObxIdToElementMap
 
 
         /* private */ fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
