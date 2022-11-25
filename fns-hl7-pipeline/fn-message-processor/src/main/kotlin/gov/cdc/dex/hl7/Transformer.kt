@@ -135,15 +135,17 @@ class Transformer  {
                     mmgObxIdentifier == obxIdentifier
                 } // .obxLine
                 
-                val obxParts = if (obxLine.size > 0) obxLine[0].split("|") else listOf<String>()
+                val obxLineParts = if (obxLine.size > 0) obxLine[0].split("|") else listOf<String>()
                 
-                val segmentData = if (obxParts.size > dataFieldPosition) obxParts[dataFieldPosition] else ""  
+                val segmentDataFull = if (obxLineParts.size > dataFieldPosition) obxLineParts[dataFieldPosition] else null 
+
+                val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
 
                 StringUtils.normalizeString(el.name) to segmentData
             }.toMap() // .mmgPid.map
 
             
-            val mmgModelBlocksSingle = mshMap + pidMap + obrMap // + obxMap
+            val mmgModelBlocksSingle = mshMap + pidMap + obrMap + obxMap
             
             logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
             logger.info("MMG Model (mmgModelBlocksSingle): --> ${Gson().toJson(mmgModelBlocksSingle)}\n")
