@@ -159,8 +159,6 @@ class Transformer  {
         //? @Throws(Exception::class) 
         fun hl7ToJsonModelBlocksNonSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, List<Map<String, Any?>>> {
 
-          
-
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
  
@@ -207,6 +205,20 @@ class Transformer  {
                         val segmentDataFull = if (lineParts.size > dataFieldPosition) lineParts[dataFieldPosition].trim() else null
 
                         val obxIdentifier = lineParts[3].split("^")[0]
+
+                        if ( obxIdToElementMap.contains(obxIdentifier) ) {
+
+                            val el = obxIdToElementMap[obxIdentifier]!!
+
+                            val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
+
+                            StringUtils.normalizeString(el.name) to segmentData
+
+                        } else {
+                            // should not happen, this obx identifier is unknown to the MMGs
+                            // TODO: throw exception?
+                            "unknown_segment_identifier" to segmentDataFull
+                        }
 
                         val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(obxIdToElementMap[obxIdentifier]!!, segmentDataFull)
 
