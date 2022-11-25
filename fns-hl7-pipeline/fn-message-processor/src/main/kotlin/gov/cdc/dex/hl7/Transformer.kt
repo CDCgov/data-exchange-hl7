@@ -206,25 +206,16 @@ class Transformer  {
 
                         val obxIdentifier = lineParts[3].split("^")[0]
 
-                        if ( obxIdToElementMap.contains(obxIdentifier) ) {
+                        // if ( obxIdToElementMap.contains(obxIdentifier) ) {}
 
-                            val el = obxIdToElementMap[obxIdentifier]!!
+                        val el = obxIdToElementMap[obxIdentifier]!! // this obxIdentifier is in the map see line 182, 184 filter
 
-                            val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
+                        val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
 
-                            StringUtils.normalizeString(el.name) to segmentData
+                        StringUtils.normalizeString(el.name) to segmentData
 
-                        } else {
-                            // should not happen, this obx identifier is unknown to the MMGs
-                            // TODO: throw exception?
-                            "unknown_segment_identifier" to segmentDataFull
-                        }
+                        
 
-                        val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(obxIdToElementMap[obxIdentifier]!!, segmentDataFull)
-
-                        val elName = obxIdToElNameMap.getOrElse(obxIdentifier) { "TODO:throw_error?" }
-
-                        StringUtils.normalizeString(elName) to segmentData
                     }.toMap() // .lines
                 } // .blockElementsNameDataTupMap
                 // logger.info("\nblockElementsNameDataTupMap: --> ${Gson().toJson(blockElementsNameDataTupMap)}\n\n")
