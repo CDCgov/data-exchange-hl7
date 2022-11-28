@@ -172,8 +172,6 @@ class Transformer  {
 
             val obxLines = messageLines.filter { it.startsWith("OBX|") }
 
-            // val obxIdToElNameMap = getObxIdToElNameMap(mmgBlocksNonSingle)
-
             val blocksNonSingleModel = mmgBlocksNonSingle.map{ block -> 
 
                 val msgLines = block.elements.flatMap { element -> 
@@ -240,15 +238,6 @@ class Transformer  {
             return hl7Content.split("\n")
         } // .getMessageLines
 
-
-        // private fun getObxIdToElNameMap(blocks: List<Block>): Map<String, String> {
-
-        //     val elems = blocks.flatMap { it.elements } // .mmgElemsBlocksSingle
-
-        //     return elems.map{ elem -> 
-        //         elem.mappings.hl7v251.identifier to elem.name
-        //     }.toMap()
-        // } // .getObxIdToElNameMap
 
         private fun getObxIdToElementMap(blocks: List<Block>): Map<String, Element> {
 
