@@ -2,26 +2,27 @@ package gov.cdc.dex.mmg
 
 import com.google.gson.Gson
 import gov.cdc.dex.azure.RedisProxy
-import gov.cdc.dex.redisModels.ConditionCode
+import gov.cdc.dex.redisModels.Condition2MMGMapping
 
 import gov.cdc.dex.redisModels.MMG
+import gov.cdc.dex.redisModels.SpecialCase
+import gov.cdc.dex.util.StringUtils.Companion.normalize
 
 import org.slf4j.LoggerFactory
-import java.util.*
 
-import redis.clients.jedis.DefaultJedisClientConfig
-import redis.clients.jedis.Jedis
+
 
 class MmgUtil(val redisProxy: RedisProxy)  {
     companion object {
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
 
-        const val PATH_MSH_21_2_1 = "MSH-21[2].1" // Gen 
-        const val PATH_MSH_21_3_1 = "MSH-21[3].1" // Condition
+        const val MSH_21_2_1_PATH = "MSH-21[2].1" // Gen
+        const val MSH_21_3_1_PATH = "MSH-21[3].1" // Condition
         const val EVENT_CODE_PATH = "OBR[@4.1='68991-9']-31.1"
-        const val PATH_JURISDICTION_CODE = "OBX[@3.1='77966-0']-5.1" // TODO: complete path
+        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1" // TODO: complete path
 
-        const val GEN_V2_MMG = "Generic_MMG_V2.0"
+        const val GEN_V2_MMG = "generic_mmg_v2.0"
+        const val ARBO_MMG_v1_0 = "arbo_case_map_v1.0"
 
         const val REDIS_MMG_PREFIX = "mmg:"
         const val REDIS_CONDITION_PREFIX = "condition:"
@@ -29,44 +30,70 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         private val gson = Gson()
     }
 
-    //TODO:: Add support for others MMG edge cases such as: Foodnet vs FoodBorne MMGs based on reporting jurisdiction, etc..
     @Throws(Exception::class)
-    fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String, jurisdictionCode: String?): Array<MMG> {
+    fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
         // TODO : include jurisdictionCode logic
+
+        //val mmg1 : MMG
         // make a list to hold all the mmgs we need
-        val mmgs : MutableList<MMG> = mutableListOf()
-        if (msh21_2 == GEN_V2_MMG) {
-            val mmg1 = gson.fromJson(redisProxy.getJedisClient().get(REDIS_MMG_PREFIX + GEN_V2_MMG), MMG::class.java)
-            mmgs.add(mmg1)
+        var mmgs : Array<MMG> = arrayOf()
+
+        var msh21_3In = msh21_3?.normalize()
+
+        if (msh21_2.normalize().contains(ARBO_MMG_v1_0)) {
+            // msh_21_3 is empty, make it same as msh_21_2
+            msh21_3In = msh21_2.normalize()
+
         } else {
-            mmgs.addAll(queryTableFor(eventCode, msh21_2))
-        }
-        if (msh21_3 != null) {
-            mmgs.addAll(queryTableFor(eventCode, msh21_3))
-        }
-        return mmgs.toTypedArray()
-    } // .getMMG
+            // get the generic MMG:
+            // TODO: add exceptions // logger.info("Pulling MMG: key: ${rKey}")
+            val mmg1 = gson.fromJson(redisProxy.getJedisClient().get(REDIS_MMG_PREFIX + msh21_2.normalize()), MMG::class.java)
 
-     fun queryTableFor(eventCode: String, guide: String): List<MMG> {
-         val mmgs: MutableList<MMG> = mutableListOf()
-         val eventCodeEntry =
-             gson.fromJson(
-                 redisProxy.getJedisClient().get(MmgUtil.REDIS_CONDITION_PREFIX + eventCode),
-                 ConditionCode::class.java
-             )
-         // get the mmg:<name> redis keys for the msh-21 profile for this condition
+            //REMOVE MSH-21 from GenV2: when condition specific is also defining it with new cardinality of [3..3]
+            if (GEN_V2_MMG == msh21_2.normalize() && eventCode != null) {
+                mmg1.blocks = mmg1.blocks.filter { it.name != "Message Header" }
+            }
+            mmgs += mmg1
 
-         if (!eventCodeEntry.mmgMaps.isNullOrEmpty()) {
-             val mmg2KeyNames = eventCodeEntry.mmgMaps[guide]  //returns a list of mmg keys
-             // add the condition-specific mmgs to the list
-             if (mmg2KeyNames != null) {
-                 for (keyName: String in mmg2KeyNames) {
-                     mmgs.add(gson.fromJson(redisProxy.getJedisClient().get(keyName), MMG::class.java))
-                 }
-             }
+        } // .else
 
-         } // .
-         return mmgs.toList()
+        if ( !msh21_3In.isNullOrEmpty() ) {
+            // get the condition code entry
+            val eventCodeEntry =
+                gson.fromJson( redisProxy.getJedisClient().get(REDIS_CONDITION_PREFIX + eventCode) , Condition2MMGMapping::class.java)
+            // check if there are mmg:<name> maps for this condition
+            if ( eventCodeEntry != null && !eventCodeEntry.mmgMaps.isNullOrEmpty() ) {
+                var mmg2KeyNames: List<String>? = null
+                // look at special cases first, if any exist
+                if (! eventCodeEntry.specialCases.isNullOrEmpty()) {
+                    // specialCases is a list
+                    for (case: SpecialCase in eventCodeEntry.specialCases) {
+                        // see if the jurisdiction code is a member of the group to which this case applies
+                        val appliesHere = redisProxy.getJedisClient().sismember(case.appliesTo, jurisdictionCode)
+                        if (appliesHere && !case.mmgMaps[msh21_3In].isNullOrEmpty()) {
+                            mmg2KeyNames = case.mmgMaps[msh21_3In] //returns a list of mmg keys
+                        }
+
+                    } // .for
+                } // .if
+
+                if (mmg2KeyNames.isNullOrEmpty()) {
+                    // no special case matched this jurisdiction, so get the regular mmg map list for the profile
+                    mmg2KeyNames = eventCodeEntry.mmgMaps[msh21_3In]  //returns a list of mmg keys
+                }
+
+                // add the condition-specific mmgs to the list
+                if (! mmg2KeyNames.isNullOrEmpty()) {
+                    for (keyName: String in mmg2KeyNames) {
+                        mmgs += gson.fromJson(redisProxy.getJedisClient().get(keyName), MMG::class.java)
+                    }
+                }
+
+            } // .if
+
+        } // .if
+
+        return mmgs
      }
 } // .companion
 

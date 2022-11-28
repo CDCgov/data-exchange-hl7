@@ -49,6 +49,8 @@ class MetadataTest {
     fun testFullMetadataObject() {
         //Provenance:
         val provenance= Provenance(
+            eventId = "test",
+            eventTimestamp = "2022-11-17",
             filePath= "abfss://container@storage/folder/file.txt",
             fileTimestamp = "2022-10-01T12:00:00.0Z",
             fileSize = 1000,
