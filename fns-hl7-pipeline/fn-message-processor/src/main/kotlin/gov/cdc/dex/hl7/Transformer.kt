@@ -10,7 +10,8 @@ import gov.cdc.dex.hl7.model.PhinDataType
 
 import gov.cdc.dex.util.StringUtils
 
-import com.google.gson.Gson
+import com.google.gson.Gson 
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
 import redis.clients.jedis.DefaultJedisClientConfig
@@ -21,6 +22,8 @@ class Transformer  {
     companion object {
         val logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
         private val gson = Gson()
+        private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
+
 
         val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
         val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
@@ -148,7 +151,9 @@ class Transformer  {
             val mmgModelBlocksSingle = mshMap + pidMap + obrMap + obxMap
             
             logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
-            logger.info("MMG Model (mmgModelBlocksSingle): --> ${Gson().toJson(mmgModelBlocksSingle)}\n")
+            logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}\n")
+
+            logger.info("MMG Model (mmgModelBlocksSingle): --> ${gsonWithNullsOn.toJson(mmgModelBlocksSingle)}\n")
             return mmgModelBlocksSingle
         } // .hl7ToJsonModelBlocksSingle 
         
@@ -223,7 +228,7 @@ class Transformer  {
 
             
             logger.info("blocksNonSingleModel.size: --> ${blocksNonSingleModel.size}\n")
-            logger.info("MMG Model (blocksNonSingleModel): --> ${Gson().toJson(blocksNonSingleModel)}\n")
+            logger.info("MMG Model (blocksNonSingleModel): --> ${gsonWithNullsOn.toJson(blocksNonSingleModel)}\n")
             return blocksNonSingleModel
         } // .hl7ToJsonModelBlocksNonSingle 
         
@@ -301,7 +306,7 @@ class Transformer  {
                         // TODO: check if both CE and CWE !!
 
                             val valueSetCode = el.valueSetCode// "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
-                            val conceptCode = map1["text"]
+                            val conceptCode = map1["identifier"]
                             
                             val conceptJson = jedis.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
 
@@ -317,7 +322,7 @@ class Transformer  {
                                 val cobj:ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
                                 mapOf(
                                    CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.codeSystemConceptName,
-                                   CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.cdcPreferredDesignation )
+                                   CDC_PREFERRED_DESIGNATION_KEY_NAME to cobj.cdcPreferredDesignation )
                             } // .else 
 
                         } else {

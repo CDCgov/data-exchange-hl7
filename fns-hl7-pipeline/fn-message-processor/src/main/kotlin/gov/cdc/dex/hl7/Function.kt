@@ -5,6 +5,8 @@ import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 
@@ -39,6 +41,7 @@ class Function {
 
         val startTime =  Date().toIsoString()
         // context.logger.info("received event: --> $message") 
+        val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
         // set up the 2 out event hubs
         val evHubConnStr = System.getenv("EventHubConnectionString")
@@ -93,7 +96,7 @@ class Function {
                     metadata.addArrayElement("processes", processMD)
                     
                     val ehDestination = eventHubSendOkName
-                    evHubSender.send(evHubTopicName=ehDestination, message=Gson().toJson(inputEvent))
+                    evHubSender.send(evHubTopicName=ehDestination, message=gsonWithNullsOn.toJson(inputEvent))
                     context.logger.info("Processed for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
 
 
