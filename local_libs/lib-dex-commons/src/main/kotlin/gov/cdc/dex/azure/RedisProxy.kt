@@ -15,6 +15,7 @@ class RedisProxy( redisName: String,  redisKey:String,  redisPort: Int = 6380) {
     private val jedis = Jedis(redisName, redisPort, DefaultJedisClientConfig.builder()
         .password(redisKey)
         .ssl(true)
+        .timeoutMillis(400000)
         .build()
     )
     init {
@@ -23,5 +24,9 @@ class RedisProxy( redisName: String,  redisKey:String,  redisPort: Int = 6380) {
 
     fun getJedisClient(): Jedis {
         return jedis
+    }
+
+    protected fun finalize() {
+        jedis.close()
     }
 }
