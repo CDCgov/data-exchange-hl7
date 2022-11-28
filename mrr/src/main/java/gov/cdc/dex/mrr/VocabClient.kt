@@ -1,6 +1,7 @@
 package gov.cdc.dex.mrr
 
 import com.caucho.hessian.client.HessianProxyFactory
+import com.google.gson.Gson
 import gov.cdc.vocab.service.VocabService
 import gov.cdc.vocab.service.bean.ValueSet
 import gov.cdc.vocab.service.bean.ValueSetConcept
@@ -45,7 +46,8 @@ class VocabClient {
                 valuesetConcepts.let {
                     for (i in valuesetConcepts) {
                         val vkey = i.conceptCode
-                        jedis.hset(vocabKey, vkey, i.toString())
+
+                        jedis.hset(vocabKey, vkey, Gson().toJson(i))
                         //jedis.del(vocabKey)
                         // println("Valueset in Redis:" + key.toString() + "-" + vkey + "-" + i.toString())
                     }
@@ -57,4 +59,6 @@ class VocabClient {
             }
         }
     }
+
+
 }
