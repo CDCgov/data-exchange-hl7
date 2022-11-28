@@ -826,5 +826,42 @@
       "cardinality": "[0..1]",
       "conformance": ""
     }
+  ],
+  "SN":[
+    {
+      "fieldNumber": 1,
+      "name": "Comparator",
+      "dataType": "ST",
+      "maxLength": "2",
+      "usage": "O",
+      "cardinality": "[0..1]",
+      "conformance": ""
+    },
+    {
+      "fieldNumber": 2,
+      "name": "Number1",
+      "dataType": "NM",
+      "maxLength": "20",
+      "usage": "O",
+      "cardinality": "[0..1]",
+      "conformance": ""
+    },
+    {
+      "fieldNumber": 3,
+      "name": "Separator",
+      "dataType": "ST",
+      "maxLength": "3",
+      "usage": "O",
+      "cardinality": "[0..1]",
+      "conformance": ""
+    },{
+      "fieldNumber": 4,
+      "name": "Number2",
+      "dataType": "NM",
+      "maxLength": "20",
+      "usage": "O",
+      "cardinality": "[0..1]",
+      "conformance": ""
+    }
   ]
 }
