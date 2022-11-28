@@ -24,6 +24,9 @@ import gov.cdc.dex.hl7.Transformer
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.google.gson.GsonBuilder
+
+import  gov.cdc.dex.azure.RedisProxy
 
 class MpTest {
 
@@ -31,14 +34,14 @@ class MpTest {
 
         val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
         val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
+        
+        val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
 
-        val jedis = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
-        .password(REDIS_PWD)
-        .ssl(true)
-        .build())
+        val redisClient = redisProxy.getJedisClient()
 
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
         private val gson = Gson()
+        private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
     } // .companion 
 /* 
     @Test
@@ -277,23 +280,28 @@ class MpTest {
 
 */
 
-    // @Test
-    // fun testTransformerHl7ToJsonModelwithRedisMmg() {
+    @Test
+    fun testTransformerHl7ToJsonModelwithRedisMmg() {
         
-    //     // hl7
-    //     val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
-    //     val hl7Content = this::class.java.getResource(hl7FilePath).readText()
+        // hl7
+        val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
 
-    //     val mmgs = MmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
+        val mmgUtil = MmgUtil(redisProxy)
+        val mmgs = mmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
 
-    //     mmgs.forEach {
-    //         logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-    //     }
+        mmgs.forEach {
+            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
 
-    //     Transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
+        val transformer = Transformer(redisClient)
+        val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
+        val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
+        val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 
 
-    //     Transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
-    // } // .testTransformerHl7ToJsonModelwithRedisMmg
+        logger.info("MMG Model (mmgModel): --> ${gsonWithNullsOn.toJson(mmgModel)}\n")
+
+    } // .testTransformerHl7ToJsonModelwithRedisMmg
 
     // @Test
     // fun testRedisConcepts() {
