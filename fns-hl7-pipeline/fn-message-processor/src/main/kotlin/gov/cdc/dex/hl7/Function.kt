@@ -108,7 +108,7 @@ class Function {
                     // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, Transformation Finished...")
 
                     val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 
-                    context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${mmgModel}")
+                    context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgModel)}")
 
                     val processMD = MpProcessMetadata(status="MMG_MODEL_OK", report=mmgModel) // TODO: MMG_MODEL_OK
                     processMD.startProcessTime = startTime
