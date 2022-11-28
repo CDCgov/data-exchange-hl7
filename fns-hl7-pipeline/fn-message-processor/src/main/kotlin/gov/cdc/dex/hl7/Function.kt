@@ -18,14 +18,16 @@ import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.util.DateHelper.toIsoString
 
 import gov.cdc.dex.metadata.Problem
+import  gov.cdc.dex.azure.RedisProxy
 
+import redis.clients.jedis.DefaultJedisClientConfig
+import redis.clients.jedis.Jedis
 /**
  * Azure Functions with Event Hub Trigger.
  */
 class Function {
     
     companion object {
-
     } // .companion
 
     @FunctionName("messageprocessor")
@@ -40,6 +42,19 @@ class Function {
 
 
         val startTime =  Date().toIsoString()
+
+        val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
+        
+        val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
+        // val redisClient = redisProxy.getJedisClient()
+
+        // val redisClient = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
+        // .password(REDIS_PWD)
+        // .ssl(true)
+        // .build())
+
+
         // context.logger.info("received event: --> $message") 
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
@@ -76,15 +91,21 @@ class Function {
                 // ----------------------------------------------
                 try {
                     // get MMG(s) for the message:
-                    val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
+                    val mmgUtil = MmgUtil(redisProxy)
+                    val mmgs = mmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
                     mmgs.forEach {
                         context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
                     }
 
-                    
-                    val mmgModelBlocksSingle = Transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+                    val transformer = Transformer(redisProxy.getJedisClient())
 
-                    val mmgModelBlocksNonSingle = Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, starting Singles...")
+                    val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+
+                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, starting Non Singles...")
+                    val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+
+                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, Transformation Finished...")
 
                     val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 
                     context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${mmgModel}")
@@ -99,6 +120,7 @@ class Function {
                     evHubSender.send(evHubTopicName=ehDestination, message=gsonWithNullsOn.toJson(inputEvent))
                     context.logger.info("Processed for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
 
+                   
 
                 } catch (e: Exception) {
                     
@@ -110,6 +132,8 @@ class Function {
                     // inputEvent.add("summary", summary.toJsonElement())
                     // evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
                     // throw  Exception("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to exception: ${e.message}")
+
+                    e.printStackTrace()
                 } 
     
 
@@ -123,11 +147,13 @@ class Function {
                 // inputEvent.add("summary", summary.toJsonElement())
 
                 // evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
-                // e.printStackTrace()
+                e.printStackTrace()
+            } finally {
+                redisProxy.getJedisClient().close()
             }
         } // .message.forEach
 
-
+     
     } // .eventHubProcessor
 
 } // .Function

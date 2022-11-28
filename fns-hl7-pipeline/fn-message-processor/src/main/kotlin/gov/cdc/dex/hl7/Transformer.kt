@@ -17,7 +17,9 @@ import com.google.gson.reflect.TypeToken
 import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.Jedis
 
-class Transformer  {
+// import  gov.cdc.dex.azure.RedisProxy 
+
+class Transformer(val redisClient: Jedis)  {
 
     companion object {
         val logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
@@ -25,13 +27,16 @@ class Transformer  {
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
 
-        val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
-        val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
+        // val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
+        // val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
 
-        val jedis = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
-        .password(REDIS_PWD)
-        .ssl(true)
-        .build())
+        // val redisClient = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
+        // .password(REDIS_PWD)
+        // .ssl(true)
+        // .build())
+
+        // // val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
+
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         private val OBR_4_1_EPI_ID = "68991-9"
@@ -43,6 +48,7 @@ class Transformer  {
         private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type"
         private val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
         private val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
+    }
 
         // --------------------------------------------------------------------------------------------------------
         //  ------------- hl7ToJsonModelBlocksSingle ------------- BLOCKS SINGLE
@@ -50,6 +56,8 @@ class Transformer  {
         
         //? @Throws(Exception::class) 
         fun hl7ToJsonModelBlocksSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, Any?> {
+
+            // val redisClient = redisProxy.getJedisClient()
 
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
@@ -150,10 +158,10 @@ class Transformer  {
             
             val mmgModelBlocksSingle = mshMap + pidMap + obrMap + obxMap
             
-            logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
-            logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}\n")
+            // logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
+            // logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}\n")
 
-            logger.info("MMG Model (mmgModelBlocksSingle): --> ${gsonWithNullsOn.toJson(mmgModelBlocksSingle)}\n")
+            // logger.info("MMG Model (mmgModelBlocksSingle): --> ${gsonWithNullsOn.toJson(mmgModelBlocksSingle)}\n")
             return mmgModelBlocksSingle
         } // .hl7ToJsonModelBlocksSingle 
         
@@ -161,9 +169,10 @@ class Transformer  {
         // --------------------------------------------------------------------------------------------------------
         //  ------------- hl7ToJsonModelBlocksNonSingle ------------- BLOCKS NON SINGLE
         // --------------------------------------------------------------------------------------------------------
+
         //? @Throws(Exception::class) 
         fun hl7ToJsonModelBlocksNonSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, List<Map<String, Any?>>> {
-
+            // val jedis = redisProxy.getJedisClient()
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
  
@@ -227,15 +236,15 @@ class Transformer  {
             }.toMap() // .blocksNonSingleModel
 
             
-            logger.info("blocksNonSingleModel.size: --> ${blocksNonSingleModel.size}\n")
-            logger.info("MMG Model (blocksNonSingleModel): --> ${gsonWithNullsOn.toJson(blocksNonSingleModel)}\n")
+            // logger.info("blocksNonSingleModel.size: --> ${blocksNonSingleModel.size}\n")
+            // logger.info("MMG Model (blocksNonSingleModel): --> ${gsonWithNullsOn.toJson(blocksNonSingleModel)}\n")
             return blocksNonSingleModel
         } // .hl7ToJsonModelBlocksNonSingle 
         
 
 
         // --------------------------------------------------------------------------------------------------------
-        //  ------------- Functions used in the transformation
+        //  ------------- Functions used in the transformation -------------
         // --------------------------------------------------------------------------------------------------------
 
         private fun getMessageLines(hl7Content: String): List<String> {
@@ -269,20 +278,27 @@ class Transformer  {
 
         
         /* private */ fun getPhinDataTypes(): Map<String, List<PhinDataType>> {
+            // logger.info("getPhinDataTypes, reading local file...")
 
-            val dataTypesFilePath = "/DefaultFieldsProfile.json"
+            val dataTypesFilePath = "/DefaultFieldsProfileX.json"
             val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+            // val dataTypesMapJson = this::class.java.classLoader.getResource(dataTypesFilePath).readText()
 
             // val dataTypesMap = Map<String, List<PhinDataType>>
             val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
 
-            return gson.fromJson(dataTypesMapJson, dataTypesMapType)
+            val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+
+            // logger.info("getPhinDataTypes, profilesMap: --> $profilesMap")
+            return profilesMap
         } // .getPhinDataTypes
 
 
         /* private */ fun getSegmentData(el: Element, segmentDataFull: String): Any {
-            
+            // logger.info("getSegmentData, calling getPhinDataTypes...")
+
             val phinDataTypesMap = getPhinDataTypes()
+            // logger.info("getSegmentData, phinDataTypesMap: --> ${phinDataTypesMap}")
 
             val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
 
@@ -308,7 +324,9 @@ class Transformer  {
                             val valueSetCode = el.valueSetCode// "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
                             val conceptCode = map1["identifier"]
                             
-                            val conceptJson = jedis.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
+                            val conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
+
+                           // logger.info("ValueSetConcept conceptJson: --> $valueSetCode, $conceptCode, --> $conceptJson")
 
                             map1 + map2 + if ( conceptJson.isNullOrEmpty() ) {
                                 // logger.info("conceptJson: isNullOrEmpty --> $conceptJson")
@@ -318,8 +336,10 @@ class Transformer  {
                                     CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to null,
                                     CDC_PREFERRED_DESIGNATION_KEY_NAME to null ) 
                             } else { // 
-                                // logger.info("conceptJson: --> $conceptJson")
+
+                                // logger.info("ValueSetConcept conceptJson: --> $conceptJson")
                                 val cobj:ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
+
                                 mapOf(
                                    CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.codeSystemConceptName,
                                    CDC_PREFERRED_DESIGNATION_KEY_NAME to cobj.cdcPreferredDesignation )
@@ -341,6 +361,6 @@ class Transformer  {
             return if (el.isRepeat) segmentData else segmentData[0]
         } // .getSegmentData
 
-    } // .companion object
+    // } // .companion object
 } // .Transformer
 
