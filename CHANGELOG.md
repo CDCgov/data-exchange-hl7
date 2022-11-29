@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Bug Fixes
     - Debatching was broken
     - MMGReport status was printing the entire report istead of just the status.   
-
+    - Missing entries in Redis for Value Set
+    
 ### [0.0.7] - 2022-11-16
   - Added new features to lib-dex-commons: RedisProxy & String normalization function.
   - Added ability to load legacy MMGs into Redis. 
