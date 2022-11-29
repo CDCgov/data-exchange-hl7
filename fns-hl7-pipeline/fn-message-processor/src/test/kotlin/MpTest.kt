@@ -101,39 +101,38 @@ class MpTest {
             logger.info("testGetMMGFromMessage: MMG for filePath: $filePath, MMG name: --> ${it.name}, MMG BLOCKS: --> ${it.blocks.size}")
         }
         
-        // TODO: ?
-        // assertEquals(mmgs.size, 2)
+        assertEquals(mmgs.size, 2)
     } // .testLoadMMG
 
-    // @Test
-    // fun testLoadMMGfromMessage() {
 
-    //     val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
-    //     val testMsg = this::class.java.getResource(filePath).readText()
-    //     val mmgUtil = MmgUtil(redisProxy)
-    //     val mmgs = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+    @Test
+    fun testGetRedisConditionCode() {
 
-    //     mmgs.forEach {
-    //         logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-    //     }
+        val ccJson = redisClient.get( "condition:" + "11088" )
+        logger.info("Redis JSON: --> $ccJson")
+        assertTrue(ccJson.length > 0 )
 
-    //     assertEquals(mmgs.size, 2)
-    //     // assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 26)
-    // } // .testLoadMMGfromMessage
+        val cc = gson.fromJson(ccJson, ConditionCode::class.java)
 
-    // TODO: ?
-    // @Test
-    // fun testGetRedisConditionCode() {
+        logger.info("Redis condition code entry: --> $cc")
+        assertEquals(cc.mmgMaps!!.size, 1)
+    } // .testLoadMMG
 
-    //     val ccJson = redisClient.get( "condition:" + "11088" )
-    //     logger.info("Redis JSON: --> $ccJson")
-    //     assertTrue(ccJson.length > 0 )
+    @Test
+    fun testLoadMMGfromMessage() {
 
-    //     val cc = gson.fromJson(ccJson, ConditionCode::class.java)
+        val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgUtil = MmgUtil(redisProxy)
+        val mmgs = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
 
-    //     logger.info("Redis condition code entry: --> $cc")
-    //     assertEquals(cc.mmgMaps!!.size, 1)
-    // } // .testLoadMMG
+        mmgs.forEach {
+            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
+
+        assertEquals(mmgs.size, 2)
+        assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 26)
+    } // .testLoadMMGfromMessage
 
 
     @Test
@@ -147,10 +146,18 @@ class MpTest {
     } // .testLoadMMG
 
 
+    @Test
+    fun testPhinDataTypesToMapOfListClass() {
+        val transformer = Transformer(redisProxy)
+
+        val dataTypesMap: Map<String, List<PhinDataType>> = transformer.getPhinDataTypes()
+
+        logger.info("testPhinDataTypesToMapOfListClass: Phin dataTypesMap.size: --> ${dataTypesMap.size}")
+    } // .testPhinDataTypes
 
 
     @Test
-    fun testTransformerHl7ToJsonModel() {
+    fun testTransformerHl7ToJsonModelTC01() {
 
         // mmg1
         val mmg1Path = "/Generic Version 2.0.1.json"
@@ -178,16 +185,6 @@ class MpTest {
         logger.info("testTransformerHl7ToJsonModel: MMG model.size: ${model.size}")
 
     } // .testTransformerHl7ToJsonModel
-
-
-    @Test
-    fun testPhinDataTypesToMapOfListClass() {
-        val transformer = Transformer(redisProxy)
-
-        val dataTypesMap: Map<String, List<PhinDataType>> = transformer.getPhinDataTypes()
-
-        logger.info("testPhinDataTypesToMapOfListClass: Phin dataTypesMap.size: --> ${dataTypesMap.size}")
-    } // .testPhinDataTypes
  
 
     @Test
@@ -216,19 +213,24 @@ class MpTest {
 
 
 } // .MpTest
-/*
 
-    @Test
-    fun testMMGUtilGetMMG() {
-        val filePath = "/TBRD_V1.0.2_TM_TC01.hl7"
-        val testMsg = this::class.java.getResource(filePath).readText()
 
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
 
-        logger.info("mmgs[0].name: --> ${mmgs[0].name}, mmgs[0].blocks.size: --> ${mmgs[0].blocks.size}")
-        val mmgs2 = mmgs.copyOf()
-        val mmgsFiltered = Transformer.getMmgsFiltered(mmgs2)
-        logger.info("mmgs[0].name: --> ${mmgs[0].name}, mmgs[0].blocks.size: --> ${mmgs[0].blocks.size}")
+
+
+
+
+    // @Test
+    // fun testMMGUtilGetMMG() {
+    //     val filePath = "/TBRD_V1.0.2_TM_TC01.hl7"
+    //     val testMsg = this::class.java.getResource(filePath).readText()
+
+    //     val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
+
+    //     logger.info("mmgs[0].name: --> ${mmgs[0].name}, mmgs[0].blocks.size: --> ${mmgs[0].blocks.size}")
+    //     val mmgs2 = mmgs.copyOf()
+    //     val mmgsFiltered = Transformer.getMmgsFiltered(mmgs2)
+    //     logger.info("mmgs[0].name: --> ${mmgs[0].name}, mmgs[0].blocks.size: --> ${mmgs[0].blocks.size}")
 
 
         // when (mmgs.size) {
@@ -274,126 +276,6 @@ class MpTest {
         //         logger.info("block.name: --> ${block.name}")
         //     }   
         // } // mmgs\
-    } // .testMMGUtilGetMMG
+    // } // .testMMGUtilGetMMG
 
 
-
-    @Test
-    fun testTransformerHl7ToJsonModelwithRedisMmgTC01() {
-        
-        // hl7
-        val hl7FilePath = "/TBRD_V1.0.2_TM_TC01.hl7"
-        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
-
-        val mmgs = MmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
-
-        mmgs.forEach {
-            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-        }
-
-        Transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
-
-        Transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
-
-    } // .testTransformerHl7ToJsonModelwithRedisMmgTC01
-
-
-*/
-
-    // @Test
-    // fun testTransformerHl7ToJsonModelwithRedisMmg() {
-        
-    //     // hl7
-    //     val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
-    //     val hl7Content = this::class.java.getResource(hl7FilePath).readText()
-
-    //     val mmgUtil = MmgUtil(redisProxy)
-    //     val mmgs = mmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
-
-    //     mmgs.forEach {
-    //         logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-    //     }
-
-    //     val transformer = Transformer(redisProxy)
-    //     val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
-    //     val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
-    //     val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 
-
-    //     logger.info("MMG Model (mmgModel): --> ${gsonWithNullsOn.toJson(mmgModel)}\n")
-
-    // } // .testTransformerHl7ToJsonModelwithRedisMmg
-
-    // @Test
-    // fun testRedisConcepts() {
-
-    //     val REDIS_VOCAB_NAMESPACE = "vocab:"
-    //     val key = "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
-    //     val conceptCode = "N"
-
-    //     val conceptJson = jedis.hget(REDIS_VOCAB_NAMESPACE + key, conceptCode)
-    //     logger.info("conceptJson: --> ${conceptJson}")
-
-    //     val cobj:ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
-
-    //     logger.info("cobj: --> ${cobj.codeSystemConceptName}, ${cobj.cdcPreferredDesignation}")
-
-    // } // .testRedisConcepts
-
-    // @Test
-    // fun testDefaultFieldsProfile() {
-
-    //     val phinTypes = Transformer.getPhinDataTypes()
-
-    //     logger.info("phinTypes: --> ${phinTypes}")
-
-    // } // .testRedisConcepts
-
-
-
-
-/* 
-    // @Test
-    // fun testGetSegments() {
-    //     val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
-    //     val testMsg = this::class.java.getResource(filePath).readText()
-    //     val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
-    //     mmgs.forEach { mmg ->
-    //         mmg.blocks.forEach { block ->
-    //             block.elements.forEach { element ->
-    //                 val segments = HL7StaticParser.getValue(testMsg, element.getSegmentPath())
-    //                 println("--SEGMENT ${element.name}--")
-    //                 if (segments.isDefined) {
-    //                     segments.get().flatten().forEach { println(it) }
-    //                     if (block.type in listOf("Repeat", "RepeatParentChild")) {
-    //                         val allOBXs = segments.get().flatten().joinToString("\n")
-    //                         val uniqueGroups = HL7StaticParser.getValue(allOBXs, "OBX-4")
-    //                         if (uniqueGroups.isDefined) {
-    //                             println("Unique Groups: " +uniqueGroups.get().flatten().distinct())
-    //                         }
-    //                     }
-    //                 }
-    //                 println("--END Seg ${element.name}")
-    //             }
-    //         }
-    //     }
-
-    // }
-
-    // @Test
-    // fun testGetLineNumber() {
-    //     val testMsg = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
-    //     val dataTypeSegments = HL7StaticParser.getListOfMatchingSegments(testMsg, "OBX", "@3.1='INV930'")
-    //     for ( k in dataTypeSegments.keys().toList()) {
-    //        println(dataTypeSegments[k].get()[5])
-    //     }
-    //     //Reduce to 4th group>
-    //     val subList = dataTypeSegments.filter {it._2[4] == "4"}
-
-    //     println(subList.size())
-    // }
-
-    // @Test
-    // fun testInvalidCode() {
-
-    // }
-    */
