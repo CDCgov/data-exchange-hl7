@@ -131,7 +131,7 @@ class MpTest {
         }
 
         assertEquals(mmgs.size, 2)
-        assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 26)
+        assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 7 + 26) // the Message Header is trimmed from the GenV2 hence 7 and not 8
     } // .testLoadMMGfromMessage
 
 
