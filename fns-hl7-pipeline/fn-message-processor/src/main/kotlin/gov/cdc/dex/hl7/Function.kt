@@ -47,13 +47,6 @@ class Function {
         val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
         
         val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
-        // val redisClient = redisProxy.getJedisClient()
-
-        // val redisClient = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
-        // .password(REDIS_PWD)
-        // .ssl(true)
-        // .build())
-
 
         // context.logger.info("received event: --> $message") 
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
@@ -99,13 +92,9 @@ class Function {
 
                     val transformer = Transformer(redisProxy)
 
-                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, starting Singles...")
                     val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
 
-                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, starting Non Singles...")
                     val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
-
-                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, Transformation Finished...")
 
                     val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 
                     context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgModel)}")
