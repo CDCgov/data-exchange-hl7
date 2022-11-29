@@ -47,7 +47,7 @@ class MpTest {
     @Test
     fun testRedisInstanceUsed() {
 
-        logger.info("REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
+        logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
         assertEquals(REDIS_CACHE_NAME, "tf-vocab-cache-dev.redis.cache.windows.net")
     } // .testRedisInstanceUsed
 
@@ -59,7 +59,7 @@ class MpTest {
         val mmgJson = this::class.java.getResource(mmgPath).readText()
 
         val mmg = gson.fromJson(mmgJson, MMG::class.java)
-        logger.info("name: ${mmg.name}, blocks: ${mmg.blocks.size}")
+        logger.info("testLocalMMGToClass: mmg.name: ${mmg.name}, mmg.blocks.size: ${mmg.blocks.size}")
 
         assertEquals(mmg.name, "Generic Version 2.0.1")
         assertEquals(mmg.blocks.size, 8)
@@ -70,7 +70,7 @@ class MpTest {
     fun testRedisReadGenericMmg() {
 
         val mmg = redisClient.get("mmg:generic_mmg_v2.0").substring(0, 100)
-        logger.info("mmg: ${mmg}...")
+        logger.info("testRedisReadGenericMmg: mmg: ${mmg}...")
 
         assertEquals(mmg.length, 100)
     } // .testLoadMMG
@@ -80,7 +80,7 @@ class MpTest {
     fun testRedisReadTBRDMmg() {
 
         val mmg = redisClient.get("mmg:tbrd").substring(0, 100)
-        logger.info("mmg: ${mmg}...")
+        logger.info("testRedisReadTBRDMmg: mmg: ${mmg}...")
 
         assertEquals(mmg.length, 100)
     } // .testLoadMMG
@@ -94,10 +94,11 @@ class MpTest {
 
         val mmgUtil = MmgUtil(redisProxy)
         val mmgs = mmgUtil.getMMGFromMessage(hl7Content, filePath, "messageUUID")
-        logger.info("getMMGFromMessage for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
+
+        logger.info("testGetMMGFromMessage: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
 
         mmgs.forEach {
-            logger.info("MMG Info for filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
+            logger.info("testGetMMGFromMessage: MMG for filePath: $filePath, MMG name: --> ${it.name}, MMG BLOCKS: --> ${it.blocks.size}")
         }
         
         // TODO: ?
@@ -139,7 +140,7 @@ class MpTest {
     fun testRedisMMGToClass() {
 
         val mmg = gson.fromJson(redisClient.get("mmg:tbrd"), MMG::class.java)
-        logger.info("name: ${mmg.name}, blocks: ${mmg.blocks.size}")
+        logger.info("testRedisMMGToClass: MMG name: ${mmg.name}, blocks: ${mmg.blocks.size}")
 
         assertEquals(mmg.name, "TBRD")
         assertEquals(mmg.blocks.size, 26)
@@ -174,18 +175,18 @@ class MpTest {
 
         val model = model1 + model2
 
-        logger.info("mmg model.size: ${model.size}")
+        logger.info("testTransformerHl7ToJsonModel: MMG model.size: ${model.size}")
 
     } // .testTransformerHl7ToJsonModel
 
 
     @Test
-    fun testPhinDataTypes() {
+    fun testPhinDataTypesToMapOfListClass() {
         val transformer = Transformer(redisClient)
 
         val dataTypesMap: Map<String, List<PhinDataType>> = transformer.getPhinDataTypes()
 
-        logger.info("Phin dataTypesMap.size: --> ${dataTypesMap.size}")
+        logger.info("testPhinDataTypesToMapOfListClass: Phin dataTypesMap.size: --> ${dataTypesMap.size}")
     } // .testPhinDataTypes
  
 
@@ -210,7 +211,7 @@ class MpTest {
 
         val mmgModel = model1 + model2
 
-        logger.info("MMG Model (mmgModel): --> ${gsonWithNullsOn.toJson(mmgModel)}\n")
+        logger.info("testTransformerHl7ToJsonModelwithRedisMmgTC04: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
     } // .testTransformerHl7ToJsonModelwithRedisMmg
 
 
