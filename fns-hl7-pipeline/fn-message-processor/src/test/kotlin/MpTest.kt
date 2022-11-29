@@ -10,8 +10,8 @@ import kotlin.test.assertTrue
 import org.slf4j.LoggerFactory
 import java.util.*
 
-import redis.clients.jedis.DefaultJedisClientConfig
-import redis.clients.jedis.Jedis
+// import redis.clients.jedis.DefaultJedisClientConfig
+// import redis.clients.jedis.Jedis
 
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.hl7.model.ConditionCode
@@ -168,7 +168,7 @@ class MpTest {
         val hl7FilePath = "/TBRD_V1.0.2_TM_TC01.hl7" // "/Genv2_2-0-1_TC01.hl7" // "/TBRD_V1.0.2_TM_TC01.hl7"
         val hl7Content = this::class.java.getResource(hl7FilePath).readText()
         
-        val transformer = Transformer(redisClient)
+        val transformer = Transformer(redisProxy)
         val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
 
         val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
@@ -182,7 +182,7 @@ class MpTest {
 
     @Test
     fun testPhinDataTypesToMapOfListClass() {
-        val transformer = Transformer(redisClient)
+        val transformer = Transformer(redisProxy)
 
         val dataTypesMap: Map<String, List<PhinDataType>> = transformer.getPhinDataTypes()
 
@@ -204,7 +204,7 @@ class MpTest {
             logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
         }
 
-        val transformer = Transformer(redisClient)
+        val transformer = Transformer(redisProxy)
         val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
 
         val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
@@ -314,7 +314,7 @@ class MpTest {
     //         logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
     //     }
 
-    //     val transformer = Transformer(redisClient)
+    //     val transformer = Transformer(redisProxy)
     //     val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
     //     val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
     //     val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 

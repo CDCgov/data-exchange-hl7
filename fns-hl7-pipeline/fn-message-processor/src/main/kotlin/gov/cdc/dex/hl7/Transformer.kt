@@ -14,12 +14,14 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
-import redis.clients.jedis.DefaultJedisClientConfig
-import redis.clients.jedis.Jedis
+// import redis.clients.jedis.DefaultJedisClientConfig
+// import redis.clients.jedis.Jedis
 
-// import  gov.cdc.dex.azure.RedisProxy 
+import  gov.cdc.dex.azure.RedisProxy 
 
-class Transformer(val redisClient: Jedis)  {
+class Transformer(val redisProxy: RedisProxy)  {
+
+    val redisClient = redisProxy.getJedisClient()
 
     companion object {
         val logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)

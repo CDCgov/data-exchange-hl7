@@ -97,7 +97,7 @@ class Function {
                         context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
                     }
 
-                    val transformer = Transformer(redisProxy.getJedisClient())
+                    val transformer = Transformer(redisProxy)
 
                     // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, starting Singles...")
                     val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
