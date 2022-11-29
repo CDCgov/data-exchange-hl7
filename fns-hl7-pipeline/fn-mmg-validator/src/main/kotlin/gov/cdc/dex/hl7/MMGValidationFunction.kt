@@ -6,132 +6,63 @@ import com.google.gson.JsonParser
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
-import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.MmgValidatorProcessMetadata
-import gov.cdc.dex.hl7.model.ReportStatus
+import gov.cdc.dex.hl7.model.ValidationReport
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
-import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
-import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
 
 /**
  * Azure Functions with Event Hub Trigger.
  */
-class MMGValidationFunction {
-    
-    companion object {
-        private const val STATUS_ERROR = "ERROR"
+class MMGValidationFunction: AzFnMsgProcessor() {
 
-        val gson = Gson()
-    } // .companion
+    private val gson = Gson()
 
     @FunctionName("mmgvalidator001")
     fun eventHubProcessor(
-            @EventHubTrigger(
-                name = "msg", 
-                eventHubName = "%EventHubReceiveName%",
-                connection = "EventHubConnectionString",
-                consumerGroup = "%EventHubConsumerGroup%",) 
-                message: List<String?>,
-                context: ExecutionContext) {
+        @EventHubTrigger(
+            name = "msg",
+            eventHubName = "%EventHubReceiveName%",
+            connection = "EventHubConnectionString",
+            consumerGroup = "%EventHubConsumerGroup%",
+        )
+        messages: List<String?>,
+        context: ExecutionContext
+    ) {
+       exec(messages, context)
+    }
 
+    override fun getProcessName(): String {
+        return MmgValidatorProcessMetadata.MMG_VALIDATOR_PROCESS
+    }
 
-        val startTime =  Date().toIsoString()
-        // context.logger.info("received event: --> $message")
-        val evHubConnStr = System.getenv("EventHubConnectionString")
-        val eventHubSendOkName = System.getenv("EventHubSendOkName")
-        val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
+    override fun prepareSummary(status: String, inputEvent: JsonObject) {
+        val summary = SummaryInfo(status)
+        if (ValidationReport.VALID_MESSAGE != status) {
+            summary.problem = Problem(
+                getProcessName(), null, null,
+                "Message failed MMG Validation",
+                false,0,0)
+        }
+        inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
+    }
 
-        val evHubSender = EventHubSender(evHubConnStr)
-//        val ehSender = EventHubSender(evHubConnStr)
+    override fun addProcessStatus(startTime: String, metadata: JsonObject, status: String, report: ValidationReport) {
+        val processMD = MmgValidatorProcessMetadata(report.status, report)
+        processMD.startProcessTime = startTime
+        processMD.endProcessTime = Date().toIsoString()
 
-        message.forEach { singleMessage: String? ->
-            val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-            // context.logger.info("singleMessage: --> $singleMessage")
+        metadata.addArrayElement("processes", processMD)
+    }
 
-            try {
-                val hl7ContentBase64 = JsonHelper.getValueFromJson("content", inputEvent).asString
-
-                val hl7ContentDecodedBytes = Base64.getDecoder().decode(hl7ContentBase64)
-                val hl7Content = String(hl7ContentDecodedBytes)
-
-                val metadata = inputEvent["metadata"].asJsonObject
-
-                val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
-                val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                
-                context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
-    
-//                try {
-                    // get MMG(s) for the message:
-                    //val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
-                    // mmgs.forEach {
-                    //     context.logger.info("MMG blocks found for messageUUID: $messageUUID, filePath: $filePath, BLOCKS: --> ${it.blocks.size}")
-                    // }
-
-                    val mmgValidator = MmgValidator()
-                    val validationReport = mmgValidator.validate(hl7Content)
-
-                   // val otherSegmentsValidator = MmgValidatorOtherSegments( hl7Content, mmgs )
-                    //val validationReportOtherSegments = otherSegmentsValidator.validateOtherSegments()
-
-                    //val validationReportFull = validationReport + validationReportOtherSegments
-                    context.logger.info("MMG Validation Report size for for messageUUID: $messageUUID, filePath: $filePath, size --> " + validationReport.size)
-
-                    // adding the content validation report to received message 
-                    // and sending to next event hub
-
-                    // get report status
-
-                    val mmgReport = MmgReport( validationReport)
-                    
-
-                    val processMD = MmgValidatorProcessMetadata(mmgReport.toString(), mmgReport)
-                    processMD.startProcessTime = startTime
-                    processMD.endProcessTime = Date().toIsoString()
-
-                    metadata.addArrayElement("processes", processMD)
-                    //Prepare Summary:
-                    val summary = SummaryInfo(mmgReport.status.toString())
-                    if (ReportStatus.MMG_ERRORS == mmgReport.status ) {
-                        summary.problem= Problem(MmgValidatorProcessMetadata.MMG_VALIDATOR_PROCESS, null, null, "Message failed MMG Validation", false, 0, 0)
-                    }
-                    inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                    //Send event
-                    context.logger.info("INPUT EVENT OUT: --> ${ gson.toJson(inputEvent) }")
-
-                val ehDestination = if (mmgReport.status == ReportStatus.MMG_VALID) eventHubSendOkName else eventHubSendErrsName
-                    evHubSender.send(evHubTopicName=ehDestination, message=gson.toJson(inputEvent))
-                    context.logger.info("Processed for MMG validated messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, reportStatus: ${mmgReport}")
-
-//                } catch (e: Exception) {
-//                    context.logger.severe("Unable to process Message due to exception: ${e.message}")
-//
-//                    val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
-//                    val summary = SummaryInfo(STATUS_ERROR, problem)
-//                    inputEvent.add("summary", summary.toJsonElement())
-//
-//                    evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
-//                    // throw  Exception("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to exception: ${e.message}")
-//                }
-
-            } catch (e: Exception) {
-                //TODO::  - update retry counts
-                context.logger.severe("Unable to process Message due to exception: ${e.message}")
-
-                val problem = Problem(MmgValidatorProcessMetadata.MMG_VALIDATOR_PROCESS, e, false, 0, 0)
-                val summary = SummaryInfo(STATUS_ERROR, problem)
-                inputEvent.add("summary", summary.toJsonElement())
-
-                evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
-                // e.printStackTrace()
-            }
-        } // .message.forEach
-    } // .eventHubProcessor
-
-} // .Function
+    override fun validateMessage(hl7Content: String): ValidationReport {
+        val mmgValidator = MmgValidator()
+        val validationReport = mmgValidator.validate(hl7Content)
+        return MmgReport(validationReport)
+    }
+}
 
