@@ -35,7 +35,7 @@ class Transformer(val redisProxy: RedisProxy)  {
         private val REDIS_VOCAB_NAMESPACE = "vocab:"
         private val ELEMENT_CE = "CE"
         private val ELEMENT_CWE = "CWE"
-        private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type"
+        // private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type" // only used in dev
         private val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
         private val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
     }
