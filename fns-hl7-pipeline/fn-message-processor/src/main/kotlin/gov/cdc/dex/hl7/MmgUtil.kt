@@ -46,7 +46,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
             val eventCode = extractValue(message, EVENT_CODE_PATH)
             val jurisdictionCode = "23" // TODO: ..  extractValue(message, PATH_JURISDICTION_CODE)
 
-            logger.info("Info for message filePath ${filePath}, messageUUID: ${messageUUID} --> msh21_2: $msh21_2, msh21_3: $msh21_3, eventCode: $eventCode")
+            logger.info("getMMGFromMessage, for message filePath ${filePath}, messageUUID: ${messageUUID} --> msh21_2: $msh21_2, msh21_3: $msh21_3, eventCode: $eventCode")
 
             val mmgUtilLib = MmgUtilLib(redisProxy)
 

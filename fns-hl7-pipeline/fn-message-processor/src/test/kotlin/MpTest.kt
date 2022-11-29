@@ -43,7 +43,7 @@ class MpTest {
         private val gson = Gson()
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
     } // .companion 
-/* 
+
     @Test
     fun testRedisInstanceUsed() {
 
@@ -65,10 +65,11 @@ class MpTest {
         assertEquals(mmg.blocks.size, 8)
     } // .testLoadMMG
 
-    @Test
-    fun testRedisReadGeneric() {
 
-        val mmg = jedis.get("mmg:generic_mmg_v2.0").substring(0, 100)
+    @Test
+    fun testRedisReadGenericMmg() {
+
+        val mmg = redisClient.get("mmg:generic_mmg_v2.0").substring(0, 100)
         logger.info("mmg: ${mmg}...")
 
         assertEquals(mmg.length, 100)
@@ -76,9 +77,9 @@ class MpTest {
 
 
     @Test
-    fun testRedisRead() {
+    fun testRedisReadTBRDMmg() {
 
-        val mmg = jedis.get("mmg:tbrd").substring(0, 100)
+        val mmg = redisClient.get("mmg:tbrd").substring(0, 100)
         logger.info("mmg: ${mmg}...")
 
         assertEquals(mmg.length, 100)
@@ -91,55 +92,60 @@ class MpTest {
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val hl7Content = this::class.java.getResource(filePath).readText()
 
-        val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, "messageUUID")
+        val mmgUtil = MmgUtil(redisProxy)
+        val mmgs = mmgUtil.getMMGFromMessage(hl7Content, filePath, "messageUUID")
+        logger.info("getMMGFromMessage for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
+
         mmgs.forEach {
             logger.info("MMG Info for filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
         }
-
-        assertEquals(mmgs.size, 2)
+        
+        // TODO: ?
+        // assertEquals(mmgs.size, 2)
     } // .testLoadMMG
 
+    // @Test
+    // fun testLoadMMGfromMessage() {
 
-    @Test
-    fun testGetRedisConditionCode() {
+    //     val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+    //     val testMsg = this::class.java.getResource(filePath).readText()
+    //     val mmgUtil = MmgUtil(redisProxy)
+    //     val mmgs = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
 
-        val ccJson = jedis.get( "condition:" + "10250" )
-        logger.info("Redis JSON: --> $ccJson")
-        assertTrue(ccJson.length > 0 )
+    //     mmgs.forEach {
+    //         logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+    //     }
 
-        val cc = gson.fromJson(ccJson, ConditionCode::class.java)
+    //     assertEquals(mmgs.size, 2)
+    //     // assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 26)
+    // } // .testLoadMMGfromMessage
 
-        logger.info("Redis condition code entry: --> $cc")
-        assertEquals(cc.mmgMaps!!.size, 1)
-    } // .testLoadMMG
+    // TODO: ?
+    // @Test
+    // fun testGetRedisConditionCode() {
+
+    //     val ccJson = redisClient.get( "condition:" + "11088" )
+    //     logger.info("Redis JSON: --> $ccJson")
+    //     assertTrue(ccJson.length > 0 )
+
+    //     val cc = gson.fromJson(ccJson, ConditionCode::class.java)
+
+    //     logger.info("Redis condition code entry: --> $cc")
+    //     assertEquals(cc.mmgMaps!!.size, 1)
+    // } // .testLoadMMG
 
 
     @Test
     fun testRedisMMGToClass() {
 
-        val mmg = gson.fromJson(jedis.get("mmg:tbrd"), MMG::class.java)
+        val mmg = gson.fromJson(redisClient.get("mmg:tbrd"), MMG::class.java)
         logger.info("name: ${mmg.name}, blocks: ${mmg.blocks.size}")
 
         assertEquals(mmg.name, "TBRD")
-        // assertEquals(mmg.blocks.size, 34)
+        assertEquals(mmg.blocks.size, 26)
     } // .testLoadMMG
 
 
-    @Test
-    fun testLoadMMGfromMessage() {
-
-        val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
-        val testMsg = this::class.java.getResource(filePath).readText()
-
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
-
-        mmgs.forEach {
-            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-        }
-
-        assertEquals(mmgs.size, 2)
-        // assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 8 + 34)
-    } // .testLoadMMGfromMessage
 
 
     @Test
@@ -158,35 +164,58 @@ class MpTest {
         val mmgs = arrayOf(mmg1, mmg2)
 
         // hl7
-        val hl7FilePath = "/Genv2_2-0-1_TC01.hl7" // "/TBRD_V1.0.2_TM_TC01.hl7"
+        val hl7FilePath = "/TBRD_V1.0.2_TM_TC01.hl7" // "/Genv2_2-0-1_TC01.hl7" // "/TBRD_V1.0.2_TM_TC01.hl7"
         val hl7Content = this::class.java.getResource(hl7FilePath).readText()
         
+        val transformer = Transformer(redisClient)
+        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
 
-        Transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
 
-        Transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+        val model = model1 + model2
+
+        logger.info("mmg model.size: ${model.size}")
+
     } // .testTransformerHl7ToJsonModel
 
 
     @Test
-    fun testTransformerHl7ToJsonModelwithRedisMmg() {
+    fun testPhinDataTypes() {
+        val transformer = Transformer(redisClient)
+
+        val dataTypesMap: Map<String, List<PhinDataType>> = transformer.getPhinDataTypes()
+
+        logger.info("Phin dataTypesMap.size: --> ${dataTypesMap.size}")
+    } // .testPhinDataTypes
+ 
+
+    @Test
+    fun testTransformerHl7ToJsonModelwithRedisMmgTC04() {
         
         // hl7
         val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val hl7Content = this::class.java.getResource(hl7FilePath).readText()
 
-        val mmgs = MmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
+        val mmgUtil = MmgUtil(redisProxy)
+        val mmgs = mmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
 
         mmgs.forEach {
             logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
         }
 
-        Transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
+        val transformer = Transformer(redisClient)
+        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
 
-        Transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
+        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+
+        val mmgModel = model1 + model2
+
+        logger.info("MMG Model (mmgModel): --> ${gsonWithNullsOn.toJson(mmgModel)}\n")
     } // .testTransformerHl7ToJsonModelwithRedisMmg
 
 
+} // .MpTest
+/*
 
     @Test
     fun testMMGUtilGetMMG() {
@@ -243,18 +272,8 @@ class MpTest {
         //     mmgFiltered.blocks.forEach { block -> 
         //         logger.info("block.name: --> ${block.name}")
         //     }   
-        // } // mmgs
-
+        // } // mmgs\
     } // .testMMGUtilGetMMG
-
-    @Test
-    fun testPhinDataTypes() {
-
-        val dataTypesMap: Map<String, List<PhinDataType>> = Transformer.getPhinDataTypes()
-
-        logger.info("dataTypesMap: --> ${dataTypesMap}")
-
-    } // .testPhinDataTypes
 
 
 
@@ -280,28 +299,28 @@ class MpTest {
 
 */
 
-    @Test
-    fun testTransformerHl7ToJsonModelwithRedisMmg() {
+    // @Test
+    // fun testTransformerHl7ToJsonModelwithRedisMmg() {
         
-        // hl7
-        val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
-        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
+    //     // hl7
+    //     val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+    //     val hl7Content = this::class.java.getResource(hl7FilePath).readText()
 
-        val mmgUtil = MmgUtil(redisProxy)
-        val mmgs = mmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
+    //     val mmgUtil = MmgUtil(redisProxy)
+    //     val mmgs = mmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
 
-        mmgs.forEach {
-            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-        }
+    //     mmgs.forEach {
+    //         logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+    //     }
 
-        val transformer = Transformer(redisClient)
-        val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
-        val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
-        val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 
+    //     val transformer = Transformer(redisClient)
+    //     val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle( hl7Content, mmgs )
+    //     val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle( hl7Content, mmgs )
+    //     val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 
 
-        logger.info("MMG Model (mmgModel): --> ${gsonWithNullsOn.toJson(mmgModel)}\n")
+    //     logger.info("MMG Model (mmgModel): --> ${gsonWithNullsOn.toJson(mmgModel)}\n")
 
-    } // .testTransformerHl7ToJsonModelwithRedisMmg
+    // } // .testTransformerHl7ToJsonModelwithRedisMmg
 
     // @Test
     // fun testRedisConcepts() {
@@ -328,8 +347,6 @@ class MpTest {
 
     // } // .testRedisConcepts
 
-
-} // .MpTest
 
 
 
