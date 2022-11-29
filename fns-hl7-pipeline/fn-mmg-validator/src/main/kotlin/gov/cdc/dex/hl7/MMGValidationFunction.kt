@@ -90,7 +90,7 @@ class MMGValidationFunction {
                     val mmgReport = MmgReport( validationReport)
                     
 
-                    val processMD = MmgValidatorProcessMetadata(mmgReport.toString(), mmgReport)
+                    val processMD = MmgValidatorProcessMetadata(mmgReport.status.toString(), mmgReport)
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
 
