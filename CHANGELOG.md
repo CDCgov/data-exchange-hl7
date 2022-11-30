@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Created PhinSpec 3.2 profiles for NIST Structure Validation
   - Updated MMG-Based Transformer to generate HL7-specific field elements and added PHIN-Vads concept name and preferred concept names.
   - Bug Fixes
-    - Debatching was broken
+    - Fixed Debatcher Code broken due an previous update
     - MMGReport status was printing the entire report instead of just the status.   
     - Missing entries in Redis for Value Set
     
