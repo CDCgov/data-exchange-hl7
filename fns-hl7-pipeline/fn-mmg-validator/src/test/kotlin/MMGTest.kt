@@ -1,14 +1,20 @@
 
-import gov.cdc.dex.hl7.MmgUtil
+import gov.cdc.dex.azure.RedisProxy
+import gov.cdc.dex.hl7.MmgValidator
+
+import gov.cdc.dex.hl7.exception.InvalidConceptKey
+import gov.cdc.dex.hl7.model.*
+
 import gov.cdc.hl7.HL7StaticParser
-import org.testng.annotations.Test
+
+import org.junit.jupiter.api.Test
 
 class MMGTest {
 
     @Test
     fun testLoadMMG() {
         val mmgName = "GEN_SUMMARY_CASE_MAP_v1.0"
-        val mmgJson = MmgUtil::class.java.getResource("/" + mmgName + ".json" ).readText()
+        val mmgJson = this::class.java.getResource("/" + mmgName + ".json" ).readText()
         println(mmgJson)
     }
 
@@ -16,7 +22,7 @@ class MMGTest {
     fun testRemoveMSH21FromGenV2() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        val mmgs = MmgValidator().getMMGFromMessage(testMsg)
         val genV2 = mmgs[0]
         val genV2NoMSH = genV2
         println(genV2NoMSH.blocks.size)
@@ -28,7 +34,7 @@ class MMGTest {
     fun testMMGUtilGetMMG() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        val mmgs = MmgValidator().getMMGFromMessage(testMsg)
         mmgs.forEach { println(it)}
     }
 
@@ -36,7 +42,7 @@ class MMGTest {
     fun testGetSegments() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
-        val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        val mmgs = MmgValidator().getMMGFromMessage(testMsg)
         mmgs.forEach { mmg ->
             mmg.blocks.forEach { block ->
                 block.elements.forEach { element ->
@@ -74,6 +80,54 @@ class MMGTest {
 
     @Test
     fun testInvalidCode() {
+        try {
+            val REDIS_CACHE_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
+            val REDIS_CACHE_KEY = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+            val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_CACHE_KEY)
+            val vocabKey = "vocab:UNKNOWN_KEY"
+            val conceptStr = redisProxy.getJedisClient()
+                .hgetAll(vocabKey) //?: throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
+            if (conceptStr.isNullOrEmpty()) {
+                throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
+            }
+            println(conceptStr)
+        } catch (e: InvalidConceptKey) {
+            assert(true)
+            println("Exception properly thrown: ${e.message}")
+        }
+    }
 
+    @Test
+    fun testMMGReportError() {
+        val v1 = ValidationIssue(ValidationIssueCategoryType.ERROR, ValidationIssueType.DATA_TYPE, "fieldX", "OBX[1]", 1,ValidationErrorMessage.DATA_TYPE_MISMATCH, "data type does not match" )
+        val v2 = ValidationIssue(ValidationIssueCategoryType.WARNING, ValidationIssueType.DATA_TYPE, "fieldy", "OBX[2]", 2,ValidationErrorMessage.DATA_TYPE_MISMATCH, "data type does not match")
+        val issues = listOf(v1, v2)
+
+        val report = MmgReport(issues)
+        println("status: ${report.status}")
+        println("errors: ${report.errorCount}")
+        println("warnings: ${report.warningCount}")
+    }
+
+    @Test
+    fun testMMGReportWarning() {
+        val v1 = ValidationIssue(ValidationIssueCategoryType.WARNING, ValidationIssueType.DATA_TYPE, "fieldX", "OBX[1]", 1,ValidationErrorMessage.DATA_TYPE_MISMATCH, "data type does not match" )
+        val v2 = ValidationIssue(ValidationIssueCategoryType.WARNING, ValidationIssueType.DATA_TYPE, "fieldy", "OBX[2]", 2,ValidationErrorMessage.DATA_TYPE_MISMATCH, "data type does not match")
+        val issues = listOf(v1, v2)
+
+        val report = MmgReport(issues)
+        println("status: ${report.status}")
+        println("errors: ${report.errorCount}")
+        println("warnings: ${report.warningCount}")
+    }
+
+    @Test
+    fun testMMGReportEmpty() {
+        val issues = listOf<ValidationIssue>()
+
+        val report = MmgReport(issues)
+        println("status: ${report.status}")
+        println("errors: ${report.errorCount}")
+        println("warnings: ${report.warningCount}")
     }
 }
