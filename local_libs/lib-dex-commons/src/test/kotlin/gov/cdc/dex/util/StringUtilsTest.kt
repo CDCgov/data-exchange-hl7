@@ -1,8 +1,11 @@
 package gov.cdc.dex.util
 
+import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 internal class StringUtilsTest {
 
@@ -20,5 +23,24 @@ internal class StringUtilsTest {
 
         val normalizedKeys = mmgKeys.map { StringUtils.normalizeString(it.substring(3))}
         normalizedKeys.forEach { println(it)}
+    }
+
+    @Test
+    fun hashString() {
+        val test = this::class.java.getResource("/KY_Hepatitis Round 2_TM1.txt").readText().hashMD5()
+        println(test)
+//896b4684f7e7246124050113836b75cf
+
+        val currentLinesArr = arrayListOf<String>()
+
+        val testFileIS = this::class.java.getResource("/KY_Hepatitis Round 2_TM1.txt").openStream()
+        BufferedReader(InputStreamReader(testFileIS)).use { br ->
+            br.forEachLine { line ->
+                currentLinesArr.add(line)
+            }
+        }
+        val newMsg = currentLinesArr.joinToString ( "\n" )
+//        println(newMsg)
+        println(newMsg.hashMD5())
     }
 }
