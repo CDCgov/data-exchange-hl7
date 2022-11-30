@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [0.0.8] - 2022-11-30
   - Created Hepatitis MMGs
   - Created PhinSpec 3.2 profiles for NIST Structure Validation
-  - Updated MMG-Based Transformer to generate HL7-specific field elements and added PHIN-Vads concept name and preferred concept names.
+  - Updated MMG-Based Transformer (fn-message-processor) to generate HL7-specific field elements and added PHIN-Vads concept name and preferred concept names.
   - Bug Fixes
     - Fixed Debatcher Code broken due an previous update
     - MMGReport status was printing the entire report instead of just the status.   
