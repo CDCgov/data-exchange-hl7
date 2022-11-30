@@ -10,7 +10,6 @@ import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.MmgValidatorProcessMetadata
 import gov.cdc.dex.hl7.model.ReportStatus
-import gov.cdc.dex.hl7.model.ValidationIssueCategoryType
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
@@ -69,30 +68,29 @@ class MMGValidationFunction {
     
 //                try {
                     // get MMG(s) for the message:
-                    val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
+                    //val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
                     // mmgs.forEach {
                     //     context.logger.info("MMG blocks found for messageUUID: $messageUUID, filePath: $filePath, BLOCKS: --> ${it.blocks.size}")
                     // }
 
-                    val mmgValidator = MmgValidator( hl7Content, mmgs )
-                    val validationReport = mmgValidator.validate()
+                    val mmgValidator = MmgValidator()
+                    val validationReport = mmgValidator.validate(hl7Content)
 
-                    val otherSegmentsValidator = MmgValidatorOtherSegments( hl7Content, mmgs )
-                    val validationReportOtherSegments = otherSegmentsValidator.validateOtherSegments()
+                   // val otherSegmentsValidator = MmgValidatorOtherSegments( hl7Content, mmgs )
+                    //val validationReportOtherSegments = otherSegmentsValidator.validateOtherSegments()
 
-                    val validationReportFull = validationReport + validationReportOtherSegments
-                    context.logger.info("MMG Validation Report size for for messageUUID: $messageUUID, filePath: $filePath, size --> " + validationReportFull.size)
+                    //val validationReportFull = validationReport + validationReportOtherSegments
+                    context.logger.info("MMG Validation Report size for for messageUUID: $messageUUID, filePath: $filePath, size --> " + validationReport.size)
 
                     // adding the content validation report to received message 
                     // and sending to next event hub
 
                     // get report status
-                    val errorCount = validationReportFull.count { it.classification == ValidationIssueCategoryType.ERROR}
-                    val warningCount = validationReportFull.count{ it.classification == ValidationIssueCategoryType.WARNING}
-                    val mmgReport = MmgReport(errorCount, warningCount, validationReportFull)
+
+                    val mmgReport = MmgReport( validationReport)
                     
 
-                    val processMD = MmgValidatorProcessMetadata(mmgReport.toString(), mmgReport)
+                    val processMD = MmgValidatorProcessMetadata(mmgReport.status.toString(), mmgReport)
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
 
