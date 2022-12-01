@@ -28,18 +28,6 @@ class Transformer(val redisProxy: RedisProxy)  {
         private val gson = Gson()
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
-
-        // val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
-        // val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
-
-        // val redisClient = Jedis(REDIS_CACHE_NAME, 6380, DefaultJedisClientConfig.builder()
-        // .password(REDIS_PWD)
-        // .ssl(true)
-        // .build())
-
-        // // val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
-
-
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         private val OBR_4_1_EPI_ID = "68991-9"
         private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
@@ -47,7 +35,7 @@ class Transformer(val redisProxy: RedisProxy)  {
         private val REDIS_VOCAB_NAMESPACE = "vocab:"
         private val ELEMENT_CE = "CE"
         private val ELEMENT_CWE = "CWE"
-        private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type"
+        // private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type" // only used in dev
         private val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
         private val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
     }
@@ -317,21 +305,19 @@ class Transformer(val redisProxy: RedisProxy)  {
                         StringUtils.normalizeString(phinDataTypeEntry.name) to dt
                     }.toMap()
                     
-                    val map2 = mapOf( PHIN_DATA_TYPE_KEY_NAME to el.mappings.hl7v251.dataType)
+                    // val map2 = mapOf( PHIN_DATA_TYPE_KEY_NAME to el.mappings.hl7v251.dataType)
 
                     // call vocab for preferred name and cdc preffered name
                     if ( el.mappings.hl7v251.dataType == ELEMENT_CE || el.mappings.hl7v251.dataType == ELEMENT_CWE ) {
-                        // TODO: check if both CE and CWE !!
+                        // both CE and CWE 
 
                             val valueSetCode = el.valueSetCode// "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
                             val conceptCode = map1["identifier"]
                             
                             val conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
 
-                           // logger.info("ValueSetConcept conceptJson: --> $valueSetCode, $conceptCode, --> $conceptJson")
 
-                            map1 + map2 + if ( conceptJson.isNullOrEmpty() ) {
-                                // logger.info("conceptJson: isNullOrEmpty --> $conceptJson")
+                            map1 /*+ map2 */+ if ( conceptJson.isNullOrEmpty() ) { // map2 used for dev only
 
                                 // No Redis entry!! for this value set code, concept code
                                 mapOf(
@@ -349,7 +335,7 @@ class Transformer(val redisProxy: RedisProxy)  {
 
                         } else {
                             // this is not an ELEMENT_CE || ELEMENT_CWE
-                            map1 + map2 
+                            map1 //+ map2 
                         } // .else
 
                 } else {
