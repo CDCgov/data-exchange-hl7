@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
+### [0.0.8] - 2022-11-30
+  - Created Hepatitis MMGs
+  - Created PhinSpec 3.2 profiles for NIST Structure Validation
+  - Updated MMG-Based Transformer (fn-message-processor) to generate HL7-specific field elements and added PHIN-Vads concept name and preferred concept names.
+  - Bug Fixes
+    - Fixed Debatcher Code broken due an previous update
+    - MMGReport status was printing the entire report instead of just the status.   
+    - Missing entries in Redis for Value Set
+    
 ### [0.0.7] - 2022-11-16
   - Added new features to lib-dex-commons: RedisProxy & String normalization function.
   - Added ability to load legacy MMGs into Redis. 
