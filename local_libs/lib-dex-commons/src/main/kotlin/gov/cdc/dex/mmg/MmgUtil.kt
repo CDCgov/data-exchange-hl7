@@ -91,7 +91,9 @@ class MmgUtil(val redisProxy: RedisProxy)  {
                     }
                 }
 
-            } // .if
+            } else {
+                throw InvalidConditionException("Condtion $eventCode not found on Mapping Table")
+            }
 
         } // .if
 
