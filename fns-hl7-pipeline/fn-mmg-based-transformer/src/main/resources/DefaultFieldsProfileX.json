@@ -8,7 +8,8 @@
       "usage": "RE",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -40,7 +41,8 @@
       "usage": "R",
       "cardinality": "[1..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -72,7 +74,8 @@
       "usage": "R",
       "cardinality": "[1..1]",
       "conformance": "REGEX:[D|T|P]",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -82,7 +85,8 @@
       "usage": "O",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     }
   ],
   "VID": [
@@ -94,7 +98,8 @@
       "usage": "R",
       "cardinality": "[1..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -126,7 +131,8 @@
       "usage": "RE",
       "cardinality": "[1..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -188,7 +194,8 @@
       "usage": "RE",
       "cardinality": "[1..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -218,7 +225,8 @@
       "usage": "RE",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 5,
@@ -228,7 +236,8 @@
       "usage": "RE",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 6,
@@ -268,7 +277,8 @@
       "usage": "RE",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     }
   ],
   "EI": [
@@ -280,7 +290,8 @@
       "usage": "R",
       "cardinality": "[1..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -322,7 +333,8 @@
       "usage": "R",
       "cardinality": "[1..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -424,7 +436,8 @@
       "usage": "X",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -434,7 +447,8 @@
       "usage": "X",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 3,
@@ -566,7 +580,8 @@
       "usage": "X",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -586,7 +601,8 @@
       "usage": "RE",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 4,
@@ -596,7 +612,8 @@
       "usage": "RE",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 5,
@@ -606,7 +623,8 @@
       "usage": "RE",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 6,
@@ -616,7 +634,8 @@
       "usage": "RE",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 7,
@@ -626,7 +645,8 @@
       "usage": "O",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 8,
@@ -646,7 +666,8 @@
       "usage": "RE",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 10,
@@ -699,42 +720,6 @@
       "notes": ""
     }
   ],
-  "ID": [
-    {
-      "fieldNumber": 1,
-      "name": "Coded Value for HL7-Defined Table",
-      "dataType": "ST",
-      "maxLength": "199",
-      "usage": "R",
-      "cardinality": "[1..1]",
-      "conformance": "",
-      "notes": ""
-    }
-  ],
-  "IS": [
-    {
-      "fieldNumber": 1,
-      "name": "Coded Value for HL7-Defined Table",
-      "dataType": "ST",
-      "maxLength": "20",
-      "usage": "R",
-      "cardinality": "[1..1]",
-      "conformance": "",
-      "notes": ""
-    }
-  ],
-  "SI": [
-    {
-      "fieldNumber": 1,
-      "name": "Sequence ID",
-      "dataType": "NM",
-      "maxLength": "4",
-      "usage": "R",
-      "cardinality": "[1..1]",
-      "conformance": "",
-      "notes": ": A non-negative integer in the form of a NM field"
-    }
-  ],
   "XON": [
     {
       "fieldNumber": 1,
@@ -743,7 +728,8 @@
       "maxLength": "50",
       "usage": "O",
       "cardinality": "[0..1]",
-      "conformance": ""
+      "conformance": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -761,7 +747,8 @@
       "maxLength": "4",
       "usage": "O",
       "cardinality": "[0..1]",
-      "conformance": ""
+      "conformance": "",
+      "preferred": true
     },
     {
       "fieldNumber": 4,
@@ -844,7 +831,8 @@
       "maxLength": "20",
       "usage": "O",
       "cardinality": "[0..1]",
-      "conformance": ""
+      "conformance": "",
+      "preferred": true
     },
     {
       "fieldNumber": 3,
