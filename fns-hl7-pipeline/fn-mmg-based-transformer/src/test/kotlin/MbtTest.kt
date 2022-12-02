@@ -28,7 +28,7 @@ import com.google.gson.GsonBuilder
 
 import  gov.cdc.dex.azure.RedisProxy
 
-class MpTest {
+class MbtTest {
 
     companion object {
 
@@ -212,7 +212,7 @@ class MpTest {
     } // .testTransformerHl7ToJsonModelwithRedisMmg
 
 
-} // .MpTest
+} // .MbtTest
 
 
 

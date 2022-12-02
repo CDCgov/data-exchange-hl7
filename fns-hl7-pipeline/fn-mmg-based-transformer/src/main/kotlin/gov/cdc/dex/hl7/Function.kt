@@ -30,7 +30,7 @@ class Function {
     companion object {
     } // .companion
 
-    @FunctionName("messageprocessor")
+    @FunctionName("mmbBasedTransformer")
     fun eventHubProcessor(
             @EventHubTrigger(
                 name = "msg", 
@@ -99,7 +99,7 @@ class Function {
                     val mmgModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle 
                     context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgModel)}")
 
-                    val processMD = MpProcessMetadata(status="MMG_MODEL_OK", report=mmgModel) // TODO: MMG_MODEL_OK
+                    val processMD = MbtProcessMetadata(status="MMG_MODEL_OK", report=mmgModel) // TODO: MMG_MODEL_OK
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
 
