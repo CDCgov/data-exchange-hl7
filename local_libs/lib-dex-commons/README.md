@@ -12,7 +12,7 @@ The basic usage of this class is to a) Instantiate a redis proxy passing redis p
 Ex.:
 
 ```kotlin
-	 val REDIS_CACHE_NAME:String=System.getenv("REDIS_CACHE_NAME")
+	val REDIS_CACHE_NAME:String=System.getenv("REDIS_CACHE_NAME")
 	val REDIS_PWD:String=System.getenv("REDIS_CACHE_KEY")
 	
 	val redisProxy=RedisProxy(REDIS_CACHE_NAME,REDIS_PWD)
@@ -39,7 +39,8 @@ Where:
 *  ehDestination is the name of the event hub topic we're sending the message to
 * gso.toJson(inputEvent) is the message we're sending (as a json string in this case).
 
-## Metadata POJOs The package gov.cdc.dex.metadata contains several data classes that handles all the metadata enrichment we add to a given HL7 message.
+## Metadata POJOs 
+The package gov.cdc.dex.metadata contains several data classes that handles all the metadata enrichment we add to a given HL7 message.
 
 ### DexEventPayload
 This class is the entire payload submitted to event hubs.
@@ -62,7 +63,7 @@ This class holds information as to the current status of the message as it progr
 This class holds functionality used by several services to determine which MMGs should be used to process a given message. It uses the Condtion2MMGMapping data class to read that table for a given event code and read all the appropriate MMGs from Redis and provide them as MMG objects to the caller.
 
 Ex.:
-```
+```kotlin
     val redisProxy=RedisProxy(REDIS_CACHE_NAME,REDIS_PWD)
     val mmgUtil=MmgUtil(redisProxy)
     val genV2mmgs=mmgUtil.getMMG(MmgUtil.GEN_V2_MMG,"Lyme_TBRD_MMG_V1.0","11088","21"
