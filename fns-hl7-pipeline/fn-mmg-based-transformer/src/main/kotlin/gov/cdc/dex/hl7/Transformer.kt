@@ -289,8 +289,14 @@ class Transformer(val redisProxy: RedisProxy)  {
 
             val phinDataTypesMap = getPhinDataTypes()
             // logger.info("getSegmentData, phinDataTypesMap: --> ${phinDataTypesMap}")
+            
+            // considering the component position
+            val dataComponentPosition = el.mappings.hl7v251.componentPosition - 1
+            val segmentParts = segmentDataFull.split("^")
 
-            val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
+            val segmentDataByCompPos = if ( dataComponentPosition >= 0 && segmentParts.size > dataComponentPosition ) segmentParts[dataComponentPosition] else segmentDataFull
+
+            val segmentDataArr = if (el.isRepeat) segmentDataByCompPos.split("~") else listOf(segmentDataByCompPos)
 
             val segmentData = segmentDataArr.map { oneRepeat ->
                 val oneRepeatParts = oneRepeat.split("^")
