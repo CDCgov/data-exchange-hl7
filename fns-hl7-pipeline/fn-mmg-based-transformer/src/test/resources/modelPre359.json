@@ -60,8 +60,8 @@
   "subject_address_county": {
     "coded_value_for_hl7_defined_table": null
   },
-  "subject_address_state": "51",
-  "subject_address_zip_code": "22030",
+  "subject_address_state": "^^^51^22030",
+  "subject_address_zip_code": "^^^51^22030",
   "deceased_date": null,
   "condition_code": {
     "identifier": "11088",
