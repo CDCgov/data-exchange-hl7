@@ -301,7 +301,7 @@ class Transformer(val redisProxy: RedisProxy)  {
 
                         val fieldNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
 
-                        val dt = if (oneRepeatParts.size > fieldNumber) oneRepeatParts[fieldNumber] else null
+                        val dt = if (oneRepeatParts.size > fieldNumber && oneRepeatParts[fieldNumber].length > 0) oneRepeatParts[fieldNumber] else null
                         StringUtils.normalizeString(phinDataTypeEntry.name) to dt
                     }.toMap()
                     

@@ -21,8 +21,8 @@
   ],
   "local_subject_id": {
     "id_number": "TickTBRD_TC04",
-    "check_digit": null,
-    "check_digit_scheme": null,
+    "check_digit": "",
+    "check_digit_scheme": "",
     "assigning_authority": "SendAppName&2.16.840.1.114222.1234&ISO",
     "identifier_type_code": null,
     "assigning_facility": null,
@@ -58,7 +58,7 @@
     "cdc_preferred_designation": "Not Hispanic or Latino"
   },
   "subject_address_county": {
-    "coded_value_for_hl7_defined_table": null
+    "coded_value_for_hl7_defined_table": ""
   },
   "subject_address_state": "^^^51^22030",
   "subject_address_zip_code": "^^^51^22030",
@@ -115,7 +115,7 @@
   "date_of_illness_onset": "20180531",
   "illness_end_date": "20180618",
   "illness_duration": {
-    "comparator": null,
+    "comparator": "",
     "number1": "19",
     "separator": null,
     "number2": null
@@ -139,7 +139,7 @@
   "admission_date": "20180605",
   "discharge_date": "20180618",
   "duration_of_hospital_stay_in_days": {
-    "comparator": null,
+    "comparator": "",
     "number1": "13",
     "separator": null,
     "number2": null
@@ -160,7 +160,7 @@
   "state_case_identifier": "340227",
   "legacy_case_identifier": "34022713S012018",
   "age_at_case_investigation": {
-    "comparator": null,
+    "comparator": "",
     "number1": "55",
     "separator": null,
     "number2": null
@@ -248,7 +248,7 @@
   "earliest_date_reported_to_county": "20180605",
   "earliest_date_reported_to_state": "20180605",
   "mmwr_week": {
-    "comparator": null,
+    "comparator": "",
     "number1": "23",
     "separator": null,
     "number2": null
@@ -713,7 +713,7 @@
       },
       "date_treatment_or_therapy_started": "20180607",
       "treatment_duration": {
-        "comparator": null,
+        "comparator": "",
         "number1": "10",
         "separator": null,
         "number2": null
@@ -735,7 +735,7 @@
       },
       "date_treatment_or_therapy_started": "20180607",
       "treatment_duration": {
-        "comparator": null,
+        "comparator": "",
         "number1": "10",
         "separator": null,
         "number2": null
