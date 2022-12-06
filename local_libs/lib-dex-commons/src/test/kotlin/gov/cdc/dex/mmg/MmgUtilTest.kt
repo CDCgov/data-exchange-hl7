@@ -20,14 +20,25 @@ internal class MmgUtilTest {
         println("GenV2")
        val genV2mmgs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, null, null, null)
         genV2mmgs.forEach {println(it.name)}
+        assert(genV2mmgs.size == 1)
 
         println("----\nLyme")
         val lymeMMGs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "11080", "13")
         lymeMMGs.forEach {println(it.name)}
+        assert(lymeMMGs.size == 2)
 
         println("----\nHepA")
         val hepAMMgs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, "Hepatitis_MMG_V1.0", "10110", "21")
         hepAMMgs.forEach {println(it.name)}
+        assert(hepAMMgs.size == 3)
+
+        try {
+            mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "1108", "21")
+            assert(false)
+        } catch (e: InvalidConditionException) {
+            assert(true)
+            println("Exception properly thrown: ${e.message}")
+        }
     }
 
     @Test
