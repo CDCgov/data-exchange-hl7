@@ -32,9 +32,7 @@
     "assigning_agency_or_department": null
   },
   "birth_date": "19630401",
-  "subjects_sex": {
-    "coded_value_for_hl7_defined_table": "M"
-  },
+  "subjects_sex": "M",
   "race_category": [
     {
       "identifier": "2054-5",
@@ -54,12 +52,10 @@
     "alternate_identifier": null,
     "alternate_text": null,
     "name_of_alternate_coding_system": null,
-    "code_system_concept_name": "Not Hispanic or Latino",
+    "code_system_concept_name": "Not \nHispanic or Latino",
     "cdc_preferred_designation": "Not Hispanic or Latino"
   },
-  "subject_address_county": {
-    "coded_value_for_hl7_defined_table": null
-  },
+  "subject_address_county": "^^^51^22030",
   "subject_address_state": "51",
   "subject_address_zip_code": "22030",
   "deceased_date": null,
@@ -79,9 +75,7 @@
     "universal_id": "2.16.840.1.114222.1234",
     "universal_id_type": "ISO"
   },
-  "notification_result_status": {
-    "coded_value_for_hl7_defined_table": "F"
-  },
+  "notification_result_status": "F",
   "date_first_electronically_submitted": "20180605150000",
   "date_of_electronic_case_notification_to_cdc": "20180605150000",
   "other_race_text": null,
@@ -194,7 +188,7 @@
     "coding_system_version_id": null,
     "alternate_coding_system_version_id": null,
     "original_text": null,
-    "code_system_concept_name": "Probable diagnosis (contextual qualifier) (qualifier value)",
+    "code_system_concept_name": "Probable diagnosis (contextual qualifier) \n(qualifier value)",
     "cdc_preferred_designation": "Probable diagnosis"
   },
   "immediate_national_notifiable_condition": {
@@ -414,7 +408,7 @@
     {
       "country_of_exposure": {
         "identifier": "USA",
-        "text": "UNITED STATES OF AMERICA",
+        "text": "UNITED \nSTATES OF AMERICA",
         "name_of_coding_system": "ISO3166_1",
         "alternate_identifier": null,
         "alternate_text": null,
