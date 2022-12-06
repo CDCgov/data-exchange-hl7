@@ -68,7 +68,6 @@ class Transformer(val redisProxy: RedisProxy)  {
             val mshMap = mmgMsh.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition - 1
-                // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
 
                 val mshLineParts = messageLines.filter { it.startsWith("MSH|") }[0].split("|") // there would be only one MSH
 
@@ -87,7 +86,6 @@ class Transformer(val redisProxy: RedisProxy)  {
             val pidMap = mmgPid.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
-                // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
 
                 val pidLineParts = messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
 
@@ -106,7 +104,6 @@ class Transformer(val redisProxy: RedisProxy)  {
             val obrMap = mmgObr.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
-                // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
 
                 val obrLineParts = messageLines.filter { it.startsWith("OBR|") && it.contains(OBR_4_1_EPI_ID) }[0].split("|") // there would be only one Epi Obr
 
@@ -127,7 +124,7 @@ class Transformer(val redisProxy: RedisProxy)  {
             val obxMap = mmgObx.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
-                // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
+
                 val mmgObxIdentifier = el.mappings.hl7v251.identifier
 
                 val obxLine = obxLines.filter { line -> 
@@ -341,9 +338,9 @@ class Transformer(val redisProxy: RedisProxy)  {
                 } else {
                     // not available in the default fields profile (DefaultFieldsProfile.json)
                     // considering the component position
-                    val dataComponentPosition = el.mappings.hl7v251.componentPosition - 1
-
-                    if ( dataComponentPosition >= 0 && oneRepeatParts.size > dataComponentPosition ) oneRepeatParts[dataComponentPosition] else null
+                    // dtCompPos data component position
+                    val dtCompPos = el.mappings.hl7v251.componentPosition - 1
+                    if ( dtCompPos >= 0 && oneRepeatParts.size > dtCompPos && oneRepeatParts[dtCompPos].length > 0 ) oneRepeatParts[dtCompPos] else null
                 } // .else
 
             } // .segmentData 
