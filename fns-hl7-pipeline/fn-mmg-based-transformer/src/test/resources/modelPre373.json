@@ -55,7 +55,7 @@
     "code_system_concept_name": "Not \nHispanic or Latino",
     "cdc_preferred_designation": "Not Hispanic or Latino"
   },
-  "subject_address_county": null,
+  "subject_address_county": "^^^51^22030",
   "subject_address_state": "51",
   "subject_address_zip_code": "22030",
   "deceased_date": null,
@@ -188,7 +188,7 @@
     "coding_system_version_id": null,
     "alternate_coding_system_version_id": null,
     "original_text": null,
-    "code_system_concept_name": "Probable diagnosis (contextual qualifier) (qualifier value)",
+    "code_system_concept_name": "Probable diagnosis (contextual qualifier) \n(qualifier value)",
     "cdc_preferred_designation": "Probable diagnosis"
   },
   "immediate_national_notifiable_condition": {
@@ -230,7 +230,7 @@
     "alternate_coding_system_version_id": null,
     "original_text": null,
     "code_system_concept_name": "Other state and or local agencies",
-    "cdc_preferred_designation": "Other State \nand Local Agencies"
+    "cdc_preferred_designation": "Other State and Local Agencies"
   },
   "reporting_source_zip_code": "22030",
   "binational_reporting_criteria": null,
@@ -319,7 +319,7 @@
     "code_system_concept_name": "Yes",
     "cdc_preferred_designation": "Yes"
   },
-  "immunocompromised_associated_condition_or_treatment": "diabetes, \nrenal disease",
+  "immunocompromised_associated_condition_or_treatment": "diabetes, renal disease",
   "treatment_drug_indicator": {
     "identifier": "Y",
     "text": "Yes",
@@ -408,7 +408,7 @@
     {
       "country_of_exposure": {
         "identifier": "USA",
-        "text": "UNITED STATES OF AMERICA",
+        "text": "UNITED \nSTATES OF AMERICA",
         "name_of_coding_system": "ISO3166_1",
         "alternate_identifier": null,
         "alternate_text": null,
@@ -416,7 +416,7 @@
         "coding_system_version_id": null,
         "alternate_coding_system_version_id": null,
         "original_text": null,
-        "code_system_concept_name": "UNITED STATES \nOF AMERICA (THE)",
+        "code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
         "cdc_preferred_designation": "UNITED STATES OF AMERICA"
       },
       "state_or_province_of_exposure": {
@@ -851,7 +851,7 @@
         "coding_system_version_id": null,
         "alternate_coding_system_version_id": null,
         "original_text": null,
-        "code_system_concept_name": "Serum \nspecimen (specimen)",
+        "code_system_concept_name": "Serum specimen (specimen)",
         "cdc_preferred_designation": "Serum"
       },
       "performing_laboratory_name": "CDC RZB Reference Laboratory",

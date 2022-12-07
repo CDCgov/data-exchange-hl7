@@ -68,7 +68,6 @@ class Transformer(val redisProxy: RedisProxy)  {
             val mshMap = mmgMsh.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition - 1
-                // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
 
                 val mshLineParts = messageLines.filter { it.startsWith("MSH|") }[0].split("|") // there would be only one MSH
 
@@ -87,7 +86,6 @@ class Transformer(val redisProxy: RedisProxy)  {
             val pidMap = mmgPid.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
-                // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
 
                 val pidLineParts = messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
 
@@ -106,7 +104,6 @@ class Transformer(val redisProxy: RedisProxy)  {
             val obrMap = mmgObr.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
-                // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
 
                 val obrLineParts = messageLines.filter { it.startsWith("OBR|") && it.contains(OBR_4_1_EPI_ID) }[0].split("|") // there would be only one Epi Obr
 
@@ -127,7 +124,7 @@ class Transformer(val redisProxy: RedisProxy)  {
             val obxMap = mmgObx.map { el -> 
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
-                // val dataComponentPosition = el.mappings.hl7v251.componentPosition 
+
                 val mmgObxIdentifier = el.mappings.hl7v251.identifier
 
                 val obxLine = obxLines.filter { line -> 
@@ -284,19 +281,13 @@ class Transformer(val redisProxy: RedisProxy)  {
         } // .getPhinDataTypes
 
 
-        /* private */ fun getSegmentData(el: Element, segmentDataFull: String): Any {
+        /* private */ fun getSegmentData(el: Element, segmentDataFull: String): Any? {
             // logger.info("getSegmentData, calling getPhinDataTypes...")
 
             val phinDataTypesMap = getPhinDataTypes()
             // logger.info("getSegmentData, phinDataTypesMap: --> ${phinDataTypesMap}")
             
-            // considering the component position
-            val dataComponentPosition = el.mappings.hl7v251.componentPosition - 1
-            val segmentParts = segmentDataFull.split("^")
-
-            val segmentDataByCompPos = if ( dataComponentPosition >= 0 && segmentParts.size > dataComponentPosition ) segmentParts[dataComponentPosition] else segmentDataFull
-
-            val segmentDataArr = if (el.isRepeat) segmentDataByCompPos.split("~") else listOf(segmentDataByCompPos)
+            val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
 
             val segmentData = segmentDataArr.map { oneRepeat ->
                 val oneRepeatParts = oneRepeat.split("^")
@@ -346,8 +337,16 @@ class Transformer(val redisProxy: RedisProxy)  {
 
                 } else {
                     // not available in the default fields profile (DefaultFieldsProfile.json)
-                    // returns segment data as is in hl7 message
-                    oneRepeat
+                    // considering the component position
+                    // dtCompPos data component position
+                    val dtCompPos = el.mappings.hl7v251.componentPosition - 1
+
+                    when ( dtCompPos ) {
+                        in 0..Int.MAX_VALUE ->  if ( oneRepeatParts.size > dtCompPos && oneRepeatParts[dtCompPos].length > 0 ) oneRepeatParts[dtCompPos] else null
+                        // no need to use component position
+                        else -> oneRepeat // full data (string)
+                    } // .when
+                    
                 } // .else
 
             } // .segmentData 
