@@ -340,7 +340,13 @@ class Transformer(val redisProxy: RedisProxy)  {
                     // considering the component position
                     // dtCompPos data component position
                     val dtCompPos = el.mappings.hl7v251.componentPosition - 1
-                    if ( dtCompPos >= 0 && oneRepeatParts.size > dtCompPos && oneRepeatParts[dtCompPos].length > 0 ) oneRepeatParts[dtCompPos] else null
+
+                    when ( dtCompPos ) {
+                        in 0..Int.MAX_VALUE ->  if ( oneRepeatParts.size > dtCompPos && oneRepeatParts[dtCompPos].length > 0 ) oneRepeatParts[dtCompPos] else null
+                        // no need to use component position
+                        else -> oneRepeat // full data (string)
+                    } // .when
+                    
                 } // .else
 
             } // .segmentData 

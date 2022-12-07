@@ -31,8 +31,8 @@
     "assigning_jurisdiction": null,
     "assigning_agency_or_department": null
   },
-  "birth_date": null,
-  "subjects_sex": null,
+  "birth_date": "19630401",
+  "subjects_sex": "M",
   "race_category": [
     {
       "identifier": "2054-5",
@@ -52,7 +52,7 @@
     "alternate_identifier": null,
     "alternate_text": null,
     "name_of_alternate_coding_system": null,
-    "code_system_concept_name": "Not Hispanic or Latino",
+    "code_system_concept_name": "Not \nHispanic or Latino",
     "cdc_preferred_designation": "Not Hispanic or Latino"
   },
   "subject_address_county": null,
@@ -75,9 +75,9 @@
     "universal_id": "2.16.840.1.114222.1234",
     "universal_id_type": "ISO"
   },
-  "notification_result_status": null,
-  "date_first_electronically_submitted": null,
-  "date_of_electronic_case_notification_to_cdc": null,
+  "notification_result_status": "F",
+  "date_first_electronically_submitted": "20180605150000",
+  "date_of_electronic_case_notification_to_cdc": "20180605150000",
   "other_race_text": null,
   "country_of_birth": {
     "identifier": "USA",
@@ -106,8 +106,8 @@
     "code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
     "cdc_preferred_designation": "UNITED STATES OF AMERICA"
   },
-  "date_of_illness_onset": null,
-  "illness_end_date": null,
+  "date_of_illness_onset": "20180531",
+  "illness_end_date": "20180618",
   "illness_duration": {
     "comparator": null,
     "number1": "19",
@@ -116,7 +116,7 @@
   },
   "illness_duration_units": null,
   "pregnancy_status": null,
-  "diagnosis_date": null,
+  "diagnosis_date": "20180605",
   "hospitalized": {
     "identifier": "Y",
     "text": "Yes",
@@ -130,8 +130,8 @@
     "code_system_concept_name": "Yes",
     "cdc_preferred_designation": "Yes"
   },
-  "admission_date": null,
-  "discharge_date": null,
+  "admission_date": "20180605",
+  "discharge_date": "20180618",
   "duration_of_hospital_stay_in_days": {
     "comparator": null,
     "number1": "13",
@@ -151,8 +151,8 @@
     "code_system_concept_name": "No",
     "cdc_preferred_designation": "No"
   },
-  "state_case_identifier": null,
-  "legacy_case_identifier": null,
+  "state_case_identifier": "340227",
+  "legacy_case_identifier": "34022713S012018",
   "age_at_case_investigation": {
     "comparator": null,
     "number1": "55",
@@ -218,7 +218,7 @@
     "cdc_preferred_designation": "No"
   },
   "case_outbreak_name": null,
-  "jurisdiction_code": null,
+  "jurisdiction_code": "S01",
   "reporting_source_type_code": {
     "identifier": "PHC252",
     "text": "Other State and Local Agencies",
@@ -229,27 +229,27 @@
     "coding_system_version_id": null,
     "alternate_coding_system_version_id": null,
     "original_text": null,
-    "code_system_concept_name": "Other state and \nor local agencies",
-    "cdc_preferred_designation": "Other State and Local Agencies"
+    "code_system_concept_name": "Other state and or local agencies",
+    "cdc_preferred_designation": "Other State \nand Local Agencies"
   },
-  "reporting_source_zip_code": null,
+  "reporting_source_zip_code": "22030",
   "binational_reporting_criteria": null,
-  "person_reporting_to_cdc_name": null,
-  "person_reporting_to_cdc_phone_number": null,
-  "person_reporting_to_cdc_email": null,
-  "case_investigation_start_date": null,
-  "date_reported": null,
-  "earliest_date_reported_to_county": null,
-  "earliest_date_reported_to_state": null,
+  "person_reporting_to_cdc_name": "Mick Chopra",
+  "person_reporting_to_cdc_phone_number": "858-888-9999",
+  "person_reporting_to_cdc_email": "Chopra@email.com",
+  "case_investigation_start_date": "20180605",
+  "date_reported": "20180605",
+  "earliest_date_reported_to_county": "20180605",
+  "earliest_date_reported_to_state": "20180605",
   "mmwr_week": {
     "comparator": null,
     "number1": "23",
     "separator": null,
     "number2": null
   },
-  "mmwr_year": null,
+  "mmwr_year": "2018",
   "date_cdc_was_first_verbally_notified_of_this_case": null,
-  "date_first_reported_to_phd": null,
+  "date_first_reported_to_phd": "20180605",
   "reporting_state": {
     "identifier": "51",
     "text": "Virginia",
@@ -319,7 +319,7 @@
     "code_system_concept_name": "Yes",
     "cdc_preferred_designation": "Yes"
   },
-  "immunocompromised_associated_condition_or_treatment": null,
+  "immunocompromised_associated_condition_or_treatment": "diabetes, \nrenal disease",
   "treatment_drug_indicator": {
     "identifier": "Y",
     "text": "Yes",
@@ -416,7 +416,7 @@
         "coding_system_version_id": null,
         "alternate_coding_system_version_id": null,
         "original_text": null,
-        "code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+        "code_system_concept_name": "UNITED STATES \nOF AMERICA (THE)",
         "cdc_preferred_designation": "UNITED STATES OF AMERICA"
       },
       "state_or_province_of_exposure": {
@@ -432,8 +432,8 @@
         "code_system_concept_name": "Virginia",
         "cdc_preferred_designation": "Virginia"
       },
-      "city_of_exposure": null,
-      "county_of_exposure": null
+      "city_of_exposure": "Oakton",
+      "county_of_exposure": "Fairfax County"
     }
   ],
   "clinical_manifestation": [
@@ -616,7 +616,7 @@
         "coding_system_version_id": null,
         "alternate_coding_system_version_id": null,
         "original_text": null,
-        "code_system_concept_name": "Decreased blood leukocyte number \n(finding)",
+        "code_system_concept_name": "Decreased blood leukocyte number (finding)",
         "cdc_preferred_designation": "Leukopenia"
       },
       "clinical_manifestation_indicator": {
@@ -705,7 +705,7 @@
         "code_system_concept_name": "Doxycycline",
         "cdc_preferred_designation": "Doxycycline"
       },
-      "date_treatment_or_therapy_started": null,
+      "date_treatment_or_therapy_started": "20180607",
       "treatment_duration": {
         "comparator": null,
         "number1": "10",
@@ -727,7 +727,7 @@
         "code_system_concept_name": "Amoxicillin",
         "cdc_preferred_designation": "Amoxicillin"
       },
-      "date_treatment_or_therapy_started": null,
+      "date_treatment_or_therapy_started": "20180607",
       "treatment_duration": {
         "comparator": null,
         "number1": "10",
@@ -738,7 +738,7 @@
   ],
   "industry_and_occupation_repeating_group": [
     {
-      "current_occupation": null,
+      "current_occupation": "Data Analyst",
       "current_occupation_standardized": {
         "identifier": "0735",
         "text": "Market research analysts and marketing specialists [0735]",
@@ -749,7 +749,7 @@
         "code_system_concept_name": "Market research analysts and marketing specialists",
         "cdc_preferred_designation": "Market research analysts and marketing specialists [0735]"
       },
-      "current_industry": null,
+      "current_industry": "Banking",
       "current_industry_standardized": {
         "identifier": "6870",
         "text": "Banking and related activities [6870]",
@@ -790,8 +790,8 @@
         "code_system_concept_name": "Beaufort",
         "cdc_preferred_designation": "Beaufort, NC"
       },
-      "date_of_arrival_to_travel_destination": null,
-      "date_of_departure_from_travel_destination": null
+      "date_of_arrival_to_travel_destination": "20180525",
+      "date_of_departure_from_travel_destination": "20180528"
     }
   ],
   "tick_bite_repeating_group": [],
@@ -839,8 +839,8 @@
         "code_system_concept_name": "Ehrlichia chaffeensis (organism)",
         "cdc_preferred_designation": "Ehrlichia chaffeensis"
       },
-      "test_result_quantitative": null,
-      "specimen_collection_date_time": null,
+      "test_result_quantitative": ">1:64",
+      "specimen_collection_date_time": "20180613",
       "specimen_type": {
         "identifier": "119364003",
         "text": "Serum",
@@ -851,10 +851,10 @@
         "coding_system_version_id": null,
         "alternate_coding_system_version_id": null,
         "original_text": null,
-        "code_system_concept_name": "Serum specimen (specimen)",
+        "code_system_concept_name": "Serum \nspecimen (specimen)",
         "cdc_preferred_designation": "Serum"
       },
-      "performing_laboratory_name": null,
+      "performing_laboratory_name": "CDC RZB Reference Laboratory",
       "laboratory_state": {
         "identifier": "13",
         "text": "Georgia",
@@ -868,7 +868,7 @@
         "code_system_concept_name": "Georgia",
         "cdc_preferred_designation": "Georgia"
       },
-      "performing_laboratory_specimen_id": null
+      "performing_laboratory_specimen_id": "99999"
     }
   ]
 }
