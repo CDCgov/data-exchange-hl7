@@ -115,8 +115,9 @@ class Function {
         val processMD = ReceiverProcessMetadata(status)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
-        val summary = SummaryInfo("RECEIVED")
-        if (!errorMessage.isNullOrEmpty() ) {
+        var summary = SummaryInfo("RECEIVED")
+        if (status == STATUS_ERROR) {
+            summary = SummaryInfo("REJECTED")
             summary.problem= Problem(ReceiverProcessMetadata.RECEIVER_PROCESS, null, null, errorMessage, false, 0, 0)
         }
         return DexMetadata(provenance, listOf(processMD)) to summary
