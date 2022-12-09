@@ -30,7 +30,7 @@ class Function {
     companion object {
     } // .companion
 
-    @FunctionName("mmbBasedTransformer")
+    @FunctionName("mmgBasedTransformer")
     fun eventHubProcessor(
             @EventHubTrigger(
                 name = "msg", 
