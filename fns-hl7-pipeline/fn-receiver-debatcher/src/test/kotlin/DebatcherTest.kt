@@ -110,7 +110,7 @@ class DebatcherTest {
         BufferedReader(reader).use { br ->
             br.forEachLine { line ->
                 val lineClean = line.trim().let { if ( it.startsWith(UTF_BOM) )  it.substring(1)  else it}
-                if ( lineClean.startsWith("FHS") || lineClean.startsWith("BHS") || lineClean.startsWith("BTS")  ) {
+                if ( lineClean.startsWith("FHS") || lineClean.startsWith("BHS") || lineClean.startsWith("BTS") || lineClean.startsWith("FTS") ) {
                     // batch line --Nothing to do here
                     provenance.singleOrBatch = Provenance.BATCH_FILE
                 } else {
