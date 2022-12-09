@@ -1,0 +1,880 @@
+{
+  "message_profile_identifier": [
+    {
+      "entity_identifier": "NOTF_ORU_v3.0",
+      "namespace_id": "PHINProfileID",
+      "universal_id": "2.16.840.1.114222.4.10.3",
+      "universal_id_type": "ISO"
+    },
+    {
+      "entity_identifier": "Generic_MMG_V2.0",
+      "namespace_id": "PHINMsgMapID",
+      "universal_id": "2.16.840.1.114222.4.10.4",
+      "universal_id_type": "ISO"
+    },
+    {
+      "entity_identifier": "Lyme_TBRD_MMG_V1.0",
+      "namespace_id": "PHINMsgMapID",
+      "universal_id": "2.16.840.1.114222.4.10.4",
+      "universal_id_type": "ISO"
+    }
+  ],
+  "local_subject_id": {
+    "id_number": "TickTBRD_TC04",
+    "check_digit": null,
+    "check_digit_scheme": null,
+    "assigning_authority": "SendAppName&2.16.840.1.114222.1234&ISO",
+    "identifier_type_code": null,
+    "assigning_facility": null,
+    "effective_date": null,
+    "expiration_date": null,
+    "assigning_jurisdiction": null,
+    "assigning_agency_or_department": null
+  },
+  "birth_date": "19630401",
+  "subjects_sex": {
+    "coded_value_for_hl7_defined_table": "M"
+  },
+  "race_category": [
+    {
+      "identifier": "2054-5",
+      "text": "Black or African American",
+      "name_of_coding_system": "CDCREC",
+      "alternate_identifier": null,
+      "alternate_text": null,
+      "name_of_alternate_coding_system": null,
+      "code_system_concept_name": "Black or African American",
+      "cdc_preferred_designation": "Black or African American"
+    }
+  ],
+  "ethnic_group": {
+    "identifier": "2186-5",
+    "text": "Not Hispanic or Latino",
+    "name_of_coding_system": "CDCREC",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "code_system_concept_name": "Not Hispanic or Latino",
+    "cdc_preferred_designation": "Not Hispanic or Latino"
+  },
+  "subject_address_county": {
+    "coded_value_for_hl7_defined_table": null
+  },
+  "subject_address_state": "^^^51^22030",
+  "subject_address_zip_code": "^^^51^22030",
+  "deceased_date": null,
+  "condition_code": {
+    "identifier": "11088",
+    "text": "Ehrlichia chaffeensis",
+    "name_of_coding_system": "NND",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "code_system_concept_name": null,
+    "cdc_preferred_designation": null
+  },
+  "local_record_id": {
+    "entity_identifier": "TickborneTBRD_TC04",
+    "namespace_id": "SendAppName",
+    "universal_id": "2.16.840.1.114222.1234",
+    "universal_id_type": "ISO"
+  },
+  "notification_result_status": {
+    "coded_value_for_hl7_defined_table": "F"
+  },
+  "date_first_electronically_submitted": "20180605150000",
+  "date_of_electronic_case_notification_to_cdc": "20180605150000",
+  "other_race_text": null,
+  "country_of_birth": {
+    "identifier": "USA",
+    "text": "UNITED STATES OF AMERICA",
+    "name_of_coding_system": "ISO3166_1",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+    "cdc_preferred_designation": "UNITED STATES OF AMERICA"
+  },
+  "other_birth_place": null,
+  "country_of_usual_residence": {
+    "identifier": "USA",
+    "text": "UNITED STATES OF AMERICA",
+    "name_of_coding_system": "ISO3166_1",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+    "cdc_preferred_designation": "UNITED STATES OF AMERICA"
+  },
+  "date_of_illness_onset": "20180531",
+  "illness_end_date": "20180618",
+  "illness_duration": {
+    "comparator": null,
+    "number1": "19",
+    "separator": null,
+    "number2": null
+  },
+  "illness_duration_units": null,
+  "pregnancy_status": null,
+  "diagnosis_date": "20180605",
+  "hospitalized": {
+    "identifier": "Y",
+    "text": "Yes",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "Yes",
+    "cdc_preferred_designation": "Yes"
+  },
+  "admission_date": "20180605",
+  "discharge_date": "20180618",
+  "duration_of_hospital_stay_in_days": {
+    "comparator": null,
+    "number1": "13",
+    "separator": null,
+    "number2": null
+  },
+  "subject_died": {
+    "identifier": "N",
+    "text": "No",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "No",
+    "cdc_preferred_designation": "No"
+  },
+  "state_case_identifier": "340227",
+  "legacy_case_identifier": "34022713S012018",
+  "age_at_case_investigation": {
+    "comparator": null,
+    "number1": "55",
+    "separator": null,
+    "number2": null
+  },
+  "age_unit_at_case_investigation": null,
+  "case_disease_imported_code": null,
+  "imported_country": null,
+  "imported_state": null,
+  "imported_city": null,
+  "imported_county": null,
+  "transmission_mode": {
+    "identifier": "418427004",
+    "text": "Vector-borne transmission",
+    "name_of_coding_system": "SCT",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "Vector-borne transmission (qualifier value)",
+    "cdc_preferred_designation": "Vector-borne transmission"
+  },
+  "case_class_status_code": {
+    "identifier": "2931005",
+    "text": "Probable diagnosis",
+    "name_of_coding_system": "SCT",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "Probable diagnosis (contextual qualifier) (qualifier value)",
+    "cdc_preferred_designation": "Probable diagnosis"
+  },
+  "immediate_national_notifiable_condition": {
+    "identifier": "N",
+    "text": "No",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "No",
+    "cdc_preferred_designation": "No"
+  },
+  "case_outbreak_indicator": {
+    "identifier": "N",
+    "text": "No",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "No",
+    "cdc_preferred_designation": "No"
+  },
+  "case_outbreak_name": null,
+  "jurisdiction_code": "S01",
+  "reporting_source_type_code": {
+    "identifier": "PHC252",
+    "text": "Other State and Local Agencies",
+    "name_of_coding_system": "CDCPHINVS",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "Other state and or local agencies",
+    "cdc_preferred_designation": "Other State and Local Agencies"
+  },
+  "reporting_source_zip_code": "22030",
+  "binational_reporting_criteria": null,
+  "person_reporting_to_cdc_name": "Mick Chopra",
+  "person_reporting_to_cdc_phone_number": "858-888-9999",
+  "person_reporting_to_cdc_email": "Chopra@email.com",
+  "case_investigation_start_date": "20180605",
+  "date_reported": "20180605",
+  "earliest_date_reported_to_county": "20180605",
+  "earliest_date_reported_to_state": "20180605",
+  "mmwr_week": {
+    "comparator": null,
+    "number1": "23",
+    "separator": null,
+    "number2": null
+  },
+  "mmwr_year": "2018",
+  "date_cdc_was_first_verbally_notified_of_this_case": null,
+  "date_first_reported_to_phd": "20180605",
+  "reporting_state": {
+    "identifier": "51",
+    "text": "Virginia",
+    "name_of_coding_system": "FIPS5_2",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "Virginia",
+    "cdc_preferred_designation": "Virginia"
+  },
+  "reporting_county": null,
+  "national_reporting_jurisdiction": {
+    "identifier": "51",
+    "text": "VA",
+    "name_of_coding_system": "FIPS5_2",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "Virginia",
+    "cdc_preferred_designation": "VA"
+  },
+  "comment": null,
+  "experienced_complication": {
+    "identifier": "Y",
+    "text": "Yes",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "Yes",
+    "cdc_preferred_designation": "Yes"
+  },
+  "type_of_complication": [
+    {
+      "identifier": "OTH",
+      "text": "other",
+      "name_of_coding_system": "NULLFL",
+      "alternate_identifier": null,
+      "alternate_text": null,
+      "name_of_alternate_coding_system": null,
+      "coding_system_version_id": null,
+      "alternate_coding_system_version_id": null,
+      "original_text": null,
+      "code_system_concept_name": "other",
+      "cdc_preferred_designation": "other"
+    }
+  ],
+  "patient_immunocompromised": {
+    "identifier": "Y",
+    "text": "Yes",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "Yes",
+    "cdc_preferred_designation": "Yes"
+  },
+  "immunocompromised_associated_condition_or_treatment": "diabetes, renal disease",
+  "treatment_drug_indicator": {
+    "identifier": "Y",
+    "text": "Yes",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "Yes",
+    "cdc_preferred_designation": "Yes"
+  },
+  "occupation_related_to_exposure": {
+    "identifier": "N",
+    "text": "No",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "No",
+    "cdc_preferred_designation": "No"
+  },
+  "travel": {
+    "identifier": "Y",
+    "text": "Yes",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "Yes",
+    "cdc_preferred_designation": "Yes"
+  },
+  "tick_bite": {
+    "identifier": "N",
+    "text": "No",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "No",
+    "cdc_preferred_designation": "No"
+  },
+  "blood_transfusion": {
+    "identifier": "N",
+    "text": "No",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "No",
+    "cdc_preferred_designation": "No"
+  },
+  "transfusion_associated": null,
+  "transfused_product": null,
+  "organ_transplant": null,
+  "blood_donor": {
+    "identifier": "N",
+    "text": "No",
+    "name_of_coding_system": "HL70136",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "coding_system_version_id": null,
+    "alternate_coding_system_version_id": null,
+    "original_text": null,
+    "code_system_concept_name": "No",
+    "cdc_preferred_designation": "No"
+  },
+  "blood_donor_implicated_during_investigation": null,
+  "donated_product": null,
+  "blood_bank_notified": null,
+  "repeating_variables_for_disease_exposure": [
+    {
+      "country_of_exposure": {
+        "identifier": "USA",
+        "text": "UNITED STATES OF AMERICA",
+        "name_of_coding_system": "ISO3166_1",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+        "cdc_preferred_designation": "UNITED STATES OF AMERICA"
+      },
+      "state_or_province_of_exposure": {
+        "identifier": "51",
+        "text": "Virginia",
+        "name_of_coding_system": "FIPS5_2",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Virginia",
+        "cdc_preferred_designation": "Virginia"
+      },
+      "city_of_exposure": "Oakton",
+      "county_of_exposure": "Fairfax County"
+    }
+  ],
+  "clinical_manifestation": [
+    {
+      "clinical_manifestation": {
+        "identifier": "386661006",
+        "text": "Fever",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Fever (finding)",
+        "cdc_preferred_designation": "Fever"
+      },
+      "clinical_manifestation_indicator": {
+        "identifier": "Y",
+        "text": "Yes",
+        "name_of_coding_system": "HL70136",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Yes",
+        "cdc_preferred_designation": "Yes"
+      }
+    },
+    {
+      "clinical_manifestation": {
+        "identifier": "271807003",
+        "text": "Rash",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Eruption of skin (disorder)",
+        "cdc_preferred_designation": "Rash"
+      },
+      "clinical_manifestation_indicator": {
+        "identifier": "N",
+        "text": "No",
+        "name_of_coding_system": "HL70136",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "No",
+        "cdc_preferred_designation": "No"
+      }
+    },
+    {
+      "clinical_manifestation": {
+        "identifier": "87319000",
+        "text": "Eschar",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Eschar (morphologic abnormality)",
+        "cdc_preferred_designation": "Eschar"
+      },
+      "clinical_manifestation_indicator": {
+        "identifier": "N",
+        "text": "No",
+        "name_of_coding_system": "HL70136",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "No",
+        "cdc_preferred_designation": "No"
+      }
+    },
+    {
+      "clinical_manifestation": {
+        "identifier": "25064002",
+        "text": "Headache",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Headache (finding)",
+        "cdc_preferred_designation": "Headache"
+      },
+      "clinical_manifestation_indicator": {
+        "identifier": "Y",
+        "text": "Yes",
+        "name_of_coding_system": "HL70136",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Yes",
+        "cdc_preferred_designation": "Yes"
+      }
+    },
+    {
+      "clinical_manifestation": {
+        "identifier": "68962001",
+        "text": "Myalgia",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Muscle pain (finding)",
+        "cdc_preferred_designation": "Myalgia"
+      },
+      "clinical_manifestation_indicator": {
+        "identifier": "N",
+        "text": "No",
+        "name_of_coding_system": "HL70136",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "No",
+        "cdc_preferred_designation": "No"
+      }
+    },
+    {
+      "clinical_manifestation": {
+        "identifier": "271737000",
+        "text": "Anemia",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Anemia (disorder)",
+        "cdc_preferred_designation": "Anemia"
+      },
+      "clinical_manifestation_indicator": {
+        "identifier": "N",
+        "text": "No",
+        "name_of_coding_system": "HL70136",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "No",
+        "cdc_preferred_designation": "No"
+      }
+    },
+    {
+      "clinical_manifestation": {
+        "identifier": "419188005",
+        "text": "Leukopenia",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Decreased blood leukocyte number (finding)",
+        "cdc_preferred_designation": "Leukopenia"
+      },
+      "clinical_manifestation_indicator": {
+        "identifier": "N",
+        "text": "No",
+        "name_of_coding_system": "HL70136",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "No",
+        "cdc_preferred_designation": "No"
+      }
+    },
+    {
+      "clinical_manifestation": {
+        "identifier": "302215000",
+        "text": "Thrombocytopenia",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Thrombocytopenic disorder (disorder)",
+        "cdc_preferred_designation": "Thrombocytopenia"
+      },
+      "clinical_manifestation_indicator": {
+        "identifier": "Y",
+        "text": "Yes",
+        "name_of_coding_system": "HL70136",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Yes",
+        "cdc_preferred_designation": "Yes"
+      }
+    },
+    {
+      "clinical_manifestation": {
+        "identifier": "PHC2108",
+        "text": "Hepatic transaminase elevation",
+        "name_of_coding_system": "CDCPHINVS",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Hepatic transaminase elevation",
+        "cdc_preferred_designation": "Hepatic transaminase elevation"
+      },
+      "clinical_manifestation_indicator": {
+        "identifier": "N",
+        "text": "No",
+        "name_of_coding_system": "HL70136",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "No",
+        "cdc_preferred_designation": "No"
+      }
+    }
+  ],
+  "antibiotics_treatment_repeating_group": [
+    {
+      "medication_administered": {
+        "identifier": "3640",
+        "text": "Doxycycline",
+        "name_of_coding_system": "RXNORM",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Doxycycline",
+        "cdc_preferred_designation": "Doxycycline"
+      },
+      "date_treatment_or_therapy_started": "20180607",
+      "treatment_duration": {
+        "comparator": null,
+        "number1": "10",
+        "separator": null,
+        "number2": null
+      }
+    },
+    {
+      "medication_administered": {
+        "identifier": "723",
+        "text": "Amoxicillin",
+        "name_of_coding_system": "RXNORM",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Amoxicillin",
+        "cdc_preferred_designation": "Amoxicillin"
+      },
+      "date_treatment_or_therapy_started": "20180607",
+      "treatment_duration": {
+        "comparator": null,
+        "number1": "10",
+        "separator": null,
+        "number2": null
+      }
+    }
+  ],
+  "industry_and_occupation_repeating_group": [
+    {
+      "current_occupation": "Data Analyst",
+      "current_occupation_standardized": {
+        "identifier": "0735",
+        "text": "Market research analysts and marketing specialists [0735]",
+        "name_of_coding_system": "CDCOCCUPATION2010",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "code_system_concept_name": "Market research analysts and marketing specialists",
+        "cdc_preferred_designation": "Market research analysts and marketing specialists [0735]"
+      },
+      "current_industry": "Banking",
+      "current_industry_standardized": {
+        "identifier": "6870",
+        "text": "Banking and related activities [6870]",
+        "name_of_coding_system": "CDCINDUSTRY2010",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "code_system_concept_name": "Banking and related activities",
+        "cdc_preferred_designation": "Banking and related activities [6870]"
+      }
+    }
+  ],
+  "travel_history": [
+    {
+      "travel_state": {
+        "identifier": "37",
+        "text": "North Carolina",
+        "name_of_coding_system": "FIPS5_2",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "North Carolina",
+        "cdc_preferred_designation": "North Carolina"
+      },
+      "travel_county": {
+        "identifier": "37013",
+        "text": "Beaufort, NC",
+        "name_of_coding_system": "FIPS6_4",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Beaufort",
+        "cdc_preferred_designation": "Beaufort, NC"
+      },
+      "date_of_arrival_to_travel_destination": "20180525",
+      "date_of_departure_from_travel_destination": "20180528"
+    }
+  ],
+  "tick_bite_repeating_group": [],
+  "blood_transfusion_date_repeating_group": [],
+  "organ_transplant_repeating_group": [],
+  "blood_donation_date_repeating_group": [],
+  "epidemiology_laboratory_repeating_group": [
+    {
+      "test_type": {
+        "identifier": "32011-9",
+        "text": "IFA IgG Ehrlichia sp",
+        "name_of_coding_system": "LN",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Ehrlichia IgG Titr Ser",
+        "cdc_preferred_designation": "IFA IgG Ehrlichia sp"
+      },
+      "test_result": {
+        "identifier": "10828004",
+        "text": "Positive",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Positive (qualifier value)",
+        "cdc_preferred_designation": "Positive"
+      },
+      "organism_name": {
+        "identifier": "59250001",
+        "text": "Ehrlichia chaffeensis",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Ehrlichia chaffeensis (organism)",
+        "cdc_preferred_designation": "Ehrlichia chaffeensis"
+      },
+      "test_result_quantitative": ">1:64",
+      "specimen_collection_date_time": "20180613",
+      "specimen_type": {
+        "identifier": "119364003",
+        "text": "Serum",
+        "name_of_coding_system": "SCT",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Serum specimen (specimen)",
+        "cdc_preferred_designation": "Serum"
+      },
+      "performing_laboratory_name": "CDC RZB Reference Laboratory",
+      "laboratory_state": {
+        "identifier": "13",
+        "text": "Georgia",
+        "name_of_coding_system": "FIPS5_2",
+        "alternate_identifier": null,
+        "alternate_text": null,
+        "name_of_alternate_coding_system": null,
+        "coding_system_version_id": null,
+        "alternate_coding_system_version_id": null,
+        "original_text": null,
+        "code_system_concept_name": "Georgia",
+        "cdc_preferred_designation": "Georgia"
+      },
+      "performing_laboratory_specimen_id": "99999"
+    }
+  ]
+}

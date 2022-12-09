@@ -5,16 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>gov.cdc.dataexchange</groupId>
-    <artifactId>mmg-validator</artifactId>
+    <artifactId>mmg-based-transformer</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>DEX Fns-Pipeline :: mmg-validator</name>
+    <name>DEX Fns-Pipeline :: mmg-based-transformer</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.7.10</kotlin.version>
-        <functions.version>2.2.0</functions.version>
+        <functions.version>2.1.0</functions.version>
         <functions.plugin.version>1.16.0</functions.plugin.version>
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
@@ -23,14 +23,15 @@
         <subscriptionID>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionID>
         <functionResourceGroup>ocio-ede-dev-moderate-hl7-rg</functionResourceGroup>
         <functionServicePlan>tf-hl7-app-service-plan</functionServicePlan>
-        <functionAppName>tf-hl7-fn-mmg-validator-dev</functionAppName>
+        <functionAppName>ocio-ede-dev-mmg-based-transformer</functionAppName>
         <slf4j.version>2.0.3</slf4j.version>
-        <azevhub.version>5.15.0</azevhub.version>
-        <azstblob.version>12.20.0</azstblob.version>
-        <gson.version>2.10</gson.version>
-        <validationreport.version>1.0.0</validationreport.version>
-        <hl7pet.version>1.2.7.1</hl7pet.version>
-        <redis.version>4.3.1</redis.version>
+        <azevhub.version>5.13.1</azevhub.version>
+        <azstblob.version>12.19.1</azstblob.version>
+        <gson.version>2.9.1</gson.version>
+        <redis.version>4.2.3</redis.version>
+        <junit.version>5.9.0</junit.version>
+        <hl7pet.version>1.2.6</hl7pet.version>
+        <libdexcommon.version>1.0.3-SNAPSHOT</libdexcommon.version>
 
     </properties>
 
@@ -38,7 +39,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>${libdexcommon.version}</version>
         </dependency>
         
         <!-- Azure Functions Java Library -->
@@ -77,11 +78,11 @@
         </dependency>
 
 
-<!--        <dependency>-->
-<!--            <groupId>com.azure</groupId>-->
-<!--            <artifactId>azure-storage-blob</artifactId>-->
-<!--            <version>${azstblob.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-blob</artifactId>
+            <version>${azstblob.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -89,18 +90,11 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.github.hl7-tools/validation-report -->
         <dependency>
-            <groupId>com.github.hl7-tools</groupId>
-            <artifactId>validation-report</artifactId>
-            <version>${validationreport.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.github.mscaldas2012/hl7-pet -->
-        <dependency>
-            <groupId>gov.cdc.hl7</groupId>
-            <artifactId>hl7-pet</artifactId>
-            <version>1.2.7</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -109,23 +103,11 @@
             <version>${redis.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.9.0</version>
-            <scope>test</scope>
+            <groupId>gov.cdc.hl7</groupId>
+            <artifactId>hl7-pet</artifactId>
+            <version>1.2.7</version>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
 
     <build>
@@ -160,16 +142,6 @@
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.1.0</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration>
-                        <environmentVariables>
-                            <REDIS_CACHE_NAME>tf-vocab-cache-dev.redis.cache.windows.net</REDIS_CACHE_NAME>
-                            <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
-                        </environmentVariables>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -178,7 +150,6 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <configuration>
-                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
@@ -288,5 +259,7 @@
             </plugin>
         </plugins>
     </build>
+
+    
 
 </project>

@@ -30,6 +30,8 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         private val gson = Gson()
     }
 
+
+
     @Throws(Exception::class)
     fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
         // TODO : include jurisdictionCode logic
@@ -89,7 +91,9 @@ class MmgUtil(val redisProxy: RedisProxy)  {
                     }
                 }
 
-            } // .if
+            } else {
+                throw InvalidConditionException("Condtion $eventCode not found on Mapping Table")
+            }
 
         } // .if
 

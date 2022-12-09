@@ -1,6 +1,8 @@
 package gov.cdc.dex.mmg
 
+import com.google.gson.Gson
 import gov.cdc.dex.azure.RedisProxy
+import gov.cdc.dex.redisModels.ValueSetConcept
 import org.junit.jupiter.api.Test
 
 
@@ -18,14 +20,25 @@ internal class MmgUtilTest {
         println("GenV2")
        val genV2mmgs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, null, null, null)
         genV2mmgs.forEach {println(it.name)}
+        assert(genV2mmgs.size == 1)
 
         println("----\nLyme")
         val lymeMMGs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "11080", "13")
         lymeMMGs.forEach {println(it.name)}
+        assert(lymeMMGs.size == 2)
 
         println("----\nHepA")
         val hepAMMgs = mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, "Hepatitis_MMG_V1.0", "10110", "21")
         hepAMMgs.forEach {println(it.name)}
+        assert(hepAMMgs.size == 3)
+
+        try {
+            mmgUtil.getMMG(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "1108", "21")
+            assert(false)
+        } catch (e: InvalidConditionException) {
+            assert(true)
+            println("Exception properly thrown: ${e.message}")
+        }
     }
 
     @Test
@@ -39,5 +52,19 @@ internal class MmgUtilTest {
         println(keys)
         val mapping = redisProxy.getJedisClient().get("condition:10110")
         println(mapping)
+    }
+    @Test
+    fun testGetPhinVads() {
+        val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
+
+        val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
+
+        val vsJson = redisProxy.getJedisClient().hget("vocab:PHVS_YesNoUnknown_CDC", "Y")
+        println(vsJson)
+
+        val vsObj = Gson().fromJson(vsJson, ValueSetConcept::class.java)
+        println(vsObj)
+
     }
 }
