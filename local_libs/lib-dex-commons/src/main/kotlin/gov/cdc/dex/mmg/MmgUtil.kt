@@ -5,6 +5,7 @@ import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.redisModels.Condition2MMGMapping
 
 import gov.cdc.dex.redisModels.MMG
+import gov.cdc.dex.redisModels.Profile
 import gov.cdc.dex.redisModels.SpecialCase
 import gov.cdc.dex.util.StringUtils.Companion.normalize
 
@@ -30,65 +31,46 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         private val gson = Gson()
     }
 
-
-
     @Throws(Exception::class)
-    fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
-        // make a list to hold all the mmgs we need
-        var mmgs : Array<MMG> = arrayOf()
+    fun getMMGList(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<String> {
         // list of mmg keys to look up in redis
-        var mmg2KeyNames = mutableListOf<String>()
+        var mmg2KeyNames = arrayOf<String>()
         // condition-specific profile from message
         var msh21_3In = msh21_3?.normalize()
 
         if (msh21_2.normalize().contains(ARBO_MMG_v1_0)) {
             // msh_21_3 is empty, make it same as msh_21_2
             msh21_3In = msh21_2.normalize()
-
         } else {
-            // get the generic MMG:
-            // TODO: add exceptions // logger.info("Pulling MMG: key: ${rKey}")
-            val mmg1 = gson.fromJson(redisProxy.getJedisClient().get(REDIS_MMG_PREFIX + msh21_2.normalize()), MMG::class.java)
-
-            //REMOVE MSH-21 from GenV2: when condition specific is also defining it with new cardinality of [3..3]
-            if (GEN_V2_MMG == msh21_2.normalize() && eventCode != null) {
-                mmg1.blocks = mmg1.blocks.filter { it.name != "Message Header" }
-            }
-            mmgs += mmg1
-
+            // add the Generic MMG
+            mmg2KeyNames += REDIS_MMG_PREFIX +  msh21_2.normalize()
         } // .else
 
         if ( !msh21_3In.isNullOrEmpty() ) {
             // get the condition code entry
             val eventCodeEntry =
                 gson.fromJson( redisProxy.getJedisClient().get(REDIS_CONDITION_PREFIX + eventCode) , Condition2MMGMapping::class.java)
-            // check the condition's profiles for a match on msh-21[3]
+            // filter condition's profiles for a match on msh-21[3]
             if ( eventCodeEntry != null && !eventCodeEntry.profiles.isNullOrEmpty() ) {
-                for (profile in eventCodeEntry.profiles) {
-                    if (profile.name == msh21_3In) {
-                        // look at special cases first, if any exist
-                        if (! profile.specialCases.isNullOrEmpty()) {
-                            for (case: SpecialCase in profile.specialCases) {
-                                // see if the jurisdiction code is a member of the group to which this case applies
-                                val appliesHere = redisProxy.getJedisClient().sismember(case.appliesTo, jurisdictionCode)
-                                if (appliesHere) {
-                                    mmg2KeyNames += case.mmgs //returns a list of mmg keys
-                                    break
-                                }
-                             } // .for
-                        } else {
-                            // no special cases; use the regular mmgs for this profile+condition
-                            mmg2KeyNames += profile.mmgs
+                var specialCasesAdded = false
+                val profileMatches: List<Profile> =
+                    eventCodeEntry.profiles.filter { profile -> profile.name == msh21_3In }
+                val profile = profileMatches[0]
+                // look at special cases first, if any exist
+                if (!profile.specialCases.isNullOrEmpty()) {
+                    for (case: SpecialCase in profile.specialCases) {
+                        // see if the jurisdiction code is a member of the group to which this case applies
+                        val appliesHere = redisProxy.getJedisClient().sismember(case.appliesTo, jurisdictionCode)
+                        if (appliesHere) {
+                            mmg2KeyNames += case.mmgs //returns a list of mmg keys
+                            specialCasesAdded = true
+                            break
                         }
-                        break
-                    } // .if match
-                }// .for profile
-
-                // add the condition-specific mmgs to the list
-                if (! mmg2KeyNames.isNullOrEmpty()) {
-                    for (keyName: String in mmg2KeyNames) {
-                        mmgs += gson.fromJson(redisProxy.getJedisClient().get(keyName), MMG::class.java)
-                    }
+                    } // .for
+                } // .if
+                if (!specialCasesAdded) {
+                    // no special cases apply; use the regular mmgs for this profile+condition
+                    mmg2KeyNames += profile.mmgs
                 }
 
             } else {
@@ -97,6 +79,16 @@ class MmgUtil(val redisProxy: RedisProxy)  {
 
         } // .if
 
+        return mmg2KeyNames
+    }
+
+
+    @Throws(Exception::class)
+    fun getMMGs(mmgKeyList: Array<String>): Array<MMG> {
+        var mmgs : Array<MMG> = arrayOf()
+        for (keyName: String in mmgKeyList) {
+            mmgs += gson.fromJson(redisProxy.getJedisClient().get(keyName), MMG::class.java)
+        }
         return mmgs
      }
 } // .companion
@@ -141,7 +133,7 @@ MSH-21.3 (only if above is GenV2) - -> Lyme, Perussis, ...
 
 Condition code: e.g. 10250 
 
-TODO: SPECIAL CASES
+
 --------
 
 ->   we need 1, 2, or 3 MMG's 
