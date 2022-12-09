@@ -25,7 +25,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         const val ARBO_MMG_v1_0 = "arbo_case_map_v1.0"
 
         const val REDIS_MMG_PREFIX = "mmg:"
-        const val REDIS_CONDITION_PREFIX = "condition:"
+        const val REDIS_CONDITION_PREFIX = "conditionv2:"
 
         private val gson = Gson()
     }
@@ -34,12 +34,11 @@ class MmgUtil(val redisProxy: RedisProxy)  {
 
     @Throws(Exception::class)
     fun getMMG(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
-        // TODO : include jurisdictionCode logic
-
-        //val mmg1 : MMG
         // make a list to hold all the mmgs we need
         var mmgs : Array<MMG> = arrayOf()
-
+        // list of mmg keys to look up in redis
+        var mmg2KeyNames = mutableListOf<String>()
+        // condition-specific profile from message
         var msh21_3In = msh21_3?.normalize()
 
         if (msh21_2.normalize().contains(ARBO_MMG_v1_0)) {
@@ -63,26 +62,27 @@ class MmgUtil(val redisProxy: RedisProxy)  {
             // get the condition code entry
             val eventCodeEntry =
                 gson.fromJson( redisProxy.getJedisClient().get(REDIS_CONDITION_PREFIX + eventCode) , Condition2MMGMapping::class.java)
-            // check if there are mmg:<name> maps for this condition
-            if ( eventCodeEntry != null && !eventCodeEntry.mmgMaps.isNullOrEmpty() ) {
-                var mmg2KeyNames: List<String>? = null
-                // look at special cases first, if any exist
-                if (! eventCodeEntry.specialCases.isNullOrEmpty()) {
-                    // specialCases is a list
-                    for (case: SpecialCase in eventCodeEntry.specialCases) {
-                        // see if the jurisdiction code is a member of the group to which this case applies
-                        val appliesHere = redisProxy.getJedisClient().sismember(case.appliesTo, jurisdictionCode)
-                        if (appliesHere && !case.mmgMaps[msh21_3In].isNullOrEmpty()) {
-                            mmg2KeyNames = case.mmgMaps[msh21_3In] //returns a list of mmg keys
+            // check the condition's profiles for a match on msh-21[3]
+            if ( eventCodeEntry != null && !eventCodeEntry.profiles.isNullOrEmpty() ) {
+                for (profile in eventCodeEntry.profiles) {
+                    if (profile.name == msh21_3In) {
+                        // look at special cases first, if any exist
+                        if (! profile.specialCases.isNullOrEmpty()) {
+                            for (case: SpecialCase in profile.specialCases) {
+                                // see if the jurisdiction code is a member of the group to which this case applies
+                                val appliesHere = redisProxy.getJedisClient().sismember(case.appliesTo, jurisdictionCode)
+                                if (appliesHere) {
+                                    mmg2KeyNames += case.mmgs //returns a list of mmg keys
+                                    break
+                                }
+                             } // .for
+                        } else {
+                            // no special cases; use the regular mmgs for this profile+condition
+                            mmg2KeyNames += profile.mmgs
                         }
-
-                    } // .for
-                } // .if
-
-                if (mmg2KeyNames.isNullOrEmpty()) {
-                    // no special case matched this jurisdiction, so get the regular mmg map list for the profile
-                    mmg2KeyNames = eventCodeEntry.mmgMaps[msh21_3In]  //returns a list of mmg keys
-                }
+                        break
+                    } // .if match
+                }// .for profile
 
                 // add the condition-specific mmgs to the list
                 if (! mmg2KeyNames.isNullOrEmpty()) {
@@ -92,7 +92,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
                 }
 
             } else {
-                throw InvalidConditionException("Condtion $eventCode not found on Mapping Table")
+                throw InvalidConditionException("Condition $eventCode not found on Mapping Table")
             }
 
         } // .if
