@@ -23,13 +23,13 @@
         <subscriptionID>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionID>
         <functionResourceGroup>ocio-ede-dev-moderate-hl7-rg</functionResourceGroup>
         <functionServicePlan>tf-hl7-app-service-plan</functionServicePlan>
-        <functionAppName>tf-hl7-dev-mp</functionAppName>
+        <functionAppName>tf-hl7-fn-mmg-validator-dev</functionAppName>
         <slf4j.version>2.0.3</slf4j.version>
-        <azevhub.version>5.13.1</azevhub.version>
+        <azevhub.version>5.15.0</azevhub.version>
         <azstblob.version>12.20.0</azstblob.version>
         <gson.version>2.10</gson.version>
         <validationreport.version>1.0.0</validationreport.version>
-        <hl7pet.version>1.2.6</hl7pet.version>
+        <hl7pet.version>1.2.7.1</hl7pet.version>
         <redis.version>4.3.1</redis.version>
 
     </properties>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>1.0.3-SNAPSHOT</version>
         </dependency>
         
         <!-- Azure Functions Java Library -->
@@ -77,11 +77,11 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-storage-blob</artifactId>
-            <version>${azstblob.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.azure</groupId>-->
+<!--            <artifactId>azure-storage-blob</artifactId>-->
+<!--            <version>${azstblob.version}</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -114,24 +114,11 @@
             <version>5.9.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-       <!-- <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>-->
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 
         <!-- Plugins Dependencies Versions -->
         <pluginManagement>
@@ -179,6 +166,7 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <configuration>
+                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
