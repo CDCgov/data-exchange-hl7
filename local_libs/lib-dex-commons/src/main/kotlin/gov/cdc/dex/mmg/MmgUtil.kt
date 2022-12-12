@@ -91,6 +91,12 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         }
         return mmgs
      }
+
+    @Throws(Exception::class)
+    fun getMMGs(msh21_2: String, msh21_3: String?, eventCode: String?, jurisdictionCode: String?): Array<MMG> {
+        val mmgList = getMMGList(msh21_2, msh21_3, eventCode, jurisdictionCode)
+        return getMMGs(mmgList)
+    }
 } // .companion
 
 //} // .MmgUtil

@@ -14,7 +14,7 @@ data class ConditionCode(
 
 data class SpecialCase(
     @SerializedName("applies_to") val appliesTo: String,
-    @SerializedName("mmg_maps") val mmgs: List<String>,
+    @SerializedName("mmgs") val mmgs: List<String>,
 ) // .SpecialCase
 
 data class Profile(

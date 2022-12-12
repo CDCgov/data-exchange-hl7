@@ -32,13 +32,13 @@ internal class MmgUtilTest {
         val mmgUtil = MmgUtil(redisProxy)
 
         println("GenV2")
-       val genV2mmgs = mmgUtil.getMMGList(MmgUtil.GEN_V2_MMG, null, null, null)
-        genV2mmgs.forEach {println(it)}
+       val genV2mmgs = mmgUtil.getMMGs(MmgUtil.GEN_V2_MMG, null, null, null)
+        genV2mmgs.forEach {println(it.name)}
         assert(genV2mmgs.size == 1)
 
         println("----\nLyme")
-        val lymeMMGs = mmgUtil.getMMGList(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "11080", "13")
-        lymeMMGs.forEach {println(it)}
+        val lymeMMGs = mmgUtil.getMMGs(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "11080", "13")
+        lymeMMGs.forEach {println(it.name)}
         assert(lymeMMGs.size == 2)
 
         println("----\nHepA")
