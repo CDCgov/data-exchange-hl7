@@ -11,12 +11,12 @@ import org.slf4j.LoggerFactory
 
 // import gov.cdc.dex.redisModels.MMG
 // import gov.cdc.dex.hl7.model.ConditionCode
-// import gov.cdc.dex.hl7.model.PhinDataType
+import gov.cdc.dex.hl7.model.PhinDataType
 // import gov.cdc.dex.redisModels.ValueSetConcept
 
 import com.google.gson.Gson
-// import com.google.gson.reflect.TypeToken
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 
 import  gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.TransformerSql
@@ -44,19 +44,34 @@ class MmgSqlTest {
     fun testTransformerSql() {
 
         // MMGs for the message
+        // ------------------------------------------------------------------------------
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgUtil = MmgUtil(redisProxy)
         val mmgs = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
         assertEquals(mmgs.size, 2)
 
+        // Default Phin Profiles Types
+        // ------------------------------------------------------------------------------
+        val dataTypesFilePath = "/DefaultFieldsProfileX.json"
+        val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+        // val dataTypesMapJson = this::class.java.classLoader.getResource(dataTypesFilePath).readText()
+
+        // val dataTypesMap = Map<String, List<PhinDataType>>
+        val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
+        val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+
+
         // MMG Based Model for the message
+        // ------------------------------------------------------------------------------
         val mmgBasedModelPath = "/model.json"
         val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
         // logger.info("mmgBasedModelStr: --> ${mmgBasedModelStr}")
 
+        // Transformer SQL
+        // ------------------------------------------------------------------------------
         val transformer = TransformerSql()
-        val mmgSqlModel = transformer.toSqlModel(mmgs, mmgBasedModelStr)
+        val mmgSqlModel = transformer.toSqlModel(mmgs, profilesMap, mmgBasedModelStr)
         logger.info(" mmgSqlModel: --> ${gsonWithNullsOn.toJson(mmgSqlModel)}")
 
     } // .testRedisInstanceUsed
