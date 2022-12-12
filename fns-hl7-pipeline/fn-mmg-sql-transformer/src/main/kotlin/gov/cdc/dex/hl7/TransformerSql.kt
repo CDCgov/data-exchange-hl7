@@ -1,7 +1,7 @@
 package gov.cdc.dex.hl7
 
 // import org.slf4j.LoggerFactory
-// import gov.cdc.dex.redisModels.MMG
+import gov.cdc.dex.redisModels.MMG
 // import gov.cdc.dex.redisModels.Block
 // import gov.cdc.dex.redisModels.Element
 // import gov.cdc.dex.redisModels.ValueSetConcept
@@ -16,9 +16,7 @@ package gov.cdc.dex.hl7
 
 import  gov.cdc.dex.azure.RedisProxy 
 
-class TransformerSql(val redisProxy: RedisProxy)  {
-
-    val redisClient = redisProxy.getJedisClient()
+class TransformerSql()  {
 
     companion object {
         // val logger = LoggerFactory.getLogger(TransformerSql::class.java.simpleName)
@@ -27,9 +25,9 @@ class TransformerSql(val redisProxy: RedisProxy)  {
 
     } // .companion object
 
-    fun toSqlModel() : Int {
+    fun toSqlModel(mmgs: Array<MMG>, model: String) : Int {
         return 42
-    }
+    } // .toSqlModel
 
 
 } // .TransformerSql

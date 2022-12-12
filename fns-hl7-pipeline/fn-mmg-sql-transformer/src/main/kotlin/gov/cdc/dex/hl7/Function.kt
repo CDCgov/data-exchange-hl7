@@ -95,17 +95,17 @@ class Function {
                         context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
                     }
 
-                    val transformer = TransformerSql(redisProxy)
+                    // val transformer = TransformerSql()
 
-                    val mmgSqlModel = transformer.toSqlModel()
+                    // val mmgSqlModel = transformer.toSqlModel()
 
-                    context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgSqlModel)}")
+                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgSqlModel)}")
 
-                    val processMD = MmgSqlTransProcessMetadata(status="MMG_SQL_MODEL_OK", report=mmgSqlModel) 
-                    processMD.startProcessTime = startTime
-                    processMD.endProcessTime = Date().toIsoString()
+                    // val processMD = MmgSqlTransProcessMetadata(status="MMG_SQL_MODEL_OK", report=mmgSqlModel) 
+                    // processMD.startProcessTime = startTime
+                    // processMD.endProcessTime = Date().toIsoString()
 
-                    metadata.addArrayElement("processes", processMD)
+                    // metadata.addArrayElement("processes", processMD)
                     
                     // TODO: enable for model
 
