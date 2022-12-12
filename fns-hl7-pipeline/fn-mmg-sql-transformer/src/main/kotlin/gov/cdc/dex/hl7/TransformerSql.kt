@@ -45,7 +45,7 @@ class TransformerSql()  {
             if (elModel.isJsonNull) {
 
                 // logger.info("${elName} --> ${elModel}")
-                listOf(elName to elModel)
+                listOf(elName to elModel) // elModel is null 
 
             } else {
                 if ( !profilesMap.containsKey(elDataType) ) {
@@ -78,6 +78,18 @@ class TransformerSql()  {
         return singlesNonRepeatsModel
     } // .singlesNonRepeatstoSqlModel
 
+    // --------------------------------------------------------------------------------------------------------
+    //  ------------- MMG Elements that are Single and Repeats -------------
+    // --------------------------------------------------------------------------------------------------------
+    fun singlesRepeatstoSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
+
+        // val modelJson = JsonParser.parseString(modelStr).asJsonObject
+
+        val singlesRepeatsModel = mapOf("42" to 42)
+
+        // logger.info("singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")       
+        return singlesRepeatsModel
+    } // .singlesRepeatstoSqlModel
 
     // --------------------------------------------------------------------------------------------------------
     //  ------------- Functions used in the transformation -------------
