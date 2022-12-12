@@ -27,6 +27,7 @@ class TransformerSql()  {
         private val gsonWithNullsOn = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
         private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
+        const val SEPARATOR_ELEMENT_FIELD_NAMES = "~"
     } // .companion object
 
     fun toSqlModel(mmgsArr: Array<MMG>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Int {
@@ -69,7 +70,7 @@ class TransformerSql()  {
                         val fldNameNorm = StringUtils.normalizeString(fld.name)
 
                         // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
-                        "$elName~$fldNameNorm" to elObj[fldNameNorm]
+                        "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
                     }
 
 
