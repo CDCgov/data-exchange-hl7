@@ -31,6 +31,8 @@ class MmgSqlTest {
         val logger = LoggerFactory.getLogger(MmgSqlTest::class.java.simpleName)
         private val gson = Gson()
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
+
+        const val MMG_BLOCK_TYPE_SINGLE = "Single"
     } // .companion 
 
     // @Test
@@ -48,8 +50,8 @@ class MmgSqlTest {
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgUtil = MmgUtil(redisProxy)
-        val mmgs = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
-        assertEquals(mmgs.size, 2)
+        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        assertEquals(mmgsArr.size, 2)
 
         // Default Phin Profiles Types
         // ------------------------------------------------------------------------------
@@ -68,11 +70,20 @@ class MmgSqlTest {
         val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
         // logger.info("mmgBasedModelStr: --> ${mmgBasedModelStr}")
 
+
         // Transformer SQL
         // ------------------------------------------------------------------------------
         val transformer = TransformerSql()
-        val mmgSqlModel = transformer.toSqlModel(mmgs, profilesMap, mmgBasedModelStr)
-        logger.info(" mmgSqlModel: --> ${gsonWithNullsOn.toJson(mmgSqlModel)}")
+
+        val mmgs = transformer.getMmgsFiltered(mmgsArr)
+        val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
+        val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+        val mmgElemsBlocksSingleNonRepeats = mmgBlocksSingle.flatMap { it.elements }.filter{ !it.isRepeat }
+
+
+        val singlesNonRepeatsModel = transformer.singlesNonRepeatstoSqlModel(mmgElemsBlocksSingleNonRepeats, profilesMap, mmgBasedModelStr)
+        logger.info(" singlesNonRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")      
+
 
     } // .testRedisInstanceUsed
 

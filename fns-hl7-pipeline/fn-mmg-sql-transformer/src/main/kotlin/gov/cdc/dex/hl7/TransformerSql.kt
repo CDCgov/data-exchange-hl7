@@ -3,7 +3,7 @@ package gov.cdc.dex.hl7
 import org.slf4j.LoggerFactory
 import gov.cdc.dex.redisModels.MMG
 // import gov.cdc.dex.redisModels.Block
-// import gov.cdc.dex.redisModels.Element
+import gov.cdc.dex.redisModels.Element
 // import gov.cdc.dex.redisModels.ValueSetConcept
 
 import gov.cdc.dex.hl7.model.PhinDataType
@@ -26,20 +26,17 @@ class TransformerSql()  {
         // private val gson = Gson()
         private val gsonWithNullsOn = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
         private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
-        const val MMG_BLOCK_TYPE_SINGLE = "Single"
         const val SEPARATOR_ELEMENT_FIELD_NAMES = "~"
     } // .companion object
 
-    fun toSqlModel(mmgsArr: Array<MMG>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Int {
-
-        val mmgs = getMmgsFiltered(mmgsArr)
-        val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
-        val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
-        val mmgElemsBlocksSingleNonRepeats = mmgBlocksSingle.flatMap { it.elements }.filter{ !it.isRepeat }
+    // --------------------------------------------------------------------------------------------------------
+    //  ------------- MMG Elements that are Single and Non Repeats -------------
+    // --------------------------------------------------------------------------------------------------------
+    fun singlesNonRepeatstoSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
 
         val modelJson = JsonParser.parseString(modelStr).asJsonObject
 
-        val singlesNonRepeatsModel = mmgElemsBlocksSingleNonRepeats.flatMap{ el -> 
+        val singlesNonRepeatsModel = elements.flatMap{ el -> 
             val elName = StringUtils.normalizeString(el.name)
             val elDataType = el.mappings.hl7v251.dataType
 
@@ -62,7 +59,6 @@ class TransformerSql()  {
                     val sqlPreferred = profilesMap[mmgDataType]!!.filter { it.preferred }
 
                     // logger.info("mmgDataType: $mmgDataType, sqlPreferred.size: --> ${sqlPreferred.size}")
-
                     val elObj = elModel.asJsonObject
 
                     sqlPreferred.map{ fld ->
@@ -71,28 +67,23 @@ class TransformerSql()  {
 
                         // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
                         "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
-                    }
-
+                    } // .map
 
                 } // .else 
             } // .else
 
-        
         }.toMap() // .mmgElemsBlocksSingleNonRepeats
 
-            // logger.info("MMG Model (blocksNonSingleModel): --> ${gsonWithNullsOn.toJson(blocksNonSingleModel)}\n")
-
-        logger.info("singlesNonRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")
-        
-        return 42
-    } // .toSqlModel
+        // logger.info("singlesNonRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")       
+        return singlesNonRepeatsModel
+    } // .singlesNonRepeatstoSqlModel
 
 
     // --------------------------------------------------------------------------------------------------------
     //  ------------- Functions used in the transformation -------------
     // --------------------------------------------------------------------------------------------------------
 
-    private fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
+    fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
 
         if ( mmgs.size > 1 ) { 
             for ( index in 0..mmgs.size - 2) { // except the last one
