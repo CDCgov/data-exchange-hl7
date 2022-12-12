@@ -54,8 +54,21 @@ class TransformerSql()  {
                     logger.info("elName: --> ${elName}, elValue: --> ${elValue}")
 
                 } else {
+                    val mmgDataType = el.mappings.hl7v251.dataType
+                    val sqlPreferred = profilesMap[mmgDataType]!!.filter { it.preferred }
+
+                    logger.info("mmgDataType: $mmgDataType, sqlPreferred.size: --> ${sqlPreferred.size}")
+
                     val elObj = elModel.asJsonObject
-                    logger.info("elName: --> ${elName}, elObj: --> ${elObj}")
+
+                    sqlPreferred.forEach{ fld ->
+                        
+                        val fldNameNorm = StringUtils.normalizeString(fld.name)
+
+                        logger.info("elName: --> ${elName}, elObj[fldNameNorm]: --> ${elObj[fldNameNorm]}")
+
+                    }
+
 
                 } // .else 
             } // .else
