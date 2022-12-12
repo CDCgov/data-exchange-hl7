@@ -29,6 +29,7 @@ class TransformerSql()  {
         const val SEPARATOR_ELEMENT_FIELD_NAMES = "~"
     } // .companion object
 
+
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Single and Non Repeats -------------
     // --------------------------------------------------------------------------------------------------------
@@ -78,24 +79,56 @@ class TransformerSql()  {
         return singlesNonRepeatsModel
     } // .singlesNonRepeatstoSqlModel
 
+
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Single and Repeats -------------
     // --------------------------------------------------------------------------------------------------------
-    fun singlesRepeatstoSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
+    fun singlesRepeatstoSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Any {
 
         val modelJson = JsonParser.parseString(modelStr).asJsonObject
 
         val singlesRepeatsModel = elements.map{ el -> 
 
-        val elName = StringUtils.normalizeString(el.name)
-            // val elDataType = el.mappings.hl7v251.dataType
+            val elName = StringUtils.normalizeString(el.name)
+            val elDataType = el.mappings.hl7v251.dataType
 
             val elModel = modelJson[elName]
-            if (elModel.isJsonNull) { 
-                elName to elModel // elModel is null, passing to model as is
+            
+            if (elModel.isJsonNull) {
+
+                elName to mapOf(elName to elModel) // elModel is null, passing to model as is
+
             } else {
-                // TODO: create new sql model
-                elName to elModel
+
+                val elModelArr = elModel.asJsonArray 
+
+                elName to elModelArr.map{ elMod -> 
+
+                    if ( !profilesMap.containsKey(elDataType) ) {
+
+                        val elValue = elMod.asJsonPrimitive
+                        // logger.info("${elName} --> ${elValue}")
+
+                        elName to mapOf(elName to elValue)
+    
+                    } else {
+                        val mmgDataType = el.mappings.hl7v251.dataType
+                        val sqlPreferred = profilesMap[mmgDataType]!!.filter { it.preferred }
+    
+                        val elObj = elMod.asJsonObject
+
+                        sqlPreferred.map{ fld ->
+                    
+                            val fldNameNorm = StringUtils.normalizeString(fld.name)
+    
+                            // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
+                            "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
+                        }.toMap() // .map
+                        
+                    } // .else 
+
+                } // .elModelArr.map
+
             } // .else
 
         }.toMap()
@@ -103,6 +136,7 @@ class TransformerSql()  {
         // logger.info("singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")       
         return singlesRepeatsModel
     } // .singlesRepeatstoSqlModel
+
 
     // --------------------------------------------------------------------------------------------------------
     //  ------------- Functions used in the transformation -------------
