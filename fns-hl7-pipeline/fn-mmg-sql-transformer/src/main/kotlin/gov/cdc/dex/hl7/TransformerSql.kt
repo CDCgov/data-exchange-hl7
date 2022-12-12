@@ -14,6 +14,9 @@ import gov.cdc.dex.util.StringUtils
 // import com.google.gson.GsonBuilder
 // import com.google.gson.reflect.TypeToken
 
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+
 import  gov.cdc.dex.azure.RedisProxy 
 
 class TransformerSql()  {
@@ -26,16 +29,40 @@ class TransformerSql()  {
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
     } // .companion object
 
-    fun toSqlModel(mmgsArr: Array<MMG>, profilesMap: Map<String, List<PhinDataType>>,model: String) : Int {
+    fun toSqlModel(mmgsArr: Array<MMG>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Int {
 
         val mmgs = getMmgsFiltered(mmgsArr)
         val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
         val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
-        val mmgElemsBlocksSingle = mmgBlocksSingle.flatMap { it.elements } 
+        val mmgElemsBlocksSingleNonRepeats = mmgBlocksSingle.flatMap { it.elements }.filter{ !it.isRepeat }
 
-        val singleElNames = mmgElemsBlocksSingle.map{ el ->  StringUtils.normalizeString(el.name) } 
+        val modelJson = JsonParser.parseString(modelStr).asJsonObject
 
-        singleElNames.forEach{ elName -> logger.info("elName: --> ${elName}")}
+        mmgElemsBlocksSingleNonRepeats.forEach{ el -> 
+            val elName = StringUtils.normalizeString(el.name)
+            val elDataType = el.mappings.hl7v251.dataType
+
+            val elModel = modelJson[elName]
+            
+
+            if (elModel.isJsonNull) {
+                logger.info("elName: --> ${elName}, elInModel: --> ${elModel}")
+            } else {
+                if ( !profilesMap.containsKey(elDataType) ) {
+
+                    val elValue = elModel.asJsonPrimitive
+                    logger.info("elName: --> ${elName}, elValue: --> ${elValue}")
+
+                } else {
+                    val elObj = elModel.asJsonObject
+                    logger.info("elName: --> ${elName}, elObj: --> ${elObj}")
+
+                } // .else 
+            } // .else
+
+        
+        } // .mmgElemsBlocksSingleNonRepeats
+
         
         return 42
     } // .toSqlModel
