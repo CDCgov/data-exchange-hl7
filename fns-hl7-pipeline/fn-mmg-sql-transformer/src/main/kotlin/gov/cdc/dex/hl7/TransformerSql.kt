@@ -83,7 +83,7 @@ class TransformerSql()  {
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Single and Repeats -------------
     // --------------------------------------------------------------------------------------------------------
-    fun singlesRepeatstoSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Any {
+    fun singlesRepeatstoSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
 
         val modelJson = JsonParser.parseString(modelStr).asJsonObject
 
@@ -93,10 +93,10 @@ class TransformerSql()  {
             val elDataType = el.mappings.hl7v251.dataType
 
             val elModel = modelJson[elName]
-            
+
             if (elModel.isJsonNull) {
 
-                elName to mapOf(elName to elModel) // elModel is null, passing to model as is
+                elName to elModel // elModel is null, passing to model as is
 
             } else {
 
