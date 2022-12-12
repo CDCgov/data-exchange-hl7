@@ -8,7 +8,11 @@ import java.net.URL
 import com.google.gson.Gson
 
 /*
-    Class containing Azure function that loads records from CSV into redis as key : json (string) pairs
+    Class containing Azure functions that load records from CSV into redis.
+    - loadGroups loads records as key : set pairs.
+    Data in CSV maps group name to a space-delimited set of members.
+
+    - loadEventMaps loads records as key : json (string) pairs
     Data in CSV maps NND event codes to MMGs, including special cases.
     Data in columns 4 through 8 are pipe-delimited when there are multiple profiles.
     Data in columns 7 and 8 are further delimited by ^ when there are multiple special cases per profile.
@@ -25,6 +29,43 @@ import com.google.gson.Gson
  */
 class EventCodeClient {
     private val debug = false
+    fun loadGroups() {
+        // for each csv in resources/groups:
+           // load csv file
+          // get the group key and members
+          // insert into redis as a set
+        val groupNamespace = "group:"
+        val url : URL? = Thread.currentThread().contextClassLoader.getResource("groups")
+        if (url != null) {
+            val dir = File(url.file)
+            RedisUtility().redisConnection().use {
+                dir.walk()
+                    .filter { f -> f.isFile }
+                    .filter { f -> f.extension.lowercase() == "csv" }
+                    .forEach { f ->
+                        run {
+                            if (debug) println("filename: $f")
+                            val parser = CSVParser.parse(
+                                f, Charsets.UTF_8, CSVFormat.DEFAULT
+                                    .withFirstRecordAsHeader()
+                            )
+
+                            for (row: CSVRecord in parser) {
+                                val groupName = groupNamespace + row.get("Group Name").trim()
+                                val members = row.get("Jurisdiction Codes").split(" ")
+                                // remove group if it already exists
+                                it.del(groupName)
+                                for (member in members) {
+                                    // if member is already in group, this will do nothing
+                                    it.sadd(groupName, member)
+                                }
+                            }
+                            parser.close()
+                        } //.run
+                    } //.foreach
+            } //.use (will close connection)
+        }//.if
+    }
     fun loadEventMaps() {
         // for each csv file in resources/event_codes:
           // load csv file
@@ -56,6 +97,7 @@ class EventCodeClient {
                                 var profileObjList: MutableList<Profile>? = null
                                 // condition may not have a profile but we still need a record for provisioning.
                                 if (profilesString.isNotEmpty()) {
+                                    profileObjList = mutableListOf()
                                     val profileList: List<String> = profilesString.trim().split("|")
                                     val specialCaseIndicators: List<String> =
                                         row.get("Profile Has Special Case").trim().split("|")
@@ -87,7 +129,6 @@ class EventCodeClient {
                                             }
 
                                         }
-                                        if (profileObjList == null) profileObjList = mutableListOf()
                                         profileObjList.add(
                                             Profile(
                                                 name = profileName,
@@ -96,7 +137,7 @@ class EventCodeClient {
                                             )
                                         )
                                     } //.for profile
-                                }//.if
+                                } // .if
                                 // add everything to the event record and save as JSON
                                 val eventRecord = ConditionCode(
                                     eventCode = conditionCode.toLong(),
