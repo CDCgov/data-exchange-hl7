@@ -11,7 +11,7 @@ import gov.cdc.dex.hl7.model.PhinDataType
 import gov.cdc.dex.util.StringUtils
 
 // import com.google.gson.Gson 
-// import com.google.gson.GsonBuilder
+import com.google.gson.GsonBuilder
 // import com.google.gson.reflect.TypeToken
 
 import com.google.gson.JsonObject
@@ -24,7 +24,7 @@ class TransformerSql()  {
     companion object {
         val logger = LoggerFactory.getLogger(TransformerSql::class.java.simpleName)
         // private val gson = Gson()
-        // private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
+        private val gsonWithNullsOn = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
         private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
     } // .companion object
@@ -38,22 +38,23 @@ class TransformerSql()  {
 
         val modelJson = JsonParser.parseString(modelStr).asJsonObject
 
-        mmgElemsBlocksSingleNonRepeats.forEach{ el -> 
+        val singlesNonRepeatsModel = mmgElemsBlocksSingleNonRepeats.flatMap{ el -> 
             val elName = StringUtils.normalizeString(el.name)
             val elDataType = el.mappings.hl7v251.dataType
 
             val elModel = modelJson[elName]
             
-
             if (elModel.isJsonNull) {
 
-                logger.info("${elName} --> ${elModel}")
+                // logger.info("${elName} --> ${elModel}")
+                listOf(elName to elModel)
 
             } else {
                 if ( !profilesMap.containsKey(elDataType) ) {
 
                     val elValue = elModel.asJsonPrimitive
-                    logger.info("${elName} --> ${elValue}")
+                    // logger.info("${elName} --> ${elValue}")
+                    listOf(elName to elValue)
 
                 } else {
                     val mmgDataType = el.mappings.hl7v251.dataType
@@ -63,12 +64,12 @@ class TransformerSql()  {
 
                     val elObj = elModel.asJsonObject
 
-                    sqlPreferred.forEach{ fld ->
+                    sqlPreferred.map{ fld ->
                         
                         val fldNameNorm = StringUtils.normalizeString(fld.name)
 
-                        logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
-
+                        // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
+                        "$elName~$fldNameNorm" to elObj[fldNameNorm]
                     }
 
 
@@ -76,8 +77,11 @@ class TransformerSql()  {
             } // .else
 
         
-        } // .mmgElemsBlocksSingleNonRepeats
+        }.toMap() // .mmgElemsBlocksSingleNonRepeats
 
+            // logger.info("MMG Model (blocksNonSingleModel): --> ${gsonWithNullsOn.toJson(blocksNonSingleModel)}\n")
+
+        logger.info("singlesNonRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")
         
         return 42
     } // .toSqlModel
