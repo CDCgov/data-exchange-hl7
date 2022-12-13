@@ -143,9 +143,21 @@ class TransformerSql()  {
     // --------------------------------------------------------------------------------------------------------
     fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
 
-        // val modelJson = JsonParser.parseString(modelStr).asJsonObject
+        val modelJson = JsonParser.parseString(modelStr).asJsonObject
 
-        val repeatedBlocksModel = mapOf("42" to 42)
+        val repeatedBlocksModel = blocks.map{blk -> 
+            val blkName = StringUtils.normalizeString(blk.name)
+
+            val blkModel = modelJson[blkName]
+
+            if ( blkModel.isJsonNull ) {
+                blkName to blkModel // this is null
+            } else {
+                // TODO: sql model for blocks
+                blkName to blkModel
+            }
+        
+        }.toMap() // .repeatedBlocksModel
 
         // logger.info("repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")       
         return repeatedBlocksModel
