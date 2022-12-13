@@ -230,7 +230,7 @@
     "alternate_coding_system_version_id": null,
     "original_text": null,
     "code_system_concept_name": "Other state and or local agencies",
-    "cdc_preferred_designation": "Other State \nand Local Agencies"
+    "cdc_preferred_designation": "Other State and Local Agencies"
   },
   "reporting_source_zip_code": "22030",
   "binational_reporting_criteria": null,
@@ -416,7 +416,7 @@
         "coding_system_version_id": null,
         "alternate_coding_system_version_id": null,
         "original_text": null,
-        "code_system_concept_name": "UNITED STATES \nOF AMERICA (THE)",
+        "code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
         "cdc_preferred_designation": "UNITED STATES OF AMERICA"
       },
       "state_or_province_of_exposure": {
@@ -791,7 +791,8 @@
         "cdc_preferred_designation": "Beaufort, NC"
       },
       "date_of_arrival_to_travel_destination": "20180525",
-      "date_of_departure_from_travel_destination": "20180528"
+      "date_of_departure_from_travel_destination": "20180528",
+      "international_destinations_of_recent_travel": null
     }
   ],
   "tick_bite_repeating_group": [],
@@ -851,7 +852,7 @@
         "coding_system_version_id": null,
         "alternate_coding_system_version_id": null,
         "original_text": null,
-        "code_system_concept_name": "Serum \nspecimen (specimen)",
+        "code_system_concept_name": "Serum specimen (specimen)",
         "cdc_preferred_designation": "Serum"
       },
       "performing_laboratory_name": "CDC RZB Reference Laboratory",

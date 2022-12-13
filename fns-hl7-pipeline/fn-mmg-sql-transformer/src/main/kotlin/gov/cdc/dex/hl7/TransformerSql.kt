@@ -158,20 +158,55 @@ class TransformerSql()  {
 
                 val blkModelArr = blkModel.asJsonArray
 
-                blkModelArr.map{ bma -> 
+                val mOut = blkModelArr.map{ bma -> 
                     val bmaObj = bma.asJsonObject
 
                     // need element keys for this block
                     val elementsInBlock = blocks.filter{ it.name == blk.name}[0].elements 
                     val elementNames = elementsInBlock.map{ StringUtils.normalizeString(it.name)}
 
-                    logger.info("blkName: --> ${blkName}, elementsNames: ${elementNames}")
-                    // TODO: transform each element to sql fields
-                
+                    // logger.info("blkName: --> ${blkName}, elementsNames: ${elementNames}")
+
+                    elementNames.map{ elName -> 
+                        val elMod = bmaObj[elName] 
+                        //logger.info("blkName: --> ${blkName}, elName: $elName, bmaObj: ${bmaObj}")
+
+                        if ( elMod.isJsonNull ) {
+
+                            mapOf(elName to elMod)
+                        } else {
+
+                            val mmgElement = elementsInBlock.filter{ StringUtils.normalizeString(it.name) == elName}[0]
+
+                            val mmgElDataType = mmgElement.mappings.hl7v251.dataType
+    
+                            if ( !profilesMap.containsKey(mmgElDataType) ) {
+    
+                                val elValue = elMod.asJsonPrimitive
+        
+                                mapOf(elName to elValue)
+                            } else {
+    
+                                val sqlPreferred = profilesMap[mmgElDataType]!!.filter { it.preferred }
+            
+                                val elObj = elMod.asJsonObject
+        
+                                sqlPreferred.map{ fld ->
+                            
+                                    val fldNameNorm = StringUtils.normalizeString(fld.name)
+            
+                                    // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
+                                    "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
+                                }.toMap() // .map
+                            } // .else 
+
+                        } // .else 
+
+                    }.reduce { acc, next -> acc + next }// .elementNames.map
                     
                 } // .blkModelArr
 
-                blkName to blkModel
+                blkName to mOut
             } // .else 
         
         }.toMap() // .repeatedBlocksModel
