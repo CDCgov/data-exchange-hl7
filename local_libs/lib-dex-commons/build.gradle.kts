@@ -57,7 +57,7 @@ publishing {
             val snapshotsRepoUrl = "https://imagehub.cdc.gov/repository/maven-ede-snapshot/"
             url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
             name = "nexus"
-            credentials(PasswordCredentials::class) //{
+            credentials(PasswordCredentials::class)// {
             //Add this to ~/.gradle/gradle.properties
 //                username="$nexusUsername"
 //                password="$nexusPassword"

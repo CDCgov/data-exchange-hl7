@@ -9,6 +9,22 @@ import org.junit.jupiter.api.Test
 internal class MmgUtilTest {
 
     @Test
+    fun testGetMessageInfo() {
+        val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
+        val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
+        val mmgUtil = MmgUtil(redisProxy)
+        try {
+            // 11085 should come under Genv1 or Genv2, not Arboviral
+            val messageInfo = mmgUtil.getMMGMessageInfo(MmgUtil.ARBO_MMG_v1_0, null, "11085", "23")
+        } catch (e : InvalidConditionException) {
+            println("Exception correctly thrown: ${e.message}")
+        }
+
+        val lymeMessageInfo = mmgUtil.getMMGMessageInfo(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "11080", "13")
+        println(lymeMessageInfo)
+    }
+    @Test
     fun testGroupValues() {
         val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
         val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
@@ -31,10 +47,10 @@ internal class MmgUtilTest {
 
         val mmgUtil = MmgUtil(redisProxy)
 
-        println("GenV2")
-       val genV2mmgs = mmgUtil.getMMGs(MmgUtil.GEN_V2_MMG, null, null, null)
-        genV2mmgs.forEach {println(it.name)}
-        assert(genV2mmgs.size == 1)
+//        println("GenV2") -- EVENT CODE CANNOT BE NULL
+//       val genV2mmgs = mmgUtil.getMMGs(MmgUtil.GEN_V2_MMG, null, null, null)
+//        genV2mmgs.forEach {println(it.name)}
+//        assert(genV2mmgs.size == 1)
 
         println("----\nLyme")
         val lymeMMGs = mmgUtil.getMMGs(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "11080", "13")
@@ -76,7 +92,7 @@ internal class MmgUtilTest {
 
         val keys = redisProxy.getJedisClient().keys("mmg:*")
         println(keys)
-        val mapping = redisProxy.getJedisClient().get("condition:10110")
+        val mapping = redisProxy.getJedisClient().get("conditionv2:10110")
         println(mapping)
     }
     @Test
