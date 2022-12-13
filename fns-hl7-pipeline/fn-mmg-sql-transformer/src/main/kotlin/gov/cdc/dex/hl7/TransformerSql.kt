@@ -27,6 +27,11 @@ class TransformerSql()  {
         private val gsonWithNullsOn = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
         private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
         const val SEPARATOR_ELEMENT_FIELD_NAMES = "~"
+        //
+        private val ELEMENT_CE = "CE"
+        private val ELEMENT_CWE = "CWE"
+        private val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
+        private val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
     } // .companion object
 
 
@@ -62,13 +67,20 @@ class TransformerSql()  {
                     // logger.info("mmgDataType: $mmgDataType, sqlPreferred.size: --> ${sqlPreferred.size}")
                     val elObj = elModel.asJsonObject
 
-                    sqlPreferred.map{ fld ->
-                        
+                    val arrFromDefProf = sqlPreferred.map{ fld ->
                         val fldNameNorm = StringUtils.normalizeString(fld.name)
-
                         // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
                         "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
                     } // .map
+
+                    // for the CE and CWE add the code_system_concept_name and cdc_preferred_designation
+                    if (mmgDataType == ELEMENT_CE || mmgDataType == ELEMENT_CWE) { 
+                        arrFromDefProf + 
+                            listOf(
+                                "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CODE_SYSTEM_CONCEPT_NAME_KEY_NAME" to elObj[CODE_SYSTEM_CONCEPT_NAME_KEY_NAME], 
+                                "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CDC_PREFERRED_DESIGNATION_KEY_NAME" to elObj[CDC_PREFERRED_DESIGNATION_KEY_NAME]
+                                )
+                     } else arrFromDefProf
 
                 } // .else 
             } // .else
@@ -117,13 +129,21 @@ class TransformerSql()  {
     
                         val elObj = elMod.asJsonObject
 
-                        sqlPreferred.map{ fld ->
+                        val mapFromDefProf = sqlPreferred.map{ fld ->
                     
                             val fldNameNorm = StringUtils.normalizeString(fld.name)
     
                             // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
                             "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
                         }.toMap() // .map
+                        // for the CE and CWE add the code_system_concept_name and cdc_preferred_designation
+                        if (mmgDataType == ELEMENT_CE || mmgDataType == ELEMENT_CWE) { 
+                            mapFromDefProf + 
+                                mapOf(
+                                    "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CODE_SYSTEM_CONCEPT_NAME_KEY_NAME" to elObj[CODE_SYSTEM_CONCEPT_NAME_KEY_NAME], 
+                                    "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CDC_PREFERRED_DESIGNATION_KEY_NAME" to elObj[CDC_PREFERRED_DESIGNATION_KEY_NAME]
+                                    )
+                        } else mapFromDefProf
                         
                     } // .else 
 
