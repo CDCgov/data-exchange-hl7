@@ -180,15 +180,16 @@ class Transformer(val redisProxy: RedisProxy)  {
                     // logger.info("element: --> ${element.mappings.hl7v251.identifier}\n")
                     val mmgObxIdentifier = element.mappings.hl7v251.identifier
 
-                    obxLines.filter { line -> 
+                    val obxLinesForElem = obxLines.filter { line -> 
                         val lineParts = line.split("|")
                         val obxIdentifier = lineParts[3].split("^")[0]
                         mmgObxIdentifier == obxIdentifier
                     } // .obxLine
-                    // logger.info("elemLines: --> ${elemLines}\n")
-
-                    // return elemLines
+                    
+                    obxLinesForElem
                 } // .block.elements
+
+                // logger.info("block.name: ${block.name}, msgLines.size: ${msgLines.size}")
 
                 val msgLinesByBlockNumMap = msgLines.map { line -> 
                     val lineParts = line.split("|")
@@ -196,8 +197,10 @@ class Transformer(val redisProxy: RedisProxy)  {
                     blockNum to line
                 }.groupBy( { it.first }, { it.second } )
 
+                // logger.info("msgLinesByBlockNumMap.size: ${msgLinesByBlockNumMap.size}")
+
                 val blockElementsNameDataTupMap = msgLinesByBlockNumMap.map { (_, lines) -> 
-                    lines.map { line -> 
+                    val mapFromMsg = lines.map { line -> 
                         val lineParts = line.split("|")
                         val dataFieldPosition = 5 //element.mappings.hl7v251.fieldPosition
 
@@ -212,10 +215,26 @@ class Transformer(val redisProxy: RedisProxy)  {
                         val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
 
                         StringUtils.normalizeString(el.name) to segmentData
-
-                        
-
                     }.toMap() // .lines
+
+                    // add block elements that are not found in the message lines
+                    val elemsNotInLines = block.elements.filter{ elemx -> 
+
+                        val mmgObxId = elemx.mappings.hl7v251.identifier 
+
+                        val linesForObxId = lines.filter{ linex -> 
+                            val linePartsx = linex.split("|")
+                            val obxId = linePartsx[3].split("^")[0]
+                            mmgObxId == obxId
+                        }
+                        linesForObxId.size == 0
+                    } // .elemsNotInLines
+
+                    val mapFromElemNotInMsg = elemsNotInLines.map{elem ->
+                        StringUtils.normalizeString(elem.name) to null 
+                    }.toMap()
+
+                    mapFromMsg + mapFromElemNotInMsg
                 } // .blockElementsNameDataTupMap
                 // logger.info("\nblockElementsNameDataTupMap: --> ${Gson().toJson(blockElementsNameDataTupMap)}\n\n")
 
