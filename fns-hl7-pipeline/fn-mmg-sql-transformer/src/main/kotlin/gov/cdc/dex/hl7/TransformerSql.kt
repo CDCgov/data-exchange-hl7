@@ -153,9 +153,26 @@ class TransformerSql()  {
             if ( blkModel.isJsonNull ) {
                 blkName to blkModel // this is null
             } else {
+
                 // TODO: sql model for blocks
+
+                val blkModelArr = blkModel.asJsonArray
+
+                blkModelArr.map{ bma -> 
+                    val bmaObj = bma.asJsonObject
+
+                    // need element keys for this block
+                    val elementsInBlock = blocks.filter{ it.name == blk.name}[0].elements 
+                    val elementNames = elementsInBlock.map{ StringUtils.normalizeString(it.name)}
+
+                    logger.info("blkName: --> ${blkName}, elementsNames: ${elementNames}")
+                    // TODO: transform each element to sql fields
+                
+                    
+                } // .blkModelArr
+
                 blkName to blkModel
-            }
+            } // .else 
         
         }.toMap() // .repeatedBlocksModel
 
@@ -169,7 +186,6 @@ class TransformerSql()  {
     // --------------------------------------------------------------------------------------------------------
 
     fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
-
         if ( mmgs.size > 1 ) { 
             for ( index in 0..mmgs.size - 2) { // except the last one
                 mmgs[index].blocks = mmgs[index].blocks.filter { block ->
