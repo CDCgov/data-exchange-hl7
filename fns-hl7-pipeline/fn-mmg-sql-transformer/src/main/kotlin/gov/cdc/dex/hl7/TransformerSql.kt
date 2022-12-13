@@ -72,7 +72,6 @@ class TransformerSql()  {
                         // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
                         "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
                     } // .map
-
                     // for the CE and CWE add the code_system_concept_name and cdc_preferred_designation
                     if (mmgDataType == ELEMENT_CE || mmgDataType == ELEMENT_CWE) { 
                         arrFromDefProf + 
@@ -196,7 +195,7 @@ class TransformerSql()  {
                             mapOf(elName to elMod)
                         } else {
 
-                            val mmgElement = elementsInBlock.filter{ StringUtils.normalizeString(it.name) == elName}[0]
+                            val mmgElement = elementsInBlock.filter{ StringUtils.normalizeString(it.name) == elName }[0]
 
                             val mmgElDataType = mmgElement.mappings.hl7v251.dataType
     
@@ -211,13 +210,20 @@ class TransformerSql()  {
             
                                 val elObj = elMod.asJsonObject
         
-                                sqlPreferred.map{ fld ->
-                            
+                                val mapFromDefProf = sqlPreferred.map{ fld ->
                                     val fldNameNorm = StringUtils.normalizeString(fld.name)
-            
                                     // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
                                     "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
                                 }.toMap() // .map
+                                // for the CE and CWE add the code_system_concept_name and cdc_preferred_designation
+                                if (mmgElDataType == ELEMENT_CE || mmgElDataType == ELEMENT_CWE) { 
+                                    mapFromDefProf + 
+                                        mapOf(
+                                            "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CODE_SYSTEM_CONCEPT_NAME_KEY_NAME" to elObj[CODE_SYSTEM_CONCEPT_NAME_KEY_NAME], 
+                                            "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CDC_PREFERRED_DESIGNATION_KEY_NAME" to elObj[CDC_PREFERRED_DESIGNATION_KEY_NAME]
+                                            )
+                                } else mapFromDefProf
+
                             } // .else 
 
                         } // .else 
