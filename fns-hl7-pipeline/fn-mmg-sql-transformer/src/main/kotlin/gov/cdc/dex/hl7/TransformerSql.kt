@@ -2,7 +2,7 @@ package gov.cdc.dex.hl7
 
 import org.slf4j.LoggerFactory
 import gov.cdc.dex.redisModels.MMG
-// import gov.cdc.dex.redisModels.Block
+import gov.cdc.dex.redisModels.Block
 import gov.cdc.dex.redisModels.Element
 // import gov.cdc.dex.redisModels.ValueSetConcept
 
@@ -136,6 +136,20 @@ class TransformerSql()  {
         // logger.info("singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")       
         return singlesRepeatsModel
     } // .singlesRepeatsToSqlModel
+
+
+    // --------------------------------------------------------------------------------------------------------
+    //  ------------- MMG Elements that are Single and Repeats -------------
+    // --------------------------------------------------------------------------------------------------------
+    fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
+
+        // val modelJson = JsonParser.parseString(modelStr).asJsonObject
+
+        val repeatedBlocksModel = mapOf("42" to 42)
+
+        // logger.info("repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")       
+        return repeatedBlocksModel
+    } // .repeatedBlocksToSqlModel
 
 
     // --------------------------------------------------------------------------------------------------------

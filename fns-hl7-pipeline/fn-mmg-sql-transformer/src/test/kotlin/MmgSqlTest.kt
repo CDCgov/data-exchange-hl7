@@ -90,8 +90,8 @@ class MmgSqlTest {
  
 
         // Repeated Blocks
-        // val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, mmgBasedModelStr)
-        // logger.info(" repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")   
+        val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, mmgBasedModelStr)
+        logger.info(" repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")   
 
     } // .testRedisInstanceUsed
 
