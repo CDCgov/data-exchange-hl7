@@ -33,7 +33,7 @@ class TransformerSql()  {
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Single and Non Repeats -------------
     // --------------------------------------------------------------------------------------------------------
-    fun singlesNonRepeatstoSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
+    fun singlesNonRepeatsToSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
 
         val modelJson = JsonParser.parseString(modelStr).asJsonObject
 
@@ -77,13 +77,13 @@ class TransformerSql()  {
 
         // logger.info("singlesNonRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")       
         return singlesNonRepeatsModel
-    } // .singlesNonRepeatstoSqlModel
+    } // .singlesNonRepeatsToSqlModel
 
 
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Single and Repeats -------------
     // --------------------------------------------------------------------------------------------------------
-    fun singlesRepeatstoSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
+    fun singlesRepeatsToSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
 
         val modelJson = JsonParser.parseString(modelStr).asJsonObject
 
@@ -135,7 +135,7 @@ class TransformerSql()  {
 
         // logger.info("singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")       
         return singlesRepeatsModel
-    } // .singlesRepeatstoSqlModel
+    } // .singlesRepeatsToSqlModel
 
 
     // --------------------------------------------------------------------------------------------------------

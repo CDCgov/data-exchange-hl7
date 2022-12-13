@@ -81,12 +81,17 @@ class MmgSqlTest {
         val ( mmgElementsSingleNonRepets, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
 
         // Singles Non Repeats
-        val singlesNonRepeatsModel = transformer.singlesNonRepeatstoSqlModel(mmgElementsSingleNonRepets, profilesMap, mmgBasedModelStr)
+        val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, mmgBasedModelStr)
         logger.info(" singlesNonRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")      
 
         // Singles Repeats
-        val singlesRepeatsModel = transformer.singlesRepeatstoSqlModel(mmgElementsSingleRepeats, profilesMap, mmgBasedModelStr)
-        logger.info(" singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")   
+        val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, mmgBasedModelStr)
+        logger.info(" singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n") 
+ 
+
+        // Repeated Blocks
+        // val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, mmgBasedModelStr)
+        // logger.info(" repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")   
 
     } // .testRedisInstanceUsed
 
