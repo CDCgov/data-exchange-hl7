@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.9] - 2022-12-14
+ - Renamed mmg-processor module to mmg-based-transformer
+ - Created function to load Condition2MMGMapping table
+ - Created new function fn-mmg-sql-transformer which transforms the output of the fn-mmg-based-transformer, which includes all MMG elements: singles, singles repeated, and repeated blocks.
+ - Designed Data consumption routing and implemented changes on metadata. (Need to implement receiver-debatcher)
+ - Updated Receiver/Debatcher to throw invalid messages into the Error queue (hl7_recdeb_err)
+ - Created Readme to several modules - lib-dex-common, lib-nist-validator, Receiver/Debatcher, Structure Validator
+ - Updated getMMGs() to throw error if condition is not present on table and created method to retrieve a list of MMG names used by a given scenario (event_code, profile, reporting_jursidiction)
+
 ### [0.0.8] - 2022-11-30
   - Created Hepatitis MMGs
   - Created PhinSpec 3.2 profiles for NIST Structure Validation

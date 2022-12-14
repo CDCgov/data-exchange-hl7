@@ -1,0 +1,593 @@
+[
+  {
+    "content": "TVNIfF5+XCZ8U2VuZEFwcE5hbWVeMi4xNi44NDAuMS4xMTQyMjIuMTIzXklTT3xTZW5kaW5nLUZhY2lsaXR5XjIuMTYuODQwLjEuMTE0MjIyLjEyM15JU098UEhJTkNEU14yLjE2Ljg0MC4xLjExNDIyMi40LjMuMi4xMF5JU098UEhJTl4yLjE2Ljg0MC4xLjExNDIyMl5JU098MjAxNDA2MzAxMjAwMzAuMTIzNC0wNTAwfHxPUlVeUjAxXk9SVV9SMDF8TUVTU0FHRSBDT05UUk9MIElEfER8Mi41LjF8fHx8fHx8fHxOT1RGX09SVV92My4wXlBISU5Qcm9maWxlSUReMi4xNi44NDAuMS4xMTQyMjIuNC4xMC4zXklTT35HZW5lcmljX01NR19WMi4wXlBISU5Nc2dNYXBJRF4yLjE2Ljg0MC4xLjExNDIyMi40LjEwLjReSVNPfkx5bWVfVEJSRF9NTUdfVjEuMF5QSElOTXNnTWFwSUReMi4xNi44NDAuMS4xMTQyMjIuNC4xMC40XklTTwpQSUR8MXx8VGlja1RCUkRfVEMwNF5eXlNlbmRBcHBOYW1lJjIuMTYuODQwLjEuMTE0MjIyLjEyMzQmSVNPfHx+Xl5eXl5eU3x8MTk2MzA0MDF8TXx8MjA1NC01XkJsYWNrIG9yIEFmcmljYW4gQW1lcmljYW5eQ0RDUkVDfF5eXjUxXjIyMDMwfHx8fHx8fHx8fHwyMTg2LTVeTm90IEhpc3BhbmljIG9yIExhdGlub15DRENSRUMKT0JSfDF8fFRpY2tib3JuZVRCUkRfVEMwNF5TZW5kQXBwTmFtZV4yLjE2Ljg0MC4xLjExNDIyMi4xMjM0XklTT3w2ODk5MS05XkVwaWRlbWlvbG9naWMgSW5mb3JtYXRpb25eTE58fHwyMDE4MDYwNTE1MDAwMHx8fHx8fHx8fHx8fHx8fDIwMTgwNjA1MTUwMDAwfHx8Rnx8fHx8fDExMDg4XkVocmxpY2hpYSBjaGFmZmVlbnNpc15OTkQKT0JYfDF8Q1dFfDc4NzQ2LTVeQ291bnRyeSBvZiBCaXJ0aF5MTnx8VVNBXlVOSVRFRCBTVEFURVMgT0YgQU1FUklDQV5JU08zMTY2XzF8fHx8fHxGCk9CWHwyfENXRXw3Nzk4My01XkNvdW50cnkgb2YgVXN1YWwgUmVzaWRlbmNlXkxOfHxVU0FeVU5JVEVEIFNUQVRFUyBPRiBBTUVSSUNBXklTTzMxNjZfMXx8fHx8fEYKT0JYfDN8VFN8MTEzNjgtOF5EYXRlIG9mIElsbG5lc3MgT25zZXReTE58fDIwMTgwNTMxfHx8fHx8RgpPQlh8NHxUU3w3Nzk3Ni05XklsbG5lc3MgRW5kIERhdGVeTE58fDIwMTgwNjE4fHx8fHx8RgpPQlh8NXxTTnw3Nzk3Ny03XklsbG5lc3MgRHVyYXRpb25eTE58fF4xOXxkXmRheSBbdGltZV1eVUNVTXx8fHx8RgpPQlh8NnxUU3w3Nzk3NS0xXkRpYWdub3NpcyBEYXRlXkxOfHwyMDE4MDYwNXx8fHx8fEYKT0JYfDd8Q1dFfDc3OTc0LTReSG9zcGl0YWxpemVkXkxOfHxZXlllc15ITDcwMTM2fHx8fHx8RgpPQlh8OHxUU3w4NjU2LTFeQWRtaXNzaW9uIERhdGVeTE58fDIwMTgwNjA1fHx8fHx8RgpPQlh8OXxUU3w4NjQ5LTZeRGlzY2hhcmdlIERhdGVeTE58fDIwMTgwNjE4fHx8fHx8RgpPQlh8MTB8U058NzgwMzMtOF5EdXJhdGlvbiBvZiBIb3NwaXRhbCBTdGF5IGluIERheXNeTE58fF4xM3x8fHx8fEYKT0JYfDExfENXRXw3Nzk3OC01XlN1YmplY3QgRGllZF5MTnx8Tl5Ob15ITDcwMTM2fHx8fHx8RgpPQlh8MTJ8U1R8Nzc5OTMtNF5TdGF0ZSBDYXNlIElkZW50aWZpZXJeTE58fDM0MDIyN3x8fHx8fEYKT0JYfDEzfFNUfDc3OTk3LTVeTGVnYWN5IENhc2UgSWRlbnRpZmllcl5MTnx8MzQwMjI3MTNTMDEyMDE4fHx8fHx8RgpPQlh8MTR8U058Nzc5OTgtM15BZ2UgYXQgQ2FzZSBJbnZlc3RpZ2F0aW9uXkxOfHxeNTV8YV55ZWFyIFt0aW1lXV5VQ1VNfHx8fHxGCk9CWHwxNXxDV0V8Nzc5ODQtM15Db3VudHJ5IG9mIEV4cG9zdXJlXkxOfDF8VVNBXlVOSVRFRCBTVEFURVMgT0YgQU1FUklDQV5JU08zMTY2XzF8fHx8fHxGCk9CWHwxNnxDV0V8Nzc5ODUtMF5TdGF0ZSBvciBQcm92aW5jZSBvZiBFeHBvc3VyZV5MTnwxfDUxXlZpcmdpbmlhXkZJUFM1XzJ8fHx8fHxGCk9CWHwxN3xTVHw3Nzk4Ni04XkNpdHkgb2YgRXhwb3N1cmVeTE58MXxPYWt0b258fHx8fHxGCk9CWHwxOHxTVHw3Nzk4Ny02XkNvdW50eSBvZiBFeHBvc3VyZV5MTnwxfEZhaXJmYXggQ291bnR5fHx8fHx8RgpPQlh8MTl8Q1dFfDc3OTg5LTJeVHJhbnNtaXNzaW9uIE1vZGVeTE58fDQxODQyNzAwNF5WZWN0b3ItYm9ybmUgdHJhbnNtaXNzaW9uXlNDVHx8fHx8fEYKT0JYfDIwfENXRXw3Nzk5MC0wXkNhc2UgQ2xhc3MgU3RhdHVzIENvZGVeTE58fDI5MzEwMDVeUHJvYmFibGUgZGlhZ25vc2lzXlNDVHx8fHx8fEYKT0JYfDIxfENXRXw3Nzk2NS0yXkltbWVkaWF0ZSBOYXRpb25hbCBOb3RpZmlhYmxlIENvbmRpdGlvbl5MTnx8Tl5Ob15ITDcwMTM2fHx8fHx8RgpPQlh8MjJ8Q1dFfDc3OTgwLTFeQ2FzZSBPdXRicmVhayBJbmRpY2F0b3JeTE58fE5eTm9eSEw3MDEzNnx8fHx8fEYKT0JYfDIzfFNUfDc3OTY5LTReSnVyaXNkaWN0aW9uIENvZGVeTE58fFMwMXx8fHx8fEYKT0JYfDI0fENXRXw0ODc2Ni0wXlJlcG9ydGluZyBTb3VyY2UgVHlwZSBDb2RlXkxOfHxQSEMyNTJeT3RoZXIgU3RhdGUgYW5kIExvY2FsIEFnZW5jaWVzXkNEQ1BISU5WU3x8fHx8fEYKT0JYfDI1fFNUfDUyODMxLTVeUmVwb3J0aW5nIFNvdXJjZSBaSVAgQ29kZV5MTnx8MjIwMzB8fHx8fHxGCk9CWHwyNnxTVHw3NDU0OS03XlBlcnNvbiBSZXBvcnRpbmcgdG8gQ0RDIC0gTmFtZV5MTnx8TWljayBDaG9wcmF8fHx8fHxGCk9CWHwyN3xTVHw3NDU0OC05XlBlcnNvbiBSZXBvcnRpbmcgdG8gQ0RDIC0gUGhvbmUgTnVtYmVyXkxOfHw4NTgtODg4LTk5OTl8fHx8fHxGCk9CWHwyOHxTVHw3NDU0Ny0xXlBlcnNvbiBSZXBvcnRpbmcgdG8gQ0RDIC0gRW1haWxeTE58fENob3ByYUBlbWFpbC5jb218fHx8fHxGCk9CWHwyOXxEVHw3Nzk3OS0zXkNhc2UgSW52ZXN0aWdhdGlvbiBTdGFydCBEYXRlXkxOfHwyMDE4MDYwNXx8fHx8fEYKT0JYfDMwfERUfDc3OTk1LTleRGF0ZSBSZXBvcnRlZF5MTnx8MjAxODA2MDV8fHx8fHxGCk9CWHwzMXxUU3w3Nzk3Mi04XkVhcmxpZXN0IERhdGUgUmVwb3J0ZWQgdG8gQ291bnR5XkxOfHwyMDE4MDYwNXx8fHx8fEYKT0JYfDMyfFRTfDc3OTczLTZeRWFybGllc3QgRGF0ZSBSZXBvcnRlZCB0byBTdGF0ZV5MTnx8MjAxODA2MDV8fHx8fHxGCk9CWHwzM3xTTnw3Nzk5MS04Xk1NV1IgV2Vla15MTnx8XjIzfHx8fHx8RgpPQlh8MzR8RFR8Nzc5OTItNl5NTVdSIFllYXJeTE58fDIwMTh8fHx8fHxGCk9CWHwzNXxEVHw3Nzk3MC0yXkRhdGUgRmlyc3QgUmVwb3J0ZWQgdG8gUEhEXkxOfHwyMDE4MDYwNXx8fHx8fEYKT0JYfDM2fENXRXw3Nzk2Ni0wXlJlcG9ydGluZyBTdGF0ZV5MTnx8NTFeVmlyZ2luaWFeRklQUzVfMnx8fHx8fEYKT0JYfDM3fENXRXw3Nzk2OC02Xk5hdGlvbmFsIFJlcG9ydGluZyBKdXJpc2RpY3Rpb25eTE58fDUxXlZBXkZJUFM1XzJ8fHx8fHxGCk9CWHwzOHxDV0V8SU5WOTI5XkNsaW5pY2FsIE1hbmlmZXN0YXRpb25eUEhJTlFVRVNUSU9OfDF8Mzg2NjYxMDA2XkZldmVyXlNDVHx8fHx8fEYKT0JYfDM5fENXRXxJTlY5MzBeQ2xpbmljYWwgTWFuaWZlc3RhdGlvbiBJbmRpY2F0b3JeUEhJTlFVRVNUSU9OfDF8WV5ZZXNeSEw3MDEzNnx8fHx8fEYKT0JYfDQwfENXRXxJTlY5MjleQ2xpbmljYWwgTWFuaWZlc3RhdGlvbl5QSElOUVVFU1RJT058MnwyNzE4MDcwMDNeUmFzaF5TQ1R8fHx8fHxGCk9CWHw0MXxDV0V8SU5WOTMwXkNsaW5pY2FsIE1hbmlmZXN0YXRpb24gSW5kaWNhdG9yXlBISU5RVUVTVElPTnwyfE5eTm9eSEw3MDEzNnx8fHx8fEYKT0JYfDQyfENXRXxJTlY5MjleQ2xpbmljYWwgTWFuaWZlc3RhdGlvbl5QSElOUVVFU1RJT058M3w4NzMxOTAwMF5Fc2NoYXJeU0NUfHx8fHx8RgpPQlh8NDN8Q1dFfElOVjkzMF5DbGluaWNhbCBNYW5pZmVzdGF0aW9uIEluZGljYXRvcl5QSElOUVVFU1RJT058M3xOXk5vXkhMNzAxMzZ8fHx8fHxGCk9CWHw0NHxDV0V8SU5WOTI5XkNsaW5pY2FsIE1hbmlmZXN0YXRpb25eUEhJTlFVRVNUSU9OfDR8MjUwNjQwMDJeSGVhZGFjaGVeU0NUfHx8fHx8RgpPQlh8NDV8Q1dFfElOVjkzMF5DbGluaWNhbCBNYW5pZmVzdGF0aW9uIEluZGljYXRvcl5QSElOUVVFU1RJT058NHxZXlllc15ITDcwMTM2fHx8fHx8RgpPQlh8NDZ8Q1dFfElOVjkyOV5DbGluaWNhbCBNYW5pZmVzdGF0aW9uXlBISU5RVUVTVElPTnw1fDY4OTYyMDAxXk15YWxnaWFeU0NUfHx8fHx8RgpPQlh8NDd8Q1dFfElOVjkzMF5DbGluaWNhbCBNYW5pZmVzdGF0aW9uIEluZGljYXRvcl5QSElOUVVFU1RJT058NXxOXk5vXkhMNzAxMzZ8fHx8fHxGCk9CWHw0OHxDV0V8SU5WOTI5XkNsaW5pY2FsIE1hbmlmZXN0YXRpb25eUEhJTlFVRVNUSU9OfDZ8MjcxNzM3MDAwXkFuZW1pYV5TQ1R8fHx8fHxGCk9CWHw0OXxDV0V8SU5WOTMwXkNsaW5pY2FsIE1hbmlmZXN0YXRpb24gSW5kaWNhdG9yXlBISU5RVUVTVElPTnw2fE5eTm9eSEw3MDEzNnx8fHx8fEYKT0JYfDUwfENXRXxJTlY5MjleQ2xpbmljYWwgTWFuaWZlc3RhdGlvbl5QSElOUVVFU1RJT058N3w0MTkxODgwMDVeTGV1a29wZW5pYV5TQ1R8fHx8fHxGCk9CWHw1MXxDV0V8SU5WOTMwXkNsaW5pY2FsIE1hbmlmZXN0YXRpb24gSW5kaWNhdG9yXlBISU5RVUVTVElPTnw3fE5eTm9eSEw3MDEzNnx8fHx8fEYKT0JYfDUyfENXRXxJTlY5MjleQ2xpbmljYWwgTWFuaWZlc3RhdGlvbl5QSElOUVVFU1RJT058OHwzMDIyMTUwMDBeVGhyb21ib2N5dG9wZW5pYV5TQ1R8fHx8fHxGCk9CWHw1M3xDV0V8SU5WOTMwXkNsaW5pY2FsIE1hbmlmZXN0YXRpb24gSW5kaWNhdG9yXlBISU5RVUVTVElPTnw4fFleWWVzXkhMNzAxMzZ8fHx8fHxGCk9CWHw1NHxDV0V8SU5WOTI5XkNsaW5pY2FsIE1hbmlmZXN0YXRpb25eUEhJTlFVRVNUSU9OfDl8UEhDMjEwOF5IZXBhdGljIHRyYW5zYW1pbmFzZSBlbGV2YXRpb25eQ0RDUEhJTlZTfHx8fHx8RgpPQlh8NTV8Q1dFfElOVjkzMF5DbGluaWNhbCBNYW5pZmVzdGF0aW9uIEluZGljYXRvcl5QSElOUVVFU1RJT058OXxOXk5vXkhMNzAxMzZ8fHx8fHxGCk9CWHw1NnxDV0V8SU5WMTI2NV5FeHBlcmllbmNlZCBDb21wbGljYXRpb25eUEhJTlFVRVNUSU9OfHxZXlllc15ITDcwMTM2fHx8fHx8RgpPQlh8NTd8Q1dFfDY3MTg3LTVeVHlwZSBvZiBDb21wbGljYXRpb25eTE58fE9USF5vdGhlcl5OVUxMRkx8fHx8fHxGCk9CWHw1OHxDV0V8MzcwMzg4MDA2XlBhdGllbnQgSW1tdW5vY29tcHJvbWlzZWReU0NUfHxZXlllc15ITDcwMTM2fHx8fHx8RgpPQlh8NTl8U1R8SU5WOTMzXkltbXVub2NvbXByb21pc2VkIEFzc29jaWF0ZWQgQ29uZGl0aW9uIG9yIFRyZWF0bWVudF5QSElOUVVFU1RJT058fGRpYWJldGVzLCByZW5hbCBkaXNlYXNlfHx8fHx8RgpPQlh8NjB8Q1dFfDI1NTYzMzAwMV5UcmVhdG1lbnQgRHJ1ZyBJbmRpY2F0b3JeU0NUfHxZXlllc15ITDcwMTM2fHx8fHx8RgpPQlh8NjF8Q1dFfDI5MzAzLTVeTWVkaWNhdGlvbiBBZG1pbmlzdGVyZWReTE58MXwzNjQwXkRveHljeWNsaW5lXlJYTk9STXx8fHx8fEYKT0JYfDYyfERUfDg2OTQ4LTdeRGF0ZSBUcmVhdG1lbnQgb3IgVGhlcmFweSBTdGFydGVkXkxOfDF8MjAxODA2MDd8fHx8fHxGCk9CWHw2M3xTTnw2NzQ1My0xXlRyZWF0bWVudCBEdXJhdGlvbl5MTnwxfF4xMHxkXmRheV5VQ1VNfHx8fHxGCk9CWHw2NHxDV0V8MjkzMDMtNV5NZWRpY2F0aW9uIEFkbWluaXN0ZXJlZF5MTnwyfDcyM15BbW94aWNpbGxpbl5SWE5PUk18fHx8fHxGCk9CWHw2NXxEVHw4Njk0OC03XkRhdGUgVHJlYXRtZW50IG9yIFRoZXJhcHkgU3RhcnRlZF5MTnwyfDIwMTgwNjA3fHx8fHx8RgpPQlh8NjZ8U058Njc0NTMtMV5UcmVhdG1lbnQgRHVyYXRpb25eTE58MnxeMTB8ZF5kYXleVUNVTXx8fHx8RgpPQlh8Njd8Q1dFfElOVjEyNjZeT2NjdXBhdGlvbiBSZWxhdGVkIHRvIEV4cG9zdXJlXlBISU5RVUVTVElPTnx8Tl5Ob15ITDcwMTM2fHx8fHx8RgpPQlh8Njh8U1R8ODU2NTgtM15DdXJyZW50IE9jY3VwYXRpb25eTE58MXxEYXRhIEFuYWx5c3R8fHx8fHxGCk9CWHw2OXxDRXw4NTY1OS0xXkN1cnJlbnQgT2NjdXBhdGlvbiBTdGFuZGFyZGl6ZWReTE58MXwwNzM1Xk1hcmtldCByZXNlYXJjaCBhbmFseXN0cyBhbmQgbWFya2V0aW5nIHNwZWNpYWxpc3RzIFswNzM1XV5DRENPQ0NVUEFUSU9OMjAxMHx8fHx8fEYKT0JYfDcwfFNUfDg1MDc4LTReQ3VycmVudCBJbmR1c3RyeV5MTnwxfEJhbmtpbmd8fHx8fHxGCk9CWHw3MXxDRXw4NTY1Ny01XkN1cnJlbnQgSW5kdXN0cnkgU3RhbmRhcmRpemVkXkxOfDF8Njg3MF5CYW5raW5nIGFuZCByZWxhdGVkIGFjdGl2aXRpZXMgWzY4NzBdXkNEQ0lORFVTVFJZMjAxMHx8fHx8fEYKT0JYfDcyfENXRXw0MjAwMDgwMDFeVHJhdmVsXlNDVHx8WV5ZZXNeSEw3MDEzNnx8fHx8fEYKT0JYfDczfENXRXw4Mjc1NC0zXlRyYXZlbCBTdGF0ZV5MTnwxfDM3Xk5vcnRoIENhcm9saW5hXkZJUFM1XzJ8fHx8fHxGCk9CWHw3NHxDV0V8ODI3NTMtNV5UcmF2ZWwgQ291bnR5XkxOfDF8MzcwMTNeQmVhdWZvcnQsIE5DXkZJUFM2XzR8fHx8fHxGCk9CWHw3NXxEVHxUUkFWRUwwNl5EYXRlIG9mIEFycml2YWwgdG8gVHJhdmVsIERlc3RpbmF0aW9uXlBISU5RVUVTVElPTnwxfDIwMTgwNTI1fHx8fHx8RgpPQlh8NzZ8RFR8VFJBVkVMMDdeRGF0ZSBvZiBEZXBhcnR1cmUgZnJvbSBUcmF2ZWwgRGVzdGluYXRpb25eUEhJTlFVRVNUSU9OfDF8MjAxODA1Mjh8fHx8fHxGCk9CWHw3N3xDV0V8OTU4OTgwMDReVGljayBCaXRlXlNDVHx8Tl5Ob15ITDcwMTM2fHx8fHx8RgpPQlh8Nzh8Q1dFfDgyMzEyLTBeQmxvb2QgVHJhbnNmdXNpb25eTE58fE5eTm9eSEw3MDEzNnx8fHx8fEYKT0JYfDc5fENXRXwxMDU0NzAwMDdeQmxvb2QgRG9ub3JeU0NUfHxOXk5vXkhMNzAxMzZ8fHx8fHxGCk9CWHw4MHxDV0V8SU5WMjkwXlRlc3QgVHlwZV5QSElOUVVFU1RJT058MXwzMjAxMS05XklGQSBJZ0cgRWhybGljaGlhIHNwXkxOfHx8fHx8RgpPQlh8ODF8Q1dFfElOVjI5MV5UZXN0IFJlc3VsdF5QSElOUVVFU1RJT058MXwxMDgyODAwNF5Qb3NpdGl2ZV5TQ1R8fHx8fHxGCk9CWHw4MnxDV0V8TEFCMjc4Xk9yZ2FuaXNtIE5hbWVeUEhJTlFVRVNUSU9OfDF8NTkyNTAwMDFeRWhybGljaGlhIGNoYWZmZWVuc2lzXlNDVHx8fHx8fEYKT0JYfDgzfFNUfExBQjYyOF5UZXN0IFJlc3VsdCBRdWFudGl0YXRpdmVeUEhJTlFVRVNUSU9OfDF8PjE6NjR8fHx8fHxGCk9CWHw4NHxUU3w2ODk2My04XlNwZWNpbWVuIENvbGxlY3Rpb24gRGF0ZS9UaW1lXkxOfDF8MjAxODA2MTN8fHx8fHxGCk9CWHw4NXxDV0V8NjY3NDYtOV5TcGVjaW1lbiBUeXBlXkxOfDF8MTE5MzY0MDAzXlNlcnVtXlNDVHx8fHx8fEYKT0JYfDg2fFNUfDY4OTk0LTNeUGVyZm9ybWluZyBMYWJvcmF0b3J5IE5hbWVeTE58MXxDREMgUlpCIFJlZmVyZW5jZSBMYWJvcmF0b3J5fHx8fHx8RgpPQlh8ODd8Q1dFfElOVjEyNjleTGFib3JhdG9yeSBTdGF0ZV5QSElOUVVFU1RJT058MXwxM15HZW9yZ2lhXkZJUFM1XzJ8fHx8fHxGCk9CWHw4OHxTVHxMQUIyMDJeUGVyZm9ybWluZyBMYWJvcmF0b3J5IFNwZWNpbWVuIElEXlBISU5RVUVTVElPTnwxfDk5OTk5fHx8fHx8Rg==",
+    "metadata": {
+      "provenance": {
+        "event_id": "1242362d-f01e-0055-14c1-0fbcb6065297",
+        "event_timestamp": "2022-12-14T13:40:35.5840889Z",
+        "file_uuid": "2c3e0496-d3b5-4c7f-97c8-2c71fa29cc41",
+        "file_path": "https://tfedemessagestoragedev.blob.core.windows.net/hl7ingress/TBRD_V1.0.2_TM_TC04.txt",
+        "file_timestamp": "2022-12-14T08:40:35-05:00",
+        "file_size": 7492,
+        "single_or_batch": "SINGLE",
+        "message_hash": "dc9b71cb7f1e2544c548cfc529f54233",
+        "ext_system_provider": "BLOB",
+        "ext_original_file_name": "TBRD_V1.0.2_TM_TC04.txt",
+        "message_index": 1
+      },
+      "processes": [
+        {
+          "status": "SUCCESS",
+          "process_name": "RECEIVER",
+          "process_version": "1.0.0",
+          "start_processing_time": "2022-12-14T08:40:36.337-05:00",
+          "end_processing_time": "2022-12-14T08:40:36.4-05:00"
+        },
+        {
+          "status": "VALID_MESSAGE",
+          "report": {
+            "entries": {
+              "structure": [],
+              "content": [],
+              "value-set": []
+            },
+            "error-count": {
+              "structure": 0,
+              "value-set": 0,
+              "content": 0
+            },
+            "warning-count": {
+              "structure": 0,
+              "value-set": 0,
+              "content": 0
+            },
+            "status": "VALID_MESSAGE"
+          },
+          "process_name": "STRUCTURE-VALIDATOR",
+          "process_version": "1.0.0",
+          "start_processing_time": "2022-12-14T08:40:36.632-05:00",
+          "end_processing_time": "2022-12-14T08:40:36.747-05:00"
+        },
+        {
+          "status": "MMG_VALID",
+          "report": {
+            "entries": [],
+            "error-count": 0,
+            "warning-count": 0,
+            "status": "MMG_VALID"
+          },
+          "process_name": "MMG-VALIDATOR",
+          "process_version": "1.0.0",
+          "start_processing_time": "2022-12-14T08:40:36.854-05:00",
+          "end_processing_time": "2022-12-14T08:40:37.558-05:00"
+        },
+        {
+          "status": "MMG_MODEL_OK",
+          "report": {
+            "message_profile_identifier": [
+              {
+                "entity_identifier": "NOTF_ORU_v3.0",
+                "namespace_id": "PHINProfileID",
+                "universal_id": "2.16.840.1.114222.4.10.3",
+                "universal_id_type": "ISO"
+              },
+              {
+                "entity_identifier": "Generic_MMG_V2.0",
+                "namespace_id": "PHINMsgMapID",
+                "universal_id": "2.16.840.1.114222.4.10.4",
+                "universal_id_type": "ISO"
+              },
+              {
+                "entity_identifier": "Lyme_TBRD_MMG_V1.0",
+                "namespace_id": "PHINMsgMapID",
+                "universal_id": "2.16.840.1.114222.4.10.4",
+                "universal_id_type": "ISO"
+              }
+            ],
+            "local_subject_id": {
+              "id_number": "TickTBRD_TC04",
+              "assigning_authority": "SendAppName&2.16.840.1.114222.1234&ISO"
+            },
+            "birth_date": "19630401",
+            "subjects_sex": "M",
+            "race_category": [
+              {
+                "identifier": "2054-5",
+                "text": "Black or African American",
+                "name_of_coding_system": "CDCREC",
+                "code_system_concept_name": "Black or African American",
+                "cdc_preferred_designation": "Black or African American"
+              }
+            ],
+            "ethnic_group": {
+              "identifier": "2186-5",
+              "text": "Not Hispanic or Latino",
+              "name_of_coding_system": "CDCREC",
+              "code_system_concept_name": "Not Hispanic or Latino",
+              "cdc_preferred_designation": "Not Hispanic or Latino"
+            },
+            "subject_address_state": "51",
+            "subject_address_zip_code": "22030",
+            "condition_code": {
+              "identifier": "11088",
+              "text": "Ehrlichia chaffeensis",
+              "name_of_coding_system": "NND"
+            },
+            "local_record_id": {
+              "entity_identifier": "TickborneTBRD_TC04",
+              "namespace_id": "SendAppName",
+              "universal_id": "2.16.840.1.114222.1234",
+              "universal_id_type": "ISO"
+            },
+            "notification_result_status": "F",
+            "date_first_electronically_submitted": "20180605150000",
+            "date_of_electronic_case_notification_to_cdc": "20180605150000",
+            "country_of_birth": {
+              "identifier": "USA",
+              "text": "UNITED STATES OF AMERICA",
+              "name_of_coding_system": "ISO3166_1",
+              "code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+              "cdc_preferred_designation": "UNITED STATES OF AMERICA"
+            },
+            "country_of_usual_residence": {
+              "identifier": "USA",
+              "text": "UNITED STATES OF AMERICA",
+              "name_of_coding_system": "ISO3166_1",
+              "code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+              "cdc_preferred_designation": "UNITED STATES OF AMERICA"
+            },
+            "date_of_illness_onset": "20180531",
+            "illness_end_date": "20180618",
+            "illness_duration": {
+              "number1": "19"
+            },
+            "diagnosis_date": "20180605",
+            "hospitalized": {
+              "identifier": "Y",
+              "text": "Yes",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "Yes",
+              "cdc_preferred_designation": "Yes"
+            },
+            "admission_date": "20180605",
+            "discharge_date": "20180618",
+            "duration_of_hospital_stay_in_days": {
+              "number1": "13"
+            },
+            "subject_died": {
+              "identifier": "N",
+              "text": "No",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "No",
+              "cdc_preferred_designation": "No"
+            },
+            "state_case_identifier": "340227",
+            "legacy_case_identifier": "34022713S012018",
+            "age_at_case_investigation": {
+              "number1": "55"
+            },
+            "transmission_mode": {
+              "identifier": "418427004",
+              "text": "Vector-borne transmission",
+              "name_of_coding_system": "SCT",
+              "code_system_concept_name": "Vector-borne transmission (qualifier value)",
+              "cdc_preferred_designation": "Vector-borne transmission"
+            },
+            "case_class_status_code": {
+              "identifier": "2931005",
+              "text": "Probable diagnosis",
+              "name_of_coding_system": "SCT",
+              "code_system_concept_name": "Probable diagnosis (contextual qualifier) (qualifier value)",
+              "cdc_preferred_designation": "Probable diagnosis"
+            },
+            "immediate_national_notifiable_condition": {
+              "identifier": "N",
+              "text": "No",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "No",
+              "cdc_preferred_designation": "No"
+            },
+            "case_outbreak_indicator": {
+              "identifier": "N",
+              "text": "No",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "No",
+              "cdc_preferred_designation": "No"
+            },
+            "jurisdiction_code": "S01",
+            "reporting_source_type_code": {
+              "identifier": "PHC252",
+              "text": "Other State and Local Agencies",
+              "name_of_coding_system": "CDCPHINVS",
+              "code_system_concept_name": "Other state and or local agencies",
+              "cdc_preferred_designation": "Other State and Local Agencies"
+            },
+            "reporting_source_zip_code": "22030",
+            "person_reporting_to_cdc_name": "Mick Chopra",
+            "person_reporting_to_cdc_phone_number": "858-888-9999",
+            "person_reporting_to_cdc_email": "Chopra@email.com",
+            "case_investigation_start_date": "20180605",
+            "date_reported": "20180605",
+            "earliest_date_reported_to_county": "20180605",
+            "earliest_date_reported_to_state": "20180605",
+            "mmwr_week": {
+              "number1": "23"
+            },
+            "mmwr_year": "2018",
+            "date_first_reported_to_phd": "20180605",
+            "reporting_state": {
+              "identifier": "51",
+              "text": "Virginia",
+              "name_of_coding_system": "FIPS5_2",
+              "code_system_concept_name": "Virginia",
+              "cdc_preferred_designation": "Virginia"
+            },
+            "national_reporting_jurisdiction": {
+              "identifier": "51",
+              "text": "VA",
+              "name_of_coding_system": "FIPS5_2",
+              "code_system_concept_name": "Virginia",
+              "cdc_preferred_designation": "VA"
+            },
+            "experienced_complication": {
+              "identifier": "Y",
+              "text": "Yes",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "Yes",
+              "cdc_preferred_designation": "Yes"
+            },
+            "type_of_complication": [
+              {
+                "identifier": "OTH",
+                "text": "other",
+                "name_of_coding_system": "EFL",
+                "code_system_concept_name": "other",
+                "cdc_preferred_designation": "other"
+              }
+            ],
+            "patient_immunocompromised": {
+              "identifier": "Y",
+              "text": "Yes",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "Yes",
+              "cdc_preferred_designation": "Yes"
+            },
+            "immunocompromised_associated_condition_or_treatment": "diabetes, renal disease",
+            "treatment_drug_indicator": {
+              "identifier": "Y",
+              "text": "Yes",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "Yes",
+              "cdc_preferred_designation": "Yes"
+            },
+            "occupation_related_to_exposure": {
+              "identifier": "N",
+              "text": "No",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "No",
+              "cdc_preferred_designation": "No"
+            },
+            "travel": {
+              "identifier": "Y",
+              "text": "Yes",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "Yes",
+              "cdc_preferred_designation": "Yes"
+            },
+            "tick_bite": {
+              "identifier": "N",
+              "text": "No",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "No",
+              "cdc_preferred_designation": "No"
+            },
+            "blood_transfusion": {
+              "identifier": "N",
+              "text": "No",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "No",
+              "cdc_preferred_designation": "No"
+            },
+            "blood_donor": {
+              "identifier": "N",
+              "text": "No",
+              "name_of_coding_system": "HL70136",
+              "code_system_concept_name": "No",
+              "cdc_preferred_designation": "No"
+            },
+            "repeating_variables_for_disease_exposure": [
+              {
+                "country_of_exposure": {
+                  "identifier": "USA",
+                  "text": "UNITED STATES OF AMERICA",
+                  "name_of_coding_system": "ISO3166_1",
+                  "code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+                  "cdc_preferred_designation": "UNITED STATES OF AMERICA"
+                },
+                "state_or_province_of_exposure": {
+                  "identifier": "51",
+                  "text": "Virginia",
+                  "name_of_coding_system": "FIPS5_2",
+                  "code_system_concept_name": "Virginia",
+                  "cdc_preferred_designation": "Virginia"
+                },
+                "city_of_exposure": "Oakton",
+                "county_of_exposure": "Fairfax County"
+              }
+            ],
+            "clinical_manifestation": [
+              {
+                "clinical_manifestation": {
+                  "identifier": "386661006",
+                  "text": "Fever",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Fever (finding)",
+                  "cdc_preferred_designation": "Fever"
+                },
+                "clinical_manifestation_indicator": {
+                  "identifier": "Y",
+                  "text": "Yes",
+                  "name_of_coding_system": "HL70136",
+                  "code_system_concept_name": "Yes",
+                  "cdc_preferred_designation": "Yes"
+                }
+              },
+              {
+                "clinical_manifestation": {
+                  "identifier": "271807003",
+                  "text": "Rash",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Eruption of \r\nskin (disorder)",
+                  "cdc_preferred_designation": "Rash"
+                },
+                "clinical_manifestation_indicator": {
+                  "identifier": "N",
+                  "text": "No",
+                  "name_of_coding_system": "HL70136",
+                  "code_system_concept_name": "No",
+                  "cdc_preferred_designation": "No"
+                }
+              },
+              {
+                "clinical_manifestation": {
+                  "identifier": "87319000",
+                  "text": "Eschar",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Eschar (morphologic abnormality)",
+                  "cdc_preferred_designation": "Eschar"
+                },
+                "clinical_manifestation_indicator": {
+                  "identifier": "N",
+                  "text": "No",
+                  "name_of_coding_system": "HL70136",
+                  "code_system_concept_name": "No",
+                  "cdc_preferred_designation": "No"
+                }
+              },
+              {
+                "clinical_manifestation": {
+                  "identifier": "25064002",
+                  "text": "Headache",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Headache (finding)",
+                  "cdc_preferred_designation": "Headache"
+                },
+                "clinical_manifestation_indicator": {
+                  "identifier": "Y",
+                  "text": "Yes",
+                  "name_of_coding_system": "HL70136",
+                  "code_system_concept_name": "Yes",
+                  "cdc_preferred_designation": "Yes"
+                }
+              },
+              {
+                "clinical_manifestation": {
+                  "identifier": "68962001",
+                  "text": "Myalgia",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Muscle pain (finding)",
+                  "cdc_preferred_designation": "Myalgia"
+                },
+                "clinical_manifestation_indicator": {
+                  "identifier": "N",
+                  "text": "No",
+                  "name_of_coding_system": "HL70136",
+                  "code_system_concept_name": "No",
+                  "cdc_preferred_designation": "No"
+                }
+              },
+              {
+                "clinical_manifestation": {
+                  "identifier": "271737000",
+                  "text": "Anemia",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Anemia (disorder)",
+                  "cdc_preferred_designation": "Anemia"
+                },
+                "clinical_manifestation_indicator": {
+                  "identifier": "N",
+                  "text": "No",
+                  "name_of_coding_system": "HL70136",
+                  "code_system_concept_name": "No",
+                  "cdc_preferred_designation": "No"
+                }
+              },
+              {
+                "clinical_manifestation": {
+                  "identifier": "419188005",
+                  "text": "Leukopenia",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Decreased blood leukocyte number (finding)",
+                  "cdc_preferred_designation": "Leukopenia"
+                },
+                "clinical_manifestation_indicator": {
+                  "identifier": "N",
+                  "text": "No",
+                  "name_of_coding_system": "HL70136",
+                  "code_system_concept_name": "No",
+                  "cdc_preferred_designation": "No"
+                }
+              },
+              {
+                "clinical_manifestation": {
+                  "identifier": "302215000",
+                  "text": "Thrombocytopenia",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Thrombocytopenic disorder (disorder)",
+                  "cdc_preferred_designation": "Thrombocytopenia"
+                },
+                "clinical_manifestation_indicator": {
+                  "identifier": "Y",
+                  "text": "Yes",
+                  "name_of_coding_system": "HL70136",
+                  "code_system_concept_name": "Yes",
+                  "cdc_preferred_designation": "Yes"
+                }
+              },
+              {
+                "clinical_manifestation": {
+                  "identifier": "PHC2108",
+                  "text": "Hepatic transaminase elevation",
+                  "name_of_coding_system": "CDCPHINVS",
+                  "code_system_concept_name": "Hepatic transaminase elevation",
+                  "cdc_preferred_designation": "Hepatic transaminase elevation"
+                },
+                "clinical_manifestation_indicator": {
+                  "identifier": "N",
+                  "text": "No",
+                  "name_of_coding_system": "HL70136",
+                  "code_system_concept_name": "No",
+                  "cdc_preferred_designation": "No"
+                }
+              }
+            ],
+            "antibiotics_treatment_repeating_group": [
+              {
+                "medication_administered": {
+                  "identifier": "3640",
+                  "text": "Doxycycline",
+                  "name_of_coding_system": "RXNORM",
+                  "code_system_concept_name": "Doxycycline",
+                  "cdc_preferred_designation": "Doxycycline"
+                },
+                "date_treatment_or_therapy_started": "20180607",
+                "treatment_duration": {
+                  "number1": "10"
+                }
+              },
+              {
+                "medication_administered": {
+                  "identifier": "723",
+                  "text": "Amoxicillin",
+                  "name_of_coding_system": "RXNORM",
+                  "code_system_concept_name": "Amoxicillin",
+                  "cdc_preferred_designation": "Amoxicillin"
+                },
+                "date_treatment_or_therapy_started": "20180607",
+                "treatment_duration": {
+                  "number1": "10"
+                }
+              }
+            ],
+            "industry_and_occupation_repeating_group": [
+              {
+                "current_occupation": "Data Analyst",
+                "current_occupation_standardized": {
+                  "identifier": "0735",
+                  "text": "Market research analysts and marketing specialists [0735]",
+                  "name_of_coding_system": "CDCOCCUPATION2010",
+                  "code_system_concept_name": "Market research analysts and marketing specialists",
+                  "cdc_preferred_designation": "Market research analysts and marketing specialists [0735]"
+                },
+                "current_industry": "Banking",
+                "current_industry_standardized": {
+                  "identifier": "6870",
+                  "text": "Banking and related activities [6870]",
+                  "name_of_coding_system": "CDCINDUSTRY2010",
+                  "code_system_concept_name": "Banking and related activities",
+                  "cdc_preferred_designation": "Banking and related activities [6870]"
+                }
+              }
+            ],
+            "travel_history": [
+              {
+                "travel_state": {
+                  "identifier": "37",
+                  "text": "North Carolina",
+                  "name_of_coding_system": "FIPS5_2",
+                  "code_system_concept_name": "North Carolina",
+                  "cdc_preferred_designation": "North Carolina"
+                },
+                "travel_county": {
+                  "identifier": "37013",
+                  "text": "Beaufort, NC",
+                  "name_of_coding_system": "FIPS6_4",
+                  "code_system_concept_name": "Beaufort",
+                  "cdc_preferred_designation": "Beaufort, NC"
+                },
+                "date_of_arrival_to_travel_destination": "20180525",
+                "date_of_departure_from_travel_destination": "20180528"
+              }
+            ],
+            "tick_bite_repeating_group": [],
+            "blood_transfusion_date_repeating_group": [],
+            "organ_transplant_repeating_group": [],
+            "blood_donation_date_repeating_group": [],
+            "epidemiology_laboratory_repeating_group": [
+              {
+                "test_type": {
+                  "identifier": "32011-9",
+                  "text": "IFA IgG Ehrlichia sp",
+                  "name_of_coding_system": "LN",
+                  "code_system_concept_name": "Ehrlichia IgG Titr Ser",
+                  "cdc_preferred_designation": "IFA IgG Ehrlichia sp"
+                },
+                "test_result": {
+                  "identifier": "10828004",
+                  "text": "Positive",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Positive (qualifier value)",
+                  "cdc_preferred_designation": "Positive"
+                },
+                "organism_name": {
+                  "identifier": "59250001",
+                  "text": "Ehrlichia chaffeensis",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Ehrlichia chaffeensis (organism)",
+                  "cdc_preferred_designation": "Ehrlichia chaffeensis"
+                },
+                "test_result_quantitative": ">1:64",
+                "specimen_collection_date_time": "20180613",
+                "specimen_type": {
+                  "identifier": "119364003",
+                  "text": "Serum",
+                  "name_of_coding_system": "SCT",
+                  "code_system_concept_name": "Serum specimen (specimen)",
+                  "cdc_preferred_designation": "Serum"
+                },
+                "performing_laboratory_name": "CDC RZB Reference Laboratory",
+                "laboratory_state": {
+                  "identifier": "13",
+                  "text": "Georgia",
+                  "name_of_coding_system": "FIPS5_2",
+                  "code_system_concept_name": "Georgia",
+                  "cdc_preferred_designation": "Georgia"
+                },
+                "performing_laboratory_specimen_id": "99999"
+              }
+            ]
+          },
+          "process_name": "MESSAGE-PROCESSOR",
+          "process_version": "1.0.0",
+          "start_processing_time": "2022-12-14T08:40:37.676-05:00",
+          "end_processing_time": "2022-12-14T08:40:38.005-05:00"
+        }
+      ]
+    },
+    "summary": {
+      "current_status": "MMG_VALID"
+    },
+    "message_uuid": "17949655-8932-4483-95cc-134c23c219dd",
+    "metadata_version": "1.0.0"
+  }
+]

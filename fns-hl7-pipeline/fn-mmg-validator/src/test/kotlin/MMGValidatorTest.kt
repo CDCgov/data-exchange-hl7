@@ -1,6 +1,8 @@
 
 import gov.cdc.dex.hl7.MmgValidator
 import gov.cdc.dex.hl7.exception.InvalidMessageException
+import gov.cdc.dex.mmg.InvalidConditionException
+
 
 
 import org.junit.jupiter.api.Test
@@ -57,8 +59,8 @@ class MMGValidatorTest {
             //val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
             val mmgValidator = MmgValidator()
             val validationReport = mmgValidator.validate(testMsg)
-//            assert(false)
-        } catch (e: InvalidMessageException) {
+            assert(false)
+        } catch (e: InvalidConditionException) {
             println("Exception properly thrown - can't validate this message lacking event code")
             assert(true)
         }
@@ -77,10 +79,12 @@ class MMGValidatorTest {
                     val validationReport = mmgValidator.validate(testMsg)
 
                     println(validationReport)
-                } catch(e: InvalidMessageException) {
+                } catch(e: InvalidMessageException ) {
+                    println(e.message)
+                } catch(e:InvalidConditionException) {
                     println(e.message)
                 }
-                    println("==========================")
+                println("==========================")
 
             }
     }

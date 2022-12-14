@@ -22,6 +22,8 @@ class Function {
     companion object {
         const val BLOB_CREATED = "Microsoft.Storage.BlobCreated"
         const val UTF_BOM = "\uFEFF"
+        const val STATUS_SUCCESS = "SUCCESS"
+        const val STATUS_ERROR = "ERROR"
         val gson = Gson()
     }
     @FunctionName("receiverdebatcher001")
@@ -37,6 +39,7 @@ class Function {
         val startTime = Date().toIsoString()
         // context.logger.info("message: --> " + message)
         val evHubName = System.getenv("EventHubSendOkName")
+        val evHubErrsName = System.getenv("EventHubSendErrsName")
         val evHubConnStr = System.getenv("EventHubConnectionString")
         val blobIngestContName = System.getenv("BlobIngestContainerName")
         val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
@@ -65,11 +68,6 @@ class Function {
                         originalFileName =blobName,
                         systemProvider = "BLOB"
                     ) // .hl7MessageMetadata
-                    val summary = SummaryInfo("RECEIVED")
-                    val processMD = ReceiverProcessMetadata("SUCCESS")
-                    processMD.startProcessTime = startTime
-
-                    val metadata = DexMetadata(provenance, listOf(processMD))
 
                     // Read Blob File by Lines
                     // -------------------------------------
@@ -77,9 +75,9 @@ class Function {
                     val currentLinesArr = arrayListOf<String>()
                     var mshCount = 0
                     BufferedReader(reader).use { br ->
-                        br.forEachLine {line ->
+                        br.forEachLine { line ->
                             val lineClean = line.trim().let { if ( it.startsWith(UTF_BOM) )  it.substring(1)  else it}
-                            if ( lineClean.startsWith("FHS") || lineClean.startsWith("BHS") || lineClean.startsWith("BTS") || lineClean.startsWith("BHS")  ) {
+                            if ( lineClean.startsWith("FHS") || lineClean.startsWith("BHS") || lineClean.startsWith("BTS") || lineClean.startsWith(("FTS")) ) {
                                 // batch line --Nothing to do here
                                 provenance.singleOrBatch = Provenance.BATCH_FILE
                             } else {
@@ -87,9 +85,9 @@ class Function {
                                     mshCount++
                                     if ( mshCount > 1 ) {
                                         provenance.singleOrBatch = Provenance.BATCH_FILE
-                                        processMD.endProcessTime = Date().toIsoString()
                                         provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
-                                        prepareAndSend(currentLinesArr,metadata,summary,  evHubSender, evHubName, context )
+                                        val (metadata, summary) = buildMetadata(STATUS_SUCCESS, startTime, provenance)
+                                        prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
                                         provenance.messageIndex++
                                     }
                                     currentLinesArr.clear()
@@ -97,15 +95,33 @@ class Function {
                                 currentLinesArr.add(lineClean)
                             } // .else
                         } // .forEachLine
-                        // Send last message
-                        processMD.endProcessTime = Date().toIsoString()
-                        provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
-                        prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
                     } // .BufferedReader
+                    // Send last message
+                    provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
+                    if (mshCount > 0) {
+                        val (metadata, summary) = buildMetadata(STATUS_SUCCESS, startTime, provenance)
+                        prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
+                    } else {
+                        // no valid message -- send to error queue
+                        val (metadata, summary) = buildMetadata(STATUS_ERROR, startTime, provenance, "No valid message found.")
+                        prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubErrsName, context)
+                    }
                 } // .if
             }
         } // .for
-    } // .eventHubProcessor
+    } // .eventHubProcess
+
+    private fun buildMetadata (status: String, startTime: String, provenance: Provenance, errorMessage: String? = null) : Pair<DexMetadata, SummaryInfo> {
+        val processMD = ReceiverProcessMetadata(status)
+        processMD.startProcessTime = startTime
+        processMD.endProcessTime = Date().toIsoString()
+        var summary = SummaryInfo("RECEIVED")
+        if (status == STATUS_ERROR) {
+            summary = SummaryInfo("REJECTED")
+            summary.problem= Problem(ReceiverProcessMetadata.RECEIVER_PROCESS, null, null, errorMessage, false, 0, 0)
+        }
+        return DexMetadata(provenance, listOf(processMD)) to summary
+    }
 
     private fun prepareAndSend(messageContent: ArrayList<String>, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String, context: ExecutionContext) {
         val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString(separator="\n").toByteArray())
