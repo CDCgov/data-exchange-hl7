@@ -64,7 +64,7 @@ class MmgSqlTest {
 
         // MMG Based Model for the message
         // ------------------------------------------------------------------------------
-        val mmgBasedModelPath = "/model.json"
+        val mmgBasedModelPath = "/mmgBasedModel1.json"
         val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
         val modelJson = JsonParser.parseString(mmgBasedModelStr).asJsonObject
 

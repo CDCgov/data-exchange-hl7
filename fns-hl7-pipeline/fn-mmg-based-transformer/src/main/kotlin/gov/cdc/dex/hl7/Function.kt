@@ -9,11 +9,13 @@ import com.google.gson.GsonBuilder
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.google.gson.JsonElement
+import com.google.gson.JsonArray
 
 import java.util.*
 
-import gov.cdc.dex.util.JsonHelper.addArrayElement
-import gov.cdc.dex.util.JsonHelper.toJsonElement
+// import gov.cdc.dex.util.JsonHelper.addArrayElement
+// import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.util.DateHelper.toIsoString
 
@@ -22,6 +24,8 @@ import  gov.cdc.dex.azure.RedisProxy
 
 import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.Jedis
+
+import gov.cdc.dex.metadata.ProcessMetadata
 /**
  * Azure Functions with Event Hub Trigger.
  */
@@ -29,6 +33,22 @@ class Function {
     
     companion object {
     } // .companion
+
+    // TODO: Start change back to library once fixed for serialize nulls
+    fun Any.toJsonElement():JsonElement {
+        val jsonStr = GsonBuilder().serializeNulls().create().toJson(this)
+        return JsonParser.parseString(jsonStr)
+    }
+
+    fun JsonObject.addArrayElement(arrayName: String, processMD: ProcessMetadata) {
+        val currentProcessPayload = this[arrayName]
+        if (currentProcessPayload == null) {
+            this.add(arrayName,  JsonArray())
+        }
+        val currentArray = this[arrayName].asJsonArray
+        currentArray.add(processMD.toJsonElement())
+    }
+    // TODO: End. change back to library once fixed for serialize nulls
 
     @FunctionName("mmgBasedTransformer")
     fun eventHubProcessor(
@@ -103,13 +123,20 @@ class Function {
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
 
-                    metadata.addArrayElement("processes", processMD)
-                    
+                    // context.logger.info("-------- processMD: --------> $processMD")
+
+                    metadata.addArrayElement("processes", processMD) // TODO: nulls disappear 
+
+                    // context.logger.info("-------- metadata: --------> $metadata")
+
                     val ehDestination = eventHubSendOkName
-                    evHubSender.send(evHubTopicName=ehDestination, message=gsonWithNullsOn.toJson(inputEvent))
+                    val outEvent = gsonWithNullsOn.toJson(inputEvent)
+
+                    // context.logger.info("-------- outEvent: --------> $outEvent")
+
+                    evHubSender.send(evHubTopicName=ehDestination, message=outEvent)
                     context.logger.info("Processed for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
 
-                   
 
                 } catch (e: Exception) {
                     

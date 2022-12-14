@@ -45,10 +45,10 @@ class TransformerSql()  {
             val elDataType = el.mappings.hl7v251.dataType
 
             val elModel = modelJson[elName]
-            
+            // logger.info("${elName} --> ${elName}, modelJson[elName]: --> ${modelJson[elName]}")
+
             if (elModel.isJsonNull) {
 
-                // logger.info("${elName} --> ${elModel}")
                 listOf(elName to elModel) // elModel is null, passing to model as is
 
             } else {

@@ -55,7 +55,7 @@ class Function {
         
         val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
 
-        // context.logger.info("received event: --> $message") 
+        // context.logger.info("------ received event: ------> message: --> $message") 
         val gson = Gson()
 
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
@@ -70,8 +70,10 @@ class Function {
         // Process each Event Hub Message
         // ----------------------------------------------
         message.forEach { singleMessage: String? ->
+            context.logger.info("------ singleMessage: ------>: --> $singleMessage")
+
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-            // context.logger.info("singleMessage: --> $singleMessage")
+            // context.logger.info("------ inputEvent: ------>: --> $inputEvent")
 
             try {
                 // extract from event
@@ -92,6 +94,8 @@ class Function {
                     prcStatus == "MMG_MODEL_OK"
                 }.last() // .mmgBasedProcesses
                 val modelJson = mmgBasedProcessLast.asJsonObject["report"].asJsonObject
+
+                // context.logger.info("------ modelJson: ------> $modelJson")
                 
                 // 
                 // Process Message 
