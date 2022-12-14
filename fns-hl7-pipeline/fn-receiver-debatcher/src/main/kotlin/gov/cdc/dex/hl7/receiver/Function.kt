@@ -8,9 +8,13 @@ import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
 import gov.cdc.dex.azure.EventHubSender
+import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.metadata.*
+import gov.cdc.dex.mmg.InvalidConditionException
+import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
+import gov.cdc.hl7.HL7StaticParser
 import java.io.*
 import java.util.*
 
@@ -24,6 +28,12 @@ class Function {
         const val UTF_BOM = "\uFEFF"
         const val STATUS_SUCCESS = "SUCCESS"
         const val STATUS_ERROR = "ERROR"
+        const val MSH_21_2_1_PATH = "MSH-21[2].1" // Generic or Arbo
+        const val MSH_21_3_1_PATH = "MSH-21[3].1" // Condition
+        const val EVENT_CODE_PATH = "OBR-31.1"
+        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77968-6']-5.1"
+        const val ALT_JURISDICTION_CODE_PATH = "OBX[@3.1='NOT116']-5.1"
+        const val MAX_MESSAGE_SIZE = 1000000
         val gson = Gson()
     }
     @FunctionName("receiverdebatcher001")
@@ -43,7 +53,10 @@ class Function {
         val evHubConnStr = System.getenv("EventHubConnectionString")
         val blobIngestContName = System.getenv("BlobIngestContainerName")
         val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
-
+        val redisName: String = System.getenv("REDIS_CACHE_NAME")
+        val redisKey: String = System.getenv("REDIS_CACHE_KEY")
+        val redisProxy = RedisProxy(redisName, redisKey)
+        val mmgUtil = MmgUtil(redisProxy)
         val evHubSender = EventHubSender(evHubConnStr)
         val azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
 
@@ -86,8 +99,9 @@ class Function {
                                     if ( mshCount > 1 ) {
                                         provenance.singleOrBatch = Provenance.BATCH_FILE
                                         provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
+                                        val messageInfo = getMessageInfo(mmgUtil, currentLinesArr.joinToString("\n" ))
                                         val (metadata, summary) = buildMetadata(STATUS_SUCCESS, startTime, provenance)
-                                        prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
+                                        prepareAndSend(currentLinesArr, messageInfo, metadata, summary, evHubSender, evHubName, context)
                                         provenance.messageIndex++
                                     }
                                     currentLinesArr.clear()
@@ -100,16 +114,39 @@ class Function {
                     provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
                     if (mshCount > 0) {
                         val (metadata, summary) = buildMetadata(STATUS_SUCCESS, startTime, provenance)
-                        prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubName, context)
+                        val messageInfo = getMessageInfo(mmgUtil, currentLinesArr.joinToString("\n" ))
+                        prepareAndSend(currentLinesArr, messageInfo, metadata, summary, evHubSender, evHubName, context)
                     } else {
                         // no valid message -- send to error queue
                         val (metadata, summary) = buildMetadata(STATUS_ERROR, startTime, provenance, "No valid message found.")
-                        prepareAndSend(currentLinesArr, metadata, summary, evHubSender, evHubErrsName, context)
+                        prepareAndSend(currentLinesArr, DexMessageInfo(null, null, null, null), metadata, summary, evHubSender, evHubErrsName, context)
                     }
                 } // .if
             }
         } // .for
     } // .eventHubProcess
+
+    private fun getMessageInfo(mmgUtil: MmgUtil, message: String): DexMessageInfo {
+        val msh21Gen = extractValue(message, MSH_21_2_1_PATH)
+        val msh21Cond = extractValue(message, MSH_21_3_1_PATH)
+        val eventCode = extractValue(message, EVENT_CODE_PATH)
+        var jurisdictionCode = extractValue(message, JURISDICTION_CODE_PATH)
+        if (jurisdictionCode.isNullOrEmpty()) {
+            jurisdictionCode = extractValue(message, ALT_JURISDICTION_CODE_PATH)
+        }
+        return try {
+            mmgUtil.getMMGMessageInfo(msh21Gen, msh21Cond, eventCode, jurisdictionCode)
+        } catch (e : InvalidConditionException) {
+            DexMessageInfo(eventCode, null, null, jurisdictionCode)
+        }
+
+    }
+
+    private fun extractValue(msg: String, path: String): String  {
+        val value = HL7StaticParser.getFirstValue(msg, path)
+        return if (value.isDefined) value.get()
+        else ""
+    }
 
     private fun buildMetadata (status: String, startTime: String, provenance: Provenance, errorMessage: String? = null) : Pair<DexMetadata, SummaryInfo> {
         val processMD = ReceiverProcessMetadata(status)
@@ -123,15 +160,19 @@ class Function {
         return DexMetadata(provenance, listOf(processMD)) to summary
     }
 
-    private fun prepareAndSend(messageContent: ArrayList<String>, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String, context: ExecutionContext) {
-        val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString(separator="\n").toByteArray())
-        val msgEvent = DexEventPayload(contentBase64, metadata, summary)
+    private fun prepareAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String, context: ExecutionContext) {
+        val wholeMessage = messageContent.joinToString("\n")
+        // truncate message content so that entire json message is less than the max message size
+        val metadataSize = gson.toJson(messageInfo).length + gson.toJson(metadata).length + gson.toJson(summary).length
+        val truncatedMessage = wholeMessage.substring(0, Integer.min(wholeMessage.length, MAX_MESSAGE_SIZE - metadataSize))
+        val contentBase64 = Base64.getEncoder().encodeToString(truncatedMessage.toByteArray())
+        val msgEvent = DexEventPayload(contentBase64, messageInfo, metadata, summary)
         context.logger.info("Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
         val jsonMessage = gson.toJson(msgEvent)
         eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
         context.logger.info("full message: $jsonMessage")
         context.logger.info("Processed and Sent to event hub $eventHubName Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
-        println(msgEvent)
+        //println(msgEvent)
     }
 } // .class  Function
 

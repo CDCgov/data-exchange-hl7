@@ -37,7 +37,12 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.cdc.hl7</groupId>
+            <artifactId>hl7-pet</artifactId>
+            <version>1.2.7</version>
         </dependency>
         <!-- Azure Functions Java Library -->
         <dependency>
