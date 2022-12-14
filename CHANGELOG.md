@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [0.0.9] - 2022-12-14
  - Renamed mmg-processor module to mmg-based-transformer
  - Created function to load Condition2MMGMapping table
- - Created MMG-SQL model for single elements including repeating single elements.
+ - Created new function fn-mmg-sql-transformer which transforms the output of the fn-mmg-based-transformer, which includes all MMG elements: singles, singles repeated, and repeated blocks.
  - Designed Data consumption routing and implemented changes on metadata. (Need to implement receiver-debatcher)
  - Updated Receiver/Debatcher to throw invalid messages into the Error queue (hl7_recdeb_err)
  - Created Readme to several modules - lib-dex-common, lib-nist-validator, Receiver/Debatcher, Structure Validator
