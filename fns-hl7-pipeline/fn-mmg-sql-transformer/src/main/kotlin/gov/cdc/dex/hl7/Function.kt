@@ -28,15 +28,13 @@ import gov.cdc.dex.hl7.model.PhinDataType
 
 
 /**
- * Azure Ffnction with event hub trigger for the MMG SQL Transformer
+ * Azure function with event hub trigger for the MMG SQL Transformer
  * Takes and MMG based model and transforms it to MMG SQL model
  */
 class Function {
     
     companion object {
-
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
-
     } // .companion
 
     @FunctionName("mmgSQLTransformer")
