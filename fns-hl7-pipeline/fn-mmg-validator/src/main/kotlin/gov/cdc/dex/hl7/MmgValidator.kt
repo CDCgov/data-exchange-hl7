@@ -19,7 +19,7 @@ class MmgValidator {
         private val logger = LoggerFactory.getLogger(MmgValidator::class.java.simpleName)
         const val GENVx_PROFILE_PATH = "MSH-21[2].1"
         const val CONDITION_PROFILE_PATH = "MSH-21[3].1"
-        const val EVENT_CODE_PATH = "OBR[@4.1='68991-9']-31.1"
+        const val EVENT_CODE_PATH = "OBR[1]-31.1"
         const val REPORTING_JURISDICTION_PATH = "OBX[@3.1='77968-6']-5.1"
     }
     val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
