@@ -158,7 +158,7 @@ class TransformerSql()  {
 
 
     // --------------------------------------------------------------------------------------------------------
-    //  ------------- MMG Elements that are Single and Repeats -------------
+    //  ------------- MMG Elements that are Repeated Blocks -------------
     // --------------------------------------------------------------------------------------------------------
     fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
 
