@@ -94,7 +94,7 @@ class DebatcherTest {
         val redisProxy = RedisProxy(redisName, redisKey)
         val mmgUtil = MmgUtil(redisProxy)
 
-        val filePath = "/other/Lyme_1.txt"
+        val filePath = "/other/hep_a_acute.txt"
         val startTime = Date().toIsoString()
         val testFileIS = this::class.java.getResource(filePath).openStream()
         val provenance = Provenance(
