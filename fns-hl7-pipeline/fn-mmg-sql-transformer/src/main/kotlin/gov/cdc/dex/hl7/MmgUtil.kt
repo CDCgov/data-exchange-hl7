@@ -35,9 +35,6 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         private val gson = Gson()
     } // .companion
 
-        // TODO: proposal: just get the profiles and then the MMGs from message_info
-
-        // TODO: proposal: not needed once the profiles are available in message_info
         @Throws(Exception::class)
         fun getMMGFromMessage(message: String, filePath: String, messageUUID: String): Array<MMG> {
 

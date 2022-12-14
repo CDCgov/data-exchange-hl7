@@ -17,6 +17,7 @@ import gov.cdc.dex.hl7.model.PhinDataType
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.google.gson.JsonParser
 
 import  gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.TransformerSql
@@ -57,9 +58,6 @@ class MmgSqlTest {
         // ------------------------------------------------------------------------------
         val dataTypesFilePath = "/DefaultFieldsProfileX.json"
         val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
-        // val dataTypesMapJson = this::class.java.classLoader.getResource(dataTypesFilePath).readText()
-
-        // val dataTypesMap = Map<String, List<PhinDataType>>
         val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
         val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
 
@@ -68,6 +66,8 @@ class MmgSqlTest {
         // ------------------------------------------------------------------------------
         val mmgBasedModelPath = "/model.json"
         val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
+        val modelJson = JsonParser.parseString(mmgBasedModelStr).asJsonObject
+
         // logger.info("mmgBasedModelStr: --> ${mmgBasedModelStr}")
 
 
@@ -81,16 +81,16 @@ class MmgSqlTest {
         val ( mmgElementsSingleNonRepets, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
 
         // Singles Non Repeats
-        val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, mmgBasedModelStr)
+        val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, modelJson)
         logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")      
 
         // Singles Repeats
-        val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, mmgBasedModelStr)
+        val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
         logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n") 
  
 
         // Repeated Blocks
-        val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, mmgBasedModelStr)
+        val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
         logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")   
 
     } // .testRedisInstanceUsed

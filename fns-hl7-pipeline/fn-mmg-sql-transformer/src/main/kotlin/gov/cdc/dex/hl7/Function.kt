@@ -6,6 +6,7 @@ import com.microsoft.azure.functions.annotation.FunctionName
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -22,12 +23,20 @@ import  gov.cdc.dex.azure.RedisProxy
 
 import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.Jedis
+
+import gov.cdc.dex.hl7.model.PhinDataType
+
+
 /**
- * Azure Functions with Event Hub Trigger.
+ * Azure Ffnction with event hub trigger for the MMG SQL Transformer
+ * Takes and MMG based model and transforms it to MMG SQL model
  */
 class Function {
     
     companion object {
+
+        const val MMG_BLOCK_TYPE_SINGLE = "Single"
+
     } // .companion
 
     @FunctionName("mmgSQLTransformer")
@@ -49,13 +58,14 @@ class Function {
         val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
 
         // context.logger.info("received event: --> $message") 
+        val gson = Gson()
+
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
         // set up the 2 out event hubs
         // val evHubConnStr = System.getenv("EventHubConnectionString")
         // val eventHubSendOkName = System.getenv("EventHubSendOkName")
         // val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
-
         // val evHubSender = EventHubSender(evHubConnStr)
 
         // 
@@ -66,40 +76,67 @@ class Function {
             // context.logger.info("singleMessage: --> $singleMessage")
 
             try {
-                
-                // TODO: proposal
-                // TODO: Read profile form message_info, do not extract again
-                // TODO: Temporary since message_info is not available 
-
+                // extract from event
                 val hl7ContentBase64 = inputEvent["content"].asString
                 val hl7ContentDecodedBytes = Base64.getDecoder().decode(hl7ContentBase64)
                 val hl7Content = String(hl7ContentDecodedBytes)
-                // TODO: Temporary since message_info is not available 
-
                 val metadata = inputEvent["metadata"].asJsonObject
                 val provenance = metadata["provenance"].asJsonObject
-
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
-                
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+
+                // extract the mmg based model from processes
+                val processesArr = metadata["processes"].asJsonArray
+                val mmgBasedProcessLast = processesArr.filter{ prc ->     
+                    val process = prc.asJsonObject 
+                    val prcStatus = process["status"].asString
+                    prcStatus == "MMG_MODEL_OK"
+                }.last() // .mmgBasedProcesses
+                val modelJson = mmgBasedProcessLast.asJsonObject["report"].asJsonObject
                 
                 // 
                 // Process Message 
                 // ----------------------------------------------
                 try {
-                    // get MMG(s) for the message:
+                    // get MMGs for the message
+                    // ------------------------------------------------------------------------------
                     val mmgUtil = MmgUtil(redisProxy)
-                    val mmgs = mmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
-                    mmgs.forEach {
+                    val mmgsArr = mmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
+                    mmgsArr.forEach {
                         context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
-                    }
+                    } // .mmgs
 
-                    // val transformer = TransformerSql()
+                    // Default Phin Profiles Types
+                    // ------------------------------------------------------------------------------
+                    val dataTypesFilePath = "/DefaultFieldsProfileX.json"
+                    val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+                    val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
+                    val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
 
-                    // val mmgSqlModel = transformer.toSqlModel()
 
-                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgSqlModel)}")
+                    // Transformer SQL
+                    // ------------------------------------------------------------------------------
+                    val transformer = TransformerSql()
+
+                    val mmgs = transformer.getMmgsFiltered(mmgsArr)
+                    val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
+                    val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+                    val ( mmgElementsSingleNonRepets, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
+
+                    // Singles Non Repeats
+                    val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, modelJson)
+                    context.logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")      
+
+                    // Singles Repeats
+                    val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
+                    context.logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n") 
+            
+
+                    // Repeated Blocks
+                    val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
+                    context.logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
+
 
                     // val processMD = MmgSqlTransProcessMetadata(status="MMG_SQL_MODEL_OK", report=mmgSqlModel) 
                     // processMD.startProcessTime = startTime

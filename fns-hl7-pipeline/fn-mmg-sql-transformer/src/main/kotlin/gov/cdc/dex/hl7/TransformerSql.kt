@@ -38,9 +38,7 @@ class TransformerSql()  {
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Single and Non Repeats -------------
     // --------------------------------------------------------------------------------------------------------
-    fun singlesNonRepeatsToSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
-
-        val modelJson = JsonParser.parseString(modelStr).asJsonObject
+    fun singlesNonRepeatsToSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
 
         val singlesNonRepeatsModel = elements.flatMap{ el -> 
             val elName = StringUtils.normalizeString(el.name)
@@ -94,9 +92,7 @@ class TransformerSql()  {
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Single and Repeats -------------
     // --------------------------------------------------------------------------------------------------------
-    fun singlesRepeatsToSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
-
-        val modelJson = JsonParser.parseString(modelStr).asJsonObject
+    fun singlesRepeatsToSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
 
         val singlesRepeatsModel = elements.map{ el -> 
 
@@ -160,9 +156,7 @@ class TransformerSql()  {
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Repeated Blocks -------------
     // --------------------------------------------------------------------------------------------------------
-    fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelStr: String) : Map<String, Any?> {
-
-        val modelJson = JsonParser.parseString(modelStr).asJsonObject
+    fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
 
         val repeatedBlocksModel = blocks.map{blk -> 
             val blkName = StringUtils.normalizeString(blk.name)
