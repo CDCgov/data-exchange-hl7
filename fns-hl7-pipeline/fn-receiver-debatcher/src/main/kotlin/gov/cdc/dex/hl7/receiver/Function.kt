@@ -4,6 +4,7 @@ import com.azure.messaging.eventhubs.*
 import com.azure.storage.blob.*
 import com.azure.storage.blob.models.*
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
@@ -34,7 +35,7 @@ class Function {
         const val JURISDICTION_CODE_PATH = "OBX[@3.1='77968-6']-5.1"
         const val ALT_JURISDICTION_CODE_PATH = "OBX[@3.1='NOT116']-5.1"
         const val MAX_MESSAGE_SIZE = 1000000
-        val gson = Gson()
+        val gson: Gson = GsonBuilder().serializeNulls().create()
     }
     @FunctionName("receiverdebatcher001")
     fun eventHubProcessor(

@@ -41,8 +41,8 @@
         </dependency>
         <dependency>
             <groupId>gov.cdc.hl7</groupId>
-            <artifactId>hl7-pet</artifactId>
-            <version>1.2.7</version>
+            <artifactId>hl7-pet_2.13</artifactId>
+            <version>1.2.7.1</version>
         </dependency>
         <!-- Azure Functions Java Library -->
         <dependency>
