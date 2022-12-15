@@ -3,6 +3,7 @@ package gov.cdc.dex.mrr
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
+import gov.cdc.dex.redisModels.*
 import java.io.File
 import java.net.URL
 import com.google.gson.Gson
@@ -139,7 +140,7 @@ class EventCodeClient {
                                     } //.for profile
                                 } // .if
                                 // add everything to the event record and save as JSON
-                                val eventRecord = ConditionCode(
+                                val eventRecord = Condition2MMGMapping(
                                     eventCode = conditionCode.toLong(),
                                     name = row.get("Condition Name").trim(),
                                     program = row.get("Program").trim(),

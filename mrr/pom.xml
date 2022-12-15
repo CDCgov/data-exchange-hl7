@@ -4,7 +4,7 @@
 
     <groupId>HL7.mrr</groupId>
     <artifactId>HL7.mrr.azure.functions</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Azure Java Functions</name>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
