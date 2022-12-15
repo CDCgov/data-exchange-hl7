@@ -126,4 +126,26 @@ class TimerTriggerFunction {
             context.logger.info("MMGATREAD Function executed at: " + LocalDateTime.now())
         }
    }
+
+    @FunctionName("EventCodesAndGroups")
+    fun runEventCodesAndGroups(
+        @TimerTrigger(name = "timerInfo", schedule = "%EVENT_CODES_TIME_TRIGGER%") timerInfo: String?,
+        context: ExecutionContext
+    ) {
+        context.logger.info("Event Codes time trigger processed a request.")
+        try {
+            val client = EventCodeClient()
+            context.logger.info("STARTING Event Code services")
+            client.loadEventMaps()
+            context.logger.info("Event Maps loaded")
+            client.loadGroups()
+            context.logger.info("Groups loaded")
+            context.logger.info("COMPLETED Event Code services")
+        } catch(e:Exception){
+            context.logger.info("Failure in EventCodesAndGroups function : ${e.printStackTrace()} ")
+            throw Exception("Failure in EventCodesAndGroups function ::${e.printStackTrace()}")
+        }
+
+    }
+
 }

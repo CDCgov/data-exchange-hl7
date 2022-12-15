@@ -1,7 +1,6 @@
 package gov.cdc.dex.mrr
 
 import com.caucho.hessian.client.HessianProxyFactory
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import gov.cdc.vocab.service.VocabService
 import gov.cdc.vocab.service.bean.ValueSet
