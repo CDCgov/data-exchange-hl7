@@ -119,7 +119,8 @@ class Function {
                     } else {
                         // no valid message -- send to error queue
                         val (metadata, summary) = buildMetadata(STATUS_ERROR, startTime, provenance, "No valid message found.")
-                        prepareAndSend(currentLinesArr, DexMessageInfo(null, null, null, null), metadata, summary, evHubSender, evHubErrsName, context)
+                        // send empty array as message content when content is invalid
+                        prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null), metadata, summary, evHubSender, evHubErrsName, context)
                     }
                 } // .if
             }
@@ -131,13 +132,13 @@ class Function {
         val msh21Cond = extractValue(message, MSH_21_3_1_PATH)
         val eventCode = extractValue(message, EVENT_CODE_PATH)
         var jurisdictionCode = extractValue(message, JURISDICTION_CODE_PATH)
-        if (jurisdictionCode.isNullOrEmpty()) {
+        if (jurisdictionCode.isEmpty()) {
             jurisdictionCode = extractValue(message, ALT_JURISDICTION_CODE_PATH)
         }
         return try {
             mmgUtil.getMMGMessageInfo(msh21Gen, msh21Cond, eventCode, jurisdictionCode)
         } catch (e : InvalidConditionException) {
-            DexMessageInfo(eventCode, null, null, jurisdictionCode)
+            DexMessageInfo(eventCode, null, null,  jurisdictionCode)
         }
 
     }
@@ -161,11 +162,7 @@ class Function {
     }
 
     private fun prepareAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String, context: ExecutionContext) {
-        val wholeMessage = messageContent.joinToString("\n")
-        // truncate message content so that entire json message is less than the max message size
-        val metadataSize = gson.toJson(messageInfo).length + gson.toJson(metadata).length + gson.toJson(summary).length
-        val truncatedMessage = wholeMessage.substring(0, Integer.min(wholeMessage.length, MAX_MESSAGE_SIZE - metadataSize))
-        val contentBase64 = Base64.getEncoder().encodeToString(truncatedMessage.toByteArray())
+        val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
         val msgEvent = DexEventPayload(contentBase64, messageInfo, metadata, summary)
         context.logger.info("Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
         val jsonMessage = gson.toJson(msgEvent)

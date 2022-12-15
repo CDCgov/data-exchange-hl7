@@ -93,8 +93,12 @@ class DebatcherTest {
         val redisKey: String = System.getenv("REDIS_CACHE_KEY")
         val redisProxy = RedisProxy(redisName, redisKey)
         val mmgUtil = MmgUtil(redisProxy)
-
-        val filePath = "/other/hep_a_acute.txt"
+//FILENAME
+        //val filePath = "other/GEN_SUMMARY_CASE_MAP_V1.0.json"  //invalid hl7
+        //val filePath = "genV1/empty.txt"  // empty file
+        //val filePath = "genV1/Genv1-Case-TestMessage2.HL7" //condition is not in redis
+        // val filePath = "genV1/Genv1-Case-TestMessage1.HL7"  //condition is in redis (should succeed)
+        val filePath = "genV1/phin-notification-message-specification-profile-v-2.0.pdf" //file too large and invalid hl7
         val startTime = Date().toIsoString()
         val testFileIS = this::class.java.getResource(filePath).openStream()
         val provenance = Provenance(
@@ -144,7 +148,7 @@ class DebatcherTest {
         } else {
             // no valid message -- send to error queue
             val (metadata, summary) = buildMetadata(Function.STATUS_ERROR, startTime, provenance, "No valid message found.")
-            prepareAndSend(currentLinesArr, DexMessageInfo(null, null, null, null), metadata, summary)
+            prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null), metadata, summary)
         }
     } // .test
 
@@ -156,7 +160,7 @@ class DebatcherTest {
         val eventCode = extractValue(message, Function.EVENT_CODE_PATH)
         println("eventCode: $eventCode")
         var jurisdictionCode = extractValue(message, Function.JURISDICTION_CODE_PATH)
-        if (jurisdictionCode.isNullOrEmpty()) {
+        if (jurisdictionCode.isEmpty()) {
             jurisdictionCode = extractValue(message, Function.ALT_JURISDICTION_CODE_PATH)
         }
         println("jurisdictionCode: $jurisdictionCode")
@@ -165,6 +169,7 @@ class DebatcherTest {
             println("Try succeeded")
             messageInfo
         } catch (e : InvalidConditionException) {
+            // TODO: SHOULD WE RECORD THIS ERROR MESSAGE?
             println("Try failed: ${e.message}")
             DexMessageInfo(eventCode, null, null, jurisdictionCode)
         }
@@ -188,15 +193,10 @@ class DebatcherTest {
     }
 
     private fun prepareAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo) {
-        val wholeMessage = messageContent.joinToString("\n")
-        // truncate message content so that entire json message is less than the max message size
-        val metadataSize = Function.gson.toJson(messageInfo).length + Function.gson.toJson(metadata).length + Function.gson.toJson(summary).length
-        val truncatedMessage = wholeMessage.substring(0, Integer.min(wholeMessage.length, Function.MAX_MESSAGE_SIZE - metadataSize))
-        println("truncatedMessage size: ${truncatedMessage.length}")
-        val contentBase64 = Base64.getEncoder().encodeToString(truncatedMessage.toByteArray())
+        val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
         val msgEvent = DexEventPayload(contentBase64, messageInfo, metadata, summary)
-        println(summary)
-        println(messageInfo)
+        val jsonMessage = Function.gson.toJson(msgEvent)
+        println(jsonMessage)
         println("Simulating Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
        // eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
         println("Processed and Sent to console Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
