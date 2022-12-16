@@ -13,8 +13,8 @@ import com.google.gson.JsonParser
 
 import java.util.*
 
-import gov.cdc.dex.util.JsonHelper.addArrayElement
-import gov.cdc.dex.util.JsonHelper.toJsonElement
+// import gov.cdc.dex.util.JsonHelper.addArrayElement
+// import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.util.DateHelper.toIsoString
 
@@ -26,6 +26,9 @@ import redis.clients.jedis.Jedis
 
 import gov.cdc.dex.hl7.model.PhinDataType
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonArray
+import gov.cdc.dex.metadata.ProcessMetadata
 
 /**
  * Azure function with event hub trigger for the MMG SQL Transformer
@@ -35,7 +38,24 @@ class Function {
     
     companion object {
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
+        const val TABLES_KEY_NAME = "tables"
     } // .companion
+
+    // TODO: Start change back to library once fixed for serialize nulls
+    fun Any.toJsonElement():JsonElement {
+        val jsonStr = GsonBuilder().serializeNulls().create().toJson(this)
+        return JsonParser.parseString(jsonStr)
+    }
+
+    fun JsonObject.addArrayElement(arrayName: String, processMD: ProcessMetadata) {
+        val currentProcessPayload = this[arrayName]
+        if (currentProcessPayload == null) {
+            this.add(arrayName,  JsonArray())
+        }
+        val currentArray = this[arrayName].asJsonArray
+        currentArray.add(processMD.toJsonElement())
+    }
+    // TODO: End. change back to library once fixed for serialize nulls
 
     @FunctionName("mmgSQLTransformer")
     fun eventHubProcessor(
@@ -61,10 +81,10 @@ class Function {
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
         // set up the 2 out event hubs
-        // val evHubConnStr = System.getenv("EventHubConnectionString")
-        // val eventHubSendOkName = System.getenv("EventHubSendOkName")
+        val evHubConnStr = System.getenv("EventHubConnectionString")
+        val eventHubSendOkName = System.getenv("EventHubSendOkName")
         // val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
-        // val evHubSender = EventHubSender(evHubConnStr)
+        val evHubSender = EventHubSender(evHubConnStr)
 
         // 
         // Process each Event Hub Message
@@ -139,37 +159,37 @@ class Function {
                     val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
                     context.logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
 
+                    val mmgSqlModel = singlesNonRepeatsModel + mapOf(
+                        TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel,
+                    ) // .mmgSqlModel
 
-                    // val processMD = MmgSqlTransProcessMetadata(status="MMG_SQL_MODEL_OK", report=mmgSqlModel) 
-                    // processMD.startProcessTime = startTime
-                    // processMD.endProcessTime = Date().toIsoString()
 
-                    // metadata.addArrayElement("processes", processMD)
-                    
+                    val processMD = MmgSqlTransProcessMetadata(status="MMG_SQL_MODEL_OK", report=mmgSqlModel) 
+                    metadata.addArrayElement("processes", processMD)
+
+                    // process time
+                    processMD.startProcessTime = startTime
+                    processMD.endProcessTime = Date().toIsoString()
+
                     // TODO: enable for model
-
-                    // val ehDestination = eventHubSendOkName
-                    // evHubSender.send(evHubTopicName=ehDestination, message=gsonWithNullsOn.toJson(inputEvent))
-                    // context.logger.info("Processed for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
+                    val ehDestination = eventHubSendOkName
+                    evHubSender.send(evHubTopicName=ehDestination, message=gsonWithNullsOn.toJson(inputEvent))
+                    context.logger.info("Processed for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
 
 
                 } catch (e: Exception) {
                     
                     
-                    context.logger.severe("Try 1: Unable to process Message due to exception: ${e.message}")
+                    // context.logger.severe("Try 1: Unable to process Message due to exception: ${e.message}")
 
                     // TODO:
-
                     // val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
                     // val summary = SummaryInfo(STATUS_ERROR, problem)
                     // inputEvent.add("summary", summary.toJsonElement())
                     // evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
-                    // throw  Exception("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to exception: ${e.message}")
-
-                    e.printStackTrace()
+                    throw  Exception("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to exception: ${e.message}")
                 } 
     
-
 
             } catch (e: Exception) {
                
@@ -177,7 +197,6 @@ class Function {
 
                 // TODO:
                  //TODO::  - update retry counts
-
                 // val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
                 // val summary = SummaryInfo(STATUS_ERROR, problem)
                 // inputEvent.add("summary", summary.toJsonElement())

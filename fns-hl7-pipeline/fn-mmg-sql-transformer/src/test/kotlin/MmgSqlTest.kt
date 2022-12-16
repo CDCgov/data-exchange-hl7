@@ -34,6 +34,7 @@ class MmgSqlTest {
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
+        const val TABLES_KEY_NAME = "tables"
     } // .companion 
 
     // @Test
@@ -92,6 +93,12 @@ class MmgSqlTest {
         // Repeated Blocks
         val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
         logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")   
+
+        val mmgSqlModel = singlesNonRepeatsModel + mapOf(
+            TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel,
+        ) // .mmgSqlModel
+
+        logger.info("mmgSqlModel: -->\n\n${gsonWithNullsOn.toJson(mmgSqlModel)}\n")   
 
     } // .testRedisInstanceUsed
 
