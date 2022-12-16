@@ -5,6 +5,8 @@ import gov.cdc.dex.metadata.ProcessMetadata
 import java.util.*
 
 object JsonHelper {
+
+    val gson = GsonBuilder().serializeNulls().create()
     fun Any.toJsonElement():JsonElement {
         val jsonStr = Gson().toJson(this)
         return JsonParser.parseString(jsonStr)
