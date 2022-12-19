@@ -22,8 +22,8 @@
         <functionAppName>tf-hl7-structure-validator-dev</functionAppName>
 
         <kotlin.version>1.7.20</kotlin.version>
-        <slf4j.version>2.0.0</slf4j.version>
-        <azevhub.version>5.14.0</azevhub.version>
+        <slf4j.version>2.0.5</slf4j.version>
+        <azevhub.version>5.15.0</azevhub.version>
     </properties>
 
     <dependencies>
