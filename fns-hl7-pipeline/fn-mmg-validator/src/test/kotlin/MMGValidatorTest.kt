@@ -1,4 +1,5 @@
 
+import com.google.gson.GsonBuilder
 import gov.cdc.dex.hl7.MmgValidator
 import gov.cdc.dex.hl7.exception.InvalidMessageException
 import gov.cdc.dex.mmg.InvalidConditionException
@@ -11,6 +12,22 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 class MMGValidatorTest {
+
+    companion object {
+        private val gsonWithNullsOn = GsonBuilder().serializeNulls().create()
+    } // .companion object
+
+    @Test
+    fun testLogMMGValidatorReport() {
+        val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+
+        val mmgValidator = MmgValidator( )
+        val validationReport = mmgValidator.validate(testMsg)
+
+        println("validationReport: -->\n\n${gsonWithNullsOn.toJson(validationReport)}\n")
+    } // .testLogMMGValidatorReport
+
     @Test
     fun testMMGValidator() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
