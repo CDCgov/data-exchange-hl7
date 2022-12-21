@@ -2,8 +2,10 @@ package gov.cdc.dex.mrr
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import gov.cdc.dex.util.StringUtils
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -20,8 +22,8 @@ import javax.net.ssl.*
 class MmgatClient {
     var url: URL? = null
     var conn: HttpURLConnection? = null
-    val GUIDANCE_STATUS_UAT  = "UserAcceptanceTesting"
-    val GUIDANCE_STATUS_FINAL  = "Final"
+    val GUIDANCE_STATUS_UAT = "useracceptancetesting"
+    val GUIDANCE_STATUS_FINAL = "final"
 
     private fun trustAllHosts() {
         try {
@@ -118,48 +120,37 @@ class MmgatClient {
     }
 
     fun loadLegacyMmgat() {
-        val url = Thread.currentThread().contextClassLoader.getResource("legacy_mmgs")
-        if (url != null) {
-            if (url.protocol == "jar") {
-                val dirname: String = "legacy_mmgs" + "/"
-                val path = url.path
-                val jarPath = path.substring(5, path.indexOf("!"))
-                JarFile(URLDecoder.decode(jarPath, StandardCharsets.UTF_8.name())).use { jar ->
-                    val entries: Enumeration<JarEntry> = jar.entries()
-                    while (entries.hasMoreElements()) {
-                        val entry: JarEntry = entries.nextElement()
-                        val name: String = entry.name
+//        val url = Thread.currentThread().contextClassLoader.getResource("legacy_mmgs")
+//        if (url != null) {
+//            if (url.protocol == "jar") {
+        //val dirname: String = "legacy_mmgs" + "/"
+        // val path = url.path
+        // val jarPath = path.substring(5, path.indexOf("!"))
 
-                        if (name.startsWith(dirname) && dirname != name) {
-                            val resource = Thread.currentThread().contextClassLoader.getResource(name)
-
-                            val instream: InputStream = jar.getInputStream(entry)
-                            val inputReader = InputStreamReader(instream)
-                            val fileOutputJson = Gson().fromJson(inputReader, JsonObject::class.java)
-                            var filename = StringUtils.normalizeString(
-                                resource.toString().substring(resource.toString().lastIndexOf("/") + 1)
-                            )
-                            filename = "mmg:" + filename.substring(0,filename.lastIndexOf("."))
-                            //println("MMGAT name2:$filename");
-                            RedisUtility().redisConnection().use { jedis ->
-                                try {
-                                    if (jedis.exists(filename))
-                                        jedis.del(filename)
-                                    jedis.set(filename, fileOutputJson.toString())
-                                } catch (e: Exception) {
-                                    throw Exception("Problem in setting Legacy MMGAT's to Redis:${e.printStackTrace()}")
-                                } finally {
-                                    jedis.close()
-                                }
-
-                            }
-
-
-                        }
-                    }
+        val url = this::class.java.getResource("/legacy_mmgs")
+        val dir = File(url.file)
+        dir.walk().forEach {
+            val legacyContent = this::class.java.getResource("/legacy_mmgs/${it.name}").readText()
+            //val fileOutputJson = Gson().fromJson(legacyContent, JsonObject::class.java)
+            val fileOutputJson = JsonParser.parseString(legacyContent)
+            var filename = StringUtils.normalizeString(it.name)
+            filename = "mmg:" + filename.substring(0, filename.lastIndexOf("."))
+            //println("MMGAT name2:$filename");
+            RedisUtility().redisConnection().use { jedis ->
+                try {
+                    if (jedis.exists(filename))
+                        jedis.del(filename)
+                    jedis.set(filename, fileOutputJson.toString())
+                } catch (e: Exception) {
+                    throw Exception("Problem in setting Legacy MMGAT's to Redis:${e.printStackTrace()}")
+                } finally {
+                    jedis.close()
                 }
+
             }
         }
+//            }
+//        }
 
 
     }

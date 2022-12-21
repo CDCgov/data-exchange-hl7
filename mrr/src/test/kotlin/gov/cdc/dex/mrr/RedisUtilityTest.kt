@@ -1,8 +1,11 @@
 package gov.cdc.dex.mrr
 
+import gov.cdc.dex.azure.RedisProxy
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import redis.clients.jedis.DefaultJedisClientConfig
+import redis.clients.jedis.Jedis
 
 internal class RedisUtilityTest {
 
@@ -25,14 +28,31 @@ internal class RedisUtilityTest {
     fun testReadCondition() {
         try {
             val key = "conditionv2:11088"
-
-            val jedis = RedisUtility().redisConnection()
-            val cond = jedis.get(key)
-            println(cond)
+            val redisName =  System.getenv("REDIS_CACHE_NAME")
+            val redisKey = System.getenv("REDIS_CACHE_KEY")
+            val redisProxy = RedisProxy(redisName, redisKey)
+            redisProxy.getJedisClient().use {
+                val cond = it.get(key)
+                println(cond)
+            }
 
         } catch (e: Exception) {
             println("Problem connecting to Redis:${e.printStackTrace()}")
+
+
         }
+    }
+
+    @Test
+    fun testPing() {
+//        val redisName = "tf-vocab-cache-dev.redis.cache.windows.net"
+//        val jedis = Jedis(redisName, 6380, DefaultJedisClientConfig.builder()
+//            .password("unvalid")
+//            .ssl(true)
+//            .timeoutMillis(400000)
+//            .build())
+//
+//        jedis.ping()
     }
 
 }

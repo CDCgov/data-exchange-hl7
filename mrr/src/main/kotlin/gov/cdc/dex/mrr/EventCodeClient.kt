@@ -7,6 +7,9 @@ import gov.cdc.dex.redisModels.*
 import java.io.File
 import java.net.URL
 import com.google.gson.Gson
+import gov.cdc.dex.azure.RedisProxy
+import java.nio.file.Files
+import java.nio.file.Paths
 
 /*
     Class containing Azure functions that load records from CSV into redis.
@@ -36,13 +39,12 @@ class EventCodeClient {
           // get the group key and members
           // insert into redis as a set
         val groupNamespace = "group:"
-        val url : URL? = Thread.currentThread().contextClassLoader.getResource("groups")
-        if (url != null) {
+        val url=  this::class.java.getResource("/groups")
+//        if (url != null) {
             val dir = File(url.file)
             RedisUtility().redisConnection().use {
-                dir.walk()
-                    .filter { f -> f.isFile }
-                    .filter { f -> f.extension.lowercase() == "csv" }
+               dir.walk()
+                    .filter { f -> f.isFile && f.extension.lowercase() == "csv"}
                     .forEach { f ->
                         run {
                             if (debug) println("filename: $f")
@@ -65,9 +67,9 @@ class EventCodeClient {
                         } //.run
                     } //.foreach
             } //.use (will close connection)
-        }//.if
+        //}//.if
     }
-    fun loadEventMaps() {
+    fun loadEventMaps(redisProxy: RedisProxy) {
         // for each csv file in resources/event_codes:
           // load csv file
           // for each row in csv file:
@@ -76,11 +78,11 @@ class EventCodeClient {
             // put the record into redis
         val namespace = "conditionv2:"
         val gson = Gson()
-        val url : URL? = Thread.currentThread().contextClassLoader.getResource("event_codes")
-        if (url != null) {
+        println("PING Redis: ${redisProxy.getJedisClient().ping()}")
+        val url = this::class.java.getResource("/event_codes")
             val dir = File(url.file)
-            RedisUtility().redisConnection().use {
-                val pipeline = it.pipelined()
+            //RedisUtility().redisConnection().use {
+                //val pipeline = it.pipelined()
                 dir.walk()
                     .filter { f -> f.isFile }
                     .filter { f -> f.extension.lowercase() == "csv" }
@@ -150,15 +152,16 @@ class EventCodeClient {
                                 val eventString = gson.toJson(eventRecord)
                                 if (debug) println(eventString)
                                 // Add record to redis pipeline
-                                pipeline.set(namespace + conditionCode, eventString)
+                                println("Adding key $namespace$conditionCode to REDIS")
+                                redisProxy.getJedisClient().set(namespace + conditionCode, eventString)
                             } //.for row
                             // insert all the rows into redis
-                            pipeline.sync()
+                            //pipeline.sync()
                             parser.close()
                         } //.run for this f
                     } //.walk
-                pipeline.close()
-            } //.use (will close connection)
-        }
+                //pipeline.close()
+//            } //.use (will close connection)
+
     }
 }
