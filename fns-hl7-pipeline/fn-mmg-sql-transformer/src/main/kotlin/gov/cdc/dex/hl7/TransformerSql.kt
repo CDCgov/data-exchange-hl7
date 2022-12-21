@@ -26,7 +26,7 @@ class TransformerSql()  {
         // private val gson = Gson()
         private val gsonWithNullsOn = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
         private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
-        const val SEPARATOR_ELEMENT_FIELD_NAMES = "~"
+        const val SEPARATOR_ELEMENT_FIELD_NAMES = "_"
         //
         private val ELEMENT_CE = "CE"
         private val ELEMENT_CWE = "CWE"
