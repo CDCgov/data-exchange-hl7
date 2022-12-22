@@ -10,15 +10,12 @@ import kotlin.test.assertTrue
 import org.slf4j.LoggerFactory
 import java.util.*
 
-// import redis.clients.jedis.DefaultJedisClientConfig
-// import redis.clients.jedis.Jedis
-
 import gov.cdc.dex.redisModels.MMG
-import gov.cdc.dex.hl7.model.ConditionCode
+
+import gov.cdc.dex.redisModels.Condition2MMGMapping 
+
 import gov.cdc.dex.hl7.model.PhinDataType
 import gov.cdc.dex.redisModels.ValueSetConcept
-// import gov.cdc.dex.hl7.model.ValueSetConcept
-
 
 import gov.cdc.dex.hl7.Transformer
 
@@ -36,13 +33,16 @@ class MbtTest {
         val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
         
         val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
-
         val redisClient = redisProxy.getJedisClient()
+
+        val REDIS_PREFIX_COONDITION = "conditionv2:"
 
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
         private val gson = Gson()
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
+
     } // .companion 
+
 
     @Test
     fun testRedisInstanceUsed() {
@@ -85,9 +85,28 @@ class MbtTest {
         assertEquals(mmg.length, 100)
     } // .testLoadMMG
 
+    // @Test
+    // fun testGetMMGFromMessageGen() {
+        
+    //     val filePath = "/Genv2_2-0-1_TC01.hl7"
+    //     val hl7Content = this::class.java.getResource(filePath).readText()
+
+    //     val mmgUtil = MmgUtil(redisProxy)
+    //     val mmgs = mmgUtil.getMMGFromMessage(hl7Content, filePath, "messageUUID")
+
+    //     logger.info("testGetMMGFromMessage: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
+
+    //     mmgs.forEach {
+    //         logger.info("testGetMMGFromMessage: MMG for filePath: $filePath, MMG name: --> ${it.name}, MMG BLOCKS: --> ${it.blocks.size}")
+    //     }
+        
+    //     assertEquals(mmgs.size, 1)
+    //     assertEquals(mmgs[0].name, "Generic Version 2.0.1")
+    // } // .testLoadMMG
+
 
     @Test
-    fun testGetMMGFromMessage() {
+    fun testGetMMGFromMessageTbrd() {
         
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val hl7Content = this::class.java.getResource(filePath).readText()
@@ -106,17 +125,18 @@ class MbtTest {
 
 
     @Test
-    fun testGetRedisConditionCode() {
+    fun testGetRedisCondition2MMGMapping() {
 
-        val ccJson = redisClient.get( "condition:" + "11088" )
+        val ccJson = redisClient.get( REDIS_PREFIX_COONDITION + "11088" )
         logger.info("Redis JSON: --> $ccJson")
         assertTrue(ccJson.length > 0 )
 
-        val cc = gson.fromJson(ccJson, ConditionCode::class.java)
+        val cc = gson.fromJson(ccJson, Condition2MMGMapping::class.java)
 
         logger.info("Redis condition code entry: --> $cc")
-        assertEquals(cc.mmgMaps!!.size, 1)
+        assertEquals(cc.profiles!!.size, 1)
     } // .testLoadMMG
+
 
     @Test
     fun testLoadMMGfromMessage() {
@@ -124,7 +144,10 @@ class MbtTest {
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgUtil = MmgUtil(redisProxy)
-        val mmgs = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+
+        val transfomer = Transformer(redisProxy)
+        val mmgs = transfomer.getMmgsFiltered(mmgsArr)
 
         mmgs.forEach {
             logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
@@ -153,6 +176,8 @@ class MbtTest {
         val dataTypesMap: Map<String, List<PhinDataType>> = transformer.getPhinDataTypes()
 
         logger.info("testPhinDataTypesToMapOfListClass: Phin dataTypesMap.size: --> ${dataTypesMap.size}")
+        // Phin dataTypesMap.size: --> 12
+        assertEquals(dataTypesMap.size, 12)
     } // .testPhinDataTypes
 
 
@@ -183,7 +208,8 @@ class MbtTest {
         val model = model1 + model2
 
         logger.info("testTransformerHl7ToJsonModel: MMG model.size: ${model.size}")
-
+        // MMG model.size: 89
+        assertEquals(model.size, 89)
     } // .testTransformerHl7ToJsonModel
  
 
@@ -213,69 +239,4 @@ class MbtTest {
 
 
 } // .MbtTest
-
-
-
-
-
-
-
-    // @Test
-    // fun testMMGUtilGetMMG() {
-    //     val filePath = "/TBRD_V1.0.2_TM_TC01.hl7"
-    //     val testMsg = this::class.java.getResource(filePath).readText()
-
-    //     val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
-
-    //     logger.info("mmgs[0].name: --> ${mmgs[0].name}, mmgs[0].blocks.size: --> ${mmgs[0].blocks.size}")
-    //     val mmgs2 = mmgs.copyOf()
-    //     val mmgsFiltered = Transformer.getMmgsFiltered(mmgs2)
-    //     logger.info("mmgs[0].name: --> ${mmgs[0].name}, mmgs[0].blocks.size: --> ${mmgs[0].blocks.size}")
-
-
-        // when (mmgs.size) {
-        //     1 -> assertEquals(mmgs[0].blocks.size, mmgsFiltered[0].blocks.size)
-        //     2 -> {
-        //         logger.info("mmgs[0].name: --> ${mmgs[0].name}, mmgs[0].blocks.size: --> ${mmgs[0].blocks.size}")
-        //         logger.info("mmgsFiltered[0].name: --> ${mmgsFiltered[0].name}, mmgsFiltered[0].blocks.size: --> ${mmgsFiltered[0].blocks.size}")
-
-
-        //         logger.info("mmgs[1].name: --> ${mmgs[1].name}, mmgs[1].blocks.size: --> ${mmgs[1].blocks.size}")
-        //         logger.info("mmgsFiltered[1].name: --> ${mmgsFiltered[1].name}, mmgsFiltered[1].blocks.size: --> ${mmgsFiltered[1].blocks.size}")
-
-        //         assertEquals(mmgs[1].blocks.size, mmgsFiltered[1].blocks.size)
-        //         assertTrue( mmgs[0].blocks.size > mmgsFiltered[0].blocks.size, "fail to filter out duplicate MSH, PID from MMGs")
-        //     } 
-        //     3 -> {
-        //         assertEquals(mmgs[2].blocks.size, mmgsFiltered[2].blocks.size)
-        //         assertTrue( mmgs[1].blocks.size > mmgsFiltered[1].blocks.size, "fail to filter out duplicate MSH, PID from MMGs")
-        //         assertTrue( mmgs[0].blocks.size > mmgsFiltered[0].blocks.size, "fail to filter out duplicate MSH, PID from MMGs")
-        //     }
-        //     else -> { 
-        //         throw Exception("more than 3 MMGs found")
-        //     }
-        // } // .when       
-
-        // logger.info("mmgs.size: --> ${mmgs.size}")
-        // mmgs.forEach { mmg ->
-        //     logger.info("mmg.name: --> ${mmg.name}, mmg.blocks.size: --> ${mmg.blocks.size}")
-        //     mmg.blocks.forEach { block -> 
-        //         logger.info("block.name: --> ${block.name}")
-        //     }   
-        // } // mmgs
-
-        // val mmgsFiltered = Transformer.getMmgsFiltered(mmgs)
-        
-        // logger.info("----------------------------")
-
-        
-        // logger.info("mmgsFiltered.size: --> ${mmgsFiltered.size}")
-        // mmgsFiltered.forEach { mmgFiltered ->
-        //     logger.info("mmgFiltered.name: --> ${mmgFiltered.name}, mmgFiltered.blocks.size: --> ${mmgFiltered.blocks.size}")
-        //     mmgFiltered.blocks.forEach { block -> 
-        //         logger.info("block.name: --> ${block.name}")
-        //     }   
-        // } // mmgs\
-    // } // .testMMGUtilGetMMG
-
 

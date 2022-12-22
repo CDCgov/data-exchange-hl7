@@ -14,20 +14,22 @@ import com.google.gson.JsonArray
 
 import java.util.*
 
-// import gov.cdc.dex.util.JsonHelper.addArrayElement
-// import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.util.DateHelper.toIsoString
 
 import gov.cdc.dex.metadata.Problem
+import gov.cdc.dex.metadata.SummaryInfo
+
 import  gov.cdc.dex.azure.RedisProxy
 
 import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.Jedis
 
 import gov.cdc.dex.metadata.ProcessMetadata
+
 /**
- * Azure Functions with Event Hub Trigger.
+ * Azure function with event hub trigger for the MMG Based Transformer
+ * Takes and HL7 message and transforms it to an MMG Based JSON model
  */
 class Function {
     
@@ -74,7 +76,7 @@ class Function {
         // set up the 2 out event hubs
         val evHubConnStr = System.getenv("EventHubConnectionString")
         val eventHubSendOkName = System.getenv("EventHubSendOkName")
-        // val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
+        val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
 
         val evHubSender = EventHubSender(evHubConnStr)
 
@@ -140,16 +142,16 @@ class Function {
 
                 } catch (e: Exception) {
                     
-                    
                     context.logger.severe("Try 1: Unable to process Message due to exception: ${e.message}")
 
                     // val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
                     // val summary = SummaryInfo(STATUS_ERROR, problem)
+                    
                     // inputEvent.add("summary", summary.toJsonElement())
                     // evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
                     // throw  Exception("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to exception: ${e.message}")
 
-                    e.printStackTrace()
+                    //e.printStackTrace()
                 } 
     
 
@@ -163,7 +165,7 @@ class Function {
                 // inputEvent.add("summary", summary.toJsonElement())
 
                 // evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
-                e.printStackTrace()
+                //e.printStackTrace()
             } finally {
                 redisProxy.getJedisClient().close()
             }
