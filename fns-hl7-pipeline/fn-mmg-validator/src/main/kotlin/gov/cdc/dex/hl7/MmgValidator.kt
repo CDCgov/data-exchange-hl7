@@ -290,7 +290,7 @@ class MmgValidator {
         val eventCode = this.extractValue(message, EVENT_CODE_PATH)
         val jurisdictionCode = this.extractValue(message,REPORTING_JURISDICTION_PATH)
         logger.info("Profiles for Message --> GenV2: $genVProfile, Condition Specific: $conditionProfile, Event Code:$eventCode")
-        return mmgUtil.getMMG(genVProfile, conditionProfile, eventCode, jurisdictionCode)
+        return mmgUtil.getMMGs(genVProfile, conditionProfile, eventCode, jurisdictionCode)
     }
     private fun extractValue(msg: String, path: String):String  {
         val value = HL7StaticParser.getFirstValue(msg, path)
