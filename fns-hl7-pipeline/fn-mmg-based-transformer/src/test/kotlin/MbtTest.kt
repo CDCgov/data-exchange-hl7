@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test
 
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFails
 
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -18,6 +20,8 @@ import gov.cdc.dex.hl7.model.PhinDataType
 import gov.cdc.dex.redisModels.ValueSetConcept
 
 import gov.cdc.dex.hl7.Transformer
+
+import gov.cdc.dex.mmg.InvalidConditionException
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -84,25 +88,6 @@ class MbtTest {
 
         assertEquals(mmg.length, 100)
     } // .testLoadMMG
-
-    // @Test
-    // fun testGetMMGFromMessageGen() {
-        
-    //     val filePath = "/Genv2_2-0-1_TC01.hl7"
-    //     val hl7Content = this::class.java.getResource(filePath).readText()
-
-    //     val mmgUtil = MmgUtil(redisProxy)
-    //     val mmgs = mmgUtil.getMMGFromMessage(hl7Content, filePath, "messageUUID")
-
-    //     logger.info("testGetMMGFromMessage: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
-
-    //     mmgs.forEach {
-    //         logger.info("testGetMMGFromMessage: MMG for filePath: $filePath, MMG name: --> ${it.name}, MMG BLOCKS: --> ${it.blocks.size}")
-    //     }
-        
-    //     assertEquals(mmgs.size, 1)
-    //     assertEquals(mmgs[0].name, "Generic Version 2.0.1")
-    // } // .testLoadMMG
 
 
     @Test
@@ -236,6 +221,53 @@ class MbtTest {
 
         logger.info("testTransformerHl7ToJsonModelwithRedisMmgTC04: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
     } // .testTransformerHl7ToJsonModelwithRedisMmg
+
+
+    @Test
+    fun testConditionNotSupportedException() {
+
+        assertFails(
+
+            block = {
+
+                val filePath = "/Genv2_2-0-1_TC01.hl7"
+                val hl7Content = this::class.java.getResource(filePath).readText()
+        
+                val mmgUtil = MmgUtil(redisProxy)
+                val mmgs = mmgUtil.getMMGFromMessage(hl7Content, filePath, "messageUUID")
+        
+                logger.info("testConditionNotSupportedException: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
+        
+                mmgs.forEach {
+                    logger.info("testConditionNotSupportedException: MMG for filePath: $filePath, MMG name: --> ${it.name}, MMG BLOCKS: --> ${it.blocks.size}")
+                }
+
+            } // .block
+
+        ) // .assertFails
+    
+        // TODO: If this was supported
+        // assertEquals(mmgs.size, 1)
+        // assertEquals(mmgs[0].name, "Generic Version 2.0.1")
+
+    } // .testLoadMMG
+
+
+    fun testMmgThrowsException() {
+
+        assertFailsWith<InvalidConditionException>(
+
+            block = {
+
+                val mmgUtil = MmgUtil(redisProxy)
+                val mmgs = mmgUtil.getMMGFromMessage("hl7Content", "hl7FilePath", "")
+                logger.info("testMmgThrowsException: mmgs.size: ${mmgs.size}")
+
+            } // .block
+
+        ) // .assertFailsWith
+
+    } // .testMmgThrowsException
 
 
 } // .MbtTest
