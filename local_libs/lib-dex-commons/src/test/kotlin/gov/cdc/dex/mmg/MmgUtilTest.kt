@@ -23,6 +23,11 @@ internal class MmgUtilTest {
 
         val lymeMessageInfo = mmgUtil.getMMGMessageInfo(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "11080", "13")
         println(lymeMessageInfo)
+
+        val arboSpecialInfo = mmgUtil.getMMGMessageInfo(MmgUtil.ARBO_MMG_v1_0, null, "10058", "23")
+        println(arboSpecialInfo)
+
+
     }
     @Test
     fun testGroupValues() {
