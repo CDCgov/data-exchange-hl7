@@ -91,7 +91,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
                         val appliesHere = redisProxy.getJedisClient().sismember(case.appliesTo, jurisdictionCode)
                         if (appliesHere) {
                             mmg2KeyNames += case.mmgs //returns a list of mmg keys
-                            messageInfo.route = "${profile.name}_${case.appliesTo.replace(REDIS_GROUP_PREFIX, "")}"
+                            messageInfo.route = "${mmg2KeyNames.last().replace(REDIS_MMG_PREFIX, "")}_${case.appliesTo.replace(REDIS_GROUP_PREFIX, "")}"
                             specialCaseAdded = true
                             break
                         }
@@ -101,7 +101,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
                 if (!specialCaseAdded) {
                     // no special cases apply; use the regular mmgs for this profile+condition
                     mmg2KeyNames += profile.mmgs
-                    messageInfo.route = profile.name
+                    messageInfo.route = mmg2KeyNames.last().replace(REDIS_MMG_PREFIX, "")
                 }
             } else {
                 throw InvalidConditionException("Condition $eventCode does not match the profile $msh21_3In.")
