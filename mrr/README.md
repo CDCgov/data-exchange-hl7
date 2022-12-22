@@ -4,18 +4,18 @@ This Service is responsible for loading auxiliary data into our Redis instance f
 
 
 # Details
-Currently, we're using Redis to load three main Sets of data. We have a specific Azure function for each set of data above. They run on a trigger based, currently configured to run once a day and it refreshes the entire dataset.
+Currently, we are using Redis to load three main sets of data, with a specific Azure function for each data set. These functions run on a trigger basis, currently configured to run once a day, and each run refreshes the entire dataset.
 
-* Vocabulary: Loads all of PHINVads latest version for each Value Set and its codes. This is used by MMG validator to validate messages are sending the right code for a given field.
-  * Source: PHINVads API (https://phinvads.cdc.gov/vocabService/v2)
+* Vocabulary: Loads all value sets and codes from the latest version of PHIN VADS. This data is used by MMG validator to validate that a message is sending the right code for a given field.
+  * Source: PHIN VADS API (https://phinvads.cdc.gov/vocabService/v2)
   * Function: PhinVocabRead
-* MMGs: Loads all our MMG configurations. Those configurations are either created in MMG-AT tool or manually created for those that are not directly supported by the MMG-AT UI.
+* MMGs: Loads all our MMG configurations. Those configurations are either created in MMG-AT tool or are manually created for those that are not directly supported by the MMG-AT UI.
 	 * Sources:
 	   * MMG-AT (https://mmgat.services.cdc.gov/api/guide/all?type=0)
 	   * Legacy MMGs under /src/main/resources folder
    * Function: MMGATRead
 
-* Condtion2MMGMapping: This table maps specific condition to which MMGs should be used to validate and transform a given message. Certain conditions can have special cases based on the jurisdiction that is sending the message. (There's a helper method on lib-dex-commons that encapsulates all the logic on how to query this table and retrieve the appropriate list of MMGs for a given message.
+* Condtion2MMGMapping: This table maps a specific condition to the MMGs that should be used to validate and transform a given message. Certain conditions can have special cases based on the jurisdiction that is sending the message. (There is a helper method on lib-dex-commons that encapsulates all the logic on how to query this table and retrieve the appropriate list of MMGs for a given message.)
 	 * Sources:
 	  * src/resoruces/event_codes
 	  * src/resources/groups (for special cases grouping)
