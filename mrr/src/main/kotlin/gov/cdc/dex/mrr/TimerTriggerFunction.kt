@@ -26,11 +26,9 @@ class TimerTriggerFunction {
             client.loadVocab()
 
         } catch (e: Exception) {
-            context.logger.info("Failure in PhinVocabRead function : ${e.printStackTrace()} ")
-            throw Exception("Failure in PhinVocabRead function ::${e.printStackTrace()}")
+            context.logger.info("Failure in PhinVocabRead function : ${e.message} ")
+            throw Exception("Failure in PhinVocabRead function ::${e.message}")
         }
-
-
     }
 
     @FunctionName("MMGATRead")
@@ -66,7 +64,7 @@ class TimerTriggerFunction {
             context.logger.info("STARTING Event Code services")
             client.loadEventMaps(redisProxy)
             context.logger.info("Event Maps loaded")
-            client.loadGroups()
+            client.loadGroups(redisProxy)
             context.logger.info("Groups loaded")
             context.logger.info("COMPLETED Event Code services")
         } catch (e: Exception) {

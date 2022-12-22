@@ -10,6 +10,7 @@ class MMGLoaderTest {
     fun testLoadMMGsFromMMGAT() {
         val fn = MmgatClient()
         val redisProxy = RedisProxy(redisName, redisKey)
+        fn.loadLegacyMmgat(redisProxy)
         fn.loadMMGAT(redisProxy)
     }
     @Test
