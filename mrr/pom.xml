@@ -20,7 +20,7 @@
         <subscriptionID>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionID>
         <!--<functionAppName>tf-hl7-dev-mmg-vocab</functionAppName>-->
         <!-- <functionAppName>timedfunctionapptest</functionAppName>-->
-      <functionAppName>tf-hl7-dev-mmg-vocab</functionAppName>
+      <functionAppName>ocio-ede-dev-hl7-cache-loader</functionAppName>
      <functionResourceGroup>ocio-ede-dev-moderate-hl7-rg</functionResourceGroup>
     <functionServicePlan>tf-hl7-app-service-plan</functionServicePlan>
      <!-- <functionServicePlan>ASP-ocioededevmoderatehl7rg-8a9e</functionServicePlan>-->
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>com.caucho</groupId>
             <artifactId>hessian</artifactId>
-            <version>4.0.66</version>
+            <version>3.1.3</version>
         </dependency>
         <dependency>
             <groupId>gov.cdc.vocab</groupId>
@@ -129,6 +129,14 @@
                         <property>
                             <name>FUNCTIONS_EXTENSION_VERSION</name>
                             <value>~4</value>
+                        </property>
+                        <property>
+                            <name>FUNCTIONS_WORKER_RUNTIME</name>
+                            <value>java</value>
+                        </property>
+                        <property>
+                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
+                            <value>1</value>
                         </property>
                     </appSettings>
                 </configuration>

@@ -1,8 +1,7 @@
 package gov.cdc.dex.mrr
 
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
+import com.google.gson.*
+import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.util.StringUtils
 import java.io.BufferedReader
 import java.io.File
@@ -14,6 +13,7 @@ import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
+import java.time.LocalDateTime
 import java.util.*
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
@@ -119,7 +119,7 @@ class MmgatClient {
         return sb
     }
 
-    fun loadLegacyMmgat() {
+    fun loadLegacyMmgat(redisProxy: RedisProxy) {
 //        val url = Thread.currentThread().contextClassLoader.getResource("legacy_mmgs")
 //        if (url != null) {
 //            if (url.protocol == "jar") {
@@ -136,22 +136,81 @@ class MmgatClient {
             var filename = StringUtils.normalizeString(it.name)
             filename = "mmg:" + filename.substring(0, filename.lastIndexOf("."))
             //println("MMGAT name2:$filename");
-            RedisUtility().redisConnection().use { jedis ->
+           // RedisUtility().redisConnection().use { jedis ->
                 try {
+                    var jedis = redisProxy.getJedisClient()
                     if (jedis.exists(filename))
                         jedis.del(filename)
                     jedis.set(filename, fileOutputJson.toString())
                 } catch (e: Exception) {
                     throw Exception("Problem in setting Legacy MMGAT's to Redis:${e.printStackTrace()}")
                 } finally {
-                    jedis.close()
+                    //jedis.close()
                 }
 
-            }
+           // }
         }
 //            }
 //        }
 
 
     }
+
+
+    fun loadMMGAT(redisProxy: RedisProxy) {
+        try {
+            println("STARTING MMGATRead services")
+
+            val mmgaGuide = this.getGuideAll().toString()
+
+            val elem: JsonElement = JsonParser.parseString(mmgaGuide)
+            //context.logger.info("Json Array size:" + elem.asJsonObject.getAsJsonArray("result").size())
+            val mmgatJArray = elem.asJsonObject.getAsJsonArray("result")
+            println("Json Array size:" + mmgatJArray.size())
+            val gson = GsonBuilder().create()
+
+            for (mmgatjson in mmgatJArray) {
+
+                val mj = mmgatjson.asJsonObject
+                //if (mj.get("guideStatus").asString.toLowerCase() in listOf(mmgaClient.GUIDANCE_STATUS_UAT, mmgaClient.GUIDANCE_STATUS_FINAL) )
+                if (mj.get("guideStatus").asString
+                        .equals(this.GUIDANCE_STATUS_UAT,true) || mj.get("guideStatus")
+                        .asString.equals(this.GUIDANCE_STATUS_FINAL,true)
+                ) {
+                    val id = (mj.get("id").asString)
+                    // context.logger.info("MMGAT id:$id")
+                    val mGuide = this.getGuideById(id)
+                    val melement = JsonParser.parseString(mGuide.toString())
+                    val mresult = melement.asJsonObject.get("result")
+
+                    mresult.asJsonObject.remove("testScenarios")
+                    mresult.asJsonObject.remove("testCaseScenarioWorksheetColumns")
+                    mresult.asJsonObject.remove("columns")
+                    mresult.asJsonObject.remove("templates")
+                    mresult.asJsonObject.remove("valueSets")
+
+                    val key = "mmg:"+ StringUtils.normalizeString(mj.get("name").asString)
+                    print("MMGAT name: $key")
+                    if (redisProxy.getJedisClient().exists(key))
+                        redisProxy.getJedisClient().del(key)
+                    try {
+                         var jedis = redisProxy.getJedisClient()
+                        if(jedis.exists(key))
+                            jedis.del(key)
+                        jedis.set(key, gson.toJson(mresult))
+                        println("...Done!")
+                    } catch (e: Throwable) {
+                        println("... ERRORED OUT")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            println("Failure in MMGATREAD function : ${e.printStackTrace()} ")
+            throw e
+        }
+        println("MMGATREAD Function executed at: " + LocalDateTime.now())
+
+    }
+
+
 }
