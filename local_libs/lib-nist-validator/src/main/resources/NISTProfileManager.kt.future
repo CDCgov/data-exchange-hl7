@@ -1,5 +1,6 @@
 package gov.cdc.nist.validator
 
+import gov.nist.validation.report.Entry
 import gov.nist.validation.report.Report
 import hl7.v2.profile.Profile
 import hl7.v2.profile.XMLDeserializer
@@ -63,19 +64,50 @@ class NISTProfileManager(val profile: String) {
     }
 
     fun validate(hl7Message: String) {
-//        val msgId = validator.profile.messages.keySet().iterator()
-//        val messageIds = profileX.getMessage(validator.)    //.messages().keySet().iterator()
+//        val msgId = validator.profile().messages().keySet().iterator()
+//        val messageIds = profileX.getMessage(validator.profile().messages().keySet().iterator()
 //        val msId = messageIds.next()
 //        val report = validator.check(hl7Message, msId)
+
+        val messageIds = validator.profile().messages().keySet().iterator()
+        val msId = messageIds.next()
+        val report =  validator.check(hl7Message, msId)
+        val filteredReport = filter(report)
+
+        val nistReport = NistReport()
+        val errors: List<Entry>? = filteredReport.get("entries")
+        if (errors != null)
+            nistReport.entries.structure = errors
     }
 
+    public NistReport validate(String hl7Message) throws Exception {
+        Iterator<String> messageIds = validator.profile().messages().keySet().iterator();
+        String msId = messageIds.next();
+        Report report = validator.check(hl7Message, msId);
+        Map filteredReport =   filter(report);
+
+        NistReport nist = new NistReport();
+        HashMap errors = (HashMap) filteredReport.get("entries");
+        if (errors.containsKey("structure"))
+            nist.getEntries().setStructure((ArrayList<Entry>) errors.get("structure"));
+        if (errors.containsKey("value-set"))
+            nist.getEntries().setValueset((ArrayList<Entry>) errors.get("value-set"));
+        if (errors.containsKey("content"))
+            nist.getEntries().setContent((ArrayList<Entry>) errors.get("content"));
+
+        nist.transferErrorCounts ((HashMap) filteredReport.get("error-count"));
+        nist.transferWarningCounts((HashMap) filteredReport.get("warning-count"));
+
+        nist.setStatus((String) filteredReport.get("status"));
+        return nist;
+    }
 
     //val filteredResults: Map<String, Any> = filter(report)
-    private fun filter(report: Report?): Map<String, Any> {
+    private fun filter(report: Report?): Map<String, List<Entry>> {
         TODO("Not yet implemented")
     }
 
     private fun getResourceFile(fileName: String): InputStream? {
-        return ProfileManager::class.java.getResourceAsStream(fileName)
+        return this::class.java.getResourceAsStream(fileName)
     }
 }

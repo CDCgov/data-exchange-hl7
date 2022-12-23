@@ -1,0 +1,617 @@
+<?xml version="1.0"?>
+<ConformanceContext xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/Jungyubw/NIST_healthcare_hl7_v2_profile_schema/master/Schema/NIST%20Validation%20Schema/ConformanceContext.xsd"
+                    UUID="630e529e8b87bc0007afec28">
+    <MetaData Name="PHIN NATIONAL CONDITION REPORTING CASE NOTIFICATION v.2.0"
+              OrgName="Centers for Disease Control and Prevention" Version="2.5.1" Date="No Date Info"/>
+    <Predicates>
+        <Datatype>
+            <ByID ID="CWE_OBX5">
+                <Predicate Target="3[1]" TrueUsage="R" FalseUsage="X">
+                    <Description>If CWE.1 (Identifier) is valued</Description>
+                    <Condition>
+                        <Presence Path="1[1]"/>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="4[1]" TrueUsage="R" FalseUsage="O">
+                    <Description>If ( CWE.1 (Identifier) is not valued AND CWE.9 (Original Text) is not valued )
+                    </Description>
+                    <Condition>
+                        <AND>
+                            <NOT>
+                                <Presence Path="9[1]"/>
+                            </NOT>
+                            <NOT>
+                                <Presence Path="1[1]"/>
+                            </NOT>
+                        </AND>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="5[1]" TrueUsage="R" FalseUsage="O">
+                    <Description>If ( CWE.1 (Identifier) is not valued AND CWE.4 (Alternate Identifier) is not valued
+                        )
+                    </Description>
+                    <Condition>
+                        <AND>
+                            <NOT>
+                                <Presence Path="4[1]"/>
+                            </NOT>
+                            <NOT>
+                                <Presence Path="1[1]"/>
+                            </NOT>
+                        </AND>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="6[1]" TrueUsage="R" FalseUsage="X">
+                    <Description>If CWE.4 (Alternate Identifier) is valued</Description>
+                    <Condition>
+                        <Presence Path="4[1]"/>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="9[1]" TrueUsage="R" FalseUsage="O">
+                    <Description>If ( CWE.1 (Identifier) is not valued AND CWE.4 (Alternate Identifier) is not valued
+                        )
+                    </Description>
+                    <Condition>
+                        <AND>
+                            <NOT>
+                                <Presence Path="1[1]"/>
+                            </NOT>
+                            <NOT>
+                                <Presence Path="4[1]"/>
+                            </NOT>
+                        </AND>
+                    </Condition>
+                </Predicate>
+            </ByID>
+            <ByID ID="CE_PID">
+                <Predicate Target="3[1]" TrueUsage="R" FalseUsage="X">
+                    <Description>If CE.1 (Identifier) is valued</Description>
+                    <Condition>
+                        <Presence Path="1[1]"/>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="4[1]" TrueUsage="R" FalseUsage="O">
+                    <Description>If ( CE.1 (Identifier) is not valued AND CE.5 (Alternate Text) is not valued )
+                    </Description>
+                    <Condition>
+                        <AND>
+                            <NOT>
+                                <Presence Path="1[1]"/>
+                            </NOT>
+                            <NOT>
+                                <Presence Path="5[1]"/>
+                            </NOT>
+                        </AND>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="5[1]" TrueUsage="R" FalseUsage="O">
+                    <Description>If ( CE.1 (Identifier) is not valued AND CE.4 (Alternate Identifier) is not valued )
+                    </Description>
+                    <Condition>
+                        <AND>
+                            <NOT>
+                                <Presence Path="1[1]"/>
+                            </NOT>
+                            <NOT>
+                                <Presence Path="4[1]"/>
+                            </NOT>
+                        </AND>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="6[1]" TrueUsage="R" FalseUsage="X">
+                    <Description>If CE.4 (Alternate Identifier) is valued</Description>
+                    <Condition>
+                        <Presence Path="4[1]"/>
+                    </Condition>
+                </Predicate>
+            </ByID>
+            <ByID ID="CWE_M3">
+                <Predicate Target="3[1]" TrueUsage="R" FalseUsage="X">
+                    <Description>If CWE.1 (Identifier) is valued</Description>
+                    <Condition>
+                        <Presence Path="1[1]"/>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="6[1]" TrueUsage="R" FalseUsage="X">
+                    <Description>If CWE.4 (Alternate Identifier) is valued</Description>
+                    <Condition>
+                        <Presence Path="4[1]"/>
+                    </Condition>
+                </Predicate>
+            </ByID>
+            <ByID ID="CE_O31">
+                <Predicate Target="3[1]" TrueUsage="R" FalseUsage="X">
+                    <Description>If CE.1 (Identifier) is valued</Description>
+                    <Condition>
+                        <Presence Path="1[1]"/>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="4[1]" TrueUsage="R" FalseUsage="O">
+                    <Description>If ( CE.1 (Identifier) is not valued AND CE.5 (Alternate Text) is not valued )
+                    </Description>
+                    <Condition>
+                        <AND>
+                            <NOT>
+                                <Presence Path="1[1]"/>
+                            </NOT>
+                            <NOT>
+                                <Presence Path="5[1]"/>
+                            </NOT>
+                        </AND>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="5[1]" TrueUsage="R" FalseUsage="O">
+                    <Description>If ( CE.1 (Identifier) is not valued AND CE.4 (Alternate Identifier) is not valued )
+                    </Description>
+                    <Condition>
+                        <AND>
+                            <NOT>
+                                <Presence Path="4[1]"/>
+                            </NOT>
+                            <NOT>
+                                <Presence Path="1[1]"/>
+                            </NOT>
+                        </AND>
+                    </Condition>
+                </Predicate>
+                <Predicate Target="6[1]" TrueUsage="R" FalseUsage="X">
+                    <Description>If CE.4 (Alternate Identifier) is valued</Description>
+                    <Condition>
+                        <Presence Path="4[1]"/>
+                    </Condition>
+                </Predicate>
+            </ByID>
+        </Datatype>
+        <Segment/>
+        <Group/>
+        <Message/>
+    </Predicates>
+    <Constraints>
+        <Datatype>
+            <ByID ID="SN_OBX5">
+                <Constraint ID="SN-3" Strength="SHALL">
+                    <Description>If SN.3 (Separator/Suffix) is valued then SN.3 (Separator/Suffix) shall match the
+                        regular expression '^\+$|^\,$|^\-$|^\:$'.
+                    </Description>
+                    <Assertion>
+                        <IMPLY>
+                            <Presence Path="3[1]"/>
+                            <Format Path="3[1]" Regex="^\+$|^\,$|^\-$|^\:$" AtLeastOnce="false"
+                                    NotPresentBehavior="FAIL"/>
+                        </IMPLY>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="TM">
+                <Constraint ID="TM_DateTimeConstraint">
+                    <Description>The value SHALL follow the Date/Time pattern 'HH[MM[SS[.S[S[S[S]]]]]][+/-ZZZZ]'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="."
+                                Regex="^(\d{2}|\d{4}|\d{6}|\d{6}\.\d|\d{6}\.\d{2}|\d{6}\.\d{3}|\d{6}\.\d{4})([+-]\d{4})?$"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="HD_MSH6">
+                <Constraint ID="CN-002" Strength="SHALL">
+                    <Description>HD.3 (Universal ID Type) shall contain the value 'ISO'.</Description>
+                    <Assertion>
+                        <PlainText Path="3[1]" Text="ISO" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="CN-001" Strength="SHALL">
+                    <Description>HD.2 (Universal ID) shall be valued with an ISO-compliant OID.</Description>
+                    <Assertion>
+                        <Format Path="2[1]" Regex="[0-2](\.(0|[1-9][0-9]*))*" AtLeastOnce="false"
+                                NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="HD_M">
+                <Constraint ID="CN-002" Strength="SHALL">
+                    <Description>HD.3 (Universal ID Type) shall contain the value 'ISO'.</Description>
+                    <Assertion>
+                        <PlainText Path="3[1]" Text="ISO" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="CN-001" Strength="SHALL">
+                    <Description>HD.2 (Universal ID) shall be valued with an ISO-compliant OID.</Description>
+                    <Assertion>
+                        <Format Path="2[1]" Regex="[0-2](\.(0|[1-9][0-9]*))*" AtLeastOnce="false"
+                                NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="DTM">
+                <Constraint ID="DTM_DateTimeConstraint">
+                    <Description>The value SHALL follow the Date/Time pattern
+                        'YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="."
+                                Regex="^(\d{4}|\d{6}|\d{8}|\d{10}|\d{12}|\d{14}|\d{14}\.\d|\d{14}\.\d{2}|\d{14}\.\d{3}|\d{14}\.\d{4})([+-]\d{4})?$"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="DT_M">
+                <Constraint ID="DT_M_DateTimeConstraint">
+                    <Description>The value SHALL follow the Date/Time pattern 'YYYY[MM[DD]]'.</Description>
+                    <Assertion>
+                        <Format Path="." Regex="^(\d{4}|\d{6}|\d{8})$"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="DT">
+                <Constraint ID="DT_DateTimeConstraint">
+                    <Description>The value SHALL follow the Date/Time pattern 'YYYY[MM[DD]]'.</Description>
+                    <Assertion>
+                        <Format Path="." Regex="^(\d{4}|\d{6}|\d{8})$"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="DTM_DOB">
+                <Constraint ID="DTM_DOB_DateTimeConstraint">
+                    <Description>Element 'xxx' SHALL follow the Date/Time pattern
+                        'YYYYMMDD[HH[MM[SS[.S[S[S[S]]]]]]][+/-ZZZZ]'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="."
+                                Regex="^(\d{8}|\d{10}|\d{12}|\d{14}|\d{14}\.\d|\d{14}\.\d{2}|\d{14}\.\d{3}|\d{14}\.\d{4})([+-]\d{4})?$"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="TS_Opt0s">
+                <Constraint ID="DateTimeOrAll0s" Strength="SHALL">
+                    <Description>If TS.1 (Time) is valued then If TS.1 (Time) does not contain the value
+                        '00000000000000'. then TS.1 (Time) shall match the regular expression
+                        '^([12]\d{3}(((0[13578]|1[02])(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)(0[1-9]|[12][0-9]|30))|((02)(0[1-9]|[12][0-9])))([01][0-9]|2[0-3])([0-5][0-9]){2}(\.\d{1,4})?([+-]\d{4})?)$'.
+                    </Description>
+                    <Assertion>
+                        <IMPLY>
+                            <Presence Path="1[1]"/>
+                            <IMPLY>
+                                <NOT>
+                                    <PlainText Path="1[1]" Text="00000000000000" IgnoreCase="false" AtLeastOnce="false"
+                                               NotPresentBehavior="FAIL"/>
+                                </NOT>
+                                <Format Path="1[1]"
+                                        Regex="^([12]\d{3}(((0[13578]|1[02])(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)(0[1-9]|[12][0-9]|30))|((02)(0[1-9]|[12][0-9])))([01][0-9]|2[0-3])([0-5][0-9]){2}(\.\d{1,4})?([+-]\d{4})?)$"
+                                        AtLeastOnce="false" NotPresentBehavior="FAIL"/>
+                            </IMPLY>
+                        </IMPLY>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="DTM_M">
+                <Constraint ID="DTM_M_DateTimeConstraint">
+                    <Description>Element 'xxx' SHALL follow the Date/Time pattern
+                        'YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="."
+                                Regex="^(\d{4}|\d{6}|\d{8}|\d{10}|\d{12}|\d{14}|\d{14}\.\d|\d{14}\.\d{2}|\d{14}\.\d{3}|\d{14}\.\d{4})([+-]\d{4})?$"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="DTM_OB22">
+                <Constraint ID="DTM_OB22_DateTimeConstraint">
+                    <Description>Element 'xxx' SHALL follow the Date/Time pattern
+                        'YYYYMMDDHHMMSS[.S[S[S[S]]]][+/-ZZZZ]'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="."
+                                Regex="^(\d{14}|\d{14}\.\d|\d{14}\.\d{2}|\d{14}\.\d{3}|\d{14}\.\d{4})([+-]\d{4})?$"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="DTM_MSH7">
+                <Constraint ID="DTM_MSH7_DateTimeConstraint">
+                    <Description>Element 'xxx' SHALL follow the Date/Time pattern
+                        'YYYYMMDDHHMMSS[.S[S[S[S]]]][+/-ZZZZ]'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="."
+                                Regex="^(\d{14}|\d{14}\.\d|\d{14}\.\d{2}|\d{14}\.\d{3}|\d{14}\.\d{4})([+-]\d{4})?$"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="HD_MSH">
+                <Constraint ID="CN-002" Strength="SHALL">
+                    <Description>HD.3 (Universal ID Type) shall contain the value 'ISO'.</Description>
+                    <Assertion>
+                        <PlainText Path="3[1]" Text="ISO" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="CN-001" Strength="SHALL">
+                    <Description>HD.2 (Universal ID) shall be valued with an ISO-compliant OID.</Description>
+                    <Assertion>
+                        <Format Path="2[1]" Regex="[0-2](\.(0|[1-9][0-9]*))*" AtLeastOnce="false"
+                                NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+        </Datatype>
+        <Segment>
+            <ByID ID="MSH_M2">
+                <Constraint ID="MSH-2" Strength="SHALL">
+                    <Description>MSH-2 (Encoding Characters) shall contain the value '^~\&amp;'.</Description>
+                    <Assertion>
+                        <PlainText Path="2[1]" Text="^~\&amp;" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-9.2" Strength="SHALL">
+                    <Description>MSH-9.2 (Trigger Event) shall contain the value 'R01'.</Description>
+                    <Assertion>
+                        <PlainText Path="9[1].2[1]" Text="R01" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-9.1" Strength="SHALL">
+                    <Description>MSH-9.1 (Message Code) shall contain the value 'ORU'.</Description>
+                    <Assertion>
+                        <PlainText Path="9[1].1[1]" Text="ORU" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-6.1" Strength="SHALL">
+                    <Description>If MSH-6.1 (Namespace ID) is valued then MSH-6.1 (Namespace ID) shall contain the value
+                        'PHIN'.
+                    </Description>
+                    <Assertion>
+                        <IMPLY>
+                            <Presence Path="6[1].1[1]"/>
+                            <PlainText Path="6[1].1[1]" Text="PHIN" IgnoreCase="false" AtLeastOnce="false"
+                                       NotPresentBehavior="FAIL"/>
+                        </IMPLY>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-11.1" Strength="SHALL">
+                    <Description>MSH-11.1 (Processing ID) shall contain one of the values in the list: ['P','T','D'].
+                    </Description>
+                    <Assertion>
+                        <StringList Path="11[1].1[1]" CSV="P,T,D" IgnoreCase="false" AtLeastOnce="false"
+                                    NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-6.2" Strength="SHALL">
+                    <Description>MSH-6.2 (Universal ID) shall contain the value '2.16.840.1.114222'.</Description>
+                    <Assertion>
+                        <PlainText Path="6[1].2[1]" Text="2.16.840.1.114222" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-21.4" Strength="SHALL">
+                    <Description>( The first occurrence of MSH-21.4 (Universal ID Type) shall contain the value 'ISO'.
+                        AND The second occurrence of MSH-21.4 (Universal ID Type) shall contain the value 'ISO'. )
+                    </Description>
+                    <Assertion>
+                        <AND>
+                            <PlainText Path="21[2].4[1]" Text="ISO" IgnoreCase="false" AtLeastOnce="false"
+                                       NotPresentBehavior="PASS"/>
+                            <PlainText Path="21[1].4[1]" Text="ISO" IgnoreCase="false" AtLeastOnce="false"
+                                       NotPresentBehavior="PASS"/>
+                        </AND>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-21.1" Strength="SHALL">
+                    <Description>The first occurrence of MSH-21.1 (Entity Identifier) shall contain the value
+                        'NND_ORU_v2.0'.
+                    </Description>
+                    <Assertion>
+                        <PlainText Path="21[1].1[1]" Text="NND_ORU_v2.0" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-9.3" Strength="SHALL">
+                    <Description>MSH-9.3 (Message Structure) shall contain the value 'ORU_R01'.</Description>
+                    <Assertion>
+                        <PlainText Path="9[1].3[1]" Text="ORU_R01" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-6.3" Strength="SHALL">
+                    <Description>MSH-6.3 (Universal ID Type) shall contain the value 'ISO'.</Description>
+                    <Assertion>
+                        <PlainText Path="6[1].3[1]" Text="ISO" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-1" Strength="SHALL">
+                    <Description>MSH-1 (Field Separator) shall contain the value '|'.</Description>
+                    <Assertion>
+                        <PlainText Path="1[1]" Text="|" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-12.1" Strength="SHALL">
+                    <Description>MSH-12.1 (Version ID) shall contain one of the values in the list: ['2.5','2.5.1'].
+                    </Description>
+                    <Assertion>
+                        <StringList Path="12[1].1[1]" CSV="2.5,2.5.1" IgnoreCase="false" AtLeastOnce="false"
+                                    NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-21.3" Strength="SHALL">
+                    <Description>( The first occurrence of MSH-21.3 (Universal ID) shall contain the value
+                        '2.16.840.1.114222.4.10.3'. AND The second occurrence of MSH-21.3 (Universal ID) shall contain
+                        the value '2.16.840.1.114222.4.10.4'. )
+                    </Description>
+                    <Assertion>
+                        <AND>
+                            <PlainText Path="21[1].3[1]" Text="2.16.840.1.114222.4.10.3" IgnoreCase="false"
+                                       AtLeastOnce="false" NotPresentBehavior="PASS"/>
+                            <PlainText Path="21[2].3[1]" Text="2.16.840.1.114222.4.10.4" IgnoreCase="false"
+                                       AtLeastOnce="false" NotPresentBehavior="PASS"/>
+                        </AND>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="MSH-21.2" Strength="SHALL">
+                    <Description>( The first occurrence of MSH-21.2 (Namespace ID) shall contain the value
+                        'PHINProfileID'. AND The second occurrence of MSH-21.2 (Namespace ID) shall contain the value
+                        'PHINMsgMapID'. )
+                    </Description>
+                    <Assertion>
+                        <AND>
+                            <PlainText Path="21[1].2[1]" Text="PHINProfileID" IgnoreCase="false" AtLeastOnce="false"
+                                       NotPresentBehavior="PASS"/>
+                            <PlainText Path="21[2].2[1]" Text="PHINMsgMapID" IgnoreCase="false" AtLeastOnce="false"
+                                       NotPresentBehavior="PASS"/>
+                        </AND>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="PID_M2">
+                <Constraint ID="CN-012_PID-5-3(Shall be blank)" Strength="SHALL">
+                    <Description>All occurrences of PID-5.3 (Second and Further Given Names or Initials Thereof) shall
+                        match the regular expression '^$'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="5[*].3[1]" Regex="^$" AtLeastOnce="false" NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="PID-26.6" Strength="SHALL">
+                    <Description>If At least one occurrence of PID-26.4 (Alternate Identifier) is valued then At least
+                        one occurrence of PID-26.6 (Name of Alternate Coding System) shall contain the value 'L'.
+                    </Description>
+                    <Assertion>
+                        <IMPLY>
+                            <Presence Path="26[*].4[1]"/>
+                            <PlainText Path="26[*].6[1]" Text="L" IgnoreCase="false" AtLeastOnce="true"
+                                       NotPresentBehavior="FAIL"/>
+                        </IMPLY>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="CN-012_PID-5-4(Shall be blank)" Strength="SHALL">
+                    <Description>All occurrences of PID-5.4 (Suffix (e.g., JR or III)) shall match the regular
+                        expression '^$'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="5[*].4[1]" Regex="^$" AtLeastOnce="false" NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="CN-012" Strength="SHALL">
+                    <Description>The second occurrence of PID-5.7 (Name Type Code) shall contain the value 'S'.
+                    </Description>
+                    <Assertion>
+                        <PlainText Path="5[2].7[1]" Text="S" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="CN-012_PID-5-5(Shall be blank)" Strength="SHALL">
+                    <Description>All occurrences of PID-5.5 (Prefix (e.g., DR)) shall match the regular expression
+                        '^$'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="5[*].5[1]" Regex="^$" AtLeastOnce="false" NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="CN-012_PID-5-6(Shall be blank)" Strength="SHALL">
+                    <Description>All occurrences of PID-5.6 (Degree (e.g., MD)) shall match the regular expression
+                        '^$'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="5[*].6[1]" Regex="^$" AtLeastOnce="false" NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="CN-011" Strength="SHALL">
+                    <Description>PID-1 (Set ID - PID) shall contain the value '1'.</Description>
+                    <Assertion>
+                        <PlainText Path="1[1]" Text="1" IgnoreCase="false" AtLeastOnce="false"
+                                   NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="CN-012_PID-5-1-1(Shall be blank)" Strength="SHALL">
+                    <Description>All occurrences of PID-5.1.1 (Surname) shall match the regular expression '^$'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="5[*].1[1].1[1]" Regex="^$" AtLeastOnce="false" NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="PID-22.6" Strength="SHALL">
+                    <Description>If PID-22.4 (Alternate Identifier) is valued then PID-22.6 (Name of Alternate Coding
+                        System) shall contain the value 'L'.
+                    </Description>
+                    <Assertion>
+                        <IMPLY>
+                            <Presence Path="22[1].4[1]"/>
+                            <PlainText Path="22[1].6[1]" Text="L" IgnoreCase="false" AtLeastOnce="false"
+                                       NotPresentBehavior="FAIL"/>
+                        </IMPLY>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="CN-012_PID-5-2(Shall be blank)" Strength="SHALL">
+                    <Description>All occurrences of PID-5.2 (Given Name) shall match the regular expression '^$'.
+                    </Description>
+                    <Assertion>
+                        <Format Path="5[*].2[1]" Regex="^$" AtLeastOnce="false" NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="PID-16.6" Strength="SHALL">
+                    <Description>If PID-16.4 (Alternate Identifier) is valued then PID-16.6 (Name of Alternate Coding
+                        System) shall contain the value 'L'.
+                    </Description>
+                    <Assertion>
+                        <IMPLY>
+                            <Presence Path="16[1].4[1]"/>
+                            <PlainText Path="16[1].6[1]" Text="L" IgnoreCase="false" AtLeastOnce="false"
+                                       NotPresentBehavior="FAIL"/>
+                        </IMPLY>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="OBR_M2">
+                <Constraint ID="OBR-7" Strength="SHALL">
+                    <Description>If OBR-25 (Result Status) contain the value 'F'. then OBR-7.1 (Time) shall match the
+                        regular expression
+                        '^([12]\d{3}(((0[13578]|1[02])(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)(0[1-9]|[12][0-9]|30))|((02)(0[1-9]|[12][0-9])))([01][0-9]|2[0-3])([0-5][0-9]){2}(\.\d{1,4})?([+-]\d{4})?)$'.
+                    </Description>
+                    <Assertion>
+                        <IMPLY>
+                            <PlainText Path="25[1]" Text="F" IgnoreCase="false" AtLeastOnce="false"
+                                       NotPresentBehavior="FAIL"/>
+                            <Format Path="7[1].1[1]"
+                                    Regex="^([12]\d{3}(((0[13578]|1[02])(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)(0[1-9]|[12][0-9]|30))|((02)(0[1-9]|[12][0-9])))([01][0-9]|2[0-3])([0-5][0-9]){2}(\.\d{1,4})?([+-]\d{4})?)$"
+                                    AtLeastOnce="false" NotPresentBehavior="FAIL"/>
+                        </IMPLY>
+                    </Assertion>
+                </Constraint>
+                <Constraint ID="OBR-25" Strength="SHALL">
+                    <Description>OBR-25 (Result Status) shall contain one of the values in the list: ['F','C','X'].
+                    </Description>
+                    <Assertion>
+                        <StringList Path="25[1]" CSV="F,C,X" IgnoreCase="false" AtLeastOnce="false"
+                                    NotPresentBehavior="PASS"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+        </Segment>
+        <Group>
+            <ByID ID="630e529e8b87bc0007afebea-3.2">
+                <Constraint ID="CN-013" Strength="SHALL">
+                    <Description>PATIENT_RESULT.ORDER_OBSERVATION.OBR-1 (Set ID - OBR) shall be valued sequentially
+                        starting with the value '1'.
+                    </Description>
+                    <Assertion>
+                        <SetID Path="2[1].1[1]"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+            <ByID ID="630e529e8b87bc0007afebea-3.2.6">
+                <Constraint ID="CN-020" Strength="SHALL">
+                    <Description>PATIENT_RESULT.ORDER_OBSERVATION.OBSERVATION.OBX-1 (Set ID - OBX) shall be valued
+                        sequentially starting with the value '1'.
+                    </Description>
+                    <Assertion>
+                        <SetID Path="1[1].1[1]"/>
+                    </Assertion>
+                </Constraint>
+            </ByID>
+        </Group>
+        <Message/>
+    </Constraints>
+</ConformanceContext>

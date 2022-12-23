@@ -9,12 +9,13 @@
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <scala.version>2.11.5</scala.version>
+<!--        <scala.version>2.11.5</scala.version>-->
 <!--        <scala.version>2.12.17</scala.version>-->
+<!--        <scala.version>2.13.10</scala.version>-->
         <kotlin.version>1.7.20</kotlin.version>
-        <nist.version>1.5.1</nist.version>
-        <jackson.version>2.14.0</jackson.version>
-        <revision>1.2.0-SNAPSHOT</revision>
+        <nist.version>1.5.5</nist.version>
+<!--        <jackson.version>2.14.0</jackson.version>-->
+        <revision>1.3.0-SNAPSHOT</revision>
     </properties>
 
     <repositories>
@@ -159,28 +160,28 @@
 
     </build>
     <dependencies>
-        <dependency>
-            <groupId>com.typesafe</groupId>
-            <artifactId>config</artifactId>
-            <version>1.4.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>${scala.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.typesafe</groupId>-->
+<!--            <artifactId>config</artifactId>-->
+<!--            <version>1.4.2</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-annotations</artifactId>-->
+<!--            <version>${jackson.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.scala-lang</groupId>-->
+<!--            <artifactId>scala-library</artifactId>-->
+<!--            <version>${scala.version}</version>-->
+<!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/xom/xom -->
-        <dependency>
-            <groupId>xom</groupId>
-            <artifactId>xom</artifactId>
-            <version>1.3.7</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>xom</groupId>-->
+<!--            <artifactId>xom</artifactId>-->
+<!--            <version>1.3.7</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>gov.nist</groupId>
@@ -191,33 +192,33 @@
             <groupId>gov.nist</groupId>
             <artifactId>hl7-v2-profile</artifactId>
             <version>${nist.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>ogr.scala-lang.modules</groupId>
-                    <artifactId>scala-xml_2.11</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.scala-lang</groupId>
-                    <artifactId>scala-reflect</artifactId>
-                </exclusion>
-            </exclusions>
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>ogr.scala-lang.modules</groupId>-->
+<!--                    <artifactId>scala-xml_2.11</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.scala-lang</groupId>-->
+<!--                    <artifactId>scala-reflect</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
         </dependency>
         <dependency>
             <groupId>gov.nist</groupId>
             <artifactId>hl7-v2-validation</artifactId>
             <version>${nist.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.hl7-tools</groupId>
-            <artifactId>validation-report</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.hl7-tools</groupId>-->
+<!--            <artifactId>validation-report</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>gov.nist</groupId>
-            <artifactId>xml-util</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>gov.nist</groupId>-->
+<!--            <artifactId>xml-util</artifactId>-->
+<!--            <version>1.0.1-SNAPSHOT</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -226,11 +227,11 @@
         </dependency>
 
         <!--AddJAXBdependency-->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>javax.xml.bind</groupId>-->
+<!--            <artifactId>jaxb-api</artifactId>-->
+<!--            <version>2.3.1</version>-->
+<!--        </dependency>-->
 
 
         <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-library -->
@@ -269,7 +270,4 @@
             <version>2.0.5</version>
         </dependency>
     </dependencies>
-
-
-
 </project>

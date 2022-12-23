@@ -39,6 +39,9 @@ public class ProfileManager {
     public  ProfileManager(ProfileFetcher profileFetcher, String profile) throws InvalidFileException {
         Logger logger = LoggerFactory.getLogger(ProfileManager.class.getName());
         try {
+            InputStream expressions = nist.xml.util.ClassPathResourceResolver.class.getResourceAsStream("/rules/Expressions.xsd");
+            InputStream commons = nist.xml.util.ClassPathResourceResolver.class.getResourceAsStream("/rules/Commons.xsd");
+
             logger.info("AUDIT:: Loading profile " + profile);
             InputStream profileXML = profileFetcher.getFileAsInputStream(profile + "/PROFILE.xml");
             // The get() at the end will throw an exception if something goes wrong
@@ -55,6 +58,7 @@ public class ProfileManager {
                 logger.debug("No Predicate Available for group " + profile + ". Ignoring Predicate.");
                 //No predicate available... ignore file...
             }
+//            List<InputStream> confContexts = new ArrayList();
 
             // The get() at the end will throw an exception if something goes wrong
             ConformanceContext conformanceContext = DefaultConformanceContext.apply(confContexts).get();
@@ -65,7 +69,8 @@ public class ProfileManager {
             validator = new SyncHL7Validator(profileX, valueSetLibrary, conformanceContext);
         } catch (Error e) {
             logger.warn("UNABLE TO READ PROFILE: " + profile + " with error:\n" + e.getMessage());
-            throw new InvalidFileException("Unable to parse profile file..." + e.getMessage());
+            e.printStackTrace();
+            throw new InvalidFileException("Unable to parse profile file with error: " + e.getMessage());
         }
     }
 
