@@ -38,22 +38,21 @@ Output: hl7-mmg-valid-ok ; hl7-mmg-valid-err
 
 ``` json
  "content": "Base64(MSH|^~\&|....)",
+ "message_info": {
+    "event_code": "10110",
+    "route": "hepatitis_v1.0_mmg_hepatitis_a_acute",
+    "mmgs": [
+      "mmg:generic_mmg_v2.0",
+      "mmg:hepatitis_v1.0_mmg_core",
+      "mmg:hepatitis_v1.0_mmg_hepatitis_a_acute"
+    ],
+    "reporting_jurisdiction": "48"
+  },
  "meta_message_uuid": "",
  "summary": {
     "current_status": "STRUCTURE_VALID"
  },
- "metadata": {
-	  "message_info": {
-	    "event_code": "10110",
-	    "route": "hepatitis_v1.0_mmg_hepatitis_a_acute",
-	    "mmgs": [
-	      "mmg:generic_mmg_v2.0",
-	      "mmg:hepatitis_v1.0_mmg_core",
-	      "mmg:hepatitis_v1.0_mmg_hepatitis_a_acute"
-	    ],
-	    "reporting_jurisdiction": "48"
-	  }
-	},
+ "metadata":
     "provenance": {
 	{unchanged}
        },
