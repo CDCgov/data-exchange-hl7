@@ -39,6 +39,7 @@ class MmgSqlTest {
         const val REDIS_INSTANCE_NAME = "tf-vocab-cache-dev.redis.cache.windows.net"
     } // .companion 
 
+
     @Test
     fun testRedisInstanceUsed() {
         logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
@@ -47,7 +48,7 @@ class MmgSqlTest {
 
 
     @Test
-    fun testTransformerSql() {
+    fun testMMGUtil() {
 
         // MMGs for the message
         // ------------------------------------------------------------------------------
@@ -55,7 +56,35 @@ class MmgSqlTest {
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgUtil = MmgUtil(redisProxy)
         val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        logger.info("mmgsArr.size: --> ${mmgsArr.size}")
+
         assertEquals(mmgsArr.size, 2)
+    } // .testMMGUtil
+
+
+    @Test
+    fun testDefaultPhinProfiles() {
+        // Default Phin Profiles Types
+        // ------------------------------------------------------------------------------
+        val dataTypesFilePath = "/DefaultFieldsProfileX.json"
+        val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+        val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
+        val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+        logger.info("profilesMap.size: --> ${profilesMap.size}")
+
+        assertEquals(profilesMap.size, 12)
+    } // .testDefaultPhinProfiles
+
+
+    @Test
+    fun testTransformerSQLForTC04() {
+
+        // MMGs for the message
+        // ------------------------------------------------------------------------------
+        val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgUtil = MmgUtil(redisProxy)
+        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
 
         // Default Phin Profiles Types
         // ------------------------------------------------------------------------------
@@ -115,7 +144,9 @@ class MmgSqlTest {
 
         logger.info("mmgSqlModel: -->\n\n${gsonWithNullsOn.toJson(mmgSqlModel)}\n")   
 
-    } // .testRedisInstanceUsed
+    } // .testTransformerSQLForTC04
+
+    
 
 
 } // .MmgSqlTest
