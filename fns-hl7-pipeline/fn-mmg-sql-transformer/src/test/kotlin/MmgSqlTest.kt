@@ -128,7 +128,7 @@ class MmgSqlTest {
 
         // logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n") 
         logger.info("singlesRepeatsModel.size: --> ${singlesRepeatsModel.size}") 
-        assertEquals(singlesRepeatsModel.size, 6)
+        assertEquals(singlesRepeatsModel.size, 5) // original 6, 5 after message profile identifier is filtered out and moving to singles non repeats
         
  
         // Repeated Blocks
@@ -145,7 +145,6 @@ class MmgSqlTest {
         ) // .mmgSqlModel
 
         logger.info("mmgSqlModel: -->\n\n${gsonWithNullsOn.toJson(mmgSqlModel)}\n")   
-
     } // .testTransformerSQLForTC04
 
     @Test
@@ -196,7 +195,7 @@ class MmgSqlTest {
         val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
         logger.info("singlesRepeatsModel[$MESSAGE_PROFILE_IDENTIFIER]: --> ${singlesRepeatsModel[MESSAGE_PROFILE_IDENTIFIER]}")
 
-        assertEquals(singlesRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER), true) // TODO: this should be FALSE
+        assertEquals(singlesRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER), false) // message profiles identifier is moving to singles not repeats
 
     } // .testMessageProfileIdentifier
 

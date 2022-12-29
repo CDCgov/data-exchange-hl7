@@ -32,6 +32,8 @@ class TransformerSql()  {
         private val ELEMENT_CWE = "CWE"
         private val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
         private val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
+
+        private val MESSAGE_PROFILE_IDENTIFIER_EL_NAME = "message_profile_identifier"
     } // .companion object
 
 
@@ -94,7 +96,11 @@ class TransformerSql()  {
     // --------------------------------------------------------------------------------------------------------
     fun singlesRepeatsToSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
 
-        val singlesRepeatsModel = elements.map{ el -> 
+        val singlesRepeatsModel = elements.filter{ el -> 
+
+            StringUtils.normalizeString(el.name) != MESSAGE_PROFILE_IDENTIFIER_EL_NAME
+            
+        }.map{ el -> 
 
             val elName = StringUtils.normalizeString(el.name)
             val elDataType = el.mappings.hl7v251.dataType
