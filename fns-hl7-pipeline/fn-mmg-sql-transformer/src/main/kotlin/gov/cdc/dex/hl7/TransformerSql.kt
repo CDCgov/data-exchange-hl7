@@ -241,6 +241,17 @@ class TransformerSql()  {
         return repeatedBlocksModel
     } // .repeatedBlocksToSqlModel
 
+    
+    // --------------------------------------------------------------------------------------------------------
+    //  ------------- MMG Element: Message Profile Identifier -------------
+    // --------------------------------------------------------------------------------------------------------
+    fun messageProfIdToSqlModel(modelJson: JsonObject) : Map<String, Any?> {
+
+        return modelJson.asJsonObject[MESSAGE_PROFILE_IDENTIFIER_EL_NAME].asJsonArray.mapIndexed{ index, mipPhinObj -> 
+            MESSAGE_PROFILE_IDENTIFIER_EL_NAME + "_" + index.toString() to mipPhinObj.asJsonObject["entity_identifier"] 
+        }.toMap()
+
+    } // .messageProfIdToSqlModel
 
     // --------------------------------------------------------------------------------------------------------
     //  ------------- Functions used in the transformation -------------

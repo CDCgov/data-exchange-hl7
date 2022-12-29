@@ -139,10 +139,19 @@ class MmgSqlTest {
         logger.info("repeatedBlocksModel.size: --> ${repeatedBlocksModel.size}")  
         assertEquals(repeatedBlocksModel.size, 10)
 
+        
+        // Message Profile Identifier
+        val mesageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
+        logger.info("mesageProfIdModel.size: --> ${mesageProfIdModel.size}")  
+        assertEquals(mesageProfIdModel.size, 3)
 
-        val mmgSqlModel = singlesNonRepeatsModel + mapOf(
+        val mmgSqlModel = mesageProfIdModel + singlesNonRepeatsModel + mapOf(
             TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel,
         ) // .mmgSqlModel
+
+        logger.info("mmgSqlModel.size: --> ${mmgSqlModel.size}")  
+        assertEquals(mesageProfIdModel.size + singlesNonRepeatsModel.size + 1, 3 + 172 + 1 )  // 1 for tables
+
 
         logger.info("mmgSqlModel: -->\n\n${gsonWithNullsOn.toJson(mmgSqlModel)}\n")   
     } // .testTransformerSQLForTC04
@@ -183,19 +192,24 @@ class MmgSqlTest {
         val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
         val ( mmgElementsSingleNonRepets, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
 
+        // Message Profile Identifier
+        val mesageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
+
         // Singles Non Repeats
         // --------------------------------------
-        val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, modelJson)
+        val singlesNonRepeatsModel = mesageProfIdModel + transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, modelJson)
 
         logger.info("singlesNonRepeatsModel[$MESSAGE_PROFILE_IDENTIFIER]: --> ${singlesNonRepeatsModel[MESSAGE_PROFILE_IDENTIFIER]}")
-        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER), false) // TODO: this should be TRUE
+        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_0"), true)
+        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_1"), true)
+        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_2"), true)
 
         // Singles Repeats
         // --------------------------------------
         val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
         logger.info("singlesRepeatsModel[$MESSAGE_PROFILE_IDENTIFIER]: --> ${singlesRepeatsModel[MESSAGE_PROFILE_IDENTIFIER]}")
 
-        assertEquals(singlesRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER), false) // message profiles identifier is moving to singles not repeats
+        assertEquals(singlesRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER), false)
 
     } // .testMessageProfileIdentifier
 
