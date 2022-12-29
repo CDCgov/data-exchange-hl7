@@ -35,13 +35,15 @@ class MmgSqlTest {
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         const val TABLES_KEY_NAME = "tables"
+
+        const val REDIS_INSTANCE_NAME = "tf-vocab-cache-dev.redis.cache.windows.net"
     } // .companion 
 
-    // @Test
-    // fun testRedisInstanceUsed() {
-    //     logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
-    //     assertEquals(REDIS_CACHE_NAME, "tf-vocab-cache-dev.redis.cache.windows.net")
-    // } // .testRedisInstanceUsed
+    @Test
+    fun testRedisInstanceUsed() {
+        logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
+        assertEquals(REDIS_CACHE_NAME, REDIS_INSTANCE_NAME)
+    } // .testRedisInstanceUsed
 
 
     @Test
@@ -82,17 +84,30 @@ class MmgSqlTest {
         val ( mmgElementsSingleNonRepets, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
 
         // Singles Non Repeats
+        // --------------------------------------
         val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, modelJson)
-        logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")      
+
+        // logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")  
+        logger.info("singlesNonRepeatsModel.size: --> ${singlesNonRepeatsModel.size}")     
+        assertEquals(singlesNonRepeatsModel.size, 172)
 
         // Singles Repeats
+        // --------------------------------------
         val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
-        logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n") 
- 
 
+        // logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n") 
+        logger.info("singlesRepeatsModel.size: --> ${singlesRepeatsModel.size}") 
+        assertEquals(singlesRepeatsModel.size, 6)
+        
+ 
         // Repeated Blocks
+        // --------------------------------------
         val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
-        logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")   
+
+        // logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")   
+        logger.info("repeatedBlocksModel.size: --> ${repeatedBlocksModel.size}")  
+        assertEquals(repeatedBlocksModel.size, 10)
+
 
         val mmgSqlModel = singlesNonRepeatsModel + mapOf(
             TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel,
