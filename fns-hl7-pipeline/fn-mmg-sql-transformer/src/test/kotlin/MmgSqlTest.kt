@@ -258,6 +258,38 @@ class MmgSqlTest {
 
     } // .testBadMessageProfIdInMMGBasedModel
 
+    @Test
+    fun testBadEventHubMessage() {
+
+        logger.info("testBadEventHubMessage..")
+
+        assertFails(
+
+            block = {
+
+                // MMG Based Model for the message
+                // ------------------------------------------------------------------------------
+                val mmgBasedModelPath = "/mmgBasedModel1BadForTest.json"
+                val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
+                
+
+                val inputEvent = JsonParser.parseString(mmgBasedModelStr).asJsonObject
+                // context.logger.info("------ inputEvent: ------>: --> $inputEvent")
+
+                // Extract from event
+                val metadata = inputEvent["metadata"].asJsonObject
+                val provenance = metadata["provenance"].asJsonObject
+                val filePath = provenance["file_path"].asString
+                val messageUUID = inputEvent["message_uuid"].asString
+
+                logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+
+            } // .block
+
+        ) // .assertFails
+
+    } // .testBadEventHubMessage
+
 
 } // .MmgSqlTest
 
