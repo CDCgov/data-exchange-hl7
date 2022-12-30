@@ -4,6 +4,9 @@ import gov.cdc.dex.hl7.MmgUtil
 import org.junit.jupiter.api.Test
 
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import gov.cdc.dex.mmg.InvalidConditionException
+
 // import kotlin.test.assertTrue
 
 import org.slf4j.LoggerFactory
@@ -210,9 +213,26 @@ class MmgSqlTest {
         logger.info("singlesRepeatsModel[$MESSAGE_PROFILE_IDENTIFIER]: --> ${singlesRepeatsModel[MESSAGE_PROFILE_IDENTIFIER]}")
 
         assertEquals(singlesRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER), false)
-
     } // .testMessageProfileIdentifier
 
+
+    fun testMmgThrowsException() {
+
+        logger.info("testMmgThrowsException..")
+
+        assertFailsWith<InvalidConditionException>(
+
+            block = {
+
+                val mmgUtil = MmgUtil(redisProxy)
+                val mmgs = mmgUtil.getMMGFromMessage("hl7Content", "hl7FilePath", "")
+                logger.info("testMmgThrowsException: mmgs.size: ${mmgs.size}")
+
+            } // .block
+
+        ) // .assertFailsWith
+
+    } // .testMmgThrowsException
     
 
 } // .MmgSqlTest
