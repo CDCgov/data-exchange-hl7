@@ -1,18 +1,15 @@
 import gov.cdc.dex.hl7.MmgUtil
-// import gov.cdc.hl7.HL7StaticParser
 
 import org.junit.jupiter.api.Test
 
 import kotlin.test.assertEquals
-// import kotlin.test.assertTrue
+import kotlin.test.assertFailsWith
+import gov.cdc.dex.mmg.InvalidConditionException
+import kotlin.test.assertFails
 
 import org.slf4j.LoggerFactory
-// import java.util.*
 
-// import gov.cdc.dex.redisModels.MMG
-// import gov.cdc.dex.hl7.model.ConditionCode
 import gov.cdc.dex.hl7.model.PhinDataType
-// import gov.cdc.dex.redisModels.ValueSetConcept
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -210,10 +207,89 @@ class MmgSqlTest {
         logger.info("singlesRepeatsModel[$MESSAGE_PROFILE_IDENTIFIER]: --> ${singlesRepeatsModel[MESSAGE_PROFILE_IDENTIFIER]}")
 
         assertEquals(singlesRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER), false)
-
     } // .testMessageProfileIdentifier
 
-    
+
+    fun testMmgThrowsException() {
+
+        logger.info("testMmgThrowsException..")
+
+        assertFailsWith<InvalidConditionException>(
+
+            block = {
+
+                val mmgUtil = MmgUtil(redisProxy)
+                val mmgs = mmgUtil.getMMGFromMessage("hl7Content", "hl7FilePath", "")
+                logger.info("testMmgThrowsException: mmgs.size: ${mmgs.size}")
+
+            } // .block
+
+        ) // .assertFailsWith
+
+    } // .testMmgThrowsException
+
+
+    @Test
+    fun testBadMessageProfIdInMMGBasedModel() {
+
+        logger.info("testBadMessageProfIdInMMGBasedModel..")
+
+        assertFails(
+
+            block = {
+
+                // MMG Based Model for the message
+                // ------------------------------------------------------------------------------
+                val mmgBasedModelPath = "/mmgBasedModel1BadForTest.json"
+                val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
+                val modelJson = JsonParser.parseString(mmgBasedModelStr).asJsonObject
+                
+                // Transformer SQL
+                // ------------------------------------------------------------------------------
+                val transformer = TransformerSql()
+
+                // Message Profile Identifier
+                val mesageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
+                if (mesageProfIdModel.size != 3) { throw Exception("Message Profile Identifier does not have 3 parts.")}
+
+            } // .block
+
+        ) // .assertFails
+
+    } // .testBadMessageProfIdInMMGBasedModel
+
+    @Test
+    fun testBadEventHubMessage() {
+
+        logger.info("testBadEventHubMessage..")
+
+        assertFails(
+
+            block = {
+
+                // MMG Based Model for the message
+                // ------------------------------------------------------------------------------
+                val mmgBasedModelPath = "/mmgBasedModel1BadForTest.json"
+                val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
+                
+
+                val inputEvent = JsonParser.parseString(mmgBasedModelStr).asJsonObject
+                // context.logger.info("------ inputEvent: ------>: --> $inputEvent")
+
+                // Extract from event
+                val metadata = inputEvent["metadata"].asJsonObject
+                val provenance = metadata["provenance"].asJsonObject
+                val filePath = provenance["file_path"].asString
+                val messageUUID = inputEvent["message_uuid"].asString
+
+                logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+
+            } // .block
+
+        ) // .assertFails
+
+    } // .testBadEventHubMessage
+
 
 } // .MmgSqlTest
 
