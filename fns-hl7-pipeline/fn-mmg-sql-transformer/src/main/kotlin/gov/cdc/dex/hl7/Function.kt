@@ -153,13 +153,17 @@ class Function {
                     // Singles Repeats
                     val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
                     context.logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n") 
-            
 
                     // Repeated Blocks
                     val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
                     context.logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
 
-                    val mmgSqlModel = singlesNonRepeatsModel + mapOf(
+                    // Message Profile Identifier
+                    val mesageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
+                    context.logger.info("mesageProfIdModel: -->\n\n${gsonWithNullsOn.toJson(mesageProfIdModel)}\n")
+                    // TODO: check mesageProfIdModel.size is 3 or throw exception
+
+                    val mmgSqlModel = mesageProfIdModel + singlesNonRepeatsModel + mapOf(
                         TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel,
                     ) // .mmgSqlModel
 

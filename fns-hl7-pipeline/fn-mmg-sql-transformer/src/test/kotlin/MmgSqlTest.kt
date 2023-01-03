@@ -35,17 +35,22 @@ class MmgSqlTest {
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         const val TABLES_KEY_NAME = "tables"
-    } // .companion 
 
-    // @Test
-    // fun testRedisInstanceUsed() {
-    //     logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
-    //     assertEquals(REDIS_CACHE_NAME, "tf-vocab-cache-dev.redis.cache.windows.net")
-    // } // .testRedisInstanceUsed
+        const val REDIS_INSTANCE_NAME = "tf-vocab-cache-dev.redis.cache.windows.net"
+
+        val MESSAGE_PROFILE_IDENTIFIER = "message_profile_identifier"
+    } // .companion 
 
 
     @Test
-    fun testTransformerSql() {
+    fun testRedisInstanceUsed() {
+        logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
+        assertEquals(REDIS_CACHE_NAME, REDIS_INSTANCE_NAME)
+    } // .testRedisInstanceUsed
+
+
+    @Test
+    fun testMMGUtil() {
 
         // MMGs for the message
         // ------------------------------------------------------------------------------
@@ -53,7 +58,35 @@ class MmgSqlTest {
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgUtil = MmgUtil(redisProxy)
         val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        logger.info("mmgsArr.size: --> ${mmgsArr.size}")
+
         assertEquals(mmgsArr.size, 2)
+    } // .testMMGUtil
+
+
+    @Test
+    fun testDefaultPhinProfiles() {
+        // Default Phin Profiles Types
+        // ------------------------------------------------------------------------------
+        val dataTypesFilePath = "/DefaultFieldsProfileX.json"
+        val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+        val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
+        val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+        logger.info("profilesMap.size: --> ${profilesMap.size}")
+
+        assertEquals(profilesMap.size, 12)
+    } // .testDefaultPhinProfiles
+
+
+    @Test
+    fun testTransformerSQLForTC04() {
+
+        // MMGs for the message
+        // ------------------------------------------------------------------------------
+        val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgUtil = MmgUtil(redisProxy)
+        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
 
         // Default Phin Profiles Types
         // ------------------------------------------------------------------------------
@@ -82,26 +115,105 @@ class MmgSqlTest {
         val ( mmgElementsSingleNonRepets, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
 
         // Singles Non Repeats
+        // --------------------------------------
         val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, modelJson)
-        logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")      
+
+        // logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")  
+        logger.info("singlesNonRepeatsModel.size: --> ${singlesNonRepeatsModel.size}")     
+        assertEquals(singlesNonRepeatsModel.size, 172)
 
         // Singles Repeats
+        // --------------------------------------
         val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
-        logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n") 
+
+        // logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n") 
+        logger.info("singlesRepeatsModel.size: --> ${singlesRepeatsModel.size}") 
+        assertEquals(singlesRepeatsModel.size, 5) // original 6, 5 after message profile identifier is filtered out and moving to singles non repeats
+        
  
-
         // Repeated Blocks
+        // --------------------------------------
         val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
-        logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")   
 
-        val mmgSqlModel = singlesNonRepeatsModel + mapOf(
+        // logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")   
+        logger.info("repeatedBlocksModel.size: --> ${repeatedBlocksModel.size}")  
+        assertEquals(repeatedBlocksModel.size, 10)
+
+        
+        // Message Profile Identifier
+        val mesageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
+        logger.info("mesageProfIdModel.size: --> ${mesageProfIdModel.size}")  
+        assertEquals(mesageProfIdModel.size, 3)
+
+        val mmgSqlModel = mesageProfIdModel + singlesNonRepeatsModel + mapOf(
             TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel,
         ) // .mmgSqlModel
 
+        logger.info("mmgSqlModel.size: --> ${mmgSqlModel.size}")  
+        assertEquals(mesageProfIdModel.size + singlesNonRepeatsModel.size + 1, 3 + 172 + 1 )  // 1 for tables
+
+
         logger.info("mmgSqlModel: -->\n\n${gsonWithNullsOn.toJson(mmgSqlModel)}\n")   
+    } // .testTransformerSQLForTC04
 
-    } // .testRedisInstanceUsed
+    @Test
+    fun testMessageProfileIdentifier() {
 
+        // MMGs for the message
+        // ------------------------------------------------------------------------------
+        val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val mmgUtil = MmgUtil(redisProxy)
+        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+
+        // Default Phin Profiles Types
+        // ------------------------------------------------------------------------------
+        val dataTypesFilePath = "/DefaultFieldsProfileX.json"
+        val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+        val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
+        val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+
+
+        // MMG Based Model for the message
+        // ------------------------------------------------------------------------------
+        val mmgBasedModelPath = "/mmgBasedModel1.json"
+        val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
+        val modelJson = JsonParser.parseString(mmgBasedModelStr).asJsonObject
+
+        // logger.info("mmgBasedModelStr: --> ${mmgBasedModelStr}")
+
+
+        // Transformer SQL
+        // ------------------------------------------------------------------------------
+        val transformer = TransformerSql()
+
+        val mmgs = transformer.getMmgsFiltered(mmgsArr)
+        val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
+        val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+        val ( mmgElementsSingleNonRepets, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
+
+        // Message Profile Identifier
+        val mesageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
+
+        // Singles Non Repeats
+        // --------------------------------------
+        val singlesNonRepeatsModel = mesageProfIdModel + transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, modelJson)
+
+        logger.info("singlesNonRepeatsModel[$MESSAGE_PROFILE_IDENTIFIER]: --> ${singlesNonRepeatsModel[MESSAGE_PROFILE_IDENTIFIER]}")
+        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_0"), true)
+        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_1"), true)
+        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_2"), true)
+
+        // Singles Repeats
+        // --------------------------------------
+        val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
+        logger.info("singlesRepeatsModel[$MESSAGE_PROFILE_IDENTIFIER]: --> ${singlesRepeatsModel[MESSAGE_PROFILE_IDENTIFIER]}")
+
+        assertEquals(singlesRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER), false)
+
+    } // .testMessageProfileIdentifier
+
+    
 
 } // .MmgSqlTest
 
