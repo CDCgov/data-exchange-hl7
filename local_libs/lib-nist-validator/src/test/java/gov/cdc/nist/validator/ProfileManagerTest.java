@@ -15,7 +15,7 @@ public class ProfileManagerTest {
     @Test
     public void testValidateStructureErrors() {
         try {
-            //ProfileManager nistValidator = new ProfileManager(new ResourceFileFetcher(), "/TEST_PROF");
+//            ProfileManager nistValidator = new ProfileManager(new ResourceFileFetcher(), "/TEST_PROF");
             NISTProfileManager nistValidator = new NISTProfileManager(new ResourceFileFetcher(), "/NND_ORU_V2.0");
 
             var nist = nistValidator.validate(getTestFile("hl7TestMessage.txt"));
@@ -44,7 +44,7 @@ public class ProfileManagerTest {
                 System.out.println("nist.getErrorCounts().getValueset() = " + nist.getErrorCounts().getValueset());
                 System.out.println("nist.getErrorCounts().getContent() = " + nist.getErrorCounts().getContent());
                 System.out.println("nist.getWarningcounts() = " + nist.getWarningcounts());
-                nist.getEntries().getStructure().forEach(it -> System.out.println(it));
+//                nist.getEntries().getStructure().forEach(System.out::println);
 
             } catch (Exception e) {
                 e.printStackTrace();

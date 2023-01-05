@@ -6,7 +6,7 @@ import hl7.v2.profile.XMLDeserializer
 import hl7.v2.validation.SyncHL7Validator
 import hl7.v2.validation.content.DefaultConformanceContext
 import hl7.v2.validation.vs.ValueSetLibraryImpl
-import nist.xml.util.ClassPathResourceResolver
+
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
 import java.util.logging.Logger
