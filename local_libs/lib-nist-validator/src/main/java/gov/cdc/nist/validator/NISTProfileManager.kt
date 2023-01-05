@@ -58,7 +58,8 @@ class NISTProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
     //            //No predicate available... ignore file...
     //        }
             // The get() at the end will throw an exception if something goes wrong
-            val conformanceContext = DefaultConformanceContext.apply(confContexts).get()
+            val conformanceContextTry = DefaultConformanceContext.apply(confContexts.toList())
+            val conformanceContext = conformanceContextTry.get()
             // get ValueSetLibrary
             val vsLibXML = profileFetcher.getFileAsInputStream("$profile/VALUESETS.xml")
             val valueSetLibrary = ValueSetLibraryImpl.apply(vsLibXML).get()
