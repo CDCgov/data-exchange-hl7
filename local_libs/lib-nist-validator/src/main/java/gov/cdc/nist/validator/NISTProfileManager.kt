@@ -49,17 +49,16 @@ class NISTProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
             // The second conformance context XML file
     //        val confContexts = mutableListOf<InputStream>()
             val confContexts = mutableListOf(contextXML1)
-    //        try {
-    //            val contextXML2 = profileFetcher.getFileAsInputStream("$profile/PREDICATES.xml")
-    //            confContexts.add(contextXML2)
-    //            //Add predicates to confContexts...
-    //        } catch (e: Exception) {
-    //            logger.fine("No Predicate Available for group $profile. Ignoring Predicate.")
-    //            //No predicate available... ignore file...
-    //        }
+            try {
+                val contextXML2 = profileFetcher.getFileAsInputStream("$profile/PREDICATES.xml")
+                confContexts.add(contextXML2)
+                //Add predicates to confContexts...
+            } catch (e: Exception) {
+                logger.fine("No Predicate Available for group $profile. Ignoring Predicate.")
+                //No predicate available... ignore file...
+            }
             // The get() at the end will throw an exception if something goes wrong
-            val conformanceContextTry = DefaultConformanceContext.apply(confContexts.toList())
-            val conformanceContext = conformanceContextTry.get()
+            val conformanceContext = DefaultConformanceContext.apply(confContexts.toList()).get()
             // get ValueSetLibrary
             val vsLibXML = profileFetcher.getFileAsInputStream("$profile/VALUESETS.xml")
             val valueSetLibrary = ValueSetLibraryImpl.apply(vsLibXML).get()
