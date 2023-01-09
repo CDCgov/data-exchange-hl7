@@ -1,2 +1,2 @@
 
-## MMG-SQL-Transformer Function for the HL7 Pipeline
+## Lake-Segs-Transformer Function for the HL7 Pipeline
