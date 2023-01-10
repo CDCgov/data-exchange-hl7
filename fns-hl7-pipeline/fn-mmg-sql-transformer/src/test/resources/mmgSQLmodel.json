@@ -1,4 +1,7 @@
 {
+  "message_profile_identifier_0": "NOTF_ORU_v3.0",
+  "message_profile_identifier_1": "Generic_MMG_V2.0",
+  "message_profile_identifier_2": "Lyme_TBRD_MMG_V1.0",
   "local_subject_id_id_number": "TickTBRD_TC04",
   "birth_date": "19630401",
   "subjects_sex": "M",
@@ -17,7 +20,7 @@
   "country_of_usual_residence_alternate_identifier": null,
   "country_of_usual_residence_alternate_text": null,
   "country_of_usual_residence_original_text": null,
-  "country_of_usual_residence_code_system_concept_name": "UNITED STATES OF AMERICA \n(THE)",
+  "country_of_usual_residence_code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
   "country_of_usual_residence_cdc_preferred_designation": "UNITED STATES OF AMERICA",
   "subject_address_county": null,
   "subject_address_state": "51",
@@ -180,17 +183,6 @@
       }
     ],
     "binational_reporting_criteria": null,
-    "message_profile_identifier": [
-      {
-        "message_profile_identifier_entity_identifier": "NOTF_ORU_v3.0"
-      },
-      {
-        "message_profile_identifier_entity_identifier": "Generic_MMG_V2.0"
-      },
-      {
-        "message_profile_identifier_entity_identifier": "Lyme_TBRD_MMG_V1.0"
-      }
-    ],
     "type_of_complication": [
       {
         "type_of_complication_identifier": "OTH",
@@ -210,7 +202,7 @@
         "country_of_exposure_alternate_text": null,
         "country_of_exposure_original_text": null,
         "country_of_exposure_code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
-        "country_of_exposure_cdc_preferred_designation": "UNITED STATES OF AMERICA",
+        "country_of_exposure_cdc_preferred_designation": "UNITED \nSTATES OF AMERICA",
         "state_or_province_of_exposure_identifier": "51",
         "state_or_province_of_exposure_alternate_identifier": null,
         "state_or_province_of_exposure_alternate_text": null,

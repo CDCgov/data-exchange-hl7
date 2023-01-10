@@ -45,7 +45,7 @@ TEMPLATE = './mmg_template.json'  # template has 3 pre-defined blocks: Message H
 ELEMENT = './mmg_element.json'    # we will add each element into the appropriate block using the element template.
 BLOCK = './mmg_block.json'        # in case we need additional blocks beyond Message Header, Patient Related, and Case Related
 
-PRIORITIES = {"R": "R", "P": "1", "O": "3"}
+PRIORITIES = {"R": "R", "P": "1", "O": "3", "U": "4"}
 LABELS = ["Message Header"]
 
 def output_mmg_json(csv_filename):
