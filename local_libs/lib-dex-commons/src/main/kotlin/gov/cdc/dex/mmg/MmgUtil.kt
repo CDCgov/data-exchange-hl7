@@ -44,7 +44,12 @@ class MmgUtil(val redisProxy: RedisProxy)  {
     fun getMMGs(mmgKeyList: Array<String>): Array<MMG> {
         var mmgs : Array<MMG> = arrayOf()
         for (keyName: String in mmgKeyList) {
-            mmgs += gson.fromJson(redisProxy.getJedisClient().get(keyName), MMG::class.java)
+            val mmg1 = gson.fromJson(redisProxy.getJedisClient().get(keyName), MMG::class.java)
+            //REMOVE MSH-21 from GenV2: when condition specific is also defining it with new cardinality of [3..3]
+            if (keyName.contains(GEN_V2_MMG)) {
+                mmg1.blocks = mmg1.blocks.filter { it.name != "Message Header" }
+            }
+            mmgs += mmg1
         }
         return mmgs
      }
