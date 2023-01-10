@@ -1,0 +1,7 @@
+{
+ "MSH": ["PID", "ORC", "OBR"],
+ "PID": ["NTE", "PV1", "NK1"],
+ "OBR": ["OBX", "SPM", "NTE"],
+ "OBX": ["NTE"],
+ "SPM": ["OBX"]
+}

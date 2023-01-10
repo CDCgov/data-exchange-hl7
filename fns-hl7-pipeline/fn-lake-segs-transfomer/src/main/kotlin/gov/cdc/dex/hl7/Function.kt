@@ -90,13 +90,7 @@ class Function {
 
                     // Transformer to Lake of Segments
                     // ------------------------------------------------------------------------------
-                    // val transformer = TransformerLakeSegs()
-
-
-                    val lakeSegsModel = mapOf(
-                        "TODO" to null 
-                    ) // .mmgSqlModel
-
+                    val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content)
 
                     val processMD = LakeSegsTransProcessMetadata(status=PROCESS_STATUS_OK, report=lakeSegsModel) 
                     metadata.addArrayElement("processes", processMD)
