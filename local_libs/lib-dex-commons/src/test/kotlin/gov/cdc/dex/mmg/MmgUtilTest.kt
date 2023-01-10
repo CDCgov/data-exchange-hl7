@@ -89,6 +89,26 @@ internal class MmgUtilTest {
     }
 
     @Test
+    fun testRemoveDuplicteMSH21() {
+        val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
+
+        val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
+
+        val mmgUtil = MmgUtil(redisProxy)
+        val lymeMMGs = mmgUtil.getMMGs(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "11080", "13")
+
+        assert(lymeMMGs.size == 2)
+
+        val msh21GenV2 = lymeMMGs[0].blocks.filter { it.name == "Message Header" } //Should not be present.
+        assert(msh21GenV2.isEmpty())
+
+        val msh21Lyme = lymeMMGs[1].blocks.filter { it.name == "MSH Header" }
+        assert(msh21Lyme.size == 1)
+
+    }
+
+    @Test
     fun testRedisKeys() {
         val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
         val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
