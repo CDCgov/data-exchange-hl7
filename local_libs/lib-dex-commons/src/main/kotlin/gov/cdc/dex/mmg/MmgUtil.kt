@@ -44,7 +44,12 @@ class MmgUtil(val redisProxy: RedisProxy)  {
     fun getMMGs(mmgKeyList: Array<String>): Array<MMG> {
         var mmgs : Array<MMG> = arrayOf()
         for (keyName: String in mmgKeyList) {
-            mmgs += gson.fromJson(redisProxy.getJedisClient().get(keyName), MMG::class.java)
+            val mmg1 = gson.fromJson(redisProxy.getJedisClient().get(keyName), MMG::class.java)
+            //REMOVE MSH-21 from GenV2: when condition specific is also defining it with new cardinality of [3..3]
+            if (keyName.contains(GEN_V2_MMG)) {
+                mmg1.blocks = mmg1.blocks.filter { it.name != "Message Header" }
+            }
+            mmgs += mmg1
         }
         return mmgs
      }
@@ -91,7 +96,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
                         val appliesHere = redisProxy.getJedisClient().sismember(case.appliesTo, jurisdictionCode)
                         if (appliesHere) {
                             mmg2KeyNames += case.mmgs //returns a list of mmg keys
-                            messageInfo.route = "${profile.name}_${case.appliesTo.replace(REDIS_GROUP_PREFIX, "")}"
+                            messageInfo.route = "${mmg2KeyNames.last().replace(REDIS_MMG_PREFIX, "")}_${case.appliesTo.replace(REDIS_GROUP_PREFIX, "")}"
                             specialCaseAdded = true
                             break
                         }
@@ -101,7 +106,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
                 if (!specialCaseAdded) {
                     // no special cases apply; use the regular mmgs for this profile+condition
                     mmg2KeyNames += profile.mmgs
-                    messageInfo.route = profile.name
+                    messageInfo.route = mmg2KeyNames.last().replace(REDIS_MMG_PREFIX, "")
                 }
             } else {
                 throw InvalidConditionException("Condition $eventCode does not match the profile $msh21_3In.")

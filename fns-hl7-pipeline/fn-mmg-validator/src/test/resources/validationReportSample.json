@@ -1,0 +1,47 @@
+[
+  {
+    "classification": "WARNING",
+    "category": "VOCAB",
+    "fieldName": "Subject\ufffd\ufffd\ufffds Sex",
+    "path": "PID-8",
+    "line": 2,
+    "errorMessage": "VOCAB_ISSUE",
+    "description": "Unable to find 'X' on 'PHVS_Sex_MFU' on line 2"
+  },
+  {
+    "classification": "ERROR",
+    "category": "VOCAB",
+    "fieldName": "Reporting State",
+    "path": "OBX[@3.1='77966-0']-5.1",
+    "line": 48,
+    "errorMessage": "VOCAB_ISSUE",
+    "description": "Unable to find 'YY' on 'PHVS_State_FIPS_5-2' on line 48"
+  },
+  {
+    "classification": "WARNING",
+    "category": "CARDINALITY",
+    "fieldName": "Clinical Manifestation",
+    "path": "OBX[@3.1='INV929']-5.1",
+    "line": 52,
+    "errorMessage": "CARDINALITY_OVER",
+    "description": "Maximum values surpassed requirements. Max allowed: 1, Found 2"
+  },
+  {
+    "classification": "WARNING",
+    "category": "CARDINALITY",
+    "fieldName": "Clinical Manifestation Indicator",
+    "path": "OBX[@3.1='INV930']-5.1",
+    "line": 60,
+    "errorMessage": "CARDINALITY_OVER",
+    "description": "Maximum values surpassed requirements. Max allowed: 1, Found 2"
+  },
+  {
+    "classification": "WARNING",
+    "category": "DATA_TYPE",
+    "fieldName": "Clinical Manifestation Indicator",
+    "path": "OBX[@3.1='INV930']-2",
+    "line": 62,
+    "errorMessage": "DATA_TYPE_MISMATCH",
+    "description": "Data type on message does not match expected data type on MMG. Expected: CWE, Found: ST"
+  }
+]

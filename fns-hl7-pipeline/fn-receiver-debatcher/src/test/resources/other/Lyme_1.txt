@@ -1,6 +1,6 @@
 MSH|^~\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
-PID|1||TickborneLyme_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19930601|M||2054-5^Black or African American^CDCREC|^^^47^37209^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||
-OBR|1||TickborneLyme_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND
+PID|1||TickborneLyme_TC01^^^SendAppName&2.16.840.1.114222.1111&ISO||~^^^^^^S||19930601|F||2054-5^Black or African American^CDCREC|^^^47^37209^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||
+OBR|1||TickborneLyme_TC01^SendAppName^2.16.840.1.114222.1111^ISO|68991-9^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND
 OBX|1|ST|32624-9^Other Race Text^LN||Botswanan||||||F
 OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
 OBX|3|ST|21842-0^Other Birth Place^LN||Navajo Reservation||||||F
@@ -45,7 +45,7 @@ OBX|41|TS|77973-6^Earliest Date Reported to State^LN||20180912||||||F
 OBX|42|SN|77991-8^MMWR Week^LN||^37||||||F
 OBX|43|DT|77992-6^MMWR Year^LN||2018||||||F
 OBX|44|DT|77970-2^Date First Reported to PHD^LN||20180912||||||F
-OBX|45|CWE|77966-0^Reporting State^LN||41^Tennessee^FIPS5_2||||||F
+OBX|45|CWE|77966-0^Reporting State^LN||47^Tennessee^FIPS5_2||||||F
 OBX|46|CWE|77967-8^Reporting County^LN||47003^Bedford, TN^FIPS6_4||||||F
 OBX|47|CWE|77968-6^National Reporting Jurisdiction^LN||47^TN^FIPS5_2||||||F
 OBX|48|TX|77999-1^Comment^LN||Patient was bitten by a tick during European backpacking trip||||||F
@@ -80,6 +80,3 @@ OBX|76|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F
 OBX|77|CWE|LAB278^Organism Name^PHINQUESTION|2|76327009^Borrelia burgdorferi^SCT||||||F
 OBX|78|CWE|66746-9^Specimen Type^LN|2|119325001^Skin^SCT||||||F
 OBX|79|TS|68963-8^Specimen Collection Date/Time^LN|2|20180705||||||F
-OBR|1||TickborneLyme_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9_not_epi^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND
-XTR|79|TS|68963-8^Specimen Collection Date/Time^LN|2|20180705||||||F
-

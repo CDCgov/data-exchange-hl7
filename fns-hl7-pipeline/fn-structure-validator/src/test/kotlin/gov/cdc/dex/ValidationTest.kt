@@ -6,7 +6,16 @@ import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
 
+import org.slf4j.LoggerFactory
+import com.google.gson.GsonBuilder
+
+
 class ValidationTest {
+
+    companion object {
+        private val gsonWithNullsOn = GsonBuilder().serializeNulls().create() 
+    } // .companion object
+
     @Test
     fun testValidateMessage() {
         val testMessage = this::class.java.getResource("/Invalid-GenV1-0-Case-Notification.hl7").readText()
@@ -17,6 +26,20 @@ class ValidationTest {
         val report = nistValidator.validate(testMessage)
         println(report)
     }
+
+    @Test
+    fun testValidateMessageAndLogReport() {
+        
+        val testMessage = this::class.java.getResource("/Invalid-GenV1-0-Case-Notification.hl7").readText()
+//        val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get()
+        val phinSpec =testMessage.split("\n")[0].split("|")[20].split("^")[0]
+        val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
+
+        val report = nistValidator.validate(testMessage)
+        println("report: -->\n\n${gsonWithNullsOn.toJson(report)}\n")   
+
+    } // .testValidateMessageAndLogReport
+
     @Test
     fun testExtractPhinSpec() {
         val msh = "MSH|^~\\\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO"

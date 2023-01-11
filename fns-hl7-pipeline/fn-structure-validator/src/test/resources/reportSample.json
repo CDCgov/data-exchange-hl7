@@ -1,0 +1,39 @@
+{
+  "entries": {
+    "structure": [
+      {
+        "line": 14,
+        "column": 56,
+        "path": "OBX[10]-5[1].2",
+        "description": "test is not a valid Number. The format should be: [+|-]digits[.digits]",
+        "category": "Format",
+        "classification": "Error",
+        "stackTrace": null,
+        "metaData": null
+      },
+      {
+        "line": 1,
+        "column": 74,
+        "path": "MSH[1]-5[1].2",
+        "description": "The required Component MSH-5.2 (Universal ID) is missing",
+        "category": "Usage",
+        "classification": "Error",
+        "stackTrace": null,
+        "metaData": null
+      }
+    ],
+    "content": [],
+    "value-set": []
+  },
+  "error-count": {
+    "structure": 2,
+    "value-set": 0,
+    "content": 0
+  },
+  "warning-count": {
+    "structure": 0,
+    "value-set": 0,
+    "content": 0
+  },
+  "status": "STRUCTURE_ERRORS"
+}

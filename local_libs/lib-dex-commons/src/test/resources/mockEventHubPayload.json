@@ -4,6 +4,7 @@
   "eventType": "Microsoft.Storage.BlobCreated",
   "eventTime": "2017-06-26T18:41:00.9584103Z",
   "id": "831e1650-001e-001b-66ab-eeb76e069631",
+  "null_attr": null,
   "data": {
     "api": "PutBlockList",
     "clientRequestId": "6d79dbfb-0e37-...",

@@ -14,7 +14,7 @@ class MMGTest {
     @Test
     fun testLoadMMG() {
         val mmgName = "GEN_SUMMARY_CASE_MAP_v1.0"
-        val mmgJson = this::class.java.getResource("/" + mmgName + ".json" ).readText()
+        val mmgJson = this::class.java.getResource("/mmgs/" + mmgName + ".json" ).readText()
         println(mmgJson)
     }
 

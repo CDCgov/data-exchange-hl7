@@ -8,8 +8,6 @@ import gov.cdc.hl7.HL7StaticParser
 import org.slf4j.LoggerFactory
 import java.util.*
 
-// import redis.clients.jedis.DefaultJedisClientConfig
-// import redis.clients.jedis.Jedis
 
 import  gov.cdc.dex.mmg.MmgUtil as MmgUtilLib
 import  gov.cdc.dex.azure.RedisProxy 
@@ -26,12 +24,6 @@ class MmgUtil(val redisProxy: RedisProxy)  {
 
         const val PATH_JURISDICTION_CODE = "" // TODO: complete path
 
-        val REDIS_CACHE_NAME = System.getenv("REDIS_CACHE_NAME")
-        val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
-
-        const val REDIS_MMG_PREFIX = "mmg:"
-        const val REDIS_CONDITION_PREFIX = "condition:"
-
         private val gson = Gson()
     } // .companion
 
@@ -47,7 +39,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
 
             val mmgUtilLib = MmgUtilLib(redisProxy)
 
-            return mmgUtilLib.getMMG(msh21_2, msh21_3, eventCode, jurisdictionCode) //getMMG(msh21_2, msh21_3, eventCode, jurisdictionCode)
+            return mmgUtilLib.getMMGs(msh21_2, msh21_3, eventCode, jurisdictionCode) //getMMG(msh21_2, msh21_3, eventCode, jurisdictionCode)
         } // .getMMGFromMessage
 
         private fun extractValue(msg: String, path: String):String  {

@@ -1,5 +1,6 @@
 package gov.cdc.dex.util
 
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import org.junit.jupiter.api.Test
 
@@ -10,7 +11,10 @@ internal class JsonHelperTest {
     @Test
     fun getValueFromJson() {
         val testFile = this::class.java.getResource("/mockEventHubPayload.json").readText()
-        val json = JsonParser.parseString(testFile)
+        val json = JsonParser.parseString(testFile) as JsonObject
+
+        val nullAttr = json["null_attr"]
+        println(nullAttr.asJsonNull)
 
         val test = JsonHelper.getValueFromJson("data.url", json)
         assert(test.asString == "https://my-st-acct...new-file.txt")
