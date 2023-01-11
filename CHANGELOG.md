@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [0.0.10] - 2023-01-11
  - Added message_info to metadata payload with relevant information from message, including routing.
- - Updated mmg-sql-transformer with ...
- - Upgraded Nist Libraries for scala 2.13 and retrofitted upgrade to our own lib-nist-validator
+ - Updated mmg-based-transformer with exception handling for bad format event hub messages or transformations exceptions.
+ - Updated mmg-sql-transformer with exception handling for bad format event hub messages or transformations exceptions.
+ - Updated mmg-sql-transformer for messsage_profile_identifier changed from tables to flat model.
+ - Updated all functions for dev for function names based on new teraform config and added sample reports in all functions.
+ - Upgraded Nist Libraries for scala 2.13 and retrofitted upgrade to our own lib-nist-validator.
 
 ### [0.0.9] - 2022-12-14
  - Renamed mmg-processor module to mmg-based-transformer
