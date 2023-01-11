@@ -43,6 +43,7 @@ class Function {
 
         val PROCESS_STATUS_OK = "PROCESS_MMG_SQL_TRANSFORMER_OK"
         val PROCESS_STATUS_EXCEPTION = "PROCESS_MMG_SQL_TRANSFORMER_EXCEPTION"
+        val PREVIOUS_PROCESS_NAME = "mmgBasedTransformer"
 
     } // .companion object
 
@@ -116,8 +117,8 @@ class Function {
                 val processesArr = metadata["processes"].asJsonArray
                 val mmgBasedProcessLast = processesArr.filter{ prc ->     
                     val process = prc.asJsonObject 
-                    val prcStatus = process["status"].asString
-                    prcStatus == "MMG_MODEL_OK"
+                    val prcName = process["name"].asString
+                    prcName == PREVIOUS_PROCESS_NAME
                 }.last() // .mmgBasedProcesses
                 val modelJson = mmgBasedProcessLast.asJsonObject["report"].asJsonObject
                 // context.logger.info("------ modelJson: ------> $modelJson")
@@ -188,7 +189,7 @@ class Function {
 
                 } catch (e: Exception) {
 
-                    context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
+                    context.logger.severe("Exception processing transformation: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
 
                     //TODO::  - update retry counts
                     val problem = Problem(PROCESS_NAME, e, false, 0, 0)
@@ -205,7 +206,7 @@ class Function {
             } catch (e: Exception) {
 
                // message is bad, can't extract fields based on schema expected
-                context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                context.logger.severe("Exception processing event hub message: Unable to process Message due to exception: ${e.message}")
                 e.printStackTrace()
 
             } // .catch
