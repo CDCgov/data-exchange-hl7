@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Updated mmg-sql-transformer for messsage_profile_identifier changed from tables to flat model.
  - Updated all functions for dev for function names based on new teraform config and added sample reports in all functions.
  - Upgraded Nist Libraries for scala 2.13 and retrofitted upgrade to our own lib-nist-validator.
+ - Created first draft of Lab Template MMG configuration.
+ - Fixed bug where JSON was supressing elements with NULL values in lib-dex-commons.
 
 ### [0.0.9] - 2022-12-14
  - Renamed mmg-processor module to mmg-based-transformer
