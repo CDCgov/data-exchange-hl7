@@ -117,7 +117,7 @@ class Function {
                 val processesArr = metadata["processes"].asJsonArray
                 val mmgBasedProcessLast = processesArr.filter{ prc ->     
                     val process = prc.asJsonObject 
-                    val prcName = process["name"].asString
+                    val prcName = process["process_name"].asString
                     prcName == PREVIOUS_PROCESS_NAME
                 }.last() // .mmgBasedProcesses
                 val modelJson = mmgBasedProcessLast.asJsonObject["report"].asJsonObject
@@ -183,8 +183,9 @@ class Function {
                     processMD.endProcessTime = Date().toIsoString()
 
                     // enable for model
+                    val inputEventOut = gsonWithNullsOn.toJson(inputEvent)
                     val ehDestination = eventHubSendOkName
-                    evHubSender.send(evHubTopicName=ehDestination, message=gsonWithNullsOn.toJson(inputEvent))
+                    evHubSender.send(evHubTopicName=ehDestination, message=gsonWithNullsOn.toJson(inputEventOut))
                     context.logger.info("Processed for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
 
                 } catch (e: Exception) {
