@@ -16,8 +16,7 @@ public class ProfileManagerTest {
     @Test
     public void testValidateStructureErrors() {
         try {
-//            ProfileManager nistValidator = new ProfileManager(new ResourceFileFetcher(), "/TEST_PROF");
-            NISTProfileManager nistValidator = new NISTProfileManager(new ResourceFileFetcher(), "/TEST_PROF");
+            ProfileManager nistValidator = new ProfileManager(new ResourceFileFetcher(), "/TEST_PROF");
 
             var nist = nistValidator.validate(getTestFile("hl7TestMessage.txt"));
             System.out.println("nist.getStatus() = " + nist.getStatus());
@@ -35,8 +34,7 @@ public class ProfileManagerTest {
     @Test
     public void testValidateStrcutureValid() {
             try {
-                NISTProfileManager nistValidator = new NISTProfileManager(new ResourceFileFetcher(), "/NOTF_ORU_V3.0");
-//                ProfileManager nistValidator = new ProfileManager(new ResourceFileFetcher(), "/NOTF_ORU_V3.0");
+                ProfileManager nistValidator = new ProfileManager(new ResourceFileFetcher(), "/NOTF_ORU_V3.0");
 
                 var nist = nistValidator.validate(getTestFile("hl7StructureValid.txt"));
                 System.out.println("nist.getStatus() = " + nist.getStatus());
@@ -55,7 +53,7 @@ public class ProfileManagerTest {
     @Test
     public void testInvalidProfile() {
         try {
-            new NISTProfileManager(new ResourceFileFetcher(), "/INVALID_PROFILE");
+            new ProfileManager(new ResourceFileFetcher(), "/INVALID_PROFILE");
         } catch (Exception e) {
             System.out.println("Exception properly handled.");
         }
@@ -64,7 +62,7 @@ public class ProfileManagerTest {
     @Test
     public void testIncompleteProfile() {
         try {
-            new NISTProfileManager(new ResourceFileFetcher(), "/INCOMPLETE_PROFILE");
+            new ProfileManager(new ResourceFileFetcher(), "/INCOMPLETE_PROFILE");
         } catch (Exception e) {
             System.out.println("e.getMessage() = " + e.getMessage());
             assert(true);

@@ -18,9 +18,9 @@ import java.util.logging.Logger
  * @Author Marcelo Caldas mcq1@cdc.gov
  */
 
-class NISTProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
+class ProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
     companion object {
-        private val logger =  Logger.getLogger(NISTProfileManager::class.java.name)
+        private val logger =  Logger.getLogger(ProfileManager::class.java.name)
 
 
         private const val VALID_MESSAGE_STATUS = "VALID_MESSAGE"
@@ -65,7 +65,7 @@ class NISTProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
             validator = SyncHL7Validator(profileX, valueSetLibrary, conformanceContext)
         } catch (e: Error) {
             logger.warning("UNABLE TO READ PROFILE: " + profile + " with error:\n" + e.message)
-            e.printStackTrace();
+//            e.printStackTrace()
             throw  InvalidFileException("Unable to parse profile file with error: " + e.message)
         }
     }

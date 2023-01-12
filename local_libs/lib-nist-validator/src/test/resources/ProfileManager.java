@@ -36,7 +36,7 @@ public class ProfileManager {
     private final SyncHL7Validator validator;
 
 
-    public  ProfileManager(ProfileFetcher profileFetcher, String profile) throws InvalidFileException {
+    public ProfileManager(ProfileFetcher profileFetcher, String profile) throws InvalidFileException {
         Logger logger = LoggerFactory.getLogger(ProfileManager.class.getName());
         try {
             InputStream expressions = nist.xml.util.ClassPathResourceResolver.class.getResourceAsStream("/rules/Expressions.xsd");
