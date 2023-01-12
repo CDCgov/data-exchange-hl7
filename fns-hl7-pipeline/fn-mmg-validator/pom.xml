@@ -75,6 +75,12 @@
             <version>${slf4j.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.github.hl7-tools/validation-report -->
+<!--        <dependency>-->
+<!--            <groupId>com.github.hl7-tools</groupId>-->
+<!--            <artifactId>validation-report</artifactId>-->
+<!--            <version>${validationreport.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>gov.cdc.hl7</groupId>
             <artifactId>hl7-pet_2.13</artifactId>
