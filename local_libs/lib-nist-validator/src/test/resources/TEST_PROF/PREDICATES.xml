@@ -4,10 +4,9 @@
 	xsi:noNamespaceSchemaLocation="ConformanceContext.xsd"
 	>
 	
-	<MetaData>
-		<Description>Conformance context sample</Description>
-	</MetaData>
-	
+	<MetaData Name="testPredicate" OrgName="TestOrg" Version="1" Date="2023-01-05"/>
+
+
 	<Predicates>
 		<Datatype>
 			
