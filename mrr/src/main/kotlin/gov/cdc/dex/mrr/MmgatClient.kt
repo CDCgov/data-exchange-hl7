@@ -1,27 +1,23 @@
 package gov.cdc.dex.mrr
 
-import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.google.gson.*
+import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.util.StringUtils
 import java.io.BufferedReader
-import java.io.InputStream
+import java.io.File
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
-import java.util.*
-import java.util.jar.JarEntry
-import java.util.jar.JarFile
+import java.time.LocalDateTime
 import javax.net.ssl.*
 
 class MmgatClient {
-    var url: URL? = null
-    var conn: HttpURLConnection? = null
-    val GUIDANCE_STATUS_UAT  = "UserAcceptanceTesting"
-    val GUIDANCE_STATUS_FINAL  = "Final"
+    val GUIDANCE_STATUS_UAT = "useracceptancetesting"
+    val GUIDANCE_STATUS_FINAL = "final"
+
+    var MMG_AT_ROOT_URL = "https://mmgat.services.cdc.gov/api/guide/"
 
     private fun trustAllHosts() {
         try {
@@ -50,117 +46,121 @@ class MmgatClient {
         }
     }
 
-    fun getGuideAll(): StringBuilder {
-        val sb = StringBuilder()
+    fun getGuideAll(): String {
         try {
             trustAllHosts()
-            url = URL("https://mmgat.services.cdc.gov/api/guide/all?type=0")
-            conn = url!!.openConnection() as HttpURLConnection
-
-            conn!!.requestMethod = "GET"
-            conn!!.setRequestProperty("Accept", "application/json")
-
-
-            if (conn!!.responseCode != 200) {
-                throw RuntimeException(
-                    "Failed : HTTP error code : " + conn!!.responseCode
-                )
-            }
-            val br = BufferedReader(
-                InputStreamReader(conn!!.inputStream)
-            )
-
-            var line = ""
-
-            while (br.readLine().also {
-                    if (it != null) {
-                        line = it
-                    }
-                } != null) {
-                sb.append(line)
-            }
-
-            conn!!.disconnect()
-
+            val url = URL("${MMG_AT_ROOT_URL}all?type=0")
+            return getContent(url)
         } catch (e: Exception) {
             println("exception:${e.printStackTrace()}")
-            throw Exception("Error in getGuideAll method: +${e.printStackTrace()}")
+            throw Exception("Error in getGuideAll method: +${e.message}")
 
         }
-        return sb
     }
 
-    fun getGuideById(id: String): StringBuilder {
-        val sb = StringBuilder()
+    fun getGuideById(id: String): String {
         try {
-            url = URL("https://mmgat.services.cdc.gov/api/guide/$id?includeGenV2=false")
-            conn = url!!.openConnection() as HttpURLConnection
-            conn!!.requestMethod = "GET"
-            conn!!.setRequestProperty("Accept", "application/json")
-
-
-            if (conn!!.responseCode != 200) {
-                throw RuntimeException("Failed : HTTP error code : " + conn!!.responseCode)
-            }
-
-            val br = BufferedReader(InputStreamReader((conn!!.inputStream)))
-
-
-            var line: String?
-
-            while ((br.readLine().also { line = it }) != null) {
-                sb.append(line)
-            }
+            val url = URL("${MMG_AT_ROOT_URL}$id?includeGenV2=false")
+            return getContent(url)
         } catch (e: Exception) {
-            throw Exception("Error in getGuideById method: +${e.printStackTrace()}")
+            throw Exception("Error in getGuideById method: +${e.message}")
         }
-        return sb
     }
 
-    fun loadLegacyMmgat() {
-        val url = Thread.currentThread().contextClassLoader.getResource("legacy_mmgs")
-        if (url != null) {
-            if (url.protocol == "jar") {
-                val dirname: String = "legacy_mmgs" + "/"
-                val path = url.path
-                val jarPath = path.substring(5, path.indexOf("!"))
-                JarFile(URLDecoder.decode(jarPath, StandardCharsets.UTF_8.name())).use { jar ->
-                    val entries: Enumeration<JarEntry> = jar.entries()
-                    while (entries.hasMoreElements()) {
-                        val entry: JarEntry = entries.nextElement()
-                        val name: String = entry.name
+    fun getContent(url: URL): String {
+        val sb = StringBuilder()
+        val conn = url.openConnection() as HttpURLConnection
+        conn.requestMethod = "GET"
+        conn.setRequestProperty("Accept", "application/json")
 
-                        if (name.startsWith(dirname) && dirname != name) {
-                            val resource = Thread.currentThread().contextClassLoader.getResource(name)
+        if (conn.responseCode != 200) {
+            throw RuntimeException("Failed : HTTP error code : " + conn.responseCode)
+        }
+        val br = BufferedReader(InputStreamReader((conn.inputStream)))
+        var line: String?
+        while ((br.readLine().also { line = it }) != null) {
+            sb.append(line)
+        }
+        return sb.toString()
+    }
 
-                            val instream: InputStream = jar.getInputStream(entry)
-                            val inputReader = InputStreamReader(instream)
-                            val fileOutputJson = Gson().fromJson(inputReader, JsonObject::class.java)
-                            var filename = StringUtils.normalizeString(
-                                resource.toString().substring(resource.toString().lastIndexOf("/") + 1)
-                            )
-                            filename = "mmg:" + filename.substring(0,filename.lastIndexOf("."))
-                            //println("MMGAT name2:$filename");
-                            RedisUtility().redisConnection().use { jedis ->
-                                try {
-                                    if (jedis.exists(filename))
-                                        jedis.del(filename)
-                                    jedis.set(filename, fileOutputJson.toString())
-                                } catch (e: Exception) {
-                                    throw Exception("Problem in setting Legacy MMGAT's to Redis:${e.printStackTrace()}")
-                                } finally {
-                                    jedis.close()
-                                }
+    fun loadLegacyMmgat(redisProxy: RedisProxy) {
+        val legacyMMGFolder = this::class.java.getResource("/legacy_mmgs")
+        val dir = File(legacyMMGFolder.file)
+        dir.walk().filter{ it.isFile }.forEach {
+            val legacyContent = this::class.java.getResource("/legacy_mmgs/${it.name}").readText()
+            val fileOutputJson = JsonParser.parseString(legacyContent)
+            var filename = StringUtils.normalizeString(it.name)
+            filename = "mmg:" + filename.substring(0, filename.lastIndexOf("."))
+            try {
+                var jedis = redisProxy.getJedisClient()
+                if (jedis.exists(filename))
+                    jedis.del(filename)
+                jedis.set(filename, fileOutputJson.toString())
+            } catch (e: Exception) {
+                throw Exception("Problem in setting Legacy MMGATs to Redis:${e.printStackTrace()}")
+            } finally {
+                //jedis.close()
+            }
 
-                            }
+        }
+    }
 
 
-                        }
+    fun loadMMGAT(redisProxy: RedisProxy) {
+        try {
+            println("STARTING MMGATRead services")
+
+            val mmgaGuide = this.getGuideAll().toString()
+
+            val elem: JsonElement = JsonParser.parseString(mmgaGuide)
+            //context.logger.info("Json Array size:" + elem.asJsonObject.getAsJsonArray("result").size())
+            val mmgatJArray = elem.asJsonObject.getAsJsonArray("result")
+            println("Json Array size:" + mmgatJArray.size())
+            val gson = GsonBuilder().create()
+
+            for (mmgatjson in mmgatJArray) {
+
+                val mj = mmgatjson.asJsonObject
+                //if (mj.get("guideStatus").asString.toLowerCase() in listOf(mmgaClient.GUIDANCE_STATUS_UAT, mmgaClient.GUIDANCE_STATUS_FINAL) )
+                if (mj.get("guideStatus").asString
+                        .equals(this.GUIDANCE_STATUS_UAT,true) || mj.get("guideStatus")
+                        .asString.equals(this.GUIDANCE_STATUS_FINAL,true)
+                ) {
+                    val id = (mj.get("id").asString)
+                    // context.logger.info("MMGAT id:$id")
+                    val mGuide = this.getGuideById(id)
+                    val melement = JsonParser.parseString(mGuide.toString())
+                    val mresult = melement.asJsonObject.get("result")
+
+                    mresult.asJsonObject.remove("testScenarios")
+                    mresult.asJsonObject.remove("testCaseScenarioWorksheetColumns")
+                    mresult.asJsonObject.remove("columns")
+                    mresult.asJsonObject.remove("templates")
+                    mresult.asJsonObject.remove("valueSets")
+
+                    val key = "mmg:"+ StringUtils.normalizeString(mj.get("name").asString)
+                    print("MMGAT name: $key")
+                    if (redisProxy.getJedisClient().exists(key))
+                        redisProxy.getJedisClient().del(key)
+                    try {
+                         var jedis = redisProxy.getJedisClient()
+                        if(jedis.exists(key))
+                            jedis.del(key)
+                        jedis.set(key, gson.toJson(mresult))
+                        println("...Done!")
+                    } catch (e: Throwable) {
+                        println("... ERRORED OUT")
                     }
                 }
             }
+        } catch (e: Exception) {
+            println("Failure in MMGATREAD function : ${e.printStackTrace()} ")
+            throw e
         }
-
+        println("MMGATREAD Function executed at: " + LocalDateTime.now())
 
     }
+
+
 }

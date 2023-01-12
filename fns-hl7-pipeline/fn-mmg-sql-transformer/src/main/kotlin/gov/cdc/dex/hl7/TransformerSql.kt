@@ -26,12 +26,14 @@ class TransformerSql()  {
         // private val gson = Gson()
         private val gsonWithNullsOn = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
         private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
-        const val SEPARATOR_ELEMENT_FIELD_NAMES = "~"
+        const val SEPARATOR_ELEMENT_FIELD_NAMES = "_"
         //
         private val ELEMENT_CE = "CE"
         private val ELEMENT_CWE = "CWE"
         private val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
         private val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
+
+        private val MESSAGE_PROFILE_IDENTIFIER_EL_NAME = "message_profile_identifier"
     } // .companion object
 
 
@@ -94,7 +96,11 @@ class TransformerSql()  {
     // --------------------------------------------------------------------------------------------------------
     fun singlesRepeatsToSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
 
-        val singlesRepeatsModel = elements.map{ el -> 
+        val singlesRepeatsModel = elements.filter{ el -> 
+
+            StringUtils.normalizeString(el.name) != MESSAGE_PROFILE_IDENTIFIER_EL_NAME
+            
+        }.map{ el -> 
 
             val elName = StringUtils.normalizeString(el.name)
             val elDataType = el.mappings.hl7v251.dataType
@@ -235,6 +241,17 @@ class TransformerSql()  {
         return repeatedBlocksModel
     } // .repeatedBlocksToSqlModel
 
+    
+    // --------------------------------------------------------------------------------------------------------
+    //  ------------- MMG Element: Message Profile Identifier -------------
+    // --------------------------------------------------------------------------------------------------------
+    fun messageProfIdToSqlModel(modelJson: JsonObject) : Map<String, Any?> {
+
+        return modelJson.asJsonObject[MESSAGE_PROFILE_IDENTIFIER_EL_NAME].asJsonArray.mapIndexed{ index, mipPhinObj -> 
+            MESSAGE_PROFILE_IDENTIFIER_EL_NAME + "_" + index.toString() to mipPhinObj.asJsonObject["entity_identifier"] 
+        }.toMap()
+
+    } // .messageProfIdToSqlModel
 
     // --------------------------------------------------------------------------------------------------------
     //  ------------- Functions used in the transformation -------------

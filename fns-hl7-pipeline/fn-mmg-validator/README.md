@@ -1,96 +1,94 @@
 
 ## MMG-Validator Function for the HL7 Pipeline
 
+# TL;DR>
 
-### Function project was started with:
+This service can validate a hl7 message content-wise using MMG  profiles created in [MMG-AT]()tool.
 
-[microsoft kotlin-maven](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-first-kotlin-maven?tabs=bash )
+# Details
+
+The MMG Validator service validates messages against their specific MMG. Currently, the service supports the following MMGs:
+
+* GenV1 Case 
+* GenV1 Summary
+* GenV2
+* Lyme/TBRD
+* Hepatitis
+* Arboviral 1.0, 1.2, 1.3
+
+The following rules are checked against each HL7 message:
+
+* **Cardinality** - validate the number of answers on the message matches the cardinality specified o the MMG for that specific field.
+* **Data Types** - validates that the Data types on OBX-2 matches the data type defined by the MMG
+* **Vocabulary** - for CE and CWE fields, the codes provided on OBX-5 are checked against Value Sets from PhinVADS.
+* **Invalid OBX segments** - if an OBX-3 code is present on the message that is not mapped on the MMG will be flagged as a warning.
+
+
+
+![image](https://user-images.githubusercontent.com/3239945/208454032-b4169ed4-1a48-41c5-a603-20f8fbf6631e.png)
+
+
+## Pipelne:
+
+Input: hl7-struct-ok
+
+Output: hl7-mmg-valid-ok ; hl7-mmg-valid-err
+
+## Hl7-mmg-ok payload:
+
+``` json
+ "content": "Base64(MSH|^~\&|....)",
+ "message_info": {
+    "event_code": "10110",
+    "route": "hepatitis_v1.0_mmg_hepatitis_a_acute",
+    "mmgs": [
+      "mmg:generic_mmg_v2.0",
+      "mmg:hepatitis_v1.0_mmg_core",
+      "mmg:hepatitis_v1.0_mmg_hepatitis_a_acute"
+    ],
+    "reporting_jurisdiction": "48"
+  },
+ "meta_message_uuid": "",
+ "summary": {
+    "current_status": "STRUCTURE_VALID"
+ },
+ "metadata":
+    "provenance": {
+	{unchanged}
+       },
+     "processes": [
+	 {
+		 "process_name": "Receiver",
+		 "start_processing_time": "2022-10-01T13:00:00.000",
+		 "end_processing_time": "2022-10-01T13:01:00.000",
+		 "process_version": "1.0.0",
+		 "status": "SUCCESS"
+	 },
+	 {
+		 "process_name": "Structure-Validator",
+		 "start_processing_time": "2022-10-01T13:02:00.000",
+		 "end_processing_time": "2022-10-01T13:03:00.000",
+		 "process_version": "1.0.0",
+		 "status": "SUCCESS"
+		"report": {
+		  {full NIST Report}
+		}
+	 },
+	 {
+		 "process_name": "MMG-Validator",
+		 "start_processing_time": "2022-10-01T13:03:00.000",
+		 "end_processing_time": "2022-10-01T13:04:00.000",
+		 "process_version": "1.0.0",
+		 "status": "SUCCESS"
+		"report": {
+		  {full MMG Validation Report}
+		}
+	 }
+   ]
+ },
+ "metadata_version": "1"
+}
 
 ```
-mvn archetype:generate \
-    -DarchetypeGroupId=com.microsoft.azure \
-    -DarchetypeArtifactId=azure-functions-kotlin-archetype
-```
 
-### Local Dependencies:
 
-```
-mvn install:install-file \
-    -Dfile=hl7-pet-1.2.6.jar \
-    -DgroupId=io.github.mscaldas2012\
-    -DartifactId=hl7-pet \
-    -Dversion=1.2.6 \
-    -Dpackaging=jar \
-    -DpomFile=hl7-pet-1.2.6.pom
-```
-
-```
-<?xml version='1.0' encoding='UTF-8'?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>io.github.mscaldas2012</groupId>
-    <artifactId>hl7-pet</artifactId>
-    <packaging>jar</packaging>
-    <description>this project is a library to Parse HL7 v2 messages</description>
-    <url>https://github.com/mscaldas2012/HL7-PET</url>
-    <version>1.2.6</version>
-    <licenses>
-        <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <name>HL7-PET</name>
-    <organization>
-        <name>mscaldas2012</name>
-        <url>https://github.com/mscaldas2012/HL7-PET</url>
-    </organization>
-    <scm>
-        <url>https://github.com/mscaldas2012/HL7-PET</url>
-        <connection>scm:git@github.com:mscaldas2012/HL7-PET.git</connection>
-    </scm>
-    <developers>
-        <developer>
-            <id>mscaldas2012</id>
-            <name>Marcelo Caldas</name>
-            <url>https://github.com/mscaldas2012</url>
-            <email>mscaldas@gmail.com</email>
-        </developer>
-    </developers>
-    <dependencies>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>2.12.8</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_2.12</artifactId>
-            <version>3.0.8</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.10.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-scala_2.12</artifactId>
-            <version>2.10.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-modules-base</artifactId>
-            <version>2.10.1</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.6</version>
-        </dependency>
-    </dependencies>
-</project>
-```

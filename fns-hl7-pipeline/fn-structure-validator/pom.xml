@@ -13,17 +13,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <azure.functions.maven.plugin.version>1.19.0</azure.functions.maven.plugin.version>
-        <azure.functions.java.library.version>2.1.0</azure.functions.java.library.version>
+        <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
 
         <functionRegion>eastus</functionRegion>
         <subscriptionID>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionID>
         <functionResourceGroup>ocio-ede-dev-moderate-hl7-rg</functionResourceGroup>
         <functionServicePlan>tf-hl7-app-service-plan</functionServicePlan>
-        <functionAppName>tf-hl7-structure-validator-dev</functionAppName>
+        <functionAppName>ocio-ede-dev-hl7-structure-validator</functionAppName>
 
         <kotlin.version>1.7.20</kotlin.version>
-        <slf4j.version>2.0.0</slf4j.version>
-        <azevhub.version>5.14.0</azevhub.version>
+        <slf4j.version>2.0.5</slf4j.version>
+        <azevhub.version>5.15.0</azevhub.version>
     </properties>
 
     <dependencies>
@@ -69,9 +69,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>gov.cdc.ncezid</groupId>
+            <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-nist-validator</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>1.2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

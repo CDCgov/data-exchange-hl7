@@ -1,0 +1,66 @@
+{
+  "message_profile_identifier": [
+    {
+      "entity_identifier": "NOTF_ORU_v3.0",
+      "namespace_id": "PHINProfileID",
+      "universal_id": "2.16.840.1.114222.4.10.3",
+      "universal_id_type": "ISO"
+    },
+    {
+      "entity_identifier": "Generic_MMG_V2.0",
+      "namespace_id": "PHINMsgMapID",
+      "universal_id": "2.16.840.1.114222.4.10.4",
+      "universal_id_type": "ISO"
+    }
+  ],
+  "local_subject_id": {
+    "id_number": "TickTBRD_TC04",
+    "check_digit": null,
+    "check_digit_scheme": null,
+    "assigning_authority": "SendAppName&2.16.840.1.114222.1234&ISO",
+    "identifier_type_code": null,
+    "assigning_facility": null,
+    "effective_date": null,
+    "expiration_date": null,
+    "assigning_jurisdiction": null,
+    "assigning_agency_or_department": null
+  },
+  "birth_date": "19630401",
+  "subjects_sex": "M",
+  "race_category": [
+    {
+      "identifier": "2054-5",
+      "text": "Black or African American",
+      "name_of_coding_system": "CDCREC",
+      "alternate_identifier": null,
+      "alternate_text": null,
+      "name_of_alternate_coding_system": null,
+      "code_system_concept_name": "Black or African American",
+      "cdc_preferred_designation": "Black or African American"
+    }
+  ],
+  "ethnic_group": {
+    "identifier": "2186-5",
+    "text": "Not Hispanic or Latino",
+    "name_of_coding_system": "CDCREC",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "code_system_concept_name": "Not \nHispanic or Latino",
+    "cdc_preferred_designation": "Not Hispanic or Latino"
+  },
+  "subject_address_county": null,
+  "subject_address_state": "51",
+  "subject_address_zip_code": "22030",
+  "deceased_date": null,
+  "condition_code": {
+    "identifier": "11088",
+    "text": "Ehrlichia chaffeensis",
+    "name_of_coding_system": "NND",
+    "alternate_identifier": null,
+    "alternate_text": null,
+    "name_of_alternate_coding_system": null,
+    "code_system_concept_name": null,
+    "cdc_preferred_designation": null
+  }
+}
