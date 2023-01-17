@@ -15,7 +15,8 @@ class MMGLoaderTest {
     }
     @Test
     fun testLoadVocab() {
-       val fn = VocabClient()
+        val redisProxy = RedisProxy(redisName, redisKey)
+       val fn = VocabClient(redisProxy)
        fn.loadVocab()
    }
 
