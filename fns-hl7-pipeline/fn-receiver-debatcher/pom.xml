@@ -19,18 +19,16 @@
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
 
-        <stagingDirectory>${project.build.directory}/azure-functions/ocio-ede-${environment-id}-hl7-receiver-debatcher</stagingDirectory>
+        <functionAppName>ocio-ede-${environment-id}-hl7-receiver-debatcher</functionAppName>
+        <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
+
         <slf4j.version>2.0.5</slf4j.version>
         <azevhub.version>5.15.0</azevhub.version>
         <azstblob.version>12.19.0</azstblob.version>
-        <gson.version>2.10</gson.version>
-        <functionRegion>eastus</functionRegion>
-        <subscriptionID>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionID>
-        <functionResourceGroup>ocio-ede-dev-moderate-hl7-rg</functionResourceGroup>
-        <functionServicePlan>tf-hl7-app-service-plan</functionServicePlan>
-        <functionAppName>ocio-ede-dev-hl7-receiver-debatcher</functionAppName>
+        <gson.version>2.10.1</gson.version>
+
         <hl7pet.version>1.2.7.1</hl7pet.version>
-        <junitjupiter.version>5.9.0</junitjupiter.version>
+        <junitjupiter.version>5.9.2</junitjupiter.version>
 
     </properties>
 
@@ -145,7 +143,7 @@
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
-                    <appName>ocio-ede-${environment-id}-hl7-receiver-debatcher</appName>
+                    <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
@@ -248,6 +246,16 @@
                             <directory>obj</directory>
                         </fileset>
                     </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <REDIS_CACHE_NAME>tf-vocab-cache-dev.redis.cache.windows.net</REDIS_CACHE_NAME>
+                        <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                    </environmentVariables>
                 </configuration>
             </plugin>
         </plugins>
