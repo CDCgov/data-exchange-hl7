@@ -15,12 +15,13 @@ import gov.cdc.nist.validator.NistReport
 class ValidationTest {
 
     companion object {
-        private val gson = GsonBuilder().serializeNulls().create()
+        private val gson = GsonBuilder().disableHtmlEscaping().serializeNulls().create()
     } // .companion object
 
     private fun validateMessage(fileName: String): NistReport {
         val testMessage = this::class.java.getResource(fileName).readText()
-        val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get()
+//        val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get()
+        val phinSpec =testMessage.split("\n")[0].split("|")[20].split("^")[0]
         val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
 
         val report = nistValidator.validate(testMessage)
@@ -29,8 +30,7 @@ class ValidationTest {
     }
     @Test
     fun testValidateMessage() {
-       validateMessage("/Lyme_WithWarnings.txt")
-
+       validateMessage("/Lyme_V1.0.2_TM_TC01.hl7")
     }
 
     @Test
