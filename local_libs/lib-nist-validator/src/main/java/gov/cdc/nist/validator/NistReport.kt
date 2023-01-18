@@ -47,11 +47,11 @@ data class SummaryCount(
 )
 
 class Entries {
-    var structure = listOf<Entry>()
-    var content   = listOf<Entry>()
+    var structure = ArrayList<Entry>()
+    var content   = ArrayList<Entry>()
     @JsonProperty  ("value-set")
     @SerializedName("value-set")
-    var valueset  = listOf<Entry>()
+    var valueset  = ArrayList<Entry>()
 }
 //
 //@JsonIgnoreProperties(ignoreUnknown = true)
