@@ -72,7 +72,7 @@ class ValidatorFunction {
                 var phinSpec: String? = null
                 try {
 //                    phinSpec = hl7Content.split("\n")[0].split("|")[20].split("^")[0]
-                    phinSpec = HL7StaticParser.getFirstValue(hl7Content,"MSH-21[1].1").get()
+                    phinSpec = HL7StaticParser.getFirstValue(hl7Content,PHIN_SPEC_PROFILE).get()
                     context.logger.fine("Processing Structure Validation for profile $phinSpec")
                     val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
                     val report = nistValidator.validate(hl7Content)
@@ -97,7 +97,7 @@ class ValidatorFunction {
                 } catch (e: ArrayIndexOutOfBoundsException) {
                     throw  InvalidMessageException("Unable to process Message: Unable to retrieve Phin Specification from message, MSH-21[1].1 Not found - messageUUID: $messageUUID, filePath: $filePath. ")
                 } catch (e: InvalidFileException) {
-                    throw InvalidMessageException("Unable to process Message due to Phin Spec: ${phinSpec} not recognized.  messageUUID: $messageUUID, filePath: $filePath")
+                    throw InvalidMessageException("Unable to process Message due to Phin Spec: $phinSpec not recognized.  messageUUID: $messageUUID, filePath: $filePath")
                 }
 
             } catch (e: Exception) {

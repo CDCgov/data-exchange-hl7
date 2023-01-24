@@ -9,37 +9,29 @@ import java.nio.file.Paths
 import org.slf4j.LoggerFactory
 import com.google.gson.GsonBuilder
 import gov.cdc.hl7.HL7StaticParser
+import gov.cdc.nist.validator.NistReport
 
 
 class ValidationTest {
 
     companion object {
-        private val gsonWithNullsOn = GsonBuilder().serializeNulls().create() 
+        private val gson = GsonBuilder().disableHtmlEscaping().serializeNulls().create()
     } // .companion object
 
+    private fun validateMessage(fileName: String): NistReport {
+        val testMessage = this::class.java.getResource(fileName).readText()
+//        val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get()
+        val phinSpec =testMessage.split("\n")[0].split("|")[20].split("^")[0]
+        val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
+
+        val report = nistValidator.validate(testMessage)
+        println("report: -->\n\n${gson.toJson(report)}\n")
+        return report
+    }
     @Test
     fun testValidateMessage() {
-        val testMessage = this::class.java.getResource("/Invalid-GenV1-0-Case-Notification.hl7").readText()
-//        val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get()
-        val phinSpec =testMessage.split("\n")[0].split("|")[20].split("^")[0]
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
-
-        val report = nistValidator.validate(testMessage)
-        println(report)
+       validateMessage("/Lyme_V1.0.2_TM_TC01.hl7")
     }
-
-    @Test
-    fun testValidateMessageAndLogReport() {
-        
-        val testMessage = this::class.java.getResource("/Invalid-GenV1-0-Case-Notification.hl7").readText()
-//        val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get()
-        val phinSpec =testMessage.split("\n")[0].split("|")[20].split("^")[0]
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
-
-        val report = nistValidator.validate(testMessage)
-        println("report: -->\n\n${gsonWithNullsOn.toJson(report)}\n")   
-
-    } // .testValidateMessageAndLogReport
 
     @Test
     fun testExtractPhinSpec() {
@@ -103,4 +95,36 @@ class ValidationTest {
     fun testHep10Messages() {
         testFolder("Hep")
     }
+
+    @Test
+    fun testMessageWithZeroErrorsAndWarnings() {
+        val report = validateMessage("/tbrd/BDB_LAB_02.txt")
+        assert(report.status == "VALID_MESSAGE")
+        assert(report.errorCounts?.structure   == 0)
+        assert(report.errorCounts?.valueset == 0)
+        assert(report.errorCounts?.content == 0)
+
+        assert(report.warningcounts?.structure == 0)
+        assert(report.warningcounts?.valueset == 0)
+        assert(report.warningcounts?.content == 0)
+    }
+
+    @Test
+    fun testGenV1MessageWithErrors() {
+        val report = validateMessage("/Invalid-GenV1-0-Case-Notification.hl7")
+        assert(report.status == "STRUCTURE_ERRORS")
+        assert(report.errorCounts?.structure!! > 0)
+    }
+
+    @Test
+    fun testMessageWithWarningNoErrors() {
+        val report = validateMessage("/Lyme_WithWarnings.txt")
+        assert(report.status == "VALID_MESSAGE")
+        assert(report.errorCounts?.structure   == 0)
+        assert(report.errorCounts?.valueset == 0)
+        assert(report.errorCounts?.content == 0)
+
+        assert(report.warningcounts?.structure == 1)
+    }
+
 }
