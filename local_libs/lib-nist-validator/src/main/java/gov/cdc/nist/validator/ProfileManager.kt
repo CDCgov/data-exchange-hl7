@@ -109,9 +109,9 @@ class ProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
             status = CONTENT_ERRORS_STATUS
         }
 
-        nist.entries.structure = filteredMap[STRUCTURE_ENTRIES] ?: listOf()
-        nist.entries.content = filteredMap[CONTENT_ENTRIES] ?: listOf ()
-        nist.entries.valueset = filteredMap[VALUE_SET_ENTRIES] ?: listOf()
+        nist.entries.structure = (filteredMap[STRUCTURE_ENTRIES] ?: ArrayList()) as java.util.ArrayList<Entry>
+        nist.entries.content = (filteredMap[CONTENT_ENTRIES] ?: ArrayList ()) as java.util.ArrayList<Entry>
+        nist.entries.valueset = (filteredMap[VALUE_SET_ENTRIES] ?: ArrayList()) as java.util.ArrayList<Entry>
         nist.transferErrorCounts(errCount)
         nist.transferWarningCounts(warCount)
         nist.status = status
