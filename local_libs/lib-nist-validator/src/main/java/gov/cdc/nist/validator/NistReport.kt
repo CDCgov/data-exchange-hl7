@@ -20,18 +20,18 @@ class NistReport {
     var warningcounts: SummaryCount?  = null
     var status:String? = null
 
-    fun transferErrorCounts(map: HashMap<String, AtomicInteger>) {
+    fun transferErrorCounts(map: Map<*, AtomicInteger>?) {
         this.errorCounts = transferCounts(map)
     }
-    fun transferWarningCounts(map: HashMap<String, AtomicInteger>) {
+    fun transferWarningCounts(map: Map<*,AtomicInteger>?) {
         this.warningcounts = transferCounts(map)
     }
 
-    private fun transferCounts( map: HashMap<String, AtomicInteger> ):SummaryCount {
+    private fun transferCounts(map: Map<*, AtomicInteger>?):SummaryCount {
         return SummaryCount(
-       map["structure"]?.get() ?:0,
-            map["value-set"]?.get() ?:0,
-       map["content"]?.get() ?:0
+       map?.get("structure")?.get() ?:0,
+            map?.get("value-set")?.get() ?:0,
+       map?.get("content")?.get() ?:0
         )
     }
 

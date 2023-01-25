@@ -18,7 +18,10 @@ class TimerTriggerFunction {
         @TimerTrigger(name = "timerInfo", schedule = "%PHINVOCAB_TIME_TRIGGER%") timerInfo: String?,
         context: ExecutionContext
     ) {
-        val client = VocabClient()
+        val redisName = System.getenv("REDIS_CACHE_NAME")
+        val redisKey = System.getenv("REDIS_CACHE_KEY")
+        val redisProxy = RedisProxy(redisName, redisKey)
+        val client = VocabClient(redisProxy)
         context.logger.info("PhinVocabRead time trigger processed a request.")
 
         try {

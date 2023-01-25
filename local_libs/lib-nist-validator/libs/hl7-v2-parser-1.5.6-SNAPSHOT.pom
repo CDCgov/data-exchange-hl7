@@ -3,35 +3,27 @@
     <groupId>gov.nist</groupId>
     <artifactId>hl7-v2-parser</artifactId>
     <packaging>jar</packaging>
-    <description>A suite of libraries for parsing and validating HL7 v2xx messages and conformance profile</description>
-    <version>1.4.2</version>
+    <description>hl7-v2-parser</description>
+    <version>1.5.6-SNAPSHOT</version>
     <name>hl7-v2-parser</name>
-    <inceptionYear>2013</inceptionYear>
     <organization>
         <name>gov.nist</name>
-        <url>http://nist.gov</url>
     </organization>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.11.5</version>
+            <version>2.13.10</version>
         </dependency>
         <dependency>
             <groupId>gov.nist</groupId>
             <artifactId>hl7-v2-profile</artifactId>
-            <version>1.4.2</version>
+            <version>1.5.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <repositories>
         <repository>
-            <id>jitpackio</id>
-            <name>jitpack.io</name>
-            <url>https://jitpack.io/</url>
-            <layout>default</layout>
-        </repository>
-        <repository>
-            <id>jitpackio</id>
+            <id>jitpack.io</id>
             <name>jitpack.io</name>
             <url>https://jitpack.io/</url>
             <layout>default</layout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:simpleType name="PositiveInteger">
+        <xs:restriction base="xs:integer">
+            <xs:pattern value="[0-9]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="IntegerOrStar">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d+|\*"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="NonEmptyString">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[\s]*[\S].*"/> <!-- \S is the negation of \s  -->
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="BindingStrengthType">
+        <xs:restriction base="NonEmptyString">
+            <xs:enumeration value="R"/> <!-- Required -->
+            <xs:enumeration value="S"/> <!-- Suggested -->
+            <xs:enumeration value="U"/> <!-- Undetermined -->
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="BindingLocationType">
+        <xs:restriction base="NonEmptyString">
+            <xs:pattern value="(\d+)|(\d+:\d+)"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
