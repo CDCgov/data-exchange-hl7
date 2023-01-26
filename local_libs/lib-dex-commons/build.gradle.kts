@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("com.google.code.gson:gson:2.9.1")
+    implementation("com.google.code.gson:gson:2.10.1")
     //Azure:
     implementation("com.azure:azure-messaging-eventhubs:5.14.0")
     implementation("redis.clients:jedis:4.3.1")
