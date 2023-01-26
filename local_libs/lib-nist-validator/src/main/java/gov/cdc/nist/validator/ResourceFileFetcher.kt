@@ -17,13 +17,13 @@ class ResourceFileFetcher: ProfileFetcher {
 
     @Throws(InvalidFileException::class)
     override fun getFileAsInputStream(file: String): InputStream {
-        return getResourceFile(file)!!
+        return getResourceFile(file)
     }
 
 
-    private fun getResourceFile(fileName: String): InputStream? {
+    private fun getResourceFile(fileName: String): InputStream {
         try {
-            return this::class.java.getResourceAsStream(fileName)
+            return this::class.java.getResourceAsStream(fileName)!!
         } catch (e: NullPointerException) {
             throw InvalidFileException("Unable to load profile for $fileName")
         }

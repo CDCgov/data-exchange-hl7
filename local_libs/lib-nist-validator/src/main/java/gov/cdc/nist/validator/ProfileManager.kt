@@ -6,6 +6,7 @@ import hl7.v2.profile.XMLDeserializer
 import hl7.v2.validation.SyncHL7Validator
 import hl7.v2.validation.content.DefaultConformanceContext
 import hl7.v2.validation.vs.ValueSetLibraryImpl
+import java.io.InputStream
 
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
@@ -47,26 +48,32 @@ class ProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
             // get ConformanceContext
             val contextXML1 = profileFetcher.getFileAsInputStream("$profile/CONSTRAINTS.xml")
             // The second conformance context XML file
-    //        val confContexts = mutableListOf<InputStream>()
             val confContexts = mutableListOf(contextXML1)
-            try {
-                val contextXML2 = profileFetcher.getFileAsInputStream("$profile/PREDICATES.xml")
-                confContexts.add(contextXML2)
-                //Add predicates to confContexts...
+            var contextXML2:InputStream? =try {
+                profileFetcher.getFileAsInputStream("$profile/PREDICATES.xml")
             } catch (e: Exception) {
                 logger.fine("No Predicate Available for group $profile. Ignoring Predicate.")
                 //No predicate available... ignore file...
+                null
             }
+            if (contextXML2 != null)
+                confContexts.add(contextXML2)
             // The get() at the end will throw an exception if something goes wrong
             val conformanceContext = DefaultConformanceContext.apply(confContexts.toList()).get()
             // get ValueSetLibrary
             val vsLibXML = profileFetcher.getFileAsInputStream("$profile/VALUESETS.xml")
             val valueSetLibrary = ValueSetLibraryImpl.apply(vsLibXML).get()
             validator = SyncHL7Validator(profileX, valueSetLibrary, conformanceContext)
+            //Close Resources:
+            profileXML.close()
+            contextXML1.close()
+            vsLibXML.close()
+            contextXML2?.close()
         } catch (e: Error) {
-            logger.warning("UNABLE TO READ PROFILE: " + profile + " with error:\n" + e.message)
+            logger.warning("UNABLE TO READ PROFILE: $profile with error:\n${e.message}")
 //            e.printStackTrace()
-            throw  InvalidFileException("Unable to parse profile file with error: " + e.message)
+            throw  InvalidFileException("Unable to parse profile file with error: ${e.message}")
+
         }
     }
 
