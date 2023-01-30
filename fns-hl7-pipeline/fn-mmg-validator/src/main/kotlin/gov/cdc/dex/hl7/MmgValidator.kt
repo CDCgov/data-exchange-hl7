@@ -69,60 +69,73 @@ class MmgValidator {
     } // .validate
 
     private fun validateObservationSubId(hl7Message: String, blockRepeat: Boolean, element: Element, msgValues: List<String>, report:MutableList<ValidationIssue>) {
+        // for repeating blocks only: check that OBX-4 is valued and is unique for each OBX-3.1
         if (blockRepeat) {
             //msgValues is a list of segments where each has the same value in OBX-3.1
-            println("${element.name} : ${msgValues}")
             if (msgValues.isNotEmpty()) {
                 // get the list of values in OBX-4 for these segments
                 val allOBXs = msgValues.joinToString("\n")
                 val subIdGroups = HL7StaticParser.getValue(allOBXs, "OBX-4")
                 if (subIdGroups.isDefined) {
                     val subIdList = subIdGroups.get().flatten()
-                    println("$subIdList")
                     if (subIdList.size < msgValues.size) {
-                        //error: one or more sub-ids are empty
-                        println("Error: sub-id missing")
-                        return
-                    }
-                    // make sure the sub-ids are unique
-                    try {
-                        val sortedIds = subIdList.map { it.toInt() }.toTypedArray().sorted()
-                        val sortedIdSet = sortedIds.toSet()
-                        if (sortedIdSet.size < sortedIds.size) {
-                            // error: sub-ids are not unique
-                            // determine which OBX is to blame
-
-                            //var lineNumber = getLineNumber()
-                        }
-                        if (element.mappings.hl7v251.repeatingGroupElementType.contains("PRIMARY|PARENT|YES".toRegex())) {
-                           // for single or parent elements, make sure sub-ids are sequential, starting with 1
-                            val isSequential = IntStream.range(0, sortedIds.size)
-                                .allMatch { value: Int -> value + 1 == sortedIds[value] }
-                            println("isSequential: $isSequential")
-                            if (!isSequential) {
-                                //error: sub-ids must be sequential for parent elements
+                        // error: one or more sub-ids are empty
+                        msgValues.forEachIndexed{idx, seg ->
+                            if (!HL7StaticParser.getValue(seg, "OBX-4").isDefined) {
+                                val line = getLineNumber(hl7Message, element, idx)
                                 report += ValidationIssue(
-                                    classification = getCategory(element.mappings.hl7v251.usage),
+                                    classification = ValidationIssueCategoryType.ERROR,
                                     category = ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION,
-                                    fieldName = element.name,
-                                    path = element.getValuePath(),
-                                    line = 1, //Data types only have single value.
-                                    errorMessage = ValidationErrorMessage.OBSERVATION_SUB_ID_NOT_UNIQUE,
-                                    description = "OBX-4 must be sequential starting with value 1 for PRIMARY/PARENT or YES repeating element types."
+                                    fieldName = "Observation Sub-Id",
+                                    path = "${element.getSegmentPath()}-4.1",
+                                    line = line,
+                                    errorMessage = ValidationErrorMessage.OBSERVATION_SUB_ID_MISSING,
+                                    description = "Observation Sub-Id is empty for repeating block element ${element.name}."
                                 )
                             }
                         }
-                    } catch (e : NumberFormatException) {
-                        // error: sub-id is not numeric
-                    }
+                     } else {
+                        // make sure the sub-ids are unique
+                        val sortedIds = subIdList.sorted()
+                        val duplicates = sortedIds.groupingBy { it }.eachCount().filter { (_, v) -> v >= 2 }
+                        if (duplicates.isNotEmpty()) {
+                            // error: combination of OBX-3 and OBX-4 must be unique
+                            msgValues.forEachIndexed{idx, seg ->
+                                duplicates.forEach { entry ->
+                                    if (HL7StaticParser.getValue(seg, "OBX-4").get().flatten()[0] == entry.key) {
+                                        val line = getLineNumber(hl7Message, element, idx)
+                                        report += ValidationIssue(
+                                            classification = ValidationIssueCategoryType.ERROR,
+                                            category = ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION,
+                                            fieldName = "Observation Sub-Id",
+                                            path = "${element.getSegmentPath()}-4.1",
+                                            line = line,
+                                            errorMessage = ValidationErrorMessage.OBSERVATION_SUB_ID_NOT_UNIQUE,
+                                            description = "Observation Sub-Id ${entry.key} is used more than once for data element ${element.name}."
+                                        )
+                                    }
+                                }
+                            }
+                        } // .if duplicates
+                    } // .else
                 } else {
-                    //error: sub-id is missing
-                }
+                    // isDefined == false means sub-id is missing on all segments
+                    val line = getLineNumber(hl7Message, element, 0)
+                    report += ValidationIssue(
+                        classification = ValidationIssueCategoryType.ERROR,
+                        category = ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION,
+                        fieldName = "Observation Sub-Id",
+                        path = "${element.getSegmentPath()}-4.1",
+                        line = line,
+                        errorMessage = ValidationErrorMessage.OBSERVATION_SUB_ID_MISSING,
+                        description = "Observation Sub-Id is empty for all instances of repeating element ${element.name}."
+                    )
+                } // .else
 
-            }
+            } // .if msgValues not empty
 
-        }
-    }
+        } // .if repeating
+    } // .validateObservationSubId
 
     private fun validateOtherSegments(hl7Message: String, mmgs: Array<MMG>, report: MutableList<ValidationIssue> ) {
         val elementsByObxID = makeMMGsMapByObxID(mmgs)
