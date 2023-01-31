@@ -35,7 +35,6 @@ class TimerTriggerFunction {
     }
 
     @FunctionName("MMGATRead")
-
     fun runMmgat(
         @TimerTrigger(name = "timerInfo", schedule = "%MMGAT_TIME_TRIGGER%") timerInfo: String?,
         context: ExecutionContext
