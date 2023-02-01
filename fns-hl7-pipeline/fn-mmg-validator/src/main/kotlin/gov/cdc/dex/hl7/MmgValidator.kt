@@ -9,7 +9,6 @@ import gov.cdc.dex.redisModels.MMG
 import gov.cdc.hl7.HL7StaticParser
 import org.slf4j.LoggerFactory
 import scala.Option
-import java.util.stream.IntStream
 
 
 class MmgValidator {
