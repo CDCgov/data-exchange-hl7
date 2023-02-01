@@ -96,26 +96,23 @@ class MmgValidator {
                         }
                      } else {
                         // make sure the sub-ids are unique
-                        val sortedIds = subIdList.sorted()
-                        val duplicates = sortedIds.groupingBy { it }.eachCount().filter { (_, v) -> v >= 2 }
+                        val duplicates = subIdList.groupingBy { it }.eachCount().filter { (_, v) -> v >= 2 }
                         if (duplicates.isNotEmpty()) {
                             // error: combination of OBX-3 and OBX-4 must be unique
-                            msgValues.forEachIndexed{idx, seg ->
-                                duplicates.forEach { entry ->
-                                    if (HL7StaticParser.getValue(seg, "OBX-4").get().flatten()[0] == entry.key) {
-                                        val line = getLineNumber(hl7Message, element, idx)
-                                        report += ValidationIssue(
-                                            classification = ValidationIssueCategoryType.ERROR,
-                                            category = ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION,
-                                            fieldName = "Observation Sub-Id",
-                                            path = "${element.getSegmentPath()}-4.1",
-                                            line = line,
-                                            errorMessage = ValidationErrorMessage.OBSERVATION_SUB_ID_NOT_UNIQUE,
-                                            description = "Observation Sub-Id ${entry.key} is used more than once for data element ${element.name}."
-                                        )
-                                    }
-                                }
-                            }
+                            duplicates.forEach { entry ->
+                                // generate one error message, use last instance of duplicate as the line number
+                                val line = getLineNumber(hl7Message, element, entry.value-1)
+                                report += ValidationIssue(
+                                    classification = ValidationIssueCategoryType.ERROR,
+                                    category = ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION,
+                                    fieldName = "Observation Sub-Id",
+                                    path = "${element.getSegmentPath()}-4.1",
+                                    line = line,
+                                    errorMessage = ValidationErrorMessage.OBSERVATION_SUB_ID_NOT_UNIQUE,
+                                    description = "The combination of data element identifier (OBX-3) and observation sub-id (OBX-4) must be unique for data element ${element.name}."
+                                )
+                            } // .foreach
+
                         } // .if duplicates
                     } // .else
                 } else {
