@@ -100,7 +100,8 @@ class MmgValidator {
                             // error: combination of OBX-3 and OBX-4 must be unique
                             duplicates.forEach { entry ->
                                 // generate one error message, use last instance of duplicate as the line number
-                                val line = getLineNumber(hl7Message, element, entry.value-1)
+                                val idx = subIdList.lastIndexOf(entry.key)
+                                val line = getLineNumber(hl7Message, element, idx)
                                 report += ValidationIssue(
                                     classification = ValidationIssueCategoryType.ERROR,
                                     category = ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION,

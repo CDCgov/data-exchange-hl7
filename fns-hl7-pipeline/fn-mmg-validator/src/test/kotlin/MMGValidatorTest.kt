@@ -4,6 +4,7 @@ import gov.cdc.dex.hl7.MmgValidator
 import gov.cdc.dex.hl7.exception.InvalidMessageException
 import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.ReportStatus
+import gov.cdc.dex.hl7.model.ValidationIssueType
 import gov.cdc.dex.mmg.InvalidConditionException
 
 
@@ -16,7 +17,7 @@ import java.nio.file.Paths
 class MMGValidatorTest {
 
     companion object {
-        private val gson = GsonBuilder().serializeNulls().create()
+        private val gson = GsonBuilder().serializeNulls().disableHtmlEscaping().create()
     } // .companion object
 
 
@@ -31,7 +32,7 @@ class MMGValidatorTest {
     }
     @Test
     fun testLogMMGValidatorReport() {
-        val report = validateMessage("/Lyme_V1.0.2_TM_TC01.hl7")
+        val report = validateMessage("/arbo/ARBOVIRAL_V1_3_TM_CN_TC01.txt")
     } // .testLogMMGValidatorReport
 
 
@@ -115,5 +116,24 @@ class MMGValidatorTest {
         assert(report.status == ReportStatus.MMG_VALID)
         assert(report.errorCount == 0)
         assert(report.warningCount > 0)
+    }
+
+    @Test
+    fun testUTF() {
+        println(MmgValidator.REPORTING_JURISDICTION_PATH)
+    }
+
+    @Test
+    fun testOBR3and4Uniqueness() {
+        val report = validateMessage("/TestOBR3and4Uniqueness.txt")
+        assert(report.status == ReportStatus.MMG_ERRORS)
+        assert(report.errorCount == 1)
+        assert(report.warningCount == 1)
+
+        val warning = report.entries.filter { it.category == ValidationIssueType.CARDINALITY }[0]
+        assert(warning.line == 60)
+
+        val error = report.entries.filter { it.category == ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION }[0]
+        assert(error.line == 60)
     }
 }
