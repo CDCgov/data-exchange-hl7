@@ -122,9 +122,19 @@ class ValidatorFunction {
         request: HttpRequestMessage<Optional<String>>,
         context: ExecutionContext): HttpResponseMessage {
 
-        val hl7Message = request.body?.get().toString()
-        var phinSpec: String?
-        var nistValidator: ProfileManager?
+        val hl7Message : String?
+        try {
+            hl7Message = request.body?.get().toString()
+        } catch (e: NoSuchElementException) {
+            return buildHttpResponse(
+                "No body was found. Please send an HL7 v.2.x message in the body of the request.",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
+        }
+
+        val phinSpec: String?
+        val nistValidator: ProfileManager?
         try {
             phinSpec = HL7StaticParser.getFirstValue(hl7Message, PHIN_SPEC_PROFILE).get()
         } catch (e: NoSuchElementException) {
