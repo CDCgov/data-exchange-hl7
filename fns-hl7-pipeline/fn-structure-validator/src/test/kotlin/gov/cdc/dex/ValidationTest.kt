@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
 
-import org.slf4j.LoggerFactory
 import com.google.gson.GsonBuilder
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
@@ -30,7 +29,7 @@ class ValidationTest {
     }
     @Test
     fun testValidateMessage() {
-       validateMessage("/Lyme_V1.0.2_TM_TC01.hl7")
+       validateMessage("/Lyme_WithMMGWarnings.txt")
     }
 
     @Test
@@ -55,7 +54,7 @@ class ValidationTest {
 //                    val phinSpec =testMsg.split("\n")[0].split("|")[20].split("^")[0]
                     val phinSpec = HL7StaticParser.getFirstValue(testMsg, "MSH-21[1].1")
                     if (phinSpec.isDefined) {
-                        val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.get()}")
+                        val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec}")
 
                         val report = nistValidator.validate(testMsg)
                         println("Status: ${report.status}; Errors: ${report.errorCounts}; Warnings: ${report.warningcounts}")
@@ -98,7 +97,7 @@ class ValidationTest {
 
     @Test
     fun testMessageWithZeroErrorsAndWarnings() {
-        val report = validateMessage("/tbrd/BDB_LAB_02.txt")
+        val report = validateMessage("/Lyme_HappyPath.txt")
         assert(report.status == "VALID_MESSAGE")
         assert(report.errorCounts?.structure   == 0)
         assert(report.errorCounts?.valueset == 0)
@@ -111,7 +110,7 @@ class ValidationTest {
 
     @Test
     fun testGenV1MessageWithErrors() {
-        val report = validateMessage("/Invalid-GenV1-0-Case-Notification.hl7")
+        val report = validateMessage("/GenV1_withStructureErrors.txt")
         assert(report.status == "STRUCTURE_ERRORS")
         assert(report.errorCounts?.structure!! > 0)
     }

@@ -21,7 +21,7 @@ class EventHubPayloadTest {
         processMD.endProcessTime = Date().toIsoString()
 
         //Validate a message to test report to Json
-//        val testMessage = this::class.java.getResource("/Invalid-GenV1-0-Case-Notification.hl7").readText()
+//        val testMessage = this::class.java.getResource("/GenV1_withStructureErrors.txt").readText()
 ////        val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get()
 //        val phinSpec = "NND_ORU_V2.0"
 //        val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")

@@ -1,11 +1,14 @@
 package gov.cdc.dex.validation.structure
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.microsoft.azure.functions.ExecutionContext
+import com.microsoft.azure.functions.*
+import com.microsoft.azure.functions.annotation.AuthorizationLevel
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
+import com.microsoft.azure.functions.annotation.HttpTrigger
 import gov.cdc.dex.azure.EventHubSender
 
 import gov.cdc.dex.metadata.Problem
@@ -30,7 +33,7 @@ class ValidatorFunction {
         private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
 
         private val logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
-        val gson = Gson()
+        val gson = GsonBuilder().serializeNulls().create()
     }
     /**
      * This function will be invoked when an event is received from Event Hub.
@@ -110,5 +113,34 @@ class ValidatorFunction {
                 ehSender.send(evHubNameErrs, Gson().toJson(inputEvent))
             }
         }
+    }
+
+    @FunctionName("validate")
+    fun invoke(
+        @HttpTrigger(name = "req",
+            methods = [HttpMethod.POST],
+            authLevel = AuthorizationLevel.ANONYMOUS)
+        request: HttpRequestMessage<Optional<String>>,
+        context: ExecutionContext): HttpResponseMessage {
+
+        val hl7Message = request.body?.get().toString()
+
+        hl7Message.let {
+            val phinSpec = HL7StaticParser.getFirstValue(hl7Message,PHIN_SPEC_PROFILE).get()
+            context.logger.info("Validating message with SPEC: $phinSpec")
+            val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec?.uppercase()}")
+            val report = nistValidator.validate(hl7Message)
+
+            return request
+                .createResponseBuilder(HttpStatus.OK)
+                .header("Content-Type", "application/json")
+                .body(gson.toJson(report))
+                .build()
+        }
+
+        return request
+            .createResponseBuilder(HttpStatus.BAD_REQUEST)
+            .body("Please pass HL7 message on the request body")
+            .build()
     }
 }
