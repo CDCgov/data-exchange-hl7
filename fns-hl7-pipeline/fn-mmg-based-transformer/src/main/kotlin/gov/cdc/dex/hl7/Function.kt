@@ -4,7 +4,6 @@ import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
 
-// import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
 import com.google.gson.JsonObject
@@ -27,6 +26,9 @@ import redis.clients.jedis.Jedis
 
 import gov.cdc.dex.metadata.ProcessMetadata
 
+import gov.cdc.dex.util.JsonHelper.addArrayElement
+import gov.cdc.dex.util.JsonHelper.toJsonElement
+
 /**
  * Azure function with event hub trigger for the MMG Based Transformer
  * Takes and HL7 message and transforms it to an MMG Based JSON model
@@ -41,22 +43,7 @@ class Function {
         val PROCESS_NAME = "mmgBasedTransformer"
         // val PROCESS_VERSION = "1.0.0"
     } // .companion
-
-    // TODO: Start change back to library once fixed for serialize nulls
-    fun Any.toJsonElement():JsonElement {
-        val jsonStr = GsonBuilder().serializeNulls().create().toJson(this)
-        return JsonParser.parseString(jsonStr)
-    }
-
-    fun JsonObject.addArrayElement(arrayName: String, processMD: ProcessMetadata) {
-        val currentProcessPayload = this[arrayName]
-        if (currentProcessPayload == null) {
-            this.add(arrayName,  JsonArray())
-        }
-        val currentArray = this[arrayName].asJsonArray
-        currentArray.add(processMD.toJsonElement())
-    }
-    // TODO: End. change back to library once fixed for serialize nulls
+    
 
     @FunctionName("mmgBasedTransformer")
     fun eventHubProcessor(
