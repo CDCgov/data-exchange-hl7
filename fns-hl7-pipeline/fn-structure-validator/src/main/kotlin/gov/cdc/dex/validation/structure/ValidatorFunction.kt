@@ -74,8 +74,7 @@ class ValidatorFunction {
 
                 var phinSpec: String? = null
                 try {
-//                    phinSpec = hl7Content.split("\n")[0].split("|")[20].split("^")[0]
-                    phinSpec = HL7StaticParser.getFirstValue(hl7Content,PHIN_SPEC_PROFILE).get()
+                    phinSpec = HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
                     context.logger.fine("Processing Structure Validation for profile $phinSpec")
                     val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
                     val report = nistValidator.validate(hl7Content)
@@ -124,23 +123,51 @@ class ValidatorFunction {
         context: ExecutionContext): HttpResponseMessage {
 
         val hl7Message = request.body?.get().toString()
-
-        hl7Message.let {
-            val phinSpec = HL7StaticParser.getFirstValue(hl7Message,PHIN_SPEC_PROFILE).get()
-            context.logger.info("Validating message with SPEC: $phinSpec")
-            val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec?.uppercase()}")
-            val report = nistValidator.validate(hl7Message)
-
-            return request
-                .createResponseBuilder(HttpStatus.OK)
-                .header("Content-Type", "application/json")
-                .body(gson.toJson(report))
-                .build()
+        var phinSpec: String?
+        var nistValidator: ProfileManager?
+        try {
+            phinSpec = HL7StaticParser.getFirstValue(hl7Message, PHIN_SPEC_PROFILE).get()
+        } catch (e: NoSuchElementException) {
+            return buildHttpResponse(
+                "The profile (MSH-21.1) is missing.",
+                HttpStatus.EXPECTATION_FAILED,
+                request
+            )
         }
 
-        return request
-            .createResponseBuilder(HttpStatus.BAD_REQUEST)
-            .body("Please pass HL7 message on the request body")
-            .build()
+        try {
+            context.logger.info("Validating message with SPEC: $phinSpec")
+            nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec?.uppercase()}")
+        } catch (e: NullPointerException) {
+            return buildHttpResponse(
+                "Could not find PHIN Spec $phinSpec.",
+                HttpStatus.EXPECTATION_FAILED,
+                request
+            )
+        }
+
+        return try {
+            val report = nistValidator.validate(hl7Message)
+            buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
+        } catch (e: Exception) {
+            buildHttpResponse(
+                "Please pass an HL7 message on the request body.",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
+        }
     }
+
+}
+
+private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+    var contentType : String = "application/json"
+    if (status != HttpStatus.OK) {
+        contentType = "text/plain"
+    }
+    return request
+        .createResponseBuilder(status)
+        .header("Content-Type", contentType)
+        .body(message)
+        .build()
 }
