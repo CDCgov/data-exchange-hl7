@@ -9,7 +9,8 @@ enum class ValidationIssueType(val message: String) {
     DATA_TYPE("data_type"), 
     CARDINALITY("cardinality"), 
     VOCAB("vocabulary"),
-    SEGMENT_NOT_IN_MMG("segment_not_in_mmg");
+    SEGMENT_NOT_IN_MMG("segment_not_in_mmg"),
+    OBSERVATION_SUB_ID_VIOLATION("observation_sub_id_violation");
 }
 
 enum class ValidationErrorMessage(val message: String) {
@@ -19,7 +20,9 @@ enum class ValidationErrorMessage(val message: String) {
     CARDINALITY_OVER("Element has more repeats than allowed by MMG cardinality"),
     VOCAB_NOT_AVAILABLE("Vocabulary not available for code system code"),
     VOCAB_ISSUE("Vocabulary code system code and code concept not found in vocabulary entries"),
-    SEGMENT_NOT_IN_MMG("HL7 segment found in the message that is part of the MMG definitions");
+    SEGMENT_NOT_IN_MMG("HL7 segment found in the message that is not part of the MMG definitions"),
+    OBSERVATION_SUB_ID_MISSING("Observation Sub-Id must be populated for data elements in a repeating group."),
+    OBSERVATION_SUB_ID_NOT_UNIQUE("The combination of the data element identifier (OBX-3) and the observation sub-id (OBX-4) must be unique.")
 }
 
 

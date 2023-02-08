@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.12] - 2023-02-08
+  - Fixed Fortify Vulnerability scans issues
+  - Enhanced MMG Validation with following rules:
+     - OBX 3 + OBX-4 must be unique
+     - OBX-4 must be present for grouped elements
+  - Added HTTP endpoints for structure and mmg-validation for QA
+
+
+
 ### [0.0.11] - 2023-01-25
   - Parameterized Azure environment specific variables on pom files of Azure function projects to help with CI/CD
   - Finalized upgrade of NIST library for v. 1.5.6 and scala 2.13

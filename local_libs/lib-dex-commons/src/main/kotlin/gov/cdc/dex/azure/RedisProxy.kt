@@ -3,8 +3,9 @@ package gov.cdc.dex.azure
 import org.slf4j.LoggerFactory
 import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.Jedis
+import java.io.Closeable
 
-class RedisProxy( redisName: String,  redisKey:String,  redisPort: Int = 6380) {
+class RedisProxy( redisName: String,  redisKey:String,  redisPort: Int = 6380) : Closeable {
     companion object {
         const val REDIS_CACHE_NAME_PROP_NAME: String = "REDIS_CACHE_NAME"
         const val REDIS_PWD_PROP_NAME: String        = "REDIS_CACHE_KEY"
@@ -26,7 +27,7 @@ class RedisProxy( redisName: String,  redisKey:String,  redisPort: Int = 6380) {
         return jedis
     }
 
-    protected fun finalize() {
+    override fun close() {
         jedis.close()
     }
 }

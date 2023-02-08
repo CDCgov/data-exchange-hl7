@@ -1,6 +1,6 @@
-MSH|^~\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
-PID|1||TickborneLyme_TC01^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19930601|M||2054-5^Black or African American^CDCREC|^^^47^37209^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||
-OBR|1||TickborneLyme_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND
+MSH|^~\&|SendAppName^2.16.840.1.114222.444^ISO|Sending-Facility^2.16.840.1.114222.444^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||BDB_LAB_02^^^SendAppName&2.16.840.1.114222.3333&ISO||~^^^^^^S||19930601|F||2054-5^Black or African American^CDCREC|^^^47^37209^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||
+OBR|1||BDB_LAB_02^SendAppName^2.16.840.1.114222.3333^ISO|68991-9^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND
 OBX|1|ST|32624-9^Other Race Text^LN||Botswanan||||||F
 OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
 OBX|3|ST|21842-0^Other Birth Place^LN||Navajo Reservation||||||F
@@ -39,26 +39,26 @@ OBX|35|ST|74549-7^Person Reporting to CDC - Name^LN||John Doe||||||F
 OBX|36|ST|74548-9^Person Reporting to CDC - Phone Number^LN||456-987-8888||||||F
 OBX|37|ST|74547-1^Person Reporting to CDC - Email^LN||john.doe@email.com||||||F
 OBX|38|DT|77979-3^Case Investigation Start Date^LN||20180628||||||F
-OBX|39|DT|77995-9^Date Reported^LN||20180912||||||F
+OBX|39|DT|77995-9^Date Reported^LN||20220229||||||F
 OBX|40|TS|77972-8^Earliest Date Reported to County^LN||20180912||||||F
 OBX|41|TS|77973-6^Earliest Date Reported to State^LN||20180912||||||F
 OBX|42|SN|77991-8^MMWR Week^LN||^37||||||F
-OBX|43|DT|77992-6^MMWR Year^LN||2018||||||F
+OBX|43|DT|77992-6^MMWR Year^LN||2025||||||F
 OBX|44|DT|77970-2^Date First Reported to PHD^LN||20180912||||||F
-OBX|45|CWE|77966-0^Reporting State^LN||41^Tennessee^FIPS5_2||||||F
+OBX|45|CWE|77966-0^Reporting State^LN||47^Tennessee^FIPS5_2||||||F
 OBX|46|CWE|77967-8^Reporting County^LN||47003^Bedford, TN^FIPS6_4||||||F
 OBX|47|CWE|77968-6^National Reporting Jurisdiction^LN||47^TN^FIPS5_2||||||F
 OBX|48|TX|77999-1^Comment^LN||Patient was bitten by a tick during European backpacking trip||||||F
 OBX|49|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|69588003^Erythema Migrans^SCT||||||F
-OBX|50|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|50|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|N^No^HL70136||||||F
 OBX|51|CWE|INV929^Clinical Manifestation^PHINQUESTION|2|193093009^Bell's palsy^SCT||||||F
 OBX|52|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|2|N^No^HL70136||||||F
 OBX|53|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|233917008^Atrioventricular block^SCT||||||F
-OBX|54|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|54|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|N^No^HL70136||||||F
 OBX|55|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|48780006^Other cranial neuritis^SCT||||||F
 OBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F
 OBX|57|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|72274001^Radiculoneuropathy^SCT||||||F
-OBX|58|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|58|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|Y^Yes^HL70136||||||F
 OBX|59|CWE|INV929^Clinical Manifestation^PHINQUESTION|6|45170000^Encephalitis^SCT||||||F
 OBX|60|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|6|N^No^HL70136||||||F
 OBX|61|CWE|INV929^Clinical Manifestation^PHINQUESTION|7|62950007^Encephalomyelitis^SCT||||||F
@@ -69,17 +69,9 @@ OBX|65|SN|67453-1^Treatment Duration^LN|1|^10|d^day^UCUM|||||F
 OBX|66|ST|85658-3^Current Occupation^LN|1|Carpenter||||||F
 OBX|67|ST|85078-4^Current Industry^LN|1|Lumber retail||||||F
 OBX|68|CE|85657-5^Current Industry Standardized^LN|1|4090^Lumber and other construction materials merchant wholesalers [4090]^CDCINDUSTRY2010||||||F
-OBX|69|CWE|INV290^Test Type^PHINQUESTION|1|20449-5^EIA/ELISA^LN||||||F
+OBX|69|CWE|INV290^Test Type^PHINQUESTION|1|16480-6^EIA/ELISA IgG^LN||||||F
 OBX|70|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
 OBX|71|ST|LAB628^Test Result Quantitative^PHINQUESTION|1|2.5||||||F
 OBX|72|CWE|LAB115^Result Units^PHINQUESTION|1|{index_val}^index value^UCUM||||||F
 OBX|73|CWE|66746-9^Specimen Type^LN|1|119297000^Blood^SCT||||||F
 OBX|74|TS|68963-8^Specimen Collection Date/Time^LN|1|20180705||||||F
-OBX|75|CWE|INV290^Test Type^PHINQUESTION|2|32667-8^PCR^LN||||||F
-OBX|76|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F
-OBX|77|CWE|LAB278^Organism Name^PHINQUESTION|2|76327009^Borrelia burgdorferi^SCT||||||F
-OBX|78|CWE|66746-9^Specimen Type^LN|2|119325001^Skin^SCT||||||F
-OBX|79|TS|68963-8^Specimen Collection Date/Time^LN|2|20180705||||||F
-OBR|1||TickborneLyme_TC01^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9_not_epi^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND
-XTR|79|TS|68963-8^Specimen Collection Date/Time^LN|2|20180705||||||F
-

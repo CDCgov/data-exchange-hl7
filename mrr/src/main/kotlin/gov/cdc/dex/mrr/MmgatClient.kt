@@ -21,19 +21,16 @@ class MmgatClient {
 
     private fun trustAllHosts() {
         try {
-
             /* Start of certificates fix */
             val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-                override fun getAcceptedIssuers(): Array<X509Certificate>? {
-                    return null
-                }
+                override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
 
                 override fun checkClientTrusted(certs: Array<X509Certificate>, authType: String) {}
                 override fun checkServerTrusted(certs: Array<X509Certificate>, authType: String) {}
             })
 
-            val sc = SSLContext.getInstance("SSL")
-            sc.init(null, trustAllCerts, SecureRandom())
+            val sc = SSLContext.getInstance("TLSv1.2")
+            sc.init(null, trustAllCerts , SecureRandom())
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.socketFactory)
             // Create all-trusting host name verifier
             val allHostsValid = HostnameVerifier { hostname, session -> true }
@@ -72,14 +69,21 @@ class MmgatClient {
         val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "GET"
         conn.setRequestProperty("Accept", "application/json")
+        var br : BufferedReader? = null
+        try {
+            if (conn.responseCode != 200) {
+                throw RuntimeException("Failed : HTTP error code : " + conn.responseCode)
+            }
+             br = BufferedReader(InputStreamReader((conn.inputStream)))
+            var line: String?
+            while ((br.readLine().also { line = it }) != null) {
+                sb.append(line)
+            }
+        }catch(e:Exception){
 
-        if (conn.responseCode != 200) {
-            throw RuntimeException("Failed : HTTP error code : " + conn.responseCode)
         }
-        val br = BufferedReader(InputStreamReader((conn.inputStream)))
-        var line: String?
-        while ((br.readLine().also { line = it }) != null) {
-            sb.append(line)
+        finally{
+            br?.close()
         }
         return sb.toString()
     }

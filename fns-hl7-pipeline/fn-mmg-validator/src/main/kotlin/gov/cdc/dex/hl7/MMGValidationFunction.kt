@@ -3,9 +3,11 @@ package gov.cdc.dex.hl7
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.microsoft.azure.functions.ExecutionContext
+import com.microsoft.azure.functions.*
+import com.microsoft.azure.functions.annotation.AuthorizationLevel
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
+import com.microsoft.azure.functions.annotation.HttpTrigger
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.MmgValidatorProcessMetadata
@@ -16,6 +18,7 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
+import gov.cdc.hl7.HL7StaticParser
 import java.util.*
 
 /**
@@ -66,29 +69,11 @@ class MMGValidationFunction {
                 
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
     
-//                try {
-                    // get MMG(s) for the message:
-                    //val mmgs = MmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
-                    // mmgs.forEach {
-                    //     context.logger.info("MMG blocks found for messageUUID: $messageUUID, filePath: $filePath, BLOCKS: --> ${it.blocks.size}")
-                    // }
-
                     val mmgValidator = MmgValidator()
                     val validationReport = mmgValidator.validate(hl7Content)
 
-                   // val otherSegmentsValidator = MmgValidatorOtherSegments( hl7Content, mmgs )
-                    //val validationReportOtherSegments = otherSegmentsValidator.validateOtherSegments()
-
-                    //val validationReportFull = validationReport + validationReportOtherSegments
                     context.logger.info("MMG Validation Report size for for messageUUID: $messageUUID, filePath: $filePath, size --> " + validationReport.size)
-
-                    // adding the content validation report to received message 
-                    // and sending to next event hub
-
-                    // get report status
-
                     val mmgReport = MmgReport( validationReport)
-                    
 
                     val processMD = MmgValidatorProcessMetadata(mmgReport.status.toString(), mmgReport)
                     processMD.startProcessTime = startTime
@@ -132,6 +117,35 @@ class MMGValidationFunction {
             }
         } // .message.forEach
     } // .eventHubProcessor
+
+    @FunctionName("validate-mmg")
+    fun invoke(
+        @HttpTrigger(name = "req",
+            methods = [HttpMethod.POST],
+            authLevel = AuthorizationLevel.ANONYMOUS)
+        request: HttpRequestMessage<Optional<String>>,
+        context: ExecutionContext): HttpResponseMessage {
+
+        val hl7Message = request.body?.get().toString()
+
+        hl7Message.let {
+            context.logger.info("Validating message...")
+            val mmgValidator = MmgValidator()
+            val validationReport = mmgValidator.validate(hl7Message)
+            val report = MmgReport( validationReport)
+
+            return request
+                .createResponseBuilder(HttpStatus.OK)
+                .header("Content-Type", "application/json")
+                .body(gson.toJson(report))
+                .build()
+        }
+
+        return request
+            .createResponseBuilder(HttpStatus.BAD_REQUEST)
+            .body("Please pass HL7 message on the request body")
+            .build()
+    }
 
 } // .Function
 

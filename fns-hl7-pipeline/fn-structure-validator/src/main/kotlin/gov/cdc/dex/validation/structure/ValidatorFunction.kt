@@ -1,11 +1,14 @@
 package gov.cdc.dex.validation.structure
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.microsoft.azure.functions.ExecutionContext
+import com.microsoft.azure.functions.*
+import com.microsoft.azure.functions.annotation.AuthorizationLevel
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
+import com.microsoft.azure.functions.annotation.HttpTrigger
 import gov.cdc.dex.azure.EventHubSender
 
 import gov.cdc.dex.metadata.Problem
@@ -30,7 +33,7 @@ class ValidatorFunction {
         private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
 
         private val logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
-        val gson = Gson()
+        val gson = GsonBuilder().serializeNulls().create()
     }
     /**
      * This function will be invoked when an event is received from Event Hub.
@@ -71,8 +74,7 @@ class ValidatorFunction {
 
                 var phinSpec: String? = null
                 try {
-//                    phinSpec = hl7Content.split("\n")[0].split("|")[20].split("^")[0]
-                    phinSpec = HL7StaticParser.getFirstValue(hl7Content,PHIN_SPEC_PROFILE).get()
+                    phinSpec = HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
                     context.logger.fine("Processing Structure Validation for profile $phinSpec")
                     val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
                     val report = nistValidator.validate(hl7Content)
@@ -111,4 +113,71 @@ class ValidatorFunction {
             }
         }
     }
+
+    @FunctionName("validate")
+    fun invoke(
+        @HttpTrigger(name = "req",
+            methods = [HttpMethod.POST],
+            authLevel = AuthorizationLevel.ANONYMOUS)
+        request: HttpRequestMessage<Optional<String>>,
+        context: ExecutionContext): HttpResponseMessage {
+
+        val hl7Message : String?
+        try {
+            hl7Message = request.body?.get().toString()
+        } catch (e: NoSuchElementException) {
+            return buildHttpResponse(
+                "No body was found. Please send an HL7 v.2.x message in the body of the request.",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
+        }
+
+        val phinSpec: String?
+        val nistValidator: ProfileManager?
+        try {
+            phinSpec = HL7StaticParser.getFirstValue(hl7Message, PHIN_SPEC_PROFILE).get()
+        } catch (e: NoSuchElementException) {
+            return buildHttpResponse(
+                "The profile (MSH-21.1) is missing.",
+                HttpStatus.EXPECTATION_FAILED,
+                request
+            )
+        }
+
+        try {
+            context.logger.info("Validating message with SPEC: $phinSpec")
+            nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec?.uppercase()}")
+        } catch (e: NullPointerException) {
+            return buildHttpResponse(
+                "Could not find PHIN Spec $phinSpec.",
+                HttpStatus.EXPECTATION_FAILED,
+                request
+            )
+        }
+
+        return try {
+            val report = nistValidator.validate(hl7Message)
+            buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
+        } catch (e: Exception) {
+            buildHttpResponse(
+                "Please pass an HL7 message on the request body.",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
+        }
+    }
+
+}
+
+private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+    var contentType : String = "application/json"
+    if (status != HttpStatus.OK) {
+        contentType = "text/plain"
+    }
+    return request
+        .createResponseBuilder(status)
+        .header("Content-Type", contentType)
+        .body(message)
+        .build()
 }
