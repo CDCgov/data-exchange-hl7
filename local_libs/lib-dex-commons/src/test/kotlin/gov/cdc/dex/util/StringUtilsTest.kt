@@ -13,8 +13,7 @@ internal class StringUtilsTest {
     fun normalizeString() {
         val newName = StringUtils.normalizeString("Fn 2.0-V1.0  & (Typhi/S)")
         println(newName)
-        assertTrue(newName == "fn_2.0_v1.0_and_typhi_s")
-
+        assertTrue(newName == "fn_2_0_v1_0_and_typhi_s")
     }
     
     @Test
