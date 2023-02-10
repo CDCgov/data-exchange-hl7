@@ -164,11 +164,9 @@ class Function {
 
 
                     val processMD = MmgSqlTransProcessMetadata(status="MMG_SQL_MODEL_OK", report=mmgSqlModel) 
-                    metadata.addArrayElement("processes", processMD)
-
-                    // process time
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
+                    metadata.addArrayElement("processes", processMD)
 
                     // enable for model
                     val inputEventOut = gsonWithNullsOn.toJson(inputEvent)
