@@ -2,7 +2,9 @@ package gov.cdc.dex.mmg
 
 import com.google.gson.Gson
 import gov.cdc.dex.azure.RedisProxy
+import gov.cdc.dex.redisModels.Condition2MMGMapping
 import gov.cdc.dex.redisModels.ValueSetConcept
+import gov.cdc.dex.util.JsonHelper.gson
 import org.junit.jupiter.api.Test
 
 
@@ -133,5 +135,31 @@ internal class MmgUtilTest {
         val vsObj = Gson().fromJson(vsJson, ValueSetConcept::class.java)
         println(vsObj)
 
+    }
+
+    @Test
+    fun listAllPossibleRoutes() {
+        val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
+
+        val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
+        val eventCodes = redisProxy.getJedisClient().keys("${MmgUtil.REDIS_CONDITION_PREFIX}*"  )
+        val routeList = mutableListOf<String?>()
+        eventCodes.forEach {
+            val code = gson.fromJson( redisProxy.getJedisClient().get( it) , Condition2MMGMapping::class.java)
+            code.profiles?.forEach { profile ->
+                val route = profile.mmgs?.last()?.replace(MmgUtil.REDIS_MMG_PREFIX, "")
+                if (!routeList.contains(route)) {
+                    routeList.add(route)
+                }
+                profile.specialCases?.forEach { specialCase ->
+                    val route2 = specialCase.appliesTo.replace(MmgUtil.REDIS_GROUP_PREFIX, "") + "_" + specialCase.mmgs?.last()?.replace(MmgUtil.REDIS_MMG_PREFIX, "")
+                    if (!routeList.contains(route2)) {
+                        routeList.add(route2)
+                    }
+                }
+            }
+        }
+        println(routeList)
     }
 }
