@@ -55,20 +55,7 @@ fun TestMetaData(){
     println("MD: $mdJson")
 
 }
-//
-//    fun Any.toJsonElement2(): JsonElement {
-//        val jsonStr = GsonBuilder().serializeNulls().create().toJson(this)
-//        return JsonParser.parseString(jsonStr)
-//    }
-//
-//    fun JsonObject.addArrayElement2(arrayName: String, processMD: ProcessMetadata) {
-//        val currentProcessPayload = this[arrayName]
-//        if (currentProcessPayload == null) {
-//            this.add(arrayName,  JsonArray())
-//        }
-//        val currentArray = this[arrayName].asJsonArray
-//        currentArray.add(processMD.toJsonElement2())
-//    }
+
 
 }
 
