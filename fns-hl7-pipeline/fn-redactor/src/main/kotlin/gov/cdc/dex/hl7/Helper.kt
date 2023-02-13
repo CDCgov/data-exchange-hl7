@@ -6,7 +6,7 @@ import scala.Tuple2
 
 
 class Helper {
-    fun getRedactedReport(msg :String): Tuple2<String, scala.collection.immutable.List<RedactInfo>>? {
+    fun getRedactedReport(msg :String): Tuple2<String,List<RedactInfo>>? {
       println("a")
         var rules = this::class.java.getResource("/case_config.txt").readText().lines()
         println("rules:${rules}")

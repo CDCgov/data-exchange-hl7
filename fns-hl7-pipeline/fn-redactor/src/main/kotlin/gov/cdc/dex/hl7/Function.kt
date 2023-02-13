@@ -72,7 +72,7 @@ class Function {
                 println("report: ${report._2}")
                 val warnings = RedactorReport(report._2().toList())
                 println("warning:$warnings")
-                val processMD = RedactorProcessMetadata(status =REDACTOR_STATUS_OK, report =warnings)
+                val processMD = RedactorProcessMetadata(status =REDACTOR_STATUS_OK, report =report._2)
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
                 println("processMD: $processMD")

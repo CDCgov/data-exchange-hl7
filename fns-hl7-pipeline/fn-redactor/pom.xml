@@ -16,8 +16,8 @@
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <functionAppName>fn-redactor-1675958879121</functionAppName>
 
-        <hl7pet.version>1.2.7.1</hl7pet.version>
-        <kotlin.version>1.7.10</kotlin.version>
+        <hl7pet.version>1.2.7.2</hl7pet.version>
+        <kotlin.version>1.8.0</kotlin.version>
         <lib-dex-commons.version>1.0.6-SNAPSHOT</lib-dex-commons.version>
     </properties>
 
