@@ -78,11 +78,14 @@ class ValidatorFunction {
                     context.logger.fine("Processing Structure Validation for profile $phinSpec")
                     val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
                     val report = nistValidator.validate(hl7Content)
+                    println("report: $report")
                     val processMD = StructureValidatorProcessMetadata(report.status?: "Unknown", report)
+                    println("processMD: $processMD")
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
 
                     metadata.addArrayElement("processes", processMD)
+                    println("metadata: $metadata")
                     //Update Summary element.
                     val summary = SummaryInfo(report.status ?: "Unknown")
                     if (NIST_VALID_MESSAGE != report.status ) {
