@@ -9,17 +9,18 @@ import gov.cdc.dex.hl7.TransformerSegments
 
 // No longer used
 // import com.google.gson.Gson
-// import com.google.gson.GsonBuilder
+import com.google.gson.GsonBuilder
 // import com.google.gson.reflect.TypeToken
 
-import gov.cdc.hl7.HL7HierarchyParser
-import gov.cdc.hl7.model.HL7Hierarchy 
 
 class LakeSegsTransTest {
 
     companion object {
 
         val logger = LoggerFactory.getLogger(LakeSegsTransTest::class.java.simpleName)
+        
+        // private val gson = Gson()
+        private val gsonWithNullsOn = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
     } // .companion 
 
 
@@ -28,19 +29,6 @@ class LakeSegsTransTest {
 
         logger.info("testLoggerInfo...")
     } // .testLoggerInfo
-
-    // No longer used
-    // @Test
-    // fun testLoadBasicProfileWithGson() {
-
-    //     val profileFilePath = "/BasicProfile.json"
-    //     val profileMapJson = this::class.java.getResource(profileFilePath).readText()
-    //     val profileMapType = object : TypeToken< Profile >() {}.type
-
-    //     val basicProfile: Profile = Gson().fromJson(profileMapJson, profileMapType)
-    
-    //     logger.info("basicProfile: --> $basicProfile")
-    // } // .testLoadBasicProfileWithGson
 
 
     @Test
@@ -60,33 +48,7 @@ class LakeSegsTransTest {
         val message = this::class.java.getResource(messagePath).readText()
 
         assertEquals(message.substring(0, 100).length, 100)
-    } // .testParseMessageHierarchyFromJson
-
-
-    @Test
-    fun testHierarchyParser() {  
-
-        logger.info("testHierarchyParser...")
-        
-        fun printTree(node: HL7Hierarchy, ident: String) {   
-            println("$ident --> ${node.segment()}")  
-             node.children().foreach {   
-                printTree(it, ident + " ")
-            }
-        } // .printTree
-
-
-        // read the profile
-        val profileFilePath = "/BasicProfile.json"
-        val profile = this::class.java.getResource(profileFilePath).readText()
-
-        // read the message:
-        val messagePath = "/Genv2_2-0-1_TC01.hl7"
-        val message = this::class.java.getResource(messagePath).readText()
-
-        val msgTree = HL7HierarchyParser.parseMessageHierarchyFromJson(message, profile)
-        printTree(msgTree, "")
-    } // .testHierarchyParser
+    } // .testReadLocalResources
 
 
 
@@ -94,19 +56,55 @@ class LakeSegsTransTest {
     fun testTransformerSegments() {
 
         logger.info("testTransformerSegments...")
-
         
-        val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val filePath = "/Hepatitis_V1_0_1_TM_TC02_HEP_B_ACUTE_MOD.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
 
-        val testMsg100 = testMsg.substring(0, 100)
-        assertEquals(testMsg100.length, 100)
+        // read the profile
+        val profileFilePath = "/BasicProfile.json"
+        val profile = this::class.java.getResource(profileFilePath).readText()
 
-        val lakeSegsModel = TransformerSegments().hl7ToSegments(testMsg)
 
-        logger.info(lakeSegsModel.toString().substring(0, 10))
+        val lakeSegsModel = TransformerSegments().hl7ToSegments(testMsg, profile)
+
+        // print the lake
+        lakeSegsModel.forEach { segments ->
+
+            segments.forEachIndexed { i, sg -> 
+                if (i != segments.lastIndex) print("$sg, ")
+                else print(sg)
+            } // .forEachIndexed 
+
+            println()
+
+        }// .forEach
+
+        assertEquals(lakeSegsModel.size, 8)
 
     } // .testTransformerSegments
+
+
+    @Test
+    fun testTransformerSegmentsToJson() {
+
+        logger.info("testTransformerSegments...")
+        
+        val filePath = "/Hepatitis_V1_0_1_TM_TC02_HEP_B_ACUTE_MOD.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+
+        // read the profile
+        val profileFilePath = "/BasicProfile.json"
+        val profile = this::class.java.getResource(profileFilePath).readText()
+
+
+        val lakeSegsModel = TransformerSegments().hl7ToSegments(testMsg, profile)
+
+        val lakeSegsModelJson = gsonWithNullsOn.toJson(lakeSegsModel)
+
+        logger.info("lakeSegsModelJson: --> $lakeSegsModelJson")
+
+        assertEquals(lakeSegsModelJson.substring(0, 100).length, 100)
+    } // .testTransformerSegmentsToJson
 
 
 } // .MmgSLakeSegsTransTestqlTest

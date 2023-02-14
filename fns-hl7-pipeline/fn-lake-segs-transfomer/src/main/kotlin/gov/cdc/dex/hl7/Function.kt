@@ -82,22 +82,25 @@ class Function {
 
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
-                
                 // 
                 // Process Message for SQL Model
                 // ----------------------------------------------
                 try {
+                    // read the profile
+                    val profileFilePath = "/BasicProfile.json"
+                    val profile = this::class.java.getResource(profileFilePath).readText()
 
                     // Transformer to Lake of Segments
                     // ------------------------------------------------------------------------------
-                    val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content)
+                    val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
 
                     val processMD = LakeSegsTransProcessMetadata(status=PROCESS_STATUS_OK, report=lakeSegsModel) 
-                    metadata.addArrayElement("processes", processMD)
 
                     // process time
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
+
+                    metadata.addArrayElement("processes", processMD)
 
                     // enable for model
                     val ehDestination = eventHubSendOkName
