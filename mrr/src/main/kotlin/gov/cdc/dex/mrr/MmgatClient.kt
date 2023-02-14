@@ -2,7 +2,8 @@ package gov.cdc.dex.mrr
 
 import com.google.gson.*
 import gov.cdc.dex.azure.RedisProxy
-import gov.cdc.dex.util.StringUtils
+import gov.cdc.dex.util.StringUtils.Companion.normalize
+import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -14,10 +15,11 @@ import java.time.LocalDateTime
 import javax.net.ssl.*
 
 class MmgatClient {
-    val GUIDANCE_STATUS_UAT = "useracceptancetesting"
-    val GUIDANCE_STATUS_FINAL = "final"
-
-    var MMG_AT_ROOT_URL = "https://mmgat.services.cdc.gov/api/guide/"
+    private val GUIDANCE_STATUS_UAT = "useracceptancetesting"
+    private val GUIDANCE_STATUS_FINAL = "final"
+    private val MMG_AT_ROOT_URL = "https://mmgat.services.cdc.gov/api/guide/"
+    private val MMG_NAMESPACE = "mmgv2:"
+    private val logger = LoggerFactory.getLogger(MmgatClient::class.java.name)
 
     private fun trustAllHosts() {
         try {
@@ -39,7 +41,7 @@ class MmgatClient {
             HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid)
             /* End of certificates fix*/
         } catch (e: Exception) {
-            throw Exception("Error in trustAllHosts method: +${e.printStackTrace()}")
+            throw Exception("Error in trustAllHosts method: ${e.printStackTrace()}")
         }
     }
 
@@ -50,7 +52,7 @@ class MmgatClient {
             return getContent(url)
         } catch (e: Exception) {
             println("exception:${e.printStackTrace()}")
-            throw Exception("Error in getGuideAll method: +${e.message}")
+            throw Exception("Error in getGuideAll method: ${e.message}")
 
         }
     }
@@ -60,11 +62,11 @@ class MmgatClient {
             val url = URL("${MMG_AT_ROOT_URL}$id?includeGenV2=false")
             return getContent(url)
         } catch (e: Exception) {
-            throw Exception("Error in getGuideById method: +${e.message}")
+            throw Exception("Error in getGuideById method: ${e.message}")
         }
     }
 
-    fun getContent(url: URL): String {
+    private fun getContent(url: URL): String {
         val sb = StringBuilder()
         val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "GET"
@@ -74,13 +76,13 @@ class MmgatClient {
             if (conn.responseCode != 200) {
                 throw RuntimeException("Failed : HTTP error code : " + conn.responseCode)
             }
-             br = BufferedReader(InputStreamReader((conn.inputStream)))
+            br = BufferedReader(InputStreamReader((conn.inputStream)))
             var line: String?
             while ((br.readLine().also { line = it }) != null) {
                 sb.append(line)
             }
         }catch(e:Exception){
-
+            logger.error("Error reading MMGAT input stream: ${e.message}")
         }
         finally{
             br?.close()
@@ -89,22 +91,21 @@ class MmgatClient {
     }
 
     fun loadLegacyMmgat(redisProxy: RedisProxy) {
-        val legacyMMGFolder = this::class.java.getResource("/legacy_mmgs")
+        val legacyMMGFolder = Thread.currentThread().contextClassLoader.getResource("legacy_mmgs")
+        if (legacyMMGFolder == null) {
+            logger.error("Directory legacy_mmgs not found.")
+            return
+        }
         val dir = File(legacyMMGFolder.file)
-        dir.walk().filter{ it.isFile }.forEach {
-            val legacyContent = this::class.java.getResource("/legacy_mmgs/${it.name}").readText()
-            val fileOutputJson = JsonParser.parseString(legacyContent)
-            var filename = StringUtils.normalizeString(it.name)
-            filename = "mmg:" + filename.substring(0, filename.lastIndexOf("."))
+        dir.walk().filter{ it.isFile && it.extension.lowercase() == "json"}.forEach {
+            var content = it.readText()
+            val fileOutputJson = JsonParser.parseString(content)
+            val filename = "$MMG_NAMESPACE${it.name.substring(0, it.name.lastIndexOf(".")).normalize()}"
             try {
-                var jedis = redisProxy.getJedisClient()
-                if (jedis.exists(filename))
-                    jedis.del(filename)
+                val jedis = redisProxy.getJedisClient()
                 jedis.set(filename, fileOutputJson.toString())
             } catch (e: Exception) {
-                throw Exception("Problem in setting Legacy MMGATs to Redis:${e.printStackTrace()}")
-            } finally {
-                //jedis.close()
+                throw Exception("Problem in setting Legacy MMGs to Redis:${e.printStackTrace()}")
             }
 
         }
@@ -113,18 +114,13 @@ class MmgatClient {
 
     fun loadMMGAT(redisProxy: RedisProxy) {
         try {
-            println("STARTING MMGATRead services")
-
+            logger.info("STARTING MMGATRead services")
             val mmgaGuide = this.getGuideAll().toString()
-
             val elem: JsonElement = JsonParser.parseString(mmgaGuide)
-            //context.logger.info("Json Array size:" + elem.asJsonObject.getAsJsonArray("result").size())
             val mmgatJArray = elem.asJsonObject.getAsJsonArray("result")
-            println("Json Array size:" + mmgatJArray.size())
+            logger.info("Json Array size:" + mmgatJArray.size())
             val gson = GsonBuilder().create()
-
             for (mmgatjson in mmgatJArray) {
-
                 val mj = mmgatjson.asJsonObject
                 //if (mj.get("guideStatus").asString.toLowerCase() in listOf(mmgaClient.GUIDANCE_STATUS_UAT, mmgaClient.GUIDANCE_STATUS_FINAL) )
                 if (mj.get("guideStatus").asString
@@ -143,8 +139,8 @@ class MmgatClient {
                     mresult.asJsonObject.remove("templates")
                     mresult.asJsonObject.remove("valueSets")
 
-                    val key = "mmg:"+ StringUtils.normalizeString(mj.get("name").asString)
-                    print("MMGAT name: $key")
+                    val key = "$MMG_NAMESPACE${mj.get("name").asString.normalize()}"
+                    logger.info("MMGAT name: $key")
                     if (redisProxy.getJedisClient().exists(key))
                         redisProxy.getJedisClient().del(key)
                     try {
@@ -152,17 +148,18 @@ class MmgatClient {
                         if(jedis.exists(key))
                             jedis.del(key)
                         jedis.set(key, gson.toJson(mresult))
-                        println("...Done!")
+                        logger.info("...Done!")
                     } catch (e: Throwable) {
-                        println("... ERRORED OUT")
+                        logger.info("... ERRORED OUT")
+                        logger.error(e.message)
                     }
                 }
             }
         } catch (e: Exception) {
-            println("Failure in MMGATREAD function : ${e.printStackTrace()} ")
+            logger.error("Failure in MMGATREAD function : ${e.printStackTrace()} ")
             throw e
         }
-        println("MMGATREAD Function executed at: " + LocalDateTime.now())
+        logger.info("MMGATREAD Function finished execution at: " + LocalDateTime.now())
 
     }
 

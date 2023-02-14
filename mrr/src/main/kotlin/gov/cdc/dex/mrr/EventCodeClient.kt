@@ -6,6 +6,7 @@ import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.redisModels.Condition2MMGMapping
 import gov.cdc.dex.redisModels.Profile
 import gov.cdc.dex.redisModels.SpecialCase
+import gov.cdc.dex.util.StringUtils.Companion.normalize
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
@@ -36,14 +37,19 @@ import kotlin.system.measureTimeMillis
 class EventCodeClient {
     private val debug = false
     private val logger = LoggerFactory.getLogger(EventCodeClient::class.java.name)
+    private val CONDITION_NAMESPACE = "conditionv3:"
+    private val GROUP_NAMESPACE = "group:"
+    private val MMG_NAMESPACE = "mmgv2:"
     fun loadGroups(redisProxy: RedisProxy) {
         // for each csv in resources/groups:
         // load csv file
         // get the group key and members
         // insert into redis as a set
-        val groupNamespace = "group:"
-        val url = this::class.java.getResource("/groups")
-//        if (url != null) {
+        val url = Thread.currentThread().contextClassLoader.getResource("groups")
+        if (url == null) {
+            logger.error("Directory 'groups' not found.")
+            return
+        }
         val dir = File(url.file)
 
         dir.walk()
@@ -57,7 +63,7 @@ class EventCodeClient {
                     )
 
                     for (row: CSVRecord in parser) {
-                        val groupName = groupNamespace + row.get("Group Name").trim()
+                        val groupName = "$GROUP_NAMESPACE${row.get("Group Name").trim()}"
                         val members = row.get("Jurisdiction Codes").split(" ")
                         // remove group if it already exists
                         redisProxy.getJedisClient().del(groupName)
@@ -81,10 +87,13 @@ class EventCodeClient {
         // save data object as JSON string
         // put the record into redis
         val timeInMillis = measureTimeMillis {
-            val namespace = "conditionv2:"
             val gson = Gson()
             logger.info("PING Redis: ${redisProxy.getJedisClient().ping()}")
-            val url = this::class.java.getResource("/event_codes")
+            val url = Thread.currentThread().contextClassLoader.getResource("event_codes")
+            if (url == null) {
+                logger.error("Directory event_codes not found.")
+                return
+            }
             val dir = File(url.file)
             val pipeline = redisProxy.getJedisClient().pipelined()
             dir.walk()
@@ -102,7 +111,7 @@ class EventCodeClient {
                             val conditionCode = row.get("Condition Code").trim()
                             val profilesString: String = row.get("Profiles").trim()
                             var profileObjList: MutableList<Profile>? = null
-                            // condition may not have a profile but we still need a record for provisioning.
+                            // condition may not have a profile, but we still need a record for provisioning.
                             if (profilesString.isNotEmpty()) {
                                 profileObjList = mutableListOf()
                                 val profileList: List<String> = profilesString.trim().split("|")
@@ -115,8 +124,9 @@ class EventCodeClient {
                                     row.get("Special Case MMGs").trim().split("|")
                                 // for each profile in the profile list, build the list of profile objects
                                 for ((profileIdx, profile: String) in profileList.withIndex()) {
-                                    val profileName = profile.trim().lowercase()
+                                    val profileName = profile.trim().normalize()
                                     val mmgList: List<String> = profileMmgLists[profileIdx].trim().split(";")
+                                    val normMmgList = mmgList.map { "$MMG_NAMESPACE${it.normalize()}"}
                                     val hasSpecial: String = specialCaseIndicators[profileIdx].trim()
                                     var specialCaseObjList: MutableList<SpecialCase>? = null
                                     if (hasSpecial == "Yes") {
@@ -127,10 +137,11 @@ class EventCodeClient {
                                         for ((groupIdx, group) in groups.withIndex()) {
                                             val specialMmgList: List<String> =
                                                 specialMmgsByGroup[groupIdx].trim().split(";")
+                                            val normSpecialMmgList = specialMmgList.map { "$MMG_NAMESPACE${it.normalize()}" }
                                             specialCaseObjList.add(
                                                 SpecialCase(
-                                                    appliesTo = group,
-                                                    mmgs = specialMmgList
+                                                    appliesTo = "$GROUP_NAMESPACE$group",
+                                                    mmgs = normSpecialMmgList
                                                 )
                                             )
                                         }
@@ -139,7 +150,7 @@ class EventCodeClient {
                                     profileObjList.add(
                                         Profile(
                                             name = profileName,
-                                            mmgs = mmgList,
+                                            mmgs = normMmgList,
                                             specialCases = specialCaseObjList
                                         )
                                     )
@@ -157,7 +168,7 @@ class EventCodeClient {
                             if (debug) println(eventString)
                             // Add record to redis pipeline
                             //println("Adding key $namespace$conditionCode to REDIS")
-                            pipeline.set(namespace + conditionCode, eventString)
+                            pipeline.set("$CONDITION_NAMESPACE$conditionCode", eventString)
                         } //.for row
                         // insert all the rows into redis
                         pipeline.sync()
@@ -167,8 +178,6 @@ class EventCodeClient {
             pipeline.close()
         }
         println("Loading Event Maps took $timeInMillis ms.")
-
-//            } //.use (will close connection)
 
     }
 }
