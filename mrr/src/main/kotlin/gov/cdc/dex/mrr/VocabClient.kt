@@ -8,13 +8,12 @@ import gov.cdc.vocab.service.bean.ValueSet
 import gov.cdc.vocab.service.bean.ValueSetConcept
 import redis.clients.jedis.Pipeline
 import java.net.MalformedURLException
-import java.util.concurrent.Executors
 import kotlin.system.measureTimeMillis
 
-class VocabClient(val redisProxy: RedisProxy) {
+class VocabClient(private val redisProxy: RedisProxy) {
     private var service: VocabService
     private val serviceUrl = "https://phinvads.cdc.gov/vocabService/v2"
-    val gson = GsonBuilder().create()
+    private val gson = GsonBuilder().create()
 
     private var phinVadsConnMS:Long = 0
     private var redisConnMS:Long = 0
@@ -27,7 +26,7 @@ class VocabClient(val redisProxy: RedisProxy) {
     }
 
     private fun getAllValueSets(): List<ValueSet> {
-        var vs = listOf<ValueSet>()
+        var vs: List<ValueSet>
         val timeInMillis = measureTimeMillis {
             val valuesResultSet = service.allValueSets
             vs =  valuesResultSet.valueSets.toList()
@@ -61,7 +60,7 @@ class VocabClient(val redisProxy: RedisProxy) {
     fun setValueSetConcepts(key: String, valuesetConcepts: List<ValueSetConcept>, pipeline: Pipeline, sync:Boolean) {
         val timeInMillis = measureTimeMillis {
             try {
-                print("Loading vocab:$key")
+                println("Loading vocab:$key")
                 valuesetConcepts.forEach {
                     pipeline.hset("vocab:$key", it.conceptCode, gson.toJson(it))
                 }
@@ -69,9 +68,7 @@ class VocabClient(val redisProxy: RedisProxy) {
                     pipeline.sync()
                 println("... Done! in $phinVadsConnMS / $redisConnMS")
             } catch (e: Exception) {
-                throw Exception("Problem in setting ValuesetConcepts to Redis:${e.printStackTrace()}")
-            } finally {
-                //jedis.close()
+                throw Exception("Problem in setting ValuesetConcepts to Redis: ${e.message}")
             }
         }
         redisConnMS += timeInMillis
@@ -100,6 +97,6 @@ class VocabClient(val redisProxy: RedisProxy) {
 //                exe.shutdown()
             }
         }
-        println("Finished loading all PHINVads in ${timeInMillis} ms, PHINVads->$phinVadsConnMS; Redis->$redisConnMS")
+        println("Finished loading all PHINVads in $timeInMillis ms, PHINVads->$phinVadsConnMS; Redis->$redisConnMS")
     }
 }

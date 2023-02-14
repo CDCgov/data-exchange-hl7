@@ -10,8 +10,8 @@ import gov.cdc.dex.util.StringUtils.Companion.normalize
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
-import org.slf4j.LoggerFactory
 import java.io.File
+import java.lang.Exception
 import kotlin.system.measureTimeMillis
 
 /*
@@ -36,20 +36,17 @@ import kotlin.system.measureTimeMillis
  */
 class EventCodeClient {
     private val debug = false
-    private val logger = LoggerFactory.getLogger(EventCodeClient::class.java.name)
     private val CONDITION_NAMESPACE = "conditionv3:"
     private val GROUP_NAMESPACE = "group:"
     private val MMG_NAMESPACE = "mmgv2:"
+
     fun loadGroups(redisProxy: RedisProxy) {
         // for each csv in resources/groups:
         // load csv file
         // get the group key and members
         // insert into redis as a set
         val url = Thread.currentThread().contextClassLoader.getResource("groups")
-        if (url == null) {
-            logger.error("Directory 'groups' not found.")
-            return
-        }
+            ?: throw Exception("Directory 'groups' not found.")
         val dir = File(url.file)
 
         dir.walk()
@@ -88,12 +85,9 @@ class EventCodeClient {
         // put the record into redis
         val timeInMillis = measureTimeMillis {
             val gson = Gson()
-            logger.info("PING Redis: ${redisProxy.getJedisClient().ping()}")
+            println("PING Redis: ${redisProxy.getJedisClient().ping()}")
             val url = Thread.currentThread().contextClassLoader.getResource("event_codes")
-            if (url == null) {
-                logger.error("Directory event_codes not found.")
-                return
-            }
+                ?: throw Exception("Directory event_codes not found.")
             val dir = File(url.file)
             val pipeline = redisProxy.getJedisClient().pipelined()
             dir.walk()

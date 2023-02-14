@@ -1,9 +1,10 @@
 package gov.cdc.dex.mrr
 
-import com.google.gson.*
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.util.StringUtils.Companion.normalize
-import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -11,7 +12,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
-import java.time.LocalDateTime
 import javax.net.ssl.*
 
 class MmgatClient {
@@ -19,7 +19,6 @@ class MmgatClient {
     private val GUIDANCE_STATUS_FINAL = "final"
     private val MMG_AT_ROOT_URL = "https://mmgat.services.cdc.gov/api/guide/"
     private val MMG_NAMESPACE = "mmgv2:"
-    private val logger = LoggerFactory.getLogger(MmgatClient::class.java.name)
 
     private fun trustAllHosts() {
         try {
@@ -35,7 +34,7 @@ class MmgatClient {
             sc.init(null, trustAllCerts , SecureRandom())
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.socketFactory)
             // Create all-trusting host name verifier
-            val allHostsValid = HostnameVerifier { hostname, session -> true }
+            val allHostsValid = HostnameVerifier { _, _ -> true }
 
             // Install the all-trusting host verifier
             HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid)
@@ -45,7 +44,7 @@ class MmgatClient {
         }
     }
 
-    fun getGuideAll(): String {
+    private fun getGuideAll(): String {
         try {
             trustAllHosts()
             val url = URL("${MMG_AT_ROOT_URL}all?type=0")
@@ -57,7 +56,7 @@ class MmgatClient {
         }
     }
 
-    fun getGuideById(id: String): String {
+    private fun getGuideById(id: String): String {
         try {
             val url = URL("${MMG_AT_ROOT_URL}$id?includeGenV2=false")
             return getContent(url)
@@ -82,7 +81,7 @@ class MmgatClient {
                 sb.append(line)
             }
         }catch(e:Exception){
-            logger.error("Error reading MMGAT input stream: ${e.message}")
+            throw Exception("Error reading MMGAT input stream: ${e.message}")
         }
         finally{
             br?.close()
@@ -92,75 +91,54 @@ class MmgatClient {
 
     fun loadLegacyMmgat(redisProxy: RedisProxy) {
         val legacyMMGFolder = Thread.currentThread().contextClassLoader.getResource("legacy_mmgs")
-        if (legacyMMGFolder == null) {
-            logger.error("Directory legacy_mmgs not found.")
-            return
-        }
+            ?: throw Exception("Directory legacy_mmgs not found.")
         val dir = File(legacyMMGFolder.file)
         dir.walk().filter{ it.isFile && it.extension.lowercase() == "json"}.forEach {
-            var content = it.readText()
+            val content = it.readText()
             val fileOutputJson = JsonParser.parseString(content)
             val filename = "$MMG_NAMESPACE${it.name.substring(0, it.name.lastIndexOf(".")).normalize()}"
-            try {
-                val jedis = redisProxy.getJedisClient()
-                jedis.set(filename, fileOutputJson.toString())
-            } catch (e: Exception) {
-                throw Exception("Problem in setting Legacy MMGs to Redis:${e.printStackTrace()}")
-            }
-
+            val jedis = redisProxy.getJedisClient()
+            jedis.set(filename, fileOutputJson.toString())
         }
     }
 
 
     fun loadMMGAT(redisProxy: RedisProxy) {
-        try {
-            logger.info("STARTING MMGATRead services")
-            val mmgaGuide = this.getGuideAll().toString()
-            val elem: JsonElement = JsonParser.parseString(mmgaGuide)
-            val mmgatJArray = elem.asJsonObject.getAsJsonArray("result")
-            logger.info("Json Array size:" + mmgatJArray.size())
-            val gson = GsonBuilder().create()
-            for (mmgatjson in mmgatJArray) {
-                val mj = mmgatjson.asJsonObject
-                //if (mj.get("guideStatus").asString.toLowerCase() in listOf(mmgaClient.GUIDANCE_STATUS_UAT, mmgaClient.GUIDANCE_STATUS_FINAL) )
-                if (mj.get("guideStatus").asString
-                        .equals(this.GUIDANCE_STATUS_UAT,true) || mj.get("guideStatus")
-                        .asString.equals(this.GUIDANCE_STATUS_FINAL,true)
-                ) {
-                    val id = (mj.get("id").asString)
-                    // context.logger.info("MMGAT id:$id")
-                    val mGuide = this.getGuideById(id)
-                    val melement = JsonParser.parseString(mGuide.toString())
-                    val mresult = melement.asJsonObject.get("result")
+        val mmgaGuide = this.getGuideAll()
+        val elem: JsonElement = JsonParser.parseString(mmgaGuide)
+        val mmgatJArray = elem.asJsonObject.getAsJsonArray("result")
+        println("Json Array size:" + mmgatJArray.size())
+        val gson = GsonBuilder().create()
+        for (mmgatjson in mmgatJArray) {
+            val mj = mmgatjson.asJsonObject
+            //if (mj.get("guideStatus").asString.toLowerCase() in listOf(mmgaClient.GUIDANCE_STATUS_UAT, mmgaClient.GUIDANCE_STATUS_FINAL) )
+            if (mj.get("guideStatus").asString
+                    .equals(this.GUIDANCE_STATUS_UAT,true) || mj.get("guideStatus")
+                    .asString.equals(this.GUIDANCE_STATUS_FINAL,true)
+            ) {
+                val id = (mj.get("id").asString)
+                // context.logger.info("MMGAT id:$id")
+                val mGuide = this.getGuideById(id)
+                val melement = JsonParser.parseString(mGuide)
+                val mresult = melement.asJsonObject.get("result")
 
-                    mresult.asJsonObject.remove("testScenarios")
-                    mresult.asJsonObject.remove("testCaseScenarioWorksheetColumns")
-                    mresult.asJsonObject.remove("columns")
-                    mresult.asJsonObject.remove("templates")
-                    mresult.asJsonObject.remove("valueSets")
+                mresult.asJsonObject.remove("testScenarios")
+                mresult.asJsonObject.remove("testCaseScenarioWorksheetColumns")
+                mresult.asJsonObject.remove("columns")
+                mresult.asJsonObject.remove("templates")
+                mresult.asJsonObject.remove("valueSets")
 
-                    val key = "$MMG_NAMESPACE${mj.get("name").asString.normalize()}"
-                    logger.info("MMGAT name: $key")
-                    if (redisProxy.getJedisClient().exists(key))
-                        redisProxy.getJedisClient().del(key)
-                    try {
-                         var jedis = redisProxy.getJedisClient()
-                        if(jedis.exists(key))
-                            jedis.del(key)
-                        jedis.set(key, gson.toJson(mresult))
-                        logger.info("...Done!")
-                    } catch (e: Throwable) {
-                        logger.info("... ERRORED OUT")
-                        logger.error(e.message)
-                    }
-                }
+                val key = "$MMG_NAMESPACE${mj.get("name").asString.normalize()}"
+                println("MMGAT name: $key")
+                if (redisProxy.getJedisClient().exists(key))
+                    redisProxy.getJedisClient().del(key)
+
+                    val jedis = redisProxy.getJedisClient()
+                    jedis.set(key, gson.toJson(mresult))
+                    println("...Done!")
+
             }
-        } catch (e: Exception) {
-            logger.error("Failure in MMGATREAD function : ${e.printStackTrace()} ")
-            throw e
         }
-        logger.info("MMGATREAD Function finished execution at: " + LocalDateTime.now())
-
     }
 
 
