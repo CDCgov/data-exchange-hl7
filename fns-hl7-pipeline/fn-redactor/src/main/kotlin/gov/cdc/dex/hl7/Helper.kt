@@ -6,14 +6,11 @@ import scala.Tuple2
 
 
 class Helper {
-    fun getRedactedReport(msg :String): Tuple2<String,List<RedactInfo>>? {
-      println("a")
+    fun getRedactedReport(msg: String): Tuple2<String, List<RedactInfo>>? {
         var rules = this::class.java.getResource("/case_config.txt").readText().lines()
-        println("rules:${rules}")
         val dIdentifier = DeIdentifier()
-       val report = dIdentifier.deIdentifyMessage(msg, rules.toTypedArray())
-       return report
-  }
+        return dIdentifier.deIdentifyMessage(msg, rules.toTypedArray())
+    }
 
 
-}t
+}

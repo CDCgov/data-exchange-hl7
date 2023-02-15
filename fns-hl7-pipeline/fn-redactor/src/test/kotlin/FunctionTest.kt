@@ -1,22 +1,20 @@
-import com.google.gson.*
-import com.google.gson.reflect.TypeToken
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import gov.cdc.dex.hl7.Helper
 import gov.cdc.dex.hl7.model.RedactorProcessMetadata
 import gov.cdc.dex.metadata.DexMetadata
-import gov.cdc.dex.metadata.ProcessMetadata
 import gov.cdc.dex.metadata.Provenance
 import gov.cdc.dex.util.JsonHelper.addArrayElement
-import gov.cdc.dex.util.JsonHelper.toJsonElement
-import gov.cdc.hl7.RedactInfo
 import org.junit.jupiter.api.Test
 
 class FunctionTest {
 
     @Test
     fun TestRedactor(){
-        val msg = this::class.java.getResource("/sample.txt").readText()
+        val msg = this::class.java.getResource("/sample.txt")?.readText()
         val helper = Helper()
-        val report =  helper.getRedactedReport(msg)
+        val report = msg?.let { helper.getRedactedReport(it) }
         if (report != null) {
             println("report msg :${report._1}")
             println("report list:${report._2}")
@@ -51,6 +49,7 @@ fun TestMetaData(){
 
     val mdJson = JsonParser.parseString(mdJsonStr) as JsonObject
     mdJson.addArrayElement("processes" , processMD)
+     mdJson.addProperty("test","test")
 
     println("MD: $mdJson")
 
