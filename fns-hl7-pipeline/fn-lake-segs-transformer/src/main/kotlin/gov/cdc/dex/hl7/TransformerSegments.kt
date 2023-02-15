@@ -5,7 +5,8 @@ import org.slf4j.LoggerFactory
 import gov.cdc.hl7.HL7HierarchyParser
 import gov.cdc.hl7.model.HL7Hierarchy 
 
-import gov.cdc.dex.hl7.model.Segment 
+import gov.cdc.dex.hl7.model.Segment
+import kotlin.collections.isNotEmpty 
 
 
 class TransformerSegments()  {
@@ -18,28 +19,23 @@ class TransformerSegments()  {
     // global for class
     var lakeFlatSegs: Array<Array<Pair<Int,String>>> = arrayOf()
     var flatSegs: Array<Pair<Int,String>> = arrayOf()
-    var treeIndex: Int = 1 
+    var treeIndex: Int = 0
 
 
-    fun hl7ToSegments(hl7Message: String, profile: String) : List<Segment>{
+    fun hl7ToSegments(hl7Message: String, profile: String) : List<Segment> {
 
         val segmentPairs: Array<Array<Pair<Int,String>>> = hl7ToSegmentPairs(hl7Message, profile)
 
-        // get just one MSH out for first entry in flat model
-        val mshSeg = segmentPairs.first().first() 
-        val mshObj = listOf( Segment(mshSeg.second, mshSeg.first, null) )
+        val segments = segmentPairs.map { segs -> 
 
-        // pairs to segment 
-        val flat = segmentPairs.map { segs -> 
-
-            val parentsPairs = segs.copyOfRange(0, segs.lastIndex) 
+            val parentsPairs = segs.copyOfRange(0, segs.lastIndex)
             
-            val parents = parentsPairs.map{ seg -> seg.second }
+            val parents = parentsPairs.map{ seg -> seg.second }.filter{ s -> s != "root"} // remove root parent, not needed
 
             Segment(segs.last().second, segs.last().first, parents)
-        } // .flat 
-
-        return mshObj.plus(flat)
+        } // .segments
+        
+        return ArrayList(segments).apply { removeAt(0) } // remove empty non HL7 root
     } // .hl7ToSegments
 
 
@@ -56,9 +52,9 @@ class TransformerSegments()  {
     private fun travTreeToArr(node: HL7Hierarchy) {
 
         // skip adding root string, only segments
-        if (node.segment() != "root") {
+        // if (node.segment() != "root") {
             flatSegs += Pair(treeIndex++, node.segment())
-        } // .if
+        // } // .if
 
         if ( node.children().isEmpty ) {
             // add this segments
@@ -67,6 +63,9 @@ class TransformerSegments()  {
             flatSegs = flatSegs.copyOfRange(0, flatSegs.lastIndex) 
 
         } else {
+            // add this segment once
+            lakeFlatSegs += flatSegs 
+
             // traverse children
             node.children().foreach { it: HL7Hierarchy -> 
                 travTreeToArr(it)

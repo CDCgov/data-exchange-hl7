@@ -2,11 +2,18 @@
   {
     "segment": "MSH|^~\\&|SendAppName",
     "segment_number": 1,
-    "parent_segments": null
+    "parent_segments": []
   },
   {
     "segment": "PID|1||HEP_B_TC02",
     "segment_number": 2,
+    "parent_segments": [
+      "MSH|^~\\&|SendAppName"
+    ]
+  },
+  {
+    "segment": "OBR|1|\"\"|HEP_B_TC02",
+    "segment_number": 3,
     "parent_segments": [
       "MSH|^~\\&|SendAppName"
     ]
@@ -44,11 +51,25 @@
     ]
   },
   {
+    "segment": "OBR|2|HEP23456-1^EHR",
+    "segment_number": 8,
+    "parent_segments": [
+      "MSH|^~\\&|SendAppName"
+    ]
+  },
+  {
     "segment": "OBX|2.1|CWE|16933-4",
     "segment_number": 9,
     "parent_segments": [
       "MSH|^~\\&|SendAppName",
       "OBR|2|HEP23456-1^EHR"
+    ]
+  },
+  {
+    "segment": "OBR|3|HEP23456-2^EHR",
+    "segment_number": 10,
+    "parent_segments": [
+      "MSH|^~\\&|SendAppName"
     ]
   },
   {

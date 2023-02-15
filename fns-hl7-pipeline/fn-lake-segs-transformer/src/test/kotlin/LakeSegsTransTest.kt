@@ -43,14 +43,14 @@ class LakeSegsTransTest {
         val profileFilePath = "/BasicProfile.json"
         val profile = this::class.java.getResource(profileFilePath).readText()
 
-        assertEquals(profile.substring(0, 100).length, 100)
+        assertEquals(100, profile.substring(0, 100).length)
 
 
         // read the message:
         val messagePath = "/Genv2_2-0-1_TC01.hl7"
         val message = this::class.java.getResource(messagePath).readText()
 
-        assertEquals(message.substring(0, 100).length, 100)
+        assertEquals(100, message.substring(0, 100).length)
     } // .testReadLocalResources
 
 
@@ -66,7 +66,7 @@ class LakeSegsTransTest {
             node.children().foreach { 
                 printTree(it, ident + " ")
             }
-        }
+        } // .printTree 
 
         logger.info("testPrintHL7HierarchyTree...")
         
@@ -102,7 +102,7 @@ class LakeSegsTransTest {
 
         logger.info("lakeSegsModel: --> $lakeSegsModel")
 
-        assertEquals(lakeSegsModel.size, 9)
+        assertEquals(12, lakeSegsModel.size)
     } // .testTransformerSegments
 
 
@@ -125,7 +125,7 @@ class LakeSegsTransTest {
 
         logger.info("lakeSegsModelJson: --> $lakeSegsModelJson")
 
-        assertEquals(lakeSegsModelJson.substring(0, 100).length, 100)
+        assertEquals(100, lakeSegsModelJson.substring(0, 100).length)
     } // .testTransformerSegmentsToJson
 
 
