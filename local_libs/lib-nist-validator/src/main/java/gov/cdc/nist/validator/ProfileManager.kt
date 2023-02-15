@@ -49,7 +49,7 @@ class ProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
             val contextXML1 = profileFetcher.getFileAsInputStream("$profile/CONSTRAINTS.xml")
             // The second conformance context XML file
             val confContexts = mutableListOf(contextXML1)
-            var contextXML2:InputStream? =try {
+            val contextXML2:InputStream? =try {
                 profileFetcher.getFileAsInputStream("$profile/PREDICATES.xml")
             } catch (e: Exception) {
                 logger.fine("No Predicate Available for group $profile. Ignoring Predicate.")
