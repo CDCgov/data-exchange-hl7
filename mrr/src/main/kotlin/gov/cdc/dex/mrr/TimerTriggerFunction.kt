@@ -29,7 +29,7 @@ class TimerTriggerFunction {
             client.loadVocab()
 
         } catch (e: Exception) {
-            context.logger.info("Failure in PhinVocabRead function : ${e.message} ")
+            context.logger.severe("Failure in PhinVocabRead function : ${e.message} ")
             throw Exception("Failure in PhinVocabRead function ::${e.message}")
         }
     }
@@ -45,10 +45,14 @@ class TimerTriggerFunction {
         val redisKey = System.getenv("REDIS_CACHE_KEY")
         val redisProxy = RedisProxy(redisName, redisKey)
         val client = MmgatClient()
-        //load legacy MMGAT'S
+         //load legacy MMGAT'S
+        context.logger.info("STARTING MMG loader services")
         client.loadLegacyMmgat(redisProxy)
+        context.logger.info("Legacy MMGs loaded")
         //load MMGAT's from API
         client.loadMMGAT(redisProxy)
+        context.logger.info("MMGAT MMGs loaded")
+        context.logger.info("COMPLETED MMG loader services")
 
     }
 
@@ -61,18 +65,14 @@ class TimerTriggerFunction {
         val redisName = System.getenv("REDIS_CACHE_NAME")
         val redisKey = System.getenv("REDIS_CACHE_KEY")
         val redisProxy = RedisProxy(redisName, redisKey)
-        try {
-            val client = EventCodeClient()
-            context.logger.info("STARTING Event Code services")
-            client.loadEventMaps(redisProxy)
-            context.logger.info("Event Maps loaded")
-            client.loadGroups(redisProxy)
-            context.logger.info("Groups loaded")
-            context.logger.info("COMPLETED Event Code services")
-        } catch (e: Exception) {
-            context.logger.info("Failure in EventCodesAndGroups function : ${e.printStackTrace()} ")
-            throw Exception("Failure in EventCodesAndGroups function ::${e.printStackTrace()}")
-        }
+        val client = EventCodeClient()
+        context.logger.info("STARTING Event Code services")
+        client.loadEventMaps(redisProxy)
+        context.logger.info("Event Maps loaded")
+        client.loadGroups(redisProxy)
+        context.logger.info("Groups loaded")
+        context.logger.info("COMPLETED Event Code services")
+
 
     }
 
