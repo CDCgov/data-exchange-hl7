@@ -2,7 +2,10 @@ package gov.cdc.dex.hl7
 
 import gov.cdc.dex.metadata.ProcessMetadata
 
-data class LakeSegsTransProcessMetadata (override val status: String, val report: Any?)
+import gov.cdc.dex.hl7.model.Segment 
+
+
+data class LakeSegsTransProcessMetadata (override val status: String, val report: List<Segment>?) // 
     : ProcessMetadata(PROCESS_NAME, PROCESS_VERSION, status) {
 
         companion object  {
