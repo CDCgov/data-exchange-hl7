@@ -18,6 +18,7 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
+import gov.cdc.dex.util.UnknownPropertyError
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.InvalidFileException
 
@@ -62,48 +63,55 @@ class ValidatorFunction {
         message.forEach { singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             // context.logger.info("singleMessage: --> $singleMessage")
-
+            val hl7Content : String
+            val metadata : JsonObject
+            val filePath : String
+            val messageUUID : String
             try {
-                val hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-                val metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
+                    try {
+                        hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
+                        metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
 
-                val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
-                val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                
-                context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+                        filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
+                        messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
 
-                var phinSpec: String? = null
-                try {
-                    phinSpec = HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
-                    context.logger.fine("Processing Structure Validation for profile $phinSpec")
-                    val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
-                    val report = nistValidator.validate(hl7Content)
-                    println("report: $report")
-                    val processMD = StructureValidatorProcessMetadata(report.status?: "Unknown", report)
-                    println("processMD: $processMD")
-                    processMD.startProcessTime = startTime
-                    processMD.endProcessTime = Date().toIsoString()
-
-                    metadata.addArrayElement("processes", processMD)
-                    println("metadata: $metadata")
-                    //Update Summary element.
-                    val summary = SummaryInfo(report.status ?: "Unknown")
-                    if (NIST_VALID_MESSAGE != report.status ) {
-                        summary.problem= Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, "Message failed Structure Validation" )
+                        context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+                    } catch (e: UnknownPropertyError) {
+                        throw InvalidMessageException("Unable to process Message: Unparsable JSON content.")
                     }
-                    inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                    //Send event
-                    val ehDestination = if (NIST_VALID_MESSAGE == report.status) evHubNameOk else evHubNameErrs
+                    var phinSpec: String?
+                    try {
+                        phinSpec = HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
+                    } catch (e: NoSuchElementException) {
+                        throw InvalidMessageException("Unable to process Message: Unable to retrieve PHIN Specification from message, MSH-21[1].1 Not found - messageUUID: $messageUUID, filePath: $filePath. ")
+                    }
+                    try {
+                       context.logger.fine("Processing Structure Validation for profile $phinSpec")
+                        val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
+                        val report = nistValidator.validate(hl7Content)
+                        val processMD = StructureValidatorProcessMetadata(report.status?: "Unknown", report)
+                        processMD.startProcessTime = startTime
+                        processMD.endProcessTime = Date().toIsoString()
+
+                        metadata.addArrayElement("processes", processMD)
+                        //Update Summary element.
+                        val summary = SummaryInfo(report.status ?: "Unknown")
+                        if (NIST_VALID_MESSAGE != report.status ) {
+                            summary.problem= Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, "Message failed Structure Validation" )
+                        }
+                        inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
+                        //Send event
+                        val ehDestination = if (NIST_VALID_MESSAGE == report.status) evHubNameOk else evHubNameErrs
 
 
-                    context.logger.info("Processed structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
-                    context.logger.finest("INPUT EVENT OUT: --> ${ gson.toJson(inputEvent) }")
-                    ehSender.send(ehDestination, Gson().toJson(inputEvent))
-                } catch (e: ArrayIndexOutOfBoundsException) {
-                    throw  InvalidMessageException("Unable to process Message: Unable to retrieve Phin Specification from message, MSH-21[1].1 Not found - messageUUID: $messageUUID, filePath: $filePath. ")
-                } catch (e: InvalidFileException) {
-                    throw InvalidMessageException("Unable to process Message due to Phin Spec: $phinSpec not recognized.  messageUUID: $messageUUID, filePath: $filePath")
-                }
+                        context.logger.info("Processed structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
+                        context.logger.finest("INPUT EVENT OUT: --> ${ gson.toJson(inputEvent) }")
+                        ehSender.send(ehDestination, Gson().toJson(inputEvent))
+                    } catch (e: NullPointerException) {
+                        throw  InvalidMessageException("Unable to process Message: Unable to load PHIN profile $phinSpec.  messageUUID: $messageUUID, filePath: $filePath")
+                    } catch (e: InvalidFileException) {
+                        throw InvalidMessageException("Unable to process Message due to PHIN Spec: $phinSpec not recognized.  messageUUID: $messageUUID, filePath: $filePath")
+                    }
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
