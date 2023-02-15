@@ -29,7 +29,7 @@ class TimerTriggerFunction {
             client.loadVocab()
 
         } catch (e: Exception) {
-            context.logger.info("Failure in PhinVocabRead function : ${e.message} ")
+            context.logger.severe("Failure in PhinVocabRead function : ${e.message} ")
             throw Exception("Failure in PhinVocabRead function ::${e.message}")
         }
     }

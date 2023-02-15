@@ -6,6 +6,7 @@ import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.vocab.service.VocabService
 import gov.cdc.vocab.service.bean.ValueSet
 import gov.cdc.vocab.service.bean.ValueSetConcept
+import org.apache.logging.log4j.LogManager
 import redis.clients.jedis.Pipeline
 import java.net.MalformedURLException
 import kotlin.system.measureTimeMillis
@@ -17,6 +18,7 @@ class VocabClient(private val redisProxy: RedisProxy) {
 
     private var phinVadsConnMS:Long = 0
     private var redisConnMS:Long = 0
+    private val logger = LogManager.getLogger()  //will automatically use the class name
     init {
         try {
             service = HessianProxyFactory().create(VocabService::class.java, serviceUrl) as VocabService
@@ -60,13 +62,13 @@ class VocabClient(private val redisProxy: RedisProxy) {
     fun setValueSetConcepts(key: String, valuesetConcepts: List<ValueSetConcept>, pipeline: Pipeline, sync:Boolean) {
         val timeInMillis = measureTimeMillis {
             try {
-                println("Loading vocab:$key")
+                logger.debug("Loading vocab:$key")
                 valuesetConcepts.forEach {
                     pipeline.hset("vocab:$key", it.conceptCode, gson.toJson(it))
                 }
                 if (sync)
                     pipeline.sync()
-                println("... Done! in $phinVadsConnMS / $redisConnMS")
+                logger.debug("... Done! in $phinVadsConnMS / $redisConnMS")
             } catch (e: Exception) {
                 throw Exception("Problem in setting ValuesetConcepts to Redis: ${e.message}")
             }
@@ -81,7 +83,7 @@ class VocabClient(private val redisProxy: RedisProxy) {
 //            val exe = Executors.newCachedThreadPool()
             try {
                 val valueSets = this.getAllValueSets()
-                println("Count of ValueSets:  ${valueSets.size}")
+                logger.debug("Count of ValueSets:  ${valueSets.size}")
 
                 val pipeline = redisProxy.getJedisClient().pipelined()
                 valueSets.forEachIndexed { idx, elem ->
@@ -89,7 +91,7 @@ class VocabClient(private val redisProxy: RedisProxy) {
                     try { //Sync every 200
                         setValueSetConcepts(elem.code, getValueSetConcepts(elem), pipeline, idx % 200 == 0 )
                     } catch (e: Exception) {
-                        println("Unable to load ${elem.code}")
+                        logger.error("Unable to load ${elem.code}")
                     }
 //                    }
                 }
@@ -97,6 +99,6 @@ class VocabClient(private val redisProxy: RedisProxy) {
 //                exe.shutdown()
             }
         }
-        println("Finished loading all PHINVads in $timeInMillis ms, PHINVads->$phinVadsConnMS; Redis->$redisConnMS")
+        logger.info("Finished loading all PHINVads in $timeInMillis ms, PHINVads->$phinVadsConnMS; Redis->$redisConnMS")
     }
 }
