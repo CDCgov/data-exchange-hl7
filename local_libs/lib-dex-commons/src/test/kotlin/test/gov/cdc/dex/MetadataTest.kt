@@ -70,7 +70,7 @@ class MetadataTest {
 
 
         val metadata = DexMetadata(provenance, listOf(processMD))
-        val event = DexEventPayload("MSH|...", DexMessageInfo(null,null,null,null), metadata, summary)
+        val event = DexEventPayload("MSH|...", DexMessageInfo(null,null,null,null, null), metadata, summary)
 
         println(event)
     }
