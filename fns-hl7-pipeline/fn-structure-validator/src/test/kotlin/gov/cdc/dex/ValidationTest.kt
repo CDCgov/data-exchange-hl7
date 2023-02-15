@@ -54,7 +54,7 @@ class ValidationTest {
 //                    val phinSpec =testMsg.split("\n")[0].split("|")[20].split("^")[0]
                     val phinSpec = HL7StaticParser.getFirstValue(testMsg, "MSH-21[1].1")
                     if (phinSpec.isDefined) {
-                        val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec}")
+                        val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.get()}")
 
                         val report = nistValidator.validate(testMsg)
                         println("Status: ${report.status}; Errors: ${report.errorCounts}; Warnings: ${report.warningcounts}")

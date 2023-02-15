@@ -114,7 +114,7 @@ class ValidatorFunction {
         }
     }
 
-    @FunctionName("validate")
+    @FunctionName("structure")
     fun invoke(
         @HttpTrigger(name = "req",
             methods = [HttpMethod.POST],
