@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory
 import gov.cdc.hl7.HL7HierarchyParser
 import gov.cdc.hl7.model.HL7Hierarchy 
 
+import gov.cdc.dex.hl7.model.Segment 
+
 
 class TransformerSegments()  {
 
@@ -13,23 +15,49 @@ class TransformerSegments()  {
 
     } // .companion object
 
-    var lakeFlatSegs: Array<Array<String>> = arrayOf()
-    var flatSegs: Array<String> = arrayOf()
+    // global for class
+    var lakeFlatSegs: Array<Array<Pair<Int,String>>> = arrayOf()
+    var flatSegs: Array<Pair<Int,String>> = arrayOf()
+    var treeIndex: Int = 1 
 
 
-    fun hl7ToSegments(hl7Message: String, profile: String) : Array<Array<String>> {
+    fun hl7ToSegments(hl7Message: String, profile: String) : List<Segment>{
+
+        val segmentPairs: Array<Array<Pair<Int,String>>> = hl7ToSegmentPairs(hl7Message, profile)
+
+        // get just one MSH out for first entry in flat model
+        val mshSeg = segmentPairs.first().first() 
+        val mshObj = listOf( Segment(mshSeg.second, mshSeg.first, null) )
+
+        // pairs to segment 
+        val flat = segmentPairs.map { segs -> 
+
+            val parentsPairs = segs.copyOfRange(0, segs.lastIndex) 
+            
+            val parents = parentsPairs.map{ seg -> seg.second }
+
+            Segment(segs.last().second, segs.last().first, parents)
+        } // .flat 
+
+        return mshObj.plus(flat)
+    } // .hl7ToSegments
+
+
+
+    private fun hl7ToSegmentPairs(hl7Message: String, profile: String) : Array<Array<Pair<Int,String>>> {
 
         val msgTree = HL7HierarchyParser.parseMessageHierarchyFromJson(hl7Message, profile)
         travTreeToArr(msgTree)
 
         return lakeFlatSegs
-    } // .hl7ToSegments
+    } // .hl7ToSegmentPairs
+
 
     private fun travTreeToArr(node: HL7Hierarchy) {
 
         // skip adding root string, only segments
         if (node.segment() != "root") {
-            flatSegs += node.segment()
+            flatSegs += Pair(treeIndex++, node.segment())
         } // .if
 
         if ( node.children().isEmpty ) {
@@ -53,8 +81,6 @@ class TransformerSegments()  {
         } // .else 
 
     } // .travTreeToArr
-
-
 
 
 } // .TransformerSql

@@ -1,19 +1,14 @@
-// package gov.cdc.dex.hl7.model 
+package gov.cdc.dex.hl7.model 
 
-// // import gov.cdc.hl7.model.Profile
+import com.google.gson.annotations.SerializedName
 
-// data class Profile ( 
+data class Segment ( 
 
-//   val segmentDefinition: Map<String, ProfileEntry>, 
+  @SerializedName("segment") val segment: String, 
+  @SerializedName("segment_number") val segmentNumber: Int, 
+  @SerializedName("parent_segments") val parentSegments: List<String>?,
 
-// ) // .Profile
+) // .Profile
 
-
-// data class ProfileEntry(
-
-//     val cardinality: String,
-//     val children: Map<String, ProfileEntry>?,
-
-// ) // .ProfileEntry
 
 

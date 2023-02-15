@@ -12,6 +12,9 @@ import gov.cdc.dex.hl7.TransformerSegments
 import com.google.gson.GsonBuilder
 // import com.google.gson.reflect.TypeToken
 
+import gov.cdc.hl7.HL7HierarchyParser 
+import gov.cdc.hl7.model.HL7Hierarchy
+
 
 class LakeSegsTransTest {
 
@@ -51,6 +54,36 @@ class LakeSegsTransTest {
     } // .testReadLocalResources
 
 
+    @Test
+    fun testPrintHL7HierarchyTree() {
+
+        var i = 0
+
+        fun printTree(node: HL7Hierarchy, ident: String) {   
+            
+            println("$ident ($i) --> ${node.segment().substring(0,3)}")   
+            i++
+            node.children().foreach { 
+                printTree(it, ident + " ")
+            }
+        }
+
+        logger.info("testPrintHL7HierarchyTree...")
+        
+        val filePath = "/Hepatitis_V1_0_1_TM_TC02_HEP_B_ACUTE_MOD.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+
+        // read the profile
+        val profileFilePath = "/BasicProfile.json"
+        val profile = this::class.java.getResource(profileFilePath).readText()
+
+
+        val msgTree = HL7HierarchyParser.parseMessageHierarchyFromJson(testMsg, profile)
+        printTree(msgTree, "")
+
+    } // .testPrintHL7HierarchyTree
+
+
 
     @Test
     fun testTransformerSegments() {
@@ -67,20 +100,9 @@ class LakeSegsTransTest {
 
         val lakeSegsModel = TransformerSegments().hl7ToSegments(testMsg, profile)
 
-        // print the lake
-        lakeSegsModel.forEach { segments ->
+        logger.info("lakeSegsModel: --> $lakeSegsModel")
 
-            segments.forEachIndexed { i, sg -> 
-                if (i != segments.lastIndex) print("$sg, ")
-                else print(sg)
-            } // .forEachIndexed 
-
-            println()
-
-        }// .forEach
-
-        assertEquals(lakeSegsModel.size, 8)
-
+        assertEquals(lakeSegsModel.size, 9)
     } // .testTransformerSegments
 
 
