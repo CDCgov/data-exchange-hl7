@@ -1,0 +1,1 @@
+PID|1||TickborneTBRD_TC03^^^SendAppName&2.16.840.1.114222.1111&ISO||~^SMITH^HENRY^H.||20000405|M||2054-5^Black or African American^CDCREC|111 FOURTH ST.^APT2^CHICAGO^47^37011^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC"
