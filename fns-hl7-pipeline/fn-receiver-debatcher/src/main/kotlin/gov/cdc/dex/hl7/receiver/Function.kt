@@ -121,7 +121,7 @@ class Function {
                         // no valid message -- send to error queue
                         val (metadata, summary) = buildMetadata(STATUS_ERROR, startTime, provenance, "No valid message found.")
                         // send empty array as message content when content is invalid
-                        prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null), metadata, summary, evHubSender, evHubErrsName, context)
+                        prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, "ECR"), metadata, summary, evHubSender, evHubErrsName, context)
                     }
                 } // .if
             }
@@ -139,7 +139,7 @@ class Function {
         return try {
             mmgUtil.getMMGMessageInfo(msh21Gen, msh21Cond, eventCode, jurisdictionCode)
         } catch (e : InvalidConditionException) {
-            DexMessageInfo(eventCode, null, null,  jurisdictionCode)
+            DexMessageInfo(eventCode, null, null,  jurisdictionCode, "ECR")
         }
 
     }
