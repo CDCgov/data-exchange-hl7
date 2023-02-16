@@ -35,7 +35,7 @@ class MmgValidator {
     }
 
     fun validateMMGRules(hl7Message: String, mmgs: Array<MMG>, report: MutableList<ValidationIssue>) {
-        val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
+        //  val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
         // logger.debug("validate started blocks.size: --> $allBlocks")
         mmgs.forEach { mmg ->
             mmg.blocks.forEach { block ->
@@ -357,6 +357,15 @@ class MmgValidator {
         val eventCode = this.extractValue(message, EVENT_CODE_PATH)
         val jurisdictionCode = this.extractValue(message,REPORTING_JURISDICTION_PATH)
         logger.info("Profiles for Message --> GenV2: $genVProfile, Condition Specific: $conditionProfile, Event Code:$eventCode")
+        if (eventCode.isEmpty()) {
+            throw NoSuchElementException("Field $EVENT_CODE_PATH Event Code is missing.")
+        }
+        if (genVProfile.isEmpty()) {
+            throw NoSuchElementException("Field $GENVx_PROFILE_PATH Message Profile is missing.")
+        }
+        if (jurisdictionCode.isEmpty()) {
+            throw NoSuchElementException("Field $REPORTING_JURISDICTION_PATH Jurisdiction Code is missing.")
+        }
         return mmgUtil.getMMGs(genVProfile, conditionProfile, eventCode, jurisdictionCode)
     }
     private fun extractValue(msg: String, path: String):String  {
