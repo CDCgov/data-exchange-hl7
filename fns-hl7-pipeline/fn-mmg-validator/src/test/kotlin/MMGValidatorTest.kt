@@ -2,6 +2,9 @@
 import com.google.gson.GsonBuilder
 import gov.cdc.dex.hl7.MmgValidator
 import gov.cdc.dex.hl7.exception.InvalidMessageException
+import gov.cdc.dex.hl7.model.MmgReport
+import gov.cdc.dex.hl7.model.ReportStatus
+import gov.cdc.dex.hl7.model.ValidationIssueType
 import gov.cdc.dex.mmg.InvalidConditionException
 
 
@@ -14,30 +17,24 @@ import java.nio.file.Paths
 class MMGValidatorTest {
 
     companion object {
-        private val gsonWithNullsOn = GsonBuilder().serializeNulls().create()
+        private val gson = GsonBuilder().serializeNulls().disableHtmlEscaping().create()
     } // .companion object
 
+
+    private fun validateMessage(fileName: String): MmgReport {
+        val testMsg = this::class.java.getResource(fileName).readText()
+
+        val mmgValidator = MmgValidator( )
+        val validationReport = mmgValidator.validate(testMsg)
+
+        println("validationReport: -->\n\n${gson.toJson(validationReport)}\n")
+        return  MmgReport(validationReport)
+    }
     @Test
     fun testLogMMGValidatorReport() {
-        val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
-        val testMsg = this::class.java.getResource(filePath).readText()
-
-        val mmgValidator = MmgValidator( )
-        val validationReport = mmgValidator.validate(testMsg)
-
-        println("validationReport: -->\n\n${gsonWithNullsOn.toJson(validationReport)}\n")
+        val report = validateMessage("/arbo/ARBOVIRAL_V1_3_TM_CN_TC01.txt")
     } // .testLogMMGValidatorReport
 
-    @Test
-    fun testMMGValidator() {
-        val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
-        val testMsg = this::class.java.getResource(filePath).readText()
-
-        val mmgValidator = MmgValidator( )
-        val validationReport = mmgValidator.validate(testMsg)
-
-        println(validationReport);
-    }
 
     @Test
     fun testGenV1CaseMapMessages() {
@@ -71,11 +68,7 @@ class MMGValidatorTest {
     @Test
     fun testInvalidMMG() {
         try {
-            val filePath = "/tbrd/BDB_LAB_13.txt"
-            val testMsg = this::class.java.getResource(filePath).readText()
-            //val mmgs = MmgUtil.getMMGFromMessage(testMsg, filePath, "")
-            val mmgValidator = MmgValidator()
-            val validationReport = mmgValidator.validate(testMsg)
+            val report = validateMessage("/tbrd/BDB_LAB_13.txt")
             assert(false)
         } catch (e: InvalidConditionException) {
             println("Exception properly thrown - can't validate this message lacking event code")
@@ -90,12 +83,8 @@ class MMGValidatorTest {
             .forEach {
                 println("==================  ${it.fileName} ")
                 try {
-                    val testMsg = this::class.java.getResource("/$folderName/${it.fileName.toString()}").readText()
-                    //val mmgs = MmgUtil.getMMGFromMessage(testMsg, it.fileName.toString(), "")
-                    val mmgValidator = MmgValidator()
-                    val validationReport = mmgValidator.validate(testMsg)
+                    val report = validateMessage("/$folderName/${it.fileName}")
 
-                    println(validationReport)
                 } catch(e: InvalidMessageException ) {
                     println(e.message)
                 } catch(e:InvalidConditionException) {
@@ -104,5 +93,47 @@ class MMGValidatorTest {
                 println("==========================")
 
             }
+    }
+
+    @Test
+    fun testMessagesWithZeroErrorsAndWarnings() {
+        val report = validateMessage("/Lyme_HappyPath.txt")
+        assert(report.status == ReportStatus.MMG_VALID)
+        assert(report.errorCount == 0)
+        assert(report.warningCount == 0)
+    }
+    @Test
+    fun testMessageWithMMGErrors() {
+        val report = validateMessage("/Lyme_WithMMGErrors.txt")
+        assert(report.status == ReportStatus.MMG_ERRORS)
+        assert(report.errorCount > 0)
+
+    }
+
+    @Test
+    fun testMessagesWithWarnings() {
+        val report = validateMessage("/Lyme_WithMMGWarnings.txt")
+        assert(report.status == ReportStatus.MMG_VALID)
+        assert(report.errorCount == 0)
+        assert(report.warningCount > 0)
+    }
+
+    @Test
+    fun testUTF() {
+        println(MmgValidator.REPORTING_JURISDICTION_PATH)
+    }
+
+    @Test
+    fun testOBR3and4Uniqueness() {
+        val report = validateMessage("/TestOBR3and4Uniqueness.txt")
+        assert(report.status == ReportStatus.MMG_ERRORS)
+        assert(report.errorCount == 1)
+        assert(report.warningCount == 1)
+
+        val warning = report.entries.filter { it.category == ValidationIssueType.CARDINALITY }[0]
+        assert(warning.line == 60)
+
+        val error = report.entries.filter { it.category == ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION }[0]
+        assert(error.line == 60)
     }
 }

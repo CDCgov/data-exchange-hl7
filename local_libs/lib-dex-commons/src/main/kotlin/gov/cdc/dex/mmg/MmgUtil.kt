@@ -33,14 +33,14 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         private val gson = Gson()
     }
 
-    @Throws(Exception::class)
+    @Throws(InvalidConditionException::class)
     fun getMMGList(msh21_2: String, msh21_3: String?, eventCode: String, jurisdictionCode: String?): Array<String> {
         val messageInfo = getMMGMessageInfo(msh21_2, msh21_3, eventCode, jurisdictionCode)
         return messageInfo.mmgKeyList?.toTypedArray() ?: arrayOf()
     }
 
 
-    @Throws(Exception::class)
+    @Throws(InvalidConditionException::class)
     fun getMMGs(mmgKeyList: Array<String>): Array<MMG> {
         var mmgs : Array<MMG> = arrayOf()
         for (keyName: String in mmgKeyList) {
@@ -54,13 +54,13 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         return mmgs
      }
 
-    @Throws(Exception::class)
+    @Throws(InvalidConditionException::class)
     fun getMMGs(msh21_2: String, msh21_3: String?, eventCode: String, jurisdictionCode: String?): Array<MMG> {
         val mmgList = getMMGList(msh21_2, msh21_3, eventCode, jurisdictionCode)
         return getMMGs(mmgList)
     }
 
-    @Throws(Exception::class)
+    @Throws(InvalidConditionException::class)
     // Populates DexMessageInfo, including list of MMGs and provision route.
     fun getMMGMessageInfo(msh21_2: String, msh21_3: String?, eventCode: String, jurisdictionCode: String?): DexMessageInfo {
         val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode)

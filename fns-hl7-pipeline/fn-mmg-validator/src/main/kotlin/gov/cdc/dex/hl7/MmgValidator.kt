@@ -2,14 +2,11 @@ package gov.cdc.dex.hl7
 
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
-
 import gov.cdc.dex.hl7.model.*
 import gov.cdc.dex.mmg.MmgUtil
-
 import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.hl7.HL7StaticParser
-
 import org.slf4j.LoggerFactory
 import scala.Option
 
@@ -43,11 +40,14 @@ class MmgValidator {
         mmgs.forEach { mmg ->
             mmg.blocks.forEach { block ->
                 block.elements.forEach { element ->
-                    //Cardinality Check!
+
                     val msgSegments = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
                     val valueList = if(msgSegments.isDefined)
                         msgSegments.get().flatten()
                     else listOf()
+                    //Observation Sub-ID Check for Repeating Blocks
+                    validateObservationSubId(hl7Message, block.type in listOf("Repeat", "RepeatParentChild"), element, valueList, report)
+                    //Cardinality Check!
                     checkCardinality(hl7Message, block.type in listOf("Repeat", "RepeatParentChild"), element, valueList, report)
                     // Data type check: (Don't check Data type for Units of measure - fieldPosition is 6, not 5 - can't use isUnitOfMeasure field.)
                     if ("OBX" == element.mappings.hl7v251.segmentType && 5 == element.mappings.hl7v251.fieldPosition) {
@@ -66,6 +66,73 @@ class MmgValidator {
             } // .for block
         }// .for mmg
     } // .validate
+
+    private fun validateObservationSubId(hl7Message: String, blockRepeat: Boolean, element: Element, msgValues: List<String>, report:MutableList<ValidationIssue>) {
+        // for repeating blocks only: check that OBX-4 is valued and is unique for each OBX-3.1
+        if (blockRepeat) {
+            //msgValues is a list of segments where each has the same value in OBX-3.1
+            if (msgValues.isNotEmpty()) {
+                // get the list of values in OBX-4 for these segments
+                val allOBXs = msgValues.joinToString("\n")
+                val subIdGroups = HL7StaticParser.getValue(allOBXs, "OBX-4")
+                if (subIdGroups.isDefined) {
+                    val subIdList = subIdGroups.get().flatten()
+                    if (subIdList.size < msgValues.size) {
+                        // error: one or more sub-ids are empty
+                        msgValues.forEachIndexed{idx, seg ->
+                            if (!HL7StaticParser.getValue(seg, "OBX-4").isDefined) {
+                                val line = getLineNumber(hl7Message, element, idx)
+                                report += ValidationIssue(
+                                    classification = ValidationIssueCategoryType.ERROR,
+                                    category = ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION,
+                                    fieldName = "Observation Sub-Id",
+                                    path = "${element.getSegmentPath()}-4.1",
+                                    line = line,
+                                    errorMessage = ValidationErrorMessage.OBSERVATION_SUB_ID_MISSING,
+                                    description = "Observation Sub-Id is empty for repeating block element ${element.name}."
+                                )
+                            }
+                        }
+                     } else {
+                        // make sure the sub-ids are unique
+                        val duplicates = subIdList.groupingBy { it }.eachCount().filter { (_, v) -> v >= 2 }
+                        if (duplicates.isNotEmpty()) {
+                            // error: combination of OBX-3 and OBX-4 must be unique
+                            duplicates.forEach { entry ->
+                                // generate one error message, use last instance of duplicate as the line number
+                                val idx = subIdList.lastIndexOf(entry.key)
+                                val line = getLineNumber(hl7Message, element, idx)
+                                report += ValidationIssue(
+                                    classification = ValidationIssueCategoryType.ERROR,
+                                    category = ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION,
+                                    fieldName = "Observation Sub-Id",
+                                    path = "${element.getSegmentPath()}-4.1",
+                                    line = line,
+                                    errorMessage = ValidationErrorMessage.OBSERVATION_SUB_ID_NOT_UNIQUE,
+                                    description = "The combination of data element identifier (OBX-3) and observation sub-id (OBX-4) must be unique for data element ${element.name}."
+                                )
+                            } // .foreach
+
+                        } // .if duplicates
+                    } // .else
+                } else {
+                    // isDefined == false means sub-id is missing on all segments
+                    val line = getLineNumber(hl7Message, element, 0)
+                    report += ValidationIssue(
+                        classification = ValidationIssueCategoryType.ERROR,
+                        category = ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION,
+                        fieldName = "Observation Sub-Id",
+                        path = "${element.getSegmentPath()}-4.1",
+                        line = line,
+                        errorMessage = ValidationErrorMessage.OBSERVATION_SUB_ID_MISSING,
+                        description = "Observation Sub-Id is empty for all instances of repeating element ${element.name}."
+                    )
+                } // .else
+
+            } // .if msgValues not empty
+
+        } // .if repeating
+    } // .validateObservationSubId
 
     private fun validateOtherSegments(hl7Message: String, mmgs: Array<MMG>, report: MutableList<ValidationIssue> ) {
         val elementsByObxID = makeMMGsMapByObxID(mmgs)
@@ -151,18 +218,18 @@ class MmgValidator {
             if (uniqueGroups.isDefined) {
                 uniqueGroups.get().flatten().distinct().forEach { groupID ->
                     val groupOBX = HL7StaticParser.getValue(allOBXs, "OBX[@4='$groupID']-5")
-                    checkSingleGroupCardinaltiy(hl7Message, minCardinality, maxCardinality, groupID, element, groupOBX, report)
+                    checkSingleGroupCardinality(hl7Message, minCardinality, maxCardinality, groupID, element, groupOBX, report)
                 }
             }
         } else {
             val allSegs = msgValues.joinToString("\n") //join all segments to extract all Values.
             val segValues = HL7StaticParser.getValue(allSegs, element.getValuePath())
 //            val segValuesFlat = if (segValues.isDefined) segValues.get().flatten() else listOf()
-            checkSingleGroupCardinaltiy(hl7Message, minCardinality, maxCardinality, null, element, segValues, report)
+            checkSingleGroupCardinality(hl7Message, minCardinality, maxCardinality, null, element, segValues, report)
 
         }
     }
-    private fun checkSingleGroupCardinaltiy(hl7Message: String, minCardinality: String, maxCardinality: String, groupID: String?,  element: Element, matchingSegs: Option<Array<Array<String>>>, report: MutableList<ValidationIssue>) {
+    private fun checkSingleGroupCardinality(hl7Message: String, minCardinality: String, maxCardinality: String, groupID: String?, element: Element, matchingSegs: Option<Array<Array<String>>>, report: MutableList<ValidationIssue>) {
         val values = if (matchingSegs.isDefined) matchingSegs.get().flatten() else listOf()
         if (minCardinality.toInt() > 0 && values.distinct().size < minCardinality.toInt()) {
             val matchingSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))

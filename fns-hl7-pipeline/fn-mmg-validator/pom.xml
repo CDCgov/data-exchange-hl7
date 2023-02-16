@@ -18,7 +18,10 @@
         <functions.plugin.version>1.16.0</functions.plugin.version>
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
-        <stagingDirectory>${project.build.directory}/azure-functions/ocio-ede-${environment-id}-hl7-mmg-validator</stagingDirectory>
+
+        <functionAppName>ocio-ede-${environment-id}-hl7-mmg-validator</functionAppName>
+        <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
+
         <slf4j.version>2.0.5</slf4j.version>
         <azevhub.version>5.15.0</azevhub.version>
         <azstblob.version>12.20.0</azstblob.version>
@@ -98,7 +101,11 @@
             <version>5.9.0</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.10</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -153,7 +160,7 @@
                 <configuration>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
-                    <appName>ocio-ede-${environment-id}-hl7-mmg-validator</appName>
+                    <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
@@ -168,6 +175,10 @@
                         <property>
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
+                        </property>
+                        <property>
+                            <name>ApplicationInsightsAgent_EXTENSION_VERSION</name>
+                            <value>~3</value>
                         </property>
                     </appSettings>
                 </configuration>

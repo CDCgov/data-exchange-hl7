@@ -1,0 +1,50 @@
+{
+  "segmentDefinition": {
+    "MSH": {
+      "cardinality": "",
+      "children": {
+        "PID": {
+          "cardinality": "",
+          "children": {
+            "NTE": {
+              "cardinality": ""
+            },
+            "PV1": {
+              "cardinality": ""
+            },
+            "NK1": {
+              "cardinality": ""
+            }
+          }
+        },
+        "ORC": {
+          "cardinality": ""
+        },
+        "OBR": {
+          "cardinality": "",
+          "children": {
+            "OBX": {
+              "cardinality": "",
+              "children": {
+                "NTE": {
+                  "cardinality": ""
+                }
+              }
+            },
+            "SPM": {
+              "cardinality": "",
+              "children": {
+                "OBX": {
+                  "cardinality": ""
+                }
+              }
+            },
+            "NTE": {
+              "cardinality": ""
+            }
+          }
+        }
+      }
+    }
+  }
+}

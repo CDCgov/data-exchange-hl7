@@ -27,6 +27,9 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonArray
 import gov.cdc.dex.metadata.ProcessMetadata
 
+import gov.cdc.dex.util.JsonHelper.addArrayElement
+import gov.cdc.dex.util.JsonHelper.toJsonElement
+
 /**
  * Azure function with event hub trigger for the MMG SQL Transformer
  * Takes and MMG based model and transforms it to MMG SQL model
@@ -47,21 +50,6 @@ class Function {
 
     } // .companion object
 
-    // TODO: Start change back to library once fixed for serialize nulls
-    fun Any.toJsonElement():JsonElement {
-        val jsonStr = GsonBuilder().serializeNulls().create().toJson(this)
-        return JsonParser.parseString(jsonStr)
-    }
-
-    fun JsonObject.addArrayElement(arrayName: String, processMD: ProcessMetadata) {
-        val currentProcessPayload = this[arrayName]
-        if (currentProcessPayload == null) {
-            this.add(arrayName,  JsonArray())
-        }
-        val currentArray = this[arrayName].asJsonArray
-        currentArray.add(processMD.toJsonElement())
-    }
-    // TODO: End. change back to library once fixed for serialize nulls
 
     @FunctionName("mmgSQLTransformer")
     fun eventHubProcessor(
@@ -176,11 +164,9 @@ class Function {
 
 
                     val processMD = MmgSqlTransProcessMetadata(status="MMG_SQL_MODEL_OK", report=mmgSqlModel) 
-                    metadata.addArrayElement("processes", processMD)
-
-                    // process time
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
+                    metadata.addArrayElement("processes", processMD)
 
                     // enable for model
                     val inputEventOut = gsonWithNullsOn.toJson(inputEvent)

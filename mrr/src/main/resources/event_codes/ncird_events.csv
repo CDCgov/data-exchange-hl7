@@ -1,0 +1,2 @@
+Category,Program,Condition Code,Condition Name,Profiles,Profile Has Special Case,MMGs,Special Case Group,Special Case MMGs
+Vaccine Preventable Diseases,NCIRD,10030,Varicella (Chickenpox),Var_Case_Map_v1.0|Var_Case_Map_v2.0|Varicella_MMG_V3.0,No|No|No,varicellacasenationalnotificationmap_v1_0|varicella_message_mapping_guide_v2_01|varicella,,
