@@ -39,7 +39,7 @@ class MbtTest {
         val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
         val redisClient = redisProxy.getJedisClient()
 
-        val REDIS_PREFIX_COONDITION = "conditionv2:"
+        val REDIS_PREFIX_COONDITION = "condition:"
 
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
         private val gson = Gson()
@@ -73,7 +73,7 @@ class MbtTest {
     @Test
     fun testRedisReadGenericMmg() {
 
-        val mmg = redisClient.get("mmg:generic_mmg_v2.0").substring(0, 100)
+        val mmg = redisClient.get("mmg:generic_mmg_v2_0").substring(0, 100)
         logger.info("testRedisReadGenericMmg: mmg: ${mmg}...")
 
         assertEquals(mmg.length, 100)
