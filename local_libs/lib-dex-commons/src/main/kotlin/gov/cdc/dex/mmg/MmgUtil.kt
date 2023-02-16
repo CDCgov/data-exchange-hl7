@@ -63,7 +63,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
     @Throws(InvalidConditionException::class)
     // Populates DexMessageInfo, including list of MMGs and provision route.
     fun getMMGMessageInfo(msh21_2: String, msh21_3: String?, eventCode: String, jurisdictionCode: String?): DexMessageInfo {
-        val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode, null)
+        val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode, "ECR")
         // list of mmg keys to look up in redis
         var mmg2KeyNames = arrayOf<String>()
         // condition-specific profile from message
