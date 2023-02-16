@@ -27,7 +27,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         const val ARBO_MMG_v1_0 = "arbo_case_map_v1.0"
 
         const val REDIS_MMG_PREFIX = "mmg:"
-        const val REDIS_CONDITION_PREFIX = "conditionv2:"
+        const val REDIS_CONDITION_PREFIX = "condition:"
         const val REDIS_GROUP_PREFIX = "group:"
 
         private val gson = Gson()
@@ -63,7 +63,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
     @Throws(InvalidConditionException::class)
     // Populates DexMessageInfo, including list of MMGs and provision route.
     fun getMMGMessageInfo(msh21_2: String, msh21_3: String?, eventCode: String, jurisdictionCode: String?): DexMessageInfo {
-        val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode)
+        val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode, "ECR")
         // list of mmg keys to look up in redis
         var mmg2KeyNames = arrayOf<String>()
         // condition-specific profile from message
