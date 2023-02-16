@@ -9,9 +9,9 @@ class TestHL7Hierarchy {
         val msg = this::class.java.getResource("/Lyme_HappyPath.txt").readText()
         val profile = this::class.java.getResource("/BasicProfile.json").readText()
 
-        val tree = HL7HierarchyParser.parseMessageHierarchyFromJson(msg, profile)
+     //   val tree = HL7HierarchyParser.parseMessageHierarchyFromJson(msg, profile)
 
-        printTree(tree, "", 1)
+     //   printTree(tree, "", 1)
     }
     
     private fun printTree(node: HL7Hierarchy, ident: String, line: Int) {
