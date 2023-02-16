@@ -37,7 +37,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.cdc.hl7</groupId>
