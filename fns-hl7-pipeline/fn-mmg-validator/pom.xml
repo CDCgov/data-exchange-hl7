@@ -26,7 +26,7 @@
         <azevhub.version>5.15.0</azevhub.version>
         <azstblob.version>12.20.0</azstblob.version>
         <gson.version>2.10</gson.version>
-        <hl7pet.version>1.2.7.1</hl7pet.version>
+        <hl7pet.version>1.2.7.2</hl7pet.version>
         <redis.version>4.3.1</redis.version>
     </properties>
 
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Azure Functions Java Library -->
