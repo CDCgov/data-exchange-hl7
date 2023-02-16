@@ -117,9 +117,9 @@ internal class MmgUtilTest {
 
         val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
 
-        val keys = redisProxy.getJedisClient().keys("mmgv2:*")
+        val keys = redisProxy.getJedisClient().keys("mmg:*")
         println(keys)
-        val mapping = redisProxy.getJedisClient().get("conditionv3:10110")
+        val mapping = redisProxy.getJedisClient().get("condition:10110")
         println(mapping)
     }
     @Test

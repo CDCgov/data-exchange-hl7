@@ -23,8 +23,8 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         const val EVENT_CODE_PATH = "OBR[@4.1='68991-9']-31.1"
         const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1" // TODO: complete path
 
-        const val GEN_V2_MMG = "generic_mmg_v2.0"
-        const val ARBO_MMG_v1_0 = "arbo_case_map_v1.0"
+        const val GEN_V2_MMG = "generic_mmg_v2_0"
+        const val ARBO_MMG_v1_0 = "arbo_case_map_v1_0"
 
         const val REDIS_MMG_PREFIX = "mmg:"
         const val REDIS_CONDITION_PREFIX = "condition:"
