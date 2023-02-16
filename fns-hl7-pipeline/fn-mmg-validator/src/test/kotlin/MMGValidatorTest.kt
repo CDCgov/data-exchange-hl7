@@ -23,7 +23,7 @@ class MMGValidatorTest {
 
 
     private fun validateMessage(fileName: String): MmgReport {
-        val testMsg = this::class.java.getResource(fileName).readText()
+        val testMsg = this::class.java.getResource(fileName).readText().trim()
 
         val mmgValidator = MmgValidator( )
         val validationReport = mmgValidator.validate(testMsg)
@@ -69,9 +69,9 @@ class MMGValidatorTest {
     @Test
     fun testInvalidMMG() {
         try {
-            val report = validateMessage("/tbrd/BDB_LAB_13.txt")
+            val report = validateMessage("/BDB_LAB_13.txt")
             assert(false)
-        } catch (e: InvalidConditionException) {
+        } catch (e: NoSuchElementException) {
             println("Exception properly thrown - can't validate this message lacking event code")
             assert(true)
         }
