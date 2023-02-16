@@ -27,7 +27,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         const val ARBO_MMG_v1_0 = "arbo_case_map_v1.0"
 
         const val REDIS_MMG_PREFIX = "mmg:"
-        const val REDIS_CONDITION_PREFIX = "conditionv2:"
+        const val REDIS_CONDITION_PREFIX = "condition:"
         const val REDIS_GROUP_PREFIX = "group:"
 
         private val gson = Gson()
