@@ -119,7 +119,7 @@ internal class MmgUtilTest {
 
         val keys = redisProxy.getJedisClient().keys("mmg:*")
         println(keys)
-        val mapping = redisProxy.getJedisClient().get("conditionv2:10110")
+        val mapping = redisProxy.getJedisClient().get("condition:10110")
         println(mapping)
     }
     @Test

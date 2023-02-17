@@ -7,8 +7,8 @@ data class Condition2MMGMapping(
   @SerializedName("name") val name: String,
   @SerializedName("program") val program: String,
   @SerializedName("category") val category: String,
-  @SerializedName("profiles") val profiles: List<Profile>?,
-  @SerializedName("type") val type: MessageType,
+  @SerializedName("profiles") val profiles: List<Profile>?
+  //@SerializedName("type") val type: MessageType,
 
   ) // .ConditionCode
 
@@ -24,6 +24,3 @@ data class Profile(
 
   ) // .Profile
 
-enum class MessageType {
-  ELR, ECR
-}

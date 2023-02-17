@@ -3,6 +3,7 @@ package gov.cdc.dex.mmg
 import com.google.gson.Gson
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.metadata.DexMessageInfo
+import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.redisModels.Condition2MMGMapping
 
 import gov.cdc.dex.redisModels.MMG
@@ -23,11 +24,11 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         const val EVENT_CODE_PATH = "OBR[@4.1='68991-9']-31.1"
         const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1" // TODO: complete path
 
-        const val GEN_V2_MMG = "generic_mmg_v2.0"
-        const val ARBO_MMG_v1_0 = "arbo_case_map_v1.0"
+        const val GEN_V2_MMG = "generic_mmg_v2_0"
+        const val ARBO_MMG_v1_0 = "arbo_case_map_v1_0"
 
         const val REDIS_MMG_PREFIX = "mmg:"
-        const val REDIS_CONDITION_PREFIX = "conditionv2:"
+        const val REDIS_CONDITION_PREFIX = "condition:"
         const val REDIS_GROUP_PREFIX = "group:"
 
         private val gson = Gson()
@@ -63,7 +64,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
     @Throws(InvalidConditionException::class)
     // Populates DexMessageInfo, including list of MMGs and provision route.
     fun getMMGMessageInfo(msh21_2: String, msh21_3: String?, eventCode: String, jurisdictionCode: String?): DexMessageInfo {
-        val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode)
+        val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode, HL7MessageType.CASE)
         // list of mmg keys to look up in redis
         var mmg2KeyNames = arrayOf<String>()
         // condition-specific profile from message
