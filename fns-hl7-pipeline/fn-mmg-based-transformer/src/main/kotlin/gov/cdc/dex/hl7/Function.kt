@@ -92,6 +92,8 @@ class Function {
                 val provenance = metadata["provenance"].asJsonObject
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
+                val messageInfo = inputEvent["message_info"].asJsonObject
+                val reportingJurisdiction = messageInfo["reporting_jurisdiction"].asString
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
 
@@ -102,7 +104,7 @@ class Function {
 
                     // get MMG(s) for the message:
                     val mmgUtil = MmgUtil(redisProxy)
-                    val mmgs = mmgUtil.getMMGFromMessage(hl7Content, filePath, messageUUID)
+                    val mmgs = mmgUtil.getMMGFromMessage(hl7Content, reportingJurisdiction)
                     mmgs.forEach {
                         context.logger.info("MMG Info for messageUUID: $messageUUID, filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
                     }
