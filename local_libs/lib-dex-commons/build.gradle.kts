@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "1.0.8-SNAPSHOT"
+version = "1.0.10-SNAPSHOT"
 
 repositories {
     maven {
@@ -30,8 +30,11 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    environment (mapOf("REDIS_CACHE_NAME" to "tf-vocab-cache-dev.redis.cache.windows.net",
-                       "REDIS_CACHE_KEY"  to findProperty("redisDevKey")
+//    environment (mapOf("REDIS_CACHE_NAME" to "tf-vocab-cache-dev.redis.cache.windows.net",
+//                       "REDIS_CACHE_KEY"  to findProperty("redisDevKey")
+//    ))
+    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-tst-dex-cache.redis.cache.windows.net",
+        "REDIS_CACHE_KEY"  to findProperty("redisTSTKey")
     ))
     finalizedBy(tasks.jacocoTestReport)
 }

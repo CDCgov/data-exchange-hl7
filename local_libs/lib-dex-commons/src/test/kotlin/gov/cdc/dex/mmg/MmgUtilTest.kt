@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test
 
 
 internal class MmgUtilTest {
-
+    private val ARBO_MMG_v1_0 = "arbo_case_map_v1_0"
+    private val VAR_MMG_v2_0 = "var_case_map_v2_0"
     @Test
     fun testGetMessageInfo() {
         val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
@@ -18,7 +19,7 @@ internal class MmgUtilTest {
         val mmgUtil = MmgUtil(redisProxy)
         try {
             // 11085 should come under Genv1 or Genv2, not Arboviral
-            val messageInfo = mmgUtil.getMMGMessageInfo(MmgUtil.ARBO_MMG_v1_0, null, "11085", "23")
+            val messageInfo = mmgUtil.getMMGMessageInfo(ARBO_MMG_v1_0, null, "11085", "23")
         } catch (e : InvalidConditionException) {
             println("Exception correctly thrown: ${e.message}")
         }
@@ -26,7 +27,7 @@ internal class MmgUtilTest {
         val lymeMessageInfo = mmgUtil.getMMGMessageInfo(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "11080", "13")
         println(lymeMessageInfo)
 
-        val arboSpecialInfo = mmgUtil.getMMGMessageInfo(MmgUtil.ARBO_MMG_v1_0, null, "10058", "23")
+        val arboSpecialInfo = mmgUtil.getMMGMessageInfo(ARBO_MMG_v1_0, null, "10058", "23")
         println(arboSpecialInfo)
 
 
@@ -70,16 +71,22 @@ internal class MmgUtilTest {
         assert(hepAMMgs.size == 3)
 
         println("----\nArbo regular")
-        val arboMMgs = mmgUtil.getMMGList(MmgUtil.ARBO_MMG_v1_0, "", "10058", "21")
+        val arboMMgs = mmgUtil.getMMGList(ARBO_MMG_v1_0, "", "10058", "21")
         arboMMgs.forEach { println(it) }
         assert(arboMMgs.size == 1)
         assert(arboMMgs[0] == "mmg:arboviral_v1_3_2_mmg_20210721")
 
         println("----\nArbo special")
-        val arboMMgS = mmgUtil.getMMGList(MmgUtil.ARBO_MMG_v1_0, "", "10058", "23")
+        val arboMMgS = mmgUtil.getMMGList(ARBO_MMG_v1_0, "", "10058", "23")
         arboMMgS.forEach { println(it) }
         assert(arboMMgS.size == 1)
         assert(arboMMgS[0] == "mmg:arboviral_human_case_message_mapping_guide")
+
+        println("----\nVaricella v2")
+        val varMMgS = mmgUtil.getMMGList(VAR_MMG_v2_0, "", "10030", "23")
+        varMMgS.forEach { println(it) }
+        assert(varMMgS.size == 1)
+        assert(varMMgS[0] == "mmg:varicella_message_mapping_guide_v2_01")
 
         try {
             mmgUtil.getMMGList(MmgUtil.GEN_V2_MMG, "Lyme_TBRD_MMG_V1.0", "1108", "21")
@@ -162,4 +169,5 @@ internal class MmgUtilTest {
         }
         println(routeList)
     }
+
 }
