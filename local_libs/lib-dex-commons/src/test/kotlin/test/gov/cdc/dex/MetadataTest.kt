@@ -2,6 +2,7 @@ package test.gov.cdc.dex
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
+import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper.addArrayElement
@@ -13,8 +14,9 @@ class MetadataTest {
 
     @Test
     fun testGeneratePayloadJson() {
+        val eventHubMD = EventHubMetadata(1,1,null, "20230101")
+        val processMD = MockMetadata("SUCCESS", eventHubMD )
 
-        val processMD = MockMetadata("SUCCESS")
         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
         processMD.oneMoreProperty = "Test Metadata ONE"
@@ -26,7 +28,8 @@ class MetadataTest {
         val metadata = newPayload["metadata"] as JsonObject
         metadata.addArrayElement("processes", processMD)
 
-        val secondProcessMD = MockMetadata( "SUCCESS")
+
+        val secondProcessMD = MockMetadata( "SUCCESS", eventHubMD)
         secondProcessMD.startProcessTime = Date().toIsoString()
         secondProcessMD.endProcessTime = Date().toIsoString()
 
@@ -63,14 +66,15 @@ class MetadataTest {
         val problem = Problem("UNIT-TEST", "java.lang.Exception", null, "Mock error for unit test", false, 0, 1)
         val summary = SummaryInfo("UNIT-TEST-ERROR", problem)
 
-        val processMD = MockMetadata("SUCCESS")
+        val eventHubMD = EventHubMetadata(1,1,null, "20230101")
+        val processMD = MockMetadata("SUCCESS", eventHubMD )
         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
         processMD.oneMoreProperty = "Test Metadata ONE"
 
 
         val metadata = DexMetadata(provenance, listOf(processMD))
-        val event = DexEventPayload("MSH|...", DexMessageInfo(null,null,null,null, null), metadata, summary)
+        val event = DexEventPayload("MSH|...", DexMessageInfo(null,null,null,null, HL7MessageType.CASE), metadata, summary)
 
         println(event)
     }

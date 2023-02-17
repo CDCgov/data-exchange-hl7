@@ -24,6 +24,3 @@ data class Profile(
 
   ) // .Profile
 
-enum class MessageType {
-  ELR, ECR
-}

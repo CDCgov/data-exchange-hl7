@@ -3,6 +3,7 @@ package gov.cdc.dex.mmg
 import com.google.gson.Gson
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.metadata.DexMessageInfo
+import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.redisModels.Condition2MMGMapping
 
 import gov.cdc.dex.redisModels.MMG
@@ -63,7 +64,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
     @Throws(InvalidConditionException::class)
     // Populates DexMessageInfo, including list of MMGs and provision route.
     fun getMMGMessageInfo(msh21_2: String, msh21_3: String?, eventCode: String, jurisdictionCode: String?): DexMessageInfo {
-        val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode, "ECR")
+        val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode, HL7MessageType.CASE)
         // list of mmg keys to look up in redis
         var mmg2KeyNames = arrayOf<String>()
         // condition-specific profile from message
