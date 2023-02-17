@@ -19,6 +19,9 @@ import com.google.gson.JsonParser
 import  gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.TransformerSql
 
+import gov.cdc.hl7.HL7StaticParser
+
+
 class MmgSqlTest {
 
     companion object {
@@ -36,6 +39,9 @@ class MmgSqlTest {
         const val REDIS_INSTANCE_NAME = "tf-vocab-cache-dev.redis.cache.windows.net"
 
         val MESSAGE_PROFILE_IDENTIFIER = "message_profile_identifier"
+
+        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1"
+
     } // .companion 
 
 
@@ -53,8 +59,11 @@ class MmgSqlTest {
         // ------------------------------------------------------------------------------
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
+        val reportingJurisdiction = extractValue(testMsg, JURISDICTION_CODE_PATH)
+
         val mmgUtil = MmgUtil(redisProxy)
-        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+
+        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, reportingJurisdiction)
         logger.info("mmgsArr.size: --> ${mmgsArr.size}")
 
         assertEquals(mmgsArr.size, 2)
@@ -82,8 +91,11 @@ class MmgSqlTest {
         // ------------------------------------------------------------------------------
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
+        val reportingJurisdiction = extractValue(testMsg, JURISDICTION_CODE_PATH)
+
         val mmgUtil = MmgUtil(redisProxy)
-        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+
+        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, reportingJurisdiction)
 
         // Default Phin Profiles Types
         // ------------------------------------------------------------------------------
@@ -160,8 +172,12 @@ class MmgSqlTest {
         // ------------------------------------------------------------------------------
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
+
+        val reportingJurisdiction = extractValue(testMsg, JURISDICTION_CODE_PATH)
+
         val mmgUtil = MmgUtil(redisProxy)
-        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+
+        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, reportingJurisdiction)
 
         // Default Phin Profiles Types
         // ------------------------------------------------------------------------------
@@ -219,7 +235,7 @@ class MmgSqlTest {
             block = {
 
                 val mmgUtil = MmgUtil(redisProxy)
-                val mmgs = mmgUtil.getMMGFromMessage("hl7Content", "hl7FilePath", "")
+                val mmgs = mmgUtil.getMMGFromMessage("hl7Content", "42")
                 logger.info("testMmgThrowsException: mmgs.size: ${mmgs.size}")
 
             } // .block
@@ -289,6 +305,13 @@ class MmgSqlTest {
         ) // .assertFails
 
     } // .testBadEventHubMessage
+
+
+    private fun extractValue(msg: String, path: String): String  {
+        val value = HL7StaticParser.getFirstValue(msg, path)
+        return if (value.isDefined) value.get()
+        else ""
+    } // .extractValue
 
 
 } // .MmgSqlTest
