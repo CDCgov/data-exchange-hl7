@@ -6,8 +6,10 @@ import com.azure.storage.blob.models.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.microsoft.azure.functions.ExecutionContext
+import com.microsoft.azure.functions.annotation.BindingName
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
+import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.metadata.*
@@ -39,13 +41,14 @@ class Function {
     }
     @FunctionName("receiverdebatcher001")
     fun eventHubProcessor(
-            @EventHubTrigger(
+        @EventHubTrigger(
                 name = "msg", 
                 eventHubName = "%EventHubReceiveName%",
                 consumerGroup = "%EventHubConsumerGroup%",
                 connection = "EventHubConnectionString") 
                 messages: List<String>?,
-            context: ExecutionContext) {
+        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
+        context: ExecutionContext) {
 
         val startTime = Date().toIsoString()
         // context.logger.info("message: --> " + message)
@@ -62,6 +65,7 @@ class Function {
         val azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
 
         if (messages != null) {
+            var nbrOfMessages = 0
             for (message in messages) {
                 val eventArr = Gson().fromJson(message, Array<AzBlobCreateEventMessage>::class.java)
                 val event = eventArr[0]
@@ -101,7 +105,7 @@ class Function {
                                         provenance.singleOrBatch = Provenance.BATCH_FILE
                                         provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
                                         val messageInfo = getMessageInfo(mmgUtil, currentLinesArr.joinToString("\n" ))
-                                        val (metadata, summary) = buildMetadata(STATUS_SUCCESS, startTime, provenance)
+                                        val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
                                         prepareAndSend(currentLinesArr, messageInfo, metadata, summary, evHubSender, evHubName, context)
                                         provenance.messageIndex++
                                     }
@@ -114,16 +118,17 @@ class Function {
                     // Send last message
                     provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
                     if (mshCount > 0) {
-                        val (metadata, summary) = buildMetadata(STATUS_SUCCESS, startTime, provenance)
+                        val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
                         val messageInfo = getMessageInfo(mmgUtil, currentLinesArr.joinToString("\n" ))
                         prepareAndSend(currentLinesArr, messageInfo, metadata, summary, evHubSender, evHubName, context)
                     } else {
                         // no valid message -- send to error queue
-                        val (metadata, summary) = buildMetadata(STATUS_ERROR, startTime, provenance, "No valid message found.")
+                        val (metadata, summary) = buildMetadata(STATUS_ERROR, eventHubMD[nbrOfMessages], startTime, provenance, "No valid message found.")
                         // send empty array as message content when content is invalid
-                        prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, "ECR"), metadata, summary, evHubSender, evHubErrsName, context)
+                        prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.CASE), metadata, summary, evHubSender, evHubErrsName, context)
                     }
                 } // .if
+             nbrOfMessages++
             }
         } // .for
     } // .eventHubProcess
@@ -139,7 +144,7 @@ class Function {
         return try {
             mmgUtil.getMMGMessageInfo(msh21Gen, msh21Cond, eventCode, jurisdictionCode)
         } catch (e : InvalidConditionException) {
-            DexMessageInfo(eventCode, null, null,  jurisdictionCode, "ECR")
+            DexMessageInfo(eventCode, null, null,  jurisdictionCode, HL7MessageType.CASE)
         }
 
     }
@@ -150,8 +155,8 @@ class Function {
         else ""
     }
 
-    private fun buildMetadata (status: String, startTime: String, provenance: Provenance, errorMessage: String? = null) : Pair<DexMetadata, SummaryInfo> {
-        val processMD = ReceiverProcessMetadata(status)
+    private fun buildMetadata (status: String, eventHubMD: EventHubMetadata, startTime: String, provenance: Provenance, errorMessage: String? = null) : Pair<DexMetadata, SummaryInfo> {
+        val processMD = ReceiverProcessMetadata(status, eventHubMD)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")

@@ -1,3 +1,4 @@
+import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.receiver.Function
 import gov.cdc.dex.hl7.receiver.Function.Companion.UTF_BOM
@@ -8,6 +9,7 @@ import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import gov.cdc.hl7.HL7StaticParser
+import jdk.jfr.Event
 
 import org.junit.jupiter.api.Test
 
@@ -116,6 +118,7 @@ class DebatcherTest {
         val reader = InputStreamReader(testFileIS)
         val currentLinesArr = arrayListOf<String>()
         var mshCount = 0
+        val eventHubMD = EventHubMetadata(1, 1, null, "20230101")
         BufferedReader(reader).use { br ->
             br.forEachLine { line ->
                 val lineClean = line.trim().let { if ( it.startsWith(UTF_BOM) )  it.substring(1)  else it}
@@ -129,7 +132,7 @@ class DebatcherTest {
                             provenance.singleOrBatch = Provenance.BATCH_FILE
                             provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
                             val messageInfo = getMessageInfo(mmgUtil, currentLinesArr.joinToString("\n" ))
-                            val (metadata, summary) = buildMetadata(Function.STATUS_SUCCESS, startTime, provenance)
+                            val (metadata, summary) = buildMetadata(Function.STATUS_SUCCESS, eventHubMD, startTime, provenance)
                             prepareAndSend(currentLinesArr, messageInfo, metadata, summary)
                             provenance.messageIndex++
                         }
@@ -143,12 +146,12 @@ class DebatcherTest {
         provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
         if (mshCount > 0) {
             val messageInfo = getMessageInfo(mmgUtil, currentLinesArr.joinToString("\n" ))
-            val (metadata, summary) = buildMetadata(Function.STATUS_SUCCESS, startTime, provenance)
+            val (metadata, summary) = buildMetadata(Function.STATUS_SUCCESS, eventHubMD, startTime, provenance)
             prepareAndSend(currentLinesArr, messageInfo, metadata, summary)
         } else {
             // no valid message -- send to error queue
-            val (metadata, summary) = buildMetadata(Function.STATUS_ERROR, startTime, provenance, "No valid message found.")
-            prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, "ECR"), metadata, summary)
+            val (metadata, summary) = buildMetadata(Function.STATUS_ERROR, eventHubMD,startTime, provenance, "No valid message found.")
+            prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.CASE), metadata, summary)
         }
     } // .test
 
@@ -171,7 +174,7 @@ class DebatcherTest {
         } catch (e : InvalidConditionException) {
             // TODO: SHOULD WE RECORD THIS ERROR MESSAGE?
             println("Try failed: ${e.message}")
-            DexMessageInfo(eventCode, null, null, jurisdictionCode,"ECR")
+            DexMessageInfo(eventCode, null, null, jurisdictionCode,HL7MessageType.CASE)
         }
 
     }
@@ -180,8 +183,8 @@ class DebatcherTest {
         return if (value.isDefined) value.get()
         else ""
     }
-    private fun buildMetadata (status: String, startTime: String, provenance: Provenance, errorMessage: String? = null) : Pair<DexMetadata, SummaryInfo> {
-        val processMD = ReceiverProcessMetadata(status)
+    private fun buildMetadata (status: String, eventHubMD: EventHubMetadata, startTime: String, provenance: Provenance, errorMessage: String? = null) : Pair<DexMetadata, SummaryInfo> {
+        val processMD = ReceiverProcessMetadata(status, eventHubMD)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")
