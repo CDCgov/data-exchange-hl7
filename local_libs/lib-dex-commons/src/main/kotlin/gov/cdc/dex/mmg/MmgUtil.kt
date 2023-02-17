@@ -17,20 +17,16 @@ import org.slf4j.LoggerFactory
 class MmgUtil(val redisProxy: RedisProxy)  {
     companion object {
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
-
-        const val MSH_21_2_1_PATH = "MSH-21[2].1" // Gen
-        const val MSH_21_3_1_PATH = "MSH-21[3].1" // Condition
-        const val EVENT_CODE_PATH = "OBR[@4.1='68991-9']-31.1"
-        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1" // TODO: complete path
-
         const val GEN_V2_MMG = "generic_mmg_v2_0"
-        const val ARBO_MMG_v1_0 = "arbo_case_map_v1_0"
-
         const val REDIS_MMG_PREFIX = "mmg:"
         const val REDIS_CONDITION_PREFIX = "condition:"
         const val REDIS_GROUP_PREFIX = "group:"
 
         private val gson = Gson()
+        private val legacy_mmgs = listOf("arbo_case_map_v1_0",
+                                        "var_case_map_v1_0",
+                                        "var_case_map_v2_0",
+                                        "tb_case_map_v2_0")
     }
 
     @Throws(InvalidConditionException::class)
@@ -63,13 +59,13 @@ class MmgUtil(val redisProxy: RedisProxy)  {
     @Throws(InvalidConditionException::class)
     // Populates DexMessageInfo, including list of MMGs and provision route.
     fun getMMGMessageInfo(msh21_2: String, msh21_3: String?, eventCode: String, jurisdictionCode: String?): DexMessageInfo {
-        val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode, "ECR")
+        val messageInfo = DexMessageInfo(eventCode, null, null, jurisdictionCode, "CASE")
         // list of mmg keys to look up in redis
         var mmg2KeyNames = arrayOf<String>()
         // condition-specific profile from message
         var msh21_3In = msh21_3?.normalize()
 
-        if (msh21_2.normalize().contains(ARBO_MMG_v1_0)) {
+        if (msh21_2.normalize() in legacy_mmgs) {
             // msh_21_3 is empty, make it same as msh_21_2
             msh21_3In = msh21_2.normalize()
         } else {
@@ -85,8 +81,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         if (!msh21_3In.isNullOrEmpty()  && !eventCodeEntry.profiles.isNullOrEmpty()) {
             // filter condition's profiles for a match on msh-21[3]
             var specialCaseAdded = false
-            val profileMatches: List<Profile> =
-                eventCodeEntry.profiles.filter { profile -> profile.name == msh21_3In }
+            val profileMatches = eventCodeEntry.profiles.filter { profile -> profile.name == msh21_3In }
             if (profileMatches.isNotEmpty()) {
                 val profile = profileMatches[0]
                 // look at special cases first, if any exist
