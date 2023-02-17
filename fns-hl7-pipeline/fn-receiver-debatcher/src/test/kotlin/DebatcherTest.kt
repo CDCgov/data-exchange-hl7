@@ -148,7 +148,7 @@ class DebatcherTest {
         } else {
             // no valid message -- send to error queue
             val (metadata, summary) = buildMetadata(Function.STATUS_ERROR, startTime, provenance, "No valid message found.")
-            prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null), metadata, summary)
+            prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, "ECR"), metadata, summary)
         }
     } // .test
 
@@ -171,7 +171,7 @@ class DebatcherTest {
         } catch (e : InvalidConditionException) {
             // TODO: SHOULD WE RECORD THIS ERROR MESSAGE?
             println("Try failed: ${e.message}")
-            DexMessageInfo(eventCode, null, null, jurisdictionCode)
+            DexMessageInfo(eventCode, null, null, jurisdictionCode,"ECR")
         }
 
     }

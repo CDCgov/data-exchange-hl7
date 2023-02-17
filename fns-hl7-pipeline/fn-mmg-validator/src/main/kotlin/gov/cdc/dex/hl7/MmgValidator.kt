@@ -18,10 +18,11 @@ class MmgValidator {
         const val CONDITION_PROFILE_PATH = "MSH-21[3].1"
         const val EVENT_CODE_PATH = "OBR[1]-31.1"
         const val REPORTING_JURISDICTION_PATH = "OBX[@3.1='77968-6']-5.1"
+        const val ALT_REPORTING_JURISDICTION_PATH = "OBX[@3.1='NOT116']-5.1"
     }
-    val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
-    val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
-    val REDIS_VOCAB_NAMESPACE = "vocab:"
+    private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
+    private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+    private val REDIS_VOCAB_NAMESPACE = "vocab:"
 
     private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     private val mmgUtil = MmgUtil(redisProxy)
@@ -34,8 +35,8 @@ class MmgValidator {
         return report
     }
 
-    fun validateMMGRules(hl7Message: String, mmgs: Array<MMG>, report: MutableList<ValidationIssue>) {
-        val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
+    private fun validateMMGRules(hl7Message: String, mmgs: Array<MMG>, report: MutableList<ValidationIssue>) {
+        //  val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
         // logger.debug("validate started blocks.size: --> $allBlocks")
         mmgs.forEach { mmg ->
             mmg.blocks.forEach { block ->
@@ -139,25 +140,9 @@ class MmgValidator {
         hl7Message.split("\n").forEachIndexed { lineNum, line ->
 
             val lineParts = line.split("|")
-            val segmentName = lineParts[0]
 
-            when (segmentName) {
+            when (val segmentName = lineParts[0]) {
                 "MSH", "PID", "OBR" -> {}// nothing to do
-//                "OBR" -> {
-//                    val segmentID = lineParts[4].split("^")[0]
-//                    //logger.info("hl7 segmentName: --> " + segmentName + " -- " + "segmentID: --> " + segmentID)
-//                    if ( segmentID != OBR_4_1_EPI_ID ) {
-//                        report += ValidationIssue(
-//                            category= ValidationIssueCategoryType.WARNING,
-//                            type= ValidationIssueType.SEGMENT_NOT_IN_MMG,
-//                            fieldName=segmentName,
-//                            hl7Path="N/A",
-//                            lineNumber=lineNum + 1,
-//                            errorMessage= ValidationErrorMessage.SEGMENT_NOT_IN_MMG,
-//                            message="OBR segment 4.1 does not match the EPI identifier. Expected: ${OBR_4_1_EPI_ID}, Found: ${segmentID}",
-//                        )
-//                    }
-//                } // .OBR
                 "OBX" -> {
                     val segmentID = lineParts[3].split("^")[0]
 
@@ -169,24 +154,11 @@ class MmgValidator {
                             path ="N/A",
                             line=lineNum + 1,
                             errorMessage= ValidationErrorMessage.SEGMENT_NOT_IN_MMG,
-                            description="OBX segment identifier ${segmentID} not found in the MMG.",
+                            description="OBX segment identifier $segmentID not found in the MMG.",
                         )
                     } // .if
                     //logger.info("hl7 segmentName: --> " + segmentName + " -- " + "segmentID: --> " + segmentID)
                 } // .OBX
-//                else -> {
-//                    if (segmentName.trim() != "") { // empty line, should not happen
-//                        report += ValidationIssue(
-//                            classification= ValidationIssueCategoryType.WARNING,
-//                            category= ValidationIssueType.SEGMENT_NOT_IN_MMG,
-//                            fieldName=segmentName,
-//                            path="N/A",
-//                            line=lineNum + 1,
-//                            errorMessage= ValidationErrorMessage.SEGMENT_NOT_IN_MMG,
-//                            description="Segment does not match: MSH, PID, OBR, or OBX. Found: ${segmentName}",
-//                        )
-//                    } // .if
-//                } // .else
             }
 
         } // hl7Message.split
@@ -245,7 +217,7 @@ class MmgValidator {
                 fieldName=element.name,
                 path=element.getValuePath(),
                 line=lineNbr, //Get the last Occurrence of line number
-                errorMessage= ValidationErrorMessage.CARDINALITY_UNDER, // CARDINALITY_OVER
+                errorMessage= ValidationErrorMessage.CARDINALITY_UNDER,
                 description="Minimum required value not present. Requires $minCardinality, Found ${values.size}",
             ) // .ValidationIssue
         }
@@ -258,12 +230,12 @@ class MmgValidator {
                      matchingSegments.filter { it._2[4] == groupID}
                 } else matchingSegments
                 report += ValidationIssue(
-                    classification= getCategory(element.mappings.hl7v251.usage),
+                    classification= ValidationIssueCategoryType.WARNING,
                     category= ValidationIssueType.CARDINALITY,
                     fieldName=element.name,
                     path=element.getValuePath(),
                     line=subList.keys().toList().last().toString().toInt(),
-                    errorMessage= ValidationErrorMessage.CARDINALITY_OVER, // CARDINALITY_OVER
+                    errorMessage= ValidationErrorMessage.CARDINALITY_OVER,
                     description="Maximum values surpassed requirements. Max allowed: $maxCardinality, Found ${values.size}",
                 ) // .ValidationIssue
             }
@@ -278,8 +250,8 @@ class MmgValidator {
                     fieldName=element.name,
                     path=element.getDataTypePath(),
                     line=lineNbr, //Data types only have single value.
-                    errorMessage= ValidationErrorMessage.DATA_TYPE_MISMATCH, // DATA_TYPE_MISMATCH
-                    description="Data type on message does not match expected data type on MMG. Expected: ${element.mappings.hl7v251.dataType}, Found: ${msgDataType}",
+                    errorMessage= ValidationErrorMessage.DATA_TYPE_MISMATCH,
+                    description="Data type on message does not match expected data type on MMG. Expected: ${element.mappings.hl7v251.dataType}, Found: $msgDataType",
                 )
         }
 
@@ -323,7 +295,7 @@ class MmgValidator {
             valueSetMap[key] = conceptStr.keys.toList()
 
         }
-        return valueSetMap[key]?.filter { it == concept }?.isNotEmpty() ?: false
+        return valueSetMap[key]?.any { it == concept } == true
     }
 
     private fun getCategory(usage: String): ValidationIssueCategoryType {
@@ -352,11 +324,23 @@ class MmgValidator {
     }
 
     fun getMMGFromMessage(message: String): Array<MMG> {
-        val genVProfile = this.extractValue(message, GENVx_PROFILE_PATH)
-        val conditionProfile = this.extractValue(message, CONDITION_PROFILE_PATH)
-        val eventCode = this.extractValue(message, EVENT_CODE_PATH)
-        val jurisdictionCode = this.extractValue(message,REPORTING_JURISDICTION_PATH)
+        val genVProfile = this.extractValue(message, GENVx_PROFILE_PATH).trim()
+        val conditionProfile = this.extractValue(message, CONDITION_PROFILE_PATH).trim()
+        val eventCode = this.extractValue(message, EVENT_CODE_PATH).trim()
+        var jurisdictionCode = this.extractValue(message,REPORTING_JURISDICTION_PATH).trim()
+        if (jurisdictionCode.isEmpty()) {
+            jurisdictionCode = this.extractValue(message, ALT_REPORTING_JURISDICTION_PATH).trim()
+        }
         logger.info("Profiles for Message --> GenV2: $genVProfile, Condition Specific: $conditionProfile, Event Code:$eventCode")
+        if (eventCode.isEmpty()) {
+            throw NoSuchElementException("Field $EVENT_CODE_PATH Event Code is missing.")
+        }
+        if (genVProfile.isEmpty()) {
+            throw NoSuchElementException("Field $GENVx_PROFILE_PATH Message Profile is missing.")
+        }
+        if (jurisdictionCode.isEmpty()) {
+            throw NoSuchElementException("Field Jurisdiction Code ($REPORTING_JURISDICTION_PATH or $ALT_REPORTING_JURISDICTION_PATH) is missing.")
+        }
         return mmgUtil.getMMGs(genVProfile, conditionProfile, eventCode, jurisdictionCode)
     }
     private fun extractValue(msg: String, path: String):String  {

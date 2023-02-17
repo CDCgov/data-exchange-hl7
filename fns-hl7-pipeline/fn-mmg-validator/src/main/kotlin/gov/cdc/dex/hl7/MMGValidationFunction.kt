@@ -12,13 +12,14 @@ import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.MmgValidatorProcessMetadata
 import gov.cdc.dex.hl7.model.ReportStatus
+import gov.cdc.dex.hl7.model.ValidationIssue
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
+import gov.cdc.dex.mmg.InvalidConditionException
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-import gov.cdc.hl7.HL7StaticParser
 import java.util.*
 
 /**
@@ -91,18 +92,7 @@ class MMGValidationFunction {
 
                 val ehDestination = if (mmgReport.status == ReportStatus.MMG_VALID) eventHubSendOkName else eventHubSendErrsName
                     evHubSender.send(evHubTopicName=ehDestination, message=gson.toJson(inputEvent))
-                    context.logger.info("Processed for MMG validated messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, reportStatus: ${mmgReport}")
-
-//                } catch (e: Exception) {
-//                    context.logger.severe("Unable to process Message due to exception: ${e.message}")
-//
-//                    val problem = Problem(MMG_VALIDATOR, e, false, 0, 0)
-//                    val summary = SummaryInfo(STATUS_ERROR, problem)
-//                    inputEvent.add("summary", summary.toJsonElement())
-//
-//                    evHubSender.send( evHubTopicName=eventHubSendErrsName, message=Gson().toJson(inputEvent) )
-//                    // throw  Exception("Unable to process Message messageUUID: $messageUUID, filePath: $filePath due to exception: ${e.message}")
-//                }
+                    context.logger.info("Processed for MMG validated messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, reportStatus: $mmgReport")
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
@@ -126,26 +116,46 @@ class MMGValidationFunction {
         request: HttpRequestMessage<Optional<String>>,
         context: ExecutionContext): HttpResponseMessage {
 
-        val hl7Message = request.body?.get().toString()
-
-        hl7Message.let {
-            context.logger.info("Validating message...")
-            val mmgValidator = MmgValidator()
-            val validationReport = mmgValidator.validate(hl7Message)
-            val report = MmgReport( validationReport)
-
-            return request
-                .createResponseBuilder(HttpStatus.OK)
-                .header("Content-Type", "application/json")
-                .body(gson.toJson(report))
-                .build()
+        val hl7Message : String?
+        try {
+            hl7Message = request.body?.get().toString()
+        } catch (e: NoSuchElementException) {
+            return buildHttpResponse(
+                "No body was found. Please send an HL7 v.2.x message in the body of the request.",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
         }
 
+        val mmgValidator : MmgValidator
+        val validationReport : List<ValidationIssue>
+        try {
+            context.logger.info("Validating message...")
+            mmgValidator = MmgValidator()
+            validationReport = mmgValidator.validate(hl7Message)
+        } catch (e : Exception) {
+            if (e is NoSuchElementException || e is InvalidConditionException) {
+                return buildHttpResponse("Error: ${e.message.toString()}",
+                    HttpStatus.BAD_REQUEST,
+                    request)
+            }
+            return buildHttpResponse("An unexpected error occurred: ${e.message.toString()}",
+                HttpStatus.BAD_REQUEST,
+                request)
+        }
+        val report = MmgReport(validationReport)
+        return buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
+    }
+    private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+        var contentType = "application/json"
+        if (status != HttpStatus.OK) {
+            contentType = "text/plain"
+        }
         return request
-            .createResponseBuilder(HttpStatus.BAD_REQUEST)
-            .body("Please pass HL7 message on the request body")
+            .createResponseBuilder(status)
+            .header("Content-Type", contentType)
+            .body(message)
             .build()
     }
-
 } // .Function
 

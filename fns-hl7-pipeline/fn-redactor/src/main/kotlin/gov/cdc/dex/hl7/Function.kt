@@ -3,9 +3,11 @@ package gov.cdc.dex.hl7
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.microsoft.azure.functions.ExecutionContext
+import com.microsoft.azure.functions.*
+import com.microsoft.azure.functions.annotation.AuthorizationLevel
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
+import com.microsoft.azure.functions.annotation.HttpTrigger
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.hl7.model.RedactorProcessMetadata
 import gov.cdc.dex.metadata.Problem
@@ -15,7 +17,6 @@ import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.gson
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-import gov.cdc.hl7.DeIdentifier
 import java.util.*
 
 
@@ -64,16 +65,18 @@ class Function {
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 val report = helper.getRedactedReport(hl7Content)
+
                 val processMD = RedactorProcessMetadata(status = "PROCESS_REDACTOR_OK", report = report?._2()?.toList())
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
-
+               // println("metadata: ${metadata}")
                 metadata.addArrayElement("processes", processMD)
+               // println("metadata new: ${metadata}")
                 //println("new content: ${report?._1()}")
                 val newContentBase64 = Base64.getEncoder().encodeToString((report?._1()?.toByteArray() ?: "") as ByteArray?)
                 inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))
 
-                //println("inputEvent new :${inputEvent}")
+                context.logger.info("inputEvent new :${inputEvent}")
                 context.logger.info("Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $evHubNameOk ")
                 context.logger.finest("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
                 ehSender.send(evHubNameOk, Gson().toJson(inputEvent))
@@ -94,5 +97,49 @@ class Function {
 
     }
 
+    @FunctionName("redactorReport")
+    fun invoke(
+        @HttpTrigger(name = "req",
+            methods = [HttpMethod.POST],
+            authLevel = AuthorizationLevel.ANONYMOUS)
+        request: HttpRequestMessage<Optional<String>>,
+        context: ExecutionContext): HttpResponseMessage {
 
-} // .Function
+        val hl7Message : String?
+        val helper = Helper()
+        try {
+            hl7Message = request.body?.get().toString()
+        } catch (e: NoSuchElementException) {
+            return buildHttpResponse(
+                "No body was found. Please send an HL7 v.2.x message in the body of the request.",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
+        }
+
+        return try {
+            val report = helper.getRedactedReport(hl7Message)
+
+            buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
+        } catch (e: Exception) {
+            buildHttpResponse(
+                "Please pass an HL7 message on the request body.",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
+        }
+    }
+
+}
+
+private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+    var contentType = "application/json"
+    if (status != HttpStatus.OK) {
+        contentType = "text/plain"
+    }
+    return request
+        .createResponseBuilder(status)
+        .header("Content-Type", contentType)
+        .body(message)
+        .build()
+}

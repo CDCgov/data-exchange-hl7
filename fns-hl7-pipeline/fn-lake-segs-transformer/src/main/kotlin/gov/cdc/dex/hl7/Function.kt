@@ -105,7 +105,7 @@ class Function {
                     // enable for model
                     val ehDestination = eventHubSendOkName
                     evHubSender.send(evHubTopicName=ehDestination, message=gsonWithNullsOn.toJson(inputEvent))
-                    context.logger.info("Processed for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
+                    context.logger.info("Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
 
                 } catch (e: Exception) {
 
