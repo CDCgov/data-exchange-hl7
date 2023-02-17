@@ -92,7 +92,7 @@ class Function {
                 val provenance = metadata["provenance"].asJsonObject
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
-                val messageInfo = inputEvent["message_uuid"].asJsonObject
+                val messageInfo = inputEvent["message_info"].asJsonObject
                 val reportingJurisdiction = messageInfo["reporting_jurisdiction"].asString
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
