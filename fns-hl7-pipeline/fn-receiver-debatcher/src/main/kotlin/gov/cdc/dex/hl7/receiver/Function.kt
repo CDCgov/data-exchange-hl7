@@ -148,7 +148,7 @@ class Function {
         if(ecrElrCond.isNotEmpty() && ecrElrCond.contains("ORU^R01^ORU_R01")){
             var elrCond = extractValue(message, MSH_21_1_1_PATH);
             if(elrCond.isNotEmpty() && elrCond.contains("PHLabReport-NoAck")){
-                var elrRoute = extractValue(message, "MSH-12")
+                var elrRoute = "COVID_".plus(extractValue(message, "MSH-12"))
                 return DexMessageInfo(eventCode, elrRoute, null,  jurisdictionCode, HL7MessageType.ELR)
             }
         }
