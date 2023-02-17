@@ -28,7 +28,7 @@
         <redis.version>4.2.3</redis.version>
         <junit.version>5.9.0</junit.version>
         <hl7pet.version>1.2.7.1</hl7pet.version>
-        <libdexcommon.version>1.0.5-SNAPSHOT</libdexcommon.version>
+        <libdexcommon.version>1.0.10-SNAPSHOT</libdexcommon.version>
 
     </properties>
 
