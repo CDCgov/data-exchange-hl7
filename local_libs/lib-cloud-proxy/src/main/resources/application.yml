@@ -1,0 +1,11 @@
+micronaut:
+  application:
+    name: lib-cloud-proxy
+
+
+cloud_environment: AWS
+
+aws:
+    bucket: cf-daart-hl7-dropbucket-dev
+    region: us-east-1
+

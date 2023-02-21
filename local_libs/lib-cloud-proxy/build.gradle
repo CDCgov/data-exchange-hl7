@@ -1,0 +1,196 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "${kotlinVersion}"
+    id "org.jetbrains.kotlin.kapt" version "${kotlinVersion}"
+    id "org.jetbrains.kotlin.plugin.allopen" version "${kotlinVersion}"
+//    id "groovy"
+    id "jacoco"
+    id "maven-publish"
+    id "com.google.osdetector" version "1.7.0"
+}
+
+version "$revision"
+group "gov.cdc.ncezid"
+
+
+repositories {
+    maven {
+        url 'https://pkgs.dev.azure.com/CDC-Org1/_packaging/Biblioteca/maven/v1'
+        credentials {
+            username azureRepoUser
+            password azureRepoToken
+        }
+    }
+}
+
+configurations {
+    // for dependencies that are needed for development only
+    developmentOnly
+}
+
+dependencies {
+    implementation group: 'com.azure', name: 'azure-sdk-bom', version: '1.2.3', ext: 'pom'
+    implementation platform("software.amazon.awssdk:bom:$awsSDKVersion") {
+        exclude group: 'io.netty', module: '*'
+    }
+//    implementation platform("com.azure:azure-skd-bom:$azureSDKVersion")
+    implementation("io.micronaut.aws:micronaut-aws-sdk-v2") {
+        exclude group: 'io.netty', module: '*'
+    }
+    implementation ("software.amazon.awssdk:s3"){
+        exclude group: 'io.netty', module: '*'
+    }
+    implementation ("software.amazon.awssdk:sqs"){
+        exclude group: 'io.netty', module: '*'
+    }
+    implementation ("software.amazon.awssdk:sts"){
+        exclude group: 'io.netty', module: '*'
+    }
+
+//    implementation group: 'io.micronaut.azure', name: 'micronaut-azure-sdk', version: '3.3.0'
+    implementation 'com.azure:azure-storage-blob:12.18.0'
+    implementation 'com.azure:azure-storage-queue:12.14.0'
+
+    kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    kapt("io.micronaut:micronaut-inject-java")
+    kapt("io.micronaut:micronaut-validation")
+
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut:micronaut-validation"
+
+    implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    implementation("io.micronaut:micronaut-inject")
+    implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut:micronaut-management")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
+
+    implementation platform("org.jetbrains.kotlin:kotlin-bom")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    implementation("javax.annotation:javax.annotation-api")
+    implementation("com.jayway.jsonpath:json-path:2.5.0")
+    runtimeOnly('ch.qos.logback:logback-classic:1.2.9')
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    kaptTest(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
+    kaptTest("io.micronaut:micronaut-inject-java")
+    testImplementation(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+//    testImplementation("io.micronaut.test:micronaut-test-spock")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    // https://mvnrepository.com/artifact/org.spockframework/spock-core
+//    testCompile group: 'org.spockframework', name: 'spock-core', version: '2.0-M4-groovy-3.0'
+//    compile "io.micronaut:micronaut-runtime-groovy"
+//    compileOnly "io.micronaut:micronaut-inject-groovy"
+    testImplementation("io.micronaut.test:micronaut-test-junit5:{junitVersion}")
+//    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:{junitVersion}")
+//    testRuntimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final'
+    runtimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final:' + osdetector.classifier
+    runtimeOnly 'io.grpc:grpc-netty-shaded:1.45.0'
+//    implementation 'io.projectreactor:reactor-core:3.4.19'
+    implementation 'javax.inject:javax.inject:1'
+// https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava
+    implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.21'
+}
+
+test.classpath += configurations.developmentOnly
+
+// use JUnit 5 platform
+test {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+    }
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.enabled true
+        csv.enabled false
+        //html.destination file("${buildDir}/jacocoHtml")
+        html.enabled true
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion('11')
+}
+
+allOpen {
+    annotation("io.micronaut.aop.Around")
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '11'
+        //Will retain parameter names for Java reflection
+        javaParameters = true
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = '11'
+        javaParameters = true
+    }
+}
+//kapt {
+//    arguments {
+//        arg("micronaut.processing.incremental", true)
+//        arg("micronaut.processing.annotations", "lib.cloud.proxy.*")
+//        arg("micronaut.processing.group", "lib.cloud.proxy")
+//        arg("micronaut.processing.module", "libCloudProxy")
+//    }
+//}
+kapt {
+    correctErrorTypes true
+}
+
+//shadowJar {
+//    mergeServiceFiles()
+//}
+
+tasks.withType(JavaExec) {
+    classpath += configurations.developmentOnly
+    jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+    if (gradle.startParameter.continuous) {
+        systemProperties(
+                'micronaut.io.watch.restart':'true',
+                'micronaut.io.watch.enabled':'true',
+                "micronaut.io.watch.paths":"src/main"
+        )
+    }
+}
+
+
+apply plugin: 'maven-publish'
+
+publishing {
+    repositories {
+        maven {
+            url 'https://pkgs.dev.azure.com/CDC-Org1/_packaging/Biblioteca/maven/v1'
+            credentials {
+                username azureRepoUser
+                password azureRepoToken
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact(kotlinSourcesJar)
+
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+
