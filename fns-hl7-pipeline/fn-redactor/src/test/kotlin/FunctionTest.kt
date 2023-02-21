@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test
 class FunctionTest {
 
     @Test
-    fun TestRedactor(){
-        val msg = this::class.java.getResource("/sample.txt")?.readText()
+    fun testRedactor(){
+        val msg = this::class.java.getResource("/BDB_LAB_02_redact.txt").readText()
         val helper = Helper()
         val report = msg?.let { helper.getRedactedReport(it) }
         if (report != null) {
@@ -21,13 +21,22 @@ class FunctionTest {
         }
 
     }
-@Test
-fun TestMetaData(){
+
+    @Test
+    fun extractValue(){
+        val helper = Helper()
+        val msg = this::class.java.getResource("/BDB_LAB_02_redact.txt").readText()
+        val pidVal = helper.extractValue(msg,"PID-5[2]")
+        println("pidVal: $pidVal")
+
+    }
+    @Test
+fun testMetaData(){
 
     val gson = GsonBuilder().serializeNulls().create()
 
     val REDACTOR_STATUS_OK = "PROCESS_REDACTOR_OK"
-    val msg = this::class.java.getResource("/sample.txt").readText()
+    val msg = this::class.java.getResource("/BDB_LAB_02_redact.txt").readText()
     val helper = Helper()
     val report =  helper.getRedactedReport(msg)
     val w = report?._2()?.toList()
