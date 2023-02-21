@@ -31,6 +31,8 @@ class Function {
         const val UTF_BOM = "\uFEFF"
         const val STATUS_SUCCESS = "SUCCESS"
         const val STATUS_ERROR = "ERROR"
+        const val MSH_9_PATH = "MSH-9"
+        const val MSH_21_1_1_PATH = "MSH-21[1].1"
         const val MSH_21_2_1_PATH = "MSH-21[2].1" // Generic or Arbo
         const val MSH_21_3_1_PATH = "MSH-21[3].1" // Condition
         const val EVENT_CODE_PATH = "OBR-31.1"
@@ -140,6 +142,15 @@ class Function {
         var jurisdictionCode = extractValue(message, JURISDICTION_CODE_PATH)
         if (jurisdictionCode.isEmpty()) {
             jurisdictionCode = extractValue(message, ALT_JURISDICTION_CODE_PATH)
+        }
+        var ecrElrCond = extractValue(message, MSH_9_PATH);
+
+        if(ecrElrCond.isNotEmpty() && ecrElrCond.contains("ORU^R01^ORU_R01")){
+            var elrCond = extractValue(message, MSH_21_1_1_PATH);
+            if(elrCond.isNotEmpty() && elrCond.contains("PHLabReport-NoAck")){
+                var elrRoute = "COVID_".plus(extractValue(message, "MSH-12"))
+                return DexMessageInfo(eventCode, elrRoute, null,  jurisdictionCode, HL7MessageType.ELR)
+            }
         }
         return try {
             mmgUtil.getMMGMessageInfo(msh21Gen, msh21Cond, eventCode, jurisdictionCode)
