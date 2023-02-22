@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.13] - 2023-02-22
+  - Created new Function to Redact messages
+  - Adding MMG for Varicella and TB Messages
+  - Started JADs for incorporating ELR messages on the pipeline.
+  - Created Lake of Segments transformations
+  - Modified Validation rule for CARDINALITY_OVER to always be an WARNING (pipeline will pick first value if multiple are present)
+  - Added EventHub metadata to Receiver/Debatcher function
+
+
 ### [0.0.12] - 2023-02-08
   - Fixed Fortify Vulnerability scans issues
   - Enhanced MMG Validation with following rules:
