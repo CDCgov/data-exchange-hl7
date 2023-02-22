@@ -8,7 +8,7 @@ object JsonHelper {
 
     val gson = GsonBuilder().serializeNulls().create()
     fun Any.toJsonElement():JsonElement {
-        val jsonStr = Gson().toJson(this)
+        val jsonStr = gson.toJson(this)
         return JsonParser.parseString(jsonStr)
     }
 

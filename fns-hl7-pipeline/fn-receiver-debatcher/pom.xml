@@ -37,7 +37,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.10-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.cdc.hl7</groupId>
@@ -142,6 +142,7 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <configuration>
+                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>

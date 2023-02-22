@@ -10,14 +10,16 @@ class MMGLoaderTest {
     fun testLoadMMGsFromMMGAT() {
         val fn = MmgatClient()
         val redisProxy = RedisProxy(redisName, redisKey)
-        fn.loadLegacyMmgat(redisProxy)
+       // fn.loadLegacyMmgat(redisProxy)
         fn.loadMMGAT(redisProxy)
     }
+
     @Test
-    fun testLoadVocab() {
+    fun loadLegacies() {
+        val fn = MmgatClient()
         val redisProxy = RedisProxy(redisName, redisKey)
-       val fn = VocabClient(redisProxy)
-       fn.loadVocab()
-   }
+        fn.loadLegacyMmgat(redisProxy)
+    }
+
 
 }

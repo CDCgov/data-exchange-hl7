@@ -29,6 +29,7 @@ import com.google.gson.GsonBuilder
 
 import  gov.cdc.dex.azure.RedisProxy
 
+
 class MbtTest {
 
     companion object {
@@ -39,11 +40,13 @@ class MbtTest {
         val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
         val redisClient = redisProxy.getJedisClient()
 
-        val REDIS_PREFIX_COONDITION = "conditionv2:"
+        val REDIS_PREFIX_COONDITION = "condition:"
 
         val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
         private val gson = Gson()
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
+
+        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1"
 
     } // .companion 
 
@@ -73,7 +76,7 @@ class MbtTest {
     @Test
     fun testRedisReadGenericMmg() {
 
-        val mmg = redisClient.get("mmg:generic_mmg_v2.0").substring(0, 100)
+        val mmg = redisClient.get("mmg:generic_mmg_v2_0").substring(0, 100)
         logger.info("testRedisReadGenericMmg: mmg: ${mmg}...")
 
         assertEquals(mmg.length, 100)
@@ -95,9 +98,10 @@ class MbtTest {
         
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val hl7Content = this::class.java.getResource(filePath).readText()
+        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
 
         val mmgUtil = MmgUtil(redisProxy)
-        val mmgs = mmgUtil.getMMGFromMessage(hl7Content, filePath, "messageUUID")
+        val mmgs = mmgUtil.getMMGFromMessage(hl7Content, reportingJurisdiction)
 
         logger.info("testGetMMGFromMessage: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
 
@@ -129,7 +133,9 @@ class MbtTest {
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgUtil = MmgUtil(redisProxy)
-        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, filePath, "")
+        val reportingJurisdiction = extractValue(testMsg, JURISDICTION_CODE_PATH)
+
+        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, reportingJurisdiction)
 
         val transfomer = Transformer(redisProxy)
         val mmgs = transfomer.getMmgsFiltered(mmgsArr)
@@ -204,9 +210,10 @@ class MbtTest {
         // hl7
         val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val hl7Content = this::class.java.getResource(hl7FilePath).readText()
+        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
 
         val mmgUtil = MmgUtil(redisProxy)
-        val mmgs = mmgUtil.getMMGFromMessage(hl7Content, hl7FilePath, "")
+        val mmgs = mmgUtil.getMMGFromMessage(hl7Content, reportingJurisdiction)
 
         mmgs.forEach {
             logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
@@ -232,9 +239,11 @@ class MbtTest {
 
                 val filePath = "/Genv2_2-0-1_TC01.hl7"
                 val hl7Content = this::class.java.getResource(filePath).readText()
+
+                val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
         
                 val mmgUtil = MmgUtil(redisProxy)
-                val mmgs = mmgUtil.getMMGFromMessage(hl7Content, filePath, "messageUUID")
+                val mmgs = mmgUtil.getMMGFromMessage(hl7Content, reportingJurisdiction)
         
                 logger.info("testConditionNotSupportedException: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
         
@@ -245,10 +254,7 @@ class MbtTest {
             } // .block
 
         ) // .assertFails
-    
-        // TODO: If this was supported
-        // assertEquals(mmgs.size, 1)
-        // assertEquals(mmgs[0].name, "Generic Version 2.0.1")
+
 
     } // .testLoadMMG
 
@@ -260,7 +266,7 @@ class MbtTest {
             block = {
 
                 val mmgUtil = MmgUtil(redisProxy)
-                val mmgs = mmgUtil.getMMGFromMessage("hl7Content", "hl7FilePath", "")
+                val mmgs = mmgUtil.getMMGFromMessage("hl7Content", "23")
                 logger.info("testMmgThrowsException: mmgs.size: ${mmgs.size}")
 
             } // .block
@@ -268,6 +274,13 @@ class MbtTest {
         ) // .assertFailsWith
 
     } // .testMmgThrowsException
+
+
+    private fun extractValue(msg: String, path: String): String  {
+        val value = HL7StaticParser.getFirstValue(msg, path)
+        return if (value.isDefined) value.get()
+        else ""
+    }
 
 
 } // .MbtTest

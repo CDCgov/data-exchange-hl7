@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.NoSuchElementException
 
 class MMGValidatorTest {
 
@@ -22,7 +23,7 @@ class MMGValidatorTest {
 
 
     private fun validateMessage(fileName: String): MmgReport {
-        val testMsg = this::class.java.getResource(fileName).readText()
+        val testMsg = this::class.java.getResource(fileName).readText().trim()
 
         val mmgValidator = MmgValidator( )
         val validationReport = mmgValidator.validate(testMsg)
@@ -68,9 +69,9 @@ class MMGValidatorTest {
     @Test
     fun testInvalidMMG() {
         try {
-            val report = validateMessage("/tbrd/BDB_LAB_13.txt")
+            val report = validateMessage("/BDB_LAB_13.txt")
             assert(false)
-        } catch (e: InvalidConditionException) {
+        } catch (e: NoSuchElementException) {
             println("Exception properly thrown - can't validate this message lacking event code")
             assert(true)
         }
@@ -135,5 +136,45 @@ class MMGValidatorTest {
 
         val error = report.entries.filter { it.category == ValidationIssueType.OBSERVATION_SUB_ID_VIOLATION }[0]
         assert(error.line == 60)
+    }
+
+    @Test
+    fun testMessageWithMissingMSH212() {
+        try {
+            val report = validateMessage("/Lyme_WithMissingMSH212.txt")
+        } catch (e : Exception) {
+            println(e.message)
+            assert(e is NoSuchElementException)
+        }
+    }
+
+    @Test
+    fun testMessageWithMissingJursidiction() {
+        try {
+            val report = validateMessage("/Lyme_WithMissingJurCode.txt")
+        } catch (e : Exception) {
+            println(e.message)
+            assert(e is NoSuchElementException)
+        }
+    }
+
+    @Test
+    fun testMessageWithMissingOBR31() {
+        try {
+            val report = validateMessage("/Lyme_WithMissingOBR31.txt")
+        } catch (e : Exception) {
+            println(e.message)
+            assert(e is NoSuchElementException)
+        }
+    }
+
+    @Test
+    fun testMessageWithInvalidOBR31() {
+        try {
+            val report = validateMessage("/Lyme_WithInvalidOBR31.txt")
+        } catch (e : Exception) {
+            println(e.message)
+            assert(e is InvalidConditionException)
+        }
     }
 }

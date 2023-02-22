@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>gov.cdc.ncezid.biblioteca</groupId>
+    <artifactId>svc-cloud-transport</artifactId>
+    <version>1.0.3-SNAPSHOT</version>
+
+    <parent>
+        <groupId>gov.cdc.ncezid.mn-parent</groupId>
+        <artifactId>eip-starter-mn-parent</artifactId>
+        <version>2.0.6-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <exec.mainClass>gov.cdc.ncezid.transport.service.Application</exec.mainClass>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>gov.cdc.ncezid.mn-parent</groupId>
+            <artifactId>eip-service-mn-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-all</artifactId>
+                </exclusion>
+            </exclusions>
+
+        </dependency>
+        <dependency>
+            <groupId>gov.cdc.ncezid</groupId>
+            <artifactId>lib-cloud-proxy</artifactId>
+            <version>1.4.0-SNAPSHOT</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.76.Final</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

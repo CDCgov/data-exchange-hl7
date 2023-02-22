@@ -28,18 +28,15 @@ class MmgUtil(val redisProxy: RedisProxy)  {
     } // .companion
 
         @Throws(Exception::class)
-        fun getMMGFromMessage(message: String, filePath: String, messageUUID: String): Array<MMG> {
+        fun getMMGFromMessage(message: String, reportingJurisdiction: String): Array<MMG> {
 
             val msh21_2 = extractValue(message, PATH_MSH_21_2_1).lowercase(Locale.getDefault())
             val msh21_3 = extractValue(message, PATH_MSH_21_3_1).lowercase(Locale.getDefault())
             val eventCode = extractValue(message, EVENT_CODE_PATH)
-            val jurisdictionCode = "23" // TODO: ..  extractValue(message, PATH_JURISDICTION_CODE)
-
-            logger.info("getMMGFromMessage, for message filePath ${filePath}, messageUUID: ${messageUUID} --> msh21_2: $msh21_2, msh21_3: $msh21_3, eventCode: $eventCode")
 
             val mmgUtilLib = MmgUtilLib(redisProxy)
 
-            return mmgUtilLib.getMMGs(msh21_2, msh21_3, eventCode, jurisdictionCode) //getMMG(msh21_2, msh21_3, eventCode, jurisdictionCode)
+            return mmgUtilLib.getMMGs(msh21_2, msh21_3, eventCode, reportingJurisdiction) 
         } // .getMMGFromMessage
 
         private fun extractValue(msg: String, path: String):String  {

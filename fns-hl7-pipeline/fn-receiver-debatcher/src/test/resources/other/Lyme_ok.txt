@@ -1,0 +1,82 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||TickLyme_TC01^^^SendAppName&2.16.840.1.114222.1111&ISO||~^^^^^^S||19930601|F||2054-5^Black or African American^CDCREC|^^^47^37209^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||
+OBR|1||TickLyme_TC01^SendAppName^2.16.840.1.114222.1111^ISO|68991-9^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND
+OBX|1|ST|32624-9^Other Race Text^LN||Botswanan||||||F
+OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|ST|21842-0^Other Birth Place^LN||Navajo Reservation||||||F
+OBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|5|TS|11368-8^Date of Illness Onset^LN||20180625||||||F
+OBX|6|TS|77976-9^Illness End Date^LN||20180710||||||F
+OBX|7|SN|77977-7^Illness Duration^LN||^15|d^day [time]^UCUM|||||F
+OBX|8|CWE|77996-7^Pregnancy Status^LN||Y^Yes^HL70136||||||F
+OBX|9|TS|77975-1^Diagnosis Date^LN||20180705||||||F
+OBX|10|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|11|TS|8656-1^Admission Date^LN||20180705||||||F
+OBX|12|TS|8649-6^Discharge Date^LN||20180710||||||F
+OBX|13|SN|78033-8^Duration of Hospital Stay in Days^LN||^5||||||F
+OBX|14|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|15|ST|77993-4^State Case Identifier^LN||340227||||||F
+OBX|16|ST|77997-5^Legacy Case Identifier^LN||34022747S012018||||||F
+OBX|17|SN|77998-3^Age at Case Investigation^LN||^25|a^year [time]^UCUM|||||F
+OBX|18|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F
+OBX|19|CWE|INV154^Imported State^PHINQUESTION||25^Massachusetts^FIPS5_2||||||F
+OBX|20|CWE|INV155^Imported City^PHINQUESTION||614554^Ipswich, MA, Essex^USGSGNIS||||||F
+OBX|21|CWE|INV156^Imported County^PHINQUESTION||25009^Essex, MA^FIPS6_4||||||F
+OBX|22|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|23|CWE|77985-0^State or Province of Exposure^LN|1|25^Massachusetts^FIPS5_2||||||F
+OBX|24|ST|77986-8^City of Exposure^LN|1|Lynn||||||F
+OBX|25|ST|77987-6^County of Exposure^LN|1|Essex||||||F
+OBX|26|CWE|77989-2^Transmission Mode^LN||418427004^Vector-borne transmission^SCT||||||F
+OBX|27|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|28|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|29|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|30|ST|77981-9^Case Outbreak Name^LN||N/A||||||F
+OBX|31|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|32|CWE|48766-0^Reporting Source Type Code^LN||PHC247^Laboratory^CDCPHINVS||||||F
+OBX|33|ST|52831-5^Reporting Source ZIP Code^LN||37243||||||F
+OBX|34|CWE|77988-4^Binational Reporting Criteria^LN||PHC1141^Other situations that may require binational notification or coordination of response^CDCPHINVS||||||F
+OBX|35|ST|74549-7^Person Reporting to CDC - Name^LN||John Doe||||||F
+OBX|36|ST|74548-9^Person Reporting to CDC - Phone Number^LN||456-987-8888||||||F
+OBX|37|ST|74547-1^Person Reporting to CDC - Email^LN||john.doe@email.com||||||F
+OBX|38|DT|77979-3^Case Investigation Start Date^LN||20180628||||||F
+OBX|39|DT|77995-9^Date Reported^LN||20180912||||||F
+OBX|40|TS|77972-8^Earliest Date Reported to County^LN||20180912||||||F
+OBX|41|TS|77973-6^Earliest Date Reported to State^LN||20180912||||||F
+OBX|42|SN|77991-8^MMWR Week^LN||^37||||||F
+OBX|43|DT|77992-6^MMWR Year^LN||2018||||||F
+OBX|44|DT|77970-2^Date First Reported to PHD^LN||20180912||||||F
+OBX|45|CWE|77966-0^Reporting State^LN||47^Tennessee^FIPS5_2||||||F
+OBX|46|CWE|77967-8^Reporting County^LN||47003^Bedford, TN^FIPS6_4||||||F
+OBX|47|CWE|77968-6^National Reporting Jurisdiction^LN||47^TN^FIPS5_2||||||F
+OBX|48|TX|77999-1^Comment^LN||Patient was bitten by a tick during European backpacking trip||||||F
+OBX|49|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|69588003^Erythema Migrans^SCT||||||F
+OBX|50|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|51|CWE|INV929^Clinical Manifestation^PHINQUESTION|2|193093009^Bell's palsy^SCT||||||F
+OBX|52|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|2|N^No^HL70136||||||F
+OBX|53|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|233917008^Atrioventricular block^SCT||||||F
+OBX|54|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|55|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|48780006^Other cranial neuritis^SCT||||||F
+OBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|57|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|72274001^Radiculoneuropathy^SCT||||||F
+OBX|58|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|59|CWE|INV929^Clinical Manifestation^PHINQUESTION|6|45170000^Encephalitis^SCT||||||F
+OBX|60|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|6|N^No^HL70136||||||F
+OBX|61|CWE|INV929^Clinical Manifestation^PHINQUESTION|7|62950007^Encephalomyelitis^SCT||||||F
+OBX|62|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|7|N^No^HL70136||||||F
+OBX|63|CWE|29303-5^Medication Administered^LN|1|3640^Doxycycline^RXNORM||||||F
+OBX|64|DT|86948-7^Date Treatment or Therapy Started^LN|1|20180705||||||F
+OBX|65|SN|67453-1^Treatment Duration^LN|1|^10|d^day^UCUM|||||F
+OBX|66|ST|85658-3^Current Occupation^LN|1|Carpenter||||||F
+OBX|67|ST|85078-4^Current Industry^LN|1|Lumber retail||||||F
+OBX|68|CE|85657-5^Current Industry Standardized^LN|1|4090^Lumber and other construction materials merchant wholesalers [4090]^CDCINDUSTRY2010||||||F
+OBX|69|CWE|INV290^Test Type^PHINQUESTION|1|20449-5^EIA/ELISA^LN||||||F
+OBX|70|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|71|ST|LAB628^Test Result Quantitative^PHINQUESTION|1|2.5||||||F
+OBX|72|CWE|LAB115^Result Units^PHINQUESTION|1|{index_val}^index value^UCUM||||||F
+OBX|73|CWE|66746-9^Specimen Type^LN|1|119297000^Blood^SCT||||||F
+OBX|74|TS|68963-8^Specimen Collection Date/Time^LN|1|20180705||||||F
+OBX|75|CWE|INV290^Test Type^PHINQUESTION|2|32667-8^PCR^LN||||||F
+OBX|76|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F
+OBX|77|CWE|LAB278^Organism Name^PHINQUESTION|2|76327009^Borrelia burgdorferi^SCT||||||F
+OBX|78|CWE|66746-9^Specimen Type^LN|2|119325001^Skin^SCT||||||F
+OBX|79|TS|68963-8^Specimen Collection Date/Time^LN|2|20180705||||||F

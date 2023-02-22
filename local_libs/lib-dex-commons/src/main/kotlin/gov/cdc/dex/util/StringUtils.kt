@@ -10,6 +10,7 @@ class StringUtils {
                 " " to "_",
                 "-" to "_",
                 "/" to "_",
+                "." to "_",
                 "&" to "_and_")
 
             var rr1 = str.trim().lowercase()

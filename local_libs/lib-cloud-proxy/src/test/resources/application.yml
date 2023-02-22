@@ -1,0 +1,17 @@
+micronaut:
+  application:
+    name: lib-cloud-proxy
+
+#aws:
+#  region: us-east-1
+#  s3:
+#    bucket: cf-daart-nist-profiles-dev
+
+azure:
+  blob:
+    connectStr: ${SPIKE_BLOB_CONNECT_STR}
+    container: foodnet
+
+  asq:
+    connectionStr: ${SPIKE_QUEUE_CONNECT_STR}
+    queueName: csv-spike-drop
