@@ -106,13 +106,10 @@ class Function {
                         throw Exception("Unable to process message due to missing required information: Event Code is '$eventCode', Jurisdiction Code is '$jurisdictionCode'")
                     }
                     context.logger.info("MMG List from MessageInfo: ${messageInfo.mmgKeyList}")
-                    val mmgs : Array<MMG> = if (messageInfo.mmgKeyList.isNullOrEmpty()) {
-                        val mshProfile= extractValue(hl7Content, "MSH-21[2].1")
-                        val mshCondition = extractValue(hl7Content, "MSH-21[3].1")
-                        mmgUtil.getMMGs(mshProfile, mshCondition, eventCode, jurisdictionCode)
-                    } else {
-                        mmgUtil.getMMGs(messageInfo.mmgKeyList!!.toTypedArray())
-                    }
+                    val mshProfile= extractValue(hl7Content, "MSH-21[2].1")
+                    val mshCondition = extractValue(hl7Content, "MSH-21[3].1")
+                    val mmgs = mmgUtil.getMMGs(mshProfile, mshCondition, eventCode, jurisdictionCode)
+
                     if (mmgs.isEmpty()) {
                         throw Exception ("Unable to find MMGs for message.")
                     }

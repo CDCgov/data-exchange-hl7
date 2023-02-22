@@ -37,6 +37,7 @@
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
             <version>${libdexcommon.version}</version>
+            <scope>compile</scope>
         </dependency>
         
         <!-- Azure Functions Java Library -->
