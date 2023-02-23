@@ -30,12 +30,12 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-//    environment (mapOf("REDIS_CACHE_NAME" to "tf-vocab-cache-dev.redis.cache.windows.net",
-//                       "REDIS_CACHE_KEY"  to findProperty("redisDevKey")
-//    ))
-    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-tst-dex-cache.redis.cache.windows.net",
-        "REDIS_CACHE_KEY"  to findProperty("redisTSTKey")
+    environment (mapOf("REDIS_CACHE_NAME" to "tf-vocab-cache-dev.redis.cache.windows.net",
+                       "REDIS_CACHE_KEY"  to findProperty("redisDevKey")
     ))
+//    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-tst-dex-cache.redis.cache.windows.net",
+//        "REDIS_CACHE_KEY"  to findProperty("redisTSTKey")
+//    ))
     finalizedBy(tasks.jacocoTestReport)
 }
 tasks.jacocoTestReport {

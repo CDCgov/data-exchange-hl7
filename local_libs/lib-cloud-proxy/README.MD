@@ -23,7 +23,7 @@ Add this library to your build file:
 For maven:
 ```xml
 <dependency>
-    <groupId>gov.cdc.ncezid</groupId>
+    <groupId>gov.cdc.dex</groupId>
     <artifactId>lib-cloud-proxy</artifactId>
     <version>1.2.0</version>
 </dependency>
@@ -31,7 +31,7 @@ For maven:
 
 For gradle:
 ```groovy
-implementation("gov.cdc.ncezid:lib-cloud-proxy:1.2.0")
+implementation("gov.cdc.dex:lib-cloud-proxy:1.2.0")
 ```
 
 ## Configuration
