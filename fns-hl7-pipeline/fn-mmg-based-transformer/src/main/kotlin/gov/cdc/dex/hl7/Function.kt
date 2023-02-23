@@ -4,18 +4,19 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.ExecutionContext
+import com.microsoft.azure.functions.annotation.BindingName
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
+import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.azure.RedisProxy
-import gov.cdc.dex.metadata.DexMessageInfo
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.util.DateHelper.toIsoString
+import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
-import gov.cdc.dex.util.JsonHelper.gson
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.HL7StaticParser
 import java.util.*
@@ -43,14 +44,15 @@ class Function {
     }
     @FunctionName("mmgBasedTransformer")
     fun eventHubProcessor(
-            @EventHubTrigger(
+        @EventHubTrigger(
                 name = "msg",
                 eventHubName = "%EventHubReceiveName%",
                 connection = "EventHubConnectionString",
                 consumerGroup = "%EventHubConsumerGroup%",
             )
                 message: List<String?>,
-                context: ExecutionContext) {
+        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
+        context: ExecutionContext) {
 
 
         val startTime =  Date().toIsoString()
@@ -73,7 +75,8 @@ class Function {
         // 
         // Process each Event Hub Message
         // ----------------------------------------------
-        message.forEach { singleMessage: String? -> 
+        message.forEachIndexed{
+            messageIndex : Int, singleMessage: String? ->
             try {
                 // 
                 // Extract from Event Hub Message 
@@ -88,8 +91,7 @@ class Function {
                 val provenance = metadata["provenance"].asJsonObject
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
-
-                val messageInfo = gson.fromJson(inputEvent["message_info"], DexMessageInfo::class.java)
+                val messageInfo = inputEvent["message_info"].asJsonObject
 
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                 val mmgUtil = MmgUtil(redisProxy)
@@ -100,16 +102,25 @@ class Function {
                     // ----------------------------------------------
 
                     // get MMG(s) for the message:
-                    val eventCode = messageInfo.eventCode.toString()
-                    val jurisdictionCode = messageInfo.jurisdictionCode.toString()
+                    val eventCode = messageInfo["event_code"].asString
+                    val jurisdictionCode = messageInfo["reporting_jurisdiction"].asString
                     if (eventCode.isEmpty() || jurisdictionCode.isEmpty()) {
                         throw Exception("Unable to process message due to missing required information: Event Code is '$eventCode', Jurisdiction Code is '$jurisdictionCode'")
                     }
-                    context.logger.info("MMG List from MessageInfo: ${messageInfo.mmgKeyList}")
-                    val mshProfile= extractValue(hl7Content, "MSH-21[2].1")
-                    val mshCondition = extractValue(hl7Content, "MSH-21[3].1")
-                    val mmgs = mmgUtil.getMMGs(mshProfile, mshCondition, eventCode, jurisdictionCode)
 
+                    val mmgKeyNames :Array<String> = JsonHelper.getStringArrayFromJsonArray(messageInfo["mmgs"].asJsonArray)
+                    context.logger.info("MMG List from MessageInfo: ${mmgKeyNames.contentToString()}")
+                    val mmgs = try {
+                        if (mmgKeyNames.isNotEmpty()) {
+                            mmgUtil.getMMGs(mmgKeyNames)
+                        } else {
+                            val mshProfile = extractValue(hl7Content, "MSH-21[2].1")
+                            val mshCondition = extractValue(hl7Content, "MSH-21[3].1")
+                            mmgUtil.getMMGs(mshProfile, mshCondition, eventCode, jurisdictionCode)
+                        }
+                    } catch (e: NullPointerException) {
+                        arrayOf()
+                    }
                     if (mmgs.isEmpty()) {
                         throw Exception ("Unable to find MMGs for message.")
                     }
@@ -127,7 +138,9 @@ class Function {
                     context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel.size: --> ${mmgBasedModel.size}")
 
 
-                    val processMD = MbtProcessMetadata(status = PROCESS_STATUS_OK, report = mmgBasedModel)
+                    val processMD = MbtProcessMetadata(status = PROCESS_STATUS_OK,
+                        report = mmgBasedModel,
+                        eventHubMD = eventHubMD[messageIndex])
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
                     metadata.addArrayElement("processes", processMD)
@@ -140,7 +153,9 @@ class Function {
 
                     context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
 
-                    val processMD = MbtProcessMetadata(status=PROCESS_STATUS_EXCEPTION, report=null)
+                    val processMD = MbtProcessMetadata(status=PROCESS_STATUS_EXCEPTION,
+                        report=null,
+                        eventHubMD = eventHubMD[messageIndex])
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
                     metadata.addArrayElement("processes", processMD) 
@@ -168,7 +183,7 @@ class Function {
             } // .catch
         } // .message.forEach
 
-        redisProxy.getJedisClient().close()
+       // redisProxy.getJedisClient().close()
      
     } // .eventHubProcessor
 

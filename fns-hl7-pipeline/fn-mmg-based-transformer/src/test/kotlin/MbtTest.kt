@@ -22,9 +22,14 @@ import gov.cdc.dex.mmg.InvalidConditionException
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 
 import  gov.cdc.dex.azure.RedisProxy
+import gov.cdc.dex.metadata.DexMessageInfo
+import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.mmg.MmgUtil
+import gov.cdc.dex.util.JsonHelper
 
 
 class MbtTest {
@@ -122,7 +127,21 @@ class MbtTest {
         assertEquals(cc.profiles!!.size, 1)
     } // .testLoadMMG
 
+    @Test
+    fun testLoadMMGsFromKeyList() {
+        val dmi = DexMessageInfo("10030", "some route", listOf("mmg:varicella_message_mapping_guide_v2_01"),
+            "13", HL7MessageType.CASE)
+        val gson = Gson()
+        val dmiString = gson.toJson(dmi)
+        val jsonObj = JsonParser.parseString(dmiString) as JsonObject
+        println(jsonObj["mmgs"])
+        println(jsonObj["mmgs"].javaClass.name)
+        val mmgKeys = JsonHelper.getStringArrayFromJsonArray(jsonObj["mmgs"].asJsonArray)
 
+        val mmgUtil = MmgUtil(redisProxy)
+        val mmgs = mmgUtil.getMMGs(mmgKeys)
+        assert(mmgs.size == 1)
+    }
     @Test
     fun testLoadMMGfromMessage() {
 
@@ -276,8 +295,8 @@ class MbtTest {
     private fun getMMGsFromMessage(messageContent: String, jurisdictionCode: String, eventCode: String) : Array<MMG>{
         val mshProfile= extractValue(messageContent, "MSH-21[2].1")
         val mshCondition = extractValue(messageContent, "MSH-21[3].1")
-        val eventCode = extractValue(messageContent, "OBR-31.1")
-        val jurisdictionCode = "13"
+      //  val eventCode = extractValue(messageContent, "OBR-31.1")
+       // val jurisdictionCode = "13"
         val mmgUtil = MmgUtil(redisProxy)
         return mmgUtil.getMMGs(mshProfile, mshCondition, eventCode, jurisdictionCode)
     }

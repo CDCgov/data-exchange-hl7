@@ -37,4 +37,12 @@ object JsonHelper {
         val encodedValue= getValueFromJson(path,element).asString
         return String(Base64.getDecoder().decode(encodedValue))
     }
+
+    fun getStringArrayFromJsonArray(array: JsonArray) : Array<String> {
+        val newStringArray = arrayListOf<String>()
+        array.forEach {
+            newStringArray.add(it.asString.trim())
+        }
+        return newStringArray.toTypedArray()
+    }
 }
