@@ -10,7 +10,7 @@ micronaut:
 azure:
   blob:
     connectStr: ${SPIKE_BLOB_CONNECT_STR}
-    container: foodnet
+    container: hl7ingress
 
   asq:
     connectionStr: ${SPIKE_QUEUE_CONNECT_STR}
