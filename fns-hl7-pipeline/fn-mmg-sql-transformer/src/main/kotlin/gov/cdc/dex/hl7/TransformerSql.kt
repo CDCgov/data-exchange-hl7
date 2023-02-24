@@ -22,18 +22,14 @@ import  gov.cdc.dex.azure.RedisProxy
 class TransformerSql()  {
 
     companion object {
-        val logger = LoggerFactory.getLogger(TransformerSql::class.java.simpleName)
-        // private val gson = Gson()
-        private val gsonWithNullsOn = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
-        private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
+        private const val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header"
         const val SEPARATOR_ELEMENT_FIELD_NAMES = "_"
-        //
-        private val ELEMENT_CE = "CE"
-        private val ELEMENT_CWE = "CWE"
-        private val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
-        private val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
-
-        private val MESSAGE_PROFILE_IDENTIFIER_EL_NAME = "message_profile_identifier"
+        private const val ELEMENT_CE = "CE"
+        private const val ELEMENT_CWE = "CWE"
+        private const val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
+        private const val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
+        private const val MESSAGE_PROFILE_IDENTIFIER_EL_NAME = "message_profile_identifier"
+        private const val MESSAGE_PROFILE_ID_ALTERNATE_NAME = "message_profile_id"
     } // .companion object
 
 
@@ -246,9 +242,10 @@ class TransformerSql()  {
     //  ------------- MMG Element: Message Profile Identifier -------------
     // --------------------------------------------------------------------------------------------------------
     fun messageProfIdToSqlModel(modelJson: JsonObject) : Map<String, Any?> {
-
-        return modelJson.asJsonObject[MESSAGE_PROFILE_IDENTIFIER_EL_NAME].asJsonArray.mapIndexed{ index, mipPhinObj -> 
-            MESSAGE_PROFILE_IDENTIFIER_EL_NAME + "_" + index.toString() to mipPhinObj.asJsonObject["entity_identifier"] 
+        val msgProfile = modelJson.get(MESSAGE_PROFILE_IDENTIFIER_EL_NAME) ?: modelJson.get(
+            MESSAGE_PROFILE_ID_ALTERNATE_NAME)
+        return msgProfile.asJsonArray.mapIndexed{ index, mipPhinObj ->
+            MESSAGE_PROFILE_IDENTIFIER_EL_NAME + "_" + index.toString() to mipPhinObj.asJsonObject["entity_identifier"]
         }.toMap()
 
     } // .messageProfIdToSqlModel
@@ -261,7 +258,7 @@ class TransformerSql()  {
         if ( mmgs.size > 1 ) { 
             for ( index in 0..mmgs.size - 2) { // except the last one
                 mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                    !( block.name == MMG_BLOCK_NAME_MESSAGE_HEADER ) //|| block.name == MMG_BLOCK_NAME_SUBJECT_RELATED )
+                    block.name != MMG_BLOCK_NAME_MESSAGE_HEADER //|| block.name == MMG_BLOCK_NAME_SUBJECT_RELATED )
                 } // .filter
             } // .for
         } // .if

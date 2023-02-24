@@ -5,6 +5,13 @@
       "version": "[3.3.0, 4.0.0)"
   },
   "logging": {
+    "fileLoggingMode": "always",
+    "logLevel": {
+      "default": "Error",
+      "Host": "Error",
+      "Function": "Information",
+      "Host.Aggregator": "Error"
+    },
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
