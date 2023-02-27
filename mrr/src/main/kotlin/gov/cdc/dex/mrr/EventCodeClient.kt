@@ -37,9 +37,9 @@ import kotlin.system.measureTimeMillis
           8 Special Case MMGs (list, delimited with ;)
  */
 class EventCodeClient {
-    private val CONDITION_NAMESPACE = "conditionv3:"
+    private val CONDITION_NAMESPACE = "condition:"
     private val GROUP_NAMESPACE = "group:"
-    private val MMG_NAMESPACE = "mmgv2:"
+    private val MMG_NAMESPACE = "mmg:"
     private val logger = LogManager.getLogger()
     //TODO: Configure logging level via environment variables (currently using xml config file)
     fun loadGroups(redisProxy: RedisProxy) {

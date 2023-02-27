@@ -24,7 +24,7 @@ class MmgatClient {
     private val GUIDANCE_STATUS_UAT = "useracceptancetesting"
     private val GUIDANCE_STATUS_FINAL = "final"
     private val MMG_AT_ROOT_URL = "https://mmgat.services.cdc.gov/api/guide/"
-    private val MMG_NAMESPACE = "mmgv2:"
+    private val MMG_NAMESPACE = "mmg:"
     private val logger = LogManager.getLogger()  //will automatically use the class name
     private fun trustAllHosts() {
         try {
