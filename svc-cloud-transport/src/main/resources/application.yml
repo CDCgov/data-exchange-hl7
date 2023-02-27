@@ -46,6 +46,6 @@ endpoints:
 azure:
   blob:
     container: hl7ingress
-    connectStr: DefaultEndpointsProtocol=https;AccountName=tfedemessagestoragedev;AccountKey=mSmJZXgLaT6T84oUBs/94Fwu8waqN4lNkwx6Ev6oZpSP4VphPN1DbCaS6z3p9ME7jNfVno2jRUBd+AStonDueA==;EndpointSuffix=core.windows.net
+    connectStr: ${CONNECT_STR}
     health:
 #      enabled: true # (default = false)
