@@ -14,7 +14,7 @@
         <java.version>11</java.version>
         <azure.functions.maven.plugin.version>1.19.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
-        <functionAppName>fn-redactor-1675958879121</functionAppName>
+        <functionAppName>ocio-ede-${environment-id}-hl7-Redactor</functionAppName>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
         <kotlin.version>1.8.0</kotlin.version>

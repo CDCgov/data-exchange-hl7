@@ -4,7 +4,7 @@ import gov.cdc.dex.metadata.ProcessMetadata
 import gov.cdc.hl7.RedactInfo
 
 
-data class RedactorProcessMetadata(override val status: String, val report: List<RedactInfo>?): ProcessMetadata(
+data class RedactorProcessMetadata(override val status: String, val report: RedactorReport): ProcessMetadata(
     REDACTOR_PROCESS, REDACTOR_VERSION, status) {
     companion object  {
         const val REDACTOR_PROCESS = "REDACTOR"
