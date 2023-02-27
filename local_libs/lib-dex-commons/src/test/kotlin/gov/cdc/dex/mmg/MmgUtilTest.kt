@@ -6,6 +6,7 @@ import gov.cdc.dex.redisModels.Condition2MMGMapping
 import gov.cdc.dex.redisModels.ValueSetConcept
 import gov.cdc.dex.util.JsonHelper.gson
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 
 internal class MmgUtilTest {
@@ -32,6 +33,22 @@ internal class MmgUtilTest {
 
 
     }
+    @Test
+    fun testLoadMMGfromMessage() {
+        val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
+        val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
+        val mmgUtil = MmgUtil(redisProxy)
+
+        val mmgsArr = mmgUtil.getMMGs("Var_Case_Map_v2.0","","10030", "13")
+
+        mmgsArr.forEach {
+            println("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
+
+        assertEquals(mmgsArr.size, 1)
+        // assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 7 + 26) // the Message Header is trimmed from the GenV2 hence 7 and not 8
+    } // .testLoadMMGfromMessage
     @Test
     fun testGroupValues() {
         val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
