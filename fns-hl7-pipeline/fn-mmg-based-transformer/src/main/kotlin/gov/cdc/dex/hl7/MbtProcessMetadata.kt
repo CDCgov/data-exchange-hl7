@@ -1,15 +1,17 @@
 package gov.cdc.dex.hl7
 
+import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.ProcessMetadata
 
 data class MbtProcessMetadata (
-                            override val status: String,
-                            val report: Any?
-                            )
-    : ProcessMetadata(PROCESS_NAME, PROCESS_VERSION, status) {
+    override val status: String,
+    val report: Any?,
+    @Transient val eventHubMD: EventHubMetadata
+)
+    : ProcessMetadata(PROCESS_NAME, PROCESS_VERSION, status, eventHubMD) {
         companion object {
-            val PROCESS_NAME = "mmgBasedTransformer"
-            val PROCESS_VERSION = "1.0.0"
+            const val PROCESS_NAME = "mmgBasedTransformer"
+            const val PROCESS_VERSION = "1.0.0"
         }
 } // .MbtProcessMetadata
 
