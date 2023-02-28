@@ -12,15 +12,13 @@ import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.redisModels.ValueSetConcept
 import gov.cdc.dex.util.StringUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class Transformer(redisProxy: RedisProxy)  {
 
     private val redisClient = redisProxy.getJedisClient()
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
+      //  val logger: Logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
         private val gson = Gson()
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
@@ -53,12 +51,12 @@ class Transformer(redisProxy: RedisProxy)  {
             val messageLines = getMessageLines(hl7Content)
 
             val mmgElemsBlocksSingle = mmgBlocksSingle.flatMap { it.elements } // .mmgElemsBlocksSingle
-            logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}")
+            //logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}")
 
             //  ------------- MSH
             // ----------------------------------------------------
             val mmgMsh = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "MSH" }
-            logger.info("Mapping MSH")
+            //logger.info("Mapping MSH")
             val mshMap = mmgMsh.associate { el ->
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition - 1
                 val mshLineParts =
@@ -71,7 +69,7 @@ class Transformer(redisProxy: RedisProxy)  {
             //  ------------- PID
             // ----------------------------------------------------
             val mmgPid = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "PID" }
-            logger.info("Mapping PID")
+            //logger.info("Mapping PID")
             val pidMap = mmgPid.associate { el ->
                 val pidLineParts =
                     messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
@@ -82,7 +80,7 @@ class Transformer(redisProxy: RedisProxy)  {
             //  ------------- OBR
             // ----------------------------------------------------
             val mmgObr = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBR" }
-            logger.info("Mapping OBR")
+            //logger.info("Mapping OBR")
             val obrMap = mmgObr.associate { el ->
                 val obrLineParts =
                     messageLines.filter { it.startsWith("OBR|") && (it.contains(OBR_4_1_EPI_ID) || it.contains(
@@ -94,7 +92,7 @@ class Transformer(redisProxy: RedisProxy)  {
             //  ------------- OBX
             // ----------------------------------------------------
             val mmgObx = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBX" }
-            logger.info("Mapping OBX")
+            //logger.info("Mapping OBX")
             val obxLines = messageLines.filter { it.startsWith("OBX|") }
             val obxMap = mmgObx.associate { el ->
                 val obxLine = filterByIdentifier(obxLines, el.mappings.hl7v251.identifier)
@@ -106,7 +104,7 @@ class Transformer(redisProxy: RedisProxy)  {
 
             val mmgModelBlocksSingle = mshMap + pidMap + obrMap + obxMap
 
-             logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
+             //logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
             // logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}\n")
 
             // logger.info("MMG Model (mmgModelBlocksSingle): --> ${gsonWithNullsOn.toJson(mmgModelBlocksSingle)}\n")
