@@ -1,32 +1,26 @@
 package gov.cdc.dex.hl7
 
-import org.slf4j.LoggerFactory
-import gov.cdc.dex.redisModels.MMG
-import gov.cdc.dex.redisModels.Block
-import gov.cdc.dex.redisModels.Element
-import gov.cdc.dex.redisModels.ValueSetConcept
-
-import gov.cdc.dex.hl7.model.PhinDataType
-
-import gov.cdc.dex.util.StringUtils
-
-import com.google.gson.Gson 
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-
 // import redis.clients.jedis.DefaultJedisClientConfig
 // import redis.clients.jedis.Jedis
 
-import  gov.cdc.dex.azure.RedisProxy 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import gov.cdc.dex.azure.RedisProxy
+import gov.cdc.dex.hl7.model.PhinDataType
+import gov.cdc.dex.redisModels.Block
+import gov.cdc.dex.redisModels.Element
+import gov.cdc.dex.redisModels.MMG
+import gov.cdc.dex.redisModels.ValueSetConcept
+import gov.cdc.dex.util.StringUtils
+import org.slf4j.LoggerFactory
 
-class Transformer(val redisProxy: RedisProxy)  {
+class Transformer(redisProxy: RedisProxy)  {
 
-    val redisClient = redisProxy.getJedisClient()
+    private val redisClient = redisProxy.getJedisClient()
 
     companion object {
         val logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
         private val gson = Gson()
-        private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         private const val OBR_4_1_EPI_ID = "68991-9"
@@ -180,33 +174,33 @@ class Transformer(val redisProxy: RedisProxy)  {
 
             val obxLines = messageLines.filter { it.startsWith("OBX|") }
 
-            val blocksNonSingleModel = mmgBlocksNonSingle.map{ block -> 
+            val blocksNonSingleModel = mmgBlocksNonSingle.associate { block ->
 
-                val msgLines = block.elements.flatMap { element -> 
+                val msgLines = block.elements.flatMap { element ->
 
                     // logger.info("element: --> ${element.mappings.hl7v251.identifier}\n")
                     val mmgObxIdentifier = element.mappings.hl7v251.identifier
 
-                    val obxLinesForElem = obxLines.filter { line -> 
+                    val obxLinesForElem = obxLines.filter { line ->
                         val lineParts = line.split("|")
                         val obxIdentifier = lineParts[3].split("^")[0]
                         mmgObxIdentifier == obxIdentifier
                     } // .obxLine
-                    
+
                     obxLinesForElem
                 } // .block.elements
 
                 // logger.info("block.name: ${block.name}, msgLines.size: ${msgLines.size}")
 
-                val msgLinesByBlockNumMap = msgLines.map { line -> 
+                val msgLinesByBlockNumMap = msgLines.map { line ->
                     val lineParts = line.split("|")
                     val blockNum = lineParts[4]
                     blockNum to line
-                }.groupBy( { it.first }, { it.second } )
+                }.groupBy({ it.first }, { it.second })
 
                 // logger.info("msgLinesByBlockNumMap.size: ${msgLinesByBlockNumMap.size}")
 
-                val blockElementsNameDataTupMap = msgLinesByBlockNumMap.map { (_, lines) -> 
+                val blockElementsNameDataTupMap = msgLinesByBlockNumMap.map { (_, lines) ->
                     val mapFromMsg = lines.associate { line ->
                         val lineParts = line.split("|")
                         val dataFieldPosition = 5 //element.mappings.hl7v251.fieldPosition
@@ -228,11 +222,11 @@ class Transformer(val redisProxy: RedisProxy)  {
                     } // .lines
 
                     // add block elements that are not found in the message lines
-                    val elemsNotInLines = block.elements.filter{ elemx -> 
+                    val elemsNotInLines = block.elements.filter { elemx ->
 
-                        val mmgObxId = elemx.mappings.hl7v251.identifier 
+                        val mmgObxId = elemx.mappings.hl7v251.identifier
 
-                        val linesForObxId = lines.filter{ linex -> 
+                        val linesForObxId = lines.filter { linex ->
                             val linePartsx = linex.split("|")
                             val obxId = linePartsx[3].split("^")[0]
                             mmgObxId == obxId
@@ -240,16 +234,16 @@ class Transformer(val redisProxy: RedisProxy)  {
                         linesForObxId.size == 0
                     } // .elemsNotInLines
 
-                    val mapFromElemNotInMsg = elemsNotInLines.map{elem ->
-                        StringUtils.normalizeString(elem.name) to null 
-                    }.toMap()
+                    val mapFromElemNotInMsg = elemsNotInLines.associate { elem ->
+                        StringUtils.normalizeString(elem.name) to null
+                    }
 
                     mapFromMsg + mapFromElemNotInMsg
                 } // .blockElementsNameDataTupMap
                 // logger.info("\nblockElementsNameDataTupMap: --> ${Gson().toJson(blockElementsNameDataTupMap)}\n\n")
 
                 StringUtils.normalizeString(block.name) to blockElementsNameDataTupMap
-            }.toMap() // .blocksNonSingleModel
+            } // .blocksNonSingleModel
 
             
             // logger.info("blocksNonSingleModel.size: --> ${blocksNonSingleModel.size}\n")
@@ -273,9 +267,9 @@ class Transformer(val redisProxy: RedisProxy)  {
 
             val elems = blocks.flatMap { it.elements } // .mmgElemsBlocksSingle
 
-            return elems.map{ elem -> 
-                elem.mappings.hl7v251.identifier to elem
-            }.toMap()
+            return elems.associateBy { elem ->
+                elem.mappings.hl7v251.identifier
+            }
         } // .getObxIdToElementMap
 
 
@@ -323,14 +317,16 @@ class Transformer(val redisProxy: RedisProxy)  {
 
                 if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType) ) {
 
-                    val map1 = phinDataTypesMap[el.mappings.hl7v251.dataType]!!.map { phinDataTypeEntry -> 
+                    val map1 = phinDataTypesMap[el.mappings.hl7v251.dataType]!!.associate {
+                            phinDataTypeEntry ->
 
                         val fieldNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
 
-                        val dt = if (oneRepeatParts.size > fieldNumber && oneRepeatParts[fieldNumber].isNotEmpty()) oneRepeatParts[fieldNumber] else null
+                        val dt =
+                            if (oneRepeatParts.size > fieldNumber && oneRepeatParts[fieldNumber].isNotEmpty()) oneRepeatParts[fieldNumber] else null
                         StringUtils.normalizeString(phinDataTypeEntry.name) to dt
-                    }.toMap()
-                    
+                    }
+
                     // val map2 = mapOf( PHIN_DATA_TYPE_KEY_NAME to el.mappings.hl7v251.dataType)
 
                     // call vocab for preferred name and cdc preffered name

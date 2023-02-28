@@ -109,7 +109,7 @@ class Function {
                     }
 
                     val mmgKeyNames :Array<String> = JsonHelper.getStringArrayFromJsonArray(messageInfo["mmgs"].asJsonArray)
-                    context.logger.info("MMG List from MessageInfo: ${mmgKeyNames.contentToString()}")
+                 //   context.logger.info("MMG List from MessageInfo: ${mmgKeyNames.contentToString()}")
                     val mmgs = try {
                         if (mmgKeyNames.isNotEmpty()) {
                             mmgUtil.getMMGs(mmgKeyNames)
@@ -126,17 +126,12 @@ class Function {
                     }
                     mmgs.forEach { context.logger.info("MMG Info for messageUUID: $messageUUID, " +
                             "filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}") }
-
                     val transformer = Transformer(redisProxy)
-
                     val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
-
                     val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
-
                     val mmgBasedModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle
-                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgBasedModel)}")
+                   // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgBasedModel)}")
                     context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel.size: --> ${mmgBasedModel.size}")
-
 
                     val processMD = MbtProcessMetadata(status = PROCESS_STATUS_OK,
                         report = mmgBasedModel,
