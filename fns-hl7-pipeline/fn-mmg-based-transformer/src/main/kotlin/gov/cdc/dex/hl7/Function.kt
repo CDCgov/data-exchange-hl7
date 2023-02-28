@@ -1,5 +1,6 @@
 package gov.cdc.dex.hl7
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -13,7 +14,6 @@ import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.mmg.MmgUtil
-import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
@@ -132,42 +132,16 @@ class Function {
                     val mmgBasedModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle
                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgBasedModel)}")
                     context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel.size: --> ${mmgBasedModel.size}")
-
-                    val processMD = MbtProcessMetadata(status = PROCESS_STATUS_OK,
-                        report = mmgBasedModel,
-                        eventHubMD = eventHubMD[messageIndex])
-                    processMD.startProcessTime = startTime
-                    processMD.endProcessTime = Date().toIsoString()
-                    metadata.addArrayElement("processes", processMD)
-
-                    val outEvent = gsonWithNullsOn.toJson(inputEvent)
-                    evHubSender.send(evHubTopicName = eventHubSendOkName, message = outEvent)
-                    context.logger.info("Processed for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendOkName")
+                    updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_OK, mmgBasedModel, eventHubMD[messageIndex],
+                        evHubSender, eventHubSendOkName, gsonWithNullsOn, inputEvent, null)
+                    context.logger.info("Processed OK for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendOkName")
 
                 } catch (e: Exception) {
-
                     context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
-
-                    val processMD = MbtProcessMetadata(status=PROCESS_STATUS_EXCEPTION,
-                        report=null,
-                        eventHubMD = eventHubMD[messageIndex])
-                    processMD.startProcessTime = startTime
-                    processMD.endProcessTime = Date().toIsoString()
-                    metadata.addArrayElement("processes", processMD) 
-
-                    //TODO::  - update retry counts
-                    val problem = Problem(PROCESS_NAME, e, false, 0, 0)
-                    val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
-                    inputEvent.add("summary", summary.toJsonElement())
-
-                    evHubSender.send(
-                        evHubTopicName = eventHubSendErrsName,
-                        message = gsonWithNullsOn.toJson(inputEvent)
-                    )
-
-                    context.logger.info("Processed for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendErrsName")
+                    updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
+                        evHubSender, eventHubSendErrsName, gsonWithNullsOn, inputEvent, e)
+                    context.logger.info("Processed ERROR for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendErrsName")
                     //e.printStackTrace()
-                    
                 } // .catch
 
             } catch (e: Exception) {
@@ -181,6 +155,29 @@ class Function {
        // redisProxy.getJedisClient().close()
      
     } // .eventHubProcessor
+    private fun updateMetadataAndDeliver(startTime: String, metadata: JsonObject, status: String, report: Map<String, Any?>?, eventHubMD: EventHubMetadata,
+                                         evHubSender: EventHubSender, evTopicName: String, gsonWithNullsOn: Gson, inputEvent: JsonObject, exception: Exception?) {
 
+        val processMD = MbtProcessMetadata(status=status, report=report, eventHubMD = eventHubMD)
+        processMD.startProcessTime = startTime
+        processMD.endProcessTime = Date().toIsoString()
+        metadata.addArrayElement("processes", processMD)
+
+        if (exception != null) {
+            //TODO::  - update retry counts
+            val problem = Problem(PROCESS_NAME, exception, false, 0, 0)
+            val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
+            inputEvent.add("summary", summary.toJsonElement())
+        } else {
+            inputEvent.add("summary", (SummaryInfo(status, null).toJsonElement()))
+        }
+        // enable for model
+        val inputEventOut = gsonWithNullsOn.toJson(inputEvent)
+        evHubSender.send(
+            evHubTopicName = evTopicName,
+            message = gsonWithNullsOn.toJson(inputEventOut)
+        )
+
+    }
 } // .Function
 
