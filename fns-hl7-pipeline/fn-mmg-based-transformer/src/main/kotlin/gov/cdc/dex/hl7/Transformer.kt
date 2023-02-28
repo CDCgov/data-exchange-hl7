@@ -59,17 +59,10 @@ class Transformer(redisProxy: RedisProxy)  {
             val mmgMsh = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "MSH" }
 
             val mshMap = mmgMsh.associate { el ->
-
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition - 1
-
                 val mshLineParts =
                     messageLines.filter { it.startsWith("MSH|") }[0].split("|") // there would be only one MSH
-
-                val segmentDataFull =
-                    if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition].trim() else null
-
-                val segmentData = if (segmentDataFull.isNullOrEmpty()) null else getSegmentData(el, segmentDataFull)
-
+                val segmentData = getSegmentData(mshLineParts, dataFieldPosition, el)
                 StringUtils.normalizeString(el.name) to segmentData
             } // .mmgMsh.map
 
@@ -79,67 +72,30 @@ class Transformer(redisProxy: RedisProxy)  {
             val mmgPid = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "PID" }
 
             val pidMap = mmgPid.associate { el ->
-
-                val dataFieldPosition = el.mappings.hl7v251.fieldPosition
-
                 val pidLineParts =
                     messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
-
-                val segmentDataFull =
-                    if (pidLineParts.size > dataFieldPosition) pidLineParts[dataFieldPosition].trim() else null
-
-                val segmentData = if (segmentDataFull.isNullOrEmpty()) null else getSegmentData(el, segmentDataFull)
-
+                val segmentData = getSegmentData(pidLineParts, el.mappings.hl7v251.fieldPosition, el)
                 StringUtils.normalizeString(el.name) to segmentData
             } // .mmgPid.map
-
-
             //  ------------- OBR
             // ----------------------------------------------------
             val mmgObr = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBR" }
-
             val obrMap = mmgObr.associate { el ->
-
-                val dataFieldPosition = el.mappings.hl7v251.fieldPosition
-
                 val obrLineParts =
                     messageLines.filter { it.startsWith("OBR|") && (it.contains(OBR_4_1_EPI_ID) || it.contains(
                         OBR_4_1_LEGACY)) }[0].split("|") // there would be only one Epi Obr
-
-                val segmentDataFull =
-                    if (obrLineParts.size > dataFieldPosition) obrLineParts[dataFieldPosition].trim() else null
-
-                val segmentData = if (segmentDataFull.isNullOrEmpty()) null else getSegmentData(el, segmentDataFull)
-
+                val segmentData = getSegmentData(obrLineParts, el.mappings.hl7v251.fieldPosition, el)
                 StringUtils.normalizeString(el.name) to segmentData
             } // .mmgObr.map
-
 
             //  ------------- OBX
             // ----------------------------------------------------
             val mmgObx = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBX" }
-
             val obxLines = messageLines.filter { it.startsWith("OBX|") }
-
             val obxMap = mmgObx.associate { el ->
-
-                val dataFieldPosition = el.mappings.hl7v251.fieldPosition
-
-                val mmgObxIdentifier = el.mappings.hl7v251.identifier
-
-                val obxLine = obxLines.filter { line ->
-                    val lineParts = line.split("|")
-                    val obxIdentifier = lineParts[3].split("^")[0]
-                    mmgObxIdentifier == obxIdentifier
-                } // .obxLine
-
-                val obxLineParts = if (obxLine.isNotEmpty()) obxLine[0].split("|") else listOf<String>()
-
-                val segmentDataFull =
-                    if (obxLineParts.size > dataFieldPosition) obxLineParts[dataFieldPosition] else null
-
-                val segmentData = if (segmentDataFull.isNullOrEmpty()) null else getSegmentData(el, segmentDataFull)
-
+                val obxLine = filterByIdentifier(obxLines, el.mappings.hl7v251.identifier)
+                val obxLineParts = if (obxLine.isNotEmpty()) obxLine[0].split("|") else listOf()
+                val segmentData = getSegmentData(obxLineParts, el.mappings.hl7v251.fieldPosition, el)
                 StringUtils.normalizeString(el.name) to segmentData
             } // .mmgPid.map
 
@@ -177,17 +133,8 @@ class Transformer(redisProxy: RedisProxy)  {
             val blocksNonSingleModel = mmgBlocksNonSingle.associate { block ->
 
                 val msgLines = block.elements.flatMap { element ->
-
                     // logger.info("element: --> ${element.mappings.hl7v251.identifier}\n")
-                    val mmgObxIdentifier = element.mappings.hl7v251.identifier
-
-                    val obxLinesForElem = obxLines.filter { line ->
-                        val lineParts = line.split("|")
-                        val obxIdentifier = lineParts[3].split("^")[0]
-                        mmgObxIdentifier == obxIdentifier
-                    } // .obxLine
-
-                    obxLinesForElem
+                    filterByIdentifier(obxLines, element.mappings.hl7v251.identifier)
                 } // .block.elements
 
                 // logger.info("block.name: ${block.name}, msgLines.size: ${msgLines.size}")
@@ -204,34 +151,18 @@ class Transformer(redisProxy: RedisProxy)  {
                     val mapFromMsg = lines.associate { line ->
                         val lineParts = line.split("|")
                         val dataFieldPosition = 5 //element.mappings.hl7v251.fieldPosition
-
-                        val segmentDataFull =
-                            if (lineParts.size > dataFieldPosition) lineParts[dataFieldPosition].trim() else null
-
                         val obxIdentifier = lineParts[3].split("^")[0]
-
                         // if ( obxIdToElementMap.contains(obxIdentifier) ) {}
-
                         val el =
-                            obxIdToElementMap[obxIdentifier]!! // this obxIdentifier is in the map see line 182, 184 filter
-
-                        val segmentData =
-                            if (segmentDataFull.isNullOrEmpty()) null else getSegmentData(el, segmentDataFull)
-
+                            obxIdToElementMap[obxIdentifier]!! // this obxIdentifier is in the map
+                        val segmentData = getSegmentData(lineParts, dataFieldPosition, el)
                         StringUtils.normalizeString(el.name) to segmentData
                     } // .lines
 
                     // add block elements that are not found in the message lines
                     val elemsNotInLines = block.elements.filter { elemx ->
-
-                        val mmgObxId = elemx.mappings.hl7v251.identifier
-
-                        val linesForObxId = lines.filter { linex ->
-                            val linePartsx = linex.split("|")
-                            val obxId = linePartsx[3].split("^")[0]
-                            mmgObxId == obxId
-                        }
-                        linesForObxId.size == 0
+                        val linesForObxId = filterByIdentifier(lines, elemx.mappings.hl7v251.identifier)
+                        linesForObxId.isEmpty()
                     } // .elemsNotInLines
 
                     val mapFromElemNotInMsg = elemsNotInLines.associate { elem ->
@@ -257,6 +188,13 @@ class Transformer(redisProxy: RedisProxy)  {
         //  ------------- Functions used in the transformation -------------
         // --------------------------------------------------------------------------------------------------------
 
+        private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
+            return lines.filter { linex ->
+                val linePartsx = linex.split("|")
+                val obxId = linePartsx[3].split("^")[0]
+                id == obxId
+            }
+        }
         private fun getMessageLines(hl7Content: String): List<String> {
 
             return hl7Content.split("\n")
@@ -278,7 +216,7 @@ class Transformer(redisProxy: RedisProxy)  {
             if ( mmgs.size > 1 ) { 
                 for ( index in 0..mmgs.size - 2) { // except the last one
                     mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                        !( block.name == MMG_BLOCK_NAME_MESSAGE_HEADER ) //|| block.name == MMG_BLOCK_NAME_SUBJECT_RELATED )
+                        block.name != MMG_BLOCK_NAME_MESSAGE_HEADER //|| block.name == MMG_BLOCK_NAME_SUBJECT_RELATED
                     } // .filter
                 } // .for
             } // .if
@@ -304,79 +242,62 @@ class Transformer(redisProxy: RedisProxy)  {
         } // .getPhinDataTypes
 
 
-        /* private */ fun getSegmentData(el: Element, segmentDataFull: String): Any? {
+        /* private */ private fun getSegmentData(lineParts: List<String>, dataFieldPosition: Int, el: Element): Any? {
             // logger.info("getSegmentData, calling getPhinDataTypes...")
+            if (lineParts.size > dataFieldPosition) {
+                val segmentDataFull = lineParts[dataFieldPosition].trim()
+                val phinDataTypesMap = getPhinDataTypes()
+                // logger.info("getSegmentData, phinDataTypesMap: --> ${phinDataTypesMap}")
+                val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
+                val segmentData = segmentDataArr.map { oneRepeat ->
+                    val oneRepeatParts = oneRepeat.split("^")
+                    if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType) ) {
+                        val map1 = phinDataTypesMap[el.mappings.hl7v251.dataType]!!.associate {
+                                phinDataTypeEntry ->
+                            val fieldNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
+                            val dt =
+                                if (oneRepeatParts.size > fieldNumber && oneRepeatParts[fieldNumber].isNotEmpty()) oneRepeatParts[fieldNumber] else null
+                            StringUtils.normalizeString(phinDataTypeEntry.name) to dt
+                        }
+                        // call vocab for preferred name and cdc preferred name
+                        if ( el.mappings.hl7v251.dataType == ELEMENT_CE || el.mappings.hl7v251.dataType == ELEMENT_CWE ) {
+                            // both CE and CWE
+                                val valueSetCode = el.valueSetCode// "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
+                                val conceptCode = map1["identifier"]
+                                val conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
+                                map1 /*+ map2 */+ if ( conceptJson.isNullOrEmpty() ) { // map2 used for dev only
+                                    // No Redis entry!! for this value set code, concept code
+                                    mapOf(
+                                        CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to null,
+                                        CDC_PREFERRED_DESIGNATION_KEY_NAME to null )
+                                } else { //
+                                    // logger.info("ValueSetConcept conceptJson: --> $conceptJson")
+                                    val cobj:ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
+                                    mapOf(
+                                       CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.codeSystemConceptName,
+                                       CDC_PREFERRED_DESIGNATION_KEY_NAME to cobj.cdcPreferredDesignation )
+                                } // .else
+                            } else {
+                                // this is not an ELEMENT_CE || ELEMENT_CWE
+                                map1 //+ map2
+                            } // .else
+                    } else {
+                        // not available in the default fields profile (DefaultFieldsProfile.json)
+                        // considering the component position
+                        // dtCompPos data component position
+                        when (val dtCompPos = el.mappings.hl7v251.componentPosition - 1) {
+                            in 0..Int.MAX_VALUE ->  if ( oneRepeatParts.size > dtCompPos && oneRepeatParts[dtCompPos].isNotEmpty()) oneRepeatParts[dtCompPos] else null
+                            // no need to use component position
+                            else -> oneRepeat // full data (string)
+                        } // .when
 
-            val phinDataTypesMap = getPhinDataTypes()
-            // logger.info("getSegmentData, phinDataTypesMap: --> ${phinDataTypesMap}")
-            
-            val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
+                    } // .else
 
-            val segmentData = segmentDataArr.map { oneRepeat ->
-                val oneRepeatParts = oneRepeat.split("^")
-
-                if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType) ) {
-
-                    val map1 = phinDataTypesMap[el.mappings.hl7v251.dataType]!!.associate {
-                            phinDataTypeEntry ->
-
-                        val fieldNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
-
-                        val dt =
-                            if (oneRepeatParts.size > fieldNumber && oneRepeatParts[fieldNumber].isNotEmpty()) oneRepeatParts[fieldNumber] else null
-                        StringUtils.normalizeString(phinDataTypeEntry.name) to dt
-                    }
-
-                    // val map2 = mapOf( PHIN_DATA_TYPE_KEY_NAME to el.mappings.hl7v251.dataType)
-
-                    // call vocab for preferred name and cdc preffered name
-                    if ( el.mappings.hl7v251.dataType == ELEMENT_CE || el.mappings.hl7v251.dataType == ELEMENT_CWE ) {
-                        // both CE and CWE 
-
-                            val valueSetCode = el.valueSetCode// "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
-                            val conceptCode = map1["identifier"]
-                            
-                            val conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
-
-
-                            map1 /*+ map2 */+ if ( conceptJson.isNullOrEmpty() ) { // map2 used for dev only
-
-                                // No Redis entry!! for this value set code, concept code
-                                mapOf(
-                                    CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to null,
-                                    CDC_PREFERRED_DESIGNATION_KEY_NAME to null ) 
-                            } else { // 
-
-                                // logger.info("ValueSetConcept conceptJson: --> $conceptJson")
-                                val cobj:ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
-
-                                mapOf(
-                                   CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.codeSystemConceptName,
-                                   CDC_PREFERRED_DESIGNATION_KEY_NAME to cobj.cdcPreferredDesignation )
-                            } // .else 
-
-                        } else {
-                            // this is not an ELEMENT_CE || ELEMENT_CWE
-                            map1 //+ map2 
-                        } // .else
-
-                } else {
-                    // not available in the default fields profile (DefaultFieldsProfile.json)
-                    // considering the component position
-                    // dtCompPos data component position
-                    val dtCompPos = el.mappings.hl7v251.componentPosition - 1
-
-                    when ( dtCompPos ) {
-                        in 0..Int.MAX_VALUE ->  if ( oneRepeatParts.size > dtCompPos && oneRepeatParts[dtCompPos].isNotEmpty()) oneRepeatParts[dtCompPos] else null
-                        // no need to use component position
-                        else -> oneRepeat // full data (string)
-                    } // .when
-                    
-                } // .else
-
-            } // .segmentData 
-
-            return if (el.isRepeat) segmentData else segmentData[0]
+                } // .segmentData
+                return if (el.isRepeat) segmentData else segmentData[0]
+            } else {
+                return null
+            }
         } // .getSegmentData
 
     // } // .companion object
