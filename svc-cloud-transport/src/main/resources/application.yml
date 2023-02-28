@@ -20,7 +20,6 @@ endpoints:
   health:
     enabled: true
     details-visible: ANONYMOUS
-
 # ---------------------------------------------------------------------------------------------
 # To keep from setting these values here (and thus making it cloud agnostic), you'll need
 # to provide equivalent OS envvars in your project to configure. For example:
@@ -46,7 +45,7 @@ endpoints:
 
 azure:
   blob:
-    container: foodnet
-    connectStr: DefaultEndpointsProtocol=https;AccountName=stezdxdev;AccountKey=qGJWZ44bCmCjkCDOHrYKROyJkxXV7+BcywLkjmiLtlUMvOGvQUE/3gpMkVO5anaBG482qslgeDCAegxbFBlBeA==;EndpointSuffix=core.windows.net
+    container: hl7ingress
+    connectStr: ${CONNECT_STR}
     health:
 #      enabled: true # (default = false)

@@ -1,4 +1,4 @@
-package gov.cdc.ncezid.transport.service
+package gov.cdc.dex.transport.service
 
 import io.micronaut.runtime.Micronaut
 

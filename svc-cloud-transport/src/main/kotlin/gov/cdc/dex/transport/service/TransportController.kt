@@ -1,6 +1,6 @@
-package gov.cdc.ncezid.transport.service
+package gov.cdc.dex.transport.service
 
-import gov.cdc.ncezid.cloud.storage.CloudStorage
+import gov.cdc.dex.cloud.storage.CloudStorage
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
