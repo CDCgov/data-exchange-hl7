@@ -29,27 +29,26 @@ class Transformer(val redisProxy: RedisProxy)  {
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
-        private val OBR_4_1_EPI_ID = "68991-9"
-        private val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header" 
+        private const val OBR_4_1_EPI_ID = "68991-9"
+        private const val OBR_4_1_LEGACY = "PERSUBJ"
+        private const val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header"
         // private val MMG_BLOCK_NAME_SUBJECT_RELATED = "Subject Related"
-        private val REDIS_VOCAB_NAMESPACE = "vocab:"
-        private val ELEMENT_CE = "CE"
-        private val ELEMENT_CWE = "CWE"
+        private const val REDIS_VOCAB_NAMESPACE = "vocab:"
+        private const val ELEMENT_CE = "CE"
+        private const val ELEMENT_CWE = "CWE"
         // private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type" // only used in dev
-        private val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
-        private val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
+        private const val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
+        private const val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
     }
 
         // --------------------------------------------------------------------------------------------------------
         //  ------------- hl7ToJsonModelBlocksSingle ------------- BLOCKS SINGLE
         // --------------------------------------------------------------------------------------------------------
-        
-        //? @Throws(Exception::class) 
+
+        //? @Throws(Exception::class)
         fun hl7ToJsonModelBlocksSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, Any?> {
 
-            // val redisClient = redisProxy.getJedisClient()
-
-            // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
+            // there could be multiple MMGs each with MSH, PID -> filter out and only keep the ones from the last MMG
             val mmgs = getMmgsFiltered(mmgsArr)
 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
@@ -65,92 +64,100 @@ class Transformer(val redisProxy: RedisProxy)  {
             // ----------------------------------------------------
             val mmgMsh = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "MSH" }
 
-            val mshMap = mmgMsh.map { el -> 
+            val mshMap = mmgMsh.associate { el ->
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition - 1
 
-                val mshLineParts = messageLines.filter { it.startsWith("MSH|") }[0].split("|") // there would be only one MSH
+                val mshLineParts =
+                    messageLines.filter { it.startsWith("MSH|") }[0].split("|") // there would be only one MSH
 
-                val segmentDataFull = if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition].trim() else null 
+                val segmentDataFull =
+                    if (mshLineParts.size > dataFieldPosition) mshLineParts[dataFieldPosition].trim() else null
 
-                val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
-                
+                val segmentData = if (segmentDataFull.isNullOrEmpty()) null else getSegmentData(el, segmentDataFull)
+
                 StringUtils.normalizeString(el.name) to segmentData
-            }.toMap() // .mmgMsh.map
+            } // .mmgMsh.map
 
 
             //  ------------- PID
             // ----------------------------------------------------
             val mmgPid = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "PID" }
 
-            val pidMap = mmgPid.map { el -> 
+            val pidMap = mmgPid.associate { el ->
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
 
-                val pidLineParts = messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
+                val pidLineParts =
+                    messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
 
-                val segmentDataFull = if (pidLineParts.size > dataFieldPosition) pidLineParts[dataFieldPosition].trim() else null 
+                val segmentDataFull =
+                    if (pidLineParts.size > dataFieldPosition) pidLineParts[dataFieldPosition].trim() else null
 
-                val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
+                val segmentData = if (segmentDataFull.isNullOrEmpty()) null else getSegmentData(el, segmentDataFull)
 
-                StringUtils.normalizeString(el.name) to segmentData 
-            }.toMap() // .mmgPid.map
+                StringUtils.normalizeString(el.name) to segmentData
+            } // .mmgPid.map
 
 
             //  ------------- OBR
             // ----------------------------------------------------
             val mmgObr = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBR" }
 
-            val obrMap = mmgObr.map { el -> 
+            val obrMap = mmgObr.associate { el ->
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
 
-                val obrLineParts = messageLines.filter { it.startsWith("OBR|") && it.contains(OBR_4_1_EPI_ID) }[0].split("|") // there would be only one Epi Obr
+                val obrLineParts =
+                    messageLines.filter { it.startsWith("OBR|") && (it.contains(OBR_4_1_EPI_ID) || it.contains(
+                        OBR_4_1_LEGACY)) }[0].split("|") // there would be only one Epi Obr
 
-                val segmentDataFull = if (obrLineParts.size > dataFieldPosition) obrLineParts[dataFieldPosition].trim() else null  
+                val segmentDataFull =
+                    if (obrLineParts.size > dataFieldPosition) obrLineParts[dataFieldPosition].trim() else null
 
-                val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
+                val segmentData = if (segmentDataFull.isNullOrEmpty()) null else getSegmentData(el, segmentDataFull)
 
-                StringUtils.normalizeString(el.name) to segmentData 
-            }.toMap() // .mmgObr.map
+                StringUtils.normalizeString(el.name) to segmentData
+            } // .mmgObr.map
 
-            
+
             //  ------------- OBX
             // ----------------------------------------------------
             val mmgObx = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBX" }
 
             val obxLines = messageLines.filter { it.startsWith("OBX|") }
 
-            val obxMap = mmgObx.map { el -> 
+            val obxMap = mmgObx.associate { el ->
 
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition
 
                 val mmgObxIdentifier = el.mappings.hl7v251.identifier
 
-                val obxLine = obxLines.filter { line -> 
+                val obxLine = obxLines.filter { line ->
                     val lineParts = line.split("|")
                     val obxIdentifier = lineParts[3].split("^")[0]
                     mmgObxIdentifier == obxIdentifier
                 } // .obxLine
-                
-                val obxLineParts = if (obxLine.size > 0) obxLine[0].split("|") else listOf<String>()
-                
-                val segmentDataFull = if (obxLineParts.size > dataFieldPosition) obxLineParts[dataFieldPosition] else null 
 
-                val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
+                val obxLineParts = if (obxLine.isNotEmpty()) obxLine[0].split("|") else listOf<String>()
+
+                val segmentDataFull =
+                    if (obxLineParts.size > dataFieldPosition) obxLineParts[dataFieldPosition] else null
+
+                val segmentData = if (segmentDataFull.isNullOrEmpty()) null else getSegmentData(el, segmentDataFull)
 
                 StringUtils.normalizeString(el.name) to segmentData
-            }.toMap() // .mmgPid.map
+            } // .mmgPid.map
 
-            
+
             val mmgModelBlocksSingle = mshMap + pidMap + obrMap + obxMap
-            
+
             // logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
             // logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}\n")
 
             // logger.info("MMG Model (mmgModelBlocksSingle): --> ${gsonWithNullsOn.toJson(mmgModelBlocksSingle)}\n")
             return mmgModelBlocksSingle
-        } // .hl7ToJsonModelBlocksSingle 
+        } // .hl7ToJsonModelBlocksSingle
         
 
         // --------------------------------------------------------------------------------------------------------
@@ -200,22 +207,25 @@ class Transformer(val redisProxy: RedisProxy)  {
                 // logger.info("msgLinesByBlockNumMap.size: ${msgLinesByBlockNumMap.size}")
 
                 val blockElementsNameDataTupMap = msgLinesByBlockNumMap.map { (_, lines) -> 
-                    val mapFromMsg = lines.map { line -> 
+                    val mapFromMsg = lines.associate { line ->
                         val lineParts = line.split("|")
                         val dataFieldPosition = 5 //element.mappings.hl7v251.fieldPosition
 
-                        val segmentDataFull = if (lineParts.size > dataFieldPosition) lineParts[dataFieldPosition].trim() else null
+                        val segmentDataFull =
+                            if (lineParts.size > dataFieldPosition) lineParts[dataFieldPosition].trim() else null
 
                         val obxIdentifier = lineParts[3].split("^")[0]
 
                         // if ( obxIdToElementMap.contains(obxIdentifier) ) {}
 
-                        val el = obxIdToElementMap[obxIdentifier]!! // this obxIdentifier is in the map see line 182, 184 filter
+                        val el =
+                            obxIdToElementMap[obxIdentifier]!! // this obxIdentifier is in the map see line 182, 184 filter
 
-                        val segmentData = if ( segmentDataFull.isNullOrEmpty() ) null else getSegmentData(el, segmentDataFull)
+                        val segmentData =
+                            if (segmentDataFull.isNullOrEmpty()) null else getSegmentData(el, segmentDataFull)
 
                         StringUtils.normalizeString(el.name) to segmentData
-                    }.toMap() // .lines
+                    } // .lines
 
                     // add block elements that are not found in the message lines
                     val elemsNotInLines = block.elements.filter{ elemx -> 
@@ -287,7 +297,7 @@ class Transformer(val redisProxy: RedisProxy)  {
             // logger.info("getPhinDataTypes, reading local file...")
 
             val dataTypesFilePath = "/DefaultFieldsProfileX.json"
-            val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+            val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath)?.readText()
             // val dataTypesMapJson = this::class.java.classLoader.getResource(dataTypesFilePath).readText()
 
             // val dataTypesMap = Map<String, List<PhinDataType>>
@@ -317,7 +327,7 @@ class Transformer(val redisProxy: RedisProxy)  {
 
                         val fieldNumber = phinDataTypeEntry.fieldNumber.toInt() - 1
 
-                        val dt = if (oneRepeatParts.size > fieldNumber && oneRepeatParts[fieldNumber].length > 0) oneRepeatParts[fieldNumber] else null
+                        val dt = if (oneRepeatParts.size > fieldNumber && oneRepeatParts[fieldNumber].isNotEmpty()) oneRepeatParts[fieldNumber] else null
                         StringUtils.normalizeString(phinDataTypeEntry.name) to dt
                     }.toMap()
                     
@@ -361,7 +371,7 @@ class Transformer(val redisProxy: RedisProxy)  {
                     val dtCompPos = el.mappings.hl7v251.componentPosition - 1
 
                     when ( dtCompPos ) {
-                        in 0..Int.MAX_VALUE ->  if ( oneRepeatParts.size > dtCompPos && oneRepeatParts[dtCompPos].length > 0 ) oneRepeatParts[dtCompPos] else null
+                        in 0..Int.MAX_VALUE ->  if ( oneRepeatParts.size > dtCompPos && oneRepeatParts[dtCompPos].isNotEmpty()) oneRepeatParts[dtCompPos] else null
                         // no need to use component position
                         else -> oneRepeat // full data (string)
                     } // .when
