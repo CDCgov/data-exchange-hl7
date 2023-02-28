@@ -127,7 +127,9 @@ class Function {
                     mmgs.forEach { context.logger.info("MMG Info for messageUUID: $messageUUID, " +
                             "filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}") }
                     val transformer = Transformer(redisProxy)
+                    context.logger.info("Getting model blocks Single")
                     val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+                    context.logger.info("Getting model blocks NON Single")
                     val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
                     val mmgBasedModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle
                    // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgBasedModel)}")

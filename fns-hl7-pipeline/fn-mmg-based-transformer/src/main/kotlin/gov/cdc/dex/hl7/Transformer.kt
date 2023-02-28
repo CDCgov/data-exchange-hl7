@@ -12,6 +12,7 @@ import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.redisModels.ValueSetConcept
 import gov.cdc.dex.util.StringUtils
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class Transformer(redisProxy: RedisProxy)  {
@@ -19,7 +20,7 @@ class Transformer(redisProxy: RedisProxy)  {
     private val redisClient = redisProxy.getJedisClient()
 
     companion object {
-        val logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
+        val logger: Logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
         private val gson = Gson()
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
@@ -42,7 +43,7 @@ class Transformer(redisProxy: RedisProxy)  {
         //? @Throws(Exception::class)
         fun hl7ToJsonModelBlocksSingle(hl7Content: String, mmgsArr: Array<MMG>): Map<String, Any?> {
 
-            // there could be multiple MMGs each with MSH, PID -> filter out and only keep the ones from the last MMG
+            // there could be multiple MMGs each with MSH -> filter out MSH block from all except last MMG listed
             val mmgs = getMmgsFiltered(mmgsArr)
 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
@@ -52,12 +53,12 @@ class Transformer(redisProxy: RedisProxy)  {
             val messageLines = getMessageLines(hl7Content)
 
             val mmgElemsBlocksSingle = mmgBlocksSingle.flatMap { it.elements } // .mmgElemsBlocksSingle
-            // logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}")
+            logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}")
 
             //  ------------- MSH
             // ----------------------------------------------------
             val mmgMsh = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "MSH" }
-
+            logger.info("Mapping MSH")
             val mshMap = mmgMsh.associate { el ->
                 val dataFieldPosition = el.mappings.hl7v251.fieldPosition - 1
                 val mshLineParts =
@@ -70,16 +71,18 @@ class Transformer(redisProxy: RedisProxy)  {
             //  ------------- PID
             // ----------------------------------------------------
             val mmgPid = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "PID" }
-
+            logger.info("Mapping PID")
             val pidMap = mmgPid.associate { el ->
                 val pidLineParts =
                     messageLines.filter { it.startsWith("PID|") }[0].split("|") // there would be only one PID
                 val segmentData = getSegmentData(pidLineParts, el.mappings.hl7v251.fieldPosition, el)
                 StringUtils.normalizeString(el.name) to segmentData
             } // .mmgPid.map
+
             //  ------------- OBR
             // ----------------------------------------------------
             val mmgObr = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBR" }
+            logger.info("Mapping OBR")
             val obrMap = mmgObr.associate { el ->
                 val obrLineParts =
                     messageLines.filter { it.startsWith("OBR|") && (it.contains(OBR_4_1_EPI_ID) || it.contains(
@@ -91,6 +94,7 @@ class Transformer(redisProxy: RedisProxy)  {
             //  ------------- OBX
             // ----------------------------------------------------
             val mmgObx = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBX" }
+            logger.info("Mapping OBX")
             val obxLines = messageLines.filter { it.startsWith("OBX|") }
             val obxMap = mmgObx.associate { el ->
                 val obxLine = filterByIdentifier(obxLines, el.mappings.hl7v251.identifier)
@@ -102,7 +106,7 @@ class Transformer(redisProxy: RedisProxy)  {
 
             val mmgModelBlocksSingle = mshMap + pidMap + obrMap + obxMap
 
-            // logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
+             logger.info("mmgModelBlocksSingle.size: --> ${mmgModelBlocksSingle.size}\n")
             // logger.info("mmgElemsBlocksSingle.size: --> ${mmgElemsBlocksSingle.size}\n")
 
             // logger.info("MMG Model (mmgModelBlocksSingle): --> ${gsonWithNullsOn.toJson(mmgModelBlocksSingle)}\n")
@@ -189,9 +193,9 @@ class Transformer(redisProxy: RedisProxy)  {
         // --------------------------------------------------------------------------------------------------------
 
         private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
-            return lines.filter { linex ->
-                val linePartsx = linex.split("|")
-                val obxId = linePartsx[3].split("^")[0]
+            return lines.filter { line ->
+                val lineParts = line.split("|")
+                val obxId = lineParts[3].split("^")[0]
                 id == obxId
             }
         }
@@ -262,25 +266,30 @@ class Transformer(redisProxy: RedisProxy)  {
                         // call vocab for preferred name and cdc preferred name
                         if ( el.mappings.hl7v251.dataType == ELEMENT_CE || el.mappings.hl7v251.dataType == ELEMENT_CWE ) {
                             // both CE and CWE
-                                val valueSetCode = el.valueSetCode// "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
-                                val conceptCode = map1["identifier"]
-                                val conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
-                                map1 /*+ map2 */+ if ( conceptJson.isNullOrEmpty() ) { // map2 used for dev only
-                                    // No Redis entry!! for this value set code, concept code
-                                    mapOf(
-                                        CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to null,
-                                        CDC_PREFERRED_DESIGNATION_KEY_NAME to null )
-                                } else { //
-                                    // logger.info("ValueSetConcept conceptJson: --> $conceptJson")
-                                    val cobj:ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
-                                    mapOf(
-                                       CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.codeSystemConceptName,
-                                       CDC_PREFERRED_DESIGNATION_KEY_NAME to cobj.cdcPreferredDesignation )
-                                } // .else
-                            } else {
-                                // this is not an ELEMENT_CE || ELEMENT_CWE
-                                map1 //+ map2
+                            val valueSetCode = el.valueSetCode// "PHVS_YesNoUnknown_CDC" // "PHVS_ClinicalManifestations_Lyme"
+                            val conceptCode = map1["identifier"]
+                            var conceptJson = ""
+                            if ((!valueSetCode.isNullOrEmpty() && valueSetCode != "N/A") && !conceptCode.isNullOrEmpty()) {
+                                conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
+                            }
+                            map1 /*+ map2 */ + if (conceptJson.isEmpty()) { // map2 used for dev only
+                                // No Redis entry!! for this value set code, concept code
+                                mapOf(
+                                    CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to null,
+                                    CDC_PREFERRED_DESIGNATION_KEY_NAME to null
+                                )
+                            } else { //
+                                // logger.info("ValueSetConcept conceptJson: --> $conceptJson")
+                                val cobj: ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
+                                mapOf(
+                                    CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.codeSystemConceptName,
+                                    CDC_PREFERRED_DESIGNATION_KEY_NAME to cobj.cdcPreferredDesignation
+                                )
                             } // .else
+                        } else {
+                            // this is not an ELEMENT_CE || ELEMENT_CWE
+                            map1 //+ map2
+                        } // .else
                     } else {
                         // not available in the default fields profile (DefaultFieldsProfile.json)
                         // considering the component position
