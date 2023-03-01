@@ -175,9 +175,9 @@ class Function {
         val inputEventOut = gsonWithNullsOn.toJson(inputEvent)
         evHubSender.send(
             evHubTopicName = evTopicName,
-            message = gsonWithNullsOn.toJson(inputEventOut)
+            message = inputEventOut
         )
-
+        println(inputEventOut)
     }
 } // .Function
 
