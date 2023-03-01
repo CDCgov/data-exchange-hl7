@@ -177,7 +177,6 @@ class Function {
             evHubTopicName = evTopicName,
             message = inputEventOut
         )
-        println(inputEventOut)
     }
 } // .Function
 
