@@ -69,8 +69,10 @@ class ValidatorFunction {
 
                 val hl7Content = getEncodedValueFromJson("content", inputEvent)
                 val metadata = getObjectFromJson("metadata", inputEvent)
-                val filePath = getObjectFromJson("metadata.provenance.file_path", inputEvent).asString
-                val messageUUID = getObjectFromJson("message_uuid", inputEvent).asString
+
+                val filePath = getValueFromJson("metadata.provenance.file_path", inputEvent)
+                val messageUUID = getValueFromJson("message_uuid", inputEvent)
+
                 log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                 //Main FN Logic
                 val report = validateMessage(hl7Content, messageUUID, filePath)
@@ -125,6 +127,15 @@ class ValidatorFunction {
             throw InvalidMessageException("Unable to process Message: Unparsable JSON content.")
         }
     }
+
+    private fun getValueFromJson(property: String, inputEvent: JsonObject): String {
+        return try {
+            JsonHelper.getValueFromJson(property, inputEvent).asString
+        } catch (e: UnknownPropertyError) {
+            throw InvalidMessageException("Unable to process Message: Unparsable JSON content.")
+        }
+    }
+
     private fun getPhinSpec(hl7Content: String, messageUUID: String, filePath: String): String {
         return try {
            HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
