@@ -37,7 +37,7 @@ class Function {
         message: List<String?>,
         context: ExecutionContext
     ) {
-        context.logger.info("------ received event: ------> message: --> $message")
+        //context.logger.info("------ received event: ------> message: --> $message")
 
         val startTime = Date().toIsoString()
         val evHubNameOk = System.getenv("EventHubSendOkName")
@@ -52,7 +52,7 @@ class Function {
         val helper = Helper()
 
         message.forEach { singleMessage: String? ->
-            context.logger.info("------ singleMessage: ------>: --> $singleMessage")
+           // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             try {
                 // Extract from event
@@ -75,7 +75,10 @@ class Function {
                     metadata.addArrayElement("processes", processMD)
                     val newContentBase64 = Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
                     inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))
-
+                    //Update Summary element.
+                    val summary = SummaryInfo(rReport.status ?: "Unknown")
+                    inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
+                    
                     context.logger.info("Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $evHubNameOk ")
                     ehSender.send(evHubNameOk, Gson().toJson(inputEvent))
                 }
@@ -86,7 +89,7 @@ class Function {
                 e.printStackTrace()
                 val problem = Problem(RedactorProcessMetadata.REDACTOR_PROCESS, e, false, 0, 0)
 
-                val summary = SummaryInfo("REDACTOR_ERROR", problem)
+                val summary = SummaryInfo("FAILURE", problem)
                 inputEvent.add("summary", summary.toJsonElement())
                 ehSender.send(evHubNameErrs, Gson().toJson(inputEvent))
             }
