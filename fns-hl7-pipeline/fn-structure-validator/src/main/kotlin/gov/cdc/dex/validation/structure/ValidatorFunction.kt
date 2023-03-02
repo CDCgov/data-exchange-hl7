@@ -5,10 +5,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.*
-import com.microsoft.azure.functions.annotation.AuthorizationLevel
-import com.microsoft.azure.functions.annotation.EventHubTrigger
-import com.microsoft.azure.functions.annotation.FunctionName
-import com.microsoft.azure.functions.annotation.HttpTrigger
+import com.microsoft.azure.functions.annotation.*
+import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
 
 import gov.cdc.dex.metadata.Problem
@@ -48,6 +46,7 @@ class ValidatorFunction {
             consumerGroup = "%EventHubConsumerGroup%",
             // cardinality = Cardinality.MANY
         ) message: List<String?>,
+        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext
     ) {
         val startTime =  Date().toIsoString()
@@ -61,6 +60,7 @@ class ValidatorFunction {
         val evHubConnStr = getSafeEnvVariable("EventHubConnectionString")
         val ehSender = EventHubSender(evHubConnStr)
 
+        var nbrOfMessages = 0
         message.forEach { singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             // context.logger.info("singleMessage: --> $singleMessage")
@@ -75,7 +75,7 @@ class ValidatorFunction {
                 //Main FN Logic
                 val report = validateMessage(hl7Content, messageUUID, filePath)
                 //preparing EventHub payload:
-                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report)
+                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages])
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
 
@@ -103,6 +103,7 @@ class ValidatorFunction {
                 inputEvent.add("summary", summary.toJsonElement())
                 ehSender.send(evHubNameErrs, Gson().toJson(inputEvent))
             }
+            nbrOfMessages++
         }
     }
 
