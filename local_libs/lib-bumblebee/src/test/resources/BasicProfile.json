@@ -1,0 +1,65 @@
+{
+  "segmentDefinition": {
+    "MSH": {
+      "cardinality": "[1..1]",
+      "children": {
+        "SFT": {
+          "cardinality": "[1..*]"
+        },
+        "PID": {
+          "cardinality": "[1..1]",
+          "children": {
+            "PD1": {
+              "cardinality": "[0..1]"
+            },
+            "NTE": {
+              "cardinality": "[0..*]"
+            },
+            "NK1": {
+              "cardinality": "[0..*]"
+            },
+            "PV1": {
+              "cardinality": "[1..1]"
+            },
+            "PV2": {
+              "cardinality": "[0..1]"
+            }
+          }
+        },
+        "ORC": {
+          "cardinality": "[0..*]",
+          "children": {
+            "NTE": {
+              "cardinality": "[0..*]"
+            }
+
+          }
+        },
+        "OBR": {
+          "cardinality": "[1..*]",
+          "children": {
+            "OBX": {
+              "cardinality": "[0..*]",
+              "children": {
+                "NTE": {
+                  "cardinality": "[0..*]"
+                }
+              }
+            },
+            "SPM": {
+              "cardinality": "[0..*]",
+              "children": {
+                "OBX": {
+                  "cardinality": "[0..*]"
+                }
+              }
+            },
+            "NTE": {
+              "cardinality": "[0..*]"
+            }
+          }
+        }
+      }
+    }
+  }
+}
