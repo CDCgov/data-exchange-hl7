@@ -1,0 +1,17 @@
+{
+  "Multiple": "OBX[@3.1='PLT631||PLT656||PLT633']-5.1",
+  "FirstReal": "OBX[@3.1='PLT631||Invalid']-5.1",
+  "secondReal": "OBX[@3.1='Invalid||PLT656']-5.1",
+  "Multi-first": "OBX[@3.1='PLT631||PLT656']-5.1(0)",
+  "Multi-second": "OBX[@3.1='PLT631||PLT656']-5.1(1)",
+  "Multi-third": "OBX[@3.1='PLT631||PLT656']-5.1(2)",
+  "Multi-forth-empty": "OBX[@3.1='PLT631||PLT656']-5.1(3)",
+  "notmatch": "OBX[@3.1='Invalid']-5.1(0)",
+
+  "azt1": "OBX[@3.1='36-4']-5(0)",
+  "azt2": "OBX[@3.1='36-4']-5(1)",
+  "pidNotes": "PID[1]->NTE-3",
+  "obrNotes": "OBR->NTE-3",
+  "obxNotes": "OBX->NTE-3"
+
+}
