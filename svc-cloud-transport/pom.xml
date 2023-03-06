@@ -120,6 +120,10 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -184,7 +188,16 @@
                                     <artifactId>micronaut-validation</artifactId>
                                     <version>${micronaut.version}</version>
                                 </annotationProcessorPath>
+                                <annotationProcessorPath>
+                                    <groupId>io.micronaut.openapi</groupId>
+                                    <artifactId>micronaut-openapi</artifactId>
+                                    <version>4.8.4</version>
+                                </annotationProcessorPath>
+
+
                             </annotationProcessorPaths>
+
+
                             <annotationProcessorArgs>
                                 <annotationProcessorArg>micronaut.processing.group=example.micronaut</annotationProcessorArg>
                                 <annotationProcessorArg>micronaut.processing.module=micronautguide</annotationProcessorArg>
@@ -278,6 +291,38 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-webapp-maven-plugin</artifactId>
+                <version>2.2.0</version>
+                <configuration>
+                    <schemaVersion>v2</schemaVersion>
+                    <!-- <subscriptionId>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionId>-->
+                    <subscriptionId>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionId>
+                    <resourceGroup>ocio-ede-dev-moderate-hl7-rg</resourceGroup>
+                    <appName>cloud-svc-transport-dev-eastus</appName>
+                    <pricingTier>P2v2</pricingTier>
+                    <region>eastus</region>
+                    <appServicePlanResourceGroup>ocio-ede-dev-moderate-hl7-rg</appServicePlanResourceGroup>
+                    <appServicePlanName>tf-hl7-app-service-plan</appServicePlanName>
+                    <runtime>
+                        <os>Linux</os>
+                        <javaVersion>Java 11</javaVersion>
+                        <webContainer>Tomcat 8.5</webContainer>
+                    </runtime>
+                    <deployment>
+                        <resources>
+                            <resource>
+                                <directory>${project.basedir}/target</directory>
+                                <includes>
+                                    <include>svc-cloud-transport*SNAPSHOT.jar</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </deployment>
+                </configuration>
             </plugin>
         </plugins>
     </build>
