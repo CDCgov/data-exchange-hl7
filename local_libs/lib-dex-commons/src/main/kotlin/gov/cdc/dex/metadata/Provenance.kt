@@ -15,7 +15,7 @@ data class Provenance(
     @SerializedName("ext_system_provider") val systemProvider: String?,
     @SerializedName("ext_original_file_name") val originalFileName: String?,
     @SerializedName("message_index") var messageIndex: Int = 1,
-    @SerializedName(" ext_original_file_timestamp") val originalFileTimestamp: String?,
+    @SerializedName("ext_original_file_timestamp") val originalFileTimestamp: String?,
 ) {
     companion object {
         const val SINGLE_FILE = "SINGLE"
