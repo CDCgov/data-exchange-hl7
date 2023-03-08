@@ -10,6 +10,7 @@ import com.microsoft.azure.functions.annotation.FunctionName
 import com.microsoft.azure.functions.annotation.HttpTrigger
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.hl7.model.RedactorProcessMetadata
+import gov.cdc.dex.hl7.model.RedactorReport
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
@@ -36,7 +37,7 @@ class Function {
         message: List<String?>,
         context: ExecutionContext
     ) {
-        context.logger.info("------ received event: ------> message: --> $message")
+        //context.logger.info("------ received event: ------> message: --> $message")
 
         val startTime = Date().toIsoString()
         val evHubNameOk = System.getenv("EventHubSendOkName")
@@ -48,10 +49,10 @@ class Function {
         var metadata : JsonObject
         var filePath : String
         var messageUUID : String
-        var helper = Helper()
+        val helper = Helper()
 
         message.forEach { singleMessage: String? ->
-            context.logger.info("------ singleMessage: ------>: --> $singleMessage")
+           // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             try {
                 // Extract from event
@@ -65,21 +66,22 @@ class Function {
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 val report = helper.getRedactedReport(hl7Content)
+                if(report != null) {
+                    val rReport = RedactorReport(report._2())
+                    val processMD = RedactorProcessMetadata(rReport.status, report = rReport)
+                    processMD.startProcessTime = startTime
+                    processMD.endProcessTime = Date().toIsoString()
 
-                val processMD = RedactorProcessMetadata(status = "PROCESS_REDACTOR_OK", report = report?._2()?.toList())
-                processMD.startProcessTime = startTime
-                processMD.endProcessTime = Date().toIsoString()
-               // println("metadata: ${metadata}")
-                metadata.addArrayElement("processes", processMD)
-               // println("metadata new: ${metadata}")
-                //println("new content: ${report?._1()}")
-                val newContentBase64 = Base64.getEncoder().encodeToString((report?._1()?.toByteArray() ?: "") as ByteArray?)
-                inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))
-
-                context.logger.info("inputEvent new :${inputEvent}")
-                context.logger.info("Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $evHubNameOk ")
-                context.logger.finest("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
-                ehSender.send(evHubNameOk, Gson().toJson(inputEvent))
+                    metadata.addArrayElement("processes", processMD)
+                    val newContentBase64 = Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
+                    inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))
+                    //Update Summary element.
+                    val summary = SummaryInfo(rReport.status ?: "Unknown")
+                    inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
+                    
+                    context.logger.info("Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $evHubNameOk ")
+                    ehSender.send(evHubNameOk, Gson().toJson(inputEvent))
+                }
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
@@ -87,7 +89,7 @@ class Function {
                 e.printStackTrace()
                 val problem = Problem(RedactorProcessMetadata.REDACTOR_PROCESS, e, false, 0, 0)
 
-                val summary = SummaryInfo("REDACTOR_ERROR", problem)
+                val summary = SummaryInfo("FAILURE", problem)
                 inputEvent.add("summary", summary.toJsonElement())
                 ehSender.send(evHubNameErrs, Gson().toJson(inputEvent))
             }

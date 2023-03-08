@@ -3,9 +3,15 @@ micronaut:
     name: lib-cloud-proxy
 
 
-cloud_environment: AWS
+cloud_environment: azure
 
-aws:
-    bucket: cf-daart-hl7-dropbucket-dev
-    region: us-east-1
+#aws:
+#    bucket: cf-daart-hl7-dropbucket-dev
+#    region: us-east-1
 
+azure:
+  blob:
+    container: my-blob-container-name
+    connectStr: my-azure-blob-connection-string
+    health:
+      enabled: true # (default = false)

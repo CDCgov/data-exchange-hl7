@@ -42,7 +42,7 @@
           "codeSystem": "N/A",
           "legacyPriority": "R",
           "priority": "R",
-          "isRepeat": false,
+          "isRepeat": true,
           "mayRepeat": "Y/3",
           "valueSetCode": "N/A",
           "mappings": {

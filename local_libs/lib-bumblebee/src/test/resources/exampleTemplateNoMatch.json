@@ -1,0 +1,11 @@
+{
+  "specimen_id": "SPM[1]-222.2.1",
+  "message_profile": "MSH-21.1",
+  "message_controller_id": "MSH-10",
+  "meta_organization": "MSH-4.1",
+
+  "phl": "MSH-4.2",
+
+  "meta_program": "MSH-6.1",
+  "message_status": "OBR[1]-25"
+}

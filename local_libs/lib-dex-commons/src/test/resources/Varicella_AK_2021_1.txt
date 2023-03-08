@@ -1,0 +1,45 @@
+MSH|^~\&|^2.16.840.1.114222.4.3.3.9^ISO|MN^2.16.840.1.114222.4.1.3661^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20211111203237||ORU^R01^ORU_R01|HL7BXFKKORPLGSQE|P|2.5|||||||||NND_ORU_v2.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Var_Case_Map_v2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||1145270566^^^&Maven EDSS&ISO||~^^^^^^S||20180929000000|M||2106-3^White^2.16.840.1.113883.6.238|^^^13^55426^^^^27053|||||||||||UNK^Unknown^NULLFL
+OBR|1|""|AK00001^^Maven EDSS^ISO|PERSUBJ^Person Subject^2.16.840.1.114222.4.5.274|||20210902000000|||||||||||||||20211111000000|||F||||||10030^Varicella (Chickenpox)^2.16.840.1.114222.4.5.277
+OBR|2|""|AK00001^^Maven EDSS^ISO|NOTF^Individual Case Notification^2.16.840.1.114222.4.5.274|||20210102000000|||||||||||||||20211111000000|||F||||||10030^Varicella (Chickenpox)^2.16.840.1.114222.4.5.277
+OBX|1|CWE|DEM126^Country of Birth^2.16.840.1.114222.4.5.232|1|UNK^UNKNOWN^1.0.3166.1||||||F
+OBX|2|CWE|NOT109^Reporting State^2.16.840.1.114222.4.5.232|1|13^Alaska^2.16.840.1.113883.6.92||||||F
+OBX|3|CWE|NOT113^Reporting County^2.16.840.1.114222.4.5.232|1|13053^Fulton^2.16.840.1.113883.6.93||||||F
+OBX|4|CWE|NOT116^National Reporting Jurisdiction^2.16.840.1.114222.4.5.232|1|13^Alaska^2.16.840.1.113883.6.92||||||F
+OBX|5|TS|INV120^Earliest Date Reported to County^2.16.840.1.114222.4.5.232|1|20210806000000||||||F
+OBX|6|TS|INV121^Earliest Date Reported to State^2.16.840.1.114222.4.5.232|1|20210806000000||||||F
+OBX|7|CWE|INV128^Was the patient hospitalized as a result of this event?^2.16.840.1.114222.4.5.232|1|N^No^2.16.840.1.113883.12.136||||||F
+OBX|8|TS|INV136^Diagnosis Date^2.16.840.1.114222.4.5.232|1|20210805000000||||||F
+OBX|9|TS|INV137^Date of Illness Onset^2.16.840.1.114222.4.5.232|1|20210104000000||||||F
+OBX|10|SN|INV143^Illness Onset Age^2.16.840.1.114222.4.5.232|1|^1|a^year [time]^2.16.840.1.113883.6.8|||||F
+OBX|11|TS|INV147^Investigation Start Date^2.16.840.1.114222.4.5.232|1|20210108000000||||||F
+OBX|12|CWE|INV150^Case Outbreak Indicator^2.16.840.1.114222.4.5.232|1|N^No^2.16.840.1.113883.12.136||||||F
+OBX|13|CWE|INV163^Case Class Status Code^2.16.840.1.114222.4.5.232|1|2931005^Probable diagnosis^2.16.840.1.113883.6.96||||||F
+OBX|14|SN|INV165^MMWR Week^2.16.840.1.114222.4.5.232|1|^01||||||F
+OBX|15|TS|INV166^MMWR Year^2.16.840.1.114222.4.5.232|1|2021||||||F
+OBX|16|ST|INV172^City/County Case Number^2.16.840.1.114222.4.5.232|1|AK00001||||||F
+OBX|17|ST|INV173^State Case ID^2.16.840.1.114222.4.5.232|1|AK00001||||||F
+OBX|18|SN|INV2001^Age at case investigation^2.16.840.1.114222.4.5.232|1|^1|a^year [time]^2.16.840.1.113883.6.8|||||F
+OBX|19|CWE|VAR100^Number of lesions in total^2.16.840.1.114222.4.5.232|1|UNK^Unkown^NULLFL||||||F
+OBX|20|CWE|VAR101^Did the patient receive Varicella-containing vaccine^2.16.840.1.114222.4.5.232|1|UNK^unknown^2.16.840.1.113883.5.1008||||||F
+OBX|21|TS|VAR102^Rash Onset Date^2.16.840.1.114222.4.5.232|1|20210804000000||||||F
+OBX|22|CWE|VAR122^Fever^2.16.840.1.114222.4.5.232|1|UNK^unknown^2.16.840.1.113883.5.1008||||||F
+OBX|23|CWE|VAR126^Is patient immunocompromised due to medical condition or treatment^2.16.840.1.114222.4.5.232|1|UNK^unknown^2.16.840.1.113883.5.1008||||||F
+OBX|24|CWE|VAR128^Did patient visit a healthcare provider during this illness^2.16.840.1.114222.4.5.232|1|Y^Yes^2.16.840.1.113883.12.136||||||F
+OBX|25|CWE|VAR129^Did patient develop any complications that were diagnosed by a healthcare provider?^2.16.840.1.114222.4.5.232|1|UNK^unknown^2.16.840.1.113883.5.1008||||||F
+OBX|26|CWE|VAR139^Antiviral treatment^2.16.840.1.114222.4.5.232|1|UNK^unknown^2.16.840.1.113883.5.1008||||||F
+OBX|27|CWE|VAR150^Diagnosed with Varicella before^2.16.840.1.114222.4.5.232|1|UNK^unknown^2.16.840.1.113883.5.1008||||||F
+OBX|28|CWE|VAR154^Is this case epi-linked to another confirmed or probable case^2.16.840.1.114222.4.5.232|1|N^No^2.16.840.1.113883.12.136||||||F
+OBX|29|CWE|VAR170^Was laboratory testing done for varicella?^2.16.840.1.114222.4.5.232|1|N^No^2.16.840.1.113883.12.136||||||F
+OBX|30|CWE|VAR171^Was DFA testing performed^2.16.840.1.114222.4.5.232||N^No^2.16.840.1.113883.12.136||||||F
+OBX|31|TS|VAR172^Date of DFA^2.16.840.1.114222.4.5.232||||||||F
+OBX|32|CWE|VAR173^DFA result^2.16.840.1.114222.4.5.232||||||||F
+OBX|33|CWE|VAR174^Was PCR testing performed^2.16.840.1.114222.4.5.232||N^No^2.16.840.1.113883.12.136||||||F
+OBX|34|TS|VAR175^Date of PCR^2.16.840.1.114222.4.5.232||||||||F
+OBX|35|CWE|VAR178^PCR result^2.16.840.1.114222.4.5.232||||||||F
+OBX|36|CWE|VAR180^Was culture performed^2.16.840.1.114222.4.5.232||N^No^2.16.840.1.113883.12.136||||||F
+OBX|37|TS|VAR181^Date of culture^2.16.840.1.114222.4.5.232||||||||F
+OBX|38|CWE|VAR182^Culture result^2.16.840.1.114222.4.5.232||||||||F
+OBX|39|CWE|VAR189^IgM performed^2.16.840.1.114222.4.5.232||N^No^2.16.840.1.113883.12.136||||||F
+OBX|40|TS|VAR192^Date IgM specimen taken^2.16.840.1.114222.4.5.232||||||||F
+OBX|41|CWE|VAR193^IgM test result^2.16.840.1.114222.4.5.232||||||||F

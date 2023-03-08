@@ -9,16 +9,12 @@ plugins {
 }
 
 version "$revision"
-group "gov.cdc.ncezid"
+group "gov.cdc.dex"
 
 
 repositories {
     maven {
-        url 'https://pkgs.dev.azure.com/CDC-Org1/_packaging/Biblioteca/maven/v1'
-        credentials {
-            username azureRepoUser
-            password azureRepoToken
-        }
+        url "https://imagehub.cdc.gov/repository/maven-ede-group/"
     }
 }
 
@@ -28,7 +24,7 @@ configurations {
 }
 
 dependencies {
-    implementation group: 'com.azure', name: 'azure-sdk-bom', version: '1.2.3', ext: 'pom'
+    implementation group: 'com.azure', name: 'azure-sdk-bom', version: '1.2.9', ext: 'pom'
     implementation platform("software.amazon.awssdk:bom:$awsSDKVersion") {
         exclude group: 'io.netty', module: '*'
     }
@@ -47,8 +43,8 @@ dependencies {
     }
 
 //    implementation group: 'io.micronaut.azure', name: 'micronaut-azure-sdk', version: '3.3.0'
-    implementation 'com.azure:azure-storage-blob:12.18.0'
-    implementation 'com.azure:azure-storage-queue:12.14.0'
+    implementation 'com.azure:azure-storage-blob:12.20.3'
+    implementation 'com.azure:azure-storage-queue:12.15.3'
 
     kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     kapt("io.micronaut:micronaut-inject-java")
@@ -69,7 +65,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     implementation("javax.annotation:javax.annotation-api")
-    implementation("com.jayway.jsonpath:json-path:2.5.0")
+    implementation("com.jayway.jsonpath:json-path:2.7.0")
     runtimeOnly('ch.qos.logback:logback-classic:1.2.9')
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
@@ -87,7 +83,7 @@ dependencies {
 //    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:{junitVersion}")
 //    testRuntimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final'
     runtimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final:' + osdetector.classifier
-    runtimeOnly 'io.grpc:grpc-netty-shaded:1.45.0'
+    runtimeOnly 'io.grpc:grpc-netty-shaded:1.53.0'
 //    implementation 'io.projectreactor:reactor-core:3.4.19'
     implementation 'javax.inject:javax.inject:1'
 // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava
@@ -168,10 +164,15 @@ apply plugin: 'maven-publish'
 publishing {
     repositories {
         maven {
-            url 'https://pkgs.dev.azure.com/CDC-Org1/_packaging/Biblioteca/maven/v1'
+            if(version.toString().endsWith("SNAPSHOT")){
+                url 'https://imagehub.cdc.gov/repository/maven-ede-snapshot/'
+            } else {
+                url 'https://imagehub.cdc.gov/repository/maven-ede/'
+            }
+
             credentials {
-                username azureRepoUser
-                password azureRepoToken
+                username "$nexusUsername"
+                password "$nexusPassword"
             }
         }
     }
@@ -179,7 +180,6 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
             artifact(kotlinSourcesJar)
-
         }
     }
 }

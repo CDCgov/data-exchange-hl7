@@ -1,0 +1,65 @@
+{
+  "place_order_number": "OBR-2",
+  "filler_order_number": "OBR-3",
+  "test_ordered_name": "OBR-4",
+  "observation_datetime": "OBR-7",
+  "specimen_action_code": "OBR-11",
+  "ordering_provider": "OBR-16",
+  "results_status_change": "OBR-22",
+  "result_status": "OBR-25",
+  "parent_result": "OBR-26",
+  "parent_lab_order": "OBR-29",
+  "reason_for_study": "OBR-31",
+  "parent_universal_service_identifier": "OBR-50",
+  "tests_results": [
+    {
+      "test_performed_name": "OBX-3",
+      "observation_subid": "OBX-4",
+      "result": "OBX-5",
+      "units_of_measure": "OBX-6",
+      "result_range": "OBX-7",
+      "interpretation_flag": "OBX-8",
+      "result_status": "OBX-11",
+      "specimen_collection_date": "OBX-14",
+      "test_method": "OBX-17",
+      "specimen_analyzed_date": "OBX-19",
+      "performing_lab_name": "OBX-23",
+      "performing_person_name": "OBX-25",
+      "comments": "NTE-3"
+    }
+    ],
+    "isolate": {
+      "id_number": "OBX[@3.1='80398-1']-5.1",
+      "check_digit": "OBX[@3.1='80398-1']-5.2",
+      "check_digit_scheme": "OBX[@3.1='80398-1']-5.3",
+      "assigning_authority": {
+        "namespace_id": "OBX[@3.1='80398-1']-5.4.1",
+        "universal_id": "OBX[@3.1='80398-1']-5.4.2",
+        "universal_id_type": "OBX[@3.1='80398-1']-5.4.3"
+      },
+      "identifier_type_code": "OBX[@3.1='80398-1']-5.5",
+      "assigning_facility": {
+        "namespace_id": "OBX[@3.1='80398-1']-5.6.1",
+        "universal_id": "OBX[@3.1='80398-1']-5.6.2",
+        "universal_id_type": "OBX[@3.1='80398-1']-5.6.3"
+      },
+      "effective_date": "OBX[@3.1='80398-1']-5.7",
+      "assigning_agency": {
+        "id": "OBX[@3.1='80398-1']-5.8.1",
+        "text": "OBX[@3.1='80398-1']-5.8.2",
+        "code_system": "OBX[@3.1='80398-1']-5.8.3"
+      }
+    },
+    "specimen": {
+      "id": "SPM-2",
+      "placer_assigned_id": "SPM-2.1",
+      "filler_assigned_id": "SPM-2.2",
+      "type": "SPM-4",
+      "source_site": "SPM-8",
+      "role": "SPM-11",
+      "collection_amount": "SPM-12",
+      "description": "SPM-14",
+      "collection_datetime": "SPM-17",
+      "received_datetime": "SPM-18"
+    }
+}

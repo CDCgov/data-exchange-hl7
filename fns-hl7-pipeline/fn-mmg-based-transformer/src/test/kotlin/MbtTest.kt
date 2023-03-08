@@ -1,5 +1,4 @@
 
-import gov.cdc.dex.hl7.MmgUtil
 import gov.cdc.hl7.HL7StaticParser
 
 import org.junit.jupiter.api.Test
@@ -10,24 +9,27 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertFails
 
 import org.slf4j.LoggerFactory
-import java.util.*
 
 import gov.cdc.dex.redisModels.MMG
 
 import gov.cdc.dex.redisModels.Condition2MMGMapping 
 
 import gov.cdc.dex.hl7.model.PhinDataType
-import gov.cdc.dex.redisModels.ValueSetConcept
 
 import gov.cdc.dex.hl7.Transformer
 
 import gov.cdc.dex.mmg.InvalidConditionException
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 
 import  gov.cdc.dex.azure.RedisProxy
+import gov.cdc.dex.metadata.DexMessageInfo
+import gov.cdc.dex.metadata.HL7MessageType
+import gov.cdc.dex.mmg.MmgUtil
+import gov.cdc.dex.util.JsonHelper
 
 
 class MbtTest {
@@ -100,13 +102,12 @@ class MbtTest {
         val hl7Content = this::class.java.getResource(filePath).readText()
         val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
 
-        val mmgUtil = MmgUtil(redisProxy)
-        val mmgs = mmgUtil.getMMGFromMessage(hl7Content, reportingJurisdiction)
+        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "11088")
 
-        logger.info("testGetMMGFromMessage: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
+        logger.info("testGetMMGsFromMessage: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
 
         mmgs.forEach {
-            logger.info("testGetMMGFromMessage: MMG for filePath: $filePath, MMG name: --> ${it.name}, MMG BLOCKS: --> ${it.blocks.size}")
+            logger.info("testGetMMGsFromMessage: MMG for filePath: $filePath, MMG name: --> ${it.name}, MMG BLOCKS: --> ${it.blocks.size}")
         }
         
         assertEquals(mmgs.size, 2)
@@ -126,26 +127,38 @@ class MbtTest {
         assertEquals(cc.profiles!!.size, 1)
     } // .testLoadMMG
 
+    @Test
+    fun testLoadMMGsFromKeyList() {
+        val dmi = DexMessageInfo("10030", "some route", listOf("mmg:varicella_message_mapping_guide_v2_01"),
+            "13", HL7MessageType.CASE)
+        val gson = Gson()
+        val dmiString = gson.toJson(dmi)
+        val jsonObj = JsonParser.parseString(dmiString) as JsonObject
+        println(jsonObj["mmgs"])
+        println(jsonObj["mmgs"].javaClass.name)
+        val mmgKeys = JsonHelper.getStringArrayFromJsonArray(jsonObj["mmgs"].asJsonArray)
 
+        val mmgUtil = MmgUtil(redisProxy)
+        val mmgs = mmgUtil.getMMGs(mmgKeys)
+        assert(mmgs.size == 1)
+    }
     @Test
     fun testLoadMMGfromMessage() {
 
-        val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val filePath = "/Varicella_AK_2021_1.txt"
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgUtil = MmgUtil(redisProxy)
-        val reportingJurisdiction = extractValue(testMsg, JURISDICTION_CODE_PATH)
+        val mmgsArr = mmgUtil.getMMGs("Var_Case_Map_v2.0", "", "10030", "13")
 
-        val mmgsArr = mmgUtil.getMMGFromMessage(testMsg, reportingJurisdiction)
-
-        val transfomer = Transformer(redisProxy)
-        val mmgs = transfomer.getMmgsFiltered(mmgsArr)
+        val transformer = Transformer(redisProxy)
+        val mmgs = transformer.getMmgsFiltered(mmgsArr)
 
         mmgs.forEach {
             logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
         }
 
-        assertEquals(mmgs.size, 2)
-        assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 7 + 26) // the Message Header is trimmed from the GenV2 hence 7 and not 8
+        assertEquals(mmgs.size, 1)
+       // assertEquals(mmgs[0].blocks.size + mmgs[1].blocks.size, 7 + 26) // the Message Header is trimmed from the GenV2 hence 7 and not 8
     } // .testLoadMMGfromMessage
 
 
@@ -212,8 +225,7 @@ class MbtTest {
         val hl7Content = this::class.java.getResource(hl7FilePath).readText()
         val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
 
-        val mmgUtil = MmgUtil(redisProxy)
-        val mmgs = mmgUtil.getMMGFromMessage(hl7Content, reportingJurisdiction)
+        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "11088")
 
         mmgs.forEach {
             logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
@@ -229,6 +241,29 @@ class MbtTest {
         logger.info("testTransformerHl7ToJsonModelwithRedisMmgTC04: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
     } // .testTransformerHl7ToJsonModelwithRedisMmg
 
+    @Test
+    fun testTransformerHep() {
+
+        // hl7
+        val hl7FilePath = "/KY_Hepatitis Round 2_TM4.txt"
+        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
+        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
+
+        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "10105")
+
+        mmgs.forEach {
+            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
+
+        val transformer = Transformer(redisProxy)
+        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+
+        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+
+        val mmgModel = model1 + model2
+
+        logger.info("testTransformerHep: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
+    } // .testTransformerHep
 
     @Test
     fun testConditionNotSupportedException() {
@@ -242,8 +277,7 @@ class MbtTest {
 
                 val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
         
-                val mmgUtil = MmgUtil(redisProxy)
-                val mmgs = mmgUtil.getMMGFromMessage(hl7Content, reportingJurisdiction)
+                val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "11550")
         
                 logger.info("testConditionNotSupportedException: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
         
@@ -265,8 +299,7 @@ class MbtTest {
 
             block = {
 
-                val mmgUtil = MmgUtil(redisProxy)
-                val mmgs = mmgUtil.getMMGFromMessage("hl7Content", "23")
+                val mmgs = getMMGsFromMessage("hl7Content", "23", "88888")
                 logger.info("testMmgThrowsException: mmgs.size: ${mmgs.size}")
 
             } // .block
@@ -282,6 +315,14 @@ class MbtTest {
         else ""
     }
 
+    private fun getMMGsFromMessage(messageContent: String, jurisdictionCode: String, eventCode: String) : Array<MMG>{
+        val mshProfile= extractValue(messageContent, "MSH-21[2].1")
+        val mshCondition = extractValue(messageContent, "MSH-21[3].1")
+      //  val eventCode = extractValue(messageContent, "OBR-31.1")
+       // val jurisdictionCode = "13"
+        val mmgUtil = MmgUtil(redisProxy)
+        return mmgUtil.getMMGs(mshProfile, mshCondition, eventCode, jurisdictionCode)
+    }
 
 } // .MbtTest
 

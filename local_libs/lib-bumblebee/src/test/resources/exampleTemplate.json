@@ -1,0 +1,32 @@
+{
+  "specimen_id": "SPM[1]-2.2.1",
+  "emptyValue": "PID[1]-2",
+  "message_profile": "MSH-21.1",
+  "message_controller_id": "MSH-10",
+  "meta_organization": "MSH-4.1",
+  "phl": "MSH-4.2",
+  "meta_program": "MSH-6.1",
+  "message_status": "OBR[1]-25",
+  "race":  "PID-10.2",
+  "$$SFT[1]-1": "SFT-4",
+  "emptyVar": "NO-Map",
+  "OBR": [
+    {
+      "type": "OBR[1]-> OBX-2",
+      "question": {
+        "code": "OBR[1]->OBX-3.1",
+        "label": "OBR[1]->OBX-3.2"
+      },
+      "Group": "OBR[1]->OBX-4",
+      "answer": "OBR[1]->OBX-5"
+    }
+  ],
+  "Tests": [
+  {
+    "$$OBR[@2.1='201912_03']->OBX[*]-3.1": "OBR[@2.1='201912_03']->OBX-5"
+  }
+    ],
+  "Multiple": "OBX[@3.1='PLT631||PLT656']-5.1"
+
+}
+
