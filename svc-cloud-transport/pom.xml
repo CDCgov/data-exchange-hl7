@@ -119,10 +119,6 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-annotations</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -186,11 +182,6 @@
                                     <groupId>io.micronaut</groupId>
                                     <artifactId>micronaut-validation</artifactId>
                                     <version>${micronaut.version}</version>
-                                </annotationProcessorPath>
-                                <annotationProcessorPath>
-                                    <groupId>io.micronaut.openapi</groupId>
-                                    <artifactId>micronaut-openapi</artifactId>
-                                    <version>4.8.4</version>
                                 </annotationProcessorPath>
                           </annotationProcessorPaths>
                        </configuration>
