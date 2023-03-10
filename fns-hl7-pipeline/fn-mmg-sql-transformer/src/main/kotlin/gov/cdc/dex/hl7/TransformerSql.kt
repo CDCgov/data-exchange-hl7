@@ -30,6 +30,7 @@ class TransformerSql()  {
         private const val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
         private const val MESSAGE_PROFILE_IDENTIFIER_EL_NAME = "message_profile_identifier"
         private const val MESSAGE_PROFILE_ID_ALTERNATE_NAME = "message_profile_id"
+        private const val MAX_BLOCK_NAME_LENGTH = 30
     } // .companion object
 
 
@@ -161,8 +162,11 @@ class TransformerSql()  {
     fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
 
         val repeatedBlocksModel = blocks.map{blk -> 
-            val blkName = StringUtils.normalizeString(blk.name)
-
+            var blkName = StringUtils.normalizeString(blk.name)
+            blkName = blkName.substringBefore("repeating_group")
+            if (blkName.length > 30) {
+                blkName = blkName.substring(0, 30)
+            }
             val blkModel = modelJson[blkName]
 
             if ( blkModel.isJsonNull ) {
@@ -237,7 +241,15 @@ class TransformerSql()  {
         return repeatedBlocksModel
     } // .repeatedBlocksToSqlModel
 
-    
+    private fun getSmallBlockName(name: String) : String {
+        var smallName = StringUtils.normalizeString(name)
+        smallName = smallName.substringBefore("_repeating")
+
+        if (smallName.length > MAX_BLOCK_NAME_LENGTH) {
+            smallName = smallName.substring(0, MAX_BLOCK_NAME_LENGTH)
+        }
+        return smallName
+    }
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Element: Message Profile Identifier -------------
     // --------------------------------------------------------------------------------------------------------

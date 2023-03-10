@@ -32,6 +32,7 @@ class Transformer(redisProxy: RedisProxy)  {
         // private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type" // only used in dev
         private const val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
         private const val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
+        private const val MAX_BLOCK_NAME_LENGTH = 30
     }
 
         // --------------------------------------------------------------------------------------------------------
@@ -175,7 +176,7 @@ class Transformer(redisProxy: RedisProxy)  {
                 } // .blockElementsNameDataTupMap
                 // logger.info("\nblockElementsNameDataTupMap: --> ${Gson().toJson(blockElementsNameDataTupMap)}\n\n")
 
-                StringUtils.normalizeString(block.name) to blockElementsNameDataTupMap
+                getSmallBlockName(block.name) to blockElementsNameDataTupMap
             } // .blocksNonSingleModel
 
             
@@ -189,6 +190,16 @@ class Transformer(redisProxy: RedisProxy)  {
         // --------------------------------------------------------------------------------------------------------
         //  ------------- Functions used in the transformation -------------
         // --------------------------------------------------------------------------------------------------------
+
+        private fun getSmallBlockName(name: String) : String {
+            var smallName = StringUtils.normalizeString(name)
+            smallName = smallName.substringBefore("_repeating")
+
+            if (smallName.length > MAX_BLOCK_NAME_LENGTH) {
+                smallName = smallName.substring(0, MAX_BLOCK_NAME_LENGTH)
+            }
+            return smallName
+        }
 
         private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
             return lines.filter { line ->

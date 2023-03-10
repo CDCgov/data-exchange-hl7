@@ -30,6 +30,7 @@ import gov.cdc.dex.metadata.DexMessageInfo
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.util.JsonHelper
+import gov.cdc.dex.util.StringUtils
 
 
 class MbtTest {
@@ -216,7 +217,17 @@ class MbtTest {
         assertEquals(model.size, 89)
     } // .testTransformerHl7ToJsonModel
  
+    @Test
+    fun getSmallBlockName(){
+        val name = "Vaccination History Repeating Group Section to specify the detailed vaccine record information - Repeats for each vaccine dose."
+        var smallName = StringUtils.normalizeString(name)
+        smallName = smallName.substringBefore("_repeating")
 
+        if (smallName.length > 30) {
+            smallName = smallName.substring(0, 30)
+        }
+        println(smallName)
+    }
     @Test
     fun testTransformerHl7ToJsonModelwithRedisMmgTC04() {
         
