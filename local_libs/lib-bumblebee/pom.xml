@@ -5,14 +5,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>gov.cdc.dex</groupId>
   <artifactId>lib-bumblebee</artifactId>
-  <version>1.1.1</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-<distributionManagement>
-  <repository>
-    <id>nexus-snapshot</id>
-    <url>https://imagehub.cdc.gov/repository/maven-ede-snapshot/</url>
-  </repository>
-</distributionManagement>
   <properties>
     <jdk.version>11</jdk.version>
     <maven.compiler.target>${jdk.version}</maven.compiler.target>
@@ -25,18 +19,20 @@
   </properties>
   <repositories>
     <repository>
-      <id>central</id>
-      <url>http://repo1.maven.org/maven2/</url>
+      <id>nexus</id>
+      <url>https://imagehub.cdc.gov/repository/maven-ede-group/</url>
     </repository>
+  </repositories>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>nexus</id>
+      <url>https://imagehub.cdc.gov/repository/maven-ede-snapshot/</url>
+    </snapshotRepository>
     <repository>
       <id>nexus</id>
       <url>https://imagehub.cdc.gov/repository/maven-ede/</url>
     </repository>
-   <repository>
-      <id>nexus-snapshot</id>
-      <url>https://imagehub.cdc.gov/repository/maven-ede-snapshot/</url>
-    </repository>
-  </repositories>
+  </distributionManagement>
   <dependencyManagement>
     <dependencies>
      <dependency>
