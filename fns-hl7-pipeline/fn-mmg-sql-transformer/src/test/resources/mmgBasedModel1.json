@@ -52,7 +52,7 @@
     "alternate_identifier": null,
     "alternate_text": null,
     "name_of_alternate_coding_system": null,
-    "code_system_concept_name": "Not \nHispanic or Latino",
+    "code_system_concept_name": "Not Hispanic or Latino",
     "cdc_preferred_designation": "Not Hispanic or Latino"
   },
   "subject_address_county": null,
@@ -319,7 +319,7 @@
     "code_system_concept_name": "Yes",
     "cdc_preferred_designation": "Yes"
   },
-  "immunocompromised_associated_condition_or_treatment": "diabetes, \nrenal disease",
+  "immunocompromised_associated_condition_or_treatment": "diabetes, renal disease",
   "treatment_drug_indicator": {
     "identifier": "Y",
     "text": "Yes",
@@ -404,7 +404,7 @@
   "blood_donor_implicated_during_investigation": null,
   "donated_product": null,
   "blood_bank_notified": null,
-  "repeating_variables_for_disease_exposure": [
+  "repeating_variables_for_diseas": [
     {
       "country_of_exposure": {
         "identifier": "USA",
@@ -690,7 +690,7 @@
       }
     }
   ],
-  "antibiotics_treatment_repeating_group": [
+  "antibiotics_treatment_repeatin": [
     {
       "medication_administered": {
         "identifier": "3640",
@@ -736,7 +736,7 @@
       }
     }
   ],
-  "industry_and_occupation_repeating_group": [
+  "industry_and_occupation_repeat": [
     {
       "current_occupation": "Data Analyst",
       "current_occupation_standardized": {
@@ -796,10 +796,10 @@
     }
   ],
   "tick_bite_repeating_group": [],
-  "blood_transfusion_date_repeating_group": [],
-  "organ_transplant_repeating_group": [],
-  "blood_donation_date_repeating_group": [],
-  "epidemiology_laboratory_repeating_group": [
+  "blood_transfusion_date_repeati": [],
+  "organ_transplant_repeating_gro": [],
+  "blood_donation_date_repeating": [],
+  "epidemiology_laboratory_repeat": [
     {
       "test_type": {
         "identifier": "32011-9",

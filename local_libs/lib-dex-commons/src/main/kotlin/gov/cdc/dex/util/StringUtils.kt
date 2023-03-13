@@ -29,5 +29,6 @@ class StringUtils {
         fun String.hashMD5(): String {
             return md5(this).toHex()
         }
+
     }
 }

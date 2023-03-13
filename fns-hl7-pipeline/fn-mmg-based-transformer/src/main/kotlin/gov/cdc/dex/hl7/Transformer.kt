@@ -193,10 +193,12 @@ class Transformer(redisProxy: RedisProxy)  {
 
         private fun getSmallBlockName(name: String) : String {
             var smallName = StringUtils.normalizeString(name)
-            smallName = smallName.substringBefore("_repeating")
 
             if (smallName.length > MAX_BLOCK_NAME_LENGTH) {
                 smallName = smallName.substring(0, MAX_BLOCK_NAME_LENGTH)
+            }
+            if (smallName.endsWith("_")) {
+                smallName = smallName.substringBeforeLast("_")
             }
             return smallName
         }

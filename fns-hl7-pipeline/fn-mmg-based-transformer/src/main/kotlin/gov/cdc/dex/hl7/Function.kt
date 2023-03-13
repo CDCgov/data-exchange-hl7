@@ -130,7 +130,7 @@ class Function {
                     val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
                     val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
                     val mmgBasedModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle
-                   // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgBasedModel)}")
+                  //  context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgBasedModel)}")
                     context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel.size: --> ${mmgBasedModel.size}")
                     updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_OK, mmgBasedModel, eventHubMD[messageIndex],
                         evHubSender, eventHubSendOkName, gsonWithNullsOn, inputEvent, null)

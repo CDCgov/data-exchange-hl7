@@ -221,10 +221,13 @@ class MbtTest {
     fun getSmallBlockName(){
         val name = "Vaccination History Repeating Group Section to specify the detailed vaccine record information - Repeats for each vaccine dose."
         var smallName = StringUtils.normalizeString(name)
-        smallName = smallName.substringBefore("_repeating")
 
         if (smallName.length > 30) {
             smallName = smallName.substring(0, 30)
+        }
+        // make sure it does not end with an underscore
+        if (smallName.endsWith("_")) {
+            smallName = smallName.substringBeforeLast("_")
         }
         println(smallName)
     }
