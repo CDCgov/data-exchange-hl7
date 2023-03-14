@@ -9,10 +9,7 @@ import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import gov.cdc.hl7.HL7StaticParser
-import jdk.jfr.Event
-
 import org.junit.jupiter.api.Test
-
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -111,7 +108,8 @@ class DebatcherTest {
             fileSize=1234,
             singleOrBatch= Provenance.SINGLE_FILE,
             originalFileName ="blobName",
-            systemProvider = "BLOB"
+            systemProvider = "BLOB",
+            originalFileTimestamp=startTime,
         )
         // Read Blob File by Lines
         // -------------------------------------

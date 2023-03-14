@@ -30,5 +30,37 @@ class StringUtils {
             return md5(this).toHex()
         }
 
+        fun getNormalizedShortName(name: String, maxLength: Int = 0) : String {
+            var shortName = name.normalize()
+            if (shortName.contains("_repeating_group")) {
+                shortName = truncateAndReplaceRepeatingGroupWithRg(shortName, maxLength)
+            } else {
+                if (maxLength > 0 && shortName.length > maxLength) {
+                    shortName = shortName.substring(0, maxLength)
+                }
+                if (shortName.endsWith("_")) {
+                    shortName = shortName.substringBeforeLast("_")
+                }
+            }
+            return shortName
+        }
+
+        private fun truncateAndReplaceRepeatingGroupWithRg(name: String, maxLength: Int) : String {
+            var newName = name.substringBefore("_repeating_group")
+            // still might be too long, so shorten and account for length of "_rg"
+            if (maxLength > 0 && newName.length > maxLength) newName = if (maxLength > 3) {
+                newName.substring(0, maxLength - 3)
+            } else {
+                newName.substring(0, maxLength)
+            }
+            newName += if (newName.endsWith("_")) {
+                "rg"
+            } else {
+                "_rg"
+            }
+            return newName
+        }
+
     }
+
 }
