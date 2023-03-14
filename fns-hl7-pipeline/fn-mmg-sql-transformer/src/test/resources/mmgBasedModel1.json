@@ -690,7 +690,7 @@
       }
     }
   ],
-  "antibiotics_treatment_repeatin": [
+  "antibiotics_treatment_rg": [
     {
       "medication_administered": {
         "identifier": "3640",
@@ -736,7 +736,7 @@
       }
     }
   ],
-  "industry_and_occupation_repeat": [
+  "industry_and_occupation_rg": [
     {
       "current_occupation": "Data Analyst",
       "current_occupation_standardized": {
@@ -795,11 +795,11 @@
       "international_destinations_of_recent_travel": null
     }
   ],
-  "tick_bite_repeating_group": [],
-  "blood_transfusion_date_repeati": [],
-  "organ_transplant_repeating_gro": [],
-  "blood_donation_date_repeating": [],
-  "epidemiology_laboratory_repeat": [
+  "tick_bite_rg": [],
+  "blood_transfusion_date_rg": [],
+  "organ_transplant_rg": [],
+  "blood_donation_date_rg": [],
+  "epidemiology_laboratory_rg": [
     {
       "test_type": {
         "identifier": "32011-9",

@@ -93,7 +93,7 @@ class TransformerSql {
 
         }.associate { el ->
 
-            val elName = StringUtils.normalizeString(el.name)
+            val elName = StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH)
             val elDataType = el.mappings.hl7v251.dataType
 
             val elModel = modelJson[elName]
@@ -156,7 +156,7 @@ class TransformerSql {
     fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
 
         val repeatedBlocksModel = blocks.associate { blk ->
-            val blkName = getSmallBlockName(blk.name)
+            val blkName = StringUtils.getNormalizedShortName(blk.name, MAX_BLOCK_NAME_LENGTH)
             val blkModel = modelJson[blkName]
 
             if (blkModel.isJsonNull) {
@@ -232,17 +232,6 @@ class TransformerSql {
         return repeatedBlocksModel
     } // .repeatedBlocksToSqlModel
 
-    private fun getSmallBlockName(name: String) : String {
-        var smallName = StringUtils.normalizeString(name)
-
-        if (smallName.length > MAX_BLOCK_NAME_LENGTH) {
-            smallName = smallName.substring(0, MAX_BLOCK_NAME_LENGTH)
-        }
-        if (smallName.endsWith("_")) {
-            smallName = smallName.substringBeforeLast("_")
-        }
-        return smallName
-    }
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Element: Message Profile Identifier -------------
     // --------------------------------------------------------------------------------------------------------
