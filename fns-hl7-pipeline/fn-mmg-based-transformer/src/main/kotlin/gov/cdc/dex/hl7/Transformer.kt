@@ -32,6 +32,7 @@ class Transformer(redisProxy: RedisProxy)  {
         // private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type" // only used in dev
         private const val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
         private const val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
+        private const val MAX_BLOCK_NAME_LENGTH = 30
     }
 
         // --------------------------------------------------------------------------------------------------------
@@ -98,7 +99,11 @@ class Transformer(redisProxy: RedisProxy)  {
                 val obxLine = filterByIdentifier(obxLines, el.mappings.hl7v251.identifier)
                 val obxLineParts = if (obxLine.isNotEmpty()) obxLine[0].split("|") else listOf()
                 val segmentData = getSegmentData(obxLineParts, el.mappings.hl7v251.fieldPosition, el)
-                StringUtils.normalizeString(el.name) to segmentData
+                if (el.isRepeat) {
+                    StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH) to segmentData
+                } else {
+                    StringUtils.normalizeString(el.name) to segmentData
+                }
             } // .mmgPid.map
 
 
@@ -175,7 +180,7 @@ class Transformer(redisProxy: RedisProxy)  {
                 } // .blockElementsNameDataTupMap
                 // logger.info("\nblockElementsNameDataTupMap: --> ${Gson().toJson(blockElementsNameDataTupMap)}\n\n")
 
-                StringUtils.normalizeString(block.name) to blockElementsNameDataTupMap
+                StringUtils.getNormalizedShortName(block.name, MAX_BLOCK_NAME_LENGTH) to blockElementsNameDataTupMap
             } // .blocksNonSingleModel
 
             
@@ -190,7 +195,7 @@ class Transformer(redisProxy: RedisProxy)  {
         //  ------------- Functions used in the transformation -------------
         // --------------------------------------------------------------------------------------------------------
 
-        private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
+           private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
             return lines.filter { line ->
                 val lineParts = line.split("|")
                 val obxId = lineParts[3].split("^")[0]

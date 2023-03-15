@@ -29,6 +29,7 @@ class StringUtils {
         fun String.hashMD5(): String {
             return md5(this).toHex()
         }
+
         fun getNormalizedShortName(name: String, maxLength: Int = 0) : String {
             var shortName = name.normalize()
             if (shortName.contains("_repeating_group")) {
@@ -59,6 +60,7 @@ class StringUtils {
             }
             return newName
         }
+
     }
 
 }
