@@ -12,6 +12,7 @@ import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.redisModels.ValueSetConcept
 import gov.cdc.dex.util.StringUtils
+import gov.cdc.dex.util.StringUtils.Companion.normalize
 
 class Transformer(redisProxy: RedisProxy)  {
 
@@ -179,8 +180,13 @@ class Transformer(redisProxy: RedisProxy)  {
                     mapFromMsg + mapFromElemNotInMsg
                 } // .blockElementsNameDataTupMap
                 // logger.info("\nblockElementsNameDataTupMap: --> ${Gson().toJson(blockElementsNameDataTupMap)}\n\n")
-
-                StringUtils.getNormalizedShortName(block.name, MAX_BLOCK_NAME_LENGTH) to blockElementsNameDataTupMap
+                // make sure the block is properly identified as a repeating block
+                val blockName = if (block.name.normalize().contains("repeating_group")) {
+                    block.name
+                } else {
+                    "${block.name} repeating group"
+                }
+                StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH) to blockElementsNameDataTupMap
             } // .blocksNonSingleModel
 
             
