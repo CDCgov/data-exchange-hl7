@@ -13,7 +13,15 @@ import org.junit.jupiter.api.Test
 
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.time.LocalDate
 import java.util.NoSuchElementException
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.format.ResolverStyle
+import java.util.Date
 
 class MMGValidatorTest {
 
@@ -176,5 +184,64 @@ class MMGValidatorTest {
             println(e.message)
             assert(e is InvalidConditionException)
         }
+    }
+
+    @Test
+    fun testDateIsValid() {
+        var exceptionThrown = false
+        val dateString = "20230229"
+        /*
+            valid patterns:
+            for DT
+               uuuu
+               uuuuMM
+               uuuuMMdd
+
+            for DTM or TS
+               uuuu
+               uuuuMM
+               uuuuMMdd
+               uuuuMMddHHmm
+               uuuuMMddHHmmss
+               uuuuMMddHHmmss.S
+               uuuuMMddHHmmss.SS
+               uuuuMMddHHmmss.SSS
+               uuuuMMddHHmmss.SSSS
+
+           any of the above may include +/-Z
+         */
+        val formatter = DateTimeFormatter.ofPattern("uuuuMMdd[Z]").withResolverStyle(ResolverStyle.STRICT)
+        try {
+            val localDate = LocalDate.parse(dateString, formatter)
+            println(localDate)
+        } catch (e: Exception) {
+            exceptionThrown = true
+            println(e.message)
+        }
+        assert(exceptionThrown)
+
+        exceptionThrown = false
+        val dateString2 = "20230228+0800"
+        try {
+            val localDate2 = LocalDate.parse(dateString2, formatter)
+        } catch (e: Exception) {
+            exceptionThrown = true
+        }
+        assert(!exceptionThrown)
+
+        exceptionThrown = false
+        val dateTimeString = "202302280115"
+        val dateTimeString2 = "202302281530+0800"
+        val dtf = DateTimeFormatter.ofPattern("uuuuMMddHHmm[Z]").withResolverStyle(ResolverStyle.STRICT)
+        try {
+            val localDt = LocalDateTime.parse(dateTimeString, dtf)
+            val localDt2 = LocalDateTime.parse(dateTimeString2, dtf)
+            println(localDt)
+            println(localDt2)
+        } catch( e: Exception ) {
+            exceptionThrown = true
+            println(e.message)
+        }
+        assert(!exceptionThrown)
     }
 }
