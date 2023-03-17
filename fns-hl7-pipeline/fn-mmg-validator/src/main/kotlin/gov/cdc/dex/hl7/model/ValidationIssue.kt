@@ -22,7 +22,8 @@ enum class ValidationErrorMessage(val message: String) {
     VOCAB_ISSUE("Vocabulary code system code and code concept not found in vocabulary entries"),
     SEGMENT_NOT_IN_MMG("HL7 segment found in the message that is not part of the MMG definitions"),
     OBSERVATION_SUB_ID_MISSING("Observation Sub-Id must be populated for data elements in a repeating group."),
-    OBSERVATION_SUB_ID_NOT_UNIQUE("The combination of the data element identifier (OBX-3) and the observation sub-id (OBX-4) must be unique.")
+    OBSERVATION_SUB_ID_NOT_UNIQUE("The combination of the data element identifier (OBX-3) and the observation sub-id (OBX-4) must be unique."),
+    DATE_INVALID("Date/time provided is not a valid date/time")
 }
 
 

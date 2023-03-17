@@ -1,5 +1,6 @@
 
 import com.google.gson.GsonBuilder
+import gov.cdc.dex.hl7.DateUtil
 import gov.cdc.dex.hl7.MmgValidator
 import gov.cdc.dex.hl7.exception.InvalidMessageException
 import gov.cdc.dex.hl7.model.MmgReport
@@ -188,60 +189,18 @@ class MMGValidatorTest {
 
     @Test
     fun testDateIsValid() {
-        var exceptionThrown = false
-        val dateString = "20230229"
-        /*
-            valid patterns:
-            for DT
-               uuuu
-               uuuuMM
-               uuuuMMdd
-
-            for DTM or TS
-               uuuu
-               uuuuMM
-               uuuuMMdd
-               uuuuMMddHHmm
-               uuuuMMddHHmmss
-               uuuuMMddHHmmss.S
-               uuuuMMddHHmmss.SS
-               uuuuMMddHHmmss.SSS
-               uuuuMMddHHmmss.SSSS
-
-           any of the above may include +/-Z
-         */
-        val formatter = DateTimeFormatter.ofPattern("uuuuMMdd[Z]").withResolverStyle(ResolverStyle.STRICT)
-        try {
-            val localDate = LocalDate.parse(dateString, formatter)
-            println(localDate)
-        } catch (e: Exception) {
-            exceptionThrown = true
-            println(e.message)
-        }
-        assert(exceptionThrown)
-
-        exceptionThrown = false
-        val dateString2 = "20230228+0800"
-        try {
-            val localDate2 = LocalDate.parse(dateString2, formatter)
-        } catch (e: Exception) {
-            exceptionThrown = true
-        }
-        assert(!exceptionThrown)
-
-        exceptionThrown = false
-        val dateTimeString = "202302280115"
-        val dateTimeString2 = "202302281530+0800"
-        val dtf = DateTimeFormatter.ofPattern("uuuuMMddHHmm[Z]").withResolverStyle(ResolverStyle.STRICT)
-        try {
-            val localDt = LocalDateTime.parse(dateTimeString, dtf)
-            val localDt2 = LocalDateTime.parse(dateTimeString2, dtf)
-            println(localDt)
-            println(localDt2)
-        } catch( e: Exception ) {
-            exceptionThrown = true
-            println(e.message)
-        }
-        assert(!exceptionThrown)
+        assert(DateUtil.validateHL7Date("20230301") == "OK")
+        println(DateUtil.validateHL7Date("20230229"))
+        assert(DateUtil.validateHL7Date("20230229") != "OK")
+        assert(DateUtil.validateHL7Date("20220812090115") == "OK")
+        assert(DateUtil.validateHL7Date("202302281530-0800") == "OK")
+        assert(DateUtil.validateHL7Date("202302281530+0500") == "OK")
+        assert(DateUtil.validateHL7Date("20220812090115.0") == "OK")
+        assert(DateUtil.validateHL7Date("20220812090115.02+0600") == "OK")
+        assert(DateUtil.validateHL7Date("20220812090115.1234") == "OK")
+        assert(DateUtil.validateHL7Date("202208120915.02") != "OK")
+        println(DateUtil.validateHL7Date("202208120915.02"))
+        println(DateUtil.validateHL7Date("202313300515"))
+        assert(DateUtil.validateHL7Date("202313300515") != "OK")
     }
 }

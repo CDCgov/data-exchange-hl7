@@ -58,6 +58,7 @@ class MmgValidator {
                         }
                     }
 
+
                     if (msgSegments.isDefined)  {
                         val msgValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
                         if (msgValues.isDefined)
