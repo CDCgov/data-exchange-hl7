@@ -16,30 +16,15 @@ class DateUtil {
         const val MILLISECOND = "S"
         const val OPTIONAL_ZONE = "[Z]"
 
-        private val PATTERNS = hashMapOf<Int,String>(
-            4 to "$YEAR$OPTIONAL_ZONE",
-            6 to "$YEAR$MONTH$OPTIONAL_ZONE",
-            8 to "$YEAR$MONTH$DAY$OPTIONAL_ZONE",
-            12 to "$YEAR$MONTH$DAY$HOUR$MINUTE$OPTIONAL_ZONE",
-            14 to "$YEAR$MONTH$DAY$HOUR$MINUTE$SECOND$OPTIONAL_ZONE",
-            16 to "$YEAR$MONTH$DAY$HOUR$MINUTE$SECOND.$MILLISECOND$OPTIONAL_ZONE",
-            17 to "$YEAR$MONTH$DAY$HOUR$MINUTE$SECOND.${MILLISECOND * 2}$OPTIONAL_ZONE",
-            18 to "$YEAR$MONTH$DAY$HOUR$MINUTE$SECOND.${MILLISECOND * 3}$OPTIONAL_ZONE",
-            19 to "$YEAR$MONTH$DAY$HOUR$MINUTE$SECOND.${MILLISECOND * 4}$OPTIONAL_ZONE"
-        )
-
         fun validateHL7Date(hl7Date: String): String {
             val pattern = determineDatePattern(hl7Date)
-            return if (pattern.isNotEmpty()) {
-                val formatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT)
-                if (pattern.contains(HOUR)) {
-                    validateDateTime(hl7Date, formatter)
-                } else {
-                    validateDate(hl7Date, formatter)
-                }
+            val formatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT)
+            return if (pattern.contains(HOUR)) {
+                validateDateTime(hl7Date, formatter)
             } else {
-                "Error: Invalid date format"
+                validateDate(hl7Date, formatter)
             }
+
         }
 
    /*     fun validateMMWRYear(mmwrYear: String): String {
@@ -82,7 +67,20 @@ class DateUtil {
             } else {
                 dateString.length
             }
-            return PATTERNS[len] ?: ""
+            return buildPattern(len)
+        }
+
+        private fun buildPattern(length: Int) : String {
+            val builder = StringBuilder()
+            if (length >= 4) builder.append(YEAR)
+            if (length >= 6) builder.append(MONTH)
+            if (length >= 8) builder.append(DAY)
+            if (length >= 10) builder.append(HOUR)
+            if (length >= 12) builder.append(MINUTE)
+            if (length >= 14) builder.append(SECOND)
+            if (length in 16..19) builder.append(".${MILLISECOND * (length - 15)}")
+            builder.append(OPTIONAL_ZONE)
+            return builder.toString()
         }
     }
 
