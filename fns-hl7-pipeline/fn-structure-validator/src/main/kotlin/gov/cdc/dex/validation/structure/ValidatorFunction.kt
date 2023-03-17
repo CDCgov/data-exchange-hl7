@@ -44,7 +44,7 @@ class ValidatorFunction {
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
             consumerGroup = "%EventHubConsumerGroup%",
-            // cardinality = Cardinality.MANY
+             cardinality = Cardinality.MANY
         ) message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext
@@ -67,10 +67,10 @@ class ValidatorFunction {
 
             try {
 
-                val hl7Content = getEncodedValueFromJson("content", inputEvent)
-                val metadata = getObjectFromJson("metadata", inputEvent)
-                val filePath = getObjectFromJson("metadata.provenance.file_path", inputEvent).asString
-                val messageUUID = getObjectFromJson("message_uuid", inputEvent).asString
+                val hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
+                val metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
+                val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
+                val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
                 log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                 //Main FN Logic
                 val report = validateMessage(hl7Content, messageUUID, filePath)
@@ -107,24 +107,6 @@ class ValidatorFunction {
         }
     }
 
-
-
-    private fun getEncodedValueFromJson(property: String, inputEvent: JsonObject): String {
-        return try {
-            JsonHelper.getValueFromJsonAndBase64Decode(property, inputEvent)
-        } catch (e: UnknownPropertyError) {
-            throw InvalidMessageException("Unable to process Message: Unparsable JSON content.")
-        }
-
-    }
-
-    private fun getObjectFromJson(property: String, inputEvent: JsonObject): JsonObject {
-        return try {
-            JsonHelper.getValueFromJson(property, inputEvent).asJsonObject
-        } catch (e: UnknownPropertyError) {
-            throw InvalidMessageException("Unable to process Message: Unparsable JSON content.")
-        }
-    }
     private fun getPhinSpec(hl7Content: String, messageUUID: String, filePath: String): String {
         return try {
            HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
@@ -135,7 +117,7 @@ class ValidatorFunction {
 
 
 
-    fun getSafeEnvVariable(varName: String): String {
+    private fun getSafeEnvVariable(varName: String): String {
         val varValue = System.getenv(varName)
         if (varValue.isNullOrEmpty()) {
             throw Exception("$varName Not Set")
