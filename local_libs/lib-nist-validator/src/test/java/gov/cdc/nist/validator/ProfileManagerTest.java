@@ -28,6 +28,7 @@ public class ProfileManagerTest {
             System.out.println("nist = " + nist);
         } catch (Exception e) {
             e.printStackTrace();
+            assert(false);
         }
     }
 
@@ -36,7 +37,7 @@ public class ProfileManagerTest {
             try {
                 ProfileManager nistValidator = new ProfileManager(new ResourceFileFetcher(), "/NOTF_ORU_V3.0");
 
-                var nist = nistValidator.validate(getTestFile("hl7StructureValid.txt"));
+                var nist = nistValidator.validate(getTestFile("hl7TestMessage.txt"));
                 System.out.println("nist.getStatus() = " + nist.getStatus());
                 System.out.println("nist.getErrorCounts() = " + nist.getErrorCounts());
                 System.out.println("nist.getErrorCounts().getStructure() = " + nist.getErrorCounts().getStructure());
@@ -47,6 +48,7 @@ public class ProfileManagerTest {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                assert(false);
             }
     }
 
@@ -78,7 +80,7 @@ public class ProfileManagerTest {
 
     @Test
     public void testLoadXom() {
-//        Object xml = XOMDocumentBuilder.build(this.getClass().getResourceAsStream("/NND_ORU_V2.0/PROFILE.xml"), this.getClass().getResourceAsStream("/Profile.xsd"), null);
+//        Object xml = XOMDocumentBuilder.build(this.getClass().getResourceAsStream("/NND_ORU_V2.0/Profile.xml"), this.getClass().getResourceAsStream("/Profile.xsd"), null);
         Object xml = XOMDocumentBuilder.build(this.getClass().getResourceAsStream("/NND_ORU_V2.0/PROFILE.xml"));
         System.out.println("xml = " + xml);
     }

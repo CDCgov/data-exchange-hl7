@@ -43,11 +43,11 @@ public class ProfileManager {
             InputStream commons = nist.xml.util.ClassPathResourceResolver.class.getResourceAsStream("/rules/Commons.xsd");
 
             logger.info("AUDIT:: Loading profile " + profile);
-            InputStream profileXML = profileFetcher.getFileAsInputStream(profile + "/PROFILE.xml");
+            InputStream profileXML = profileFetcher.getFileAsInputStream(profile + "/Profile.xml");
             // The get() at the end will throw an exception if something goes wrong
             Profile profileX = XMLDeserializer.deserialize(profileXML).get();
             // get ConformanceContext
-            InputStream contextXML1 = profileFetcher.getFileAsInputStream(profile + "/CONSTRAINTS.xml");
+            InputStream contextXML1 = profileFetcher.getFileAsInputStream(profile + "/Constraints.xml");
             // The second conformance context XML file
             List<InputStream> confContexts = new ArrayList<>(Collections.singletonList(contextXML1));
             try {
@@ -63,7 +63,7 @@ public class ProfileManager {
             // The get() at the end will throw an exception if something goes wrong
             ConformanceContext conformanceContext = DefaultConformanceContext.apply(confContexts).get();
             // get ValueSetLibrary
-            InputStream vsLibXML = profileFetcher.getFileAsInputStream(profile + "/VALUESETS.xml");
+            InputStream vsLibXML = profileFetcher.getFileAsInputStream(profile + "/ValueSets.xml");
             ValueSetLibrary valueSetLibrary = ValueSetLibraryImpl.apply(vsLibXML).get();
 
             validator = new SyncHL7Validator(profileX, valueSetLibrary, conformanceContext);
