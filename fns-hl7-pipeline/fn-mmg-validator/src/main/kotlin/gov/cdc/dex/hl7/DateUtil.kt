@@ -3,7 +3,10 @@ package gov.cdc.dex.hl7
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 import java.time.format.ResolverStyle
+import java.time.temporal.ChronoField
+
 
 class DateUtil {
     companion object {
@@ -17,12 +20,19 @@ class DateUtil {
         const val OPTIONAL_ZONE = "[Z]"
 
         fun validateHL7Date(hl7Date: String): String {
+            // all 9s and all 0s pattern has already been examined
+            // by Structure Validator, so OK to pass through if present
+            if (hl7Date == 9.toString() * hl7Date.length ||
+                    hl7Date == 0.toString() * hl7Date.length) { return "OK" }
+            // otherwise, validate date content
             val pattern = determineDatePattern(hl7Date)
             val formatter = DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT)
             return if (pattern.contains(HOUR)) {
                 validateDateTime(hl7Date, formatter)
-            } else {
+            } else if (pattern.contains(DAY)){
                 validateDate(hl7Date, formatter)
+            } else {
+                validateDateParts(hl7Date, pattern)
             }
 
         }
@@ -35,9 +45,24 @@ class DateUtil {
 
         }
 */
+        private fun validateDateParts(dateString: String, pattern: String) : String {
+            if (dateString.length % 2 != 0) {
+                return "Error: Unable to parse date of length $dateString.length"
+            }
+           // since month and day are optional, but LocalDate requires them,
+           // this will insert default values for month and day if needed
+           val format = DateTimeFormatterBuilder()
+               .appendPattern(pattern)
+               .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
+               .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+               .toFormatter()
+
+            return validateDate(dateString, format)
+        }
+
         private fun validateDate(dateString: String, formatter: DateTimeFormatter): String {
             return try {
-                val localDate = LocalDate.parse(dateString, formatter)
+                LocalDate.parse(dateString, formatter)
                 "OK"
             } catch (e: Exception) {
                 "Error: ${e.message}"
@@ -46,7 +71,7 @@ class DateUtil {
 
         private fun validateDateTime(dateTimeString: String, formatter: DateTimeFormatter): String {
             return try {
-                val localDateTime = LocalDateTime.parse(dateTimeString, formatter)
+                LocalDateTime.parse(dateTimeString, formatter)
                 "OK"
             } catch (e: Exception) {
                 "Error: ${e.message}"

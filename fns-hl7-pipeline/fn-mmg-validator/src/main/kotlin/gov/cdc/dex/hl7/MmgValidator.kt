@@ -19,6 +19,9 @@ class MmgValidator {
         const val EVENT_CODE_PATH = "OBR[1]-31.1"
         const val REPORTING_JURISDICTION_PATH = "OBX[@3.1='77968-6']-5.1"
         const val ALT_REPORTING_JURISDICTION_PATH = "OBX[@3.1='NOT116']-5.1"
+        val DATE_DATA_TYPES = listOf("DT", "DTM", "TS")
+        const val MMWR_YEAR_CODE = "77992-6"
+        const val MMWR_WEEK_CODE = "77991-8"
     }
     private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
     private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
@@ -58,16 +61,20 @@ class MmgValidator {
                         }
                     }
 
-
                     if (msgSegments.isDefined)  {
                         val msgValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
-                        if (msgValues.isDefined)
-                            checkVocab(element,msgValues.get(), hl7Message, report)
+                        if (msgValues.isDefined) {
+                            checkVocab(element, msgValues.get(), hl7Message, report)
+                            if (element.mappings.hl7v251.dataType in DATE_DATA_TYPES) {
+                                this.checkDateContent(element, msgValues.get(), hl7Message, report)
+                            }
+                        }
                     }
                 } // .for element
             } // .for block
         }// .for mmg
     } // .validate
+
 
     private fun validateObservationSubId(hl7Message: String, blockRepeat: Boolean, element: Element, msgValues: List<String>, report:MutableList<ValidationIssue>) {
         // for repeating blocks only: check that OBX-4 is valued and is unique for each OBX-3.1
@@ -279,6 +286,26 @@ class MmgValidator {
                 }//.forEach Inner Array
             } //.forEach Outer Array
         }
+    }
+    private fun checkDateContent(elem: Element, msgValues: Array<Array<String>>, message: String, report:MutableList<ValidationIssue> ) {
+        msgValues.forEachIndexed { outIdx, outArray ->
+            outArray.forEachIndexed { _, inElem ->
+                val dateValidationResponse = DateUtil.validateHL7Date(inElem)
+                if (dateValidationResponse != "OK") {
+                    val lineNbr = getLineNumber(message, elem, outIdx)
+                    val issue = ValidationIssue(
+                        getCategory(elem.mappings.hl7v251.usage),
+                        ValidationIssueType.DATA_TYPE,
+                        elem.name,
+                        elem.getValuePath(),
+                        lineNbr,
+                        ValidationErrorMessage.DATE_INVALID,
+                        "$dateValidationResponse on line $lineNbr"
+                    )
+                    report.add(issue)
+                }
+            }//.forEach Inner Array
+        } //.forEach Outer Array
     }
 
     //Some Look ps are reused - storing them so no need to re-download them from Redis.
