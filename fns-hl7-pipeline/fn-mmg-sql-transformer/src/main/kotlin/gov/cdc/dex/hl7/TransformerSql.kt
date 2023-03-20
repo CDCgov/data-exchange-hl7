@@ -12,6 +12,7 @@ import gov.cdc.dex.redisModels.Block
 import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.util.StringUtils
+import gov.cdc.dex.util.StringUtils.Companion.normalize
 
 class TransformerSql {
 
@@ -156,14 +157,17 @@ class TransformerSql {
     fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
 
         val repeatedBlocksModel = blocks.associate { blk ->
-            val blkName = StringUtils.getNormalizedShortName(blk.name, MAX_BLOCK_NAME_LENGTH)
+            val blockName = if (blk.name.normalize().contains("repeating_group")) {
+                blk.name
+            } else {
+                "${blk.name} repeating group"
+            }
+            val blkName = StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH)
             val blkModel = modelJson[blkName]
 
             if (blkModel.isJsonNull) {
                 blkName to blkModel // this is null
             } else {
-
-                // TODO: sql model for blocks
 
                 val blkModelArr = blkModel.asJsonArray
 

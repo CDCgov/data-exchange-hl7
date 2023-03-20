@@ -31,6 +31,7 @@ import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.StringUtils
+import gov.cdc.dex.util.StringUtils.Companion.normalize
 
 
 class MbtTest {
@@ -219,8 +220,13 @@ class MbtTest {
  
     @Test
     fun getSmallBlockName(){
-        val name = "Vaccination History Repeating Group Section to specify the detailed vaccine record information - Repeats for each vaccine dose."
-        var smallName = StringUtils.getNormalizedShortName(name, 30)
+        val name = "Vaccination History Section to specify the detailed vaccine record information - Repeats for each vaccine dose."
+        val blockName = if (name.normalize().contains("repeating_group")) {
+            name
+        } else {
+            "$name repeating group"
+        }
+        val smallName = StringUtils.getNormalizedShortName(blockName, 30)
         println(smallName)
         assert(smallName.length <= 30)
         assert(smallName.endsWith("_rg"))
