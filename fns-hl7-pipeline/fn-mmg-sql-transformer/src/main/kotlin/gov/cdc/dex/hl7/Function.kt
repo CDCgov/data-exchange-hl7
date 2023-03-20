@@ -183,14 +183,14 @@ class Function {
                     ) // .mmgSqlModel
 
                     updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_OK, mmgSqlModel, eventHubMD[messageIndex],
-                        evHubSender, eventHubSendOkName, gsonWithNullsOn, inputEvent, null)
+                        evHubSender, eventHubSendOkName, gsonWithNullsOn, inputEvent,   null, mmgKeyNames.asList())
                     context.logger.info("Processed OK for MMG-SQL fileName: $fileName, messageUUID: $messageUUID, ehDestination: $eventHubSendOkName")
 
                 } catch (e: Exception) {
-
                     context.logger.severe("Exception processing transformation: Unable to process Message fileName: $fileName, messageUUID: $messageUUID, due to exception: ${e.message}")
                     updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
-                        evHubSender, eventHubSendErrsName, gsonWithNullsOn, inputEvent, e)
+                        evHubSender, eventHubSendErrsName, gsonWithNullsOn, inputEvent, e, listOf()
+                    )
                     context.logger.info("Processed ERROR for MMG-SQL fileName: $fileName, messageUUID: $messageUUID, ehDestination: $eventHubSendErrsName")
                 } // .catch
 
@@ -212,9 +212,9 @@ class Function {
     } // .extractValue
 
     private fun updateMetadataAndDeliver(startTime: String, metadata: JsonObject, status: String, report: Map<String, Any?>?, eventHubMD: EventHubMetadata,
-        evHubSender: EventHubSender, evTopicName: String, gsonWithNullsOn: Gson, inputEvent: JsonObject, exception: Exception?) {
+        evHubSender: EventHubSender, evTopicName: String, gsonWithNullsOn: Gson, inputEvent: JsonObject, exception: Exception?, config: List<String>) {
 
-        val processMD = MmgSqlTransProcessMetadata(status=status, report=report, eventHubMD = eventHubMD)
+        val processMD = MmgSqlTransProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
         metadata.addArrayElement("processes", processMD)

@@ -404,7 +404,7 @@
   "blood_donor_implicated_during_investigation": null,
   "donated_product": null,
   "blood_bank_notified": null,
-  "repeating_variables_for_diseas": [
+  "repeating_variables_for_dis_rg": [
     {
       "country_of_exposure": {
         "identifier": "USA",
@@ -436,7 +436,7 @@
       "county_of_exposure": "Fairfax County"
     }
   ],
-  "clinical_manifestation": [
+  "clinical_manifestation_rg": [
     {
       "clinical_manifestation": {
         "identifier": "386661006",
@@ -762,7 +762,7 @@
       }
     }
   ],
-  "travel_history": [
+  "travel_history_rg": [
     {
       "travel_state": {
         "identifier": "37",
