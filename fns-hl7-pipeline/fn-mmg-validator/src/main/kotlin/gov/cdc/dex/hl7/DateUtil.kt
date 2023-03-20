@@ -37,35 +37,45 @@ class DateUtil {
 
         }
 
-   /*     fun validateMMWRYear(mmwrYear: String): String {
+        fun validateMMWRYear(mmwrYear: String): String {
+            val formatter = getFormatterForIncompleteDate("uuuu")
+            return try {
+                val parsedYear = LocalDate.parse(mmwrYear, formatter)
+                val currentYear = LocalDateTime.now().plusHours(24).toLocalDate()
+                if (parsedYear <= currentYear) {
+                    "OK"
+                } else {
+                    "Year cannot be greater than current year"
+                }
+            } catch (e : Exception) {
+                "${e.message}"
+            }
 
         }
 
-        fun validateMMWRDay(mmwrDay: String): String {
-
-        }
-*/
         private fun validateDateParts(dateString: String, pattern: String) : String {
             if (dateString.length % 2 != 0) {
-                return "Error: Unable to parse date of length $dateString.length"
+                return "Unable to parse date of length ${dateString.length}"
             }
            // since month and day are optional, but LocalDate requires them,
            // this will insert default values for month and day if needed
-           val format = DateTimeFormatterBuilder()
-               .appendPattern(pattern)
-               .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
-               .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-               .toFormatter()
-
-            return validateDate(dateString, format)
+            return validateDate(dateString, getFormatterForIncompleteDate(pattern))
         }
 
+        private fun getFormatterForIncompleteDate(pattern: String) : DateTimeFormatter {
+            return DateTimeFormatterBuilder()
+                .appendPattern(pattern)
+                .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                .toFormatter()
+
+        }
         private fun validateDate(dateString: String, formatter: DateTimeFormatter): String {
             return try {
                 LocalDate.parse(dateString, formatter)
                 "OK"
             } catch (e: Exception) {
-                "Error: ${e.message}"
+                "${e.message}"
             }
         }
 
@@ -74,7 +84,7 @@ class DateUtil {
                 LocalDateTime.parse(dateTimeString, formatter)
                 "OK"
             } catch (e: Exception) {
-                "Error: ${e.message}"
+                "${e.message}"
             }
         }
 

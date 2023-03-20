@@ -290,17 +290,22 @@ class MmgValidator {
     private fun checkDateContent(elem: Element, msgValues: Array<Array<String>>, message: String, report:MutableList<ValidationIssue> ) {
         msgValues.forEachIndexed { outIdx, outArray ->
             outArray.forEachIndexed { _, inElem ->
-                val dateValidationResponse = DateUtil.validateHL7Date(inElem)
+
+                val dateValidationResponse = if (elem.mappings.hl7v251.identifier != MMWR_YEAR_CODE){
+                    DateUtil.validateHL7Date(inElem)
+                } else {
+                    DateUtil.validateMMWRYear(inElem)
+                }
                 if (dateValidationResponse != "OK") {
                     val lineNbr = getLineNumber(message, elem, outIdx)
                     val issue = ValidationIssue(
                         getCategory(elem.mappings.hl7v251.usage),
-                        ValidationIssueType.DATA_TYPE,
+                        ValidationIssueType.DATE_CONTENT,
                         elem.name,
                         elem.getValuePath(),
                         lineNbr,
                         ValidationErrorMessage.DATE_INVALID,
-                        "$dateValidationResponse on line $lineNbr"
+                        dateValidationResponse
                     )
                     report.add(issue)
                 }

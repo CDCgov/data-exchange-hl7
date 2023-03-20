@@ -10,7 +10,8 @@ enum class ValidationIssueType(val message: String) {
     CARDINALITY("cardinality"), 
     VOCAB("vocabulary"),
     SEGMENT_NOT_IN_MMG("segment_not_in_mmg"),
-    OBSERVATION_SUB_ID_VIOLATION("observation_sub_id_violation");
+    OBSERVATION_SUB_ID_VIOLATION("observation_sub_id_violation"),
+    DATE_CONTENT("date_content")
 }
 
 enum class ValidationErrorMessage(val message: String) {

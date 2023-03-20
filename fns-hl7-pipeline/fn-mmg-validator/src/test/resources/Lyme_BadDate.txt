@@ -43,7 +43,7 @@ OBX|39|DT|77995-9^Date Reported^LN||20180912||||||F
 OBX|40|TS|77972-8^Earliest Date Reported to County^LN||99999999||||||F
 OBX|41|TS|77973-6^Earliest Date Reported to State^LN||20180912||||||F
 OBX|42|SN|77991-8^MMWR Week^LN||^37||||||F
-OBX|43|DT|77992-6^MMWR Year^LN||2018||||||F
+OBX|43|DT|77992-6^MMWR Year^LN||2024||||||F
 OBX|44|DT|77970-2^Date First Reported to PHD^LN||20180912||||||F
 OBX|45|CWE|77966-0^Reporting State^LN||47^Tennessee^FIPS5_2||||||F
 OBX|46|CWE|77967-8^Reporting County^LN||47003^Bedford, TN^FIPS6_4||||||F
