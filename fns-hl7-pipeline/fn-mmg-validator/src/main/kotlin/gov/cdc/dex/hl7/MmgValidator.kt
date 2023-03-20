@@ -21,7 +21,7 @@ class MmgValidator {
         const val ALT_REPORTING_JURISDICTION_PATH = "OBX[@3.1='NOT116']-5.1"
         val DATE_DATA_TYPES = listOf("DT", "DTM", "TS")
         const val MMWR_YEAR_CODE = "77992-6"
-        const val MMWR_WEEK_CODE = "77991-8"
+        const val MMWR_YEAR_LEGACY_CODE = "INV166"
     }
     private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
     private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
@@ -291,7 +291,8 @@ class MmgValidator {
         msgValues.forEachIndexed { outIdx, outArray ->
             outArray.forEachIndexed { _, inElem ->
 
-                val dateValidationResponse = if (elem.mappings.hl7v251.identifier != MMWR_YEAR_CODE){
+                val dateValidationResponse = if (elem.mappings.hl7v251.identifier != MMWR_YEAR_CODE
+                    && elem.mappings.hl7v251.identifier != MMWR_YEAR_LEGACY_CODE){
                     DateUtil.validateHL7Date(inElem)
                 } else {
                     DateUtil.validateMMWRYear(inElem)
