@@ -8,7 +8,6 @@ import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
-
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.model.StructureValidatorProcessMetadata
@@ -16,10 +15,8 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-import gov.cdc.dex.util.UnknownPropertyError
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
-
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
 import org.slf4j.LoggerFactory
