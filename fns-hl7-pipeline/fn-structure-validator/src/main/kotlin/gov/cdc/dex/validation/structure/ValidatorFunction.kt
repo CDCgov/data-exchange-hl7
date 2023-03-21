@@ -73,9 +73,10 @@ class ValidatorFunction {
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
                 log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                 //Main FN Logic
-                val report = validateMessage(hl7Content, messageUUID, filePath)
+                val phinSpec = getPhinSpec(hl7Content, messageUUID, filePath)
+                val report = validateMessage(hl7Content, phinSpec)
                 //preparing EventHub payload:
-                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages])
+                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages], listOf(phinSpec))
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
 
@@ -126,8 +127,7 @@ class ValidatorFunction {
     }
 
 
-    private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String): NistReport {
-        val phinSpec = getPhinSpec(hl7Message, messageUUID, filePath)
+    private fun validateMessage(hl7Message: String, phinSpec: String): NistReport {
         val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
         return nistValidator.validate(hl7Message)
     }
@@ -151,7 +151,8 @@ class ValidatorFunction {
         }
 
         return runCatching {
-            val report = validateMessage(hl7Message, "N/A", "N/A")
+            val phinSpec = getPhinSpec(hl7Message, "N/A", "N/A")
+            val report = validateMessage(hl7Message, phinSpec)
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
         }.onFailure { exception ->
             context.logger.severe("error validating message: ${exception.message}")
