@@ -270,7 +270,7 @@ class MmgValidator {
             msgValues.forEachIndexed { outIdx, outArray ->
                 outArray.forEachIndexed { _, inElem ->
                     //if (concepts.filter { it.conceptCode == inElem }.isEmpty()) {
-                    if (!isConceptValid(elem.valueSetCode!!, inElem)) {
+                    if (!isConceptValid( elem.valueSetCode!!, inElem )) {
                         val lineNbr = getLineNumber(message, elem, outIdx)
                         val issue = ValidationIssue(
                             getCategory(elem.mappings.hl7v251.usage),

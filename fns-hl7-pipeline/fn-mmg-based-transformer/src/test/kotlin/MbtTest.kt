@@ -58,7 +58,7 @@ class MbtTest {
     @Test
     fun testRedisInstanceUsed() {
 
-        logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
+        logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> $REDIS_CACHE_NAME")
         assertEquals(REDIS_CACHE_NAME, "tf-vocab-cache-dev.redis.cache.windows.net")
     } // .testRedisInstanceUsed
 
@@ -306,7 +306,7 @@ class MbtTest {
 
     } // .testLoadMMG
 
-
+    @Test
     fun testMmgThrowsException() {
 
         assertFailsWith<InvalidConditionException>(
