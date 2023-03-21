@@ -43,11 +43,11 @@ public class ProfileManager {
             InputStream commons = nist.xml.util.ClassPathResourceResolver.class.getResourceAsStream("/rules/Commons.xsd");
 
             logger.info("AUDIT:: Loading profile " + profile);
-            InputStream profileXML = profileFetcher.getFileAsInputStream(profile + "/Profile.xml");
+            InputStream profileXML = profileFetcher.getFileAsInputStream(profile + "/PROFILE.xml");
             // The get() at the end will throw an exception if something goes wrong
             Profile profileX = XMLDeserializer.deserialize(profileXML).get();
             // get ConformanceContext
-            InputStream contextXML1 = profileFetcher.getFileAsInputStream(profile + "/Constraints.xml");
+            InputStream contextXML1 = profileFetcher.getFileAsInputStream(profile + "/CONSTRAINTS.xml");
             // The second conformance context XML file
             List<InputStream> confContexts = new ArrayList<>(Collections.singletonList(contextXML1));
             try {

@@ -80,7 +80,7 @@ public class ProfileManagerTest {
 
     @Test
     public void testLoadXom() {
-//        Object xml = XOMDocumentBuilder.build(this.getClass().getResourceAsStream("/NND_ORU_V2.0/Profile.xml"), this.getClass().getResourceAsStream("/Profile.xsd"), null);
+//        Object xml = XOMDocumentBuilder.build(this.getClass().getResourceAsStream("/NND_ORU_V2.0/PROFILE.xml"), this.getClass().getResourceAsStream("/Profile.xsd"), null);
         Object xml = XOMDocumentBuilder.build(this.getClass().getResourceAsStream("/NND_ORU_V2.0/PROFILE.xml"));
         System.out.println("xml = " + xml);
     }
