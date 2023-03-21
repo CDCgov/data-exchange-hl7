@@ -11,21 +11,23 @@ import java.io.InputStream
 class ResourceFileFetcher: ProfileFetcher {
 
     @Throws(InvalidFileException::class)
-    override fun getFile(file: String): String {
+    override fun getFile(file: String, req: Boolean): String? {
         TODO("Not yet implemented")
     }
 
     @Throws(InvalidFileException::class)
-    override fun getFileAsInputStream(file: String): InputStream {
-        return getResourceFile(file)
+    override fun getFileAsInputStream(file: String, req: Boolean): InputStream? {
+        return getResourceFile(file, req)
     }
 
 
-    private fun getResourceFile(fileName: String): InputStream {
+    private fun getResourceFile(fileName: String, req:Boolean): InputStream? {
         try {
             return this::class.java.getResourceAsStream(fileName)!!
         } catch (e: NullPointerException) {
-            throw InvalidFileException("Unable to load profile for $fileName")
+            if (req)
+                throw InvalidFileException("Unable to load profile for $fileName")
+            else return null
         }
     }
 }
