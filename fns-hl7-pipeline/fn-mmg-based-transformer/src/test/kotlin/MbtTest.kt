@@ -58,8 +58,8 @@ class MbtTest {
     @Test
     fun testRedisInstanceUsed() {
 
-        logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> $REDIS_CACHE_NAME")
-        assertEquals(REDIS_CACHE_NAME, "tf-vocab-cache-dev.redis.cache.windows.net")
+        logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
+        assertEquals(REDIS_CACHE_NAME, "ocio-ede-dev-dex-cache.redis.cache.windows.net")
     } // .testRedisInstanceUsed
 
 
