@@ -58,7 +58,7 @@ class MbtTest {
     @Test
     fun testRedisInstanceUsed() {
 
-        logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
+        logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> $REDIS_CACHE_NAME")
         assertEquals(REDIS_CACHE_NAME, "tf-vocab-cache-dev.redis.cache.windows.net")
     } // .testRedisInstanceUsed
 
@@ -280,6 +280,29 @@ class MbtTest {
     } // .testTransformerHep
 
     @Test
+    fun testTransformerGenv1() {
+
+        // hl7
+        val hl7FilePath = "/Tuleremia.hl7"
+        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
+        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
+
+        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "10230")
+
+        mmgs.forEach {
+            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
+
+        val transformer = Transformer(redisProxy)
+        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+
+        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+
+        val mmgModel = model1 + model2
+
+        logger.info("testTransformer Genv1: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
+    } // .testTransformerHep
+    @Test
     fun testConditionNotSupportedException() {
 
         assertFails(
@@ -306,7 +329,7 @@ class MbtTest {
 
     } // .testLoadMMG
 
-
+    @Test
     fun testMmgThrowsException() {
 
         assertFailsWith<InvalidConditionException>(
