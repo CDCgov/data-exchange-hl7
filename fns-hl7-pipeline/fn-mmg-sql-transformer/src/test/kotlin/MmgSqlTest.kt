@@ -40,7 +40,7 @@ class MmgSqlTest {
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         const val TABLES_KEY_NAME = "tables"
 
-        const val REDIS_INSTANCE_NAME = "tf-vocab-cache-dev.redis.cache.windows.net"
+        const val REDIS_INSTANCE_NAME = "ocio-ede-dev-dex-cache.redis.cache.windows.net"
 
         val MESSAGE_PROFILE_IDENTIFIER = "message_profile_identifier"
 
