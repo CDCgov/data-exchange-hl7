@@ -120,7 +120,7 @@
           "codeSystem": "PHINQUESTION",
           "legacyPriority": "R",
           "priority": 1,
-          "isRepeat": false,
+          "isRepeat": true,
           "mayRepeat": "Y/2",
           "valueSetCode": "",
           "mappings": {

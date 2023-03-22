@@ -159,8 +159,7 @@ class Function {
                     context.logger.info("Partitioning blocks")
                     val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
                     context.logger.info("Mapping elements")
-                    val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
-
+                    val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !(it.isRepeat || it.mayRepeat.contains("Y")) }
                     // Singles Non Repeats
                     val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepeats, profilesMap, modelJson)
               //       context.logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")

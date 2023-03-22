@@ -8,7 +8,6 @@ import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
-
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.model.StructureValidatorProcessMetadata
@@ -16,10 +15,8 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-import gov.cdc.dex.util.UnknownPropertyError
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
-
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
 import org.slf4j.LoggerFactory
@@ -64,16 +61,20 @@ class ValidatorFunction {
         message.forEach { singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             // context.logger.info("singleMessage: --> $singleMessage")
+            var report : NistReport = NistReport()
+            var metadata :JsonObject = JsonObject()
 
             try {
-
                 val hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-                val metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
+                metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
                 val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
+
                 log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+
                 //Main FN Logic
-                val report = validateMessage(hl7Content, messageUUID, filePath)
+                 report = validateMessage(hl7Content, messageUUID, filePath)
+
                 //preparing EventHub payload:
                 val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages])
                 processMD.startProcessTime = startTime
@@ -98,8 +99,14 @@ class ValidatorFunction {
             } catch (e: Exception) {
                 //TODO::  - update retry counts
                 log.severe("Unable to process Message due to exception: ${e.message}")
+                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages])
+                processMD.startProcessTime = startTime
+                processMD.endProcessTime = Date().toIsoString()
+                metadata.addArrayElement("processes", processMD)
                 val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, e, false, 0, 0)
                 val summary = SummaryInfo("STRUCTURE_ERROR", problem)
+                log.severe("metadata in exception: $metadata")
+                log.info("inputEvent in exception:$inputEvent")
                 inputEvent.add("summary", summary.toJsonElement())
                 ehSender.send(evHubNameErrs, Gson().toJson(inputEvent))
             }
