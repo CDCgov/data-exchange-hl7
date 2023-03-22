@@ -41,14 +41,14 @@ class ValidatorFunction {
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
             consumerGroup = "%EventHubConsumerGroup%",
-             cardinality = Cardinality.MANY
+            cardinality = Cardinality.MANY
         ) message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext
     ) {
         val startTime =  Date().toIsoString()
 
-       // context.logger.info("Event received message.size: ${message.size}")
+        // context.logger.info("Event received message.size: ${message.size}")
         val log = context.logger
         log.info("Event Message received: $message.")
 
@@ -69,14 +69,12 @@ class ValidatorFunction {
                 metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
                 val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-
                 log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
-
                 //Main FN Logic
-                 report = validateMessage(hl7Content, messageUUID, filePath)
-
+                val phinSpec = getPhinSpec(hl7Content, messageUUID, filePath)
+                val report = validateMessage(hl7Content, phinSpec)
                 //preparing EventHub payload:
-                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages])
+                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages], listOf(phinSpec))
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
 
@@ -99,7 +97,7 @@ class ValidatorFunction {
             } catch (e: Exception) {
                 //TODO::  - update retry counts
                 log.severe("Unable to process Message due to exception: ${e.message}")
-                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages])
+                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages], listOf())
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
                 metadata.addArrayElement("processes", processMD)
@@ -116,7 +114,7 @@ class ValidatorFunction {
 
     private fun getPhinSpec(hl7Content: String, messageUUID: String, filePath: String): String {
         return try {
-           HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
+            HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
         } catch (e: NoSuchElementException) {
             throw InvalidMessageException("Unable to process Message: Unable to retrieve PHIN Specification from message, MSH-21[1].1 Not found - messageUUID: $messageUUID, filePath: $filePath. ")
         }
@@ -133,8 +131,7 @@ class ValidatorFunction {
     }
 
 
-    private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String): NistReport {
-        val phinSpec = getPhinSpec(hl7Message, messageUUID, filePath)
+    private fun validateMessage(hl7Message: String, phinSpec: String): NistReport {
         val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
         return nistValidator.validate(hl7Message)
     }
@@ -158,7 +155,8 @@ class ValidatorFunction {
         }
 
         return runCatching {
-            val report = validateMessage(hl7Message, "N/A", "N/A")
+            val phinSpec = getPhinSpec(hl7Message, "N/A", "N/A")
+            val report = validateMessage(hl7Message, phinSpec)
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
         }.onFailure { exception ->
             context.logger.severe("error validating message: ${exception.message}")

@@ -7,6 +7,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 import com.google.gson.GsonBuilder
+import gov.cdc.dex.model.StructureValidatorProcessMetadata
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
 
