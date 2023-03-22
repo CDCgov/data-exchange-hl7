@@ -1,14 +1,13 @@
 package gov.cdc.dex
 
+import com.google.gson.GsonBuilder
+import gov.cdc.hl7.HL7StaticParser
+import gov.cdc.nist.validator.NistReport
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
-
-import com.google.gson.GsonBuilder
-import gov.cdc.hl7.HL7StaticParser
-import gov.cdc.nist.validator.NistReport
 
 
 class ValidationTest {

@@ -18,7 +18,7 @@ class EventHubPayloadTest {
         val root: JsonObject = JsonParser.parseString(eventInput) as JsonObject
 
         val ehMD = EventHubMetadata(1, 1, null, "2023-01-01")
-        val processMD = StructureValidatorProcessMetadata("SUCCESS", null, ehMD)
+        val processMD = StructureValidatorProcessMetadata("SUCCESS", null, ehMD, listOf())
         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
 
@@ -35,7 +35,7 @@ class EventHubPayloadTest {
         newPayload.addArrayElement("processes", processMD)
         println(newPayload)
 
-        val secondProcessMD = StructureValidatorProcessMetadata( "SUCCESS", null, ehMD)
+        val secondProcessMD = StructureValidatorProcessMetadata( "SUCCESS", null, ehMD, listOf())
         secondProcessMD.startProcessTime = Date().toIsoString()
         secondProcessMD.endProcessTime = Date().toIsoString()
 
