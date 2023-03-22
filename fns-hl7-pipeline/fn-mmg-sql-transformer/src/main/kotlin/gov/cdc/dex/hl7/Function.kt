@@ -106,7 +106,7 @@ class Function {
                     prcName == PREVIOUS_PROCESS_NAME
                 } // .mmgBasedProcesses
                 val modelJson = mmgBasedProcessLast.asJsonObject["report"].asJsonObject
-                context.logger.info("------ modelJson: ------> $modelJson")
+             //   context.logger.info("------ modelJson: ------> $modelJson")
                 
                 // 
                 // Process Message for SQL Model
@@ -159,23 +159,22 @@ class Function {
                     context.logger.info("Partitioning blocks")
                     val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
                     context.logger.info("Mapping elements")
-                    val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
-
+                    val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !(it.isRepeat || it.mayRepeat.contains("Y")) }
                     // Singles Non Repeats
                     val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepeats, profilesMap, modelJson)
-                     context.logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")
+              //       context.logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")
 
                     // Singles Repeats
                     val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
-                     context.logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")
+              //       context.logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")
 
                     // Repeated Blocks
                     val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
-                     context.logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
+               //      context.logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
 
                     // Message Profile Identifier
                     val messageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
-                     context.logger.info("messageProfIdModel: -->\n\n${gsonWithNullsOn.toJson(messageProfIdModel)}\n")
+               //      context.logger.info("messageProfIdModel: -->\n\n${gsonWithNullsOn.toJson(messageProfIdModel)}\n")
 
                     // Compose the SQL Model from parts
                     val mmgSqlModel = messageProfIdModel + singlesNonRepeatsModel + mapOf(

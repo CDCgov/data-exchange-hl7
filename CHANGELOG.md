@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.15] - 2023-03-22
+  - Set up STG environment and pipelines
+  - Updated PHIN Specs with findings on discrepacies with MVPS validation
+  - Shrotened the name of columns and repeating groups due to size limitations
+  - Included extra fields to be redacted
+  - Created redaction config for lab messages
+  - Added config names to Processes for clarity on which configuration was used.
+  - Several bug fixes.
+
 ### [0.0.14] - 2023-03-08
   - Set up TST environment and pipelines
   - Develop transport service to upload files with Metadata (pending deployment)

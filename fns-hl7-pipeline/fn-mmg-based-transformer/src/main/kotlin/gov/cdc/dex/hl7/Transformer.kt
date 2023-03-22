@@ -12,6 +12,7 @@ import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.redisModels.ValueSetConcept
 import gov.cdc.dex.util.StringUtils
+import gov.cdc.dex.util.StringUtils.Companion.normalize
 
 class Transformer(redisProxy: RedisProxy)  {
 
@@ -32,6 +33,7 @@ class Transformer(redisProxy: RedisProxy)  {
         // private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type" // only used in dev
         private const val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
         private const val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
+        private const val MAX_BLOCK_NAME_LENGTH = 30
     }
 
         // --------------------------------------------------------------------------------------------------------
@@ -98,7 +100,11 @@ class Transformer(redisProxy: RedisProxy)  {
                 val obxLine = filterByIdentifier(obxLines, el.mappings.hl7v251.identifier)
                 val obxLineParts = if (obxLine.isNotEmpty()) obxLine[0].split("|") else listOf()
                 val segmentData = getSegmentData(obxLineParts, el.mappings.hl7v251.fieldPosition, el)
-                StringUtils.normalizeString(el.name) to segmentData
+                if (el.isRepeat) {
+                    StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH) to segmentData
+                } else {
+                    StringUtils.normalizeString(el.name) to segmentData
+                }
             } // .mmgPid.map
 
 
@@ -174,8 +180,13 @@ class Transformer(redisProxy: RedisProxy)  {
                     mapFromMsg + mapFromElemNotInMsg
                 } // .blockElementsNameDataTupMap
                 // logger.info("\nblockElementsNameDataTupMap: --> ${Gson().toJson(blockElementsNameDataTupMap)}\n\n")
-
-                StringUtils.normalizeString(block.name) to blockElementsNameDataTupMap
+                // make sure the block is properly identified as a repeating block
+                val blockName = if (block.name.normalize().contains("repeating_group")) {
+                    block.name
+                } else {
+                    "${block.name} repeating group"
+                }
+                StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH) to blockElementsNameDataTupMap
             } // .blocksNonSingleModel
 
             
@@ -190,7 +201,7 @@ class Transformer(redisProxy: RedisProxy)  {
         //  ------------- Functions used in the transformation -------------
         // --------------------------------------------------------------------------------------------------------
 
-        private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
+           private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
             return lines.filter { line ->
                 val lineParts = line.split("|")
                 val obxId = lineParts[3].split("^")[0]
@@ -250,7 +261,13 @@ class Transformer(redisProxy: RedisProxy)  {
                 val segmentDataFull = lineParts[dataFieldPosition].trim()
                 val phinDataTypesMap = getPhinDataTypes()
                 // logger.info("getSegmentData, phinDataTypesMap: --> ${phinDataTypesMap}")
-                val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
+                val segmentDataArr = if (segmentDataFull.contains("~")) {
+                    if (el.isRepeat || el.mayRepeat.contains("Y"))
+                        segmentDataFull.split("~")
+                    else
+                        listOf(segmentDataFull.split("~")[0])
+                } else listOf(segmentDataFull)
+
                 val segmentData = segmentDataArr.map { oneRepeat ->
                     val oneRepeatParts = oneRepeat.split("^")
                     if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType) ) {
@@ -301,7 +318,7 @@ class Transformer(redisProxy: RedisProxy)  {
                     } // .else
 
                 } // .segmentData
-                return if (el.isRepeat) segmentData else segmentData[0]
+                return if (el.isRepeat || el.mayRepeat.contains("Y")) segmentData else segmentData[0]
             } else {
                 return null
             }

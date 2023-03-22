@@ -11,11 +11,10 @@ class Helper {
     private val PATH_PID_5_2 = "PID-5[2]"
     fun getRedactedReport(msg: String): Tuple2<String, List<RedactInfo>>? {
         val pid_5_2 = extractValue(msg, PATH_PID_5_2).lowercase(Locale.getDefault())
-        val rules :List<String>
-        if(pid_5_2.equals("^^^^^^S",true)){
-             rules = this::class.java.getResource("/case_config.txt").readText().lines()
-         } else {
-            rules = this::class.java.getResource("/case_pid_config.txt").readText().lines()
+        val rules :List<String> = if(pid_5_2.equals("^^^^^^S",true)){
+            this::class.java.getResource("/case_config.txt").readText().lines()
+        } else {
+            this::class.java.getResource("/case_pid_config.txt").readText().lines()
         }
         val dIdentifier = DeIdentifier()
         return dIdentifier.deIdentifyMessage(msg, rules.toTypedArray())

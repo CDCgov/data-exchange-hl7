@@ -60,7 +60,8 @@ class MetadataTest {
             singleOrBatch = Provenance.SINGLE_FILE,
             messageHash = "1234",
             systemProvider = "Unit Test",
-            originalFileName = "localFile.txt"
+            originalFileName = "localFile.txt",
+            originalFileTimestamp = "2022-10-01T12:00:00.0Z"
         )
 
         val problem = Problem("UNIT-TEST", "java.lang.Exception", null, "Mock error for unit test", false, 0, 1)

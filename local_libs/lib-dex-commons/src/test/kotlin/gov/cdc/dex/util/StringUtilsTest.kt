@@ -42,4 +42,28 @@ internal class StringUtilsTest {
 //        println(newMsg)
         println(newMsg.hashMD5())
     }
+
+    @Test
+    fun testShortName() {
+        val name = "Vaccine Related Repeating Group Section About Vaccinations and Other Vaccine Related Stuff"
+        val shortName = StringUtils.getNormalizedShortName(name, 30)
+        println(shortName)
+        assert(shortName.length <= 30)
+        val name2 = StringUtils.getNormalizedShortName("Clinical Manifestations Of Disease Repeating Group", 30)
+        println(name2)
+        assert(name2.length <= 30)
+        val name3 = StringUtils.getNormalizedShortName("Clinical Manifestations of Disease", 30)
+        println(name3)
+        assert(name3 != name2)
+        val name4 = StringUtils.getNormalizedShortName("Tick Bite Repeating Group", 30)
+        println(name4)
+        val name5 = StringUtils.getNormalizedShortName(("Tick Bite Repeating Group"))
+        println(name5)
+        assert(name4 == name5)
+        val name6 = StringUtils.getNormalizedShortName("Tick Bite")
+        println(name6)
+        assert (name6 != name5)
+        val name7 = StringUtils.getNormalizedShortName("Tick Bite Repeating Group", 2)
+        println(name7)
+    }
 }
