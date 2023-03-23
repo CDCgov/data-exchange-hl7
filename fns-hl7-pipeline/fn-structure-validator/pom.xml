@@ -100,11 +100,12 @@
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <!-- function app service plan name -->
                     <appServicePlanName>${functionServicePlan}</appServicePlanName>
+                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <region>${functionRegion}</region>
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
-                        <javaVersion>11</javaVersion>
+                        <javaVersion>${java.version}</javaVersion>
                     </runtime>
                     <appSettings>
                         <property>
