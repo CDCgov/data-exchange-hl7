@@ -4,10 +4,8 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.*
-import com.microsoft.azure.functions.annotation.AuthorizationLevel
-import com.microsoft.azure.functions.annotation.EventHubTrigger
-import com.microsoft.azure.functions.annotation.FunctionName
-import com.microsoft.azure.functions.annotation.HttpTrigger
+import com.microsoft.azure.functions.annotation.*
+import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.MmgValidatorProcessMetadata
@@ -35,13 +33,14 @@ class MMGValidationFunction {
 
     @FunctionName("mmgvalidator001")
     fun eventHubProcessor(
-            @EventHubTrigger(
+        @EventHubTrigger(
                 name = "msg", 
                 eventHubName = "%EventHubReceiveName%",
                 connection = "EventHubConnectionString",
                 consumerGroup = "%EventHubConsumerGroup%",) 
                 message: List<String?>,
-                context: ExecutionContext) {
+        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
+        context: ExecutionContext) {
 
 
         val startTime =  Date().toIsoString()
@@ -53,7 +52,8 @@ class MMGValidationFunction {
         val evHubSender = EventHubSender(evHubConnStr)
 //        val ehSender = EventHubSender(evHubConnStr)
 
-        message.forEach { singleMessage: String? ->
+        message.forEachIndexed{
+                messageIndex : Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             // context.logger.info("singleMessage: --> $singleMessage")
 
@@ -67,7 +67,8 @@ class MMGValidationFunction {
 
                 val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                
+
+                val mmgInfo = JsonHelper.getStringArrayFromJsonArray(JsonHelper.getValueFromJson("message_info.mmgs", inputEvent).asJsonArray)
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
     
                     val mmgValidator = MmgValidator()
@@ -76,7 +77,8 @@ class MMGValidationFunction {
                     context.logger.info("MMG Validation Report size for for messageUUID: $messageUUID, filePath: $filePath, size --> " + validationReport.size)
                     val mmgReport = MmgReport( validationReport)
 
-                    val processMD = MmgValidatorProcessMetadata(mmgReport.status.toString(), mmgReport)
+                    val processMD = MmgValidatorProcessMetadata(mmgReport.status.toString(), mmgReport,eventHubMD[messageIndex],
+                        mmgInfo.toList())
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
 
