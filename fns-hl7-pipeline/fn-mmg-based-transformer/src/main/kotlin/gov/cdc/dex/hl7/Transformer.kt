@@ -100,7 +100,7 @@ class Transformer(redisProxy: RedisProxy)  {
                 val obxLine = filterByIdentifier(obxLines, el.mappings.hl7v251.identifier)
                 val obxLineParts = if (obxLine.isNotEmpty()) obxLine[0].split("|") else listOf()
                 val segmentData = getSegmentData(obxLineParts, el.mappings.hl7v251.fieldPosition, el)
-                if (el.isRepeat) {
+                if (el.isRepeat || el.mayRepeat.contains("Y")) {
                     StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH) to segmentData
                 } else {
                     StringUtils.normalizeString(el.name) to segmentData
@@ -285,7 +285,11 @@ class Transformer(redisProxy: RedisProxy)  {
                             val conceptCode = map1["identifier"]
                             var conceptJson = ""
                             if ((!valueSetCode.isNullOrEmpty() && valueSetCode != "N/A") && !conceptCode.isNullOrEmpty()) {
-                                conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
+                                try {
+                                    conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
+                                } catch (e : NullPointerException) {
+                                    println("ValueSetCode: $valueSetCode, conceptCode: $conceptCode not found in Redis cache")
+                                }
                             }
                             map1 /*+ map2 */ + if (conceptJson.isEmpty()) { // map2 used for dev only
                                 // No Redis entry!! for this value set code, concept code

@@ -1,0 +1,116 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20150630120030.1234-0500||ORU^R01^ORU_R01|PERT_V1_TM_TC01|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Pertussis_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||Pertussis_TC01^^^TXNBS01&2.16.840.1.114222.GENv2&ISO||~^^^^^^S||20071018|M||2106-3^White^CDCREC|^^Sherwood^05^72120^^^^05119|||||||||||2186-5^Not Hispanic or Latino^CDCREC
+OBR|1||Pertussis_TC01^SendAppName^2.16.840.1.114222^ISO|68991-9^Epidemiologic Information^LN|||20150130170100|||||||||||||||20150130170100|||F||||||10190^Pertussis^NND
+OBX|1|CWE|78746-5^Country of Birth^LN||USA^United States^ISO3166_1||||||F
+OBX|2|CWE|77983-5^Country of Usual Residence^LN||USA^United States^ISO3166_1||||||F
+OBX|3|TS|11368-8^Date of Illness Onset^LN||20141221||||||F
+OBX|4|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|5|TS|77975-1^Diagnosis Date^LN||20150122||||||F
+OBX|6|CWE|77974-4^Hospitalized^LN||N^No^HL70136||||||F
+OBX|7|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|8|ST|77993-4^State Case Identifier^LN||2470||||||F
+OBX|9|ST|77997-5^Legacy Case Identifier^LN||125498732102015||||||F
+OBX|10|SN|77998-3^Age at Case Investigation^LN||^7|a^year^UCUM|||||F
+OBX|11|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of State^CDCPHINVS||||||F
+OBX|12|CWE|INV154^Imported State^PHINQUESTION||04^Arizona^FIPS5_2||||||F
+OBX|13|CWE|INV155^Imported City^PHINQUESTION||44784^Phoenix^USGSGNIS||||||F
+OBX|14|CWE|INV156^Imported County^PHINQUESTION||04013^Maricopa, AZ^FIPS6_4||||||F
+OBX|15|CWE|77984-3^Country of Exposure^LN|1|USA^United States^ISO3166_1||||||F
+OBX|16|CWE|77985-0^State or Province of Exposure^LN|1|04^Arizona^FIPS5_2||||||F
+OBX|17|ST|77986-8^City of Exposure^LN|1|Phoenix||||||F
+OBX|18|ST|77987-6^County of Exposure^LN|1|Maricopa||||||F
+OBX|19|CWE|77989-2^Transmission Mode^LN||416380006^Airborne transmission^SCT||||||F
+OBX|20|CWE|77990-0^Case Class Status Code^LN||2931005^Probable diagnosis^SCT||||||F
+OBX|21|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|22|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|23|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|24|CWE|48766-0^Reporting Source Type Code^LN||39350007^Private physicians' group office^SCT||||||F
+OBX|25|ST|52831-5^Reporting Source Zip Code^LN||72120||||||F
+OBX|26|ST|74549-7^Person Reporting to CDC - Name^LN||Smith, John||||||F
+OBX|27|ST|74548-9^Person Reporting to CDC-Phone Number^LN||(404)222-1111||||||F
+OBX|28|ST|74547-1^Person Reporting to CDC-Email^LN||jsmith@pertussis.com||||||F
+OBX|29|DT|77979-3^Case Investigation Start Date^LN||20150128||||||F
+OBX|30|DT|77995-9^Date Reported^LN||20150128||||||F
+OBX|31|TS|77972-8^Earliest Date Reported to County^LN||20150128||||||F
+OBX|32|TS|77973-6^Earliest Date Reported to State^LN||20150128||||||F
+OBX|33|SN|77991-8^MMWR Week^LN||^4||||||F
+OBX|34|DT|77992-6^MMWR Year^LN||2015||||||F
+OBX|35|DT|77970-2^Date First Reported to PHD^LN||20150128||||||F
+OBX|36|CWE|77966-0^Reporting State^LN||05^Arkansas^FIPS5_2||||||F
+OBX|37|CWE|77967-8^Reporting County^LN||05119^Pulaski, AR^FIPS6_4||||||F
+OBX|38|CWE|77968-6^National Reporting Jurisdiction^LN||05^Arkansas^FIPS5_2||||||F
+OBX|39|CWE|56831-1^Signs and Symptoms^LN|2|49727002^Cough^SCT||||||F
+OBX|40|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|41|CWE|56831-1^Signs and Symptoms^LN|3|43025008^Paroxysmal Cough^SCT||||||F
+OBX|42|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|43|CWE|56831-1^Signs and Symptoms^LN|4|60537006^Whoop^SCT||||||F
+OBX|44|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|45|CWE|56831-1^Signs and Symptoms^LN|5|424580008^Post-tussive Vomiting^SCT||||||F
+OBX|46|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|47|DT|INV555^Date of Final Interview^PHINQUESTION||20150126||||||F
+OBX|48|CWE|PRT008^Cough at Final Interview^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|49|DT|85932-2^Cough Onset Date^LN||20141221||||||F
+OBX|50|SN|85933-0^Total Cough Duration^LN||^36|d^Day^UCUM|||||F
+OBX|51|SN|85934-8^Age at Cough Onset^LN||^7|a^year^UCUM|||||F
+OBX|52|CWE|INV923^Chest X-Ray Result^PHINQUESTION||385660001^Not Done^SCT||||||F
+OBX|53|CWE|67187-5^Type of Complication^LN|6|91175000^Seizures^SCT||||||F
+OBX|54|CWE|INV920^Type of Complications Indicator^PHINQUESTION|6|N^No^HL70136||||||F
+OBX|55|CWE|67187-5^Type of Complication^LN|7|81308009^Encephalopathy^SCT||||||F
+OBX|56|CWE|INV920^Type of Complications Indicator^PHINQUESTION|7|N^No^HL70136||||||F
+OBX|57|CWE|INV559^Antibiotics Given^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|58|CWE|29303-5^Medication Administered^LN|8|OTH^Other^NULLFL||||||F
+OBX|59|DT|86948-7^Date Treatment or Therapy Started^LN|8|20150122||||||F
+OBX|60|SN|67453-1^Treatment Duration^LN|8|^10|d^Day^UCUM|||||F
+OBX|61|CWE|223366009^Case Patient a Healthcare Worker^SCT||N^No^HL70136||||||F
+OBX|62|CWE|INV561^Setting (Outside Household) of Further Documented Spread From This Case^PHINQUESTION||257698009^School^SCT||||||F
+OBX|63|SN|INV562^Number of Contacts Recommended Prophylaxis^PHINQUESTION||^4||||||F
+OBX|64|CWE|PRT070^One or More Suspected Sources^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|65|SN|PRT071^Number of suspected sources^PHINQUESTION||^1||||||F
+OBX|66|SN|PRT074^Suspected Source Age^PHINQUESTION|9|^25|a^year^UCUM|||||F
+OBX|67|CWE|PRT076^Suspected Source Sex^PHINQUESTION|9|M^Male^HL70001||||||F
+OBX|68|CWE|PRT077^Suspected Source Relationship to Case^PHINQUESTION|9|OTH^Other^NULLFL||||||F
+OBX|69|DT|PRT088^Suspected Source Cough Onset Date^PHINQUESTION|9|20141216||||||F
+OBX|70|CWE|INV109^Case Investigation Status Code^PHINQUESTION||9571008^Approved^SCT||||||F
+OBX|71|CWE|81267-7^Transmission Setting^LN||UNK^UNKNOWN^NULLFL||||||F
+OBX|72|CWE|INV927^Epi-linked to a laboratory confirmed case^PHINQUESTION||N^No^HL70136||||||F
+OBX|73|CWE|LAB630^Laboratory Testing Performed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|74|CWE|82314-6^Specimen Sent to CDC^LN||Y^Yes^HL70136||||||F
+OBX|75|CWE|INV290^Test Type^PHINQUESTION|10|23826-1^Pertussis PCR^LN||||||F
+OBX|76|CWE|INV291^Test Result^PHINQUESTION|10|260385009^Negative^SCT||||||F
+OBX|77|CWE|31208-2^Specimen Source^LN|10|258450006^Cerebrospinal fluid sample^SCT||||||F
+OBX|78|DT|68963-8^Specimen Collection Date/Time^LN|10|20150120||||||F
+OBX|79|CWE|82771-7^Performing Laboratory Type^LN|10|PHC645^Private commercial^CDCPHINVS||||||F
+OBX|80|CWE|INV290^Test Type^PHINQUESTION|11|549-6^Pertussis Culture^LN||||||F
+OBX|81|CWE|INV291^Test Result^PHINQUESTION|11|260385009^Negative^SCT||||||F
+OBX|82|CWE|31208-2^Specimen Source^LN|11|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|83|DT|68963-8^Specimen Collection Date/Time^LN|11|20150120||||||F
+OBX|84|CWE|82771-7^Performing Laboratory Type^LN|11|PHC645^Private commercial^CDCPHINVS||||||F
+OBX|85|CWE|INV290^Test Type^PHINQUESTION|12|OTH^Other^NULLFL||||||F
+OBX|86|DT|68963-8^Specimen Collection Date/Time^LN|12|20150120||||||F
+OBX|87|CWE|31208-2^Specimen Source^LN|12|119297000^Blood specimen^SCT||||||F
+OBX|88|DT|85930-6^Date Specimen Sent to CDC^LN|12|20150120||||||F
+OBX|89|CWE|82771-7^Performing Laboratory Type^LN|12|PHC412^CDC laboratory^CDCPHINVS||||||F
+OBX|90|CWE|VAC126^Did the Subject Ever Receive a Vaccine Against This Disease^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|91|DT|VAC142^Date of Last Dose Prior to Illness Onset^PHINQUESTION||20130310||||||F
+OBX|92|SN|82745-1^Vaccination Doses Prior to Onset^LN||^5||||||F
+OBX|93|CWE|VAC148^Vaccinated per ACIP Recommendations^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|94|CWE|30956-7^Vaccine Type^LN|13|20^DTaP^CVX||||||F
+OBX|95|DT|30952-6^Vaccine Administered Date^LN|13|20071210||||||F
+OBX|96|SN|30973-2^Vaccine Dose Number^LN|13|^1||||||F
+OBX|97|CWE|30957-5^Vaccine Manufacturer^LN|13|SKB^GlaxoSmithKline^MVX||||||F
+OBX|98|ST|30959-1^Vaccine Lot Number^LN|13|AC14A006CA||||||F
+OBX|99|DT|VAC109^Vaccine Expiration Date^PHINQUESTION|13|20100201||||||F
+OBX|100|ST|VAC153^National Drug Code (NDC)^PHINQUESTION|13|49281-286-10||||||F
+OBX|101|CWE|VAC147^Vaccine Event Information Source^PHINQUESTION|13|PHC1436^Historical information - from patient or parent's written record^CDCPHINVS||||||F
+OBX|102|CWE|30956-7^Vaccine Type^LN|14|20^DTaP^CVX||||||F
+OBX|103|DT|30952-6^Vaccine Administered Date^LN|14|20080215||||||F
+OBX|104|SN|30973-2^Vaccine Dose Number^LN|14|^2||||||F
+OBX|105|CWE|30957-5^Vaccine Manufacturer^LN|14|SKB^GlaxoSmithKline^MVX||||||F
+OBX|106|ST|30959-1^Vaccine Lot Number^LN|14|AC14B040CA||||||F
+OBX|107|DT|VAC109^Vaccine Expiration Date^PHINQUESTION|14|20101212||||||F
+OBX|108|CWE|VAC147^Vaccine Event Information Source^PHINQUESTION|14|PHC1436^Historical information - from patient or parent's written record^CDCPHINVS||||||F
+OBX|109|CWE|30956-7^Vaccine Type^LN|15|20^DTaP^CVX||||||F
+OBX|110|DT|30952-6^Vaccine Administered Date^LN|15|20080413||||||F
+OBX|111|SN|30973-2^Vaccine Dose Number^LN|15|^3||||||F
+OBX|112|CWE|30957-5^Vaccine Manufacturer^LN|15|SKB^GlaxoSmithKline^MVX||||||F
+OBX|113|CWE|VAC147^Vaccine Event Information Source^PHINQUESTION|15|PHC1436^Historical information - from patient or parent's written record^CDCPHINVS||||||F
