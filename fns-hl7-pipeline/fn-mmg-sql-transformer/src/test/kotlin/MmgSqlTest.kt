@@ -85,18 +85,17 @@ class MmgSqlTest {
         assertEquals(profilesMap.size, 12)
     } // .testDefaultPhinProfiles
 
-
     @Test
-    fun testTransformerSQLForTC04() {
+    fun testTransformerSQLForHep() {
 
         // MMGs for the message
         // ------------------------------------------------------------------------------
-        val filePath = "/Tuleremia.hl7"
+        val filePath = "/KY_Hepatitis Round 2_TM4.txt"
         val testMsg = this::class.java.getResource(filePath).readText()
         val reportingJurisdiction = extractValue(testMsg, JURISDICTION_CODE_PATH)
 
 
-        val mmgsArr = getMMGsFromMessage(testMsg, reportingJurisdiction, "10230")
+        val mmgsArr = getMMGsFromMessage(testMsg, reportingJurisdiction, "10105")
 
         // Default Phin Profiles Types
         // ------------------------------------------------------------------------------
@@ -108,7 +107,87 @@ class MmgSqlTest {
 
         // MMG Based Model for the message
         // ------------------------------------------------------------------------------
-        val mmgBasedModelPath = "/modelGenV1.json"
+        val mmgBasedModelPath = "/modelHep.json"
+        val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
+        val modelJson = JsonParser.parseString(mmgBasedModelStr).asJsonObject
+
+        // logger.info("mmgBasedModelStr: --> ${mmgBasedModelStr}")
+
+
+        // Transformer SQL
+        // ------------------------------------------------------------------------------
+        val transformer = TransformerSql()
+
+        val mmgs = transformer.getMmgsFiltered(mmgsArr)
+        val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
+        val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+        val ( mmgElementsSingleNonRepets, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !(it.isRepeat || it.mayRepeat.contains("Y"))}
+
+        // Singles Non Repeats
+        // --------------------------------------
+        val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, modelJson)
+
+        // logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")
+        logger.info("singlesNonRepeatsModel.size: --> ${singlesNonRepeatsModel.size}")
+        //  assertEquals(singlesNonRepeatsModel.size, 172)
+
+        // Singles Repeats
+        // --------------------------------------
+        val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
+
+        // logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")
+        logger.info("singlesRepeatsModel.size: --> ${singlesRepeatsModel.size}")
+        //  assertEquals(singlesRepeatsModel.size, 5) // original 6, 5 after message profile identifier is filtered out and moving to singles non repeats
+
+
+        // Repeated Blocks
+        // --------------------------------------
+        val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
+
+        // logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
+        logger.info("repeatedBlocksModel.size: --> ${repeatedBlocksModel.size}")
+        //  assertEquals(repeatedBlocksModel.size, 10)
+
+
+        // Message Profile Identifier
+        val mesageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
+        logger.info("mesageProfIdModel.size: --> ${mesageProfIdModel.size}")
+        //   assertEquals(mesageProfIdModel.size, 3)
+
+        val mmgSqlModel = mesageProfIdModel + singlesNonRepeatsModel + mapOf(
+            TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel,
+        ) // .mmgSqlModel
+
+        logger.info("mmgSqlModel.size: --> ${mmgSqlModel.size}")
+        //  assertEquals(mesageProfIdModel.size + singlesNonRepeatsModel.size + 1, 3 + 172 + 1 )  // 1 for tables
+
+
+        logger.info("mmgSqlModel: -->\n\n${gsonWithNullsOn.toJson(mmgSqlModel)}\n")
+    } // .testTransformerSQLForHep
+
+    @Test
+    fun testTransformerSQLForTC04() {
+
+        // MMGs for the message
+        // ------------------------------------------------------------------------------
+        val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val reportingJurisdiction = extractValue(testMsg, JURISDICTION_CODE_PATH)
+
+
+        val mmgsArr = getMMGsFromMessage(testMsg, reportingJurisdiction, "11088")
+
+        // Default Phin Profiles Types
+        // ------------------------------------------------------------------------------
+        val dataTypesFilePath = "/DefaultFieldsProfileX.json"
+        val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+        val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
+        val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+
+
+        // MMG Based Model for the message
+        // ------------------------------------------------------------------------------
+        val mmgBasedModelPath = "/mmgBasedModel1.json"
         val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
         val modelJson = JsonParser.parseString(mmgBasedModelStr).asJsonObject
 
@@ -165,6 +244,86 @@ class MmgSqlTest {
 
         logger.info("mmgSqlModel: -->\n\n${gsonWithNullsOn.toJson(mmgSqlModel)}\n")
     } // .testTransformerSQLForTC04
+
+    @Test
+    fun testTransformerSQLForGenV1() {
+
+        // MMGs for the message
+        // ------------------------------------------------------------------------------
+        val filePath = "/Tuleremia.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+        val reportingJurisdiction = extractValue(testMsg, JURISDICTION_CODE_PATH)
+
+
+        val mmgsArr = getMMGsFromMessage(testMsg, reportingJurisdiction, "10230")
+
+        // Default Phin Profiles Types
+        // ------------------------------------------------------------------------------
+        val dataTypesFilePath = "/DefaultFieldsProfileX.json"
+        val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+        val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
+        val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+
+
+        // MMG Based Model for the message
+        // ------------------------------------------------------------------------------
+        val mmgBasedModelPath = "/modelGenV1.json"
+        val mmgBasedModelStr = this::class.java.getResource(mmgBasedModelPath).readText()
+        val modelJson = JsonParser.parseString(mmgBasedModelStr).asJsonObject
+
+        // logger.info("mmgBasedModelStr: --> ${mmgBasedModelStr}")
+
+
+        // Transformer SQL
+        // ------------------------------------------------------------------------------
+        val transformer = TransformerSql()
+
+        val mmgs = transformer.getMmgsFiltered(mmgsArr)
+        val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
+        val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+        val ( mmgElementsSingleNonRepets, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !(it.isRepeat || it.mayRepeat.contains("Y"))}
+
+        // Singles Non Repeats
+        // --------------------------------------
+        val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepets, profilesMap, modelJson)
+
+        // logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")
+        logger.info("singlesNonRepeatsModel.size: --> ${singlesNonRepeatsModel.size}")
+        //  assertEquals(singlesNonRepeatsModel.size, 172)
+
+        // Singles Repeats
+        // --------------------------------------
+        val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
+
+        // logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")
+        logger.info("singlesRepeatsModel.size: --> ${singlesRepeatsModel.size}")
+        //  assertEquals(singlesRepeatsModel.size, 5) // original 6, 5 after message profile identifier is filtered out and moving to singles non repeats
+
+
+        // Repeated Blocks
+        // --------------------------------------
+        val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
+
+        // logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
+        logger.info("repeatedBlocksModel.size: --> ${repeatedBlocksModel.size}")
+        //  assertEquals(repeatedBlocksModel.size, 10)
+
+
+        // Message Profile Identifier
+        val mesageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
+        logger.info("mesageProfIdModel.size: --> ${mesageProfIdModel.size}")
+        //   assertEquals(mesageProfIdModel.size, 3)
+
+        val mmgSqlModel = mesageProfIdModel + singlesNonRepeatsModel + mapOf(
+            TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel,
+        ) // .mmgSqlModel
+
+        logger.info("mmgSqlModel.size: --> ${mmgSqlModel.size}")
+        //  assertEquals(mesageProfIdModel.size + singlesNonRepeatsModel.size + 1, 3 + 172 + 1 )  // 1 for tables
+
+
+        logger.info("mmgSqlModel: -->\n\n${gsonWithNullsOn.toJson(mmgSqlModel)}\n")
+    } // .testTransformerSQLForGenv1
   /*  fun testTransformerSQLForLegacy() {
 
         // MMGs for the message
