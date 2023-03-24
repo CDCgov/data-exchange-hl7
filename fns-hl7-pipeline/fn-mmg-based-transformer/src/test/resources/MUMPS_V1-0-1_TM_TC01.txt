@@ -1,0 +1,127 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20150630120030.1234-0500||ORU^R01^ORU_R01|MUMPS_V1_TM_TC01|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Mumps_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||Mumps_TC01^^^PSNCA01&2.16.840.1.114222.222&ISO||~^^^^^^S||19850803|F||2106-3^White^CDCREC|^^Berkeley^06^^^^^06109|||||||||||2186-5^Not Hispanic or Latino^CDCREC|||||||99999999
+OBR|1||Mumps_TC01^SendAppName^2.16.840.1.114222^ISO|68991-9^Epidemiologic Information^LN|||20150607170100|||||||||||||||20150607170100|||F||||||10180^Mumps^NND
+OBX|1|ST|32624-9^Other Race Text^LN||Apache||||||F
+OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|3|CWE|77983-5^Country of Usual Residence^LN||USA^United States^ISO3166_1||||||F
+OBX|4|TS|11368-8^Date of Illness Onset^LN||20150507||||||F
+OBX|5|TS|77976-9^Illness End Date^LN||||||||F
+OBX|6|SN|77977-7^Illness Duration^LN||||||||F
+OBX|7|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|8|TS|77975-1^Diagnosis Date^LN||||||||F
+OBX|9|CWE|77974-4^Hospitalized^LN||||||||F
+OBX|10|TS|8656-1^Admission Date^LN||||||||F
+OBX|11|TS|8649-6^Discharge Date^LN||||||||F
+OBX|12|SN|78033-8^Duration of Hospital Stay in Days^LN||||||||F
+OBX|13|CWE|77978-5^Subject Died^LN||UNK^Unknown^NULLFL||||||F
+OBX|14|ST|77993-4^State Case Identifier^LN||CA4321||||||F
+OBX|15|ST|77997-5^Legacy Case Identifier^LN||06432106S012015||||||F
+OBX|16|SN|77998-3^Age Unit at Case Investigation^LN||^29|a^year^UCUM|||||F
+OBX|17|CWE|77982-7^Case Disease Imported Code^LN||PHC245^Out of jurisdiction, from another jurisdiction within state^CDCPHINVS||||||F
+OBX|18|CWE|INV153^Imported Country^PHINQUESTION||USA^United States^ISO3166_1||||||F
+OBX|19|CWE|INV154^Imported State^PHINQUESTION||45^South Carolina^FIPS5_2||||||F
+OBX|20|CWE|INV155^Imported City^PHINQUESTION||1244839^Abbeville^USGSGNIS||||||F
+OBX|21|CWE|INV156^Imported County^PHINQUESTION||45001^Abbeville^FIPS6_4||||||F
+OBX|22|CWE|77984-3^Country of Exposure^LN|1|USA^United States^ISO3166_1||||||F
+OBX|23|CWE|77985-0^State or Province of Exposure^LN|1|06^California^FIPS5_2||||||F
+OBX|24|ST|77986-8^City of Exposure^LN|1|Berkeley||||||F
+OBX|25|ST|77987-6^County of Exposure^LN|1|06109||||||F
+OBX|26|CWE|77989-2^Transmission Mode^LN||416380006^Airborne transmission^SCT||||||F
+OBX|27|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|28|CWE|77965-2^Immediate National Notifiable Condition^LN||Y^Yes^HL70136||||||F
+OBX|29|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|30|CWE|48766-0^Reporting Source Type Code^LN||1^Hospital^HL70406||||||F
+OBX|31|CWE|77988-4^Binational Reporting Criteria^LN||PHC1215^Potentialy exposed by a resident of Mexico or Canada^CDCPHINVS||||||F
+OBX|32|ST|52831-5^Reporting Source Zip Code^LN||94608||||||F
+OBX|33|ST|74549-7^Person Reporting to CDC - Name^LN||Smith, John||||||F
+OBX|34|ST|74548-9^Person Reporting to CDC-Phone Number^LN||(404)222-1111||||||F
+OBX|35|ST|74547-1^Person Reporting to CDC-Email^LN||jsmith@txdoh.org||||||F
+OBX|36|DT|77979-3^Case Investigation Start Date^LN||20150605||||||F
+OBX|37|DT|77995-9^Date Reported^LN||20150605||||||F
+OBX|38|TS|77972-8^Earliest Date Reported to County^LN||20150605||||||F
+OBX|39|TS|77973-6^Earliest Date Reported to State^LN||20150605||||||F
+OBX|40|SN|77991-8^MMWR Week^LN||^10||||||F
+OBX|41|DT|77992-6^MMWR Year^LN||2015||||||F
+OBX|42|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20150607||||||F
+OBX|43|DT|77970-2^Date First Reported to PHD^LN||20150605||||||F
+OBX|44|CWE|77966-0^Reporting State^LN||06^California^FIPS5_2||||||F
+OBX|45|CWE|77967-8^Reporting County^LN||06109^Tuolumne, CA^FIPS6_4||||||F
+OBX|46|CWE|77968-6^National Reporting Jurisdiction^LN||06^California^FIPS5_2||||||F
+OBX|47|TX|77999-1^Comment^LN||||||||F
+OBX|48|CWE|56831-1^Signs and Symptoms^LN|2|274667000^Jaw pain^SCT||||||F
+OBX|49|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|50|CWE|56831-1^Signs and Symptoms^LN|3|271615003^Sublingual salivary gland swelling^SCT||||||F
+OBX|51|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|52|CWE|56831-1^Signs and Symptoms^LN|4|271614004^Submandibular salivary gland swelling^SCT||||||F
+OBX|53|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|54|CWE|INV301^Parotitis Laterality^PHINQUESTION||||||||F
+OBX|55|DT|85931-4^Salivary Gland Swelling Onset Date^LN||20150605||||||F
+OBX|56|SN|85929-8^Salivary Gland Swelling Duration in Days^LN||^5|d^Day^UCUM|||||F
+OBX|57|SN|81265-1^Highest Measured Temperature^LN||^101.2|[degF]^Fahrenheit^UCUM|||||F
+OBX|58|DT|81266-9^Date of Fever Onset^LN||20150605||||||F
+OBX|59|CWE|67187-5^Type of Complications^LN|5|272033007^Deafness symptom^SCT||||||F
+OBX|60|CWE|INV920^Type of Complications Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|61|CWE|67187-5^Type of Complications^LN|6|31646008^Mumps encephalitis^SCT||||||F
+OBX|62|CWE|INV920^Type of Complications Indicator^PHINQUESTION|6|N^No^HL70136||||||F
+OBX|63|CWE|67187-5^Type of Complications^LN|7|44201003^Mumps meningitis^SCT||||||F
+OBX|64|CWE|INV920^Type of Complications Indicator^PHINQUESTION|7|N^No^HL70136||||||F
+OBX|65|CWE|67187-5^Type of Complications^LN|8|78580004^Mumps orchitis^SCT||||||F
+OBX|66|CWE|INV920^Type of Complications Indicator^PHINQUESTION|8|N^No^HL70136||||||F
+OBX|67|CWE|67187-5^Type of Complications^LN|9|OTH^other^NULLFL||||||F
+OBX|68|CWE|INV920^Type of Complications Indicator^PHINQUESTION|9|N^No^HL70136||||||F
+OBX|69|CWE|INV307^Type of Deafness^PHINQUESTION||||||||F
+OBX|70|SN|DEM225^Length of Time in the US^PHINQUESTION||^24|a^year^UCUM|||||F
+OBX|71|CWE|INV293^Import Status^PHINQUESTION||||||||F
+OBX|72|CWE|INV516^US Acquired^PHINQUESTION||PHC464^endemic case^CDCPHINVS||||||F
+OBX|73|CWE|82764-2^International Destination(s) of Recent Travel^LN||||||||F
+OBX|74|DT|TRAVEL08^Date of Return from Travel^PHINQUESTION||||||||F
+OBX|75|CWE|INV109^Case Investigation Status Code^PHINQUESTION||385651009^In progress^SCT||||||F
+OBX|76|CWE|INV159^Detection method^PHINQUESTION||PHC241^Provider reported^CDCPHINVS||||||F
+OBX|77|CWE|81267-7^Transmission Setting^LN||UNK^UNKNOWN^NULLFL||||||F
+OBX|78|CWE|85700-3^Age and Setting Verified^LN||UNK^UNKNOWN^NULLFL||||||F
+OBX|79|CWE|INV217^Epi-Linked^PHINQUESTION||||||||F
+OBX|80|ST|85658-3^Current Occupation^LN|10|Accountant||||||F
+OBX|81|CE|85659-1^Current Occupation Standardized^LN|10|0800^Accountants and auditors^CDCOCCUPATION2010||||||F
+OBX|82|ST|85078-4^Current Industry^LN|10|Tax preparation industry||||||F
+OBX|83|CE|85657-5^Current Industry Standardized^LN|10|7280^Accounting, tax preparation, bookkeeping, and payroll services^CDCINDUSTRY2010||||||F
+OBX|84|CWE|LAB630^Laboratory Testing Performed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|85|CWE|INV164^Laboratory Confirmed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|86|CWE|82314-6^Specimen sent to CDC^LN||Y^Yes^HL70136||||||F
+OBX|87|ST|LAB143^VPD Lab Message Reference Laboratory^PHINQUESTION|11|||||||F
+OBX|88|CX|LAB598^VPD Lab Message Patient Identifier^PHINQUESTION|11|||||||F
+OBX|89|CX|LAB125^VPD Lab Message Specimen Identifier^PHINQUESTION|11|||||||F
+OBX|90|CWE|INV290^Test Type^PHINQUESTION|12|LAB640^Mumps IgG Antibody (Acute)^PHINQUESTION||||||F
+OBX|91|CWE|INV291^Test Result^PHINQUESTION|12|10828004^Positive^SCT||||||F
+OBX|92|ST|LAB628^Test Result Quantitative^PHINQUESTION|12|15||||||F
+OBX|93|CWE|LAB115^Result Units^PHINQUESTION|12|mg/dL^MilliGrams Per Deci Liter^UCUM||||||F
+OBX|94|CWE|31208-2^Specimen Source^LN|12|119364003^Serum specimen^SCT||||||F
+OBX|95|TS|68963-8^Specimen Collection Date/Time^LN|12|20150605031512||||||F
+OBX|96|TS|85930-6^Date Specimen Sent to CDC^LN|12|20150607||||||F
+OBX|97|CWE|82771-7^Performing Laboratory Type^LN|12|PHC412^CDC laboratory^CDCPHINVS||||||F
+OBX|98|CWE|INV290^Test Type^PHINQUESTION|13|OTH^other^NULLFL^^^^^^7966-5  Mumps virus IgG Ab [Units/volume] in Serum||||||F
+OBX|99|CWE|INV291^Test Result^PHINQUESTION|13|||||||F
+OBX|100|ST|LAB628^Test Result Quantitative^PHINQUESTION|13|18||||||F
+OBX|101|CWE|LAB115^Result Units^PHINQUESTION|13|mg/dL^MilliGrams Per Deci Liter^UCUM||||||F
+OBX|102|CWE|31208-2^Specimen Source^LN|13|119364003^Serum specimen^SCT||||||F
+OBX|103|TS|68963-8^Specimen Collection Date/Time^LN|13|20150605031512||||||F
+OBX|104|TS|85930-6^Date Specimen Sent to CDC^LN|13|20150607||||||F
+OBX|105|CWE|82771-7^Performing Laboratory Type^LN|13|PHC412^CDC laboratory^CDCPHINVS||||||F
+OBX|106|CWE|VAC126^Did the Subject Ever Receive a Vaccine Against This Disease^PHINQUESTION||N^No^HL70136||||||F
+OBX|107|SN|VAC129^Number of Doses Received On or After 1st Birthday^PHINQUESTION||||||||F
+OBX|108|DT|VAC142^Date of Last Dose Prior to Illness Onset^PHINQUESTION||||||||F
+OBX|109|SN|82745-1^Vaccination Doses Prior to Onset^LN||||||||F
+OBX|110|CWE|VAC148^Vaccinated per ACIP Recommendations^PHINQUESTION||N^No^HL70136||||||F
+OBX|111|CWE|VAC149^Reason Not Vaccinated Per ACIP Recommendations^PHINQUESTION||PHC94^Parent/Patient forgot to vaccinate^CDCPHINVS||||||F
+OBX|112|TX|VAC133^Vaccine History Comments^PHINQUESTION||Vaccination history may be updated once confirmed with patient's parents||||||F
+OBX|113|CWE|30956-7^Vaccine Type^LN|14|||||||F
+OBX|114|DT|30952-6^Vaccine Administered Date^LN|14|||||||F
+OBX|115|SN|30973-2^Vaccine Dose Number^LN|14|||||||F
+OBX|116|CWE|30957-5^Vaccine Manufacturer^LN|14|||||||F
+OBX|117|ST|30959-1^Vaccine Lot Number^LN|14|||||||F
+OBX|118|DT|VAC109^Vaccine Expiration Date^PHINQUESTION|14|||||||F
+OBX|119|ST|VAC153^National Drug Code (NDC)^PHINQUESTION|14|||||||F
+OBX|120|ST|VAC102^Vaccination Record Identifier^PHINQUESTION|14|||||||F
+OBX|121|CWE|VAC147^Vaccine Event Information Source^PHINQUESTION|14|||||||F
+OBR|2|X100061242^EHR^2.16.840.1.113883.19.3.2.3^ISO|M1234^Lab^2.16.840.1.113883.19.3.1.6^ISO|77398-6^MuV IgM Ser Ql^LN|||20150605090212||||||||||||||||||F
+OBX|1|NM|25418-5^MuV IgM Ser Ql^LN|1|18|mg/dL^MilliGramsPerDeciLiter^UCUM|0-5|H|||F|||20150605090212|||0010^Serum Neutralization^OBSMETHOD||20150605||||Mayo Medical Laboratory||
+OBX|2|NM|25419-3^Mumps virus IgM Ab^LN|1|20|mg/dL^MilliGramsPerDeciLiter^UCUM|0-5|H|||F|||20150605090212|||0010^Serum Neutralization^OBSMETHOD||20150605||||Mayo Medical Laboratory||
