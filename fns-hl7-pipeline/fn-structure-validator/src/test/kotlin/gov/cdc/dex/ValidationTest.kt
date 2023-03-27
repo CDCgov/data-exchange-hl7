@@ -57,6 +57,7 @@ class ValidationTest {
 
                         val report = nistValidator.validate(testMsg)
                         println("Status: ${report.status}; Errors: ${report.errorCounts}; Warnings: ${report.warningcounts}")
+                       // println(gson.toJson(report))
                     }
                 } catch(e: Exception) {
                     println(e.message)
