@@ -75,9 +75,8 @@ class Function {
                     val newContentBase64 = Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
                     inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))
                     //Update Summary element.
-                    val summary = SummaryInfo(rReport.status ?: "Unknown")
+                    val summary = SummaryInfo("REDACTED")
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                    
                     context.logger.info("Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $evHubNameOk ")
                     ehSender.send(evHubNameOk, Gson().toJson(inputEvent))
                 }
