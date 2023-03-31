@@ -127,9 +127,9 @@ class ValidatorFunction {
         evHubNameErrs: String
     ): String {
         if (messageType.equals("ELR") && NIST_VALID_MESSAGE == report.status) {
-           return evHubNameOk
-        } else if (messageType.equals("CASE") && NIST_VALID_MESSAGE == report.status) {
            return evHubNameELROk
+        } else if (messageType.equals("CASE") && NIST_VALID_MESSAGE == report.status) {
+           return evHubNameOk
         } else {
             return evHubNameErrs
         }
