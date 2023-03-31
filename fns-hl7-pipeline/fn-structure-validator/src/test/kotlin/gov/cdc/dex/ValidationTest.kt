@@ -1,13 +1,14 @@
 package gov.cdc.dex
 
-import com.google.gson.GsonBuilder
-import gov.cdc.hl7.HL7StaticParser
-import gov.cdc.nist.validator.NistReport
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
+
+import com.google.gson.GsonBuilder
+import gov.cdc.hl7.HL7StaticParser
+import gov.cdc.nist.validator.NistReport
 
 
 class ValidationTest {
@@ -39,6 +40,13 @@ class ValidationTest {
         println(profile)
     }
 
+    @Test
+    fun testExtractELRSpec() {
+        val msh = "MSH|^~\\\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO"
+        //val profile = msh.split("|")[20].split("^")[0]
+        val profile = HL7StaticParser.getFirstValue(msh, "MSH-12").get()
+        println(profile)
+    }
 
     private fun testFolder(folderName: String) {
         val dir = "src/test/resources/$folderName"
@@ -57,7 +65,6 @@ class ValidationTest {
 
                         val report = nistValidator.validate(testMsg)
                         println("Status: ${report.status}; Errors: ${report.errorCounts}; Warnings: ${report.warningcounts}")
-                       // println(gson.toJson(report))
                     }
                 } catch(e: Exception) {
                     println(e.message)

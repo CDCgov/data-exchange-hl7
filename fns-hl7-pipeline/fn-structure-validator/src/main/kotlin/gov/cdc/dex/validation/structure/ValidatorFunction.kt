@@ -26,6 +26,7 @@ import java.util.*
 class ValidatorFunction {
     companion object {
         private const val PHIN_SPEC_PROFILE = "MSH-21[1].1" //Not able to use HL7-PET due to scala version conflicts with NistValidator.
+        private const val ELR_SPEC_PROFILE = "MSH-12"
         private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
 
         private val logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
@@ -55,6 +56,8 @@ class ValidatorFunction {
         val evHubNameOk = getSafeEnvVariable("EventHubSendOkName")
         val evHubNameErrs = getSafeEnvVariable("EventHubSendErrsName")
         val evHubConnStr = getSafeEnvVariable("EventHubConnectionString")
+        var evHubNameELROk = getSafeEnvVariable("EventHubSendELROkName")
+
         val ehSender = EventHubSender(evHubConnStr)
 
         var nbrOfMessages = 0
@@ -69,12 +72,15 @@ class ValidatorFunction {
                 metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
                 val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+
+                val messageType = JsonHelper.getValueFromJson("message_type", inputEvent).asString
+                log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                 //Main FN Logic
-                val phinSpec = getPhinSpec(hl7Content, messageUUID, filePath)
-                val report = validateMessage(hl7Content, phinSpec)
+                val phinSpec = getProfile(hl7Content, messageUUID, filePath, PHIN_SPEC_PROFILE)
+                val report = validateMessage(hl7Content, messageUUID, filePath, messageType)
                 //preparing EventHub payload:
                 val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages], listOf(phinSpec))
+
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
 
@@ -86,9 +92,10 @@ class ValidatorFunction {
                         Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, "Message failed Structure Validation")
                 }
                 inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                //Send event
-                val ehDestination = if (NIST_VALID_MESSAGE == report.status) evHubNameOk else evHubNameErrs
 
+                //Send event
+                val ehDestination = getEhDestination(messageType, report, evHubNameOk, evHubNameELROk, evHubNameErrs)
+                //val ehDestination = if (NIST_VALID_MESSAGE == report.status) evHubNameOk else evHubNameErrs
 
                 log.info("Processed structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
                 log.finest("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
@@ -112,9 +119,25 @@ class ValidatorFunction {
         }
     }
 
-    private fun getPhinSpec(hl7Content: String, messageUUID: String, filePath: String): String {
+    private fun getEhDestination(
+        messageType: String,
+        report: NistReport,
+        evHubNameOk: String,
+        evHubNameELROk: String,
+        evHubNameErrs: String
+    ): String {
+        if (messageType.equals("ELR") && NIST_VALID_MESSAGE == report.status) {
+           return evHubNameOk
+        } else if (messageType.equals("CASE") && NIST_VALID_MESSAGE == report.status) {
+           return evHubNameELROk
+        } else {
+            return evHubNameErrs
+        }
+    }
+
+    private fun getProfile(hl7Content: String, messageUUID: String, filePath: String, specProfile: String): String {
         return try {
-            HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
+           HL7StaticParser.getFirstValue(hl7Content, specProfile).get()
         } catch (e: NoSuchElementException) {
             throw InvalidMessageException("Unable to process Message: Unable to retrieve PHIN Specification from message, MSH-21[1].1 Not found - messageUUID: $messageUUID, filePath: $filePath. ")
         }
@@ -131,9 +154,25 @@ class ValidatorFunction {
     }
 
 
-    private fun validateMessage(hl7Message: String, phinSpec: String): NistReport {
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
-        return nistValidator.validate(hl7Message)
+    private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String, messageType: String): NistReport {
+
+        if(messageType.equals("CASE")){
+            val phinSpec = getProfile(hl7Message, messageUUID, filePath, PHIN_SPEC_PROFILE)
+            logger.info("phinSpec: --> $phinSpec")
+            if(phinSpec.isNotEmpty()){
+                val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
+                return nistValidator.validate(hl7Message)
+            }
+       }
+      else  if(messageType.equals("ELR")){
+            val elrSpec = getProfile(hl7Message, messageUUID, filePath, ELR_SPEC_PROFILE)
+            logger.info("elrSpec: --> $elrSpec")
+            if(elrSpec.isNotEmpty()){
+                val nistValidator = ProfileManager(ResourceFileFetcher(), "/COVID19_ELR-v${elrSpec.uppercase()}")
+                return nistValidator.validate(hl7Message)
+            }
+        }
+      return NistReport()
     }
 
     @FunctionName("structure")
@@ -153,10 +192,9 @@ class ValidatorFunction {
                 request
             )
         }
-
+val messageType =  request.queryParameters?.get("message_type").toString()
         return runCatching {
-            val phinSpec = getPhinSpec(hl7Message, "N/A", "N/A")
-            val report = validateMessage(hl7Message, phinSpec)
+            val report = validateMessage(hl7Message, "N/A", "N/A", messageType)
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
         }.onFailure { exception ->
             context.logger.severe("error validating message: ${exception.message}")
