@@ -8,6 +8,7 @@ import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
+import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.model.StructureValidatorProcessMetadata
@@ -29,7 +30,7 @@ class ValidatorFunction {
         private const val ELR_SPEC_PROFILE = "MSH-12"
         private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
 
-        private val logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
+        private var logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
         val gson = GsonBuilder().serializeNulls().create()
     }
     /**
@@ -47,6 +48,7 @@ class ValidatorFunction {
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext
     ) {
+
         val startTime =  Date().toIsoString()
 
         // context.logger.info("Event received message.size: ${message.size}")
@@ -74,12 +76,14 @@ class ValidatorFunction {
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
 
                 val messageType = JsonHelper.getValueFromJson("message_type", inputEvent).asString
+                val route = JsonHelper.getValueFromJson("message_info.route", inputEvent).asString
+
                 log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                 //Main FN Logic
-                val phinSpec = getProfile(hl7Content, messageUUID, filePath, PHIN_SPEC_PROFILE)
-                val report = validateMessage(hl7Content, messageUUID, filePath, messageType)
+                //val phinSpec = getProfile(hl7Content, messageUUID, filePath, PHIN_SPEC_PROFILE)
+                val report = validateMessage(hl7Content, messageUUID, filePath, HL7MessageType.valueOf(messageType), route)
                 //preparing EventHub payload:
-                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages], listOf(phinSpec))
+                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages], listOf(getProfileName(hl7Content, HL7MessageType.valueOf(messageType), route )))
 
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
@@ -126,21 +130,25 @@ class ValidatorFunction {
         evHubNameELROk: String,
         evHubNameErrs: String
     ): String {
-        if (messageType.equals("ELR") && NIST_VALID_MESSAGE == report.status) {
-           return evHubNameELROk
-        } else if (messageType.equals("CASE") && NIST_VALID_MESSAGE == report.status) {
-           return evHubNameOk
+        return if (messageType == "ELR" && NIST_VALID_MESSAGE == report.status) {
+            evHubNameELROk
+        } else if (messageType == "CASE" && NIST_VALID_MESSAGE == report.status) {
+            evHubNameOk
         } else {
-            return evHubNameErrs
+            evHubNameErrs
         }
     }
 
-    private fun getProfile(hl7Content: String, messageUUID: String, filePath: String, specProfile: String): String {
-        return try {
-           HL7StaticParser.getFirstValue(hl7Content, specProfile).get()
-        } catch (e: NoSuchElementException) {
-            throw InvalidMessageException("Unable to process Message: Unable to retrieve PHIN Specification from message, MSH-21[1].1 Not found - messageUUID: $messageUUID, filePath: $filePath. ")
-        }
+    private fun getProfileName(hl7Content: String, messageType: HL7MessageType, route: String): String {
+        val profileName:String =
+            when (messageType) {
+                HL7MessageType.CASE -> HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
+                    .uppercase(Locale.getDefault())
+
+                HL7MessageType.ELR -> "$route-v${HL7StaticParser.getFirstValue(hl7Content, ELR_SPEC_PROFILE).get()}"
+                else -> throw InvalidMessageException("Invalid Message Type: $messageType. Please specify CASE or ELR")
+            }
+        return profileName
     }
 
 
@@ -154,25 +162,17 @@ class ValidatorFunction {
     }
 
 
-    private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String, messageType: String): NistReport {
+    private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String, messageType: HL7MessageType, route: String): NistReport {
+       var profileName = ""
+        try {
+            profileName = getProfileName(hl7Message, messageType, route)
+            val nistValidator = ProfileManager(ResourceFileFetcher(), "/$profileName")
+            return nistValidator.validate(hl7Message)
 
-        if(messageType.equals("CASE")){
-            val phinSpec = getProfile(hl7Message, messageUUID, filePath, PHIN_SPEC_PROFILE)
-            logger.info("phinSpec: --> $phinSpec")
-            if(phinSpec.isNotEmpty()){
-                val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.uppercase()}")
-                return nistValidator.validate(hl7Message)
-            }
-       }
-      else  if(messageType.equals("ELR")){
-            val elrSpec = getProfile(hl7Message, messageUUID, filePath, ELR_SPEC_PROFILE)
-            logger.info("elrSpec: --> $elrSpec")
-            if(elrSpec.isNotEmpty()){
-                val nistValidator = ProfileManager(ResourceFileFetcher(), "/COVID19_ELR-v${elrSpec.uppercase()}")
-                return nistValidator.validate(hl7Message)
-            }
+        } catch (e: NoSuchElementException) {
+            logger.error("Unable to retrieve Profile for $profileName")
+            throw InvalidMessageException("Unable to process Message: Unable to retrieve PHIN Specification from message for $profileName,  - messageUUID: $messageUUID, filePath: $filePath. ")
         }
-      return NistReport()
     }
 
     @FunctionName("structure")
@@ -192,9 +192,17 @@ class ValidatorFunction {
                 request
             )
         }
-val messageType =  request.queryParameters?.get("message_type").toString()
+        //val messageType =  request.queryParameters?.get("message_type").toString()
         return runCatching {
-            val report = validateMessage(hl7Message, "N/A", "N/A", messageType)
+            val messageType = request.headers["x-tp-message_type"]
+            val route = request.headers["x-tp-route"]
+            val report = route?.let { rt ->
+                messageType?.let { HL7MessageType.valueOf(it) }?.let { msgType ->
+                    validateMessage(hl7Message, "N/A", "N/A",
+                        msgType, rt
+                    )
+                }
+            }
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
         }.onFailure { exception ->
             context.logger.severe("error validating message: ${exception.message}")
