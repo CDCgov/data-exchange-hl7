@@ -2,7 +2,10 @@ package gov.cdc.dex.hl7
 
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
-import gov.cdc.dex.hl7.model.*
+import gov.cdc.dex.hl7.model.ValidationErrorMessage
+import gov.cdc.dex.hl7.model.ValidationIssue
+import gov.cdc.dex.hl7.model.ValidationIssueCategoryType
+import gov.cdc.dex.hl7.model.ValidationIssueType
 import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
@@ -29,6 +32,10 @@ class MmgValidator {
 
     private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     private val mmgUtil = MmgUtil(redisProxy)
+
+
+
+
     fun validate(hl7Message: String): List<ValidationIssue> {
         val mmgs = getMMGFromMessage(hl7Message)
         val report = mutableListOf<ValidationIssue>()
@@ -42,10 +49,9 @@ class MmgValidator {
         //  val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
         // logger.debug("validate started blocks.size: --> $allBlocks")
         mmgs.forEach { mmg ->
-            mmg.blocks.forEach { block ->
-                block.elements.forEach { element ->
-
-                    val msgSegments = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
+           mmg.blocks.forEach { block ->
+               block.elements.forEach { element ->
+                  val msgSegments = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
                     val valueList = if(msgSegments.isDefined)
                         msgSegments.get().flatten()
                     else listOf()
@@ -319,17 +325,17 @@ class MmgValidator {
     //    private val mapper = jacksonObjectMapper()
     @Throws(InvalidConceptKey::class)
     fun isConceptValid(key: String, concept: String): Boolean {
-        if (valueSetMap[key] === null) {
+       // if (valueSetMap[key] === null) {
             // logger.debug("Retrieving $key from Redis")
-            val conceptStr = redisProxy.getJedisClient().hgetAll(REDIS_VOCAB_NAMESPACE + key)
-            //Keys comes from MMG definitions and therefore SHOULD exist on REDIS.
-            //IF not the env. is misconfigured and we cannot proceed validating messages
-            if (conceptStr.isNullOrEmpty())
-                throw InvalidConceptKey("Unable to retrieve concept values for $key")
-            valueSetMap[key] = conceptStr.keys.toList()
+        var conceptExists :Boolean = false
 
-        }
-        return valueSetMap[key]?.any { it == concept } == true
+          try {
+               conceptExists = redisProxy.getJedisClient().hexists(REDIS_VOCAB_NAMESPACE + key, concept)
+          }catch(e:Exception){
+              throw InvalidConceptKey("Unable to retrieve concept values for $key")
+          }
+
+        return conceptExists
     }
 
     private fun getCategory(usage: String): ValidationIssueCategoryType {
