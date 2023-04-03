@@ -165,7 +165,9 @@ class ValidatorFunction {
             getProfileName(hl7Message, messageType, route)
         } catch (e: NoSuchElementException) {
             logger.error("Unable to retrieve Profile Name")
-            throw InvalidMessageException("Unable to process Message: Unable to retrieve PHIN Specification from message for messageUUID: $messageUUID, filePath: $filePath. ")
+            val exMessage = if (filePath != "N/A") {  " for messageUUID: $messageUUID, filePath: $filePath." }
+                else { "." } // do not add file information if processed via https request
+            throw InvalidMessageException("Unable to process message: Unable to retrieve PHIN Specification from $PHIN_SPEC_PROFILE$exMessage")
         }
         val nistValidator = ProfileManager(ResourceFileFetcher(), "/$profileName")
         return nistValidator.validate(hl7Message)
@@ -186,11 +188,13 @@ class ValidatorFunction {
 
     @FunctionName("structure")
     fun invoke(
-        @HttpTrigger(name = "req",
+        @HttpTrigger(
+            name = "req",
             methods = [HttpMethod.POST],
-            authLevel = AuthorizationLevel.ANONYMOUS)
-        request: HttpRequestMessage<Optional<String>>,
-        context: ExecutionContext): HttpResponseMessage {
+            authLevel = AuthorizationLevel.ANONYMOUS
+        )
+        request: HttpRequestMessage<Optional<String>>
+    ): HttpResponseMessage {
 
         val hl7Message = try {
             request.body?.get().toString()
@@ -201,35 +205,53 @@ class ValidatorFunction {
                 request
             )
         }
-        //val messageType =  request.queryParameters?.get("message_type").toString()
-        return runCatching {
-            val messageType = request.headers["x-tp-message_type"]
-            val route = request.headers["x-tp-route"]
-            val report = route?.let { rt ->
-                messageType?.let { HL7MessageType.valueOf(it) }?.let { msgType ->
-                    validateMessage(hl7Message, "N/A", "N/A",
-                        msgType, rt
-                    )
-                }
+        // notify user when required header values are missing/empty
+        val messageType = if (!request.headers["x-tp-message_type"].isNullOrEmpty()) {
+            request.headers["x-tp-message_type"].toString()
+        } else {
+            return buildHttpResponse("BAD REQUEST: Message Type ('CASE' or 'ELR') " +
+                    "must be specified in the HTTP Header as 'x-tp-message_type'. " +
+                    "Please correct the HTTP header and try again.",
+                HttpStatus.BAD_REQUEST,
+                request)
+        }
+        val route = if (!request.headers["x-tp-route"].isNullOrEmpty()) {
+            request.headers["x-tp-route"].toString()
+        } else {
+            if (messageType == "ELR") {
+                return buildHttpResponse("BAD REQUEST: ELR message must specify a route" +
+                        " in the HTTP header as 'x-tp-route'. " +
+                        "Please correct the HTTP header and try again.",
+                HttpStatus.BAD_REQUEST,
+                request)
+            } else {
+                ""
             }
+        }
+
+        return try {
+            val report =  validateMessage(
+                    hl7Message, "N/A", "N/A",
+                    messageType.let { HL7MessageType.valueOf(it) }, route
+                )
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
-        }.onFailure { exception ->
-            context.logger.severe("error validating message: ${exception.message}")
-            return buildHttpResponse(
-                "${exception.message}",
+        } catch (e: Exception) {
+            buildHttpResponse(
+                "${e.message}",
                 HttpStatus.BAD_REQUEST,
                 request
             )
-        }.getOrThrow()
-
+        }
     }
 
 }
 
 private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+    // need to be able to send plain text exception message that is not formatted as json
+    val contentType = if (status == HttpStatus.OK) { "application/json" } else { "text/plain" }
     return request
         .createResponseBuilder(status)
-        .header("Content-Type", "application/json")
+        .header("Content-Type", contentType)
         .body(message)
         .build()
 }

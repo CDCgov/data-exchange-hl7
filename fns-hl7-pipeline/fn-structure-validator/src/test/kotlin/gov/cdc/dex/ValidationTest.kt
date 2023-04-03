@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder
 import gov.cdc.dex.validation.structure.InvalidMessageException
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
+import kotlin.test.assertTrue
 
 
 class ValidationTest {
@@ -47,18 +48,6 @@ class ValidationTest {
         //val profile = msh.split("|")[20].split("^")[0]
         val profile = HL7StaticParser.getFirstValue(msh, "MSH-12").get()
         println(profile)
-    }
-    @Test
-  fun validateHL7Delimiters() {
-        val hl7Message = this::class.java.getResource("/Lyme_HappyPath.txt").readText()
-        val msg = hl7Message.trim()
-        val mshPos = msg.indexOf("MSH|")
-        if (mshPos > -1) {
-            val delimiters = msg.substring(mshPos + 4, mshPos + 8)
-            println(delimiters)
-        } else {
-            throw InvalidMessageException("some message")
-        }
     }
     private fun testFolder(folderName: String) {
         val dir = "src/test/resources/$folderName"
