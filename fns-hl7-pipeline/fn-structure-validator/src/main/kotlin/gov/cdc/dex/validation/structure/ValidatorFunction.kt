@@ -1,6 +1,5 @@
 package gov.cdc.dex.validation.structure
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -29,9 +28,10 @@ class ValidatorFunction {
         private const val PHIN_SPEC_PROFILE = "MSH-21[1].1" //Not able to use HL7-PET due to scala version conflicts with NistValidator.
         private const val ELR_SPEC_PROFILE = "MSH-12"
         private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
-
+        private const val HL7_MSH = "MSH|"
+        private const val HL7_SUBDELIMITERS = "^~\\&"
         private var logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
-        val gson = GsonBuilder().serializeNulls().create()
+        val gson = GsonBuilder().serializeNulls().create()!!
     }
     /**
      * This function will be invoked when an event is received from Event Hub.
@@ -58,32 +58,30 @@ class ValidatorFunction {
         val evHubNameOk = getSafeEnvVariable("EventHubSendOkName")
         val evHubNameErrs = getSafeEnvVariable("EventHubSendErrsName")
         val evHubConnStr = getSafeEnvVariable("EventHubConnectionString")
-        var evHubNameELROk = getSafeEnvVariable("EventHubSendELROkName")
+        val evHubNameELROk = getSafeEnvVariable("EventHubSendELROkName")
 
         val ehSender = EventHubSender(evHubConnStr)
 
-        var nbrOfMessages = 0
-        message.forEach { singleMessage: String? ->
+        message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             // context.logger.info("singleMessage: --> $singleMessage")
-            var report : NistReport = NistReport()
-            var metadata :JsonObject = JsonObject()
+            var report = NistReport()
+            var metadata = JsonObject()
 
             try {
                 val hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
                 metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
                 val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-
                 val messageType = JsonHelper.getValueFromJson("message_type", inputEvent).asString
                 val route = JsonHelper.getValueFromJson("message_info.route", inputEvent).asString
 
                 log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                 //Main FN Logic
                 //val phinSpec = getProfile(hl7Content, messageUUID, filePath, PHIN_SPEC_PROFILE)
-                val report = validateMessage(hl7Content, messageUUID, filePath, HL7MessageType.valueOf(messageType), route)
+                report = validateMessage(hl7Content, messageUUID, filePath, HL7MessageType.valueOf(messageType), route)
                 //preparing EventHub payload:
-                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages], listOf(getProfileName(hl7Content, HL7MessageType.valueOf(messageType), route )))
+                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[msgNumber], listOf(getProfileName(hl7Content, HL7MessageType.valueOf(messageType), route )))
 
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
@@ -103,12 +101,12 @@ class ValidatorFunction {
 
                 log.info("Processed structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
                 log.finest("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
-                ehSender.send(ehDestination, Gson().toJson(inputEvent))
+                ehSender.send(ehDestination, gson.toJson(inputEvent))
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
                 log.severe("Unable to process Message due to exception: ${e.message}")
-                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[nbrOfMessages], listOf())
+                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[msgNumber], listOf())
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
                 metadata.addArrayElement("processes", processMD)
@@ -117,9 +115,8 @@ class ValidatorFunction {
                 log.severe("metadata in exception: $metadata")
                 log.info("inputEvent in exception:$inputEvent")
                 inputEvent.add("summary", summary.toJsonElement())
-                ehSender.send(evHubNameErrs, Gson().toJson(inputEvent))
+                ehSender.send(evHubNameErrs, gson.toJson(inputEvent))
             }
-            nbrOfMessages++
         }
     }
 
@@ -163,15 +160,27 @@ class ValidatorFunction {
 
 
     private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String, messageType: HL7MessageType, route: String): NistReport {
-       var profileName = ""
-        try {
-            profileName = getProfileName(hl7Message, messageType, route)
-            val nistValidator = ProfileManager(ResourceFileFetcher(), "/$profileName")
-            return nistValidator.validate(hl7Message)
-
+        validateHL7Delimiters(hl7Message)
+        val profileName =  try {
+            getProfileName(hl7Message, messageType, route)
         } catch (e: NoSuchElementException) {
-            logger.error("Unable to retrieve Profile for $profileName")
-            throw InvalidMessageException("Unable to process Message: Unable to retrieve PHIN Specification from message for $profileName,  - messageUUID: $messageUUID, filePath: $filePath. ")
+            logger.error("Unable to retrieve Profile Name")
+            throw InvalidMessageException("Unable to process Message: Unable to retrieve PHIN Specification from message for messageUUID: $messageUUID, filePath: $filePath. ")
+        }
+        val nistValidator = ProfileManager(ResourceFileFetcher(), "/$profileName")
+        return nistValidator.validate(hl7Message)
+    }
+
+    private fun validateHL7Delimiters(hl7Message: String) {
+        val msg = hl7Message.trim()
+        val mshPos = msg.indexOf(HL7_MSH)
+        if (mshPos > -1) {
+            val delimiters = msg.substring(mshPos + HL7_MSH.length, mshPos + (HL7_MSH.length + HL7_SUBDELIMITERS.length))
+            if (delimiters != HL7_SUBDELIMITERS) {
+                throw InvalidMessageException("Invalid delimiters found in message header: found '$delimiters', expected '$HL7_SUBDELIMITERS'")
+            }
+        } else {
+            throw InvalidMessageException("Unable to locate message header sequence '$HL7_MSH'")
         }
     }
 
