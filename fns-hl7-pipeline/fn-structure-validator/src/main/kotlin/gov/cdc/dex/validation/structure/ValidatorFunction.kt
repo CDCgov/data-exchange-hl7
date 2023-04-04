@@ -73,7 +73,8 @@ class ValidatorFunction {
                 metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
                 val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                val messageType = JsonHelper.getValueFromJson("message_type", inputEvent).asString
+                //TODO: "type" or "message_type" going forward?
+                val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
                 val route = JsonHelper.getValueFromJson("message_info.route", inputEvent).asString
 
                 log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
@@ -98,8 +99,12 @@ class ValidatorFunction {
                 //Send event
                 val ehDestination = getEhDestination(messageType, report, evHubNameOk, evHubNameELROk, evHubNameErrs)
                 //val ehDestination = if (NIST_VALID_MESSAGE == report.status) evHubNameOk else evHubNameErrs
-
-                log.info("Processed structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
+                val destIndicator = if (ehDestination == evHubNameErrs) {
+                    "ERROR"
+                } else {
+                    "OK"
+                }
+                log.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
                 log.finest("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
                 ehSender.send(ehDestination, gson.toJson(inputEvent))
 
@@ -141,7 +146,6 @@ class ValidatorFunction {
             when (messageType) {
                 HL7MessageType.CASE -> HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
                     .uppercase(Locale.getDefault())
-
                 HL7MessageType.ELR -> "$route-v${HL7StaticParser.getFirstValue(hl7Content, ELR_SPEC_PROFILE).get()}"
                 else -> throw InvalidMessageException("Invalid Message Type: $messageType. Please specify CASE or ELR")
             }
