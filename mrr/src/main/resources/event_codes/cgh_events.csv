@@ -1,0 +1,4 @@
+Category,Program,Condition Code,Condition Name,Profiles,Profile Has Special Case,MMGs,Special Case Group,Special Case MMGs
+Zoonotic,CGH,12010,Babesiosis,Babesiosis_MMG_V1.0|Babesiosis_MMG_V1.1,No|No,babesiosis|babesiosis_v1_1,,
+Zoonotic,CGH,10270,Trichinellosis,Trichinellosis_MMG_V1.0,No,trichinellosis,,
+Vectorborne Diseases,CGH,10130,Malaria,Malaria_MMG_V1.0,No,malaria,,
