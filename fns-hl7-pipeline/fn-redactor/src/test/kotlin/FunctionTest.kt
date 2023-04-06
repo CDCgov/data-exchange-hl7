@@ -16,7 +16,7 @@ class FunctionTest {
     fun testRedactor(){
         val msg = this::class.java.getResource("/BDB_LAB_02_redact.txt")?.readText()
         val helper = Helper()
-        val report = msg?.let { helper.getRedactedReport(it) }
+        val report = msg?.let { helper.getRedactedReport(it,"CASE") }
         if (report != null) {
             println("report msg :${report._1}")
             println("report List: ${report._2()?.toList()}")
@@ -24,6 +24,17 @@ class FunctionTest {
 
     }
 
+    @Test
+    fun testRedactorELR(){
+        val msg = this::class.java.getResource("/HL7_2.5_New HHS Fields1.txt")?.readText()
+        val helper = Helper()
+        val report = msg?.let { helper.getRedactedReport(it,"ELR") }
+        if (report != null) {
+            println("report msg :${report._1}")
+            println("report List: ${report._2()?.toList()}")
+        }
+
+    }
     @Test
     fun extractValue(){
         val helper = Helper()
@@ -38,7 +49,7 @@ class FunctionTest {
         val gson = GsonBuilder().serializeNulls().create()
         val msg = this::class.java.getResource("/BDB_LAB_02_redact.txt").readText()
         val helper = Helper()
-        val report =  helper.getRedactedReport(msg)
+        val report =  helper.getRedactedReport(msg, "CASE")
         val w = report?._2()?.toList()
 
         println("w: ${w}")

@@ -61,9 +61,11 @@ class Function {
                 filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
 
+                val messageType = JsonHelper.getValueFromJson("message_type", inputEvent).asString
+
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
-                val report = helper.getRedactedReport(hl7Content)
+                val report = helper.getRedactedReport(hl7Content, messageType)
                 if(report != null) {
                     val rReport = RedactorReport(report._2())
                     val configFileName : List<String> = if (!singleMessage.isNullOrEmpty()) listOf(helper.getConfigFileName(singleMessage)) else listOf();
@@ -118,7 +120,8 @@ class Function {
         }
 
         return try {
-            val report = helper.getRedactedReport(hl7Message)
+            val messageType: String? = request.headers["x-tp-message_type"]
+            val report = messageType?.let { helper.getRedactedReport(hl7Message, it) }
 
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
         } catch (e: Exception) {
@@ -131,6 +134,7 @@ class Function {
     }
 
 }
+
 
 private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
     var contentType = "application/json"
