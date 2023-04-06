@@ -76,7 +76,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.6-SNAPSHOT</version>
+            <version>1.0.12-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -241,7 +241,7 @@
                 <version>2.12.4</version>
                 <configuration>
                     <environmentVariables>
-                        <REDIS_CACHE_NAME>tf-vocab-cache-dev.redis.cache.windows.net</REDIS_CACHE_NAME>
+                        <REDIS_CACHE_NAME>tf-vocab-cache-${environment-id}.redis.cache.windows.net</REDIS_CACHE_NAME>
                         <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
                     </environmentVariables>
                 </configuration>
