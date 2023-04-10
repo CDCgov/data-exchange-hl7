@@ -16,7 +16,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Metadata bug fixes
     - Redacted did not update summary
     - Process metadata missing when exceptions were thrown on several functions.
-      
+
+  - Dev Ops
+    -	Moved Redis to Premium in Dev and TST with automated backups
+    -	Terraformed cloud service app and deployed in DEV, TST and STG (waiting on firewall for private end points)
+    -	Started process to create ADF for AWS S3 Data migration.
+    -	Created PhinMS Security Architecture diagram.
+    -	Rerun Fortify Scans
+
+
 
 ### [0.0.15] - 2023-03-22
   - Set up STG environment and pipelines
