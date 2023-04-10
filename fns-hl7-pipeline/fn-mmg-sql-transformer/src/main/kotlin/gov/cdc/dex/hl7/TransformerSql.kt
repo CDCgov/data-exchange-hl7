@@ -158,7 +158,7 @@ class TransformerSql {
     //  ------------- MMG Elements that are Repeated Blocks -------------
     // --------------------------------------------------------------------------------------------------------
     fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
-
+        var listOfLists = false
         val repeatedBlocksModel = blocks.associate { blk ->
             val blockName = if (blk.name.normalize().contains("repeating_group")) {
                 blk.name
@@ -187,6 +187,7 @@ class TransformerSql {
                                 mapSingleElement(bmaObj, elName, elementsInBlock, profilesMap)
                             }.reduce { acc, next -> acc + next }// .elementNames.map
                         } else {
+                            listOfLists = true // we will need to fix this at the end
                             // for each repeated element, we need a separate row in the table that also
                             // duplicates the non-repeating elements
                             val repeatersNames = repeaters.map { StringUtils.normalizeString(it.name) }
@@ -211,14 +212,23 @@ class TransformerSql {
                             rows.toList()
                         }
                     } //blkModelArr.map
+                if (listOfLists) {
+                    // unwrap this list of lists into a single list
+                    listOfLists = false
+                    val newList = mutableListOf<Any>()
+                    mOut.forEach{
+                        listInIt ->
+                        if (listInIt is Iterable<*>) newList.addAll(listInIt as Collection<Any>) //IntelliJ will highlight this but it's OK
+                    }
+                    blkName to newList
+                } else {
+                    blkName to mOut
+                }
 
-                blkName to mOut
-
-        }// .else
+            }// .else
 
         } // .repeatedBlocksModel
-
-        // logger.info("repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")       
+        // logger.info("repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
         return repeatedBlocksModel
     } // .repeatedBlocksToSqlModel
     private fun mapSingleElement(bmaObj: JsonObject, elName: String, elementsInBlock: List<Element>, profilesMap: Map<String, List<PhinDataType>>) : Map<String, JsonElement> {
