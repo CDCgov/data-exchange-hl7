@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.16] - 2023-04-06
+  - Added config information to event metadata (configuration file names)
+  - Added MUMPS, Pertussis, Tuberculosis, Babesiosis, Trichinellosis MMGs and Event Codes
+  - Updates on PHIN Spec profiles
+    - Replaced predicate statements with conformance statements for better uer messages.
+    - Removed content validation of dates from IGAMT profiles into MMG validation.
+  - Updated structure validator to validate HL7 delimiters
+  - Creted tool to update IGAMT profile XML files with friendly error messages and deployed new updated profiles.   
+  - Improved performance on MMG Validator by refactoring Redis lookups
+  - Metadata bug fixes
+    - Redacted did not update summary
+    - Process metadata missing when exceptions were thrown on several functions.
+      
+
 ### [0.0.15] - 2023-03-22
   - Set up STG environment and pipelines
   - Updated PHIN Specs with findings on discrepacies with MVPS validation
