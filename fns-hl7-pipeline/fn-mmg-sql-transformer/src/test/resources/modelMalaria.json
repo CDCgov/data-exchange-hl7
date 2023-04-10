@@ -590,6 +590,19 @@
 					"original_text": null,
 					"code_system_concept_name": "Plasmodium malariae (organism)",
 					"cdc_preferred_designation": "Malariae"
+				},
+				{
+					"identifier": "9999999",
+					"text": "Fake",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Fake (organism)",
+					"cdc_preferred_designation": "Fake Organism"
 				}
 			]
 		},
