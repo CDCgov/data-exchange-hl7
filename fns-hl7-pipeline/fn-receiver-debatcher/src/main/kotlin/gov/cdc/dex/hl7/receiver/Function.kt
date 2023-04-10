@@ -90,13 +90,13 @@ class Function {
                         fileSize=blobClient.properties.blobSize,
                         singleOrBatch=Provenance.SINGLE_FILE,
                         originalFileName =blobName,
-                        systemProvider = metaDataMap.getValue("system_provider"),
-                        originalFileTimestamp = metaDataMap.getValue("original_file_timestamp")
+                        systemProvider = metaDataMap["system_provider"],
+                        originalFileTimestamp = metaDataMap["original_file_timestamp"]
                     ) // .hl7MessageMetadata
                     //Validate metadata
-                    val isValidMessage = validateMessageMetaData(metaDataMap);
+                    val isValidMessage = validateMessageMetaData(metaDataMap, context);
 
-                    var messageType = metaDataMap.getValue("message_type");
+                    var messageType = metaDataMap["message_type"];
 
                     if(messageType.isNullOrEmpty()){
                         messageType = HL7MessageType.UNKOWN.name;
@@ -161,10 +161,10 @@ class Function {
         val eventCode = extractValue(message, EVENT_CODE_PATH)
 
         //READ FROM METADATA FOR ELR
-        val messageType = metaDataMap.getValue("message_type");
+        val messageType = metaDataMap["message_type"];
         if(messageType == HL7MessageType.ELR.name){
-            val route = metaDataMap.getValue("route")?.normalize();
-            val reportingJurisdiction = metaDataMap.getValue("reporting_jurisdiction");
+            val route = metaDataMap["route"]?.normalize();
+            val reportingJurisdiction = metaDataMap["reporting_jurisdiction"];
             return DexMessageInfo(eventCode, route, null,  reportingJurisdiction, HL7MessageType.ELR)
         }
 
@@ -213,12 +213,13 @@ class Function {
         //println(msgEvent)
     }
 
-    private fun validateMessageMetaData(metaDataMap: Map<String, String>):Boolean {
+    private fun validateMessageMetaData(metaDataMap: Map<String, String>, context: ExecutionContext):Boolean {
         var isValid = true;
         //Check if required Meta data fields are present
-        val messageType = metaDataMap.getValue("message_type");
-        val route = metaDataMap.getValue("route");
-        val reportingJurisdiction = metaDataMap.getValue("reporting_jurisdiction");
+        val messageType = metaDataMap["message_type"];
+        val route = metaDataMap["route"];
+        val reportingJurisdiction = metaDataMap["reporting_jurisdiction"];
+        context.logger.info("MetaData Info: --> messageType: ${messageType}, route: ${route}, reportingJurisdiction: $reportingJurisdiction")
 
         if(messageType.isNullOrEmpty()){
             isValid = false;
@@ -227,6 +228,7 @@ class Function {
                 isValid = false;
             }
         }
+        context.logger.info("isValid: --> $isValid")
 
         return isValid;
     }

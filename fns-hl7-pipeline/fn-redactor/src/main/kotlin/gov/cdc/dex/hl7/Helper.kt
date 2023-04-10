@@ -18,13 +18,21 @@ class Helper {
         }
         val dIdentifier = DeIdentifier()
         return dIdentifier.deIdentifyMessage(msg, rules.toTypedArray())
-
     }
 
      fun extractValue(msg: String, path: String):String  {
         val value = HL7StaticParser.getFirstValue(msg, path)
         return if (value.isDefined) value.get() //throw Exception("Error extracting $path from HL7 message")
         else ""
+    }
+
+    fun getConfigFileName(msg: String):String{
+        val pid_5_2 = extractValue(msg, PATH_PID_5_2).lowercase(Locale.getDefault())
+        return if(pid_5_2.equals("^^^^^^S",true)){
+            "/case_config.txt"
+        } else {
+            "/case_pid_config.txt"
+        }
     }
 
    }
