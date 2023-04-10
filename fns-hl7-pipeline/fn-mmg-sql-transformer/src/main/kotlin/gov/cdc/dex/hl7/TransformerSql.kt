@@ -94,46 +94,27 @@ class TransformerSql {
             StringUtils.normalizeString(el.name) != MESSAGE_PROFILE_IDENTIFIER_EL_NAME
 
         }.associate { el ->
-
             val elName = StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH)
             val elDataType = el.mappings.hl7v251.dataType
-
             val elModel = modelJson[elName]
-
             if (elModel.isJsonNull) {
-
                 elName to elModel // elModel is null, passing to model as is
-
             } else {
-
                 val elModelArr = elModel.asJsonArray
-
                 elName to elModelArr.map { elMod ->
-
                     if (!profilesMap.containsKey(elDataType)) {
-
                         val elValue = elMod.asJsonPrimitive
-                        // logger.info("${elName} --> ${elValue}")
-
-                      //  elName to mapOf(elName to elValue)
-                        elName to elValue
-
+                        mapOf(elName to elValue)
                     } else {
                         val mmgDataType = el.mappings.hl7v251.dataType
                         val sqlPreferred = profilesMap[mmgDataType]!!.filter { it.preferred }
-
                         val elObj = elMod.asJsonObject
-
                         getMapWithPreferredNames(sqlPreferred, elName, elObj, mmgDataType)
                     } // .else
-
                 } // .elModelArr.map
-
             } // .else
-
         }
-
-        // logger.info("singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")       
+        // logger.info("singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")
         return singlesRepeatsModel
     } // .singlesRepeatsToSqlModel
 
