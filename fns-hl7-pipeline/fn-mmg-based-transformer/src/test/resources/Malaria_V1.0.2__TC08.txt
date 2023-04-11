@@ -1,0 +1,70 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Malaria_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||Malaria_Sample04^^^SendAppName&2.16.840.1.114222.222&ISO||~^^^^^^S||20020515|U||2028-9^Asian^CDCREC|^^^11^20001^^^^11001|||||||||||OTH^other^NULLFL
+OBR|1||Malaria_Sample04^SendAppName^2.16.840.1.114222.222^ISO|68991-9^Epidemiologic Information^LN|||20160601100100|||||||||||||||20160608100100|||C||||||10130^Malaria^NND
+OBX|1|CWE|78746-5^Country of Birth^LN||KOR^KOREA (THE REPUBLIC OF)^ISO3166_1||||||F
+OBX|2|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|TS|11368-8^Date of Illness Onset^LN||20160518||||||F
+OBX|4|CWE|77996-7^Pregnancy Status^LN||UNK^Unknown^NULLFL||||||F
+OBX|5|TS|77975-1^Diagnosis Date^LN||20160525||||||F
+OBX|6|CWE|77974-4^Hospitalized^LN||UNK^Unknown^NULLFL||||||F
+OBX|7|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|8|SN|77998-3^Age at Case Investigation^LN||^14|a^year [time]^UCUM|||||F
+OBX|9|CWE|77982-7^Case Disease Imported Code^LN||C1512888^International^UML||||||F
+OBX|10|CWE|INV153^Imported Country^PHINQUESTION||KOR^KOREA (THE REPUBLIC OF)^ISO3166_1||||||F
+OBX|11|CWE|77984-3^Country of Exposure^LN|1|KOR^KOREA (THE REPUBLIC OF)^ISO3166_1||||||F
+OBX|12|CWE|77989-2^Transmission Mode^LN||418427004^Vector-borne transmission^SCT||||||F
+OBX|13|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|14|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|15|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|16|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|17|CWE|48766-0^Reporting Source Type Code^LN||1^Hospital^HL70406||||||F
+OBX|18|ST|74549-7^Person Reporting to CDC - Name^LN||Jennifer Blank||||||F
+OBX|19|ST|74548-9^Person Reporting to CDC - Phone Number^LN||223-555-9922||||||F
+OBX|20|DT|77979-3^Case Investigation Start Date^LN||20160601||||||F
+OBX|21|DT|77995-9^Date Reported^LN||20160601||||||F
+OBX|22|TS|77972-8^Earliest Date Reported to County^LN||20160605||||||F
+OBX|23|TS|77973-6^Earliest Date Reported to State^LN||20160606||||||F
+OBX|24|SN|77991-8^MMWR Week^LN||^23||||||F
+OBX|25|DT|77992-6^MMWR Year^LN||2016||||||F
+OBX|26|DT|77970-2^Date First Reported to PHD^LN||20160601||||||F
+OBX|27|CWE|77966-0^Reporting State^LN||11^District of Columbia^FIPS5_2||||||F
+OBX|28|CWE|77967-8^Reporting County^LN||11001^District of Columbia, DC^FIPS6_4||||||F
+OBX|29|CWE|77968-6^National Reporting Jurisdiction^LN||11^DC^FIPS5_2||||||F
+OBX|30|TX|77999-1^Comment^LN||The subject had a relapse of P. vivax. Took atovaquone-proguanil while traveling but did not take terminal prophylaxis with primaquine||||||F
+OBX|31|ST|45394-4^Subject's Last Name^LN||Hofft||||||F
+OBX|32|ST|45392-8^Subject's First Name^LN||Kaw||||||F
+OBX|33|ST|52526-1^Physician Name^LN|1|Young, Mary||||||F
+OBX|34|ST|68340-9^Physician Phone^LN|1|333-444-5555||||||F
+OBX|35|CWE|161413004^History of Previous Illness^SCT||N^No^HL70136||||||F
+OBX|36|CWE|67187-5^Type of Complications^LN||260413007^No Complication^SCT||||||F
+OBX|37|CWE|182929008^Chemoprophylaxis^SCT||Y^Yes^HL70136||||||F
+OBX|38|CWE|INV931^Chemoprophylaxis Medication(s)^PHINQUESTION||284623^Atovaquone/Proguanil (Malarone)^RXNORM||||||F
+OBX|39|CWE|INV309^Chemoprophylaxis Taken as Prescribed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|40|CWE|55753-8^Treatment Information^LN|1|5521^Hydroxychloroquine^RXNORM||||||F
+OBX|41|DT|86948-7^Date Treatment or Therapy Started^LN|1|20160520||||||F
+OBX|42|DT|63939-3^Date Treatment or Therapy Stopped^LN|1|20160531||||||F
+OBX|43|SN|67453-1^Treatment Duration^LN|1|^11|d^day^UCUM|||||F
+OBX|44|CWE|55753-8^Treatment Information^LN|2|8687^Primaquine^RXNORM||||||F
+OBX|45|DT|86948-7^Date Treatment or Therapy Started^LN|2|20160520||||||F
+OBX|46|DT|63939-3^Date Treatment or Therapy Stopped^LN|2|20160530||||||F
+OBX|47|SN|67453-1^Treatment Duration^LN|2|^10|d^day^UCUM|||||F
+OBX|48|CWE|82312-0^Received Blood Transfusion/Organ Transplant^LN||N^No^HL70136||||||F
+OBX|49|CWE|TRAVEL10^Subject Traveled or Lived Outside US^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|50|CWE|TRAVEL15^Subject's Country of Residence Prior to Most Recent Travel^PHINQUESTION||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|51|CWE|82764-2^International Destination(s) of Recent Travel^LN|1|KOR^Korea, Republic Of^ISO3166_1||||||F
+OBX|52|DT|55209-1^Date of Return to the US from Travel^LN|1|20160202||||||F
+OBX|53|SN|82310-4^Duration of Stay^LN|1|^6|mo^month [time]^UCUM|||||F
+OBX|54|CWE|66415-1^Reason(s) for Travel^LN|1|PHC386^Business^CDCPHINVS||||||F
+OBX|55|CWE|82314-6^Specimen Sent to CDC^LN||Y^Yes^HL70136||||||F
+OBX|56|CWE|66746-9^Specimen Type(s) Sent to CDC^LN|1|PHC1502^Images^CDCPHINVS||||||F
+OBX|57|ST|INV965^CSID^PHINQUESTION|1|3000345678||||||F
+OBX|58|CWE|66746-9^Specimen Type(s) Sent to CDC^LN|2|258580003^Whole Blood^SCT||||||F
+OBX|59|ST|INV965^CSID^PHINQUESTION|2|3000345679||||||F
+OBX|60|CWE|INV290^Test Type^PHINQUESTION|1|10710-2^Blood Smear^LN||||||F
+OBX|61|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|62|TS|68963-8^Specimen Collection Date/Time^LN|1|20160520||||||F
+OBX|63|CWE|LAB278^Organism Name^PHINQUESTION|1|74746009^Vivax^SCT||||||F
+OBX|64|SN|53556-7^Parasitemia Level Percentage^LN|1|^1||||||F
+OBX|65|CWE|INV290^Test Type^PHINQUESTION|2|47085-6^Polymerase Chain Reaction^LN||||||F
+OBX|66|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F
+OBX|67|TS|68963-8^Specimen Collection Date/Time^LN|2|20160520||||||F
