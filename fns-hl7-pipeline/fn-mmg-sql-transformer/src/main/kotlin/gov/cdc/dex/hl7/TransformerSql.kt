@@ -149,8 +149,8 @@ class TransformerSql {
             val blkName = StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH)
             val blkModel = modelJson[blkName]
 
-            if (blkModel.isJsonNull) {
-                blkName to blkModel // this is null
+            if (blkModel.isJsonNull || blkModel.asJsonArray.isEmpty) {
+                blkName to null// we want null, not an empty array
             } else {
                 val blkModelArr = blkModel.asJsonArray  //array of data for this repeating block
                 // need to determine up front if there are any repeating elements within this repeat block
