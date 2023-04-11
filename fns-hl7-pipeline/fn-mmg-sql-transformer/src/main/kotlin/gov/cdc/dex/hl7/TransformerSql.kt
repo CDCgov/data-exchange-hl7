@@ -7,7 +7,9 @@ package gov.cdc.dex.hl7
 // import com.google.gson.reflect.TypeToken
 
 import com.google.gson.JsonElement
+import com.google.gson.JsonNull
 import com.google.gson.JsonObject
+import com.google.gson.JsonPrimitive
 import gov.cdc.dex.hl7.model.PhinDataType
 import gov.cdc.dex.redisModels.Block
 import gov.cdc.dex.redisModels.Element
@@ -181,13 +183,17 @@ class TransformerSql {
                             repeatersNames.forEach { elName ->
                                 // extract each element of the array and create a new Json object
                                 // with the same key as the key to the array
-                                val arrayData = bmaObj[elName].asJsonArray
-                                for (arrayDatum in arrayData) {
-                                    val newObject = JsonObject()
-                                    newObject.add(elName, arrayDatum)
-                                    val flattenedRepeat =
-                                        mapSingleElement(newObject, elName, repeaters, profilesMap)
-                                    rows.add(flattenedSingles + flattenedRepeat)
+                                if (bmaObj[elName].isJsonNull || bmaObj[elName].asJsonArray.isEmpty) {
+                                    rows.add(flattenedSingles + mapOf(elName to (bmaObj[elName] as JsonNull)))
+                                } else {
+                                    val arrayData = bmaObj[elName].asJsonArray
+                                    for (arrayDatum in arrayData) {
+                                        val newObject = JsonObject()
+                                        newObject.add(elName, arrayDatum)
+                                        val flattenedRepeat =
+                                            mapSingleElement(newObject, elName, repeaters, profilesMap)
+                                        rows.add(flattenedSingles + flattenedRepeat)
+                                    }
                                 }
                             }
                             rows.toList()
