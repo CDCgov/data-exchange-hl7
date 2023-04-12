@@ -1,6 +1,7 @@
 package gov.cdc.dex.hl7
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.*
@@ -14,7 +15,6 @@ import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
-import gov.cdc.dex.util.JsonHelper.gson
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
 
@@ -23,6 +23,9 @@ import java.util.*
  * Azure function with event hub trigger to redact messages   */
 class Function {
 
+    companion object {
+        val gson: Gson = GsonBuilder().serializeNulls().create()
+    }
     @FunctionName("Redactor")
     fun eventHubProcessor(
         @EventHubTrigger(
@@ -68,7 +71,7 @@ class Function {
                 val report = helper.getRedactedReport(hl7Content, messageType)
                 if(report != null) {
                     val rReport = RedactorReport(report._2())
-                    val configFileName : List<String> = if (!singleMessage.isNullOrEmpty()) listOf(helper.getConfigFileName(singleMessage)) else listOf();
+                    val configFileName : List<String> = if (!singleMessage.isNullOrEmpty()) listOf(helper.getConfigFileName(singleMessage)) else listOf()
                     val processMD = RedactorProcessMetadata(rReport.status, report = rReport, eventHubMD[nbrOfMessages], configFileName)
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
@@ -80,7 +83,7 @@ class Function {
                     val summary = SummaryInfo("REDACTED")
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
                     context.logger.info("Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $evHubNameOk ")
-                    ehSender.send(evHubNameOk, Gson().toJson(inputEvent))
+                    ehSender.send(evHubNameOk, gson.toJson(inputEvent))
                 }
 
             } catch (e: Exception) {
@@ -91,7 +94,7 @@ class Function {
 
                 val summary = SummaryInfo("FAILURE", problem)
                 inputEvent.add("summary", summary.toJsonElement())
-                ehSender.send(evHubNameErrs, Gson().toJson(inputEvent))
+                ehSender.send(evHubNameErrs, gson.toJson(inputEvent))
             }
             nbrOfMessages++
 
