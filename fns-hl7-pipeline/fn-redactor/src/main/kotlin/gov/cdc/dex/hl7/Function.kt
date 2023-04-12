@@ -61,7 +61,7 @@ class Function {
                 filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
 
-                val messageType = JsonHelper.getValueFromJson("message_type", inputEvent).asString
+                val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
 
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
