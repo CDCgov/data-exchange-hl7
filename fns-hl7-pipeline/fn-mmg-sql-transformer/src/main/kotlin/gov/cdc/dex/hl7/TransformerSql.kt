@@ -106,7 +106,7 @@ class TransformerSql {
                 elName to elModelArr.map { elMod ->
                     if (!profilesMap.containsKey(elDataType)) {
                         val elValue = elMod.asJsonPrimitive
-                        mapOf(elName to elValue)
+                        mapOf("$elName${SEPARATOR}value" to elValue)
                     } else {
                         val mmgDataType = el.mappings.hl7v251.dataType
                         val sqlPreferred = profilesMap[mmgDataType]!!.filter { it.preferred }
