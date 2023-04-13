@@ -3,6 +3,7 @@ package gov.cdc.dex.validation.structure
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
@@ -73,9 +74,11 @@ class ValidatorFunction {
                 metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
                 val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                //TODO: "type" or "message_type" going forward?
+
                 val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
-                val route = JsonHelper.getValueFromJson("message_info.route", inputEvent).asString
+
+                val routeJson = JsonHelper.getValueFromJson("message_info.route", inputEvent)
+                val route = if (routeJson is JsonPrimitive) routeJson.asString else ""
 
                 log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                 //Main FN Logic
@@ -146,7 +149,7 @@ class ValidatorFunction {
             when (messageType) {
                 HL7MessageType.CASE -> HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
                     .uppercase(Locale.getDefault())
-                HL7MessageType.ELR -> "$route-v${HL7StaticParser.getFirstValue(hl7Content, ELR_SPEC_PROFILE).get()}"
+                HL7MessageType.ELR -> "${route.uppercase()}-v${HL7StaticParser.getFirstValue(hl7Content, ELR_SPEC_PROFILE).get().uppercase()}"
                 else -> throw InvalidMessageException("Invalid Message Type: $messageType. Please specify CASE or ELR")
             }
         return profileName
