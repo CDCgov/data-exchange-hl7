@@ -157,45 +157,6 @@
           }
         },
         {
-          "id": "815be666-d5a1-44f4-8ede-1eb0f2869612",
-          "guideId": "880e7fe9-c82e-4359-b70a-cd741338de49",
-          "guideInternalVersion": 0,
-          "blockId": "2",
-          "ordinal": 2,
-          "name": "Patient name type",
-          "description": "Name is not requested by the program, but the Patient Name field is required to be populated for the HL7 message to be valid. Have adopted the HL7 convention for processing a field where the name has been removed for de-identification purposes.",
-          "comments": "",
-          "status": "Final",
-          "dataType": "Coded",
-          "businessRules": "",
-          "isUnitOfMeasure": false,
-          "legacyCodeSystem": "PHINQUESTION",
-          "codeSystem": "PHINQUESTION",
-          "legacyPriority": "R",
-          "priority": 1,
-          "isRepeat": false,
-          "mayRepeat": "N",
-          "valueSetCode": "",
-          "mappings": {
-            "hl7v251": {
-              "legacyIdentifier": "DEM100",
-              "identifier": "DEM100",
-              "messageContext": "PID-5.7 Patient Name Type - second instance (does not pass Variable ID or label). HL7 reserves the first instance of the name for Legal Name.",
-              "dataType": "XPN",
-              "segmentType": "PID",
-              "obrPosition": 1,
-              "fieldPosition": 5,
-              "componentPosition": 7,
-              "usage": "R",
-              "cardinality": "[1..1]",
-              "literalFieldValues": {},
-              "repeatingGroupElementType": "NO",
-              "implementationNotes": "Literal value: |~^^^^^^S|",
-              "sampleSegment": ""
-            }
-          }
-        },
-        {
           "id": "97f14f04-0885-4f36-9650-9c54cefba2e8",
           "guideId": "880e7fe9-c82e-4359-b70a-cd741338de49",
           "guideInternalVersion": 0,
