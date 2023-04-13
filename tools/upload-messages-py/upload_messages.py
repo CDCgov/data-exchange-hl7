@@ -11,18 +11,19 @@ x-tp-orginal_file_name:
 '''
 user_id = ""
 env = "dev"
-ENVIRONMENTS = ["dev", "tst"]
+ENVIRONMENTS = ["dev", "tst", "stg"]
 upload_url = "hl7ingress?filename="
 
 def upload_files(path_to_files, file_list):
-    base_url = f'https://cloud-svc-transport-{env}-eastus.azurewebsites.net/'
+   # base_url = f'https://cloud-svc-transport-{env}-eastus.azurewebsites.net/'
+    base_url = f'https://ocio-ede-{env}-hl7-svc-transport.azurewebsites.net/'
 
     for file_name in file_list:
         file_text = ""
         full_path = os.path.join(path_to_files, file_name)
 
         # get plain text
-        with open(full_path, 'r', encoding='utf-8') as f:
+        with open(full_path, 'r') as f:
             file_text = f.read()
         
         if len(file_text) > 0:
