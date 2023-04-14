@@ -39,13 +39,13 @@ class Function {
     } // .companion object
 
 
-    @FunctionName("lakeSegsTransformer")
-    fun eventHubProcessor(
+    @FunctionName("lakeSegsCASETransformer")
+    fun eventHubCASEProcessor(
             @EventHubTrigger(
                 name = "msg", 
-                eventHubName = "%EventHubReceiveName%",
+                eventHubName = "%EventHubReceiveNameCASE%",
                 connection = "EventHubConnectionString",
-                consumerGroup = "%EventHubConsumerGroup%",) 
+                consumerGroup = "%EventHubConsumerGroupCASE%",)
                 message: List<String?>,
                 context: ExecutionContext) {
 
