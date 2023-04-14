@@ -19,7 +19,7 @@
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
 
-        <functionAppName>ocio-ede-${environment-id}-hl7-mmg-lake-segs-transfomer</functionAppName>
+        <functionAppName>ocio-ede-${environment-id}-hl7-lake-segments-transformer</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
 
         <slf4j.version>2.0.3</slf4j.version>
@@ -144,6 +144,7 @@
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
+                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <appSettings>
