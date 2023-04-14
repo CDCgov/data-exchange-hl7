@@ -39,13 +39,13 @@ class Function {
     } // .companion object
 
 
-    @FunctionName("lakeSegsTransformer")
-    fun eventHubProcessor(
+    @FunctionName("lakeSegsCASETransformer")
+    fun eventHubCASEProcessor(
             @EventHubTrigger(
                 name = "msg", 
-                eventHubName = "%EventHubReceiveName%",
+                eventHubName = "%EventHubReceiveNameCASE%",
                 connection = "EventHubConnectionString",
-                consumerGroup = "%EventHubConsumerGroup%",) 
+                consumerGroup = "%EventHubConsumerGroupCASE%",)
                 message: List<String?>,
                 context: ExecutionContext) {
 
@@ -125,9 +125,9 @@ class Function {
     fun eventHubELRProcessor(
         @EventHubTrigger(
             name = "msg",
-            eventHubName = "%EventHubReceiveName%",
+            eventHubName = "%EventHubReceiveNameELR%",
             connection = "EventHubConnectionString",
-            consumerGroup = "%EventHubConsumerGroup%",)
+            consumerGroup = "%EventHubConsumerGroupELR%",)
         message: List<String?>,
         context: ExecutionContext) {
 
@@ -139,7 +139,7 @@ class Function {
 
         // Set up the 2 out Event Hubs: OK and Errs
         val evHubConnStr = System.getenv("EventHubConnectionString")
-        val eventHubSendELROkName = System.getenv("EventHubSendELROkName")
+        val eventHubSendOkName = System.getenv("EventHubSendOkName")
         val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
         val evHubSender = EventHubSender(evHubConnStr)
 
@@ -173,13 +173,13 @@ class Function {
                         hl7Content,
                         startTime,
                         metadata,
-                        eventHubSendELROkName,
+                        eventHubSendOkName,
                         evHubSender,
                         gsonWithNullsOn,
                         inputEvent
                     )
 
-                    context.logger.info("Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendELROkName")
+                    context.logger.info("Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendOkName")
 
                 } catch (e: Exception) {
 
