@@ -183,7 +183,7 @@ class TransformerSql {
                             repeatersNames.forEach { elName ->
                                 // extract each element of the array and create a new Json object
                                 // with the same key as the key to the array
-                                if (bmaObj[elName].isJsonNull || bmaObj[elName].asJsonArray.isEmpty) {
+                                if (bmaObj[elName] == null || bmaObj[elName].isJsonNull || bmaObj[elName].asJsonArray.isEmpty) {
                                     rows.add(flattenedSingles + mapOf(elName to (bmaObj[elName] as JsonNull)))
                                 } else {
                                     val arrayData = bmaObj[elName].asJsonArray
