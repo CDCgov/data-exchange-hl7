@@ -12,7 +12,7 @@ Tuberculosis,NCHHSTP,50258,Latent TB Infection,TB_Case_Map_v2.0|TB_MMG_V3.0,No|N
 Sexually Transmitted Diseases,NCHHSTP,10273,Chancroid,STD_MMG_V1.0|STD_MMG_V1.2,No|No,std|std_1_2,,
 Sexually Transmitted Diseases,NCHHSTP,10274,Chlamydia trachomatis infection,STD_MMG_V1.0|STD_MMG_V1.2,No|No,std|std_1_2,,
 Sexually Transmitted Diseases,NCHHSTP,10280,Gonorrhea,STD_MMG_V1.0|STD_MMG_V1.2,No|No,std|std_1_2,,
-Sexually Transmitted Diseases,NCHHSTP,10316,"Syphilis, congenital",STD_MMG_V1.0|STD_MMG_V1.2,No|No,std|std_1_2,,
+Sexually Transmitted Diseases,NCHHSTP,10316,"Syphilis, congenital",CongenitalSyphilis_MMG_V1.0|CongenitalSyphilis_MMG_V1.1,No|No,congenital_syphilis|congenital_syphilis_1_1,,
 Sexually Transmitted Diseases,NCHHSTP,10313,"Syphilis, early non-primary, non-secondary",STD_MMG_V1.0|STD_MMG_V1.2,No|No,std|std_1_2,,
 Sexually Transmitted Diseases,NCHHSTP,10311,"Syphilis, primary",STD_MMG_V1.0|STD_MMG_V1.2,No|No,std|std_1_2,,
 Sexually Transmitted Diseases,NCHHSTP,10312,"Syphilis, secondary",STD_MMG_V1.0|STD_MMG_V1.2,No|No,std|std_1_2,,
