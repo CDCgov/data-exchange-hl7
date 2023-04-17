@@ -44,7 +44,7 @@ class TransformerSql {
             val elModel = modelJson[elName]
             // logger.info("${elName} --> ${elName}, modelJson[elName]: --> ${modelJson[elName]}")
 
-            if (elModel.isJsonNull) {
+            if (elModel == null || elModel.isJsonNull) {
 
                 listOf(elName to elModel) // elModel is null, passing to model as is
 
@@ -99,7 +99,7 @@ class TransformerSql {
             val elName = StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH)
             val elDataType = el.mappings.hl7v251.dataType
             val elModel = modelJson[elName]
-            if (elModel.isJsonNull) {
+            if (elModel == null || elModel.isJsonNull) {
                 elName to elModel // elModel is null, passing to model as is
             } else {
                 val elModelArr = elModel.asJsonArray
@@ -151,7 +151,7 @@ class TransformerSql {
             val blkName = StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH)
             val blkModel = modelJson[blkName]
 
-            if (blkModel.isJsonNull || blkModel.asJsonArray.isEmpty) {
+            if (blkModel == null || blkModel.isJsonNull || blkModel.asJsonArray.isEmpty) {
                 blkName to null// we want null, not an empty array
             } else {
                 val blkModelArr = blkModel.asJsonArray  //array of data for this repeating block
@@ -221,7 +221,7 @@ class TransformerSql {
     private fun mapSingleElement(bmaObj: JsonObject, elName: String, elementsInBlock: List<Element>, profilesMap: Map<String, List<PhinDataType>>) : Map<String, JsonElement> {
         val elMod = bmaObj[elName]
         //logger.info("blkName: --> ${blkName}, elName: $elName, bmaObj: ${bmaObj}")
-        return if (elMod.isJsonNull) {
+        return if (elMod == null || elMod.isJsonNull) {
             mapOf(elName to elMod)
         } else {
             val mmgElement =
