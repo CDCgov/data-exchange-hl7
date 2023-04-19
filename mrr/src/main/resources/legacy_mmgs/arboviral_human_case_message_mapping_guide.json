@@ -194,45 +194,6 @@
           }
         },
         {
-          "id": "75d291c8-684c-52e3-8ae1-7bd3c346b187",
-          "guideId": "51592ac7-45c6-56e3-9417-0c698baa273f",
-          "guideInternalVersion": 0,
-          "blockId": "2",
-          "ordinal": 2,
-          "name": "Patient name type",
-          "description": "Name is not requested by the program, but the Patient Name field is required to be populated for the HL7 message to be valid.  Have adopted the HL7 convention for processing a field where the name has been removed for de-identification purposes.",
-          "comments": "",
-          "status": "Final",
-          "dataType": "Coded",
-          "businessRules": "",
-          "isUnitOfMeasure": false,
-          "legacyCodeSystem": "PHINQUESTION",
-          "codeSystem": "PHINQUESTION",
-          "legacyPriority": "R",
-          "priority": 1,
-          "isRepeat": true,
-          "mayRepeat": "Y/2",
-          "valueSetCode": "PHVS_NameType_HL7_2x",
-          "mappings": {
-            "hl7v251": {
-              "legacyIdentifier": "DEM100",
-              "identifier": "DEM100",
-              "messageContext": "PID-5 Patient Name field",
-              "dataType": "XPN",
-              "segmentType": "PID",
-              "obrPosition": 1,
-              "fieldPosition": 5,
-              "componentPosition": 7,
-              "usage": "R",
-              "cardinality": "[1..2]",
-              "literalFieldValues": {},
-              "repeatingGroupElementType": "NO",
-              "implementationNotes": "Literal value:  |~^^^^^^S|\n\nSECOND INSTANCE - where PID-5.7 Patient Name Type - is S for Pseudonym.  HL7 reserves the first instance of the name for Legal Name.",
-              "sampleSegment": ""
-            }
-          }
-        },
-        {
           "id": "887f63dd-2728-5841-ae1f-78d1bc86d9e9",
           "guideId": "51592ac7-45c6-56e3-9417-0c698baa273f",
           "guideInternalVersion": 0,

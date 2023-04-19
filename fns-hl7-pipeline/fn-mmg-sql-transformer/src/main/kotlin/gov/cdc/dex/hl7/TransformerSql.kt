@@ -7,7 +7,9 @@ package gov.cdc.dex.hl7
 // import com.google.gson.reflect.TypeToken
 
 import com.google.gson.JsonElement
+import com.google.gson.JsonNull
 import com.google.gson.JsonObject
+import com.google.gson.JsonPrimitive
 import gov.cdc.dex.hl7.model.PhinDataType
 import gov.cdc.dex.redisModels.Block
 import gov.cdc.dex.redisModels.Element
@@ -42,7 +44,7 @@ class TransformerSql {
             val elModel = modelJson[elName]
             // logger.info("${elName} --> ${elName}, modelJson[elName]: --> ${modelJson[elName]}")
 
-            if (elModel.isJsonNull) {
+            if (elModel == null || elModel.isJsonNull) {
 
                 listOf(elName to elModel) // elModel is null, passing to model as is
 
@@ -94,46 +96,27 @@ class TransformerSql {
             StringUtils.normalizeString(el.name) != MESSAGE_PROFILE_IDENTIFIER_EL_NAME
 
         }.associate { el ->
-
             val elName = StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH)
             val elDataType = el.mappings.hl7v251.dataType
-
             val elModel = modelJson[elName]
-
-            if (elModel.isJsonNull) {
-
+            if (elModel == null || elModel.isJsonNull) {
                 elName to elModel // elModel is null, passing to model as is
-
             } else {
-
                 val elModelArr = elModel.asJsonArray
-
                 elName to elModelArr.map { elMod ->
-
                     if (!profilesMap.containsKey(elDataType)) {
-
                         val elValue = elMod.asJsonPrimitive
-                        // logger.info("${elName} --> ${elValue}")
-
-                      //  elName to mapOf(elName to elValue)
-                        elName to elValue
-
+                        mapOf("$elName${SEPARATOR}value" to elValue)
                     } else {
                         val mmgDataType = el.mappings.hl7v251.dataType
                         val sqlPreferred = profilesMap[mmgDataType]!!.filter { it.preferred }
-
                         val elObj = elMod.asJsonObject
-
                         getMapWithPreferredNames(sqlPreferred, elName, elObj, mmgDataType)
                     } // .else
-
                 } // .elModelArr.map
-
             } // .else
-
         }
-
-        // logger.info("singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")       
+        // logger.info("singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")
         return singlesRepeatsModel
     } // .singlesRepeatsToSqlModel
 
@@ -158,7 +141,7 @@ class TransformerSql {
     //  ------------- MMG Elements that are Repeated Blocks -------------
     // --------------------------------------------------------------------------------------------------------
     fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
-
+        var listOfLists = false
         val repeatedBlocksModel = blocks.associate { blk ->
             val blockName = if (blk.name.normalize().contains("repeating_group")) {
                 blk.name
@@ -168,8 +151,8 @@ class TransformerSql {
             val blkName = StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH)
             val blkModel = modelJson[blkName]
 
-            if (blkModel.isJsonNull) {
-                blkName to blkModel // this is null
+            if (blkModel == null || blkModel.isJsonNull || blkModel.asJsonArray.isEmpty) {
+                blkName to null// we want null, not an empty array
             } else {
                 val blkModelArr = blkModel.asJsonArray  //array of data for this repeating block
                 // need to determine up front if there are any repeating elements within this repeat block
@@ -187,6 +170,7 @@ class TransformerSql {
                                 mapSingleElement(bmaObj, elName, elementsInBlock, profilesMap)
                             }.reduce { acc, next -> acc + next }// .elementNames.map
                         } else {
+                            listOfLists = true // we will need to fix this at the end
                             // for each repeated element, we need a separate row in the table that also
                             // duplicates the non-repeating elements
                             val repeatersNames = repeaters.map { StringUtils.normalizeString(it.name) }
@@ -199,32 +183,45 @@ class TransformerSql {
                             repeatersNames.forEach { elName ->
                                 // extract each element of the array and create a new Json object
                                 // with the same key as the key to the array
-                                val arrayData = bmaObj[elName].asJsonArray
-                                for (arrayDatum in arrayData) {
-                                    val newObject = JsonObject()
-                                    newObject.add(elName, arrayDatum)
-                                    val flattenedRepeat =
-                                        mapSingleElement(newObject, elName, repeaters, profilesMap)
-                                    rows.add(flattenedSingles + flattenedRepeat)
+                                if (bmaObj[elName] == null || bmaObj[elName].isJsonNull || bmaObj[elName].asJsonArray.isEmpty) {
+                                    rows.add(flattenedSingles + mapOf(elName to (bmaObj[elName] as JsonNull)))
+                                } else {
+                                    val arrayData = bmaObj[elName].asJsonArray
+                                    for (arrayDatum in arrayData) {
+                                        val newObject = JsonObject()
+                                        newObject.add(elName, arrayDatum)
+                                        val flattenedRepeat =
+                                            mapSingleElement(newObject, elName, repeaters, profilesMap)
+                                        rows.add(flattenedSingles + flattenedRepeat)
+                                    }
                                 }
                             }
                             rows.toList()
                         }
                     } //blkModelArr.map
+                if (listOfLists) {
+                    // unwrap this list of lists into a single list
+                    listOfLists = false
+                    val newList = mutableListOf<Any>()
+                    mOut.forEach{
+                        listInIt ->
+                        if (listInIt is Iterable<*>) newList.addAll(listInIt as Collection<Any>) //IntelliJ will highlight this but it's OK
+                    }
+                    blkName to newList
+                } else {
+                    blkName to mOut
+                }
 
-                blkName to mOut
-
-        }// .else
+            }// .else
 
         } // .repeatedBlocksModel
-
-        // logger.info("repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")       
+        // logger.info("repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
         return repeatedBlocksModel
     } // .repeatedBlocksToSqlModel
     private fun mapSingleElement(bmaObj: JsonObject, elName: String, elementsInBlock: List<Element>, profilesMap: Map<String, List<PhinDataType>>) : Map<String, JsonElement> {
         val elMod = bmaObj[elName]
         //logger.info("blkName: --> ${blkName}, elName: $elName, bmaObj: ${bmaObj}")
-        return if (elMod.isJsonNull) {
+        return if (elMod == null || elMod.isJsonNull) {
             mapOf(elName to elMod)
         } else {
             val mmgElement =

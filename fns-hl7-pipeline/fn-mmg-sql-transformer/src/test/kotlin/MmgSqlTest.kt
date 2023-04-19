@@ -153,6 +153,11 @@ class MmgSqlTest {
     fun testTransformerSQLForTB() {
         testTransformerSQL("/TB and LTBI_3-0-3_TC01.txt", "/modelTB.json")
     }
+
+    @Test
+    fun testTransformerSQLForCRS() {
+        testTransformerSQL("/CRS_1-0_TC02.txt", "/modelCRS.json")
+    }
     @Test
     fun testMessageProfileIdentifier() {
         println("===Begin Test Message Profile Identifier=======================")
