@@ -35,7 +35,7 @@ class Function {
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext
     ) {
-        context.logger.info("------ received event: ------> message: --> $message")
+        //context.logger.info("------ received event: ------> message: --> $message")
 
         val startTime = Date().toIsoString()
         val evHubNameOk = System.getenv("EventHubSendOkName")
