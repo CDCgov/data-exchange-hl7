@@ -13,15 +13,15 @@ Files dropped here can be single HL7 files or batches of HL7 files. Batches migh
 
 An AZ Container is setup with Events to generate a new Event on BlobCreate to push messages to an event hub topic. (<code>hl7-file-dropped</code>). This service will be a consumer of such topic and further process the event.
 
-Each file must be uploaded with certain metadata attached to that object as follows:
-- **message_type**: [Required] Indicates if the message being uploaded is a "CASE" message or "ELR" message. (Only those two values are suported so far.
-- **reporting_jurisdiction**: [Required if message_type == "ELR"] Indicates the Jurisdiction submitting the message. ELR does not contain information about reporting jurisdiction within the message and therefore must be provided as metadata.
-- **route**: [Required if message_type == "ELR"] Indicates the program owning this message and where should it be routed to. Currently only COVID19_ELR value is supported for route.
-- **system_provider**: [Optional] Informs which system is performing the upload. Ex.: DEX_Upload, PHINMS, Mercury, etc.
-- **orginal_file_name**: [Optional] Uploader can identify the original file name at their system of origin.
-- **original_file_timestamp**: [Optional] Uploader can identify the original file timestamp at their system of origin.
+Each file must be uploaded with certain metadata attached to that object, as follows:
+- **message_type**: [Required] Indicates whether the message being uploaded is a "CASE" message or "ELR" message. (Only those two values are suported so far.)
+- **reporting_jurisdiction**: [Required if message_type == "ELR"] Indicates the Jurisdiction submitting the message. ELR does not contain information about reporting jurisdiction within the message and therefore it must be provided as metadata.
+- **route**: [Required if message_type == "ELR"] Indicates the program owning this message and where should it be routed to. Currently, only the value "COVID19_ELR"  is supported for route.
+- **system_provider**: [Optional] Indicates which system is performing the upload. Ex.: DEX_Upload, PHINMS, Mercury, etc.
+- **orginal_file_name**: [Optional] Uploader can identify the original file name from the system of origin.
+- **original_file_timestamp**: [Optional] Uploader can identify the original file timestamp from the system of origin.
 
-This service, upon receiving the event, will read the actual data from the blob storage and determine if the data is a single HL7 message or batch of messages. In either case, each message will be enriched with provenance metadata (file-name, size, creation timestamp, single or batch,  message index, event id and timestamp), user submitted metadata (external system provider, original file name and timestamp) and some generated Ids to track the message along the pipeline (file_uuid and message_uuid). 
+This service, upon receiving the event, will read the actual data from the blob storage and determine whether the data is a single HL7 message or a batch of messages. In either case, each message will be enriched with provenance metadata (filename, size, creation timestamp, single or batch,  message index, event id and timestamp), user submitted metadata (external system provider, original file name and timestamp) and some generated IDs to track the message along the pipeline (file_uuid and message_uuid). 
 Basic metadata validation will be performed for the required attributes above. If validation fails, the message will be dead-lettered.
 
 Both the generated metadata described above and the actual HL7 content (base-64 encoded) will be propagated to an event hub (hl7-recdeb-ok).
