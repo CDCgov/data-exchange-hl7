@@ -3,21 +3,21 @@ This service redacts PII data out of the original message. Redacted fields are c
 	
 	
 # Details:
-This field uses HL7-PET library to perform redaction on specific fields based on configuration files. 
-It loads different configuration files for CASE message vs ELR messages. It inspects specific fields (defined as HL7 paths, ex.: PID[1]-11.9) for the presence of any value and if populated, it will substitute the field out based on the Rule.
+The Redactor service uses the HL7-PET library to perform redaction on specific fields based on configuration files. 
+It loads different configuration files for CASE messages vs. ELR messages. It inspects specific fields (defined as HL7 paths, e.g., PID[1]-11.9) for the presence of any value and, if populated, it will substitute a value into the field based on the configured rule.
 	
 ## PID-5
 It was agreed that for PID-5, we don't want to fully "fix" the message.
 CDC requires STLTs to send **PID-5** as <code>"~^^^^^^S"</code>
 
-Redactor service expects **PID-5[2]** to be precisely <code>^^^^^^S</code>. And it will not "fix" a message if it was sent with any other value.
+Redactor service expects **PID-5[2]** to be precisely <code>^^^^^^S</code>, and it will not "fix" a message if it was sent with any other value.
 
-The way this was implemented is - first, the redactor checks for the presence of <code>^^^^^^S</code> in** PID-5[2]** and loads a specific configuration file depending on whether this field is properly set or not.
-Then it proceeds to redact **PID-5[1]** and possibly **PID-5[2]** to remove any PII data present.
+The way this was implemented is as follows: first, the redactor checks for the presence of <code>^^^^^^S</code> in** PID-5[2]** and loads a specific configuration file depending on whether this field is properly set or not.
+Then, it proceeds to redact **PID-5[1]** and possibly **PID-5[2]** to remove any PII data present.
 
 If **PID-5[2]** is not the appropriate value, Redactor will remove the PII data from the message and the Structure Validator will error out this message. 
 
-Therefore it's important that STLTS send **PID-5[2]** as defined on the PHIN Spec with the exact value of "^^^^^^S.
+Therefore it is important that STLTs send **PID-5[2]** as defined on the PHIN Spec with the exact value of "^^^^^^S.
 
 Ex.:
 
