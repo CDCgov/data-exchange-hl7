@@ -10,6 +10,13 @@ Currently, structure validator can validate any PHIN Spec version - 2.0, 3.0, 3.
 For CASE, the **MSH-21[1].1** field specifies the Phin Spec version the message abides by and that field is used to load the appropriate specification for validation.
 For ELR, The service is dependent on metadata submitted by the uploader. the Receiver/Debatcher will read azure object metadata and make that available on our even under message_info. Structure validator will use **message_info.route** as the prefix of the profiles to be used plus **MSH-12** (version) to fully know what profiles to load. **COVID19_ELR** is the only route currently supported as of today (2023-04) and we support versions 2.3, 2.3.1, 2.3.Z, 2.5 and 2.5.1
 
+As a first step, the structure validator Makes sure that the message starts with a MSH segment, followed by a pipe delimiter ("**|**"), and the exact encoding characters: **"^~\\&"**.
+I/e., the message must start with 
+
+```
+"MSH|^~\\&"
+```
+
 All IGAMT profiles are stored within this project under [/src/main/resources](https://github.com/CDCgov/data-exchange-hl7/tree/develop/fns-hl7-pipeline/fn-structure-validator/src/main/resources) folder, with one folder for each set of files that belong to a specific profile:
 
 (Note: This was feasible when we thought we would have only the 4 case profiles. If the number of profiles keeps growing, perhaps this decision needs to be revisited for a more robust solution).
