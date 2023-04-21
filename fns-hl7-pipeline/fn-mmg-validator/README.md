@@ -22,7 +22,10 @@ The following rules are checked against each HL7 message:
 * **Data Types** - validates that the Data types on OBX-2 matches the data type defined by the MMG
 * **Vocabulary** - for CE and CWE fields, the codes provided on OBX-5 are checked against Value Sets from PhinVADS.
 * **Invalid OBX segments** - if an OBX-3 code is present on the message that is not mapped on the MMG will be flagged as a warning.
-
+* **Observation Sub ID (OBX-4)** - Makes sure Observation Sub ID is populated for repeating elements of the MMG.
+* **Dates** - Make sure dates are sent in appropriate HL7 format
+* **MMWR Year** -Validate specifically MMWR Year (this violates our pattern of fully configurable rules, this one is hardcoded but was requested by customer to be included)
+*
 
 
 ![image](https://user-images.githubusercontent.com/3239945/208454032-b4169ed4-1a48-41c5-a603-20f8fbf6631e.png)
@@ -46,7 +49,8 @@ Output: hl7-mmg-valid-ok ; hl7-mmg-valid-err
       "mmg:hepatitis_v1.0_mmg_core",
       "mmg:hepatitis_v1.0_mmg_hepatitis_a_acute"
     ],
-    "reporting_jurisdiction": "48"
+    "reporting_jurisdiction": "48",
+    "type": "CASE"
   },
  "meta_message_uuid": "",
  "summary": {
@@ -62,6 +66,9 @@ Output: hl7-mmg-valid-ok ; hl7-mmg-valid-err
 		 "start_processing_time": "2022-10-01T13:00:00.000",
 		 "end_processing_time": "2022-10-01T13:01:00.000",
 		 "process_version": "1.0.0",
+		 "eventhub_queued_time": "2022-10-01T13:04.000",
+		 "eventhub_offset": 1234567890,
+		 "eventhub_sequence_number": 123,
 		 "status": "SUCCESS"
 	 },
 	 {
@@ -69,6 +76,9 @@ Output: hl7-mmg-valid-ok ; hl7-mmg-valid-err
 		 "start_processing_time": "2022-10-01T13:02:00.000",
 		 "end_processing_time": "2022-10-01T13:03:00.000",
 		 "process_version": "1.0.0",
+		 "eventhub_queued_time": "2022-10-01T13:04.000",
+		 "eventhub_offset": 1234567890,
+		 "eventhub_sequence_number": 123,
 		 "status": "SUCCESS"
 		"report": {
 		  {full NIST Report}
@@ -79,7 +89,14 @@ Output: hl7-mmg-valid-ok ; hl7-mmg-valid-err
 		 "start_processing_time": "2022-10-01T13:03:00.000",
 		 "end_processing_time": "2022-10-01T13:04:00.000",
 		 "process_version": "1.0.0",
-		 "status": "SUCCESS"
+		 "eventhub_queued_time": "2022-10-01T13:04.000",
+		 "eventhub_offset": 1234567890,
+		 "eventhub_sequence_number": 123,
+		 "status": "SUCCESS",
+		 "configurations": [
+		 	"genV1",
+			"Hep_v1.0"
+		],
 		"report": {
 		  {full MMG Validation Report}
 		}
