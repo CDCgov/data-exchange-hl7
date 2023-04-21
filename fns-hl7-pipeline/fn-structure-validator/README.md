@@ -40,9 +40,21 @@ The **metadata.summary** element will also be updated to reflect the current sta
 
 This service splits CASE messages and ELR messages into two separate Eventhubs. ELR messages do not go through MMG validation, therefore they are separated from the CASE messages topic where MMG-validation service is listening for messages.
 
+### Notes on application.conf.
+
+The NIST validator libraries uses an <code>application.conf</code> file to somewhat control how issues are flagged. A specific issue/problem can be flagged as error or warning (among others not used by DEX).
+We made some alterations to this file in order to better control DEX validation:
+
+- Any Length issue is flagged as a warning.
+- Any X-usage issue is flagged as a warning.
+- Any cardinality and null-cardinality issue is flagged as a warning.
+
+
+## Diagram 
+
 ![image](https://user-images.githubusercontent.com/3239945/233380847-1bef3d9b-21dd-414f-a856-78a59c5ee44f.png)
 
-## Pipelne:
+## Pipeline:
 
  - Input: hl7-redacted-ok 
  - Outputs: 
@@ -79,7 +91,10 @@ This service splits CASE messages and ELR messages into two separate Eventhubs. 
 		 "configurations": [
 		 	"NOTF_OUR_v3.0"
 		 ],
-		"report": {
+		 "eventhb_queued_tyme": "2022-10-01T13:03:00.000",
+		 "eventhub_offset": 12345678890,
+		 "eventhub_sequence_number": 123,
+		 "report": {
 		  {full NIST Report}
 		}
 	 }
