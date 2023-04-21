@@ -96,7 +96,7 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
+             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlinVersion}</version>
             <scope>compile</scope>
         </dependency>
@@ -184,12 +184,8 @@
                                     <artifactId>micronaut-validation</artifactId>
                                     <version>${micronaut.version}</version>
                                 </annotationProcessorPath>
-                            </annotationProcessorPaths>
-                            <annotationProcessorArgs>
-                                <annotationProcessorArg>micronaut.processing.group=example.micronaut</annotationProcessorArg>
-                                <annotationProcessorArg>micronaut.processing.module=micronautguide</annotationProcessorArg>
-                            </annotationProcessorArgs>
-                        </configuration>
+                          </annotationProcessorPaths>
+                       </configuration>
                     </execution>
                     <execution>
                         <id>compile</id>
@@ -279,7 +275,41 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
+
+            <plugin>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-webapp-maven-plugin</artifactId>
+                <version>2.2.0</version>
+                <configuration>
+                    <schemaVersion>v2</schemaVersion>
+                    <appName>cloud-svc-transport-${environment-id}-eastus</appName>
+                    <appServicePlanResourceGroup>${functionResourceGroup}</appServicePlanResourceGroup>
+                     <!-- function app resource group -->
+                    <resourceGroup>${functionResourceGroup}</resourceGroup>
+                    <!-- function app service plan name -->
+                    <appServicePlanName>${functionServicePlan}</appServicePlanName>
+                    <subscriptionId>${subscriptionID}</subscriptionId>
+                    <region>${functionRegion}</region>
+
+
+                    <runtime>
+                        <os>Linux</os>
+                        <javaVersion>Java 11</javaVersion>
+                        <webContainer>Java SE</webContainer>
+                    </runtime>
+                    <deployment>
+                        <resources>
+                            <resource>
+                                <directory>${project.basedir}/target</directory>
+                                <includes>
+                                    <include>*.jar</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </deployment>
+                </configuration>
+            </plugin>
+       </plugins>
     </build>
 
 </project>
