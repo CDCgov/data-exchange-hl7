@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dex</groupId>
     <artifactId>svc-cloud-transport</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <parent>
         <groupId>io.micronaut</groupId>
@@ -19,7 +19,7 @@
         <micronaut.version>3.8.5</micronaut.version>
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>gov.cdc.dex.transport.service.Application</exec.mainClass>
-        <kotlinVersion>1.6.10</kotlinVersion>
+        <kotlinVersion>1.7.20</kotlinVersion>
     </properties>
 
     <repositories>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-cloud-proxy</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
@@ -96,7 +96,7 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlinVersion}</version>
             <scope>compile</scope>
         </dependency>
