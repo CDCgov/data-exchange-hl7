@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
-import java.time.Duration
 import java.util.*
 import javax.inject.Singleton
 
@@ -134,9 +133,14 @@ class BlobProxy(private val azureConfig: AzureConfig, private val meterRegistry:
         }
     }
 
-    override fun saveFile(container: String,fileName: String,content: InputStream,size: Long,metadata: Map<String, String>?,contentType: String
+    override fun saveFile(container: String, fileName: String, content: InputStream, size: Long, metadata: Map<String, String>?, contentType: String
     ) = meterRegistry.withMetrics("blob.saveFile.inputStream") {
-        TODO("Not yet implemented")
+        val binaryData = BinaryData.fromStream(content)
+        val blobClient: BlobClient = containerClient.getBlobClient(fileName)
+        blobClient.upload(binaryData, true)
+        if (metadata != null) {
+            blobClient.setMetadata(metadata)
+        }
     }
 
     override fun saveFile(fileName: String, content: String, metadata: Map<String, String>?, contentType: String) =
