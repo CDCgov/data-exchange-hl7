@@ -39,7 +39,7 @@ class MmgSqlTest {
 
 
     @Test
-    fun testRedisInstanceUsed() { println("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
+    fun testRedisInstanceUsed() { println("testRedisInstanceUsed: REDIS_CACHE_NAME: --> $REDIS_CACHE_NAME")
         assertEquals(REDIS_CACHE_NAME, REDIS_INSTANCE_NAME)
     } // .testRedisInstanceUsed
 
@@ -157,6 +157,21 @@ class MmgSqlTest {
     @Test
     fun testTransformerSQLForCRS() {
         testTransformerSQL("/CRS_1-0_TC02.txt", "/modelCRS.json")
+    }
+
+    @Test
+    fun testTransformerSQLForCandida() {
+        testTransformerSQL("/C auris_1-0-1_TC01.txt", "/modelCandida.json")
+    }
+
+    @Test
+    fun testTransformerSQLForCPCRE() {
+        testTransformerSQL("/CP-CRE_1-0-1_TC01.txt", "/modelCPCRE.json")
+    }
+
+    @Test
+    fun testTransformerSQLForSalmonellosis() {
+        testTransformerSQL("/FDD_V1.0.1_ETM4-Sal(D).txt", "/modelSal.json")
     }
     @Test
     fun testMessageProfileIdentifier() {

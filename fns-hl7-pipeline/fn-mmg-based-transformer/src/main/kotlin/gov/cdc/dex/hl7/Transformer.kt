@@ -127,19 +127,13 @@ class Transformer(redisProxy: RedisProxy)  {
             // val jedis = redisProxy.getJedisClient()
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
- 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
-
-            val obxIdToElementMap = getObxIdToElementMap(mmgBlocks)
-
             val (_, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             val messageLines = getMessageLines(hl7Content)
-
             val obxLines = messageLines.filter { it.startsWith("OBX|") }
-
             val blocksNonSingleModel = mmgBlocksNonSingle.associate { block ->
-
+                val obxIdToElementMap = block.elements.associateBy { element ->  element.mappings.hl7v251.identifier }
                 val msgLines = block.elements.flatMap { element ->
                     // logger.info("element: --> ${element.mappings.hl7v251.identifier}\n")
                     filterByIdentifier(obxLines, element.mappings.hl7v251.identifier)
@@ -212,16 +206,6 @@ class Transformer(redisProxy: RedisProxy)  {
 
             return hl7Content.split("\n")
         } // .getMessageLines
-
-
-        private fun getObxIdToElementMap(blocks: List<Block>): Map<String, Element> {
-
-            val elems = blocks.flatMap { it.elements } // .mmgElemsBlocksSingle
-
-            return elems.associateBy { elem ->
-                elem.mappings.hl7v251.identifier
-            }
-        } // .getObxIdToElementMap
 
 
         /* private */ fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
