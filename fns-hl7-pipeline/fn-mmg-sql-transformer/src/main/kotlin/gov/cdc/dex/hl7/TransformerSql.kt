@@ -9,7 +9,6 @@ package gov.cdc.dex.hl7
 import com.google.gson.JsonElement
 import com.google.gson.JsonNull
 import com.google.gson.JsonObject
-import com.google.gson.JsonPrimitive
 import gov.cdc.dex.hl7.model.PhinDataType
 import gov.cdc.dex.redisModels.Block
 import gov.cdc.dex.redisModels.Element
@@ -156,7 +155,9 @@ class TransformerSql {
             } else {
                 val blkModelArr = blkModel.asJsonArray  //array of data for this repeating block
                 // need to determine up front if there are any repeating elements within this repeat block
-                val elementsInBlock = blocks.filter { it.name == blk.name }[0].elements
+             //   val elementsInBlock = blocks.filter { it.name == blk.name }[0].elements
+                val elementsInBlock = blocks.filter { it.name == blk.name }[0].elements.associateBy {elem ->
+                    elem.mappings.hl7v251.identifier}.values.toList()
                 val elementNames = elementsInBlock.map { StringUtils.normalizeString(it.name) }
                 val (repeaters, singles) = elementsInBlock.partition { it.isRepeat || it.mayRepeat.contains("Y") }
 
