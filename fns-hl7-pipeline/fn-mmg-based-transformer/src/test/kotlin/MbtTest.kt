@@ -30,6 +30,8 @@ import gov.cdc.dex.metadata.DexMessageInfo
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.util.JsonHelper
+import gov.cdc.dex.util.StringUtils
+import gov.cdc.dex.util.StringUtils.Companion.normalize
 
 
 class MbtTest {
@@ -49,6 +51,7 @@ class MbtTest {
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
 
         const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1"
+        const val EVENT_CODE_PATH = "OBR-31.1"
 
     } // .companion 
 
@@ -57,7 +60,7 @@ class MbtTest {
     fun testRedisInstanceUsed() {
 
         logger.info("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
-        assertEquals(REDIS_CACHE_NAME, "tf-vocab-cache-dev.redis.cache.windows.net")
+        assertEquals(REDIS_CACHE_NAME, "ocio-ede-dev-dex-cache.redis.cache.windows.net")
     } // .testRedisInstanceUsed
 
 
@@ -101,8 +104,8 @@ class MbtTest {
         val filePath = "/TBRD_V1.0.2_TM_TC04.hl7"
         val hl7Content = this::class.java.getResource(filePath).readText()
         val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
-
-        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "11088")
+        val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
+        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
 
         logger.info("testGetMMGsFromMessage: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
 
@@ -216,55 +219,56 @@ class MbtTest {
         assertEquals(model.size, 89)
     } // .testTransformerHl7ToJsonModel
  
-
+    @Test
+    fun getSmallBlockName(){
+        val name = "Vaccination History Section to specify the detailed vaccine record information - Repeats for each vaccine dose."
+        val blockName = if (name.normalize().contains("repeating_group")) {
+            name
+        } else {
+            "$name repeating group"
+        }
+        val smallName = StringUtils.getNormalizedShortName(blockName, 30)
+        println(smallName)
+        assert(smallName.length <= 30)
+        assert(smallName.endsWith("_rg"))
+    }
     @Test
     fun testTransformerHl7ToJsonModelwithRedisMmgTC04() {
-        
-        // hl7
-        val hl7FilePath = "/TBRD_V1.0.2_TM_TC04.hl7"
-        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
-        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
+        testTransformerWithRedis("testTC04", "/TBRD_V1.0.2_TM_TC04.hl7")
 
-        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "11088")
-
-        mmgs.forEach {
-            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-        }
-
-        val transformer = Transformer(redisProxy)
-        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
-
-        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
-
-        val mmgModel = model1 + model2
-
-        logger.info("testTransformerHl7ToJsonModelwithRedisMmgTC04: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
     } // .testTransformerHl7ToJsonModelwithRedisMmg
 
     @Test
     fun testTransformerHep() {
-
-        // hl7
-        val hl7FilePath = "/KY_Hepatitis Round 2_TM4.txt"
-        val hl7Content = this::class.java.getResource(hl7FilePath).readText()
-        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
-
-        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "10105")
-
-        mmgs.forEach {
-            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-        }
-
-        val transformer = Transformer(redisProxy)
-        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
-
-        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
-
-        val mmgModel = model1 + model2
-
-        logger.info("testTransformerHep: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
+       testTransformerWithRedis("testHep", "/KY_Hepatitis Round 2_TM4.txt")
     } // .testTransformerHep
 
+    @Test
+    fun testTransformerGenv1() {
+
+        testTransformerWithRedis("testGenv1", "/Tuleremia.hl7")
+    }
+
+    @Test
+    fun testMumps() {
+        testTransformerWithRedis("testMumps", "/MUMPS_V1-0-1_TM_TC01.txt")
+
+    }
+
+    @Test
+    fun testPertussis() {
+        testTransformerWithRedis("testPertussis", "/PERT_V1.0.1_TM_TC01.txt")
+    }
+
+    @Test
+    fun testTuberculosis() {
+        testTransformerWithRedis("testTuberculosis", "/TB and LTBI_3-0-3_TC01.txt")
+    }
+
+    @Test
+    fun testMalaria() {
+        testTransformerWithRedis("testMalaria", "/Malaria_V1.0.2__TC08.txt")
+    }
     @Test
     fun testConditionNotSupportedException() {
 
@@ -292,7 +296,7 @@ class MbtTest {
 
     } // .testLoadMMG
 
-
+    @Test
     fun testMmgThrowsException() {
 
         assertFailsWith<InvalidConditionException>(
@@ -324,5 +328,24 @@ class MbtTest {
         return mmgUtil.getMMGs(mshProfile, mshCondition, eventCode, jurisdictionCode)
     }
 
+    private fun testTransformerWithRedis(testName: String, filePath: String) {
+
+        val hl7Content = this::class.java.getResource(filePath).readText()
+        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
+        val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
+        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
+
+        mmgs.forEach {
+            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+        }
+
+        val transformer = Transformer(redisProxy)
+        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+
+        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+
+        val mmgModel = model1 + model2
+        logger.info("$testName: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
+    }
 } // .MbtTest
 

@@ -21,8 +21,8 @@
         <slf4j.version>2.0.5</slf4j.version>
         <azevhub.version>5.15.0</azevhub.version>
 
-        <lib-dex-commons.version>1.0.10-SNAPSHOT</lib-dex-commons.version>
-        <lib-nist-validator.version>1.3.2-SNAPSHOT</lib-nist-validator.version>
+        <lib-dex-commons.version>1.0.12-SNAPSHOT</lib-dex-commons.version>
+        <lib-nist-validator.version>1.3.4-SNAPSHOT</lib-nist-validator.version>
         <hl7-pet.version>1.2.7.2</hl7-pet.version>
     </properties>
 
@@ -100,11 +100,12 @@
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <!-- function app service plan name -->
                     <appServicePlanName>${functionServicePlan}</appServicePlanName>
+                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <region>${functionRegion}</region>
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
-                        <javaVersion>11</javaVersion>
+                        <javaVersion>${java.version}</javaVersion>
                     </runtime>
                     <appSettings>
                         <property>

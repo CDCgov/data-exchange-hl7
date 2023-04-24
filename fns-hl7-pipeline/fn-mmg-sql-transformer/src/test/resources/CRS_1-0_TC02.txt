@@ -1,0 +1,88 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.1111^ISO|Sending-Facility^2.16.840.1.114222.1111^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~CRS_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||test 2 ca-CRS^^^SendAppName&2.16.840.1.114222.1111&ISO||~^^^^^^S||20150411|F||2106-3^White^CDCREC|^^^06^94501^^^^06001|||||||||||2186-5^Not Hispanic or Latino^CDCREC
+NK1|1||MTH^Mother^HL70063|^^^^^NGA
+OBR|1||TEST 2^SendAppName^2.16.840.1.114222.1111^ISO|68991-9^Epidemiologic Information^LN|||20160501143800|||||||||||||||20160501143800|||F||||||10370^Rubella, congenital syndrome^NND
+OBX|1|ST|32624-9^Other Race Text^LN||Multiracial||||||F
+OBX|2|CWE|78746-5^Country of Birth^LN||GBR^UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND^ISO3166_1||||||F
+OBX|3|CWE|77983-5^Country of Usual Residence^LN||GBR^UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND^ISO3166_1||||||F
+OBX|4|TS|11368-8^Date of Illness Onset^LN||20160423||||||F
+OBX|5|SN|77977-7^Illness Duration^LN||^10|d^day [time]^UCUM|||||F
+OBX|6|CWE|77996-7^Pregnancy Status^LN||Y^Yes^HL70136||||||F
+OBX|7|TS|77975-1^Diagnosis Date^LN||20160423||||||F
+OBX|8|CWE|77974-4^Hospitalized^LN||N^No^HL70136||||||F
+OBX|9|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|10|SN|77998-3^Age at Case Investigation^LN||^3|a^year [time]^UCUM|||||F
+OBX|11|CWE|77982-7^Case Disease Imported Code^LN||PHC244^Indigenous^CDCPHINVS||||||F
+OBX|12|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|13|CWE|77985-0^State or Province of Exposure^LN|1|06^California^FIPS5_2||||||F
+OBX|14|ST|77986-8^City of Exposure^LN|1|Los Angeles||||||F
+OBX|15|ST|77987-6^County of Exposure^LN|1|Los Angeles||||||F
+OBX|16|CWE|77984-3^Country of Exposure^LN|2|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|17|CWE|77985-0^State or Province of Exposure^LN|2|06^California^FIPS5_2||||||F
+OBX|18|ST|77986-8^City of Exposure^LN|2|Los Angeles||||||F
+OBX|19|ST|77987-6^County of Exposure^LN|2|Los Angeles||||||F
+OBX|20|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|21|CWE|77965-2^Immediate National Notifiable Condition^LN||Y^Yes^HL70136||||||F
+OBX|22|CWE|77980-1^Case Outbreak Indicator^LN||Y^Yes^HL70136||||||F
+OBX|23|ST|77981-9^Case Outbreak Name^LN||LA County, CA 2016-1||||||F
+OBX|24|ST|52831-5^Reporting Source ZIP Code^LN||94501||||||F
+OBX|25|DT|77979-3^Case Investigation Start Date^LN||20160423||||||F
+OBX|26|DT|77995-9^Date Reported^LN||20160423||||||F
+OBX|27|TS|77972-8^Earliest Date Reported to County^LN||20160423||||||F
+OBX|28|TS|77973-6^Earliest Date Reported to State^LN||20160423||||||F
+OBX|29|SN|77991-8^MMWR Week^LN||^18||||||F
+OBX|30|DT|77992-6^MMWR Year^LN||2016||||||F
+OBX|31|DT|77970-2^Date First Reported to PHD^LN||20160423||||||F
+OBX|32|CWE|77966-0^Reporting State^LN||06^California^FIPS5_2||||||F
+OBX|33|CWE|77968-6^National Reporting Jurisdiction^LN||06^CA^FIPS5_2||||||F
+OBX|34|ST|INV337^Primary Cause of Death from Death Certificate^PHINQUESTION||ggggg||||||F
+OBX|35|CWE|67187-5^Type of Complication^LN|1|15188001^Hearing Impairment^SCT||||||F
+OBX|36|CWE|INV920^Type of Complications Indicator^PHINQUESTION|1|N^No^HL70136||||||F
+OBX|37|CWE|67187-5^Type of Complication^LN|2|13213009^Congenital heart disease^SCT||||||F
+OBX|38|CWE|INV920^Type of Complications Indicator^PHINQUESTION|2|N^No^HL70136||||||F
+OBX|39|CWE|INV159^Detection Method^PHINQUESTION||PHC243^Routine Physical^CDCPHINVS||||||F
+OBX|40|CWE|INV935^Clinical Case Appraisal^PHINQUESTION||2931005^Probable^SCT||||||F
+OBX|41|CWE|85733-4^Did the Mother Have a Rash^LN||Y^Yes^HL70136||||||F
+OBX|42|SN|85731-8^Mother's Rash Duration (in days)^LN||^2||||||F
+OBX|43|CWE|85730-0^Did the Mother Have a Fever^LN||Y^Yes^HL70136||||||F
+OBX|44|SN|85728-4^Mother's Fever Duration (in days)^LN||^2||||||F
+OBX|45|CWE|85727-6^Did the Mother Have Lymphadenopathy^LN||N^No^HL70136||||||F
+OBX|46|SN|8339-4^Birth Weight^LN||^7|[lb_av]^pound [mass]^UCUM|||||F
+OBX|47|CWE|MTH109^Mother's Birth Country^PHINQUESTION||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|48|SN|85725-0^Length of Time Mother Has Been in the US^LN||^1||||||F
+OBX|49|SN|85724-3^Mother's Age at Delivery^LN||^33|a^year^UCUM|||||F
+OBX|50|SN|85720-1^Number of Children Less Than 18 Years of Age Immunized With the Rubella Vaccine^LN||^12||||||F
+OBX|51|DT|75200-6^Date of First Prenatal Visit for This Pregnancy^LN||20140705||||||F
+OBX|52|CWE|85718-5^Where was Prenatal Care For This Pregnancy Obtained^LN||PHC421^Private sector^CDCPHINVS||||||F
+OBX|53|CWE|85717-7^Did the Mother Have Serological Testing Prior to This pregnancy^LN||Y^Yes^HL70136||||||F
+OBX|54|DT|85674-0^Mother's Pre-Pregnancy Serological Test Date^LN||99999999||||||F
+OBX|55|CWE|85675-7^Mother's Pre-Pregnancy Serological Test Interpretation^LN||131196009^Susceptible^SCT||||||F
+OBX|56|CWE|85716-9^Was There a Rubella-like Illness During This Pregnancy^LN||Y^Yes^HL70136||||||F
+OBX|57|CWE|MTH124^Was Rubella Diagnosed By a Physician At Time of Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|58|CWE|85711-0^Was Rubella Serologically Confirmed At Time of Illness^LN||N^No^HL70136||||||F
+OBX|59|CWE|82764-2^International Destination(s) of Recent Travel^LN|1|ATA^ANTARCTICA^ISO3166_1||||||F
+OBX|60|CWE|85708-6^Was the Mother Directly Exposed to a Confirmed Case^LN||Y^Yes^HL70136||||||F
+OBX|61|CWE|85705-2^Has Mother Given Birth In the US Previously^LN||N^No^HL70136||||||F
+OBX|62|SN|75201-4^Number of Mother's Previous Pregnancies^LN||^3||||||F
+OBX|63|SN|75202-2^Number of Total Live Births^LN||^2||||||F
+OBX|64|SN|85703-7^If Mother Has Given Birth in US, Number of Births Delivered in US^LN||^1||||||F
+OBX|65|ST|85658-3^Current Occupation^LN|1|Teacher||||||F
+OBX|66|CE|85659-1^Current Occupation Standardized^LN|1|2320^Secondary school teachers [2320]^CDCOCCUPATION2010||||||F
+OBX|67|ST|85078-4^Current Industry^LN|1|High School||||||F
+OBX|68|CE|85657-5^Current Industry Standardized^LN|1|7860^Elementary and secondary schools [7860]^CDCINDUSTRY2010||||||F
+OBX|69|CWE|LAB630^Laboratory Testing Performed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|70|CWE|INV164^Laboratory Confirmed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|71|CWE|82314-6^Specimen Sent to CDC^LN||Y^Yes^HL70136||||||F
+OBX|72|CWE|85793-8^Specimen From Mother or Infant^LN|1|72705000^Mother^SCT||||||F
+OBX|73|CWE|INV290^Test Type^PHINQUESTION|1|LAB648^Rubella IgM (Capture)^PHINQUESTION||||||F
+OBX|74|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|75|ST|LAB628^Test Result Quantitative^PHINQUESTION|1|50||||||F
+OBX|76|CWE|LAB115^Result Units^PHINQUESTION|1|[lb_av]^pound [mass]^UCUM||||||F
+OBX|77|CWE|31208-2^Specimen Source^LN|1|122575003^Urine specimen^SCT||||||F
+OBX|78|CWE|82771-7^Performing Laboratory Type^LN|1|PHC1316^VPD Testing Laboratory^CDCPHINVS||||||F
+OBX|79|ST|LAB143^VPD Lab Message Reference Laboratory^PHINQUESTION|1|2.16.840.1.114222.4.1.14410||||||F
+OBX|80|CX|LAB598^VPD Lab Message Patient Identifier^PHINQUESTION|1|case2||||||F
+OBX|81|CX|LAB125^VPD Lab Message Specimen Identifier^PHINQUESTION|1|specimenid2||||||F
+OBX|82|CWE|30956-7^Vaccine Type^LN|1|06^rubella virus vaccine^CVX||||||F
+OBX|83|ST|30959-1^Vaccine Lot Number^LN|1|aaaaaaaaa||||||F
+OBX|84|ST|VAC102^Vaccination Record Identifier^PHINQUESTION|1|aaaaaaaaa||||||F

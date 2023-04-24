@@ -2,7 +2,10 @@ package gov.cdc.dex.hl7
 
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
-import gov.cdc.dex.hl7.model.*
+import gov.cdc.dex.hl7.model.ValidationErrorMessage
+import gov.cdc.dex.hl7.model.ValidationIssue
+import gov.cdc.dex.hl7.model.ValidationIssueCategoryType
+import gov.cdc.dex.hl7.model.ValidationIssueType
 import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
@@ -19,6 +22,9 @@ class MmgValidator {
         const val EVENT_CODE_PATH = "OBR[1]-31.1"
         const val REPORTING_JURISDICTION_PATH = "OBX[@3.1='77968-6']-5.1"
         const val ALT_REPORTING_JURISDICTION_PATH = "OBX[@3.1='NOT116']-5.1"
+        val DATE_DATA_TYPES = listOf("DT", "DTM", "TS")
+        const val MMWR_YEAR_CODE = "77992-6"
+        const val MMWR_YEAR_LEGACY_CODE = "INV166"
     }
     private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
     private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
@@ -26,6 +32,10 @@ class MmgValidator {
 
     private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     private val mmgUtil = MmgUtil(redisProxy)
+
+
+
+
     fun validate(hl7Message: String): List<ValidationIssue> {
         val mmgs = getMMGFromMessage(hl7Message)
         val report = mutableListOf<ValidationIssue>()
@@ -39,10 +49,9 @@ class MmgValidator {
         //  val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
         // logger.debug("validate started blocks.size: --> $allBlocks")
         mmgs.forEach { mmg ->
-            mmg.blocks.forEach { block ->
-                block.elements.forEach { element ->
-
-                    val msgSegments = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
+           mmg.blocks.forEach { block ->
+               block.elements.forEach { element ->
+                  val msgSegments = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
                     val valueList = if(msgSegments.isDefined)
                         msgSegments.get().flatten()
                     else listOf()
@@ -60,13 +69,18 @@ class MmgValidator {
 
                     if (msgSegments.isDefined)  {
                         val msgValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
-                        if (msgValues.isDefined)
-                            checkVocab(element,msgValues.get(), hl7Message, report)
+                        if (msgValues.isDefined) {
+                            checkVocab(element, msgValues.get(), hl7Message, report)
+                            if (element.mappings.hl7v251.dataType in DATE_DATA_TYPES) {
+                                this.checkDateContent(element, msgValues.get(), hl7Message, report)
+                            }
+                        }
                     }
                 } // .for element
             } // .for block
         }// .for mmg
     } // .validate
+
 
     private fun validateObservationSubId(hl7Message: String, blockRepeat: Boolean, element: Element, msgValues: List<String>, report:MutableList<ValidationIssue>) {
         // for repeating blocks only: check that OBX-4 is valued and is unique for each OBX-3.1
@@ -262,7 +276,7 @@ class MmgValidator {
             msgValues.forEachIndexed { outIdx, outArray ->
                 outArray.forEachIndexed { _, inElem ->
                     //if (concepts.filter { it.conceptCode == inElem }.isEmpty()) {
-                    if (!isConceptValid(elem.valueSetCode!!, inElem)) {
+                    if (!isConceptValid( elem.valueSetCode!!, inElem )) {
                         val lineNbr = getLineNumber(message, elem, outIdx)
                         val issue = ValidationIssue(
                             getCategory(elem.mappings.hl7v251.usage),
@@ -279,23 +293,49 @@ class MmgValidator {
             } //.forEach Outer Array
         }
     }
+    private fun checkDateContent(elem: Element, msgValues: Array<Array<String>>, message: String, report:MutableList<ValidationIssue> ) {
+        msgValues.forEachIndexed { outIdx, outArray ->
+            outArray.forEachIndexed { _, inElem ->
+
+                val dateValidationResponse = if (elem.mappings.hl7v251.identifier != MMWR_YEAR_CODE
+                    && elem.mappings.hl7v251.identifier != MMWR_YEAR_LEGACY_CODE){
+                    DateUtil.validateHL7Date(inElem)
+                } else {
+                    DateUtil.validateMMWRYear(inElem)
+                }
+                if (dateValidationResponse != "OK") {
+                    val lineNbr = getLineNumber(message, elem, outIdx)
+                    val issue = ValidationIssue(
+                        getCategory(elem.mappings.hl7v251.usage),
+                        ValidationIssueType.DATE_CONTENT,
+                        elem.name,
+                        elem.getValuePath(),
+                        lineNbr,
+                        ValidationErrorMessage.DATE_INVALID,
+                        dateValidationResponse
+                    )
+                    report.add(issue)
+                }
+            }//.forEach Inner Array
+        } //.forEach Outer Array
+    }
 
     //Some Look ps are reused - storing them so no need to re-download them from Redis.
     private val valueSetMap = mutableMapOf<String, List<String>>()
     //    private val mapper = jacksonObjectMapper()
     @Throws(InvalidConceptKey::class)
     fun isConceptValid(key: String, concept: String): Boolean {
-        if (valueSetMap[key] === null) {
+       // if (valueSetMap[key] === null) {
             // logger.debug("Retrieving $key from Redis")
-            val conceptStr = redisProxy.getJedisClient().hgetAll(REDIS_VOCAB_NAMESPACE + key)
-            //Keys comes from MMG definitions and therefore SHOULD exist on REDIS.
-            //IF not the env. is misconfigured and we cannot proceed validating messages
-            if (conceptStr.isNullOrEmpty())
-                throw InvalidConceptKey("Unable to retrieve concept values for $key")
-            valueSetMap[key] = conceptStr.keys.toList()
+        var conceptExists :Boolean = false
 
-        }
-        return valueSetMap[key]?.any { it == concept } == true
+          try {
+               conceptExists = redisProxy.getJedisClient().hexists(REDIS_VOCAB_NAMESPACE + key, concept)
+          }catch(e:Exception){
+              throw InvalidConceptKey("Unable to retrieve concept values for $key")
+          }
+
+        return conceptExists
     }
 
     private fun getCategory(usage: String): ValidationIssueCategoryType {

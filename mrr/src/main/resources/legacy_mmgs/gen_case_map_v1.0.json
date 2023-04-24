@@ -120,7 +120,7 @@
           "codeSystem": "PHINQUESTION",
           "legacyPriority": "R",
           "priority": 1,
-          "isRepeat": false,
+          "isRepeat": true,
           "mayRepeat": "Y/2",
           "valueSetCode": "",
           "mappings": {
@@ -189,45 +189,6 @@
               "literalFieldValues": {},
               "repeatingGroupElementType": "NO",
               "implementationNotes": "PID-3.1-ID Number is the local Subject ID from the sending system's internally assigned Subject id; \n\nPID-3.4-Assigning Authority format <localID&OID&ISO>  \n\nDoes not pass Variable ID  or label.",
-              "sampleSegment": ""
-            }
-          }
-        },
-        {
-          "id": "6d148514-7826-4831-a4d6-602a76ee4585",
-          "guideId": "1c89083d-8b2d-417e-bab7-84907d756a52",
-          "guideInternalVersion": 0,
-          "blockId": "2",
-          "ordinal": 2,
-          "name": "Subject Name Type",
-          "description": "Name is not requested by the program, but the Patient Name field is required to be populated for the HL7 message to be valid.  Have adopted the HL7 convention for processing a field where the name has been removed for de-identification purposes.",
-          "comments": "",
-          "status": "Final",
-          "dataType": "Coded",
-          "businessRules": "",
-          "isUnitOfMeasure": false,
-          "legacyCodeSystem": "PHINQUESTION",
-          "codeSystem": "PHINQUESTION",
-          "legacyPriority": "R",
-          "priority": 1,
-          "isRepeat": false,
-          "mayRepeat": "Y/2",
-          "valueSetCode": "PHVS_NameType_HL7_2x",
-          "mappings": {
-            "hl7v251": {
-              "legacyIdentifier": "DEM100",
-              "identifier": "DEM100",
-              "messageContext": "PID-5.7-Patient Name Type",
-              "dataType": "XPN",
-              "segmentType": "PID",
-              "obrPosition": 0,
-              "fieldPosition": 5,
-              "componentPosition": 7,
-              "usage": "R",
-              "cardinality": "[1..2]",
-              "literalFieldValues": {},
-              "repeatingGroupElementType": "NO",
-              "implementationNotes": "Literal value:  |~^^^^^^S|\n\nPatient Name Type is passed in the second instance as HL7 reserves the first instance of the name field for Legal Name.",
               "sampleSegment": ""
             }
           }

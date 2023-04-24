@@ -16,7 +16,7 @@ public class VALID_PROFILE_CONFIGSTest {
         assertEquals(VALID_PROFILE_CONFIGS.valueOf("PREDICATES"), VALID_PROFILE_CONFIGS.PREDICATES);
     }
 
-    String[] fileNames = {"Profile.xml", "constraints.xml", "valuesets.xml"};
+    String[] fileNames = {"PROFILE.xml", "constraints.xml", "valuesets.xml"};
     VALID_PROFILE_CONFIGS[] VALID_VALUES = {VALID_PROFILE_CONFIGS.PROFILE, VALID_PROFILE_CONFIGS.CONSTRAINTS, VALID_PROFILE_CONFIGS.VALUESETS};
     @Test
     public void testFileNames() {

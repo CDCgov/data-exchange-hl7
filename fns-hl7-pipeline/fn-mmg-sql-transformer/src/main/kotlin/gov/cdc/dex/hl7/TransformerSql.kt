@@ -1,35 +1,34 @@
 package gov.cdc.dex.hl7
 
-import org.slf4j.LoggerFactory
-import gov.cdc.dex.redisModels.MMG
-import gov.cdc.dex.redisModels.Block
-import gov.cdc.dex.redisModels.Element
+//import org.slf4j.LoggerFactory
 // import gov.cdc.dex.redisModels.ValueSetConcept
 
-import gov.cdc.dex.hl7.model.PhinDataType
-
-import gov.cdc.dex.util.StringUtils
-
-// import com.google.gson.Gson 
-import com.google.gson.GsonBuilder
+// import com.google.gson.Gson
 // import com.google.gson.reflect.TypeToken
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonNull
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
+import gov.cdc.dex.hl7.model.PhinDataType
+import gov.cdc.dex.redisModels.Block
+import gov.cdc.dex.redisModels.Element
+import gov.cdc.dex.redisModels.MMG
+import gov.cdc.dex.util.StringUtils
+import gov.cdc.dex.util.StringUtils.Companion.normalize
 
-import  gov.cdc.dex.azure.RedisProxy 
-
-class TransformerSql()  {
+class TransformerSql {
 
     companion object {
         private const val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header"
-        const val SEPARATOR_ELEMENT_FIELD_NAMES = "_"
+        const val SEPARATOR = "_"
         private const val ELEMENT_CE = "CE"
         private const val ELEMENT_CWE = "CWE"
-        private const val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
-        private const val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
+        private const val CODE_SYSTEM_CONCEPT_NAME = "code_system_concept_name"
+        private const val CDC_PREFERRED_DESIGNATION =  "cdc_preferred_designation"
         private const val MESSAGE_PROFILE_IDENTIFIER_EL_NAME = "message_profile_identifier"
         private const val MESSAGE_PROFILE_ID_ALTERNATE_NAME = "message_profile_id"
+        private const val MAX_BLOCK_NAME_LENGTH = 30
     } // .companion object
 
 
@@ -45,7 +44,7 @@ class TransformerSql()  {
             val elModel = modelJson[elName]
             // logger.info("${elName} --> ${elName}, modelJson[elName]: --> ${modelJson[elName]}")
 
-            if (elModel.isJsonNull) {
+            if (elModel == null || elModel.isJsonNull) {
 
                 listOf(elName to elModel) // elModel is null, passing to model as is
 
@@ -66,14 +65,14 @@ class TransformerSql()  {
                     val arrFromDefProf = sqlPreferred.map{ fld ->
                         val fldNameNorm = StringUtils.normalizeString(fld.name)
                         // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
-                        "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
+                        "$elName$SEPARATOR$fldNameNorm" to elObj[fldNameNorm]
                     } // .map
                     // for the CE and CWE add the code_system_concept_name and cdc_preferred_designation
                     if (mmgDataType == ELEMENT_CE || mmgDataType == ELEMENT_CWE) { 
                         arrFromDefProf + 
                             listOf(
-                                "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CODE_SYSTEM_CONCEPT_NAME_KEY_NAME" to elObj[CODE_SYSTEM_CONCEPT_NAME_KEY_NAME], 
-                                "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CDC_PREFERRED_DESIGNATION_KEY_NAME" to elObj[CDC_PREFERRED_DESIGNATION_KEY_NAME]
+                                "$elName$SEPARATOR$CODE_SYSTEM_CONCEPT_NAME" to elObj[CODE_SYSTEM_CONCEPT_NAME],
+                                "$elName$SEPARATOR$CDC_PREFERRED_DESIGNATION" to elObj[CDC_PREFERRED_DESIGNATION]
                                 )
                      } else arrFromDefProf
 
@@ -92,152 +91,153 @@ class TransformerSql()  {
     // --------------------------------------------------------------------------------------------------------
     fun singlesRepeatsToSqlModel(elements: List<Element>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
 
-        val singlesRepeatsModel = elements.filter{ el -> 
+        val singlesRepeatsModel = elements.filter { el ->
 
             StringUtils.normalizeString(el.name) != MESSAGE_PROFILE_IDENTIFIER_EL_NAME
-            
-        }.map{ el -> 
 
-            val elName = StringUtils.normalizeString(el.name)
+        }.associate { el ->
+            val elName = StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH)
             val elDataType = el.mappings.hl7v251.dataType
-
             val elModel = modelJson[elName]
-
-            if (elModel.isJsonNull) {
-
+            if (elModel == null || elModel.isJsonNull) {
                 elName to elModel // elModel is null, passing to model as is
-
             } else {
-
-                val elModelArr = elModel.asJsonArray 
-
-                elName to elModelArr.map{ elMod -> 
-
-                    if ( !profilesMap.containsKey(elDataType) ) {
-
+                val elModelArr = elModel.asJsonArray
+                elName to elModelArr.map { elMod ->
+                    if (!profilesMap.containsKey(elDataType)) {
                         val elValue = elMod.asJsonPrimitive
-                        // logger.info("${elName} --> ${elValue}")
-
-                        elName to mapOf(elName to elValue)
-    
+                        mapOf("$elName${SEPARATOR}value" to elValue)
                     } else {
                         val mmgDataType = el.mappings.hl7v251.dataType
                         val sqlPreferred = profilesMap[mmgDataType]!!.filter { it.preferred }
-    
                         val elObj = elMod.asJsonObject
-
-                        val mapFromDefProf = sqlPreferred.map{ fld ->
-                    
-                            val fldNameNorm = StringUtils.normalizeString(fld.name)
-    
-                            // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
-                            "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
-                        }.toMap() // .map
-                        // for the CE and CWE add the code_system_concept_name and cdc_preferred_designation
-                        if (mmgDataType == ELEMENT_CE || mmgDataType == ELEMENT_CWE) { 
-                            mapFromDefProf + 
-                                mapOf(
-                                    "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CODE_SYSTEM_CONCEPT_NAME_KEY_NAME" to elObj[CODE_SYSTEM_CONCEPT_NAME_KEY_NAME], 
-                                    "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CDC_PREFERRED_DESIGNATION_KEY_NAME" to elObj[CDC_PREFERRED_DESIGNATION_KEY_NAME]
-                                    )
-                        } else mapFromDefProf
-                        
-                    } // .else 
-
+                        getMapWithPreferredNames(sqlPreferred, elName, elObj, mmgDataType)
+                    } // .else
                 } // .elModelArr.map
-
             } // .else
-
-        }.toMap()
-
-        // logger.info("singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")       
+        }
+        // logger.info("singlesRepeatsModel: --> \n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")
         return singlesRepeatsModel
     } // .singlesRepeatsToSqlModel
 
-
+    private fun getMapWithPreferredNames(sqlPreferred: List<PhinDataType>,
+                                         elName: String, elObj: JsonObject,
+                                         mmgDataType: String) : Map<String, JsonElement>  {
+        val mapFromDefProf = sqlPreferred.associate { fld ->
+            val fldNameNorm = StringUtils.normalizeString(fld.name)
+            // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
+            "$elName$SEPARATOR$fldNameNorm" to elObj[fldNameNorm]
+        } // .map
+        // for the CE and CWE add the code_system_concept_name and cdc_preferred_designation
+        return if (mmgDataType == ELEMENT_CE || mmgDataType == ELEMENT_CWE) {
+            mapFromDefProf +
+                    mapOf(
+                        "$elName$SEPARATOR$CODE_SYSTEM_CONCEPT_NAME" to elObj[CODE_SYSTEM_CONCEPT_NAME],
+                        "$elName$SEPARATOR$CDC_PREFERRED_DESIGNATION" to elObj[CDC_PREFERRED_DESIGNATION]
+                    )
+        } else mapFromDefProf
+    }
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Repeated Blocks -------------
     // --------------------------------------------------------------------------------------------------------
     fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
-
-        val repeatedBlocksModel = blocks.map{blk -> 
-            val blkName = StringUtils.normalizeString(blk.name)
-
+        var listOfLists = false
+        val repeatedBlocksModel = blocks.associate { blk ->
+            val blockName = if (blk.name.normalize().contains("repeating_group")) {
+                blk.name
+            } else {
+                "${blk.name} repeating group"
+            }
+            val blkName = StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH)
             val blkModel = modelJson[blkName]
 
-            if ( blkModel.isJsonNull ) {
-                blkName to blkModel // this is null
+            if (blkModel == null || blkModel.isJsonNull || blkModel.asJsonArray.isEmpty) {
+                blkName to null// we want null, not an empty array
             } else {
+                val blkModelArr = blkModel.asJsonArray  //array of data for this repeating block
+                // need to determine up front if there are any repeating elements within this repeat block
+                val elementsInBlock = blocks.filter { it.name == blk.name }[0].elements
+                val elementNames = elementsInBlock.map { StringUtils.normalizeString(it.name) }
+                val (repeaters, singles) = elementsInBlock.partition { it.isRepeat || it.mayRepeat.contains("Y") }
 
-                // TODO: sql model for blocks
-
-                val blkModelArr = blkModel.asJsonArray
-
-                val mOut = blkModelArr.map{ bma -> 
-                    val bmaObj = bma.asJsonObject
-
-                    // need element keys for this block
-                    val elementsInBlock = blocks.filter{ it.name == blk.name}[0].elements 
-                    val elementNames = elementsInBlock.map{ StringUtils.normalizeString(it.name)}
-
-                    // logger.info("blkName: --> ${blkName}, elementsNames: ${elementNames}")
-
-                    elementNames.map{ elName -> 
-                        val elMod = bmaObj[elName] 
-                        //logger.info("blkName: --> ${blkName}, elName: $elName, bmaObj: ${bmaObj}")
-
-                        if ( elMod.isJsonNull ) {
-
-                            mapOf(elName to elMod)
+                val mOut =
+                    blkModelArr.map { bma ->
+                        val bmaObj = bma.asJsonObject
+                        // logger.info("blkName: --> ${blkName}, elementsNames: ${elementNames}")
+                        if (repeaters.isEmpty()) {
+                            // we only have single elements to map
+                            elementNames.map { elName ->
+                                mapSingleElement(bmaObj, elName, elementsInBlock, profilesMap)
+                            }.reduce { acc, next -> acc + next }// .elementNames.map
                         } else {
+                            listOfLists = true // we will need to fix this at the end
+                            // for each repeated element, we need a separate row in the table that also
+                            // duplicates the non-repeating elements
+                            val repeatersNames = repeaters.map { StringUtils.normalizeString(it.name) }
+                             // get the singles that we will need to repeat for each row
+                            val singlesNames = singles.map { StringUtils.normalizeString(it.name) }
+                            val flattenedSingles = singlesNames.map { elName ->
+                                mapSingleElement(bmaObj, elName, singles, profilesMap)
+                            }.reduce {acc, map -> acc + map}
+                            val rows = mutableListOf<Map<String, JsonElement>>()
+                            repeatersNames.forEach { elName ->
+                                // extract each element of the array and create a new Json object
+                                // with the same key as the key to the array
+                                if (bmaObj[elName] == null || bmaObj[elName].isJsonNull || bmaObj[elName].asJsonArray.isEmpty) {
+                                    rows.add(flattenedSingles + mapOf(elName to (bmaObj[elName] as JsonNull)))
+                                } else {
+                                    val arrayData = bmaObj[elName].asJsonArray
+                                    for (arrayDatum in arrayData) {
+                                        val newObject = JsonObject()
+                                        newObject.add(elName, arrayDatum)
+                                        val flattenedRepeat =
+                                            mapSingleElement(newObject, elName, repeaters, profilesMap)
+                                        rows.add(flattenedSingles + flattenedRepeat)
+                                    }
+                                }
+                            }
+                            rows.toList()
+                        }
+                    } //blkModelArr.map
+                if (listOfLists) {
+                    // unwrap this list of lists into a single list
+                    listOfLists = false
+                    val newList = mutableListOf<Any>()
+                    mOut.forEach{
+                        listInIt ->
+                        if (listInIt is Iterable<*>) newList.addAll(listInIt as Collection<Any>) //IntelliJ will highlight this but it's OK
+                    }
+                    blkName to newList
+                } else {
+                    blkName to mOut
+                }
 
-                            val mmgElement = elementsInBlock.filter{ StringUtils.normalizeString(it.name) == elName }[0]
+            }// .else
 
-                            val mmgElDataType = mmgElement.mappings.hl7v251.dataType
-    
-                            if ( !profilesMap.containsKey(mmgElDataType) ) {
-    
-                                val elValue = elMod.asJsonPrimitive
-        
-                                mapOf(elName to elValue)
-                            } else {
-    
-                                val sqlPreferred = profilesMap[mmgElDataType]!!.filter { it.preferred }
-            
-                                val elObj = elMod.asJsonObject
-        
-                                val mapFromDefProf = sqlPreferred.map{ fld ->
-                                    val fldNameNorm = StringUtils.normalizeString(fld.name)
-                                    // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
-                                    "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$fldNameNorm" to elObj[fldNameNorm]
-                                }.toMap() // .map
-                                // for the CE and CWE add the code_system_concept_name and cdc_preferred_designation
-                                if (mmgElDataType == ELEMENT_CE || mmgElDataType == ELEMENT_CWE) { 
-                                    mapFromDefProf + 
-                                        mapOf(
-                                            "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CODE_SYSTEM_CONCEPT_NAME_KEY_NAME" to elObj[CODE_SYSTEM_CONCEPT_NAME_KEY_NAME], 
-                                            "$elName$SEPARATOR_ELEMENT_FIELD_NAMES$CDC_PREFERRED_DESIGNATION_KEY_NAME" to elObj[CDC_PREFERRED_DESIGNATION_KEY_NAME]
-                                            )
-                                } else mapFromDefProf
-
-                            } // .else 
-
-                        } // .else 
-
-                    }.reduce { acc, next -> acc + next }// .elementNames.map
-                    
-                } // .blkModelArr
-
-                blkName to mOut
-            } // .else 
-        
-        }.toMap() // .repeatedBlocksModel
-
-        // logger.info("repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")       
+        } // .repeatedBlocksModel
+        // logger.info("repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
         return repeatedBlocksModel
     } // .repeatedBlocksToSqlModel
+    private fun mapSingleElement(bmaObj: JsonObject, elName: String, elementsInBlock: List<Element>, profilesMap: Map<String, List<PhinDataType>>) : Map<String, JsonElement> {
+        val elMod = bmaObj[elName]
+        //logger.info("blkName: --> ${blkName}, elName: $elName, bmaObj: ${bmaObj}")
+        return if (elMod == null || elMod.isJsonNull) {
+            mapOf(elName to elMod)
+        } else {
+            val mmgElement =
+                elementsInBlock.filter { StringUtils.normalizeString(it.name) == elName }[0]
+            val mmgElDataType = mmgElement.mappings.hl7v251.dataType
+            if (!profilesMap.containsKey(mmgElDataType)) {
+                val elValue = elMod.asJsonPrimitive
+                mapOf(elName to elValue)
+            } else {
+                val sqlPreferred = profilesMap[mmgElDataType]!!.filter { it.preferred }
+                val elObj = elMod.asJsonObject
+                getMapWithPreferredNames(sqlPreferred, elName, elObj, mmgElDataType)
+            } // .else
+        }
+    }
 
-    
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Element: Message Profile Identifier -------------
     // --------------------------------------------------------------------------------------------------------
@@ -258,7 +258,7 @@ class TransformerSql()  {
         if ( mmgs.size > 1 ) { 
             for ( index in 0..mmgs.size - 2) { // except the last one
                 mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                    block.name != MMG_BLOCK_NAME_MESSAGE_HEADER //|| block.name == MMG_BLOCK_NAME_SUBJECT_RELATED )
+                    block.name != MMG_BLOCK_NAME_MESSAGE_HEADER
                 } // .filter
             } // .for
         } // .if
