@@ -25,13 +25,13 @@ import java.util.*
 class TransportController(private val cloudStorage: CloudStorage) {
     private val log = LoggerFactory.getLogger(TransportController::class.java.name)
 
-    @Post(value = "/encode", consumes = [MediaType.TEXT_PLAIN])
+    //@Post(value = "/encode", consumes = [MediaType.TEXT_PLAIN])
     fun encode(@Body body: String?): String? {
         log.info("AUDIT:: encoding message")
         return Base64.getEncoder().encodeToString(body!!.toByteArray())
     }
 
-    @Post(value = "/default", consumes = [MediaType.MULTIPART_FORM_DATA])
+    //@Post(value = "/default", consumes = [MediaType.MULTIPART_FORM_DATA])
     fun uploadFileDefault(
         @Body file: CompletedFileUpload,
         @QueryValue fileContentType: String?,
@@ -46,7 +46,7 @@ class TransportController(private val cloudStorage: CloudStorage) {
         )
     }
 
-    @Post(value = "/{bucket}", consumes = [MediaType.MULTIPART_FORM_DATA])
+    //@Post(value = "/{bucket}", consumes = [MediaType.MULTIPART_FORM_DATA])
     fun uploadFile(
         @Body file: CompletedFileUpload,
         @PathVariable bucket: String,
@@ -63,7 +63,7 @@ class TransportController(private val cloudStorage: CloudStorage) {
         )
     }
 
-    @Post(value = "/default", consumes = [MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN])
+    //@Post(value = "/default", consumes = [MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN])
     fun uploadContentDefault(
         @Body content: String,
         @QueryValue filename: String?,
@@ -76,7 +76,7 @@ class TransportController(private val cloudStorage: CloudStorage) {
         return HttpResponse.ok(guid)
     }
 
-    @Post(value = "/{bucket}", consumes = [MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN])
+    //@Post(value = "/{bucket}", consumes = [MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN])
     fun uploadContent(
         @Body content: String,
         @PathVariable bucket: String,
@@ -98,37 +98,37 @@ class TransportController(private val cloudStorage: CloudStorage) {
             .toMap()
     }
 
-    @Get(value = "/{bucket}")
+    //@Get(value = "/{bucket}")
     fun getListOfFiles(@PathVariable bucket: String, @QueryValue prefix: String? = null): List<String> {
         log.info("AUDIT - Getting List of files")
         return cloudStorage.list(bucket, 100, prefix)
     }
 
-    @Get(value = "/default")
+    //@Get(value = "/default")
     fun getListOfFilesDefault(@QueryValue prefix: String? = null): List<String> {
         return cloudStorage.list(100, prefix)
     }
 
     //TODO::Key does not allow prefixes, like folder/filename - Needs improvement
-    @Get(value = "/{bucket:[a-zA-Z0-9-_\\.\\/]+}/{key}")
+    //@Get(value = "/{bucket:[a-zA-Z0-9-_\\.\\/]+}/{key}")
     fun getContent(@PathVariable bucket: String, @PathVariable key: String): String  {
         log.info("AUDIT - Getting file content ${bucket} -> $key")
         return cloudStorage.getFileContent(bucket, key)
     }
 
-    @Get(value = "/default/{key:[a-zA-Z0-9-_\\.\\/]+}")
+    //@Get(value = "/default/{key:[a-zA-Z0-9-_\\.\\/]+}")
     fun getContentDefault(@PathVariable key: String) = cloudStorage.getFileContent(key)
 
-    @Get(value = "/{bucket}/{key}/metadata")
+    //@Get(value = "/{bucket}/{key}/metadata")
     fun getMetadata(@PathVariable bucket: String, @PathVariable key: String) = cloudStorage.getMetadata(bucket, key)
 
-    @Get(value = "/default/{key}/metadata")
+    //@Get(value = "/default/{key}/metadata")
     fun getMetadataDefault(@PathVariable key: String) = cloudStorage.getMetadata(key)
 
-    @Delete(value = "/{bucket}/{key}")
+    //@Delete(value = "/{bucket}/{key}")
     fun deleteObject(@PathVariable bucket: String, @PathVariable key: String) = cloudStorage.deleteFile(bucket, key)
 
-    @Delete(value = "/default/{key}")
+    //@Delete(value = "/default/{key}")
     fun deleteObjectDefault(@PathVariable key: String) = cloudStorage.deleteFile(key)
 
 
