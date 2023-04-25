@@ -11,8 +11,8 @@ micronaut:
 
 endpoints:
   all:
-    enabled: true
-    sensitive: false
+    enabled: false
+    sensitive: true
   loggers:
     write-sensitive: false
   stop:
