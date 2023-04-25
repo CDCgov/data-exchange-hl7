@@ -9,50 +9,46 @@ class FunctionTest {
 
     @Test
     fun processELR_HappyPath() {
-        println("Starting Function test")
+        println("Starting processELR_HappyPath test")
         val function = Function()
         val text = File("src/test/resources/ELR_message.txt").readText()
-        //JsonParser.parseString(text)
 
         val messages: MutableList<String> = ArrayList()
             messages.add(text)
-            val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
-            val eventHubMD = EventHubMetadata(1, 99, "", "")
-            eventHubMDList.add(eventHubMD)
-            function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-        println("Finished Function test")
+        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
+        val eventHubMD = EventHubMetadata(1, 99, "", "")
+        eventHubMDList.add(eventHubMD)
+        function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
+        println("Finished processELR_HappyPath test")
     }
 
     @Test
     fun processCASE_HappyPath() {
-        println("Starting Function test")
+        println("Starting processCASE_HappyPath test")
         val function = Function()
         val text = File("src/test/resources/CASE_message.txt").readText()
-        //JsonParser.parseString(text)
-
         val messages: MutableList<String> = ArrayList()
-        messages.add(text)
+            messages.add(text)
         val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
         val eventHubMD = EventHubMetadata(1, 99, "", "")
         eventHubMDList.add(eventHubMD)
         function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-        println("Finished Function test")
+        println("Finished processCASE_HappyPath test")
     }
 
     @Test
     fun process_ErrorPath() {
-        println("Starting Function test")
+        println("Starting process_ErrorPath test")
         val function = Function()
         val text = File("src/test/resources/ERROR_message.txt").readText()
-        //JsonParser.parseString(text)
 
         val messages: MutableList<String> = ArrayList()
-        messages.add(text)
+            messages.add(text)
         val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
         val eventHubMD = EventHubMetadata(1, 99, "", "")
         eventHubMDList.add(eventHubMD)
         function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-        println("Finished Function test")
+        println("Finished process_ErrorPath test")
     }
 
 
