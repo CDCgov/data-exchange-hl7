@@ -105,7 +105,7 @@ OBX|101|CWE|LAB678^Result of Chest Study^PHINQUESTION|2|385660001^Not Done^SCT||
 OBX|102|CWE|INV1274^Case Meets Binational Reporting Criteria^PHINQUESTION||N^No^HL70136||||||F
 OBX|103|CWE|INV1122^Identified During Contact Investigation^PHINQUESTION||Y^Yes^HL70136||||||F
 OBX|104|CWE|INV1123^Evaluation During Contact Investigation^PHINQUESTION||Y^Yes^HL70136||||||F
-OBX|105|ST|INV1124^Linked Case Number^PHINQUESTION||2018GA287163402||||||F
+OBX|105|ST|INV1124^Linked Case Number^PHINQUESTION||2018GA287163402~2018GA123123456||||||F
 OBX|106|DT|86948-7^Date Treatment or Therapy Started^LN||20180210||||||F
 OBX|107|CWE|55753-8^Treatment Administration Type^LN||435891000124101^DOT (Directly observed therapy, in person)^SCT~PHC1881^EDOT (Electronic DOT, via video call or other electronic method)^CDCPHINVS||||||F
 OBX|108|CWE|INV1115^Case Verification Category^PHINQUESTION||PHC654^3 - Clinical Case Definition^CDCPHINVS||||||F
