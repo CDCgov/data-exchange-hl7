@@ -8,10 +8,10 @@ import java.util.logging.Logger
 class FunctionTest {
 
     @Test
-    fun callReceiverDebatcherFunction_happyPath() {
+    fun processELR_HappyPath() {
         println("Starting Function test")
         val function = Function()
-        val text = File("src/test/resources/message.txt").readText()
+        val text = File("src/test/resources/ELR_message.txt").readText()
         //JsonParser.parseString(text)
 
         val messages: MutableList<String> = ArrayList()
@@ -20,6 +20,38 @@ class FunctionTest {
             val eventHubMD = EventHubMetadata(1, 99, "", "")
             eventHubMDList.add(eventHubMD)
             function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
+        println("Finished Function test")
+    }
+
+    @Test
+    fun processCASE_HappyPath() {
+        println("Starting Function test")
+        val function = Function()
+        val text = File("src/test/resources/CASE_message.txt").readText()
+        //JsonParser.parseString(text)
+
+        val messages: MutableList<String> = ArrayList()
+        messages.add(text)
+        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
+        val eventHubMD = EventHubMetadata(1, 99, "", "")
+        eventHubMDList.add(eventHubMD)
+        function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
+        println("Finished Function test")
+    }
+
+    @Test
+    fun process_ErrorPath() {
+        println("Starting Function test")
+        val function = Function()
+        val text = File("src/test/resources/ERROR_message.txt").readText()
+        //JsonParser.parseString(text)
+
+        val messages: MutableList<String> = ArrayList()
+        messages.add(text)
+        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
+        val eventHubMD = EventHubMetadata(1, 99, "", "")
+        eventHubMDList.add(eventHubMD)
+        function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
         println("Finished Function test")
     }
 

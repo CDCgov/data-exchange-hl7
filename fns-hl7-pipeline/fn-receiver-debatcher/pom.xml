@@ -138,19 +138,6 @@
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.1.0</version>
                 </plugin>
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-surefire-plugin</artifactId>-->
-<!--                    <configuration>-->
-<!--                        <environmentVariables>-->
-<!--                            <EventHubConnectionString>Endpoint=sb://tf-eventhub-namespace-dev.servicebus.windows.net/;SharedAccessKeyName=azfn-eh-namespace-key;SharedAccessKey=EIhO3LHvvcpWKTuEuPE1Vq5UvDKgu8h7v+AEhEybFnk=</EventHubConnectionString>-->
-<!--                            <BlobIngestConnectionString>DefaultEndpointsProtocol=https;AccountName=tfedemessagestoragedev;AccountKey=NDPFwHn3KrdvUS48RA9X6Wka1wyRd7SQA/1FxhaFexgACAYTHF7lAWXUptYLkWmCQWrOjJcV7etR+AStz2WArA==;EndpointSuffix=core.windows.net</BlobIngestConnectionString>-->
-<!--                            <BlobIngestContainerName>hl7ingress</BlobIngestContainerName>-->
-<!--                            <EventHubSendOkName>hl7-recdeb-ok</EventHubSendOkName>-->
-<!--                            <EventHubSendErrsName>hl7-recdeb-err</EventHubSendErrsName>-->
-<!--                        </environmentVariables>-->
-<!--                    </configuration>-->
-<!--                </plugin>-->
             </plugins>
         </pluginManagement>
 
@@ -273,7 +260,7 @@
                     <environmentVariables>
                         <REDIS_CACHE_NAME>ocio-ede-dev-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
                         <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
-                        <EventHubConnectionString>Endpoint=sb://tf-eventhub-namespace-dev.servicebus.windows.net/;SharedAccessKeyName=azfn-eh-namespace-key;SharedAccessKey=EIhO3LHvvcpWKTuEuPE1Vq5UvDKgu8h7v+AEhEybFnk=</EventHubConnectionString>
+                        <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>
                         <BlobIngestContainerName>hl7ingress</BlobIngestContainerName>
                         <EventHubSendOkName>hl7-recdeb-ok</EventHubSendOkName>
