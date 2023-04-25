@@ -171,7 +171,7 @@ class MmgSqlTest {
 
     @Test
     fun testTransformerSQLForSalmonellosis() {
-        testTransformerSQL("/FDD_V1.0.1_ETM4-Sal(D).txt", "/modelSal.json")
+        testTransformerSQL("/FDD_V1.0.1_ETM4-Sal(D).txt", "/modelSal.json", printAllOutput = true)
     }
     @Test
     fun testMessageProfileIdentifier() {
