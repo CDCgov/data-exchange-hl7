@@ -60,8 +60,8 @@ class ProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
             // Create Validation Context object using builder
             val ctxBuilder =  ValidationContextBuilder(profileXML)
 
-            constraintsXML.let      {ctxBuilder.useConformanceContext(Arrays.asList(constraintsXML))}    // Optional
-            valueSetLibraryXML.let  {ctxBuilder.useValueSetLibrary(valueSetLibraryXML)} // Optional
+            constraintsXML?.let      {ctxBuilder.useConformanceContext(Arrays.asList(constraintsXML))}    // Optional
+            valueSetLibraryXML?.let  {ctxBuilder.useValueSetLibrary(valueSetLibraryXML)} // Optional
             valueSetBindingsXML?.let {ctxBuilder.useVsBindings(valueSetBindingsXML)} // Optional
             slicingsXML?.let         {ctxBuilder.useSlicingContext(slicingsXML)} // Optional
             coConstraintsXML?.let    { ctxBuilder.useCoConstraintsContext(coConstraintsXML)} // Optional
