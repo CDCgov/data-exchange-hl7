@@ -97,6 +97,10 @@ class TransformerSql {
         }.associate { el ->
             val elName = StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH)
             val elDataType = el.mappings.hl7v251.dataType
+            val isPrimitive = !profilesMap.containsKey(elDataType)
+            val sqlPreferred = if (!isPrimitive) {
+                profilesMap[elDataType]!!.filter { it.preferred }
+            } else listOf()
             val elModel = modelJson[elName]
             if (elModel == null || elModel.isJsonNull) {
                 elName to elModel // elModel is null, passing to model as is
@@ -107,10 +111,10 @@ class TransformerSql {
                         val elValue = elMod.asJsonPrimitive
                         mapOf("$elName${SEPARATOR}value" to elValue)
                     } else {
-                        val mmgDataType = el.mappings.hl7v251.dataType
-                        val sqlPreferred = profilesMap[mmgDataType]!!.filter { it.preferred }
+
+
                         val elObj = elMod.asJsonObject
-                        getMapWithPreferredNames(sqlPreferred, elName, elObj, mmgDataType)
+                        getMapWithPreferredNames(sqlPreferred, elName, elObj, elDataType)
                     } // .else
                 } // .elModelArr.map
             } // .else
@@ -119,23 +123,7 @@ class TransformerSql {
         return singlesRepeatsModel
     } // .singlesRepeatsToSqlModel
 
-    private fun getMapWithPreferredNames(sqlPreferred: List<PhinDataType>,
-                                         elName: String, elObj: JsonObject,
-                                         mmgDataType: String) : Map<String, JsonElement>  {
-        val mapFromDefProf = sqlPreferred.associate { fld ->
-            val fldNameNorm = StringUtils.normalizeString(fld.name)
-            // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
-            "$elName$SEPARATOR$fldNameNorm" to elObj[fldNameNorm]
-        } // .map
-        // for the CE and CWE add the code_system_concept_name and cdc_preferred_designation
-        return if (mmgDataType == ELEMENT_CE || mmgDataType == ELEMENT_CWE) {
-            mapFromDefProf +
-                    mapOf(
-                        "$elName$SEPARATOR$CODE_SYSTEM_CONCEPT_NAME" to elObj[CODE_SYSTEM_CONCEPT_NAME],
-                        "$elName$SEPARATOR$CDC_PREFERRED_DESIGNATION" to elObj[CDC_PREFERRED_DESIGNATION]
-                    )
-        } else mapFromDefProf
-    }
+
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Repeated Blocks -------------
     // --------------------------------------------------------------------------------------------------------
@@ -221,24 +209,62 @@ class TransformerSql {
     } // .repeatedBlocksToSqlModel
     private fun mapSingleElement(bmaObj: JsonObject, elName: String, elementsInBlock: List<Element>, profilesMap: Map<String, List<PhinDataType>>) : Map<String, JsonElement> {
         val elMod = bmaObj[elName]
+        val mmgElement =
+            elementsInBlock.filter { StringUtils.normalizeString(it.name) == elName }[0]
+        val mmgElDataType = mmgElement.mappings.hl7v251.dataType
+        val isPrimitive : Boolean = !profilesMap.containsKey(mmgElDataType)
+        val sqlPreferred = if (!isPrimitive) {
+            profilesMap[mmgElDataType]!!.filter { it.preferred }
+        } else listOf()
         //logger.info("blkName: --> ${blkName}, elName: $elName, bmaObj: ${bmaObj}")
         return if (elMod == null || elMod.isJsonNull) {
-            mapOf(elName to elMod)
+             if (isPrimitive) {
+                mapOf(elName to elMod)
+            } else {
+                mapPreferredNamesToNull(sqlPreferred, elName, mmgElDataType)
+            }
         } else {
-            val mmgElement =
-                elementsInBlock.filter { StringUtils.normalizeString(it.name) == elName }[0]
-            val mmgElDataType = mmgElement.mappings.hl7v251.dataType
-            if (!profilesMap.containsKey(mmgElDataType)) {
+            if (isPrimitive) {
                 val elValue = elMod.asJsonPrimitive
                 mapOf(elName to elValue)
             } else {
-                val sqlPreferred = profilesMap[mmgElDataType]!!.filter { it.preferred }
                 val elObj = elMod.asJsonObject
                 getMapWithPreferredNames(sqlPreferred, elName, elObj, mmgElDataType)
             } // .else
         }
     }
 
+    private fun mapPreferredNamesToNull(sqlPreferred: List<PhinDataType>,
+                                        elName: String, mmgDataType: String): Map<String, JsonElement> {
+        val componentMap = sqlPreferred.associate { component ->
+            val compName = StringUtils.normalizeString(component.name)
+            "$elName$SEPARATOR$compName" to JsonNull.INSTANCE
+        }
+        return if (mmgDataType == ELEMENT_CE || mmgDataType == ELEMENT_CWE) {
+            componentMap + mapOf(
+                "$elName$SEPARATOR$CODE_SYSTEM_CONCEPT_NAME" to JsonNull.INSTANCE,
+                "$elName$SEPARATOR$CDC_PREFERRED_DESIGNATION" to JsonNull.INSTANCE
+            )
+        } else componentMap
+    }
+
+    private fun getMapWithPreferredNames(sqlPreferred: List<PhinDataType>,
+                                         elName: String, elObj: JsonObject,
+                                         mmgDataType: String) : Map<String, JsonElement>  {
+        val mapFromDefProf = sqlPreferred.associate { fld ->
+            val fldNameNorm = StringUtils.normalizeString(fld.name)
+            // logger.info("${elName}~${fldNameNorm} --> ${elObj[fldNameNorm]}")
+            "$elName$SEPARATOR$fldNameNorm" to elObj[fldNameNorm]
+        } // .map
+        // for the CE and CWE add the code_system_concept_name and cdc_preferred_designation
+        return if (mmgDataType == ELEMENT_CE || mmgDataType == ELEMENT_CWE) {
+            mapFromDefProf +
+                    mapOf(
+                        "$elName$SEPARATOR$CODE_SYSTEM_CONCEPT_NAME" to elObj[CODE_SYSTEM_CONCEPT_NAME],
+                        "$elName$SEPARATOR$CDC_PREFERRED_DESIGNATION" to elObj[CDC_PREFERRED_DESIGNATION]
+                    )
+        } else mapFromDefProf
+    }
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Element: Message Profile Identifier -------------
     // --------------------------------------------------------------------------------------------------------
