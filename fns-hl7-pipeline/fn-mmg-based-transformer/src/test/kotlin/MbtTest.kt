@@ -264,6 +264,31 @@ class MbtTest {
     fun testTuberculosis() {
         testTransformerWithRedis("testTuberculosis", "/TB and LTBI_3-0-3_TC01.txt")
     }
+
+    @Test
+    fun testMalaria() {
+        testTransformerWithRedis("testMalaria", "/Malaria_V1.0.2__TC08.txt")
+    }
+
+    @Test
+    fun testCRS() {
+        testTransformerWithRedis("testCRS", "/CRS_1-0_TC09.txt")
+    }
+
+    @Test
+    fun testCandidaAuris() {
+        testTransformerWithRedis("testCandidaAuris", "/C auris_1-0-1_TC01.txt")
+    }
+
+    @Test
+    fun testCPCRE() {
+        testTransformerWithRedis("testCPCRE", "/CP-CRE_1-0-1_TC01.txt")
+    }
+
+    @Test
+    fun testSalmonellosis() {
+        testTransformerWithRedis("testSalmonellosis", "/FDD_V1.0.1_ETM4-Sal(D).txt")
+    }
     @Test
     fun testConditionNotSupportedException() {
 
@@ -276,7 +301,7 @@ class MbtTest {
 
                 val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
         
-                val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "11550")
+                val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "9")
         
                 logger.info("testConditionNotSupportedException: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
         

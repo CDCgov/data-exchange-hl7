@@ -155,45 +155,6 @@
       "shouldDisplayName": false,
       "elements": [
         {
-          "id": "75d291c8-684c-52e3-8ae1-7bd3c346b187",
-          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
-          "guideInternalVersion": 0,
-          "blockId": "2",
-          "ordinal": 1,
-          "name": "Patient name type",
-          "description": "Name is not requested by the program, but the Patient Name field is required to be populated for the HL7 message to be valid.  Have adopted the HL7 convention for processing a field where the name has been removed for de-identification purposes.",
-          "comments": "",
-          "status": "Final",
-          "dataType": "Coded",
-          "businessRules": "",
-          "isUnitOfMeasure": false,
-          "legacyCodeSystem": "PHINQUESTION",
-          "codeSystem": "PHINQUESTION",
-          "legacyPriority": "R",
-          "priority": 1,
-          "isRepeat": true,
-          "mayRepeat": "Y/2",
-          "valueSetCode": "PHVS_NameType_HL7_2x",
-          "mappings": {
-            "hl7v251": {
-              "legacyIdentifier": "DEM100",
-              "identifier": "DEM100",
-              "messageContext": "PID-5 Patient Name field",
-              "dataType": "XPN",
-              "segmentType": "PID",
-              "obrPosition": 1,
-              "fieldPosition": 5,
-              "componentPosition": 7,
-              "usage": "R",
-              "cardinality": "[1..2]",
-              "literalFieldValues": {},
-              "repeatingGroupElementType": "NO",
-              "implementationNotes": "Literal value:  |~^^^^^^S|\n\nSECOND INSTANCE - where PID-5.7 Patient Name Type - is S for Pseudonym.  HL7 reserves the first instance of the name for Legal Name.",
-              "sampleSegment": ""
-            }
-          }
-        },
-        {
           "id": "84a8112d-c27b-52ab-a244-0762ec25e95a",
           "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
@@ -467,46 +428,6 @@
           }
         },
         {
-          "id": "aad08b79-947f-5ebe-8b84-7b1e69e5c149",
-          "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
-          "guideInternalVersion": 0,
-          "blockId": "2",
-          "ordinal": 8,
-          "name": "Race Category",
-          "description": "Field containing one or more codes that broadly refer to the patient\u2019s race(s).",
-          "comments": "",
-          "status": "Final",
-          "dataType": "Coded",
-          "businessRules": "",
-          "isUnitOfMeasure": false,
-          "legacyCodeSystem": "PHINQUESTION",
-          "codeSystem": "PHINQUESTION",
-          "legacyPriority": "R",
-          "priority": 1,
-          "isRepeat": true,
-          "mayRepeat": "Y",
-          "valueSetCode": "PHVS_RaceCategory_CDC_Unk",
-          "mappings": {
-            "hl7v251": {
-              "legacyIdentifier": "DEM152",
-              "identifier": "DEM152",
-              "messageContext": "PID-10 Race",
-              "dataType": "CE",
-              "segmentType": "PID",
-              "obrPosition": 2,
-              "fieldPosition": 10,
-              "componentPosition": -1,
-              "usage": "O",
-              "cardinality": "[1..*]",
-              "literalFieldValues": {},
-              "repeatingGroupElementType": "NO",
-              "implementationNotes": "",
-              "sampleSegment": ""
-            }
-          }
-        },
-        {
-
           "id": "c9c2d601-3d9b-579b-a273-0ab012459b3c",
           "guideId": "2c48b64b-885e-5595-989d-b20f62ceb0c1",
           "guideInternalVersion": 0,
@@ -2999,7 +2920,7 @@
             "hl7v251": {
               "legacyIdentifier": "40440-0",
               "identifier": "40440-0",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3038,7 +2959,7 @@
             "hl7v251": {
               "legacyIdentifier": "LAB617",
               "identifier": "LAB617",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3077,7 +2998,7 @@
             "hl7v251": {
               "legacyIdentifier": "91454002",
               "identifier": "91454002",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3116,7 +3037,7 @@
             "hl7v251": {
               "legacyIdentifier": "ARB003",
               "identifier": "ARB003",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3155,7 +3076,7 @@
             "hl7v251": {
               "legacyIdentifier": "ARB005",
               "identifier": "ARB005",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3194,7 +3115,7 @@
             "hl7v251": {
               "legacyIdentifier": "ARB014",
               "identifier": "ARB014",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "TS",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3233,7 +3154,7 @@
             "hl7v251": {
               "legacyIdentifier": "ARB013",
               "identifier": "ARB013",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3272,7 +3193,7 @@
             "hl7v251": {
               "legacyIdentifier": "ARB006",
               "identifier": "ARB006",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3311,7 +3232,7 @@
             "hl7v251": {
               "legacyIdentifier": "ARB007",
               "identifier": "ARB007",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3350,7 +3271,7 @@
             "hl7v251": {
               "legacyIdentifier": "ARB008",
               "identifier": "ARB008",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3389,7 +3310,7 @@
             "hl7v251": {
               "legacyIdentifier": "ARB009",
               "identifier": "ARB009",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3428,7 +3349,7 @@
             "hl7v251": {
               "legacyIdentifier": "ARB051",
               "identifier": "ARB051",
-              "messageContext": "Observation/OBX Segment with this variable ID and label",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3608,7 +3529,7 @@
             "hl7v251": {
               "legacyIdentifier": "INV290",
               "identifier": "INV290",
-              "messageContext": "Observation/OBX Segment with this variable ID and label\n(OBX-4=obs sub-id)",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3647,7 +3568,7 @@
             "hl7v251": {
               "legacyIdentifier": "INV291",
               "identifier": "INV291",
-              "messageContext": "Observation/OBX Segment with this variable ID and label\n(OBX-4=obs sub-id)",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3686,7 +3607,7 @@
             "hl7v251": {
               "legacyIdentifier": "66746-9",
               "identifier": "66746-9",
-              "messageContext": "Observation/OBX Segment with this variable ID and label\n(OBX-4=obs sub-id)",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3725,7 +3646,7 @@
             "hl7v251": {
               "legacyIdentifier": "33882-2",
               "identifier": "33882-2",
-              "messageContext": "Observation/OBX Segment with this variable ID and label\n(OBX-4=obs sub-id)",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "TS",
               "segmentType": "OBX",
               "obrPosition": 2,
@@ -3764,7 +3685,7 @@
             "hl7v251": {
               "legacyIdentifier": "LAB606",
               "identifier": "LAB606",
-              "messageContext": "Observation/OBX Segment with this variable ID and label\n(OBX-4=obs sub-id)",
+              "messageContext": "Observation/OBX Segment with this variable ID and label\nOBX-5",
               "dataType": "CWE",
               "segmentType": "OBX",
               "obrPosition": 2,

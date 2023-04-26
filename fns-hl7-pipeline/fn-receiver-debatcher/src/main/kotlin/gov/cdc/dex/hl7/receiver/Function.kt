@@ -70,7 +70,7 @@ class Function {
         if (messages != null) {
             var nbrOfMessages = 0
             for (message in messages) {
-                val eventArr = Gson().fromJson(message, Array<AzBlobCreateEventMessage>::class.java)
+                val eventArr = gson.fromJson(message, Array<AzBlobCreateEventMessage>::class.java)
                 val event = eventArr[0]
                 if ( event.eventType == BLOB_CREATED) {
                     context.logger.info("Received BLOB_CREATED event: --> $event")

@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.17] - 2023-04-19
+  - Redacting ELR messages
+  - Updated NIST Profiles to remove rules not present in MVPS 
+  - Updated Legacy MMGs to not include subject/patient name type
+  - Lake of Segments now processing ELR Messages
+  - Added more MMG support - STD, congenital syphilis, Rubella, Congenital Rubella, Mumps, Malaria, Tuberculosis
+  - Bug Fixes
+     - Properly handling Repeating elements when creating inner lists in repeating table
+     - Repeating elements of type ST not properly mapped
+     - Changed repeat table to null instead of empty array in JSON output
+     - Handling null repeating elements in repeating groups
+     - Properly mapping primitive repeating elements
+
+
 ### [0.0.16] - 2023-04-06
   - Added config information to event metadata (configuration file names)
   - Added MUMPS, Pertussis, Tuberculosis, Babesiosis, Trichinellosis MMGs and Event Codes

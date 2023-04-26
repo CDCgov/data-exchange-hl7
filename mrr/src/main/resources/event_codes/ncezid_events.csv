@@ -1,19 +1,109 @@
 Category,Program,Condition Code,Condition Name,Profiles,Profile Has Special Case,MMGs,Special Case Group,Special Case MMGs
-Vaccine Preventable Diseases,NCIRD,10030,Varicella (Chickenpox),Var_Case_Map_v1.0|Var_Case_Map_v2.0|Varicella_MMG_V3.0,No|No|No,varicellacasenationalnotificationmap_v1_0|varicella_message_mapping_guide_v2_01|varicella,,
-Coronavirus,NCIRD,11065,Coronavirus Disease 2019 (COVID-19)  ,COVID19_MMG_V1.0|COVID19_MMG_V1.1|COVID19_MMG_V1.2,No|No|No,covid_19|covid_19_v1_1|covid_19_v1_2,,
-Vaccine Preventable Diseases,NCIRD,10180,Mumps,Mumps_MMG_V1.0,No,mumps,,
-Vaccine Preventable Diseases,NCIRD,10190,Pertussis,Pertussis_MMG_V1.0,No,pertussis,,
-Vaccine Preventable Diseases,NCIRD,10040,Diphtheria,,No,,,
-Vaccine Preventable Diseases,NCIRD,10140,Measles (rubeola),Measles_MMG_V1.0,No,measles,,
-Vaccine Preventable Diseases,NCIRD,10200,Rubella,Rubella_MMG_V1.0,No,rubella,,
-Vaccine Preventable Diseases,NCIRD,10210,Tetanus,,No,,,
-Vaccine Preventable Diseases,NCIRD,10370,"Rubella, congenital syndrome",CRS_MMG_V1.0,No,congenital_rubella_syndrome,,
-Vaccine Preventable Diseases,NCIRD,10405,"Poliovirus infection, nonparalytic ",,No,,,
-Vaccine Preventable Diseases,NCIRD,10410,"Poliomyelitis, paralytic",,No,,,
-Coronavirus,NCIRD,10575,Severe Acute Respiratory Syndrome (SARS)-associated Coronavirus disease (SARS-CoV),,No,,,
-Influenza,NCIRD,11061,Influenza-associated pediatric mortality,,No,,,
-Influenza,NCIRD,11062,"Novel influenza A virus infections, initial detections of",,No,,,
-Coronavirus,NCIRD,11066,Multisystem Inflammatory Syndrome (MIS) associated with Coronavirus Disease 2019 (COVID-19),,No,,,
-Neurological,NCIRD,11120,Acute flaccid myelitis,,No,,,
-RSV-associated death,NCIRD,11646,Respiratory Syncytial Virus-Associated Deaths,,No,,,
-Streptococcal toxic shock syndrome,NCIRD,11700,Streptococcal toxic shock syndrome,,No,,,
+Zoonotic,NCEZID,10020,Brucellosis,,,,,
+Arboviral Diseases,NCEZID,10049,West Nile virus non-neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10051,St. Louis encephalitis virus neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10052,Western equine encephalitis virus neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10053,Eastern equine encephalitis virus neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10054,California serogroup virus neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10055,Venezuelan equine encephalitis neuroinvasive ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10056,West Nile virus neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10057,Powassan virus neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10058,Cache Valley virus neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10059,Japanese encephalitis virus neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10061,California serogroup virus non-neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10062,Eastern equine encephalitis virus non-neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10063,Powassan virus non-neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10064,St. Louis encephalitis virus non-neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10065,Western equine encephalitis virus non-neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10066,Cache Valley virus non-neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10067,Venezuelan equine encephalitis virus non-neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10068,Japanese encephalitis virus non-neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10072,Other Arboviral,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10073,Chikungunya virus ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10074,Tick-borne Encephalitis viruses ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10078,"Jamestown CNoon virus, neuroinvasive disease ",Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10079,"Jamestown CNoon virus, non-neuroinvasive disease ",Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10081,LaCrosse virus neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10082,LaCrosse virus non-neuroinvasive disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10093,Colorado tick fever virus ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Vectorborne Diseases,NCEZID,10230,Tularemia,,No,,,
+Vectorborne Diseases,NCEZID,10250,Spotted Fever Rickettsiosis ,Lyme_TBRD_MMG_V1.0,No,tbrd,,
+Vectorborne Diseases,NCEZID,10255,Q fever,,No,,,
+Vectorborne Diseases,NCEZID,10257,"Q fever, Chronic ",,No,,,
+Vectorborne Diseases,NCEZID,10258,"Q fever, Acute ",,No,,,
+Zoonotic,NCEZID,10340,"Rabies, animal",,,,,
+Zoonotic,NCEZID,10350,Anthrax,,,,,
+Hansen disease (Leprosy),NCEZID,10380,Hansen's disease (Leprosy),,,,,
+Zoonotic,NCEZID,10390,Leptospirosis,,,,,
+Vectorborne Diseases,NCEZID,10440,Plague,,No,,,
+Zoonotic,NCEZID,10460,"Rabies, human",,,,,
+Enteric Diseases,NCEZID,10470,Cholera (toxigenic Vibrio cholerae O1 or O139),FDD_MMG_V1.0,Yes,fdd_cholera_and_vibriosis,foodnet_states,fdd_foodnet;fdd_cholera_and_vibriosis
+Toxic-shock syndrome (other than streptococcal),NCEZID,10520,Toxic-shock syndrome (other than streptococcal),,,,,
+Botulism,NCEZID,10530,"Botulism, foodborne",,,,,
+Botulism,NCEZID,10540,"Botulism, infant",,,,,
+Botulism,NCEZID,10548,"Botulism, other unspecified",,,,,
+Botulism,NCEZID,10549,"Botulism, wound",,,,,
+Botulism,NCEZID,10550,"Botulism, other (includes wound)",,,,,
+Enteric Diseases,NCEZID,10640,Listeriosis,,,,,
+Arboviral Diseases,NCEZID,10660,Yellow fever ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,10680,Dengue ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Enteric Diseases,NCEZID,11010,Shigellosis,FDD_MMG_V1.0,Yes,fdd_shigellosis,foodnet_states,fdd_foodnet;fdd_shigellosis
+Enteric Diseases,NCEZID,11020,Campylobacteriosis,FDD_MMG_V1.0,Yes,fdd_campylobacteriosis,foodnet_states,fdd_foodnet;fdd_campylobacteriosis
+Vectorborne Diseases,NCEZID,11080,Lyme Disease,Lyme_TBRD_MMG_V1.0,No,lyme_disease,,
+Vectorborne Diseases,NCEZID,11085,Anaplasma phagocytophilum,Lyme_TBRD_MMG_V1.0,No,tbrd,,
+Vectorborne Diseases,NCEZID,11086,Ehrlichia chaffeensis ,Lyme_TBRD_MMG_V1.0,No,tbrd,,
+Vectorborne Diseases,NCEZID,11087,"Ehrlichiosis/Anaplasmosis, undetermined ",Lyme_TBRD_MMG_V1.0,No,tbrd,,
+Vectorborne Diseases,NCEZID,11088,Ehrlichia chaffeensis ,Lyme_TBRD_MMG_V1.0,No,tbrd,,
+Vectorborne Diseases,NCEZID,11089,Ehrlichia ewingii,Lyme_TBRD_MMG_V1.0,No,tbrd,,
+Vectorborne Diseases,NCEZID,11090,Anaplasma phagocytophilum,Lyme_TBRD_MMG_V1.0,No,tbrd,,
+Vectorborne Diseases,NCEZID,11091,"Ehrlichiosis/Anaplasmosis, undetermined",Lyme_TBRD_MMG_V1.0,No,tbrd,,
+Enteric Diseases,NCEZID,11545,"Vibriosis (any species of the family Vibrionaceae, other than toxigenic Vibrio cholerae O1 or O139)",FDD_MMG_V1.0,Yes,fdd_cholera_and_vibriosis,foodnet_states,fdd_foodnet;fdd_cholera_and_vibriosis
+Enteric Diseases,NCEZID,11550,Hemolytic uremic syndrome postdiarrheal,FDD_MMG_V1.0,No,fdd_foodnet,,
+Enteric Diseases,NCEZID,11563,Shiga toxin-producing Escherichia coli (STEC),FDD_MMG_V1.0,Yes,fdd_stec,foodnet_states,fdd_foodnet;fdd_stec
+Enteric Diseases,NCEZID,11565,Yersiniosis (non-pestis),FDD_MMG_V1.0,No,fdd_foodnet,,
+Enteric Diseases,NCEZID,11566,Enterotoxigenic E.coli (ETEC) ,FDD_MMG_V1.0,No,fdd_foodnet,,
+Enteric Diseases,NCEZID,11570,Giardiasis,,,,,
+Enteric Diseases,NCEZID,11580,Cryptosporidiosis,FDD_MMG_V1.0,Yes,fdd_cryptosporidiosis,foodnet_states,fdd_foodnet;fdd_cryptosporidiosis
+Zoonotic,NCEZID,11585,Melioidosis,,,,,
+Zoonotic,NCEZID,11590,Hantavirus pulmonary syndrome,,,,,
+Zoonotic,NCEZID,11610,"Hantavirus infection, non-Hantavirus Pulmonary Syndrome",,,,,
+Hemorrhagic fevers,NCEZID,11630,Ebola hemorrhagic fever,,,,,
+Hemorrhagic fevers,NCEZID,11631,Marburg fever,,,,,
+Hemorrhagic fevers,NCEZID,11632,Lassa fever,,,,,
+Hemorrhagic fevers,NCEZID,11637,Machupo hemorrhagic fever,,,,,
+Hemorrhagic fevers,NCEZID,11638,Junín hemorrhagic fever,,,,,
+Hemorrhagic fevers,NCEZID,11639,Sabia-associated hemorrhagic fever,,,,,
+Hemorrhagic fevers,NCEZID,11640,Crimean-Congo hemorrhagic fever,,,,,
+Hemorrhagic fevers,NCEZID,11644,Lujo virus,,,,,
+Hemorrhagic fevers,NCEZID,11648,Guanarito hemorrhagic fever,,,,,
+Hemorrhagic fevers,NCEZID,11649,Chapare hemorrhagic fever,,,,,
+Vancomycin-intermediate Staphylococcus aureus (VISA),NCEZID,11663,Vancomycin-intermediate Staphylococcus aureus (VISA),,,,,
+Vancomycin-resistant Staphylococcus aureus (VRSA),NCEZID,11665,Vancomycin-resistant Staphylococcus aureus (VRSA),,,,,
+Arboviral Diseases,NCEZID,11704,Dengue-like illness ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,11705,"Dengue, severe ",Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,11712,Keystone virus disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,11718,California encephalitis virus disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,11724,Trivittatus virus disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,11726,Zika virus disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,11734,Snowshoe hare virus disease ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,11736,Zika Virus Congenital Infection ,Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Vaccine Preventable Diseases,NCEZID,11800,Smallpox,,,,,
+Zoonotic,NCEZID,11801,Mpox,,,,,
+Coccidioidomycosis,NCEZID,11900,Coccidioidomycosis,,,,,
+Fungal disease,NCEZID,11910,Blastomycosis,,,,,
+Fungal disease,NCEZID,11915,Histoplasmosis,,,,,
+Arboviral Diseases,NCEZID,50221,"Zika virus infection, non-congenital ",Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,50222,"Zika virus infection, congenital ",Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,50223,"Zika virus disease, non-congenital ",Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Arboviral Diseases,NCEZID,50224,"Zika virus disease, congenital ",Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Parasitic Diseases,NCEZID,50225,Acanthamoeba disease (excluding keratitis),,,,,
+Parasitic Diseases,NCEZID,50226,Balamuthia mandrillaris disease,,,,,
+Parasitic Diseases,NCEZID,50227,Naegleria fowleri causing Primary Amebic Meningoencephalitis,,,,,
+Arboviral Diseases,NCEZID,50237,"Flavivirus disease, not otherwise specified ",Arbo_Case_Map_v1.0,Yes,arboviral_v1_3_2_mmg_20210721,legacy_arbo,arboviral_human_case_message_mapping_guide
+Carbapenem Resistant Infections,NCEZID,50244,Carbapenemase-producing carbapenem-resistant Enterobacteriaceae (CP-CRE),HAI_MDRO_MMG_V1.0,No,hai_mdro_cp_cre,,
+Fungal disease,NCEZID,50263,"Candida auris, clinical",HAI_MDRO_MMG_V1.0,No,hai_mdro_candida_auris,,
+Fungal disease,NCEZID,50264,"Candida auris, colonization/screening",HAI_MDRO_MMG_V1.0,No,hai_mdro_candida_auris,,
+Enteric Diseases,NCEZID,50265,Salmonellosis (excluding S. Typhi infection and S. Paratyphi infection),FDD_MMG_V1.0,Yes,fdd_salmonellosis,foodnet_states,fdd_foodnet;fdd_salmonellosis
+Enteric Diseases,NCEZID,50266,"Salmonella enterica serotypes Paratyphi A, B (tartrate negative) and C (S. Paratyphi) infection",FDD_MMG_V1.0,Yes,fdd_s_typhi_and_s_paratyphi,foodnet_states,fdd_foodnet;fdd_s_typhi_and_s_paratyphi
+Enteric Diseases,NCEZID,50267,Salmonella enterica Typhi (S.Typhi) infection,FDD_MMG_V1.0,Yes,fdd_s_typhi_and_s_paratyphi,foodnet_states,fdd_foodnet;fdd_s_typhi_and_s_paratyphi
+Vectorborne Diseases,NCEZID,50269,Alpha-gal syndrome,,,,,
