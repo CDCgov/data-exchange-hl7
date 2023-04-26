@@ -173,8 +173,7 @@ class Function {
                 val provenance = metadata["provenance"].asJsonObject
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
-                val mmgInfo = JsonHelper.getStringArrayFromJsonArray(JsonHelper.getValueFromJson("message_info.mmgs", inputEvent).asJsonArray)
-
+                val profileFilePath : List<String> = listOf("/BasicProfile.json")
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 //
@@ -188,10 +187,10 @@ class Function {
                         metadata,
                         eventHubSendOkName,
                         evHubSender,
-                       eventHubMD[messageIndex],
+                        eventHubMD[messageIndex],
                         gsonWithNullsOn,
                         inputEvent,
-                       mmgInfo.toList()
+                       profileFilePath
                     )
 
                     context.logger.info("Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendOkName")
