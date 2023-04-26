@@ -63,7 +63,7 @@ public class ProfileManager {
             // The get() at the end will throw an exception if something goes wrong
             ConformanceContext conformanceContext = DefaultConformanceContext.apply(confContexts).get();
             // get ValueSetLibrary
-            InputStream vsLibXML = profileFetcher.getFileAsInputStream(profile + "/ValueSets.xml");
+            InputStream vsLibXML = profileFetcher.getFileAsInputStream(profile + "/VALUESETS-disble.xml");
             ValueSetLibrary valueSetLibrary = ValueSetLibraryImpl.apply(vsLibXML).get();
 
             validator = new SyncHL7Validator(profileX, valueSetLibrary, conformanceContext);

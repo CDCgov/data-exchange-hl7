@@ -19,7 +19,7 @@
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
 
-        <functionAppName>ocio-ede-${environment-id}-hl7-mmg-lake-segs-transfomer</functionAppName>
+        <functionAppName>ocio-ede-${environment-id}-hl7-lake-segments-transformer</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
 
         <slf4j.version>2.0.3</slf4j.version>
@@ -27,7 +27,7 @@
         <azstblob.version>12.19.1</azstblob.version>
         <gson.version>2.9.1</gson.version>
         <junit.version>5.9.0</junit.version>
-        <libdexcommon.version>1.0.5-SNAPSHOT</libdexcommon.version>
+        <libdexcommon.version>1.0.12-SNAPSHOT</libdexcommon.version>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
 
@@ -255,7 +255,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <environmentVariables>
-                        <REDIS_CACHE_NAME>tf-vocab-cache-dev.redis.cache.windows.net</REDIS_CACHE_NAME>
+                        <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
                         <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
                     </environmentVariables>
                 </configuration>

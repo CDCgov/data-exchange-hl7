@@ -1,0 +1,7 @@
+MSH|^~\&|NYSDOH ECLRS|NY State DOH^99NYELR999^CLIA|DC-ELR|DCDOH|20210113023000||ORU^R01^ORU_R01|SSH-2|P|2.5.1|||||USA||||
+SFT|Netlims^^^^^&&ISO|3.4.35|LabOS|894||20180311000000
+PID|1||REDACTED^^^^XX^&&CLIA|15200108452570^^^^XX^NYSDOH&&L|^^^^^^S||1991|F|||^^WASHINGTON^DC^20010-2840^^H
+ORC|RE|49147339173|-A||||||||||||||||||Centers Urgent Care - Ave J|1811 Avenue J^^Brooklyn^NY^11230|^WPN^PH^^^718^8196780|1811 Avenue J^^Brooklyn^NY^11230
+OBR|1|49147339173|-A|94563-4^SARS coronavirus 2 IgG Ab [Presence] in Serum or Plasma by Immunoassay^LN|||20210112102800|||||||||1033634431^Schonfeld^Yisroel||||||0000|||F|||||||Schonfeld
+OBX|1|ST|94563-4^SARS coronavirus 2 IgG Ab [Presence] in Serum or Plasma by Immunoassay^LN||Negative||Negative||||F||610G610|20210112102800|NY State Dept. of Health^99NYELR999^CLIA||||20210112102800|||||
+SPM|1|^1133623101||26^Serum|||||||||||||20210111160400|20210112073800
