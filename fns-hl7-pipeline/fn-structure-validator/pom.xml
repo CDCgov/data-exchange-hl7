@@ -19,7 +19,7 @@
 
         <kotlin.version>1.7.20</kotlin.version>
         <slf4j.version>2.0.5</slf4j.version>
-        <azevhub.version>5.15.0</azevhub.version>
+        <azevhub.version>5.15.1</azevhub.version>
 
         <lib-dex-commons.version>1.0.12-SNAPSHOT</lib-dex-commons.version>
         <lib-nist-validator.version>1.3.4-SNAPSHOT</lib-nist-validator.version>
