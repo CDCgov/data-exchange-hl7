@@ -33,16 +33,16 @@ class Function {
     companion object {
 
         // same in LakeSegsTransProcessMetadata
-        const val PROCESS_NAME = "lakeSegsTransformer"
+        const val PROCESS_NAME = "LAKE_OF_SEGMENTS_TRANSFORMER"
         // const val PROCESS_VERSION = "1.0.0"
 
-        val PROCESS_STATUS_OK = "PROCESS_LAKE_SEGS_TRANSFORMER_OK"
-        val PROCESS_STATUS_EXCEPTION = "PROCESS_LAKE_SEGS_TRANSFORMER_EXCEPTION"
+        val PROCESS_STATUS_OK = "SUCCESS"
+        val PROCESS_STATUS_EXCEPTION = "FAILURE"
 
     } // .companion object
 
 
-    @FunctionName("lakeSegsCASETransformer")
+    @FunctionName("LAKE_OF_SEGMENTS_TRANSFORMER_CASE")
     fun eventHubCASEProcessor(
         @EventHubTrigger(
                 name = "msg", 
@@ -130,7 +130,7 @@ class Function {
 
 
 
-    @FunctionName("lakeSegsELRTransformer")
+    @FunctionName("LAKE_OF_SEGMENTS_TRANSFORMER_ELR")
     fun eventHubELRProcessor(
         @EventHubTrigger(
             name = "msg",
