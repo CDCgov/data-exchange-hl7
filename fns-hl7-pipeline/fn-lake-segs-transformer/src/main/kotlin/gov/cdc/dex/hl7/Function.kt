@@ -1,27 +1,21 @@
 package gov.cdc.dex.hl7
 
-import com.microsoft.azure.functions.ExecutionContext
-import com.microsoft.azure.functions.annotation.EventHubTrigger
-import com.microsoft.azure.functions.annotation.FunctionName
-
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.BindingName
+import com.microsoft.azure.functions.annotation.EventHubTrigger
+import com.microsoft.azure.functions.annotation.FunctionName
 import gov.cdc.dex.azure.EventHubMetadata
-
-import java.util.*
-
 import gov.cdc.dex.azure.EventHubSender
+import gov.cdc.dex.metadata.Problem
+import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-
-import gov.cdc.dex.metadata.Problem
-import gov.cdc.dex.metadata.SummaryInfo
-import gov.cdc.dex.util.JsonHelper
+import java.util.*
 
 
 /**
@@ -85,7 +79,6 @@ class Function {
                 val provenance = metadata["provenance"].asJsonObject
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
-                val profileFilePath : List<String> = listOf("/BasicProfile.json")
 
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
@@ -101,8 +94,7 @@ class Function {
                         evHubSender,
                         eventHubMD[messageIndex],
                         gsonWithNullsOn,
-                        inputEvent,
-                        profileFilePath
+                        inputEvent
                     )
                     context.logger.info("Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendOkName")
 
@@ -173,7 +165,7 @@ class Function {
                 val provenance = metadata["provenance"].asJsonObject
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
-                val profileFilePath : List<String> = listOf("/BasicProfile.json")
+
                 context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 //
@@ -189,8 +181,7 @@ class Function {
                         evHubSender,
                         eventHubMD[messageIndex],
                         gsonWithNullsOn,
-                        inputEvent,
-                       profileFilePath
+                        inputEvent
                     )
 
                     context.logger.info("Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendOkName")
@@ -224,8 +215,7 @@ class Function {
         evHubSender: EventHubSender,
         eventHubMD: EventHubMetadata,
         gsonWithNullsOn: Gson,
-        inputEvent: JsonObject,
-        config : List<String>
+        inputEvent: JsonObject
     ){
         // read the profile
         val profileFilePath = "/BasicProfile.json"
@@ -236,7 +226,7 @@ class Function {
         val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
 
         val processMD = LakeSegsTransProcessMetadata(status = PROCESS_STATUS_OK, eventHubMD = eventHubMD, report = lakeSegsModel,
-            config = config
+            config = listOf(profileFilePath)
         )
 
         // process time
