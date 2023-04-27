@@ -29,11 +29,11 @@ import java.util.*
 class Function {
     
     companion object {
-        const val PROCESS_STATUS_OK = "PROCESS_MMG_BASED_TRANSFORMER_OK"
-        const val PROCESS_STATUS_EXCEPTION = "PROCESS_MMG_BASED_TRANSFORMER_EXCEPTION"
+        const val PROCESS_STATUS_OK = "SUCCESS"
+        const val PROCESS_STATUS_EXCEPTION = "FAILURE"
 
         // same in MbtProcessMetadata
-        const val PROCESS_NAME = "mmgBasedTransformer"
+        const val PROCESS_NAME = "MMG_BASED_TRANSFORMER"
         // val PROCESS_VERSION = "1.0.0"
     } // .companion
 
@@ -42,7 +42,7 @@ class Function {
         return if (value.isDefined) value.get() //throw InvalidMessageException("Error extracting $path from HL7 message")
         else ""
     }
-    @FunctionName("mmgBasedTransformer")
+    @FunctionName("MMG_BASED_TRANSFORMER")
     fun eventHubProcessor(
         @EventHubTrigger(
                 name = "msg",
