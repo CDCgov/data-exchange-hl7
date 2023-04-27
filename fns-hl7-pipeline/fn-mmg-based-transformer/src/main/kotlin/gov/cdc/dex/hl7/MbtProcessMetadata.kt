@@ -11,7 +11,7 @@ data class MbtProcessMetadata (
 )
     : ProcessMetadata(PROCESS_NAME, PROCESS_VERSION, status, eventHubMD, config) {
         companion object {
-            const val PROCESS_NAME = "mmgBasedTransformer"
+            const val PROCESS_NAME = "MMG_BASED_TRANSFORMER"
             const val PROCESS_VERSION = "1.0.0"
         }
 } // .MbtProcessMetadata

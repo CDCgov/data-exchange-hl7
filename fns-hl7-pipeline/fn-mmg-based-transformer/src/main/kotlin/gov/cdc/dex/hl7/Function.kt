@@ -31,10 +31,6 @@ class Function {
     companion object {
         const val PROCESS_STATUS_OK = "SUCCESS"
         const val PROCESS_STATUS_EXCEPTION = "FAILURE"
-
-        // same in MbtProcessMetadata
-        const val PROCESS_NAME = "MMG_BASED_TRANSFORMER"
-        // val PROCESS_VERSION = "1.0.0"
     } // .companion
 
     private fun extractValue(msg: String, path: String):String  {
@@ -165,7 +161,7 @@ class Function {
 
         if (exception != null) {
             //TODO::  - update retry counts
-            val problem = Problem(PROCESS_NAME, exception, false, 0, 0)
+            val problem = Problem(MbtProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
             val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
             inputEvent.add("summary", summary.toJsonElement())
         } else {
