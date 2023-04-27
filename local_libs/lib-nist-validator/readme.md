@@ -40,11 +40,14 @@ This project uses some 3rd party code from NIST. The source code is available at
 |----|-----|----|
 |Snelick, Robert D.| <robert.snelick@nist.gov> | (Fed) |
 |Hossam Tamri | <hossam.tamri@nist.gov> | (Tech)|
+|Caroline Rosin | <caroline.rosin@nist.gov> | (Assoc) |
 |Crouzier, Nicolas (Assoc) | <nicolas.crouzier@nist.gov> | |
 
 ## Building this project
 
-NIST folks have the jar files available on a public Nexus repository. We are currently using version 1.4.2:
+NIST folks have the jar files available on a public Nexus repository. We are currently using version 1.6.3:
+
+Their repo is here: https://hit-nexus.nist.gov/repository/releases/
 
 To make them available, make sure you run maven with the following parameters:
 
