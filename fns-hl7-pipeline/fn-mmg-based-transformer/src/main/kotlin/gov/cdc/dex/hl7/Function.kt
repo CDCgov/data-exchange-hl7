@@ -29,12 +29,8 @@ import java.util.*
 class Function {
     
     companion object {
-        const val PROCESS_STATUS_OK = "PROCESS_MMG_BASED_TRANSFORMER_OK"
-        const val PROCESS_STATUS_EXCEPTION = "PROCESS_MMG_BASED_TRANSFORMER_EXCEPTION"
-
-        // same in MbtProcessMetadata
-        const val PROCESS_NAME = "mmgBasedTransformer"
-        // val PROCESS_VERSION = "1.0.0"
+        const val PROCESS_STATUS_OK = "SUCCESS"
+        const val PROCESS_STATUS_EXCEPTION = "FAILURE"
     } // .companion
 
     private fun extractValue(msg: String, path: String):String  {
@@ -42,7 +38,7 @@ class Function {
         return if (value.isDefined) value.get() //throw InvalidMessageException("Error extracting $path from HL7 message")
         else ""
     }
-    @FunctionName("mmgBasedTransformer")
+    @FunctionName("MMG_BASED_TRANSFORMER")
     fun eventHubProcessor(
         @EventHubTrigger(
                 name = "msg",
@@ -165,7 +161,7 @@ class Function {
 
         if (exception != null) {
             //TODO::  - update retry counts
-            val problem = Problem(PROCESS_NAME, exception, false, 0, 0)
+            val problem = Problem(MbtProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
             val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
             inputEvent.add("summary", summary.toJsonElement())
         } else {
