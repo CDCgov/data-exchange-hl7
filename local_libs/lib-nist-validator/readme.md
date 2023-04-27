@@ -19,12 +19,15 @@ The provided NistReport will also be filtered to contain only ERROR and WARNING 
 
 # Profiles
 
-Profiles should be created with the IGAMT tool (https://hl7v2.igamt-2.nist.gov/home) and exported as XML. Once exported, there should be at least 3 files present and an optional 4th file:
+Profiles should be created with the IGAMT tool (https://hl7v2.igamt-2.nist.gov/home) and exported as XML. Once exported, there should be the following files:
 
 	• PROFILE.xml
-	• CONSTRAINTS.xml
-	• VALUESETS.xml
-	• (option) PREDICATES.xml
+	• (optional) CONSTRAINTS.xml
+	• (optional) VALUESETS.xml
+	• (optional) VALUESETBINDINGS.xml
+	• (optional) COCONSTRAINTS.xml
+	• (optional) SLICINGS.xml
+	
 
 Ultimately it is up to the implementer of the ProfileFetcher on how to store and manage those resources. The ResourceFileFetcher expects a subfolder for each profile name under /src/main/resources and those files be copied under that folder.
 
