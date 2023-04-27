@@ -272,7 +272,7 @@ class TransformerSql {
         val msgProfile = modelJson.get(MESSAGE_PROFILE_IDENTIFIER_EL_NAME) ?: modelJson.get(
             MESSAGE_PROFILE_ID_ALTERNATE_NAME)
         return msgProfile.asJsonArray.mapIndexed{ index, mipPhinObj ->
-            MESSAGE_PROFILE_IDENTIFIER_EL_NAME + "_" + index.toString() to mipPhinObj.asJsonObject["entity_identifier"]
+            MESSAGE_PROFILE_IDENTIFIER_EL_NAME + "_" + (index.toInt()+1).toString() to mipPhinObj.asJsonObject["entity_identifier"]
         }.toMap()
 
     } // .messageProfIdToSqlModel
