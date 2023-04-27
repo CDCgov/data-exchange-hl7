@@ -25,6 +25,8 @@ class MmgValidator {
         val DATE_DATA_TYPES = listOf("DT", "DTM", "TS")
         const val MMWR_YEAR_CODE = "77992-6"
         const val MMWR_YEAR_LEGACY_CODE = "INV166"
+        const val MMWR_WEEK_CODE = "77991-8"
+        const val MMWR_WEEK_LEGACY_CODE = "INV165"
     }
     private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
     private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
@@ -66,13 +68,15 @@ class MmgValidator {
                            checkDataType(element, dataTypeSegments[k].get()[2], k.toString().toInt(), report )
                         }
                     }
-
+                    //Content checks
                     if (msgSegments.isDefined)  {
                         val msgValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
                         if (msgValues.isDefined) {
                             checkVocab(element, msgValues.get(), hl7Message, report)
                             if (element.mappings.hl7v251.dataType in DATE_DATA_TYPES) {
                                 this.checkDateContent(element, msgValues.get(), hl7Message, report)
+                            } else if (element.mappings.hl7v251.identifier in listOf(MMWR_WEEK_CODE, MMWR_WEEK_LEGACY_CODE)) {
+                                this.checkMMWRWeek(element, msgValues.get(), hl7Message, report)
                             }
                         }
                     }
@@ -297,11 +301,11 @@ class MmgValidator {
         msgValues.forEachIndexed { outIdx, outArray ->
             outArray.forEachIndexed { _, inElem ->
 
-                val dateValidationResponse = if (elem.mappings.hl7v251.identifier != MMWR_YEAR_CODE
-                    && elem.mappings.hl7v251.identifier != MMWR_YEAR_LEGACY_CODE){
-                    DateUtil.validateHL7Date(inElem)
-                } else {
+                val dateValidationResponse = if (elem.mappings.hl7v251.identifier in
+                        listOf(MMWR_YEAR_CODE, MMWR_YEAR_LEGACY_CODE)){
                     DateUtil.validateMMWRYear(inElem)
+                } else {
+                    DateUtil.validateHL7Date(inElem)
                 }
                 if (dateValidationResponse != "OK") {
                     val lineNbr = getLineNumber(message, elem, outIdx)
@@ -313,6 +317,27 @@ class MmgValidator {
                         lineNbr,
                         ValidationErrorMessage.DATE_INVALID,
                         dateValidationResponse
+                    )
+                    report.add(issue)
+                }
+            }//.forEach Inner Array
+        } //.forEach Outer Array
+    }
+
+    private fun checkMMWRWeek(elem: Element, msgValues: Array<Array<String>>, message: String, report:MutableList<ValidationIssue> ) {
+        msgValues.forEachIndexed { outIdx, outArray ->
+            outArray.forEachIndexed { _, inElem ->
+                val weekValidationResponse = DateUtil.validateMMWRWeek(inElem)
+                if (weekValidationResponse != "OK") {
+                    val lineNbr = getLineNumber(message, elem, outIdx)
+                    val issue = ValidationIssue(
+                        getCategory(elem.mappings.hl7v251.usage),
+                        ValidationIssueType.MMWR_WEEK,
+                        elem.name,
+                        elem.getValuePath(),
+                        lineNbr,
+                        ValidationErrorMessage.WEEK_INVALID,
+                        weekValidationResponse
                     )
                     report.add(issue)
                 }
