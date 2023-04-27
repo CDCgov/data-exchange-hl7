@@ -10,14 +10,14 @@ class FunctionTest {
     @Test
     fun processELR_HappyPath() {
         println("Starting processELR_HappyPath test")
-        val function = Function()
         val text = File("src/test/resources/ELR_message.txt").readText()
-
         val messages: MutableList<String> = ArrayList()
             messages.add(text)
         val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
         val eventHubMD = EventHubMetadata(1, 99, "", "")
         eventHubMDList.add(eventHubMD)
+
+        val function = Function()
         function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
         println("Finished processELR_HappyPath test")
     }
