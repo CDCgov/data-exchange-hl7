@@ -220,7 +220,7 @@ class Transformer(redisProxy: RedisProxy)  {
                 // remove duplicate blocks that occur in last and next-to-last mmgs
                 val lastMMG =  mmgs[mmgs.size - 1]
                 val nextToLastMMG = mmgs[mmgs.size - 2]
-                // compare each block in lastMMG with blocks in nextToLastMMG
+                // compare blocks of elements in the mmgs
                 // if all the elements IDs in one block are all contained within another block,
                 // keep the bigger one
                 keepBiggerElementSet(lastMMG, nextToLastMMG)
