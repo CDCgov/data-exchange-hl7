@@ -4,7 +4,7 @@ import gov.nist.validation.report.Entry
 import gov.nist.validation.report.Report
 import hl7.v2.profile.XMLDeserializer
 import hl7.v2.validation.SyncHL7Validator
-import hl7.v2.validation.ValidationContext
+
 import hl7.v2.validation.ValidationContextBuilder
 import hl7.v2.validation.content.DefaultConformanceContext
 import hl7.v2.validation.vs.ValueSetLibraryImpl
