@@ -333,7 +333,7 @@ class MbtTest {
             // remove message header block from all but last mmg
             for (index in 0..mmgs.size - 2) {
                 mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                    block.name != "Message Header"
+                    block.name != "Message Header" && block.elements.isNotEmpty()
                 } // .filter
             } // .for
             // remove duplicate blocks that occur in last and next-to-last mmgs
@@ -343,15 +343,20 @@ class MbtTest {
             // if the elements IDs are identical, remove it from nextToLastMMG
             println("LastMMG --> ${lastMMG.name} : size ${lastMMG.blocks.size}")
             println("Next to Last MMG --> ${nextToLastMMG.name} : size ${nextToLastMMG.blocks.size}")
-            lastMMG.blocks.forEach { block ->
-                val blockElementIds = block.elements.map { elem -> elem.mappings.hl7v251.identifier }.toSet()
-                nextToLastMMG.blocks = nextToLastMMG.blocks.filter {
-                    it.elements.map { el -> el.mappings.hl7v251.identifier }.toSet() != blockElementIds
-                }
-            }
+            keepBiggerElementSet(lastMMG, nextToLastMMG)
+            keepBiggerElementSet(nextToLastMMG, lastMMG)
             println("After transform")
             println("LastMMG --> ${lastMMG.name} : size ${lastMMG.blocks.size}")
             println("Next to Last MMG --> ${nextToLastMMG.name} : size ${nextToLastMMG.blocks.size}")
+        }
+    }
+
+    private fun keepBiggerElementSet(firstMMG: MMG, secondMMG: MMG) {
+        firstMMG.blocks.forEach { block ->
+            val blockElementIds = block.elements.map { elem -> elem.mappings.hl7v251.identifier }.toSet()
+            secondMMG.blocks = secondMMG.blocks.filter {
+              !blockElementIds.containsAll(it.elements.map { el -> el.mappings.hl7v251.identifier }.toSet())
+            }
         }
     }
     @Test
