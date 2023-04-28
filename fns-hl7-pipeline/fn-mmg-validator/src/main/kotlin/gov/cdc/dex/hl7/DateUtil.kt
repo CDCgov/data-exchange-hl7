@@ -53,6 +53,19 @@ class DateUtil {
 
         }
 
+        fun validateMMWRWeek(mmwrWeek: String): String {
+            return try {
+                val parsedWeek = mmwrWeek.toInt()
+                if (parsedWeek in 1..52) {
+                    "OK"
+                } else {
+                    "Week must be in the range 1 to 52"
+                }
+            } catch (e: Exception) {
+                "'$mmwrWeek' is not a valid week"
+            }
+        }
+
         private fun validateDateParts(dateString: String, pattern: String) : String {
             if (dateString.length % 2 != 0) {
                 return "Unable to parse date of length ${dateString.length}"
