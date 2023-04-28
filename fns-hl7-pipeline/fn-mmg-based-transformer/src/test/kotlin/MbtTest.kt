@@ -50,7 +50,7 @@ class MbtTest {
         private val gson = Gson()
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
 
-        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1"
+        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77968-6']-5.1"
         const val EVENT_CODE_PATH = "OBR-31.1"
 
     } // .companion 
@@ -289,6 +289,11 @@ class MbtTest {
     fun testSalmonellosis() {
         testTransformerWithRedis("testSalmonellosis", "/FDD_V1.0.1_ETM4-Sal(D).txt")
     }
+
+    @Test
+    fun testShigellosis() {
+        testTransformerWithRedis("testShigellosis", "/FDD_V1.0.1_ETM5-Shig(F).txt")
+    }
     @Test
     fun testConditionNotSupportedException() {
 
@@ -316,6 +321,39 @@ class MbtTest {
 
     } // .testLoadMMG
 
+    @Test
+    fun testFilterMMGs() {
+        val filePath = "/FDD_V1.0.1_ETM5-Shig(F).txt"
+        val hl7Content = this::class.java.getResource(filePath).readText()
+        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
+        val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
+        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
+
+        if ( mmgs.size > 1 ) {
+            // remove message header block from all but last mmg
+            for (index in 0..mmgs.size - 2) {
+                mmgs[index].blocks = mmgs[index].blocks.filter { block ->
+                    block.name != "Message Header"
+                } // .filter
+            } // .for
+            // remove duplicate blocks that occur in last and next-to-last mmgs
+            val lastMMG = mmgs[mmgs.size - 1]
+            val nextToLastMMG = mmgs[mmgs.size - 2]
+            // compare each block in lastMMG with blocks in nextToLastMMG
+            // if the elements IDs are identical, remove it from nextToLastMMG
+            println("LastMMG --> ${lastMMG.name} : size ${lastMMG.blocks.size}")
+            println("Next to Last MMG --> ${nextToLastMMG.name} : size ${nextToLastMMG.blocks.size}")
+            lastMMG.blocks.forEach { block ->
+                val blockElementIds = block.elements.map { elem -> elem.mappings.hl7v251.identifier }.toSet()
+                nextToLastMMG.blocks = nextToLastMMG.blocks.filter {
+                    it.elements.map { el -> el.mappings.hl7v251.identifier }.toSet() != blockElementIds
+                }
+            }
+            println("After transform")
+            println("LastMMG --> ${lastMMG.name} : size ${lastMMG.blocks.size}")
+            println("Next to Last MMG --> ${nextToLastMMG.name} : size ${nextToLastMMG.blocks.size}")
+        }
+    }
     @Test
     fun testMmgThrowsException() {
 
