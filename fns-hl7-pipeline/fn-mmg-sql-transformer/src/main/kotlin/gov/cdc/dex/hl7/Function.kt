@@ -34,17 +34,17 @@ class Function {
         const val TABLES_KEY_NAME = "tables"
 
         // same in MmgSqlTransProcessMetadata
-        const val PROCESS_NAME = "mmgSQLTransformer"
+        const val PROCESS_NAME = "MMG_BASED_SQL_TRANSFORMER"
         // const val PROCESS_VERSION = "1.0.0"
 
-        const val PROCESS_STATUS_OK = "PROCESS_MMG_SQL_TRANSFORMER_OK"
-        const val PROCESS_STATUS_EXCEPTION = "PROCESS_MMG_SQL_TRANSFORMER_EXCEPTION"
-        const val PREVIOUS_PROCESS_NAME = "mmgBasedTransformer"
+        const val PROCESS_STATUS_OK = "SUCCESS"
+        const val PROCESS_STATUS_EXCEPTION = "FAILURE"
+        const val PREVIOUS_PROCESS_NAME = "MMG_BASED_TRANSFORMER"
 
     } // .companion object
 
 
-    @FunctionName("mmgSQLTransformer")
+    @FunctionName("MMG_BASED_SQL_TRANSFORMER")
     fun eventHubProcessor(
         @EventHubTrigger(
                 name = "msg", 

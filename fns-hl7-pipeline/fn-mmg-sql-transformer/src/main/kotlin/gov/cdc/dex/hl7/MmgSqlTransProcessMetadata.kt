@@ -10,7 +10,7 @@ data class MmgSqlTransProcessMetadata (
     val config : List<String>)
     : ProcessMetadata(PROCESS_NAME, PROCESS_VERSION, status, eventHubMD, config) {
         companion object  {
-            const val PROCESS_NAME = "mmgSQLTransformer"
+            const val PROCESS_NAME = "MMG_BASED_SQL_TRANSFORMER"
             const val PROCESS_VERSION = "1.0.0"
         } // .companion object
 

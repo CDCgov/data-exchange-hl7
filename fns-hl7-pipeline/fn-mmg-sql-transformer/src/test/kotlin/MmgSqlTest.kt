@@ -219,9 +219,9 @@ class MmgSqlTest {
         // --------------------------------------
         val singlesNonRepeatsModel = messageProfIdModel + transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepeats, profilesMap, modelJson)
         println("singlesNonRepeatsModel[$MESSAGE_PROFILE_IDENTIFIER]: --> ${singlesNonRepeatsModel[MESSAGE_PROFILE_IDENTIFIER]}")
-        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_0"), true)
         assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_1"), true)
         assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_2"), true)
+        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_3"), true)
 
         // Singles Repeats
         // --------------------------------------
