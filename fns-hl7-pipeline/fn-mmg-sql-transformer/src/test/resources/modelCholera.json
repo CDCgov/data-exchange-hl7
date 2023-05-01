@@ -1,0 +1,3067 @@
+{
+	"message_profile_identifier": [
+		{
+			"entity_identifier": "NOTF_ORU_v3.0",
+			"namespace_id": "PHINProfileID",
+			"universal_id": "2.16.840.1.114222.4.10.3",
+			"universal_id_type": "ISO"
+		},
+		{
+			"entity_identifier": "Generic_MMG_V2.0",
+			"namespace_id": "PHINMsgMapID",
+			"universal_id": "2.16.840.1.114222.4.10.4",
+			"universal_id_type": "ISO"
+		},
+		{
+			"entity_identifier": "FDD_MMG_V1.0",
+			"namespace_id": "PHINMsgMapID",
+			"universal_id": "2.16.840.1.114222.4.10.4",
+			"universal_id_type": "ISO"
+		}
+	],
+	"local_subject_id": {
+		"id_number": "FDD_CHO_TC01",
+		"check_digit": null,
+		"check_digit_scheme": null,
+		"assigning_authority": "SendAppName&2.16.840.1.114222.222&ISO",
+		"identifier_type_code": null,
+		"assigning_facility": null,
+		"effective_date": null,
+		"expiration_date": null,
+		"assigning_jurisdiction": null,
+		"assigning_agency_or_department": null
+	},
+	"birth_date": "19750301",
+	"subjects_sex": "M",
+	"race_category": [
+		{
+			"identifier": "2054-5",
+			"text": "Black or African American",
+			"name_of_coding_system": "CDCREC",
+			"alternate_identifier": null,
+			"alternate_text": null,
+			"name_of_alternate_coding_system": null,
+			"code_system_concept_name": "Black or African American",
+			"cdc_preferred_designation": "Black or African American"
+		}
+	],
+	"ethnic_group": {
+		"identifier": "2186-5",
+		"text": "Not Hispanic or Latino",
+		"name_of_coding_system": "CDCREC",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"code_system_concept_name": "Not Hispanic or Latino",
+		"cdc_preferred_designation": "Not Hispanic or Latino"
+	},
+	"subject_address_county": "26163",
+	"subject_address_state": "26",
+	"subject_address_zip_code": "48201",
+	"deceased_date": "",
+	"condition_code": {
+		"identifier": "10470",
+		"text": "Cholera",
+		"name_of_coding_system": "NND",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"code_system_concept_name": "Cholera (toxigenic Vibrio cholerae O1 or O139)",
+		"cdc_preferred_designation": "Cholera (toxigenic Vibrio cholerae O1 or O139)"
+	},
+	"local_record_id": {
+		"entity_identifier": "FDD_CHO_PC01",
+		"namespace_id": "SendAppName",
+		"universal_id": "2.16.840.1.114222",
+		"universal_id_type": "ISO"
+	},
+	"notification_result_status": "F",
+	"date_first_electronically_submitted": "20170802111655",
+	"date_of_electronic_case_notification_to_cdc": "20170802111655",
+	"other_race_text": "No other race",
+	"country_of_birth": {
+		"identifier": "USA",
+		"text": "UNITED STATES",
+		"name_of_coding_system": "ISO3166_1",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+		"cdc_preferred_designation": "UNITED STATES OF AMERICA"
+	},
+	"other_birth_place": "No other birth place",
+	"country_of_usual_residence": {
+		"identifier": "USA",
+		"text": "UNITED STATES",
+		"name_of_coding_system": "ISO3166_1",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+		"cdc_preferred_designation": "UNITED STATES OF AMERICA"
+	},
+	"date_of_illness_onset": "20170720",
+	"illness_end_date": "20170801",
+	"illness_duration": {
+		"comparator": null,
+		"number1": "13",
+		"separator": null,
+		"number2": null
+	},
+	"illness_duration_units": null,
+	"pregnancy_status": {
+		"identifier": "N",
+		"text": "No",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "No",
+		"cdc_preferred_designation": "No"
+	},
+	"diagnosis_date": "20170725",
+	"hospitalized": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"admission_date": "20170723",
+	"discharge_date": "20170725",
+	"duration_of_hospital_stay_in_days": {
+		"comparator": null,
+		"number1": "2",
+		"separator": null,
+		"number2": null
+	},
+	"subject_died": {
+		"identifier": "UNK",
+		"text": "Unknown",
+		"name_of_coding_system": "NULLFL",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "unknown",
+		"cdc_preferred_designation": "Unknown"
+	},
+	"state_case_identifier": "MI98126-2017",
+	"legacy_case_identifier": "45126958S012017",
+	"age_at_case_investigation": {
+		"comparator": null,
+		"number1": "43",
+		"separator": null,
+		"number2": null
+	},
+	"age_unit_at_case_investigation": null,
+	"case_disease_imported_code": {
+		"identifier": "PHC246",
+		"text": "Out of state",
+		"name_of_coding_system": "CDCPHINVS",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Out of state",
+		"cdc_preferred_designation": "Out of state"
+	},
+	"imported_country": {
+		"identifier": "USA",
+		"text": "UNITED STATES",
+		"name_of_coding_system": "ISO3166_1",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+		"cdc_preferred_designation": "UNITED STATES OF AMERICA"
+	},
+	"imported_state": {
+		"identifier": "48",
+		"text": "Texas",
+		"name_of_coding_system": "FIPS5_2",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Texas",
+		"cdc_preferred_designation": "Texas"
+	},
+	"imported_city": {
+		"identifier": "1380948",
+		"text": "Houston",
+		"name_of_coding_system": "USGSGNIS",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Houston",
+		"cdc_preferred_designation": "Houston, TX, Harris"
+	},
+	"imported_county": {
+		"identifier": "48201",
+		"text": "Harris",
+		"name_of_coding_system": "FIPS6_4",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Harris",
+		"cdc_preferred_designation": "Harris, TX"
+	},
+	"transmission_mode": {
+		"identifier": "416086007",
+		"text": "Food-borne transmission",
+		"name_of_coding_system": "SCT",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Food-borne transmission (qualifier value)",
+		"cdc_preferred_designation": "Food-borne transmission"
+	},
+	"case_class_status_code": {
+		"identifier": "410605003",
+		"text": "Confirmed present",
+		"name_of_coding_system": "SCT",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Confirmed present (qualifier value)",
+		"cdc_preferred_designation": "Confirmed present"
+	},
+	"immediate_national_notifiable_condition": {
+		"identifier": "N",
+		"text": "No",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "No",
+		"cdc_preferred_designation": "No"
+	},
+	"case_outbreak_indicator": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"case_outbreak_name": "CHOLERAOUTTX54564",
+	"jurisdiction_code": "S01",
+	"reporting_source_type_code": {
+		"identifier": "1",
+		"text": "Hospital",
+		"name_of_coding_system": "HL70406",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Hospital",
+		"cdc_preferred_designation": "Hospital"
+	},
+	"reporting_source_zip_code": "48201",
+	"binational_reporting_criteria": [
+		{
+			"identifier": "PHC1139",
+			"text": "Has case contacts in or from Mexico or Canada",
+			"name_of_coding_system": "CDCPHINVS",
+			"alternate_identifier": null,
+			"alternate_text": null,
+			"name_of_alternate_coding_system": null,
+			"coding_system_version_id": null,
+			"alternate_coding_system_version_id": null,
+			"original_text": null,
+			"code_system_concept_name": "Has case contacts in or from Mexico or Canada",
+			"cdc_preferred_designation": "Has case contacts in or from Mexico or Canada"
+		}
+	],
+	"person_reporting_to_cdc_name": "Jones, Indiana",
+	"person_reporting_to_cdc_phone_number": "555-541-8745",
+	"person_reporting_to_cdc_email": "ijones@MIDOH.gov",
+	"case_investigation_start_date": "20170729",
+	"date_reported": "20170729",
+	"earliest_date_reported_to_county": "20170730",
+	"earliest_date_reported_to_state": "20170729",
+	"mmwr_week": {
+		"comparator": null,
+		"number1": "30",
+		"separator": null,
+		"number2": null
+	},
+	"mmwr_year": "2017",
+	"date_cdc_was_first_verbally_notified_of_this_case": "20170731",
+	"date_first_reported_to_phd": "20170729",
+	"reporting_state": {
+		"identifier": "26",
+		"text": "Michigan",
+		"name_of_coding_system": "FIPS5_2",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Michigan",
+		"cdc_preferred_designation": "Michigan"
+	},
+	"reporting_county": {
+		"identifier": "26163",
+		"text": "Wayne",
+		"name_of_coding_system": "FIPS6_4",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Wayne",
+		"cdc_preferred_designation": "Wayne, MI"
+	},
+	"national_reporting_jurisdiction": {
+		"identifier": "26",
+		"text": "MI",
+		"name_of_coding_system": "FIPS5_2",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Michigan",
+		"cdc_preferred_designation": "MI"
+	},
+	"comment": "Cholera all fields",
+	"signs_and_symptoms_comments": "No Additional Comments",
+	"type_of_sequelae": "ataxia",
+	"site_of_bullae": "left arm",
+	"site_of_cellulitis": "right leg",
+	"medical_history_type_specify": "fatty liver disease",
+	"consumed_medications_to_block_acids_within_30_days_before_illness": {
+		"identifier": "29115",
+		"text": "Maalox",
+		"name_of_coding_system": "RXNORM",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Maalox / Maox",
+		"cdc_preferred_designation": "Maalox / Maox"
+	},
+	"antibiotic_used_for_current_illness": null,
+	"specify_different_exposure_window": {
+		"comparator": null,
+		"number1": "5",
+		"separator": null,
+		"number2": null
+	},
+	"consumed_same_seafood_by_dining_partners": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"ill_dining_partners": {
+		"identifier": "N",
+		"text": "No",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "No",
+		"cdc_preferred_designation": "No"
+	},
+	"body_of_water": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"name_of_body_of_water": "Atlantic ocean",
+	"type_of_water": {
+		"identifier": "46031004",
+		"text": "Salt water",
+		"name_of_coding_system": "SCT",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Salt water (substance)",
+		"cdc_preferred_designation": "Salt water"
+	},
+	"drippings": {
+		"identifier": "UNK",
+		"text": "Unknown",
+		"name_of_coding_system": "NULLFL",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "unknown",
+		"cdc_preferred_designation": "Unknown"
+	},
+	"marine_life_exposure": {
+		"identifier": "UNK",
+		"text": "Unknown",
+		"name_of_coding_system": "NULLFL",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "unknown",
+		"cdc_preferred_designation": "Unknown"
+	},
+	"date_of_recent_exposure": "20170718",
+	"occupational_skin_exposure": {
+		"identifier": "UNK",
+		"text": "Unknown",
+		"name_of_coding_system": "NULLFL",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "unknown",
+		"cdc_preferred_designation": "Unknown"
+	},
+	"wound_during_exposure_type_code": {
+		"identifier": "PHC395",
+		"text": "yes, sustained a wound",
+		"name_of_coding_system": "CDCPHINVS",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Sustained Wound",
+		"cdc_preferred_designation": "yes, sustained a wound"
+	},
+	"wound_during_exposure_details": "right elbow",
+	"specify_different_travel_exposure_window": {
+		"comparator": null,
+		"number1": "7",
+		"separator": null,
+		"number2": null
+	},
+	"travel_outside_of_home_state_in_the_7_days_before_illness_onset": null,
+	"travel_outside_usa_prior_to_illness_onset_within_program_specific_timeframe": {
+		"identifier": "N",
+		"text": "No",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "No",
+		"cdc_preferred_designation": "No"
+	},
+	"pulse_net_cluster_code": "CHOLERA1254",
+	"pulsenet_id": null,
+	"did_the_subject_ever_receive_a_vaccine_against_this_disease": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"vaccine_administered_date": null,
+	"exposure_to_other_persons_with_cholera_or_cholera_like_illness": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"cholera_serotype": {
+		"identifier": "66635002",
+		"text": "Ogawa",
+		"name_of_coding_system": "SCT",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Vibrio cholerae serotype Ogawa",
+		"cdc_preferred_designation": "Ogawa"
+	},
+	"cholera_biotype": {
+		"identifier": "58735003",
+		"text": "El Tor",
+		"name_of_coding_system": "SCT",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Vibrio cholerae, El Tor biotype",
+		"cdc_preferred_designation": "El Tor"
+	},
+	"cholera_toxigenic": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"probable_laboratory_diagnosed": {
+		"identifier": "N",
+		"text": "No",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "No",
+		"cdc_preferred_designation": "No"
+	},
+	"probable_epi_linked": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"date_case_report_form_completed": "20170729",
+	"comment_field": "No additional comments",
+	"repeating_variables_for_dis_rg": [
+		{
+			"country_of_exposure": {
+				"identifier": "USA",
+				"text": "UNITED STATES",
+				"name_of_coding_system": "ISO3166_1",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+				"cdc_preferred_designation": "UNITED STATES OF AMERICA"
+			},
+			"state_or_province_of_exposure": {
+				"identifier": "48",
+				"text": "Texas",
+				"name_of_coding_system": "FIPS5_2",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Texas",
+				"cdc_preferred_designation": "Texas"
+			},
+			"city_of_exposure": "Houston",
+			"county_of_exposure": "Harris"
+		}
+	],
+	"signs_and_symptoms_repeatin_rg": [
+		{
+			"signs_and_symptoms": [
+				{
+					"identifier": "62315008",
+					"text": "Diarrhea",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Diarrhea",
+					"cdc_preferred_designation": "Diarrhea"
+				}
+			],
+			"signs_and_symptoms_indicator": [
+				{
+					"identifier": "Y",
+					"text": "Yes",
+					"name_of_coding_system": "HL70136",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Yes",
+					"cdc_preferred_designation": "Yes"
+				}
+			]
+		},
+		{
+			"signs_and_symptoms": [
+				{
+					"identifier": "386661006",
+					"text": "Fever",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Fever",
+					"cdc_preferred_designation": "Fever"
+				}
+			],
+			"signs_and_symptoms_indicator": [
+				{
+					"identifier": "Y",
+					"text": "Yes",
+					"name_of_coding_system": "HL70136",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Yes",
+					"cdc_preferred_designation": "Yes"
+				}
+			]
+		},
+		{
+			"signs_and_symptoms": [
+				{
+					"identifier": "405729008",
+					"text": "Bloody diarrhea",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Hematochezia",
+					"cdc_preferred_designation": "Bloody diarrhea"
+				}
+			],
+			"signs_and_symptoms_indicator": [
+				{
+					"identifier": "Y",
+					"text": "Yes",
+					"name_of_coding_system": "HL70136",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Yes",
+					"cdc_preferred_designation": "Yes"
+				}
+			]
+		},
+		{
+			"signs_and_symptoms": [
+				{
+					"identifier": "OTH",
+					"text": "other (specify)",
+					"name_of_coding_system": "NULLFL",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "other",
+					"cdc_preferred_designation": "other (specify)"
+				}
+			],
+			"signs_and_symptoms_indicator": [
+				{
+					"identifier": "Y",
+					"text": "Yes",
+					"name_of_coding_system": "HL70136",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Yes",
+					"cdc_preferred_designation": "Yes"
+				}
+			]
+		},
+		{
+			"signs_and_symptoms": [
+				{
+					"identifier": "268988001",
+					"text": "Bullae",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Bullae",
+					"cdc_preferred_designation": "Bullae"
+				}
+			],
+			"signs_and_symptoms_indicator": [
+				{
+					"identifier": "Y",
+					"text": "Yes",
+					"name_of_coding_system": "HL70136",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Yes",
+					"cdc_preferred_designation": "Yes"
+				}
+			]
+		},
+		{
+			"signs_and_symptoms": [
+				{
+					"identifier": "128045006",
+					"text": "Cellulitis",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Cellulitis",
+					"cdc_preferred_designation": "Cellulitis"
+				}
+			],
+			"signs_and_symptoms_indicator": [
+				{
+					"identifier": "Y",
+					"text": "Yes",
+					"name_of_coding_system": "HL70136",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Yes",
+					"cdc_preferred_designation": "Yes"
+				}
+			]
+		},
+		{
+			"signs_and_symptoms": [
+				{
+					"identifier": "68962001",
+					"text": "Muscle Pain",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Muscle Pain",
+					"cdc_preferred_designation": "Muscle Pain"
+				}
+			],
+			"signs_and_symptoms_indicator": [
+				{
+					"identifier": "Y",
+					"text": "Yes",
+					"name_of_coding_system": "HL70136",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Yes",
+					"cdc_preferred_designation": "Yes"
+				}
+			]
+		},
+		{
+			"signs_and_symptoms": [
+				{
+					"identifier": "302049001",
+					"text": "Sequelae",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Sequelae",
+					"cdc_preferred_designation": "Sequelae"
+				}
+			],
+			"signs_and_symptoms_indicator": [
+				{
+					"identifier": "Y",
+					"text": "Yes",
+					"name_of_coding_system": "HL70136",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Yes",
+					"cdc_preferred_designation": "Yes"
+				}
+			]
+		},
+		{
+			"signs_and_symptoms": [
+				{
+					"identifier": "27942005",
+					"text": "Septic Shock",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Septic Shock",
+					"cdc_preferred_designation": "Septic Shock"
+				}
+			],
+			"signs_and_symptoms_indicator": [
+				{
+					"identifier": "N",
+					"text": "No",
+					"name_of_coding_system": "HL70136",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "No",
+					"cdc_preferred_designation": "No"
+				}
+			]
+		}
+	],
+	"medical_history_repeating_q_rg": [
+		{
+			"medical_history": {
+				"identifier": "7200002",
+				"text": "Alcoholism",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"medical_history_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "73211009",
+				"text": "Diabetes",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Diabetes",
+				"cdc_preferred_designation": "Diabetes mellitus (disorder)"
+			},
+			"medical_history_indicator": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "310151004",
+				"text": "Gastric Surgery",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"medical_history_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "363346000",
+				"text": "Cancer",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Malignant neoplastic disease (disorder)",
+				"cdc_preferred_designation": "Cancer"
+			},
+			"medical_history_indicator": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "56265001",
+				"text": "Heart Disease",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Heart disease (disorder)",
+				"cdc_preferred_designation": "Heart Disease (specify)"
+			},
+			"medical_history_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "84114007",
+				"text": "Heart Failure",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"medical_history_indicator": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "234532001",
+				"text": "Immunodeficiency condition/immunodeficiency",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"medical_history_indicator": {
+				"identifier": "UNK",
+				"text": "Unknown",
+				"name_of_coding_system": "NULLFL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "unknown",
+				"cdc_preferred_designation": "Unknown"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "707311008",
+				"text": "Immunosuppressants therapy",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Immunosuppressants therapy",
+				"cdc_preferred_designation": "immunosuppressants"
+			},
+			"medical_history_indicator": {
+				"identifier": "UNK",
+				"text": "Unknown",
+				"name_of_coding_system": "NULLFL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "unknown",
+				"cdc_preferred_designation": "Unknown"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "235856003",
+				"text": "Liver disease",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"medical_history_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "13200003",
+				"text": "Peptic Ulcer",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"medical_history_indicator": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "90708001",
+				"text": "Kidney Disease",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"medical_history_indicator": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "FDD_A_92",
+				"text": "antacids or ulcer medications in the past 30 days",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"medical_history_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "FDD_A_121",
+				"text": "Hematological disease",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"medical_history_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			}
+		},
+		{
+			"medical_history": {
+				"identifier": "OTH",
+				"text": "Other",
+				"name_of_coding_system": "NULLFL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Other",
+				"cdc_preferred_designation": "Other (specify)"
+			},
+			"medical_history_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			}
+		}
+	],
+	"start_antibiotics_repeating_rg": [
+		{
+			"name_of_the_antibiotic_used_for_current_illness": {
+				"identifier": "202866",
+				"text": "Flagyl",
+				"name_of_coding_system": "RXNORM",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Flagyl",
+				"cdc_preferred_designation": "Flagyl"
+			},
+			"date_treatment_or_therapy_started": "20170721",
+			"date_treatment_or_therapy_stopped": "20170725"
+		},
+		{
+			"name_of_the_antibiotic_used_for_current_illness": {
+				"identifier": "722",
+				"text": "Amoxicillin",
+				"name_of_coding_system": "RXNORM",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Amoxicillin",
+				"cdc_preferred_designation": "Amoxicillin"
+			},
+			"date_treatment_or_therapy_started": "20170725",
+			"date_treatment_or_therapy_stopped": "20170801"
+		}
+	],
+	"seafood_consumption_repeati_rg": [
+		{
+			"type_of_seafood_consumed_7_days_before_illness_began": {
+				"identifier": "B1331",
+				"text": "clams",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "CLAM",
+				"cdc_preferred_designation": "clams"
+			},
+			"seafood_exposure_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"last_date_consumed": "20170715",
+			"eaten_raw": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"consumed_on_multiple_dates": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"further_description_of_seafood": "littleneck clams"
+		},
+		{
+			"type_of_seafood_consumed_7_days_before_illness_began": {
+				"identifier": "B1335",
+				"text": "crab",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "CRAB",
+				"cdc_preferred_designation": "crab"
+			},
+			"seafood_exposure_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"last_date_consumed": "20170715",
+			"eaten_raw": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"consumed_on_multiple_dates": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"further_description_of_seafood": "shelled crab"
+		},
+		{
+			"type_of_seafood_consumed_7_days_before_illness_began": {
+				"identifier": "B2686",
+				"text": "crawfish",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "CRAWFISH OR CRAYFISH",
+				"cdc_preferred_designation": "crawfish"
+			},
+			"seafood_exposure_indicator": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"last_date_consumed": null,
+			"eaten_raw": null,
+			"consumed_on_multiple_dates": null,
+			"further_description_of_seafood": null
+		},
+		{
+			"type_of_seafood_consumed_7_days_before_illness_began": {
+				"identifier": "B1222",
+				"text": "fish",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "FISH",
+				"cdc_preferred_designation": "fish"
+			},
+			"seafood_exposure_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"last_date_consumed": "20170715",
+			"eaten_raw": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"consumed_on_multiple_dates": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"further_description_of_seafood": "filleted fish"
+		},
+		{
+			"type_of_seafood_consumed_7_days_before_illness_began": {
+				"identifier": "B1505",
+				"text": "lobster",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "LOBSTER",
+				"cdc_preferred_designation": "lobster"
+			},
+			"seafood_exposure_indicator": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"last_date_consumed": null,
+			"eaten_raw": null,
+			"consumed_on_multiple_dates": null,
+			"further_description_of_seafood": null
+		},
+		{
+			"type_of_seafood_consumed_7_days_before_illness_began": {
+				"identifier": "B1223",
+				"text": "mussels",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "MUSSEL",
+				"cdc_preferred_designation": "mussels"
+			},
+			"seafood_exposure_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"last_date_consumed": "20170715",
+			"eaten_raw": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"consumed_on_multiple_dates": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"further_description_of_seafood": "steamed"
+		},
+		{
+			"type_of_seafood_consumed_7_days_before_illness_began": {
+				"identifier": "B1489",
+				"text": "scallops",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "SCALLOP",
+				"cdc_preferred_designation": "scallops"
+			},
+			"seafood_exposure_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"eaten_raw": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"consumed_on_multiple_dates": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"further_description_of_seafood": "large bay",
+			"last_date_consumed": null
+		},
+		{
+			"type_of_seafood_consumed_7_days_before_illness_began": {
+				"identifier": "PHC378",
+				"text": "other shellfish (specify)",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Other shellfish",
+				"cdc_preferred_designation": "other shellfish (specify)"
+			},
+			"seafood_exposure_indicator": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"last_date_consumed": null,
+			"eaten_raw": null,
+			"consumed_on_multiple_dates": null,
+			"further_description_of_seafood": null
+		},
+		{
+			"type_of_seafood_consumed_7_days_before_illness_began": {
+				"identifier": "B1224",
+				"text": "oysters",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "OYSTER",
+				"cdc_preferred_designation": "oysters"
+			},
+			"seafood_exposure_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"last_date_consumed": "20170715",
+			"eaten_raw": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"consumed_on_multiple_dates": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"further_description_of_seafood": "on the half shell"
+		},
+		{
+			"type_of_seafood_consumed_7_days_before_illness_began": {
+				"identifier": "B1237",
+				"text": "shrimp",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "SHRIMP",
+				"cdc_preferred_designation": "shrimp"
+			},
+			"seafood_exposure_indicator": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"last_date_consumed": "20170715",
+			"eaten_raw": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"consumed_on_multiple_dates": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"further_description_of_seafood": "head-on shrimp"
+		}
+	],
+	"seafood_investigation_repea_rg": [
+		{
+			"seafood_investigation_id": "Clam1",
+			"type_of_seafood_products_investigated": {
+				"identifier": "B1331",
+				"text": "clams",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "CLAM",
+				"cdc_preferred_designation": "clams"
+			},
+			"date_seafood_consumed": "20170715",
+			"amount_of_seafood_consumed": "approximately 1 pound",
+			"seafood_preparation_method": {
+				"identifier": "PHC1511",
+				"text": "Fully Cooked",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "fully cooked",
+				"cdc_preferred_designation": "fully cooked"
+			},
+			"additional_product_preparation_information": "boiled in bag",
+			"imported_seafood": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"imported_seafood_country": {
+				"identifier": "CAN",
+				"text": "CANADA",
+				"name_of_coding_system": "ISO3166_1",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "CANADA",
+				"cdc_preferred_designation": "CANADA"
+			},
+			"seafood_harvested_by_patient_or_friend": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"seafood_obtained": {
+				"identifier": "FDD_A_101",
+				"text": "Food store",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Food store",
+				"cdc_preferred_designation": "Food store"
+			},
+			"name_of_establishment": "local food store",
+			"shellfish_received_by_retail_outlet": {
+				"identifier": "FDD_A_103",
+				"text": "Live Shellstock",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Live Shellstock",
+				"cdc_preferred_designation": "Live Shellstock"
+			},
+			"date_seafood_received": "20170713",
+			"environmental_assessment_conducted": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"evidence_of_improper_storage": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"improper_handling_and_storage": [
+				{
+					"identifier": "FDD_A_106",
+					"text": "Holding temperature violation",
+					"name_of_coding_system": "CDCPHINVS",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Holding temperature violation",
+					"cdc_preferred_designation": "Holding temperature violation"
+				}
+			],
+			"seafood_identifier_available": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"shippers_and_certification_numbers_information": [
+				"CLAMTAG45879"
+			]
+		},
+		{
+			"seafood_investigation_id": "Crab1",
+			"type_of_seafood_products_investigated": {
+				"identifier": "B1335",
+				"text": "crab",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "CRAB",
+				"cdc_preferred_designation": "crab"
+			},
+			"date_seafood_consumed": "20170715",
+			"amount_of_seafood_consumed": "approximately 2 pounds",
+			"seafood_preparation_method": {
+				"identifier": "PHC1511",
+				"text": "Fully Cooked",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "fully cooked",
+				"cdc_preferred_designation": "fully cooked"
+			},
+			"additional_product_preparation_information": "boiled in bag",
+			"imported_seafood": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"imported_seafood_country": {
+				"identifier": "CAN",
+				"text": "CANADA",
+				"name_of_coding_system": "ISO3166_1",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "CANADA",
+				"cdc_preferred_designation": "CANADA"
+			},
+			"seafood_harvested_by_patient_or_friend": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"seafood_obtained": {
+				"identifier": "FDD_A_101",
+				"text": "Food store",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Food store",
+				"cdc_preferred_designation": "Food store"
+			},
+			"name_of_establishment": "local food store",
+			"date_seafood_received": "20170713",
+			"environmental_assessment_conducted": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"evidence_of_improper_storage": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"seafood_identifier_available": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"shippers_and_certification_numbers_information": [
+				"CRABTAG784597"
+			],
+			"shellfish_received_by_retail_outlet": null,
+			"improper_handling_and_storage": null
+		},
+		{
+			"seafood_investigation_id": "FISH1",
+			"type_of_seafood_products_investigated": {
+				"identifier": "B1222",
+				"text": "fish",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "FISH",
+				"cdc_preferred_designation": "fish"
+			},
+			"date_seafood_consumed": "20170715",
+			"amount_of_seafood_consumed": "approximately 1/4 pound",
+			"seafood_preparation_method": {
+				"identifier": "PHC1511",
+				"text": "Fully Cooked",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "fully cooked",
+				"cdc_preferred_designation": "fully cooked"
+			},
+			"additional_product_preparation_information": "flounder",
+			"imported_seafood": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"imported_seafood_country": {
+				"identifier": "CAN",
+				"text": "CANADA",
+				"name_of_coding_system": "ISO3166_1",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "CANADA",
+				"cdc_preferred_designation": "CANADA"
+			},
+			"seafood_harvested_by_patient_or_friend": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"seafood_obtained": {
+				"identifier": "FDD_A_101",
+				"text": "Food store",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Food store",
+				"cdc_preferred_designation": "Food store"
+			},
+			"name_of_establishment": "local food store",
+			"date_seafood_received": "20170713",
+			"environmental_assessment_conducted": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"evidence_of_improper_storage": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"seafood_identifier_available": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"shippers_and_certification_numbers_information": [
+				"FISHTAGS123"
+			],
+			"shellfish_received_by_retail_outlet": null,
+			"improper_handling_and_storage": null
+		},
+		{
+			"seafood_investigation_id": "MUSSEL1",
+			"type_of_seafood_products_investigated": {
+				"identifier": "B1223",
+				"text": "mussels",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "MUSSEL",
+				"cdc_preferred_designation": "mussels"
+			},
+			"date_seafood_consumed": "20170715",
+			"amount_of_seafood_consumed": "approximately 1 pound",
+			"seafood_preparation_method": {
+				"identifier": "PHC1511",
+				"text": "Fully Cooked",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "fully cooked",
+				"cdc_preferred_designation": "fully cooked"
+			},
+			"additional_product_preparation_information": "blue mussel",
+			"imported_seafood": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"imported_seafood_country": {
+				"identifier": "CAN",
+				"text": "CANADA",
+				"name_of_coding_system": "ISO3166_1",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "CANADA",
+				"cdc_preferred_designation": "CANADA"
+			},
+			"seafood_harvested_by_patient_or_friend": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"seafood_obtained": {
+				"identifier": "FDD_A_101",
+				"text": "Food store",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Food store",
+				"cdc_preferred_designation": "Food store"
+			},
+			"name_of_establishment": "local food store",
+			"date_seafood_received": "20170713",
+			"environmental_assessment_conducted": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"evidence_of_improper_storage": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"improper_handling_and_storage": [
+				{
+					"identifier": "FDD_A_107",
+					"text": "Cross-contamination",
+					"name_of_coding_system": "CDCPHINVS",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Cross-contamination",
+					"cdc_preferred_designation": "Cross-contamination"
+				}
+			],
+			"seafood_identifier_available": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"shippers_and_certification_numbers_information": [
+				"MUSSEL1789"
+			],
+			"shellfish_received_by_retail_outlet": null
+		},
+		{
+			"seafood_investigation_id": "Oyster1",
+			"type_of_seafood_products_investigated": {
+				"identifier": "B1224",
+				"text": "oysters",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "OYSTER",
+				"cdc_preferred_designation": "oysters"
+			},
+			"date_seafood_consumed": "20170715",
+			"amount_of_seafood_consumed": "12 oysters",
+			"seafood_preparation_method": {
+				"identifier": "FDD_A_93",
+				"text": "Raw",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Raw",
+				"cdc_preferred_designation": "Raw"
+			},
+			"additional_product_preparation_information": "eastern oyster",
+			"imported_seafood": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"seafood_harvested_by_patient_or_friend": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"seafood_obtained": {
+				"identifier": "FDD_A_101",
+				"text": "Food store",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Food store",
+				"cdc_preferred_designation": "Food store"
+			},
+			"name_of_establishment": "local food store",
+			"shellfish_received_by_retail_outlet": {
+				"identifier": "FDD_A_103",
+				"text": "Live Shellstock",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Live Shellstock",
+				"cdc_preferred_designation": "Live Shellstock"
+			},
+			"date_seafood_received": "20170713",
+			"environmental_assessment_conducted": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"evidence_of_improper_storage": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"improper_handling_and_storage": [
+				{
+					"identifier": "FDD_A_106",
+					"text": "Holding temperature violation",
+					"name_of_coding_system": "CDCPHINVS",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Holding temperature violation",
+					"cdc_preferred_designation": "Holding temperature violation"
+				}
+			],
+			"seafood_identifier_available": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"shippers_and_certification_numbers_information": [
+				"OYSTER784519"
+			],
+			"imported_seafood_country": null
+		},
+		{
+			"seafood_investigation_id": "SHRIMP1",
+			"type_of_seafood_products_investigated": {
+				"identifier": "B1237",
+				"text": "shrimp",
+				"name_of_coding_system": "LANGUAL",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "SHRIMP",
+				"cdc_preferred_designation": "shrimp"
+			},
+			"date_seafood_consumed": "20170715",
+			"amount_of_seafood_consumed": "approximately 1/2 pounds",
+			"seafood_preparation_method": {
+				"identifier": "PHC1511",
+				"text": "Fully Cooked",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "fully cooked",
+				"cdc_preferred_designation": "fully cooked"
+			},
+			"additional_product_preparation_information": "boiled in bag",
+			"imported_seafood": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"imported_seafood_country": {
+				"identifier": "CAN",
+				"text": "CANADA",
+				"name_of_coding_system": "ISO3166_1",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "CANADA",
+				"cdc_preferred_designation": "CANADA"
+			},
+			"seafood_harvested_by_patient_or_friend": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"seafood_obtained": {
+				"identifier": "FDD_A_101",
+				"text": "Food store",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Food store",
+				"cdc_preferred_designation": "Food store"
+			},
+			"name_of_establishment": "local food store",
+			"date_seafood_received": "20170713",
+			"environmental_assessment_conducted": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"evidence_of_improper_storage": {
+				"identifier": "N",
+				"text": "No",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "No",
+				"cdc_preferred_designation": "No"
+			},
+			"seafood_identifier_available": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"shippers_and_certification_numbers_information": [
+				"SHRIMPTAG745499"
+			],
+			"shellfish_received_by_retail_outlet": null,
+			"improper_handling_and_storage": null
+		}
+	],
+	"harvest_area_repeating_ques_rg": [
+		{
+			"seafood_investigation_id_link": "Oyster1",
+			"harvest_state": {
+				"identifier": "23",
+				"text": "Maine",
+				"name_of_coding_system": "FIPS5_2",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Maine",
+				"cdc_preferred_designation": "Maine"
+			},
+			"area_listed_on_tag": "Maine",
+			"harvest_date_on_tag": "20170711",
+			"harvest_classification_status": {
+				"identifier": "FDD_A_115",
+				"text": "Approved",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Approved",
+				"cdc_preferred_designation": "Approved"
+			},
+			"description_of_product_listed_on_seafood_tag": "eastern oysters"
+		},
+		{
+			"seafood_investigation_id_link": "Oyster1",
+			"harvest_state": {
+				"identifier": "CA-NS",
+				"text": "Nova Scotia, CA",
+				"name_of_coding_system": "ISO3166_2",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"area_listed_on_tag": "Nova Scotia",
+			"harvest_date_on_tag": "20170711",
+			"harvest_classification_status": {
+				"identifier": "FDD_A_118",
+				"text": "Conditional approved",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Conditional approved",
+				"cdc_preferred_designation": "Conditional approved"
+			},
+			"description_of_product_listed_on_seafood_tag": "belon oysters"
+		},
+		{
+			"seafood_investigation_id_link": "Oyster1",
+			"harvest_state": {
+				"identifier": "01",
+				"text": "Alabama",
+				"name_of_coding_system": "FIPS5_2",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Alabama",
+				"cdc_preferred_designation": "Alabama"
+			},
+			"area_listed_on_tag": "Gulf coast",
+			"harvest_date_on_tag": "20170711",
+			"harvest_classification_status": {
+				"identifier": "FDD_A_118",
+				"text": "Conditional approved",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Conditional approved",
+				"cdc_preferred_designation": "Conditional approved"
+			},
+			"description_of_product_listed_on_seafood_tag": "eastern oysters"
+		},
+		{
+			"seafood_investigation_id_link": "Oyster1",
+			"harvest_state": {
+				"identifier": "22",
+				"text": "Louisiana",
+				"name_of_coding_system": "FIPS5_2",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Louisiana",
+				"cdc_preferred_designation": "Louisiana"
+			},
+			"area_listed_on_tag": "Gulf coast",
+			"harvest_date_on_tag": "20170711",
+			"harvest_classification_status": {
+				"identifier": "FDD_A_118",
+				"text": "Conditional approved",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Conditional approved",
+				"cdc_preferred_designation": "Conditional approved"
+			},
+			"description_of_product_listed_on_seafood_tag": "oysters"
+		},
+		{
+			"seafood_investigation_id_link": "Oyster1",
+			"harvest_state": {
+				"identifier": "06",
+				"text": "California",
+				"name_of_coding_system": "FIPS5_2",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "California",
+				"cdc_preferred_designation": "California"
+			},
+			"area_listed_on_tag": "pacific northwest",
+			"harvest_date_on_tag": "20170711",
+			"harvest_classification_status": {
+				"identifier": "FDD_A_118",
+				"text": "Conditional approved",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Conditional approved",
+				"cdc_preferred_designation": "Conditional approved"
+			},
+			"description_of_product_listed_on_seafood_tag": "oysters"
+		}
+	],
+	"vibrio_species_isolated_rg": [
+		{
+			"performing_laboratory_specimen_id": "SPM457800",
+			"specimen_type": {
+				"identifier": "119297000",
+				"text": "Blood",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Blood",
+				"cdc_preferred_designation": "Blood"
+			},
+			"specimen_source_site": {
+				"identifier": "right arm",
+				"text": null,
+				"name_of_coding_system": null,
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": null,
+				"cdc_preferred_designation": null
+			},
+			"specimen_collection_date_time": "20170723",
+			"isolate_sent_to_state_public_health_lab": {
+				"identifier": "Y",
+				"text": "Yes",
+				"name_of_coding_system": "HL70136",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Yes",
+				"cdc_preferred_designation": "Yes"
+			},
+			"culture_result": {
+				"identifier": "10828004",
+				"text": "Positive",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Positive (qualifier value)",
+				"cdc_preferred_designation": "Positive"
+			},
+			"cultured_species_name": [
+				{
+					"identifier": "62987004",
+					"text": "Vibrio CHOLERAE O1",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Vibrio cholerae, O1 (organism)",
+					"cdc_preferred_designation": "Vibrio CHOLERAE O1"
+				}
+			],
+			"cidt_test_name": "Mayo clinic Cholera test",
+			"result_of_cidt_for_vibrio": {
+				"identifier": "10828004",
+				"text": "Positive",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Positive (qualifier value)",
+				"cdc_preferred_designation": "Positive"
+			},
+			"cidt_species_name": [
+				{
+					"identifier": "62987004",
+					"text": "Vibrio CHOLERAE O1",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Vibrio cholerae, O1 (organism)",
+					"cdc_preferred_designation": "Vibrio CHOLERAE O1"
+				}
+			],
+			"other_organisms_from_specimen": [
+				"Cholera"
+			]
+		}
+	],
+	"travel_history_rg": [
+		{
+			"travel_state": {
+				"identifier": "01",
+				"text": "Alabama",
+				"name_of_coding_system": "FIPS5_2",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Alabama",
+				"cdc_preferred_designation": "Alabama"
+			},
+			"date_of_arrival_to_travel_destination": "20170715",
+			"date_of_departure_from_travel_destination": "20170718",
+			"reasons_for_travel": [
+				{
+					"identifier": "PHC387",
+					"text": "Visiting relatives and or friends",
+					"name_of_coding_system": "CDCPHINVS",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Visiting relatives and or friends",
+					"cdc_preferred_designation": "Visiting relatives/friends"
+				}
+			],
+			"international_destinations_of_recent_travel": null
+		},
+		{
+			"international_destinations_of_recent_travel": {
+				"identifier": "MEX",
+				"text": "MEXICO",
+				"name_of_coding_system": "ISO3166_1",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "MEXICO",
+				"cdc_preferred_designation": "MEXICO"
+			},
+			"date_of_arrival_to_travel_destination": "20170710",
+			"date_of_departure_from_travel_destination": "20170715",
+			"reasons_for_travel": [
+				{
+					"identifier": "PHC387",
+					"text": "Visiting relatives and or friends",
+					"name_of_coding_system": "CDCPHINVS",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Visiting relatives and or friends",
+					"cdc_preferred_designation": "Visiting relatives/friends"
+				}
+			],
+			"travel_state": null
+		}
+	],
+	"industry_and_occupation_rg": [
+		{
+			"current_occupation": "Clergy",
+			"current_occupation_standardized": {
+				"identifier": "2040",
+				"text": "Clergy",
+				"name_of_coding_system": "CDCOCCUPATION2010",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"code_system_concept_name": "Clergy",
+				"cdc_preferred_designation": "Clergy [2040]"
+			},
+			"current_industry": "Religious organizations",
+			"current_industry_standardized": {
+				"identifier": "9160",
+				"text": "Religious organizations",
+				"name_of_coding_system": "CDCINDUSTRY2010",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"code_system_concept_name": "Religious organizations",
+				"cdc_preferred_designation": "Religious organizations [9160]"
+			}
+		}
+	],
+	"antimicrobial_susceptibilit_rg": []
+}
