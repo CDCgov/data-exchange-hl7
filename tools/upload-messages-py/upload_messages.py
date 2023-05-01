@@ -1,7 +1,5 @@
-import json
 import requests
 import sys, os
-from uuid import NAMESPACE_URL, uuid5
 '''
 Possible header keys:
 x-tp-message_type:  (CASE or ELR)
@@ -15,12 +13,12 @@ ENVIRONMENTS = ["dev", "tst", "stg"]
 upload_url = "hl7ingress?filename="
 
 def upload_files(path_to_files, file_list):
-   # base_url = f'https://cloud-svc-transport-{env}-eastus.azurewebsites.net/'
     base_url = f'https://ocio-ede-{env}-hl7-svc-transport.azurewebsites.net/'
 
     for file_name in file_list:
         file_text = ""
         full_path = os.path.join(path_to_files, file_name)
+        norm_name = normalize(file_name)
 
         # get plain text
         with open(full_path, 'r') as f:
@@ -31,8 +29,7 @@ def upload_files(path_to_files, file_list):
             header = {"x-tp-message_type": "CASE", "x-tp-original_file_name": file_name, "content-type": "text/plain"}
 
             # upload the file
-            guid = uuid5(NAMESPACE_URL, full_path)
-            new_filename = f"upload-{user_id}-{guid}.txt"
+            new_filename = f"upload-{user_id}-{norm_name}.txt"
 
             full_url = f'{base_url}{upload_url}{new_filename}'
             resp = requests.post(url=full_url, data=file_text, headers=header)
@@ -43,7 +40,10 @@ def upload_files(path_to_files, file_list):
                 print(f'Problem uploading file {file_name}. Status code {resp.status_code}, message {resp.text}')
         else:
             print(f'Unable to upload {file_name} - no content found')
-            
+
+def normalize(name): 
+    return name.replace(".", "_").replace(" ", "_").replace("-", "_").replace("(", "").replace(")", "").replace("&", "and").lower()        
+          
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
