@@ -32,7 +32,7 @@ class MmgSqlTest {
 
         const val MESSAGE_PROFILE_IDENTIFIER = "message_profile_identifier"
 
-        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1"
+        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77968-6']-5.1"
         const val EVENT_CODE_PATH = "OBR-31.1"
 
     } // .companion 
@@ -171,7 +171,12 @@ class MmgSqlTest {
 
     @Test
     fun testTransformerSQLForSalmonellosis() {
-        testTransformerSQL("/FDD_V1.0.1_ETM4-Sal(D).txt", "/modelSal.json", printAllOutput = true)
+        testTransformerSQL("/FDD_V1.0.1_ETM4-Sal(D).txt", "/modelSal.json", printAllOutput = false)
+    }
+
+    @Test
+    fun testTransformerSQLForShigellosis() {
+        testTransformerSQL("/FDD_V1.0.1_ETM5-Shig(F).txt", "/modelShig.json", printAllOutput = true)
     }
     @Test
     fun testMessageProfileIdentifier() {

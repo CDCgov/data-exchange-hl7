@@ -210,18 +210,34 @@ class Transformer(redisProxy: RedisProxy)  {
 
         /* private */ fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
 
-            if ( mmgs.size > 1 ) { 
-                for ( index in 0..mmgs.size - 2) { // except the last one
+            if ( mmgs.size > 1 ) {
+                // remove message header block from all but last mmg
+                for ( index in 0..mmgs.size - 2) {
                     mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                        block.name != MMG_BLOCK_NAME_MESSAGE_HEADER //|| block.name == MMG_BLOCK_NAME_SUBJECT_RELATED
+                        block.name != MMG_BLOCK_NAME_MESSAGE_HEADER && block.elements.isNotEmpty()
                     } // .filter
                 } // .for
+                // remove duplicate blocks that occur in last and next-to-last mmgs
+                val lastMMG =  mmgs[mmgs.size - 1]
+                val nextToLastMMG = mmgs[mmgs.size - 2]
+                // compare blocks of elements in the mmgs
+                // if all the elements IDs in one block are all contained within another block,
+                // keep the bigger one
+                keepBiggerElementSet(lastMMG, nextToLastMMG)
+                keepBiggerElementSet(nextToLastMMG, lastMMG)
             } // .if
 
             return mmgs
         } // .getMmgsFiltered
 
-        
+    private fun keepBiggerElementSet(firstMMG: MMG, secondMMG: MMG) {
+        firstMMG.blocks.forEach { block ->
+            val blockElementIds = block.elements.map { elem -> elem.mappings.hl7v251.identifier }.toSet()
+            secondMMG.blocks = secondMMG.blocks.filter {
+                !blockElementIds.containsAll(it.elements.map { el -> el.mappings.hl7v251.identifier }.toSet())
+            }
+        }
+    }
         /* private */ fun getPhinDataTypes(): Map<String, List<PhinDataType>> {
             // logger.info("getPhinDataTypes, reading local file...")
 
