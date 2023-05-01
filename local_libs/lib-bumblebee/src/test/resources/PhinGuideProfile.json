@@ -1,0 +1,1125 @@
+{
+  "segmentDefinition": {
+    "MSH": {
+      "cardinality": "[1..1]",
+      "children": {
+        "PID": {
+          "cardinality": "[1..1]",
+          "children": {
+            "NTE": {
+              "cardinality": "[0..*]"
+            }
+          }
+        },
+        "SFT": {
+          "cardinality": "[0..*]"
+        },
+        "OBR": {
+          "cardinality": "[1..*]",
+          "children": {
+            "OBX": {
+              "cardinality": "[0..*]",
+              "children": {
+                "NTE": {
+                  "cardinality": "[0..*]"
+                }
+              }
+            },
+            "SPM": {
+              "cardinality": "[0..*]",
+              "children": {
+                "NTE": {
+                  "cardinality": "[0..*]"
+                }
+              }
+            },
+            "NTE": {
+              "cardinality": "[0..*]"
+            }
+          }
+        }
+
+      }
+    }
+  },
+  "segmentFields": {
+    "MSH":  [
+      {
+        "fieldNumber": 1,
+        "name": "File Separator",
+        "dataType": "ST",
+        "maxLength": "1",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "|",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 2,
+        "name": "Encoding Characters",
+        "dataType": "ST",
+        "maxLength": "4",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "^~\\&",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 3,
+        "name": "Sending Application",
+        "dataType": "HD",
+        "maxLength": "227",
+        "usage": "O",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 4,
+        "name": "Sending Facility",
+        "dataType": "HD",
+        "maxLength": "227",
+        "usage": "O",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 5,
+        "name": "Receiving Application",
+        "dataType": "HD",
+        "maxLength": "227",
+        "usage": "O",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 6,
+        "name": "Receiving Facility",
+        "dataType": "HD",
+        "maxLength": "227",
+        "usage": "O",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 7,
+        "name": "Date/Time of Message",
+        "dataType": "TS",
+        "maxLength": "26",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "REGEX:<<DateForSeconds>>",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 8,
+        "name": "Security",
+        "dataType": "ST",
+        "maxLength": "40",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 9,
+        "name": "Message Type",
+        "dataType": "MSG",
+        "maxLength": "15",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "ORU^R01^ORU_R01",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 10,
+        "name": "Message Control ID",
+        "dataType": "ST",
+        "maxLength": "15",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 11,
+        "name": "Processing ID",
+        "dataType": "PT",
+        "maxLength": "3",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 12,
+        "name": "Version ID",
+        "dataType": "VID",
+        "maxLength": "1689",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "2.5.1",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 13,
+        "name": "Sequence Number",
+        "dataType": "NM",
+        "maxLength": "15",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 14,
+        "name": "Continuation Pointer",
+        "dataType": "ST",
+        "maxLength": "180",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 15,
+        "name": "Accept Acknowledgement Type",
+        "dataType": "ID",
+        "maxLength": "2",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "REGEX:[|AL]",
+        "notes": "Fixed to AL if used."
+      },
+      {
+        "fieldNumber": 16,
+        "name": "Application Acknowledgement Type",
+        "dataType": "ID",
+        "maxLength": "2",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "REGEX:[|NE]",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 17,
+        "name": "Country Code",
+        "dataType": "ID",
+        "maxLength": "3",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 18,
+        "name": "Character Set",
+        "dataType": "ID",
+        "maxLength": "16",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 19,
+        "name": "Principal Language of Message",
+        "dataType": "CE",
+        "maxLength": "841",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 20,
+        "name": "Alternate Character Set Handling Scheme",
+        "dataType": "ID",
+        "maxLength": "20",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 21,
+        "name": "Message Profile identifier",
+        "dataType": "EI",
+        "maxLength": "427",
+        "usage": "R",
+        "cardinality": "[2..3]",
+        "conformance": "",
+        "notes": ""
+      }
+    ],
+    "PID":  [
+  {
+    "fieldNumber": 1,
+    "name": "Set ID",
+    "dataType": "SI",
+    "maxLength": "4",
+    "usage": "R",
+    "cardinality": "[1..1]",
+    "conformance": "1",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 2,
+    "name": "Patient ID",
+    "dataType": "ST",
+    "maxLength": "199",
+    "usage": "X",
+    "cardinality": "[1..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 3,
+    "name": "Patient Identifier List",
+    "dataType": "CX",
+    "maxLength": "2646",
+    "usage": "R",
+    "cardinality": "[1..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 4,
+    "name": "Alternate Patient ID",
+    "dataType": "ST",
+    "maxLength": "199",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 5,
+    "name": "Patient Name",
+    "dataType": "XPN",
+    "maxLength": "1108",
+    "usage": "R",
+    "cardinality": "[1..2]",
+    "conformance": "~^^^^^^S",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 6,
+    "name": "Mother's Maiden Name",
+    "dataType": "ST",
+    "maxLength": "0",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 7,
+    "name": "Date/Time of Birth",
+    "dataType": "TS",
+    "maxLength": "26",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 8,
+    "name": "Administrative Sex",
+    "dataType": "IS",
+    "maxLength": "1",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 9,
+    "name": "Patient Alias",
+    "dataType": "ST",
+    "maxLength": "0",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 10,
+    "name": "Race",
+    "dataType": "CE",
+    "maxLength": "841",
+    "usage": "RE",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 11,
+    "name": "Patient Address",
+    "dataType": "XAD",
+    "maxLength": "274",
+    "usage": "RE",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 12,
+    "name": "County Code",
+    "dataType": "ST",
+    "maxLength": "0",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 13,
+    "name": "Phone Number - Home",
+    "dataType": "ST",
+    "maxLength": "0",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 14,
+    "name": "Phone Number - Business",
+    "dataType": "ST",
+    "maxLength": "0",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 15,
+    "name": "Primary Language",
+    "dataType": "CE",
+    "maxLength": "841",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 16,
+    "name": "Marital Status",
+    "dataType": "CE",
+    "maxLength": "841",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": "HL7 700 02"
+  },
+  {
+    "fieldNumber": 17,
+    "name": "Religion",
+    "dataType": "CE",
+    "maxLength": "841",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 18,
+    "name": "Patient Account Number",
+    "dataType": "ST",
+    "maxLength": "0",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 19,
+    "name": "SSN Number - Patient",
+    "dataType": "ST",
+    "maxLength": "0",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 20,
+    "name": "Driver's License Number - Patient",
+    "dataType": "ST",
+    "maxLength": "0",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 21,
+    "name": "Mother's Identifier",
+    "dataType": "ST",
+    "maxLength": "0",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 22,
+    "name": "Ethnic Group",
+    "dataType": "CE",
+    "maxLength": "841",
+    "usage": "RE",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": "This field further defines the patient's ancestry. HL7 allows this field to repeat."
+  },
+  {
+    "fieldNumber": 23,
+    "name": "Birth Place",
+    "dataType": "ST",
+    "maxLength": "199",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 24,
+    "name": "Multiple Birth Indicator",
+    "dataType": "ID",
+    "maxLength": "1",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 25,
+    "name": "Birth Order",
+    "dataType": "NM",
+    "maxLength": "2",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  }
+],
+    "OBR":  [
+  {
+    "fieldNumber": 1,
+    "name": "Set ID",
+    "dataType": "SI",
+    "maxLength": "4",
+    "usage": "R",
+    "cardinality": "[1..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 2,
+    "name": "Place Order Number",
+    "dataType": "EI",
+    "maxLength": "427",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 3,
+    "name": "Filler Order Number",
+    "dataType": "EI",
+    "maxLength": "427",
+    "usage": "R",
+    "cardinality": "[1..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 4,
+    "name": "Universal Service Identifier",
+    "dataType": "CE",
+    "maxLength": "841",
+    "usage": "R",
+    "cardinality": "[1..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 5,
+    "name": "Priority",
+    "dataType": "ST",
+    "maxLength": "1",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": "6",
+    "name": "Requested Date/Time",
+    "dataType": "TS",
+    "maxLength": "26",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 7,
+    "name": "Observation Date/Time",
+    "dataType": "TS",
+    "maxLength": "26",
+    "usage": "R",
+    "cardinality": "[1..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 8,
+    "name": "Observation End Date/Time",
+    "dataType": "TS",
+    "maxLength": "26",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 9,
+    "name": "Collection Volume",
+    "dataType": "ST",
+    "maxLength": "100",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 10,
+    "name": "Collector Identifier",
+    "dataType": "ST",
+    "maxLength": "100",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 11,
+    "name": "Specimen Action Code",
+    "dataType": "ID",
+    "maxLength": "1",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": "If G, then OBR-26 and OBR-29 should be populated!"
+  },
+  {
+    "fieldNumber": 12,
+    "name": "Danger Code",
+    "dataType": "ST",
+    "maxLength": "100",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 13,
+    "name": "Relevant Clinical Information",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 14,
+    "name": "Specimen Received Date/Time",
+    "dataType": "TS",
+    "maxLength": "26",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 15,
+    "name": "Specimen Source",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 16,
+    "name": "Ordering Prrovider",
+    "dataType": "XCN",
+    "maxLength": "3242",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 17,
+    "name": "Order Callback Phone Number",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 18,
+    "name": "Placer Field 1",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 19,
+    "name": "Placer Field 2",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 20,
+    "name": "Filler Field 1",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 21,
+    "name": "Filler Field 2",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 22,
+    "name": "Results Report/Status Change Date/Time",
+    "dataType": "TS",
+    "maxLength": "26",
+    "usage": "C(R/RE)->4",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": "Required for Epi OBR, where OBR-4[1].1 == 68991-9"
+  },
+  {
+    "fieldNumber": 23,
+    "name": "Charge to Practice",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 24,
+    "name": "diagnostic Serv Sect ID",
+    "dataType": "ID",
+    "maxLength": "10",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": "HL70074"
+  },
+  {
+    "fieldNumber": 25,
+    "name": "Result Status",
+    "dataType": "ID",
+    "maxLength": "1",
+    "usage": "R",
+    "cardinality": "[1..1]",
+    "conformance": "",
+    "notes": "F, C or X"
+  },
+  {
+    "fieldNumber": 26,
+    "name": "Parent Result",
+    "dataType": "PRL",
+    "maxLength": "755",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": "",
+    "xtraValidation": [
+      {
+        "rule": "$11 == G => $this != NULL ",
+        "category": "ERROR",
+        "message": "OBR-26 (Parent Result) cannot be NULL if OBR-11 (Specimen Action Code) has the value G"
+      }
+    ]
+  },
+  {
+    "fieldNumber": 27,
+    "name": "Quantity/timing",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 28,
+    "name": "Results Copies Tp",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 29,
+    "name": "Parent",
+    "dataType": "EIP",
+    "maxLength": "855",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": "",
+    "xtraValidation": [
+      {
+        "rule": "$11 == G => $this != NULL ",
+        "category": "ERROR",
+        "message": "OBR-29 (Parent) cannot be NULL if OBR-11 (Specimen Action Code) has the value G"
+      }
+    ]
+  },
+  {
+    "fieldNumber": 30,
+    "name": "Transportation Mode",
+    "dataType": "ID",
+    "maxLength": "20",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 31,
+    "name": "Reason for Study",
+    "dataType": "CE",
+    "maxLength": "841",
+    "usage": "C(R/RE)->4",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": "Required for Epi OBR, where OBR-4[1].1 == 68991-9"
+  },
+  {
+    "fieldNumber": 32,
+    "name": "Principal Result Interpreter",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 33,
+    "name": "Assistant Result Interpreter",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 34,
+    "name": "Technician",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 35,
+    "name": "Transcriptionist",
+    "dataType": "ST",
+    "maxLength": "200",
+    "usage": "X",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 36,
+    "name": "Scheduled Date/Time",
+    "dataType": "TS",
+    "maxLength": "26",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  }
+],
+    "OBX":  [
+  {
+    "fieldNumber": 1,
+    "name": "Set ID",
+    "dataType": "SI",
+    "maxLength": "4",
+    "usage": "R",
+    "cardinality": "[1..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 2,
+    "name": "Value Type",
+    "dataType": "ID",
+    "maxLength": "3",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": "This field is Required, Unless OBX-11 is valued X",
+    "xtraValidation": [
+      {
+        "rule": "$11 == X => $this != NULL",
+        "category": "ERROR",
+        "message": "If OBX-11 (Observation Result Status) has the value X, OBX-2 (Value Type) is required"
+      }
+    ]
+  },
+  {
+    "fieldNumber": 3,
+    "name": "Observation Identifier",
+    "dataType": "CE",
+    "maxLength": "841",
+    "usage": "R",
+    "cardinality": "[1..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 4,
+    "name": "Observation Sub-ID",
+    "dataType": "ST",
+    "maxLength": "20",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 5,
+    "name": "Observation Value",
+    "dataType": "ST",
+    "maxLength": "9999",
+    "usage": "RE",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 6,
+    "name": "Units",
+    "dataType": "CE",
+    "maxLength": "62",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 7,
+    "name": "Reference Range",
+    "dataType": "ST",
+    "maxLength": "60",
+    "usage": "RE",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 8,
+    "name": "Abnormal Flags",
+    "dataType": "IS",
+    "maxLength": "5",
+    "usage": "RE",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": "HL70078"
+  },
+  {
+    "fieldNumber": 9,
+    "name": "Probability",
+    "dataType": "NM",
+    "maxLength": "5",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 10,
+    "name": "Nature of Abnormal Test",
+    "dataType": "ID",
+    "maxLength": "2",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 11,
+    "name": "Observation Result Status",
+    "dataType": "ID",
+    "maxLength": "1",
+    "usage": "R",
+    "cardinality": "[1..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 12,
+    "name": "Effective Date of Reference Range",
+    "dataType": "TS",
+    "maxLength": "26",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  }
+],
+    "SFT": [
+      {
+        "fieldNumber": 1,
+        "name": "Software Vendor Organization",
+        "dataType": "XON",
+        "maxLength": "567",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 2,
+        "name": "software Certified Version or Release Number",
+        "dataType": "ST",
+        "maxLength": "15",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 3,
+        "name": "software Product Name",
+        "dataType": "ST",
+        "maxLength": "20",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 4,
+        "name": "Software Binary ID",
+        "dataType": "ST",
+        "maxLength": "20",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 5,
+        "name": "Software Product Information",
+        "dataType": "TX",
+        "maxLength": "1024",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 6,
+        "name": "Software Install Date",
+        "dataType": "DTM",
+        "maxLength": "24",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }
+    ],
+    "NTE": [
+      {
+        "fieldNumber": 1,
+        "name": "Set ID",
+        "dataType": "SI",
+        "maxLength": "4",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 2,
+        "name": "Source of Comment",
+        "dataType": "ID",
+        "maxLength": "8",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 3,
+        "name": "Comment",
+        "dataType": "FT",
+        "maxLength": "65536",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 4,
+        "name": "Comment type",
+        "dataType": "CE",
+        "maxLength": "60",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }
+    ]
+
+  }
+}
+
+
+
+
