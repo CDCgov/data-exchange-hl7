@@ -220,7 +220,7 @@ class MmgSqlTest {
         val mmgs = transformer.getMmgsFiltered(mmgsArr)
         val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
         val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
-        val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
+        val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat && it.mayRepeat != "Y" }
 
         // Message Profile Identifier
         val messageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)

@@ -6,6 +6,7 @@ package gov.cdc.dex.hl7
 // import com.google.gson.Gson
 // import com.google.gson.reflect.TypeToken
 
+import com.fasterxml.jackson.databind.JsonMappingException
 import com.google.gson.JsonElement
 import com.google.gson.JsonNull
 import com.google.gson.JsonObject
@@ -13,8 +14,10 @@ import gov.cdc.dex.hl7.model.PhinDataType
 import gov.cdc.dex.redisModels.Block
 import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
+import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.util.StringUtils
 import gov.cdc.dex.util.StringUtils.Companion.normalize
+import java.util.*
 
 class TransformerSql {
 
@@ -127,78 +130,89 @@ class TransformerSql {
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Repeated Blocks -------------
     // --------------------------------------------------------------------------------------------------------
-    fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
-        var listOfLists = false
-        val repeatedBlocksModel = blocks.associate { blk ->
-            val blockName = if (blk.name.normalize().contains("repeating_group")) {
-                blk.name
-            } else {
-                "${blk.name} repeating group"
-            }
-            val blkName = StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH)
-            val blkModel = modelJson[blkName]
+    private fun getNormalizedBlockName(block: Block) : String {
+        val blockName = if (block.name.normalize().contains("repeating_group")) {
+            block.name
+        } else {
+            "${block.name} repeating group"
+        }
+        return StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH)
+    }
 
-            if (blkModel == null || blkModel.isJsonNull || blkModel.asJsonArray.isEmpty) {
-                blkName to null// we want null, not an empty array
+    fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
+        val tables = mutableMapOf<String, Any?>()
+        blocks.forEach { blk ->
+            val blkName = getNormalizedBlockName(blk)
+            val blkData = modelJson[blkName]
+
+            if (blkData == null || blkData.isJsonNull || blkData.asJsonArray.isEmpty) {
+                tables[blkName] = JsonNull.INSTANCE// we want null, not an empty array
             } else {
-                val blkModelArr = blkModel.asJsonArray  //array of data for this repeating block
+                val blkModelArr = blkData.asJsonArray  //array of data for this repeating block
                 // need to determine up front if there are any repeating elements within this repeat block
                 val elementsInBlock = blocks.filter { it.name == blk.name }[0].elements.associateBy {elem ->
                     elem.mappings.hl7v251.identifier}.values.toList()
                 val elementNames = elementsInBlock.map { StringUtils.normalizeString(it.name) }
                 val (repeaters, singles) = elementsInBlock.partition { it.isRepeat || it.mayRepeat.contains("Y") }
+                val tableRows = mutableListOf<Map<String, JsonElement>>()
+                val subTables = mutableMapOf<String, MutableList<Map<String, JsonElement>>>()
+                val idColName = StringUtils.getNormalizedShortName("${blkName}_id")
 
-                val mOut =
-                    blkModelArr.map { bma ->
+                blkModelArr.forEach { bma ->
                         val bmaObj = bma.asJsonObject
-                        if (repeaters.isEmpty()) {
-                            // we only have single elements to map
-                            elementNames.map { elName ->
-                                mapSingleElement(bmaObj, elName, elementsInBlock, profilesMap)
-                            }.reduce { acc, next -> acc + next }// .elementNames.map
+                        // for each repeated element, create a separate table
+                        // with a unique ID that matches it with the parent table record
+                        val repeatersNames = if (repeaters.isNotEmpty()) {
+                            repeaters.map { StringUtils.normalizeString(it.name) }
                         } else {
-                            // for each repeated element, create a separate column for each instance
-                            val repeatersNames = repeaters.map { StringUtils.normalizeString(it.name) }
-                             // get the singles that we will need to repeat for each row
-                            val flattenedSingles = if (singles.isNotEmpty()) {
-                                val singlesNames = singles.map { StringUtils.normalizeString(it.name) }
-                                singlesNames.map { elName ->
-                                    mapSingleElement(bmaObj, elName, singles, profilesMap)
-                                }.reduce { acc, map -> acc + map }
-                            } else {
-                                mapOf()
-                            }
-                            val cols = mutableMapOf<String, JsonElement>()
-                            repeatersNames.forEach { elName ->
-                                // extract each element of the array and create a new Json object
-                                // with the same key as the key to the array
-                                var repCount = 1
-                                if (bmaObj[elName] == null || bmaObj[elName].isJsonNull || bmaObj[elName].asJsonArray.isEmpty) {
-                                    cols["${elName}_$repCount"] = (bmaObj[elName] as JsonNull)
+                            listOf()
+                        }
+                        // get the singles for the main table
+                        val flattenedSingles = if (singles.isNotEmpty()) {
+                            val singlesNames = singles.map { StringUtils.normalizeString(it.name) }
+                            singlesNames.map { elName ->
+                                mapSingleElement(bmaObj, elName, singles, profilesMap)
+                            }.reduce { acc, map -> acc + map }
+                        } else {
+                            mapOf()
+                        }
+                        // add a column for the unique ID
+                        val idColumn = mapOf(idColName to UUID.randomUUID().toString().toJsonElement())
+                        tableRows.add(idColumn + flattenedSingles)
+
+                        //create a table for each repeating element
+                        //include the unique id to link it back to the parent table record
+                    //TODO: only getting the last record :(
+                    // need a list of tables that we can add rows to with each iteration
+                    // then map each list to the table name at the end
+                        repeatersNames.forEach { elName ->
+                            val subTableName = "${blkName}_${StringUtils.getNormalizedShortName(elName)}"
+                            // extract each element of the array and create a new Json object
+                            // with a key that combines the block name and element name
+                            if (!(bmaObj[elName] == null || bmaObj[elName].isJsonNull || bmaObj[elName].asJsonArray.isEmpty)) {
+                                val arrayData = bmaObj[elName].asJsonArray
+                                val rows = mutableListOf<Map<String, JsonElement>>()
+                                for (arrayDatum in arrayData) {
+                                    val newObject = JsonObject()
+                                    newObject.add(elName, arrayDatum)
+                                    rows.add(idColumn + mapSingleElement(newObject, elName, repeaters, profilesMap))
+                                }
+                                if (subTables[subTableName] != null) {
+                                    subTables[subTableName]?.addAll(rows)
                                 } else {
-                                    val arrayData = bmaObj[elName].asJsonArray
-                                    for (arrayDatum in arrayData) {
-                                        val newObject = JsonObject()
-                                        newObject.add(elName, arrayDatum)
-                                        val flattenedRepeat =
-                                            mapSingleElement(newObject, elName, repeaters, profilesMap)
-                                        // add to cols map with new name that includes the rep count
-                                        flattenedRepeat.keys.forEach { key ->
-                                            cols["${key}_$repCount"] = flattenedRepeat.getOrDefault(key, JsonNull.INSTANCE)
-                                        }
-                                        repCount++
-                                    }
+                                    subTables[subTableName] = rows
                                 }
                             }
-                            flattenedSingles + cols
                         }
-                    } //blkModelArr.map
-                    blkName to mOut
+                    } // .forEach array
+                    tables[blkName] = tableRows.toTypedArray().toJsonElement()
+                    subTables.keys.forEach { key ->
+                        tables[key] = subTables[key]?.toTypedArray()?.toJsonElement()
+                    }
+                }// .else
 
-            }// .else
-
-        } // .repeatedBlocksModel
-        return repeatedBlocksModel
+            }// .forEach block
+        return tables
     } // .repeatedBlocksToSqlModel
     private fun mapSingleElement(bmaObj: JsonObject, elName: String, elementsInBlock: List<Element>, profilesMap: Map<String, List<PhinDataType>>) : Map<String, JsonElement> {
         val elMod = bmaObj[elName]
