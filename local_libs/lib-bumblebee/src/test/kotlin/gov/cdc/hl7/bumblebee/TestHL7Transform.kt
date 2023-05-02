@@ -1,13 +1,12 @@
-package gov.cdc.ncezid.bumblebee
+package gov.cdc.hl7.bumblebee
 
 
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
-import com.google.gson.JsonNull
-import com.google.gson.JsonObject
+import com.google.gson.*
+import com.google.gson.reflect.TypeToken
+
 import org.junit.jupiter.api.Test
+
 
 
 class TestHL7Transform {
@@ -123,5 +122,29 @@ class TestHL7Transform {
 
         val json = GsonBuilder().serializeNulls().create().toJson(fullHl7)
         println(json)
+    }
+
+    @Test
+    fun loadProfiles() {
+        val content = this::class.java.getResource("/PhinGuideProfile.json").readText()
+
+        val gson = GsonBuilder()
+                //.registerTypeAdapter(Map::class.java, HashMap::class.java)
+                .create()
+
+        val profile: Profile = gson.fromJson(content, Profile::class.java)
+
+        println(profile)
+        println("\n\nMSH Fields")
+        profile.getSegmentField("MSH")?.forEach { println(it)}
+    }
+    @Test
+    fun loadFieldDef() {
+        val content = this::class.java.getResource("/DefaultFieldsProfile.json").readText()
+
+        val gson = Gson()
+
+        val profile: Profile = gson.fromJson(content, Profile::class.java)
+        println(profile)
     }
 }

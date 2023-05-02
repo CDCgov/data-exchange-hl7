@@ -35,7 +35,7 @@
     <dependency>
       <groupId>gov.cdc.hl7</groupId>
       <artifactId>hl7-pet_2.13</artifactId>
-      <version>1.2.7.1</version>
+      <version>1.2.7.2</version>
     </dependency>
 
     <dependency>
