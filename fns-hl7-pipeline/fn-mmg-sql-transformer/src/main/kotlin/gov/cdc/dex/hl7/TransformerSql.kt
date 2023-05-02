@@ -164,10 +164,14 @@ class TransformerSql {
                             // duplicates the non-repeating elements
                             val repeatersNames = repeaters.map { StringUtils.normalizeString(it.name) }
                              // get the singles that we will need to repeat for each row
-                            val singlesNames = singles.map { StringUtils.normalizeString(it.name) }
-                            val flattenedSingles = singlesNames.map { elName ->
-                                mapSingleElement(bmaObj, elName, singles, profilesMap)
-                            }.reduce {acc, map -> acc + map}
+                            val flattenedSingles = if (singles.isNotEmpty()) {
+                                val singlesNames = singles.map { StringUtils.normalizeString(it.name) }
+                                singlesNames.map { elName ->
+                                    mapSingleElement(bmaObj, elName, singles, profilesMap)
+                                }.reduce { acc, map -> acc + map }
+                            } else {
+                                mapOf()
+                            }
                             val rows = mutableListOf<Map<String, JsonElement>>()
                             repeatersNames.forEach { elName ->
                                 // extract each element of the array and create a new Json object

@@ -176,7 +176,12 @@ class MmgSqlTest {
 
     @Test
     fun testTransformerSQLForShigellosis() {
-        testTransformerSQL("/FDD_V1.0.1_ETM5-Shig(F).txt", "/modelShig.json", printAllOutput = true)
+        testTransformerSQL("/FDD_V1.0.1_ETM5-Shig(F).txt", "/modelShig.json", printAllOutput = false)
+    }
+
+    @Test
+    fun testTransformerSQLForCholera() {
+        testTransformerSQL("/FDD_V1.0.1_ETM9-Cholera(F).txt", "/modelCholera.json", printAllOutput = false)
     }
     @Test
     fun testMessageProfileIdentifier() {
