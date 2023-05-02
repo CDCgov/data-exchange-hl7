@@ -8,3 +8,6 @@ mvn deploy:deploy-file -DrepositoryId=nexus -Durl=https://imagehub.cdc.gov/repos
 mvn deploy:deploy-file -DrepositoryId=nexus -Durl=https://imagehub.cdc.gov/repository/maven-ede-snapshot/ -Dfile=hl7-v2-parser-$NIST_VERSION.jar -DgroupId=gov.nist -DartifactId=hl7-v2-parser -Dversion=$NIST_VERSION -Dpackaging=jar -DpomFile=hl7-v2-parser-$NIST_VERSION.pom
 mvn deploy:deploy-file -DrepositoryId=nexus -Durl=https://imagehub.cdc.gov/repository/maven-ede-snapshot/ -Dfile=hl7-v2-validation-$NIST_VERSION.jar -DgroupId=gov.nist -DartifactId=hl7-v2-validation -Dversion=$NIST_VERSION -Dpackaging=jar -DpomFile=hl7-v2-validation-$NIST_VERSION.pom
 
+# mvn install:install-file  -Dfile=hl7-v2-profile-$NIST_VERSION.jar -DgroupId=gov.nist -DartifactId=hl7-v2-profile -Dversion=$NIST_VERSION -Dpackaging=jar -DpomFile=hl7-v2-profile-$NIST_VERSION.pom
+# mvn install:install-file  -Dfile=hl7-v2-parser-$NIST_VERSION.jar -DgroupId=gov.nist -DartifactId=hl7-v2-parser -Dversion=$NIST_VERSION -Dpackaging=jar -DpomFile=hl7-v2-parser-$NIST_VERSION.pom
+# mvn install:install-file  -Dfile=hl7-v2-validation-$NIST_VERSION.jar -DgroupId=gov.nist -DartifactId=hl7-v2-validation -Dversion=$NIST_VERSION -Dpackaging=jar -DpomFile=hl7-v2-validation-$NIST_VERSION.pom
