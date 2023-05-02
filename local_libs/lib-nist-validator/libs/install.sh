@@ -1,4 +1,4 @@
-export NIST_VERSION=1.5.6-SNAPSHOT
+export NIST_VERSION=1.6.3-SNAPSHOT
 
 mvn deploy:deploy-file -DrepositoryId=nexus -Durl=https://imagehub.cdc.gov/repository/maven-ede/ -Dfile=xml-util-2.1.0.jar -DgroupId=gov.nist -DartifactId=xml-util -Dversion=2.1.0 -Dpackaging=jar -DpomFile=xml-util-2.1.0.pom
 mvn deploy:deploy-file -DrepositoryId=nexus -Durl=https://imagehub.cdc.gov/repository/maven-ede/ -Dfile=validation-report-1.1.0.jar -DgroupId=com.github.hl7-tools -DartifactId=validation-report -Dversion=1.1.0 -Dpackaging=jar -DpomFile=validation-report-1.1.0.pom
