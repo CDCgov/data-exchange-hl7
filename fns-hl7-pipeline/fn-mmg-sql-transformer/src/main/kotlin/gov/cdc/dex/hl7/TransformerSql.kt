@@ -146,13 +146,12 @@ class TransformerSql {
             val blkData = modelJson[blkName]
 
             if (blkData == null || blkData.isJsonNull || blkData.asJsonArray.isEmpty) {
-                tables[blkName] = JsonNull.INSTANCE// we want null, not an empty array
+                tables[blkName] = JsonNull.INSTANCE // we want null, not an empty array
             } else {
                 val blkModelArr = blkData.asJsonArray  //array of data for this repeating block
                 // need to determine up front if there are any repeating elements within this repeat block
                 val elementsInBlock = blocks.filter { it.name == blk.name }[0].elements.associateBy {elem ->
                     elem.mappings.hl7v251.identifier}.values.toList()
-                val elementNames = elementsInBlock.map { StringUtils.normalizeString(it.name) }
                 val (repeaters, singles) = elementsInBlock.partition { it.isRepeat || it.mayRepeat.contains("Y") }
                 val tableRows = mutableListOf<Map<String, JsonElement>>()
                 val subTables = mutableMapOf<String, MutableList<Map<String, JsonElement>>>()
@@ -161,7 +160,7 @@ class TransformerSql {
                 blkModelArr.forEach { bma ->
                         val bmaObj = bma.asJsonObject
                         // for each repeated element, create a separate table
-                        // with a unique ID that matches it with the parent table record
+                        // a unique ID matches each record with the parent table record
                         val repeatersNames = if (repeaters.isNotEmpty()) {
                             repeaters.map { StringUtils.normalizeString(it.name) }
                         } else {
@@ -182,9 +181,6 @@ class TransformerSql {
 
                         //create a table for each repeating element
                         //include the unique id to link it back to the parent table record
-                    //TODO: only getting the last record :(
-                    // need a list of tables that we can add rows to with each iteration
-                    // then map each list to the table name at the end
                         repeatersNames.forEach { elName ->
                             val subTableName = "${blkName}_${StringUtils.getNormalizedShortName(elName)}"
                             // extract each element of the array and create a new Json object
@@ -204,8 +200,10 @@ class TransformerSql {
                                 }
                             }
                         }
-                    } // .forEach array
+                    } // .forEach array in this block
+                    // add the main rg table
                     tables[blkName] = tableRows.toTypedArray().toJsonElement()
+                    // add any sub-tables
                     subTables.keys.forEach { key ->
                         tables[key] = subTables[key]?.toTypedArray()?.toJsonElement()
                     }
