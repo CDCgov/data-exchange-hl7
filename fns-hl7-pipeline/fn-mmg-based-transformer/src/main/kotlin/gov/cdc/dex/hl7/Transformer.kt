@@ -127,19 +127,13 @@ class Transformer(redisProxy: RedisProxy)  {
             // val jedis = redisProxy.getJedisClient()
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
- 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
-
-            val obxIdToElementMap = getObxIdToElementMap(mmgBlocks)
-
             val (_, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             val messageLines = getMessageLines(hl7Content)
-
             val obxLines = messageLines.filter { it.startsWith("OBX|") }
-
             val blocksNonSingleModel = mmgBlocksNonSingle.associate { block ->
-
+                val obxIdToElementMap = block.elements.associateBy { element ->  element.mappings.hl7v251.identifier }
                 val msgLines = block.elements.flatMap { element ->
                     // logger.info("element: --> ${element.mappings.hl7v251.identifier}\n")
                     filterByIdentifier(obxLines, element.mappings.hl7v251.identifier)
@@ -214,30 +208,36 @@ class Transformer(redisProxy: RedisProxy)  {
         } // .getMessageLines
 
 
-        private fun getObxIdToElementMap(blocks: List<Block>): Map<String, Element> {
-
-            val elems = blocks.flatMap { it.elements } // .mmgElemsBlocksSingle
-
-            return elems.associateBy { elem ->
-                elem.mappings.hl7v251.identifier
-            }
-        } // .getObxIdToElementMap
-
-
         /* private */ fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
 
-            if ( mmgs.size > 1 ) { 
-                for ( index in 0..mmgs.size - 2) { // except the last one
+            if ( mmgs.size > 1 ) {
+                // remove message header block from all but last mmg
+                for ( index in 0..mmgs.size - 2) {
                     mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                        block.name != MMG_BLOCK_NAME_MESSAGE_HEADER //|| block.name == MMG_BLOCK_NAME_SUBJECT_RELATED
+                        block.name != MMG_BLOCK_NAME_MESSAGE_HEADER && block.elements.isNotEmpty()
                     } // .filter
                 } // .for
+                // remove duplicate blocks that occur in last and next-to-last mmgs
+                val lastMMG =  mmgs[mmgs.size - 1]
+                val nextToLastMMG = mmgs[mmgs.size - 2]
+                // compare blocks of elements in the mmgs
+                // if all the elements IDs in one block are all contained within another block,
+                // keep the bigger one
+                keepBiggerElementSet(lastMMG, nextToLastMMG)
+                keepBiggerElementSet(nextToLastMMG, lastMMG)
             } // .if
 
             return mmgs
         } // .getMmgsFiltered
 
-        
+    private fun keepBiggerElementSet(firstMMG: MMG, secondMMG: MMG) {
+        firstMMG.blocks.forEach { block ->
+            val blockElementIds = block.elements.map { elem -> elem.mappings.hl7v251.identifier }.toSet()
+            secondMMG.blocks = secondMMG.blocks.filter {
+                !blockElementIds.containsAll(it.elements.map { el -> el.mappings.hl7v251.identifier }.toSet())
+            }
+        }
+    }
         /* private */ fun getPhinDataTypes(): Map<String, List<PhinDataType>> {
             // logger.info("getPhinDataTypes, reading local file...")
 

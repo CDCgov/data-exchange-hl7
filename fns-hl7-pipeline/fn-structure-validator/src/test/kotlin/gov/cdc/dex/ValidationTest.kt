@@ -1,6 +1,7 @@
 package gov.cdc.dex
 
 import com.google.gson.GsonBuilder
+import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
 import gov.cdc.nist.validator.ProfileManager
@@ -27,6 +28,19 @@ class ValidationTest {
         return report
     }
     @Test
+    fun testELRMessage() {
+        val testMessage = this::class.java.getResource("/covidELR/2.3.1 HL7 Test File with HHS Data.txt")?.readText()
+
+        val nistValidator = ProfileManager(ResourceFileFetcher(), "/COVID19_ELR-v2.3.1")
+
+        val report = nistValidator.validate(testMessage!!)
+        println("report: -->\n\n${gson.toJson(report)}\n")
+        //
+
+    }
+
+
+    @Test
     fun testValidateMessage() {
        validateMessage("/Lyme_WithMMGWarnings.txt")
     }
@@ -47,6 +61,10 @@ class ValidationTest {
         println(profile)
     }
     private fun testFolder(folderName: String) {
+        testFolderByType(folderName, HL7MessageType.CASE)
+    }
+
+    private fun testFolderByType(folderName: String, type: HL7MessageType) {
         val dir = "src/test/resources/$folderName"
 
         Files.walk(Paths.get(dir))
@@ -55,21 +73,25 @@ class ValidationTest {
                 println("==================  ${it.fileName} ")
                 try {
                     val testMsg = this::class.java.getResource("/$folderName/${it.fileName}").readText()
-
-//                    val phinSpec =testMsg.split("\n")[0].split("|")[20].split("^")[0]
-                    val phinSpec = HL7StaticParser.getFirstValue(testMsg, "MSH-21[1].1")
-                    if (phinSpec.isDefined) {
-                        val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec.get()}")
-
-                        val report = nistValidator.validate(testMsg)
-                        println("Status: ${report.status}; Errors: ${report.errorCounts}; Warnings: ${report.warningcounts}")
+                    val phinSpec = when (type) {
+                        HL7MessageType.ELR -> "COVID19_ELR-v${HL7StaticParser.getFirstValue(testMsg, "MSH-12[1].1").get()}"
+                        HL7MessageType.CASE -> HL7StaticParser.getFirstValue(testMsg, "MSH-21[1].1").get()
+                        else -> throw Exception("Unknown type)")
                     }
+                    val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec}")
+                    val report = nistValidator.validate(testMsg)
+                    println("Status: ${report.status}; Errors: ${report.errorCounts}; Warnings: ${report.warningcounts}")
                 } catch(e: Exception) {
                     println(e.message)
                 }
                 println("==========================")
 
             }
+    }
+
+    @Test
+    fun testCovidELRMessages() {
+        testFolderByType("covidELR", HL7MessageType.ELR)
     }
     @Test
     fun testGenV1CaseMapMessages() {

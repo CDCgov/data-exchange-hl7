@@ -32,14 +32,14 @@ class MmgSqlTest {
 
         const val MESSAGE_PROFILE_IDENTIFIER = "message_profile_identifier"
 
-        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1"
+        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77968-6']-5.1"
         const val EVENT_CODE_PATH = "OBR-31.1"
 
     } // .companion 
 
 
     @Test
-    fun testRedisInstanceUsed() { println("testRedisInstanceUsed: REDIS_CACHE_NAME: --> ${REDIS_CACHE_NAME}")
+    fun testRedisInstanceUsed() { println("testRedisInstanceUsed: REDIS_CACHE_NAME: --> $REDIS_CACHE_NAME")
         assertEquals(REDIS_CACHE_NAME, REDIS_INSTANCE_NAME)
     } // .testRedisInstanceUsed
 
@@ -158,6 +158,31 @@ class MmgSqlTest {
     fun testTransformerSQLForCRS() {
         testTransformerSQL("/CRS_1-0_TC02.txt", "/modelCRS.json")
     }
+
+    @Test
+    fun testTransformerSQLForCandida() {
+        testTransformerSQL("/C auris_1-0-1_TC01.txt", "/modelCandida.json")
+    }
+
+    @Test
+    fun testTransformerSQLForCPCRE() {
+        testTransformerSQL("/CP-CRE_1-0-1_TC01.txt", "/modelCPCRE.json")
+    }
+
+    @Test
+    fun testTransformerSQLForSalmonellosis() {
+        testTransformerSQL("/FDD_V1.0.1_ETM4-Sal(D).txt", "/modelSal.json", printAllOutput = false)
+    }
+
+    @Test
+    fun testTransformerSQLForShigellosis() {
+        testTransformerSQL("/FDD_V1.0.1_ETM5-Shig(F).txt", "/modelShig.json", printAllOutput = false)
+    }
+
+    @Test
+    fun testTransformerSQLForCholera() {
+        testTransformerSQL("/FDD_V1.0.1_ETM9-Cholera(F).txt", "/modelCholera.json", printAllOutput = false)
+    }
     @Test
     fun testMessageProfileIdentifier() {
         println("===Begin Test Message Profile Identifier=======================")
@@ -195,7 +220,7 @@ class MmgSqlTest {
         val mmgs = transformer.getMmgsFiltered(mmgsArr)
         val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
         val (mmgBlocksSingle, _) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
-        val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
+        val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat && it.mayRepeat != "Y" }
 
         // Message Profile Identifier
         val messageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
@@ -204,9 +229,9 @@ class MmgSqlTest {
         // --------------------------------------
         val singlesNonRepeatsModel = messageProfIdModel + transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepeats, profilesMap, modelJson)
         println("singlesNonRepeatsModel[$MESSAGE_PROFILE_IDENTIFIER]: --> ${singlesNonRepeatsModel[MESSAGE_PROFILE_IDENTIFIER]}")
-        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_0"), true)
         assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_1"), true)
         assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_2"), true)
+        assertEquals(singlesNonRepeatsModel.contains(MESSAGE_PROFILE_IDENTIFIER + "_3"), true)
 
         // Singles Repeats
         // --------------------------------------

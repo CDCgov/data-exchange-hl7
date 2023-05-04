@@ -20,6 +20,7 @@ import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import gov.cdc.dex.util.StringUtils.Companion.normalize
 import gov.cdc.hl7.HL7StaticParser
 import java.io.*
+import java.net.URL
 import java.util.*
 
 
@@ -75,11 +76,11 @@ class Function {
                 if ( event.eventType == BLOB_CREATED) {
                     context.logger.info("Received BLOB_CREATED event: --> $event")
                     // Pick up blob metadata
-                    val blobName = event.evHubData.url.split("/").last()
-                    context.logger.fine("Reading blob $blobName")
+                    val blobName= event.evHubData.url.substringAfter("/hl7ingress/")
+                    context.logger.fine("Reading blob: $blobName")
                     val blobClient = azBlobProxy.getBlobClient(blobName)
                     //Create Map of Metadata with lower case keys
-                    val metaDataMap = blobClient.properties.metadata.mapKeys { it.key.lowercase() }
+                    val metaDataMap =  blobClient.properties.metadata.mapKeys { it.key.lowercase() }
 
                     // Create Metadata for Provenance
                     val provenance = Provenance(
