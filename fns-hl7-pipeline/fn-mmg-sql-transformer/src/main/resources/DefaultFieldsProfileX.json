@@ -142,7 +142,8 @@
       "usage": "C(R/RE)->!1",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 3,
@@ -205,7 +206,8 @@
       "usage": "RE",
       "cardinality": "[0..1]",
       "conformance": "",
-      "notes": ""
+      "notes": "",
+      "preferred": true
     },
     {
       "fieldNumber": 3,
@@ -226,7 +228,6 @@
       "cardinality": "[0..1]",
       "conformance": "",
       "notes": "",
-      "preferred": true
     },
     {
       "fieldNumber": 5,
@@ -237,7 +238,6 @@
       "cardinality": "[0..1]",
       "conformance": "",
       "notes": "",
-      "preferred": true
     },
     {
       "fieldNumber": 6,
@@ -278,7 +278,6 @@
       "cardinality": "[0..1]",
       "conformance": "",
       "notes": "",
-      "preferred": true
     }
   ],
   "EI": [
@@ -701,7 +700,7 @@
     },
     {
       "fieldNumber": 13,
-      "name": "Effeective Date",
+      "name": "Effective Date",
       "dataType": "TS",
       "maxLength": "26",
       "usage": "O",
@@ -822,7 +821,8 @@
       "maxLength": "2",
       "usage": "O",
       "cardinality": "[0..1]",
-      "conformance": ""
+      "conformance": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -841,7 +841,8 @@
       "maxLength": "3",
       "usage": "O",
       "cardinality": "[0..1]",
-      "conformance": ""
+      "conformance": "",
+      "preferred": true
     },{
       "fieldNumber": 4,
       "name": "Number2",
@@ -849,7 +850,8 @@
       "maxLength": "20",
       "usage": "O",
       "cardinality": "[0..1]",
-      "conformance": ""
+      "conformance": "",
+      "preferred": true
     }
   ]
 }
