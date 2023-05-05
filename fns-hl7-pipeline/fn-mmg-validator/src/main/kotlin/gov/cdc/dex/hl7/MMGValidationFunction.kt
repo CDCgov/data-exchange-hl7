@@ -48,9 +48,8 @@ class MMGValidationFunction {
         val eventHubSendOkName = System.getenv("EventHubSendOkName")
         val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
         val evHubSender = EventHubSender(evHubConnStr)
-//        val ehSender = EventHubSender(evHubConnStr)
 
-        message.forEachIndexed{
+        message.forEachIndexed {
                 messageIndex : Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             // context.logger.info("singleMessage: --> $singleMessage")
@@ -61,16 +60,26 @@ class MMGValidationFunction {
                 val metadata = inputEvent["metadata"].asJsonObject
                 val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                val mmgInfo = JsonHelper.getStringArrayFromJsonArray(JsonHelper.getValueFromJson("message_info.mmgs", inputEvent).asJsonArray)
-                context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 try {
+                    context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                     val mmgValidator = MmgValidator()
                     val validationReport = mmgValidator.validate(hl7Content)
-
                     context.logger.info("MMG Validation Report size for for messageUUID: $messageUUID, filePath: $filePath, size --> " + validationReport.size)
                     val mmgReport = MmgReport( validationReport)
 
+                    // document the MMGs used to validate the message
+                    var mmgInfo = try {
+                        JsonHelper.getStringArrayFromJsonArray(JsonHelper.getValueFromJson("message_info.mmgs", inputEvent).asJsonArray)
+                    } catch (e: Exception) {
+                        arrayOf()
+                    }
+                    // 'validate' function is actually getting its own list of MMGs based on the message --
+                    // so, if the message_info list is empty/null, we can try to get it from mmgValidator
+                    // (exception will already have been thrown if mmgValidator could not determine the MMGs)
+                    if (mmgInfo.isEmpty() && mmgValidator.mmgs.isNotEmpty()) {
+                        mmgInfo = mmgValidator.mmgs.map { "mmg:${it.name}" }.toTypedArray()
+                    }
                     val processMD = MmgValidatorProcessMetadata(mmgReport.status.toString(), mmgReport,eventHubMD[messageIndex],
                         mmgInfo.toList())
                     processMD.startProcessTime = startTime
@@ -108,6 +117,7 @@ class MMGValidationFunction {
                 }
             } catch (e: Exception) {
                 context.logger.severe("Exception processing event hub message: Unable to process Message due to exception: ${e.message}")
+                evHubSender.send(evHubTopicName = eventHubSendErrsName, message = Gson().toJson(inputEvent))
                 e.printStackTrace()
             }
         } // .message.forEach
@@ -162,5 +172,6 @@ class MMGValidationFunction {
             .body(message)
             .build()
     }
+
 } // .Function
 

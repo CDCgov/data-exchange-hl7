@@ -34,10 +34,7 @@ class MmgValidator {
 
     private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     private val mmgUtil = MmgUtil(redisProxy)
-
-
-
-
+    val mmgs : Array<MMG> = arrayOf()
     fun validate(hl7Message: String): List<ValidationIssue> {
         val mmgs = getMMGFromMessage(hl7Message)
         val report = mutableListOf<ValidationIssue>()
@@ -345,22 +342,13 @@ class MmgValidator {
         } //.forEach Outer Array
     }
 
-    //Some Look ps are reused - storing them so no need to re-download them from Redis.
-    private val valueSetMap = mutableMapOf<String, List<String>>()
-    //    private val mapper = jacksonObjectMapper()
     @Throws(InvalidConceptKey::class)
     fun isConceptValid(key: String, concept: String): Boolean {
-       // if (valueSetMap[key] === null) {
-            // logger.debug("Retrieving $key from Redis")
-        var conceptExists :Boolean = false
-
           try {
-               conceptExists = redisProxy.getJedisClient().hexists(REDIS_VOCAB_NAMESPACE + key, concept)
-          }catch(e:Exception){
+              return redisProxy.getJedisClient().hexists(REDIS_VOCAB_NAMESPACE + key, concept)
+          } catch (e:Exception){
               throw InvalidConceptKey("Unable to retrieve concept values for $key")
           }
-
-        return conceptExists
     }
 
     private fun getCategory(usage: String): ValidationIssueCategoryType {
