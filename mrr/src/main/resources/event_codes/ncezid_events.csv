@@ -107,5 +107,5 @@ Enteric Diseases,NCEZID,50265,Salmonellosis (excluding S. Typhi infection and S.
 Enteric Diseases,NCEZID,50266,"Salmonella enterica serotypes Paratyphi A, B (tartrate negative) and C (S. Paratyphi) infection",FDD_MMG_V1.0,Yes,fdd_s_typhi_and_s_paratyphi,foodnet_states,fdd_foodnet;fdd_s_typhi_and_s_paratyphi
 Enteric Diseases,NCEZID,50267,Salmonella enterica Typhi (S.Typhi) infection,FDD_MMG_V1.0,Yes,fdd_s_typhi_and_s_paratyphi,foodnet_states,fdd_foodnet;fdd_s_typhi_and_s_paratyphi
 Vectorborne Diseases,NCEZID,50269,Alpha-gal syndrome,,,,,
-Enteric Diseases,NCEZID,50270,"Carbapenemase-Producing Organisms (CPO), clinical ",FDD_MMG_V1.0,Yes,fdd_s_typhi_and_s_paratyphi,foodnet_states,fdd_foodnet;fdd_s_typhi_and_s_paratyphi
+Enteric Diseases,NCEZID,50270,"Carbapenemase-Producing Organisms (CPO), clinical",FDD_MMG_V1.0,Yes,fdd_s_typhi_and_s_paratyphi,foodnet_states,fdd_foodnet;fdd_s_typhi_and_s_paratyphi
 Enteric Diseases,NCEZID,50271,"Carbapenemase-Producing Organisms (CPO), screening",FDD_MMG_V1.0,Yes,fdd_s_typhi_and_s_paratyphi,foodnet_states,fdd_foodnet;fdd_s_typhi_and_s_paratyphi
