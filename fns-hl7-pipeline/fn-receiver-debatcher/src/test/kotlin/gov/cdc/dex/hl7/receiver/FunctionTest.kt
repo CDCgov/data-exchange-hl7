@@ -3,60 +3,52 @@ package gov.cdc.dex.hl7.receiver
 import com.microsoft.azure.functions.ExecutionContext
 import gov.cdc.dex.azure.EventHubMetadata
 import org.junit.jupiter.api.Test
-import java.io.File
+
 import java.util.logging.Logger
 
 class FunctionTest {
 
+    private fun processFile(filename: String) {
+        println("Start processing $filename ")
+        val text = this::class.java.getResource("/$filename").readText()
+        val messages = listOf(text)
+
+        val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
+
+        val function = Function()
+        function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
+        println("Finished processing $filename ")
+        assert(true)
+
+    }
+
     @Test
     fun processELR_HappyPath() {
-        println("Starting processELR_HappyPath test")
-        val text = File("src/test/resources/ELR_message.txt").readText()
-        val messages: MutableList<String> = ArrayList()
-            messages.add(text)
-        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
-        val eventHubMD = EventHubMetadata(1, 99, "", "")
-        eventHubMDList.add(eventHubMD)
-
-        val function = Function()
-        function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-        println("Finished processELR_HappyPath test")
-        assert(true)
+        processFile("ELR_message.txt")
     }
-
     @Test
     fun processCASE_HappyPath() {
-        println("Starting processCASE_HappyPath test")
-        val function = Function()
-        val text = File("src/test/resources/CASE_message.txt").readText()
-        val messages: MutableList<String> = ArrayList()
-            messages.add(text)
-        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
-        val eventHubMD = EventHubMetadata(1, 99, "", "")
-        eventHubMDList.add(eventHubMD)
-        function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-        println("Finished processCASE_HappyPath test")
-        assert(true)
+        processFile("CASE_message.txt")
     }
-
     @Test
     fun process_ErrorPath() {
-        println("Starting process_ErrorPath test")
-        val function = Function()
-        val text = File("src/test/resources/ERROR_message.txt").readText()
-
-        val messages: MutableList<String> = ArrayList()
-            messages.add(text)
-        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
-        val eventHubMD = EventHubMetadata(1, 99, "", "")
-        eventHubMDList.add(eventHubMD)
-        function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-        println("Finished process_ErrorPath test")
-        assert(true)
+        processFile("ERROR_message.txt")
+    }
+    @Test
+    fun process_NoMetadata() {
+        processFile("NoMetadataFile.txt")
+    }
+    @Test
+    fun process_BatchMessage() {
+        processFile("BatchMessage.txt")
+    }
+    @Test
+    fun process_InvalidMessage() {
+        processFile("InvalidMessage.txt")
     }
 
 
-    private fun getExecutionContext(): ExecutionContext? {
+    private fun getExecutionContext(): ExecutionContext {
         return object : ExecutionContext {
             override fun getLogger(): Logger {
                 return Logger.getLogger(FunctionTest::class.java.name)
