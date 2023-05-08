@@ -24,7 +24,8 @@ class Transformer(redisProxy: RedisProxy)  {
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         private const val OBR_4_1_EPI_ID = "68991-9"
-        private const val OBR_4_1_LEGACY = "PERSUBJ"
+        private const val OBR_4_1_LEGACY = "NOTF"
+        private const val OBR_4_1_SUBJECT = "PERSUBJ"
         private const val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header"
         // private val MMG_BLOCK_NAME_SUBJECT_RELATED = "Subject Related"
         private const val REDIS_VOCAB_NAMESPACE = "vocab:"
@@ -131,7 +132,16 @@ class Transformer(redisProxy: RedisProxy)  {
             val (_, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             val messageLines = getMessageLines(hl7Content)
-            val obxLines = messageLines.filter { it.startsWith("OBX|") }
+            // Do we have non-EPI OBRs?
+            val obrLines = messageLines.filter { it.startsWith("OBR|")
+                    && it.split("|")[4].split("^")[0].trim() !in listOf(OBR_4_1_EPI_ID,
+                OBR_4_1_LEGACY, OBR_4_1_SUBJECT) }
+            // If so, get only the EPI OBXs
+            val obxLines = if (obrLines.isEmpty()) {
+                messageLines.filter { it.startsWith("OBX|") }
+            } else {
+                getEpiOBXs(messageLines)
+            }
             val blocksNonSingleModel = mmgBlocksNonSingle.associate { block ->
                 val obxIdToElementMap = block.elements.associateBy { element ->  element.mappings.hl7v251.identifier }
                 val msgLines = block.elements.flatMap { element ->
@@ -195,7 +205,29 @@ class Transformer(redisProxy: RedisProxy)  {
         //  ------------- Functions used in the transformation -------------
         // --------------------------------------------------------------------------------------------------------
 
-           private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
+        fun getEpiOBXs(hl7MessageLines: List<String>): List<String> {
+            // get the OBX lines from the message that come after the EPI OBR
+            // up to the point where another OBR occurs.
+            val epiIndex = hl7MessageLines.indexOfFirst { line -> line.startsWith("OBR|")
+                    && line.split("|")[4].split("^")[0].trim() in listOf(
+                OBR_4_1_EPI_ID, OBR_4_1_LEGACY) }
+
+            val firstNonEpi = hl7MessageLines.withIndex().indexOfFirst { (index, line) ->
+                line.startsWith("OBR|")
+                    && line.split("|")[4].split("^")[0].trim() !in listOf(
+                        OBR_4_1_EPI_ID, OBR_4_1_LEGACY, OBR_4_1_SUBJECT)
+                        && index > epiIndex
+            }
+
+            return if (firstNonEpi == -1) {
+                hl7MessageLines.subList(epiIndex + 1, hl7MessageLines.size)
+            } else {
+                hl7MessageLines.subList(epiIndex + 1, firstNonEpi)
+            }
+
+        }
+
+        private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
             return lines.filter { line ->
                 val lineParts = line.split("|")
                 val obxId = lineParts[3].split("^")[0]

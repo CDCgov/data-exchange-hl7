@@ -294,6 +294,11 @@ class MbtTest {
     fun testShigellosis() {
         testTransformerWithRedis("testShigellosis", "/FDD_V1.0.1_ETM5-Shig(F).txt")
     }
+
+    @Test
+    fun testCholera() {
+        testTransformerWithRedis("testCholera", "/FDD_V1.0.1_ETM9-Cholera(F).txt")
+    }
     @Test
     fun testConditionNotSupportedException() {
 
@@ -375,6 +380,17 @@ class MbtTest {
 
     } // .testMmgThrowsException
 
+    @Test
+    fun testFilterOBXs() {
+        val filePath = "/Hepatitis_V1_0_1_TM_TC02_HEP_B_ACUTE.txt"
+        val hl7Content = this::class.java.getResource(filePath).readText().trim()
+        val messageLines = hl7Content.split("\r")
+        val transformer = Transformer(redisProxy)
+        val epiLines = transformer.getEpiOBXs(messageLines)
+        assertTrue { epiLines.isNotEmpty() }
+        assertTrue { epiLines[0].split("|")[1].trim() == "1" }
+        assertTrue { epiLines.last().split("|")[1].trim() == "101" }
+    }
 
     private fun extractValue(msg: String, path: String): String  {
         val value = HL7StaticParser.getFirstValue(msg, path)
@@ -394,6 +410,8 @@ class MbtTest {
     private fun testTransformerWithRedis(testName: String, filePath: String) {
 
         val hl7Content = this::class.java.getResource(filePath).readText()
+            .replace("\r\n", "\n")
+            .replace("\r", "\n")
         val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
         val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
         val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
