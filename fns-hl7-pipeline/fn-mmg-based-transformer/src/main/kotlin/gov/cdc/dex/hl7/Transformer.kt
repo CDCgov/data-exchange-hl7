@@ -96,7 +96,8 @@ class Transformer(redisProxy: RedisProxy)  {
             // ----------------------------------------------------
             val mmgObx = mmgElemsBlocksSingle.filter { it.mappings.hl7v251.segmentType == "OBX" }
             //logger.info("Mapping OBX")
-            val obxLines = messageLines.filter { it.startsWith("OBX|") }
+            // get only the EPI OBXs
+            val obxLines = getEpiOBXs(messageLines)
             val obxMap = mmgObx.associate { el ->
                 val obxLine = filterByIdentifier(obxLines, el.mappings.hl7v251.identifier)
                 val obxLineParts = if (obxLine.isNotEmpty()) obxLine[0].split("|") else listOf()
@@ -132,16 +133,9 @@ class Transformer(redisProxy: RedisProxy)  {
             val (_, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             val messageLines = getMessageLines(hl7Content)
-            // Do we have non-EPI OBRs?
-            val obrLines = messageLines.filter { it.startsWith("OBR|")
-                    && it.split("|")[4].split("^")[0].trim() !in listOf(OBR_4_1_EPI_ID,
-                OBR_4_1_LEGACY, OBR_4_1_SUBJECT) }
-            // If so, get only the EPI OBXs
-            val obxLines = if (obrLines.isEmpty()) {
-                messageLines.filter { it.startsWith("OBX|") }
-            } else {
-                getEpiOBXs(messageLines)
-            }
+            // get only the EPI OBXs
+            val obxLines = getEpiOBXs(messageLines)
+
             val blocksNonSingleModel = mmgBlocksNonSingle.associate { block ->
                 val obxIdToElementMap = block.elements.associateBy { element ->  element.mappings.hl7v251.identifier }
                 val msgLines = block.elements.flatMap { element ->
@@ -220,7 +214,8 @@ class Transformer(redisProxy: RedisProxy)  {
             }
 
             return if (firstNonEpi == -1) {
-                hl7MessageLines.subList(epiIndex + 1, hl7MessageLines.size)
+                val end = hl7MessageLines.subList(epiIndex + 1, hl7MessageLines.size)
+                end.filter { it.startsWith("OBX|") }
             } else {
                 hl7MessageLines.subList(epiIndex + 1, firstNonEpi)
             }

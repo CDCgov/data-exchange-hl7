@@ -386,7 +386,9 @@ class MbtTest {
         val hl7Content = this::class.java.getResource(filePath).readText().trim()
         val messageLines = hl7Content.split("\r")
         val transformer = Transformer(redisProxy)
+     //   val start = System.currentTimeMillis()
         val epiLines = transformer.getEpiOBXs(messageLines)
+     //   println(System.currentTimeMillis() - start)
         assertTrue { epiLines.isNotEmpty() }
         assertTrue { epiLines[0].split("|")[1].trim() == "1" }
         assertTrue { epiLines.last().split("|")[1].trim() == "101" }
