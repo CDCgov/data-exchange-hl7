@@ -1,4 +1,4 @@
-package gov.cdc.ncezid.bumblebee
+package gov.cdc.dex
 
 import groovy.json.JsonSlurper
 
