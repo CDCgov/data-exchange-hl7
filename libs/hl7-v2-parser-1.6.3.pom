@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>gov.nist</groupId>
+    <artifactId>hl7-v2-parser</artifactId>
+    <packaging>jar</packaging>
+    <description>hl7-v2-parser</description>
+    <version>1.6.3</version>
+    <name>hl7-v2-parser</name>
+    <organization>
+        <name>gov.nist</name>
+    </organization>
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.13.10</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist</groupId>
+            <artifactId>hl7-v2-profile</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>HIT Nexus</id>
+            <name>HIT Nexus</name>
+            <url>https://hit-nexus.nist.gov/repository/releases/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+</project>

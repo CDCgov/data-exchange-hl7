@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>gov.nist</groupId>
+    <artifactId>hl7-v2-profile</artifactId>
+    <packaging>jar</packaging>
+    <description>hl7-v2-profile</description>
+    <version>1.6.3</version>
+    <name>hl7-v2-profile</name>
+    <organization>
+        <name>gov.nist</name>
+    </organization>
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.13.10</version>
+        </dependency>
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+            <version>1.3.7</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist</groupId>
+            <artifactId>xml-util</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang.modules</groupId>
+            <artifactId>scala-xml_2.13</artifactId>
+            <version>1.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit</groupId>
+            <artifactId>hl7-v2-schemas</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.specs2</groupId>
+            <artifactId>specs2-core_2.13</artifactId>
+            <version>4.19.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scalacheck</groupId>
+            <artifactId>scalacheck_2.13</artifactId>
+            <version>1.17.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.specs2</groupId>
+            <artifactId>specs2-scalacheck_2.13</artifactId>
+            <version>4.19.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>HIT Nexus</id>
+            <name>HIT Nexus</name>
+            <url>https://hit-nexus.nist.gov/repository/releases/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+</project>
