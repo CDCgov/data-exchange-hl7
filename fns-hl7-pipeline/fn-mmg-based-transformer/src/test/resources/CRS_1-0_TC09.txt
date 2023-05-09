@@ -1,0 +1,57 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.1111^ISO|Sending-Facility^2.16.840.1.114222.1111^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~CRS_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||test 3 ca-CRS^^^SendAppName&2.16.840.1.114222.1111&ISO||~^^^^^^S||19991227|M||2106-3^White^CDCREC|^^^06^94501^^^^06001|||||||||||2186-5^Not Hispanic or Latino^CDCREC|||||||20160412
+NK1|1||MTH^Mother^HL70063
+OBR|1||TEST 3^SendAppName^2.16.840.1.114222.1111^ISO|68991-9^Epidemiologic Information^LN|||20160419143800|||||||||||||||20160422143800|||C||||||10370^Rubella, congenital syndrome^NND
+OBX|1|CWE|78746-5^Country of Birth^LN||GBR^UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND^ISO3166_1||||||F
+OBX|2|CWE|77983-5^Country of Usual Residence^LN||GBR^UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND^ISO3166_1||||||F
+OBX|3|TS|11368-8^Date of Illness Onset^LN||20160411||||||F
+OBX|4|SN|77977-7^Illness Duration^LN||^12|d^day [time]^UCUM|||||F
+OBX|5|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|6|TS|77975-1^Diagnosis Date^LN||20160411||||||F
+OBX|7|CWE|77974-4^Hospitalized^LN||N^No^HL70136||||||F
+OBX|8|CWE|77978-5^Subject Died^LN||Y^Yes^HL70136||||||F
+OBX|9|ST|77997-5^Legacy Case Identifier^LN||ID4321||||||F
+OBX|10|SN|77998-3^Age at Case Investigation^LN||^16|a^year [time]^UCUM|||||F
+OBX|11|CWE|77982-7^Case Disease Imported Code^LN||C1512888^International^UML||||||F
+OBX|12|CWE|INV153^Imported Country^PHINQUESTION||GBR^UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND^ISO3166_1||||||F
+OBX|13|CWE|77984-3^Country of Exposure^LN|1|GBR^UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND^ISO3166_1||||||F
+OBX|14|ST|77986-8^City of Exposure^LN|1|Westside||||||F
+OBX|15|CWE|77984-3^Country of Exposure^LN|2|GBR^UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND^ISO3166_1||||||F
+OBX|16|CWE|77990-0^Case Class Status Code^LN||PHC178^Not a Case^CDCPHINVS||||||F
+OBX|17|CWE|77965-2^Immediate National Notifiable Condition^LN||Y^Yes^HL70136||||||F
+OBX|18|CWE|77980-1^Case Outbreak Indicator^LN||Y^Yes^HL70136||||||F
+OBX|19|ST|77981-9^Case Outbreak Name^LN||LA County, CA 2016-1||||||F
+OBX|20|ST|77969-4^Jurisdiction Code^LN||14||||||F
+OBX|21|ST|52831-5^Reporting Source ZIP Code^LN||94501||||||F
+OBX|22|CWE|77988-4^Binational Reporting Criteria^LN||PHC1140^Exposure to suspected product from Canada or Mexico^CDCPHINVS||||||F
+OBX|23|DT|77979-3^Case Investigation Start Date^LN||20160411||||||F
+OBX|24|DT|77995-9^Date Reported^LN||20160411||||||F
+OBX|25|TS|77972-8^Earliest Date Reported to County^LN||20160411||||||F
+OBX|26|TS|77973-6^Earliest Date Reported to State^LN||20160411||||||F
+OBX|27|SN|77991-8^MMWR Week^LN||^17||||||F
+OBX|28|DT|77992-6^MMWR Year^LN||2016||||||F
+OBX|29|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20160411||||||F
+OBX|30|DT|77970-2^Date First Reported to PHD^LN||20160411||||||F
+OBX|31|CWE|77966-0^Reporting State^LN||06^California^FIPS5_2||||||F
+OBX|32|CWE|77968-6^National Reporting Jurisdiction^LN||06^CA^FIPS5_2||||||F
+OBX|33|ST|INV338^Secondary Cause of Death from Death Certificate^PHINQUESTION||hhhhh||||||F
+OBX|34|CWE|67187-5^Type of Complication^LN|1|16294009^Enlarged spleen^SCT||||||F
+OBX|35|CWE|INV920^Type of Complications Indicator^PHINQUESTION|1|N^No^HL70136||||||F
+OBX|36|CWE|INV109^Case Investigation Status Code^PHINQUESTION||385651009^In progress^SCT||||||F
+OBX|37|CWE|85733-4^Did the Mother Have a Rash^LN||Y^Yes^HL70136||||||F
+OBX|38|CWE|85730-0^Did the Mother Have a Fever^LN||Y^Yes^HL70136||||||F
+OBX|39|DT|85729-2^What was the Mother's Fever Onset Date^LN||20130101||||||F
+OBX|40|SN|85728-4^Mother's Fever Duration (in days)^LN||^4||||||F
+OBX|41|CWE|85794-6^Did the Mother Have Arthralgia/Arthritis^LN||N^No^HL70136||||||F
+OBX|42|CWE|75204-8^Was Prenatal Care Obtained For this Pregnancy^LN||UNK^Unknown^NULLFL||||||F
+OBX|43|CWE|85716-9^Was There a Rubella-like Illness During This Pregnancy^LN||N^No^HL70136||||||F
+OBX|44|CWE|MTH123^Rubella Lab Testing Mother^PHINQUESTION||N^No^HL70136||||||F
+OBX|45|CWE|85709-4^Did the Mother Travel Outside the US During the First Trimester of Pregnancy^LN||N^No^HL70136||||||F
+OBX|46|ST|85658-3^Current Occupation^LN|1|Engineer||||||F
+OBX|47|ST|85078-4^Current Industry^LN|1|Engineering||||||F
+OBX|48|CWE|LAB630^Laboratory Testing Performed^PHINQUESTION||N^No^HL70136||||||F
+OBX|49|CWE|INV164^Laboratory Confirmed^PHINQUESTION||N^No^HL70136||||||F
+OBX|50|CWE|82314-6^Specimen Sent to CDC^LN||N^No^HL70136||||||F
+OBX|51|CWE|VAC148^Vaccinated per ACIP Recommendations^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|52|CWE|30956-7^Vaccine Type^LN|1|03^measles, mumps and rubella virus vaccine^CVX||||||F
+OBX|53|DT|VAC109^Vaccine Expiration Date^PHINQUESTION|1|20130313||||||F

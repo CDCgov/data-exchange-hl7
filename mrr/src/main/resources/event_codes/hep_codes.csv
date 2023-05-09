@@ -1,9 +1,0 @@
-Category,Program,Condition Code,Condition Name,Profiles,Profile Has Special Case,MMGs,Special Case Group,Special Case MMGs
-Hepatitis,NCHHSTP,10100,Hepatitis B acute,Hepatitis_MMG_V1.0,No,hepatitis_v1.0_mmg_core;hepatitis_v1.0_mmg_hepatitis_b_acute_de,,
-Hepatitis,NCHHSTP,10101,Hepatitis C acute,Hepatitis_MMG_V1.0,No,hepatitis_v1.0_mmg_core;hepatitis_v1.0_mmg_hepatitis_c_acute_de,,
-Hepatitis,NCHHSTP,10103,Hepatitis E acute,Hepatitis_MMG_V1.0,No,hepatitis_v1.0_mmg_core,,
-Hepatitis,NCHHSTP,10104,Hepatitis B perinatal infection,Hepatitis_MMG_V1.0,No,hepatitis_v1.0_mmg_core;hepatitis_v1.0_mmg_hepatitis_b_perinatal_de,,
-Hepatitis,NCHHSTP,10105,Hepatitis B virus infection chronic,Hepatitis_MMG_V1.0,No,hepatitis_v1.0_mmg_core;hepatitis_v1.0_mmg_hepatitis_b_chronic_de,,
-Hepatitis,NCHHSTP,10106,Hepatitis C Chronic,Hepatitis_MMG_V1.0,No,hepatitis_v1.0_mmg_core;hepatitis_v1.0_mmg_hepatitis_c_chronic_de,,
-Hepatitis,NCHHSTP,10110,Hepatitis A acute,Hepatitis_MMG_V1.0,No,hepatitis_v1.0_mmg_core;hepatitis_v1.0_mmg_hepatitis_a_acute,,
-Hepatitis,NCHHSTP,50248,Hepatitis C perinatal infection,Hepatitis_MMG_V1.0,No,hepatitis_v1.0_mmg_core,,

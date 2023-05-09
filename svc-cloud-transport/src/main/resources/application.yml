@@ -1,6 +1,9 @@
 micronaut:
   application:
     name: svc-cloud-transport
+  server:
+    multipart:
+      max-file-size: 10485760
   metrics:
     enabled: true
     export:
@@ -11,8 +14,8 @@ micronaut:
 
 endpoints:
   all:
-    enabled: true
-    sensitive: false
+    enabled: false
+    sensitive: true
   loggers:
     write-sensitive: false
   stop:

@@ -4,6 +4,96 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.18] - 2023-05-03
+ - Added support for new conditions:
+	- Cryptosporidiosis
+	- Cyclosporiasis
+	- Cholera and Vibriosis
+	- Campylobacteriosis
+	- Salmonellosis
+	- STEC
+	- Shigellosis
+	- S Typhi and S Paratyphi
+	- FoodNet
+	- Candida Auris
+	- CP-CRE
+ - Updated Receiver to be able to handle files in sub folders.
+ - Updated MMG-Based and MMG-SQL to support new feature of the new conditions
+	- Elements mapped more than in one block
+	- Handling properly complex fields that are not populated
+	- Added check for empty single collections.
+ - Create sub tables for repeating elements in repeating groups for MMG-in-SQL
+ - Added unit test and code coverage to Receiver/Debatcher and Redactor functions.
+ - Added support for file upload to cloud-transport service and support for up to 10Mb files.
+ - Renamed MSH-21 column names to be one based instead of zero based.
+ - Removed rule that validates OBR-22 against OBR-7
+ - Added validation for MMWR week.
+ - Updated PHIN Spec profiles to match discrepancies finding testing against MVPS
+ - Fixed fortify scan Critical and High issues.
+ - Updated Readme files with latest changes and features
+ - Updated all process names and process status on all functions to be consistent.
+
+
+
+### [0.0.17] - 2023-04-19
+  - Redacting ELR messages
+  - Updated NIST Profiles to remove rules not present in MVPS 
+  - Updated Legacy MMGs to not include subject/patient name type
+  - Lake of Segments now processing ELR Messages
+  - Added more MMG support - STD, congenital syphilis, Rubella, Congenital Rubella, Mumps, Malaria, Tuberculosis
+  - Bug Fixes
+     - Properly handling Repeating elements when creating inner lists in repeating table
+     - Repeating elements of type ST not properly mapped
+     - Changed repeat table to null instead of empty array in JSON output
+     - Handling null repeating elements in repeating groups
+     - Properly mapping primitive repeating elements
+
+
+### [0.0.16] - 2023-04-06
+  - Added config information to event metadata (configuration file names)
+  - Added MUMPS, Pertussis, Tuberculosis, Babesiosis, Trichinellosis MMGs and Event Codes
+  - Updates on PHIN Spec profiles
+    - Replaced predicate statements with conformance statements for better uer messages.
+    - Removed content validation of dates from IGAMT profiles into MMG validation.
+  - Updated structure validator to validate HL7 delimiters
+  - Creted tool to update IGAMT profile XML files with friendly error messages and deployed new updated profiles.   
+  - Improved performance on MMG Validator by refactoring Redis lookups
+  - Metadata bug fixes
+    - Redacted did not update summary
+    - Process metadata missing when exceptions were thrown on several functions.
+
+  - Dev Ops
+    -	Moved Redis to Premium in Dev and TST with automated backups
+    -	Terraformed cloud service app and deployed in DEV, TST and STG (waiting on firewall for private end points)
+    -	Started process to create ADF for AWS S3 Data migration.
+    -	Created PhinMS Security Architecture diagram.
+    -	Rerun Fortify Scans
+
+
+
+### [0.0.15] - 2023-03-22
+  - Set up STG environment and pipelines
+  - Updated PHIN Specs with findings on discrepacies with MVPS validation
+  - Shrotened the name of columns and repeating groups due to size limitations
+  - Included extra fields to be redacted
+  - Created redaction config for lab messages
+  - Added config names to Processes for clarity on which configuration was used.
+  - Several bug fixes.
+
+### [0.0.14] - 2023-03-08
+  - Set up TST environment and pipelines
+  - Develop transport service to upload files with Metadata (pending deployment)
+  - Designed and Develop Transport metadata to identify messages upon upload
+  - Flaggged cardinality over as warnings
+  - Added vocabulary check for OBR-31/GenV2 messages
+  - Added COVID ELR profiles for structure validation
+  - Bug fixes and Enhancements
+    - Fixed NK1 Redaction paths
+    - Routing unknwon messages properly
+    - Fixed MMG-Based and MMG-In-SQL transform to support non-GenV2 messages
+  
+  
+
 ### [0.0.13] - 2023-02-22
   - Created new Function to Redact messages
   - Adding MMG for Varicella and TB Messages

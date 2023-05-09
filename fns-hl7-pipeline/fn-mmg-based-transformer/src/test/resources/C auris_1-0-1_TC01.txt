@@ -1,0 +1,83 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~HAI_MDRO_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||C_auris_PAT_01^^^SendAppName&2.16.840.1.114222.222&ISO||~^^^^^^S||19400101|F||2131-1^Other Race^CDCREC~2106-3^White^CDCREC|^^^13^30126^^^^13067|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||20181206
+OBR|1||C_auris_01^SendAppName^2.16.840.1.114222.222^ISO|68991-9^Epidemiologic Information^LN|||20181210000000|||||||||||||||20181210000000|||F||||||50263^Candida auris, clinical^NND
+OBX|1|ST|32624-9^Other Race Text^LN||Indigenous||||||F
+OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|ST|21842-0^Other Birth Place^LN||Smyrna||||||F
+OBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|5|TS|11368-8^Date of Illness Onset^LN||20181129||||||F
+OBX|6|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|7|TS|77975-1^Diagnosis Date^LN||20181201||||||F
+OBX|8|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|9|TS|8656-1^Admission Date^LN||20181120||||||F
+OBX|10|TS|8649-6^Discharge Date^LN||20181206||||||F
+OBX|11|SN|78033-8^Duration of Hospital Stay in Days^LN||^144||||||F
+OBX|12|CWE|77978-5^Subject Died^LN||Y^Yes^HL70136||||||F
+OBX|13|ST|77993-4^State Case Identifier^LN||GA000001||||||F
+OBX|14|ST|77997-5^Legacy Case Identifier^LN||012345678||||||F
+OBX|15|SN|77998-3^Age at Case Investigation^LN||^78|a^year [time]^UCUM|||||F
+OBX|16|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F
+OBX|17|CWE|INV153^Imported Country^PHINQUESTION||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|18|CWE|INV154^Imported State^PHINQUESTION||12^Florida^FIPS5_2||||||F
+OBX|19|CWE|INV155^Imported City^PHINQUESTION||295003^Jacksonville, FL, Duval^USGSGNIS||||||F
+OBX|20|CWE|INV156^Imported County^PHINQUESTION||12031^Duval, FL^FIPS6_4||||||F
+OBX|21|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|22|CWE|77985-0^State or Province of Exposure^LN|1|13^Georgia^FIPS5_2||||||F
+OBX|23|ST|77986-8^City of Exposure^LN|1|Lawrenceville||||||F
+OBX|24|ST|77987-6^County of Exposure^LN|1|Gwinnett||||||F
+OBX|25|CWE|77984-3^Country of Exposure^LN|2|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|26|CWE|77985-0^State or Province of Exposure^LN|2|13^Georgia^FIPS5_2||||||F
+OBX|27|ST|77986-8^City of Exposure^LN|2|Smyrna||||||F
+OBX|28|ST|77987-6^County of Exposure^LN|2|Cobb||||||F
+OBX|29|CWE|77984-3^Country of Exposure^LN|3|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|30|CWE|77985-0^State or Province of Exposure^LN|3|12^Florida^FIPS5_2||||||F
+OBX|31|ST|77986-8^City of Exposure^LN|3|Jacksonville||||||F
+OBX|32|ST|77987-6^County of Exposure^LN|3|Duval||||||F
+OBX|33|CWE|77989-2^Transmission Mode^LN||418375005^Indeterminate disease transmission mode^SCT||||||F
+OBX|34|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|35|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|36|CWE|77980-1^Case Outbreak Indicator^LN||Y^Yes^HL70136||||||F
+OBX|37|ST|77981-9^Case Outbreak Name^LN||Outbreak012345||||||F
+OBX|38|ST|77969-4^Jurisdiction Code^LN||012345||||||F
+OBX|39|CWE|48766-0^Reporting Source Type Code^LN||1^Hospital^HL70406||||||F
+OBX|40|ST|52831-5^Reporting Source ZIP Code^LN||30303||||||F
+OBX|41|CWE|77988-4^Binational Reporting Criteria^LN||PHC1215^Potentially exposed by a resident of Mexico or Canada^CDCPHINVS||||||F
+OBX|42|ST|74549-7^Person Reporting to CDC - Name^LN||von Count, Count||||||F
+OBX|43|ST|74548-9^Person Reporting to CDC - Phone Number^LN||404-400-4000||||||F
+OBX|44|ST|74547-1^Person Reporting to CDC - Email^LN||count_voncount@gadph.gov||||||F
+OBX|45|DT|77979-3^Case Investigation Start Date^LN||20181201||||||F
+OBX|46|DT|77995-9^Date Reported^LN||20181201||||||F
+OBX|47|TS|77972-8^Earliest Date Reported to County^LN||20181201||||||F
+OBX|48|TS|77973-6^Earliest Date Reported to State^LN||20181201||||||F
+OBX|49|SN|77991-8^MMWR Week^LN||^31||||||F
+OBX|50|DT|77992-6^MMWR Year^LN||2018||||||F
+OBX|51|DT|77970-2^Date First Reported to PHD^LN||20181202||||||F
+OBX|52|CWE|77966-0^Reporting State^LN||13^Georgia^FIPS5_2||||||F
+OBX|53|CWE|77967-8^Reporting County^LN||13067^Cobb, GA^FIPS6_4||||||F
+OBX|54|CWE|77968-6^National Reporting Jurisdiction^LN||13^GA^FIPS5_2||||||F
+OBX|55|TX|77999-1^Comment^LN||This is a test case.||||||F
+OBX|56|CWE|INV1109^Previously Counted Case^PHINQUESTION||N^No^HL70136||||||F
+OBX|57|CWE|448621002^Tracheostomy Tube at Specimen Collection^SCT||Y^Yes^HL70136||||||F
+OBX|58|CWE|250870006^Ventilator Use at Specimen Collection^SCT||Y^Yes^HL70136||||||F
+OBX|59|CWE|INV636^Long-term Care Resident^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|60|CWE|INV1120^Type of Long-term Care Facility^PHINQUESTION||PHC2156^Nursing home/Skilled nursing facility with ventilator beds^CDCPHINVS||||||F
+OBX|61|CWE|91515-7^Healthcare Outside Resident State^LN||Y^Yes^HL70136||||||F
+OBX|62|CWE|TRAVEL38^Travel Outside USA Prior to Illness Onset within Program Specific Timeframe^PHINQUESTION||N^No^HL70136||||||F
+OBX|63|CWE|90366-6^Received Healthcare Outside the USA^LN||N^No^HL70136||||||F
+OBX|64|CWE|90041-5^Type of Location Where Specimen Collected^LN||440654001^Inpatient^SCT||||||F
+OBX|65|CWE|89202-6^County of Facility^LN||13067^Cobb, GA^FIPS6_4||||||F
+OBX|66|CWE|68488-6^State of Facility^LN||13^Georgia^FIPS5_2||||||F
+OBX|67|CWE|INV1270^Infection with Another MDRO^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|68|CWE|91558-7^Co-infection Type^LN||726492000^CRPA^SCT~5933001^C. difficile^SCT||||||F
+OBX|69|CWE|INV290^Test Type^PHINQUESTION|1|LAB724^MALDI-TOF ^PHINQUESTION||||||F
+OBX|70|ST|85069-3^Test Method^LN|1|Bruker Biotyper||||||F
+OBX|71|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|72|CWE|66746-9^Specimen Type^LN|1|119297000^Blood specimen (specimen)^SCT||||||F
+OBX|73|TS|68963-8^Specimen Collection Date/Time^LN|1|20181129||||||F
+OBX|74|ST|PLT687^State Lab Specimen ID^PHINQUESTION|1|PHL345678||||||F
+OBX|75|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|1|PLAB76543||||||F
+OBX|76|ST|INV949^WGS ID Number^PHINQUESTION|1|WGSID123456||||||F
+OBX|77|ST|85658-3^Current Occupation^LN|1|Retired||||||F
+OBX|78|CE|85659-1^Current Occupation Standardized^LN|1|9060^Retired - NIOSH/NCHS [9060]^CDCOCCUPATION2010||||||F
+OBX|79|ST|85078-4^Current Industry^LN|1|Retired||||||F
+OBX|80|CE|85657-5^Current Industry Standardized^LN|1|9880^Retired [9880]^CDCINDUSTRY2010||||||F

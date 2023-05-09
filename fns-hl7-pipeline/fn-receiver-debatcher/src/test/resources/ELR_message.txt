@@ -1,0 +1,25 @@
+[{
+"topic":"/subscriptions/01f9b1b1-a130-4031-ba25-71771007d3ca/resourceGroups/ocio-ede-dev-moderate-hl7-rg/providers/Microsoft.Storage/storageAccounts/tfedemessagestoragedev",
+"subject":"/blobServices/default/containers/hl7ingress/blobs/unitTests/CovidELR.doNotDelete.txt",
+"eventType":"Microsoft.Storage.BlobCreated",
+"id":"866024c9-a01e-0015-4e81-6cbb8e069468",
+"data":{
+    "api":"PutBlob",
+    "clientRequestId":"d8a40b4b-a2d9-4874-8eb0-b1133c67acd9",
+    "requestId":"866024c9-a01e-0015-4e81-6cbb8e000000",
+    "eTag":"0x8DB3A98319AFE04",
+    "contentType":"application/octet-stream",
+    "contentLength":824,
+    "blobType":"BlockBlob",
+    "url":"https://tfedemessagestoragedev.blob.core.windows.net/hl7ingress/unitTests/CovidELR.doNotDelete.txt",
+    "sequencer":"0000000000000000000000000001c52f000000000002fae2",
+    "identity":"$superuser",
+    "storageDiagnostics":{
+        "batchId":"004fc050-3006-0017-0081-6c0536000000"
+       }
+      },
+      "dataVersion":"",
+      "metadataVersion":"1",
+      "eventTime":"2023-04-11T14:22:34.4964204Z"
+     }
+    ]

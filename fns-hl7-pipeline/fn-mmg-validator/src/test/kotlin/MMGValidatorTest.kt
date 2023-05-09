@@ -1,19 +1,14 @@
-
 import com.google.gson.GsonBuilder
+import gov.cdc.dex.hl7.DateUtil
 import gov.cdc.dex.hl7.MmgValidator
 import gov.cdc.dex.hl7.exception.InvalidMessageException
 import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.ReportStatus
 import gov.cdc.dex.hl7.model.ValidationIssueType
 import gov.cdc.dex.mmg.InvalidConditionException
-
-
-
 import org.junit.jupiter.api.Test
-
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.util.NoSuchElementException
 
 class MMGValidatorTest {
 
@@ -177,4 +172,44 @@ class MMGValidatorTest {
             assert(e is InvalidConditionException)
         }
     }
+
+    @Test
+    fun testDateIsValid() {
+        assert(DateUtil.validateHL7Date("202111") == "OK")
+        assert(DateUtil.validateHL7Date("2019") == "OK")
+        assert(DateUtil.validateHL7Date("20230301") == "OK")
+        println(DateUtil.validateHL7Date("20230229"))
+        assert(DateUtil.validateHL7Date("20230229") != "OK")
+        assert(DateUtil.validateHL7Date("20220812090115") == "OK")
+        assert(DateUtil.validateHL7Date("202302281530-0800") == "OK")
+        assert(DateUtil.validateHL7Date("202302281530+0500") == "OK")
+        assert(DateUtil.validateHL7Date("20220812090115.0") == "OK")
+        assert(DateUtil.validateHL7Date("20220812090115.02+0600") == "OK")
+        assert(DateUtil.validateHL7Date("20220812090115.1234") == "OK")
+        assert(DateUtil.validateHL7Date("202208120915.02") != "OK")
+        println(DateUtil.validateHL7Date("2022081209"))
+        println(DateUtil.validateHL7Date("202313300515"))
+        assert(DateUtil.validateHL7Date("202313300515") != "OK")
+    }
+
+    @Test
+    fun testMMWRWeek() {
+        assert(DateUtil.validateMMWRWeek("1.5") != "OK")
+        assert(DateUtil.validateMMWRWeek("haha") != "OK")
+        assert(DateUtil.validateMMWRWeek("12") == "OK")
+        assert(DateUtil.validateMMWRWeek("1") == "OK")
+        assert(DateUtil.validateMMWRWeek("52") == "OK")
+        assert(DateUtil.validateMMWRWeek("53") != "OK")
+    }
+    @Test
+    fun testInvalidDate() {
+        val report = validateMessage("./Lyme_BadDate.txt")
+
+    }
+
+    @Test
+    fun testInvalidWeek() {
+        validateMessage("./Lyme_BadWeek.txt")
+    }
+
 }

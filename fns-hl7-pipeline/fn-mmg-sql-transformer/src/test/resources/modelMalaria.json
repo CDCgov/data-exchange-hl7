@@ -1,0 +1,695 @@
+{
+	"message_profile_identifier": [
+		{
+			"entity_identifier": "NOTF_ORU_v3.0",
+			"namespace_id": "PHINProfileID",
+			"universal_id": "2.16.840.1.114222.4.10.3",
+			"universal_id_type": "ISO"
+		},
+		{
+			"entity_identifier": "Generic_MMG_V2.0",
+			"namespace_id": "PHINMsgMapID",
+			"universal_id": "2.16.840.1.114222.4.10.4",
+			"universal_id_type": "ISO"
+		},
+		{
+			"entity_identifier": "Malaria_MMG_V1.0",
+			"namespace_id": "PHINMsgMapID",
+			"universal_id": "2.16.840.1.114222.4.10.4",
+			"universal_id_type": "ISO"
+		}
+	],
+	"local_subject_id": {
+		"id_number": "Malaria_Sample04",
+		"check_digit": null,
+		"check_digit_scheme": null,
+		"assigning_authority": "SendAppName&2.16.840.1.114222.222&ISO",
+		"identifier_type_code": null,
+		"assigning_facility": null,
+		"effective_date": null,
+		"expiration_date": null,
+		"assigning_jurisdiction": null,
+		"assigning_agency_or_department": null
+	},
+	"birth_date": "20020515",
+	"subjects_sex": "U",
+	"race_category": [
+		{
+			"identifier": "2028-9",
+			"text": "Asian",
+			"name_of_coding_system": "CDCREC",
+			"alternate_identifier": null,
+			"alternate_text": null,
+			"name_of_alternate_coding_system": null,
+			"code_system_concept_name": "Asian",
+			"cdc_preferred_designation": "Asian"
+		}
+	],
+	"ethnic_group": {
+		"identifier": "OTH",
+		"text": "other",
+		"name_of_coding_system": "NULLFL",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"code_system_concept_name": "other",
+		"cdc_preferred_designation": "other"
+	},
+	"subject_address_county": "11001",
+	"subject_address_state": "11",
+	"subject_address_zip_code": "20001",
+	"deceased_date": null,
+	"condition_code": {
+		"identifier": "10130",
+		"text": "Malaria",
+		"name_of_coding_system": "NND",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"code_system_concept_name": "Malaria",
+		"cdc_preferred_designation": "Malaria"
+	},
+	"local_record_id": {
+		"entity_identifier": "Malaria_Sample04",
+		"namespace_id": "SendAppName",
+		"universal_id": "2.16.840.1.114222.222",
+		"universal_id_type": "ISO"
+	},
+	"notification_result_status": "C",
+	"date_first_electronically_submitted": "20160601100100",
+	"date_of_electronic_case_notification_to_cdc": "20160608100100",
+	"other_race_text": null,
+	"country_of_birth": {
+		"identifier": "KOR",
+		"text": "KOREA (THE REPUBLIC OF)",
+		"name_of_coding_system": "ISO3166_1",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "KOREA (THE REPUBLIC OF)",
+		"cdc_preferred_designation": "KOREA (THE REPUBLIC OF)"
+	},
+	"other_birth_place": null,
+	"country_of_usual_residence": {
+		"identifier": "USA",
+		"text": "UNITED STATES OF AMERICA",
+		"name_of_coding_system": "ISO3166_1",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+		"cdc_preferred_designation": "UNITED STATES OF AMERICA"
+	},
+	"date_of_illness_onset": "20160518",
+	"illness_end_date": null,
+	"illness_duration": null,
+	"illness_duration_units": null,
+	"pregnancy_status": {
+		"identifier": "UNK",
+		"text": "Unknown",
+		"name_of_coding_system": "NULLFL",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "unknown",
+		"cdc_preferred_designation": "Unknown"
+	},
+	"diagnosis_date": "20160525",
+	"hospitalized": {
+		"identifier": "UNK",
+		"text": "Unknown",
+		"name_of_coding_system": "NULLFL",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "unknown",
+		"cdc_preferred_designation": "Unknown"
+	},
+	"admission_date": null,
+	"discharge_date": null,
+	"duration_of_hospital_stay_in_days": null,
+	"subject_died": {
+		"identifier": "N",
+		"text": "No",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "No",
+		"cdc_preferred_designation": "No"
+	},
+	"state_case_identifier": null,
+	"legacy_case_identifier": null,
+	"age_at_case_investigation": {
+		"comparator": null,
+		"number1": "14",
+		"separator": null,
+		"number2": null
+	},
+	"age_unit_at_case_investigation": null,
+	"case_disease_imported_code": {
+		"identifier": "C1512888",
+		"text": "International",
+		"name_of_coding_system": "UML",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "International",
+		"cdc_preferred_designation": "International"
+	},
+	"imported_country": {
+		"identifier": "KOR",
+		"text": "KOREA (THE REPUBLIC OF)",
+		"name_of_coding_system": "ISO3166_1",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "KOREA (THE REPUBLIC OF)",
+		"cdc_preferred_designation": "KOREA (THE REPUBLIC OF)"
+	},
+	"imported_state": null,
+	"imported_city": null,
+	"imported_county": null,
+	"transmission_mode": {
+		"identifier": "418427004",
+		"text": "Vector-borne transmission",
+		"name_of_coding_system": "SCT",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Vector-borne transmission (qualifier value)",
+		"cdc_preferred_designation": "Vector-borne transmission"
+	},
+	"case_class_status_code": {
+		"identifier": "410605003",
+		"text": "Confirmed present",
+		"name_of_coding_system": "SCT",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Confirmed present (qualifier value)",
+		"cdc_preferred_designation": "Confirmed present"
+	},
+	"immediate_national_notifiable_condition": {
+		"identifier": "N",
+		"text": "No",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "No",
+		"cdc_preferred_designation": "No"
+	},
+	"case_outbreak_indicator": {
+		"identifier": "N",
+		"text": "No",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "No",
+		"cdc_preferred_designation": "No"
+	},
+	"case_outbreak_name": null,
+	"jurisdiction_code": "S01",
+	"reporting_source_type_code": {
+		"identifier": "1",
+		"text": "Hospital",
+		"name_of_coding_system": "HL70406",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Hospital",
+		"cdc_preferred_designation": "Hospital"
+	},
+	"reporting_source_zip_code": null,
+	"binational_reporting_criteria": null,
+	"person_reporting_to_cdc_name": "Jennifer Blank",
+	"person_reporting_to_cdc_phone_number": "223-555-9922",
+	"person_reporting_to_cdc_email": null,
+	"case_investigation_start_date": "20160601",
+	"date_reported": "20160601",
+	"earliest_date_reported_to_county": "20160605",
+	"earliest_date_reported_to_state": "20160606",
+	"mmwr_week": {
+		"comparator": null,
+		"number1": "23",
+		"separator": null,
+		"number2": null
+	},
+	"mmwr_year": "2016",
+	"date_cdc_was_first_verbally_notified_of_this_case": null,
+	"date_first_reported_to_phd": "20160601",
+	"reporting_state": {
+		"identifier": "11",
+		"text": "District of Columbia",
+		"name_of_coding_system": "FIPS5_2",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "District of Columbia",
+		"cdc_preferred_designation": "District of Columbia"
+	},
+	"reporting_county": {
+		"identifier": "11001",
+		"text": "District of Columbia, DC",
+		"name_of_coding_system": "FIPS6_4",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "District of Columbia",
+		"cdc_preferred_designation": "District of Columbia, DC"
+	},
+	"national_reporting_jurisdiction": {
+		"identifier": "11",
+		"text": "DC",
+		"name_of_coding_system": "FIPS5_2",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "District of Columbia",
+		"cdc_preferred_designation": "DC"
+	},
+	"comment": "The subject had a relapse of P. vivax. Took atovaquone-proguanil while traveling but did not take terminal prophylaxis with primaquine",
+	"subjects_last_name": "Hofft",
+	"subjects_first_name": "Kaw",
+	"height": null,
+	"height_units": null,
+	"weight": null,
+	"weight_units": null,
+	"history_of_previous_illness": {
+		"identifier": "N",
+		"text": "No",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "No",
+		"cdc_preferred_designation": "No"
+	},
+	"type_of_complications": [
+		{
+			"identifier": "260413007",
+			"text": "No Complication",
+			"name_of_coding_system": "SCT",
+			"alternate_identifier": null,
+			"alternate_text": null,
+			"name_of_alternate_coding_system": null,
+			"coding_system_version_id": null,
+			"alternate_coding_system_version_id": null,
+			"original_text": null,
+			"code_system_concept_name": "None (qualifier value)",
+			"cdc_preferred_designation": "No Complication"
+		}
+	],
+	"chemoprophylaxis": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"chemoprophylaxis_medications": [
+		{
+			"identifier": "284623",
+			"text": "Atovaquone/Proguanil (Malarone)",
+			"name_of_coding_system": "RXNORM",
+			"alternate_identifier": null,
+			"alternate_text": null,
+			"name_of_alternate_coding_system": null,
+			"coding_system_version_id": null,
+			"alternate_coding_system_version_id": null,
+			"original_text": null,
+			"code_system_concept_name": "Atovaquone / Proguanil",
+			"cdc_preferred_designation": "Atovaquone/Proguanil (Malarone)"
+		}
+	],
+	"chemoprophylaxis_taken_as_prescribed": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"reason_doses_missed": null,
+	"side_effect_that_caused_missed_doses": null,
+	"received_blood_transfusion_organ_transplant": {
+		"identifier": "N",
+		"text": "No",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "No",
+		"cdc_preferred_designation": "No"
+	},
+	"blood_transfusion_organ_transplant_date": null,
+	"subject_traveled_or_lived_outside_us": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"subjects_country_of_residence_prior_to_most_recent_travel": {
+		"identifier": "USA",
+		"text": "UNITED STATES OF AMERICA",
+		"name_of_coding_system": "ISO3166_1",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "UNITED STATES OF AMERICA (THE)",
+		"cdc_preferred_designation": "UNITED STATES OF AMERICA"
+	},
+	"specimen_sent_to_cdc": {
+		"identifier": "Y",
+		"text": "Yes",
+		"name_of_coding_system": "HL70136",
+		"alternate_identifier": null,
+		"alternate_text": null,
+		"name_of_alternate_coding_system": null,
+		"coding_system_version_id": null,
+		"alternate_coding_system_version_id": null,
+		"original_text": null,
+		"code_system_concept_name": "Yes",
+		"cdc_preferred_designation": "Yes"
+	},
+	"treatment_taken_as_prescribed": null,
+	"symptoms_resolved_after_treatment": null,
+	"recurrence_of_symptoms_after_treatment": null,
+	"adverse_events_after_treatment": null,
+	"repeating_variables_for_dis_rg": [
+		{
+			"country_of_exposure": {
+				"identifier": "KOR",
+				"text": "KOREA (THE REPUBLIC OF)",
+				"name_of_coding_system": "ISO3166_1",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "KOREA (THE REPUBLIC OF)",
+				"cdc_preferred_designation": "KOREA (THE REPUBLIC OF)"
+			},
+			"state_or_province_of_exposure": null,
+			"city_of_exposure": null,
+			"county_of_exposure": null
+		}
+	],
+	"physician_name_number_rg": [
+		{
+			"physician_name": "Young, Mary",
+			"physician_phone": "333-444-5555"
+		}
+	],
+	"hospitalization_rg": [],
+	"previous_illness_rg": [],
+	"treatment_rg": [
+		{
+			"treatment_information": {
+				"identifier": "5521",
+				"text": "Hydroxychloroquine",
+				"name_of_coding_system": "RXNORM",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Hydroxychloroquine",
+				"cdc_preferred_designation": "Hydroxychloroquine"
+			},
+			"date_treatment_or_therapy_started": "20160520",
+			"date_treatment_or_therapy_stopped": "20160531",
+			"treatment_duration": {
+				"comparator": null,
+				"number1": "11",
+				"separator": null,
+				"number2": null
+			}
+		},
+		{
+			"treatment_information": {
+				"identifier": "8687",
+				"text": "Primaquine",
+				"name_of_coding_system": "RXNORM",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Primaquine",
+				"cdc_preferred_designation": "Primaquine"
+			},
+			"date_treatment_or_therapy_started": "20160520",
+			"date_treatment_or_therapy_stopped": "20160530",
+			"treatment_duration": {
+				"comparator": null,
+				"number1": "10",
+				"separator": null,
+				"number2": null
+			}
+		}
+	],
+	"travel_history_rg": [
+		{
+			"international_destinations_of_recent_travel": {
+				"identifier": "KOR",
+				"text": "Korea, Republic Of",
+				"name_of_coding_system": "ISO3166_1",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Korea, Republic Of",
+				"cdc_preferred_designation": "Korea, Republic Of"
+			},
+			"date_of_return_to_the_us_from_travel": "20160202",
+			"duration_of_stay": {
+				"comparator": null,
+				"number1": "6",
+				"separator": null,
+				"number2": null
+			},
+			"reasons_for_travel": [
+				{
+					"identifier": "PHC386",
+					"text": "Business",
+					"name_of_coding_system": "CDCPHINVS",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Business",
+					"cdc_preferred_designation": "Business"
+				}
+			],
+			"duration_of_stay_units": null
+		}
+	],
+	"industry_and_occupation_rg": [],
+	"specimen_type_rg": [
+		{
+			"specimen_types_sent_to_cdc": {
+				"identifier": "PHC1502",
+				"text": "Images",
+				"name_of_coding_system": "CDCPHINVS",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Images",
+				"cdc_preferred_designation": "Images"
+			},
+			"csid": "3000345678"
+		},
+		{
+			"specimen_types_sent_to_cdc": {
+				"identifier": "258580003",
+				"text": "Whole Blood",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Whole blood sample (specimen)",
+				"cdc_preferred_designation": "Whole Blood"
+			},
+			"csid": "3000345679"
+		}
+	],
+	"epidemiology_laboratory_rg": [
+		{
+			"test_type": {
+				"identifier": "10710-2",
+				"text": "Blood Smear",
+				"name_of_coding_system": "LN",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Plasmodium Bld Thin Film",
+				"cdc_preferred_designation": "Blood Smear"
+			},
+			"test_result": {
+				"identifier": "10828004",
+				"text": "Positive",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Positive (qualifier value)",
+				"cdc_preferred_designation": "Positive"
+			},
+			"specimen_collection_date_time": "20160520",
+			"organism_name": [
+				{
+					"identifier": "74746009",
+					"text": "Vivax",
+					"name_of_coding_system": "SCT",
+					"alternate_identifier": null,
+					"alternate_text": null,
+					"name_of_alternate_coding_system": null,
+					"coding_system_version_id": null,
+					"alternate_coding_system_version_id": null,
+					"original_text": null,
+					"code_system_concept_name": "Plasmodium vivax (organism)",
+					"cdc_preferred_designation": "Vivax"
+				}
+			],
+			"parasitemia_level_percentage": {
+				"comparator": null,
+				"number1": "1",
+				"separator": null,
+				"number2": null
+			},
+			"date_time_of_lab_result": null,
+			"performing_laboratory_name": null,
+			"laboratory_phone_number": null
+		},
+		{
+			"test_type": {
+				"identifier": "47085-6",
+				"text": "Polymerase Chain Reaction",
+				"name_of_coding_system": "LN",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Plasmodium DNA Bld Ql PCR",
+				"cdc_preferred_designation": "Polymerase Chain Reaction"
+			},
+			"test_result": {
+				"identifier": "10828004",
+				"text": "Positive",
+				"name_of_coding_system": "SCT",
+				"alternate_identifier": null,
+				"alternate_text": null,
+				"name_of_alternate_coding_system": null,
+				"coding_system_version_id": null,
+				"alternate_coding_system_version_id": null,
+				"original_text": null,
+				"code_system_concept_name": "Positive (qualifier value)",
+				"cdc_preferred_designation": "Positive"
+			},
+			"specimen_collection_date_time": "20160520",
+			"date_time_of_lab_result": null,
+			"organism_name": null,
+			"performing_laboratory_name": null,
+			"laboratory_phone_number": null,
+			"parasitemia_level_percentage": null
+		}
+	],
+	"adverse_event_rg": [],
+	"malaria_medications_part_ii_rg": []
+}

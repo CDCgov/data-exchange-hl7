@@ -1,0 +1,146 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Malaria_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||Malaria_Sample01^^^SendAppName&2.16.840.1.114222.222&ISO||~^^^^^^S||19920515|M||2054-5^Black or African American^CDCREC|^^^53^98001^^^^53033|||||||||||UNK^unknown^NULLFL
+OBR|1||Malaria_Sample01^SendAppName^2.16.840.1.114222.222^ISO|68991-9^Epidemiologic Information^LN|||20160601100100|||||||||||||||20160601100100|||F||||||10130^Malaria^NND
+OBX|1|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|2|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|TS|11368-8^Date of Illness Onset^LN||20160519||||||F
+OBX|4|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|5|TS|77975-1^Diagnosis Date^LN||20160525||||||F
+OBX|6|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|7|TS|8656-1^Admission Date^LN||20160521||||||F
+OBX|8|TS|8649-6^Discharge Date^LN||20160604||||||F
+OBX|9|SN|78033-8^Duration of Hospital Stay in Days^LN||^14||||||F
+OBX|10|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|11|ST|77993-4^State Case Identifier^LN||159357||||||F
+OBX|12|ST|77997-5^Legacy Case Identifier^LN||125498753122016||||||F
+OBX|13|SN|77998-3^Age at Case Investigation^LN||^24|a^year [time]^UCUM|||||F
+OBX|14|CWE|77982-7^Case Disease Imported Code^LN||PHC244^Indigenous^CDCPHINVS||||||F
+OBX|15|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|16|CWE|77985-0^State or Province of Exposure^LN|1|53^Washington^FIPS5_2||||||F
+OBX|17|ST|77986-8^City of Exposure^LN|1|Unknown||||||F
+OBX|18|ST|77987-6^County of Exposure^LN|1|King||||||F
+OBX|19|CWE|77989-2^Transmission Mode^LN||420014008^Blood borne transmission^SCT||||||F
+OBX|20|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|21|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|22|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|23|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|24|CWE|48766-0^Reporting Source Type Code^LN||ER^Emergency Room/Emergency Department^ROLECODE||||||F
+OBX|25|ST|74549-7^Person Reporting to CDC - Name^LN||George Lucas||||||F
+OBX|26|ST|74548-9^Person Reporting to CDC - Phone Number^LN||223-887-9922||||||F
+OBX|27|DT|77979-3^Case Investigation Start Date^LN||20160601||||||F
+OBX|28|DT|77995-9^Date Reported^LN||20160601||||||F
+OBX|29|TS|77972-8^Earliest Date Reported to County^LN||20160605||||||F
+OBX|30|TS|77973-6^Earliest Date Reported to State^LN||20160606||||||F
+OBX|31|SN|77991-8^MMWR Week^LN||^23||||||F
+OBX|32|DT|77992-6^MMWR Year^LN||2016||||||F
+OBX|33|DT|77970-2^Date First Reported to PHD^LN||20160601||||||F
+OBX|34|CWE|77966-0^Reporting State^LN||53^Washington^FIPS5_2||||||F
+OBX|35|CWE|77967-8^Reporting County^LN||53033^King, WA^FIPS6_4||||||F
+OBX|36|CWE|77968-6^National Reporting Jurisdiction^LN||53^WA^FIPS5_2||||||F
+OBX|37|TX|77999-1^Comment^LN||Transfusion acquired malaria in a sickle-cell patient||||||F
+OBX|38|ST|45394-4^Subject's Last Name^LN||Jones||||||F
+OBX|39|ST|45392-8^Subject's First Name^LN||Michael||||||F
+OBX|40|SN|3137-7^Height^LN||^165|cm^CentiMeter [SI Length Units]^UCUM|||||F
+OBX|41|SN|3141-9^Weight^LN||^182|[lb_av]^pound [mass]^UCUM|||||F
+OBX|42|ST|52526-1^Physician Name^LN|1|Gupta, Sanjay||||||F
+OBX|43|ST|68340-9^Physician Phone^LN|1|888-999-1010||||||F
+OBX|44|DT|52455-3^Admission Date^LN|1|20160521||||||F
+OBX|45|DT|52525-3^Discharge Date^LN|1|20160604||||||F
+OBX|46|ST|58237-9^Hospital Name^LN|1|Hospital B||||||F
+OBX|47|ST|46106-1^Hospital Record Number^LN|1|554135||||||F
+OBX|48|CWE|32485007^Admitted as Inpatient^SCT|1|Y^Yes^HL70136||||||F
+OBX|49|CWE|161413004^History of Previous Illness^SCT||Y^Yes^HL70136||||||F
+OBX|50|DT|82758-4^Date of Previous Illness^LN|1|20160124||||||F
+OBX|51|CWE|INV914^Organism Associated with Previous Illness^PHINQUESTION|1|56395006^Malariae^SCT||||||F
+OBX|52|DT|82758-4^Date of Previous Illness^LN|2|20150302||||||F
+OBX|53|CWE|INV914^Organism Associated with Previous Illness^PHINQUESTION|2|30020004^Falciparum^SCT||||||F
+OBX|54|DT|82758-4^Date of Previous Illness^LN|3|20140916||||||F
+OBX|55|CWE|INV914^Organism Associated with Previous Illness^PHINQUESTION|3|30020004^Falciparum^SCT||||||F
+OBX|56|CWE|67187-5^Type of Complications^LN||260413007^No Complication^SCT||||||F
+OBX|57|CWE|182929008^Chemoprophylaxis^SCT||Y^Yes^HL70136||||||F
+OBX|58|CWE|INV931^Chemoprophylaxis Medication(s)^PHINQUESTION||3640^Doxycycline^RXNORM||||||F
+OBX|59|CWE|INV309^Chemoprophylaxis Taken as Prescribed^PHINQUESTION||N^No^HL70136||||||F
+OBX|60|CWE|INV932^Reason Doses Missed^PHINQUESTION||401207004^Had a side effect^SCT||||||F
+OBX|61|ST|INV921^Side Effect that Caused Missed Doses^PHINQUESTION||sun sensitivity||||||F
+OBX|62|CWE|55753-8^Treatment Information^LN|1|282448^Artemether / Lumefantrine (Coartem)^RXNORM||||||F
+OBX|63|DT|86948-7^Date Treatment or Therapy Started^LN|1|20160521||||||F
+OBX|64|DT|63939-3^Date Treatment or Therapy Stopped^LN|1|20160524||||||F
+OBX|65|SN|67453-1^Treatment Duration^LN|1|^3|d^day^UCUM|||||F
+OBX|66|CWE|55753-8^Treatment Information^LN|2|2582^Clindamycin^RXNORM||||||F
+OBX|67|DT|86948-7^Date Treatment or Therapy Started^LN|2|20160124||||||F
+OBX|68|DT|63939-3^Date Treatment or Therapy Stopped^LN|2|20160131||||||F
+OBX|69|SN|67453-1^Treatment Duration^LN|2|^7|d^day^UCUM|||||F
+OBX|70|CWE|55753-8^Treatment Information^LN|3|6694^Mefloquine^RXNORM||||||F
+OBX|71|DT|86948-7^Date Treatment or Therapy Started^LN|3|20160203||||||F
+OBX|72|DT|63939-3^Date Treatment or Therapy Stopped^LN|3|20160208||||||F
+OBX|73|SN|67453-1^Treatment Duration^LN|3|^5|d^day^UCUM|||||F
+OBX|74|CWE|82312-0^Received Blood Transfusion/Organ Transplant^LN||Y^Yes^HL70136||||||F
+OBX|75|DT|80989-7^Blood Transfusion/Organ Transplant Date^LN||20160510||||||F
+OBX|76|CWE|TRAVEL10^Subject Traveled or Lived Outside US^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|77|CWE|TRAVEL15^Subject's Country of Residence Prior to Most Recent Travel^PHINQUESTION||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|78|CWE|82764-2^International Destination(s) of Recent Travel^LN|1|015^Northern Africa^georegcdc||||||F
+OBX|79|DT|55209-1^Date of Return to the US from Travel^LN|1|20160302||||||F
+OBX|80|SN|82310-4^Duration of Stay^LN|1|^3|d^day [time]^UCUM|||||F
+OBX|81|CWE|66415-1^Reason(s) for Travel^LN|1|PHC918^Missionary^CDCPHINVS||||||F
+OBX|82|CWE|82764-2^International Destination(s) of Recent Travel^LN|2|MAR^Morocco^ISO3166_1||||||F
+OBX|83|DT|55209-1^Date of Return to the US from Travel^LN|2|20160302||||||F
+OBX|84|SN|82310-4^Duration of Stay^LN|2|^5|d^day [time]^UCUM|||||F
+OBX|85|CWE|66415-1^Reason(s) for Travel^LN|2|PHC918^Missionary^CDCPHINVS||||||F
+OBX|86|CWE|82764-2^International Destination(s) of Recent Travel^LN|3|CAF^Central African Republic^ISO3166_1||||||F
+OBX|87|DT|55209-1^Date of Return to the US from Travel^LN|3|20160302||||||F
+OBX|88|SN|82310-4^Duration of Stay^LN|3|^2|d^day [time]^UCUM|||||F
+OBX|89|CWE|66415-1^Reason(s) for Travel^LN|3|PHC918^Missionary^CDCPHINVS||||||F
+OBX|90|ST|85658-3^Current Occupation^LN|1|Medical Technologist||||||F
+OBX|91|CE|85659-1^Current Occupation Standardized^LN|1|3300^Clinical laboratory technologists and technicians [3300]^CDCOCCUPATION2010||||||F
+OBX|92|ST|85078-4^Current Industry^LN|1|Hospital lab||||||F
+OBX|93|CE|85657-5^Current Industry Standardized^LN|1|8190^Hospitals [8190]^CDCINDUSTRY2010||||||F
+OBX|94|ST|85658-3^Current Occupation^LN|2|Youth Pastor||||||F
+OBX|95|CE|85659-1^Current Occupation Standardized^LN|2|2040^Clergy [2040]^CDCOCCUPATION2010||||||F
+OBX|96|ST|85078-4^Current Industry^LN|2|Religious Organizations||||||F
+OBX|97|CE|85657-5^Current Industry Standardized^LN|2|9160^Religious organizations [9160]^CDCINDUSTRY2010||||||F
+OBX|98|CWE|82314-6^Specimen Sent to CDC^LN||Y^Yes^HL70136||||||F
+OBX|99|CWE|66746-9^Specimen Type(s) Sent to CDC^LN|1|PHC1502^Images^CDCPHINVS||||||F
+OBX|100|ST|INV965^CSID^PHINQUESTION|1|3000123456||||||F
+OBX|101|CWE|66746-9^Specimen Type(s) Sent to CDC^LN|2|258433009^Smears^SCT||||||F
+OBX|102|ST|INV965^CSID^PHINQUESTION|2|3000123457||||||F
+OBX|103|CWE|INV290^Test Type^PHINQUESTION|1|10710-2^Blood Smear^LN||||||F
+OBX|104|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|105|TS|68963-8^Specimen Collection Date/Time^LN|1|20160523||||||F
+OBX|106|TS|82773-3^Date/Time of Lab Result^LN|1|20160524||||||F
+OBX|107|CWE|LAB278^Organism Name^PHINQUESTION|1|30020004^Falciparum^SCT||||||F
+OBX|108|SN|53556-7^Parasitemia Level Percentage^LN|1|^3||||||F
+OBX|109|CWE|INV290^Test Type^PHINQUESTION|2|47085-6^Polymerase Chain Reaction^LN||||||F
+OBX|110|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F
+OBX|111|TS|68963-8^Specimen Collection Date/Time^LN|2|20160524||||||F
+OBX|112|TS|82773-3^Date/Time of Lab Result^LN|2|20160525||||||F
+OBX|113|CWE|LAB278^Organism Name^PHINQUESTION|2|30020004^Falciparum^SCT||||||F
+OBX|114|CWE|INV290^Test Type^PHINQUESTION|3|70569-9^Rapid Diagnostic Test^LN||||||F
+OBX|115|CWE|INV291^Test Result^PHINQUESTION|3|10828004^Positive^SCT||||||F
+OBX|116|TS|68963-8^Specimen Collection Date/Time^LN|3|20160530||||||F
+OBX|117|TS|82773-3^Date/Time of Lab Result^LN|3|20160530||||||F
+OBX|118|CWE|LAB278^Organism Name^PHINQUESTION|3|74746009^Vivax^SCT~30020004^Falciparum^SCT||||||F
+OBX|119|ST|68994-3^Performing Laboratory Name^LN|3|Quest Diagnostics Inc.||||||F
+OBX|120|ST|65651-2^Laboratory Phone Number^LN|3|222-555-7777||||||F
+OBX|121|SN|53556-7^Parasitemia Level Percentage^LN|3|^12||||||F
+OBX|122|CWE|INV917^Treatment Taken as Prescribed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|123|CWE|313185002^Symptoms Resolved After Treatment^SCT||Y^Yes^HL70136||||||F
+OBX|124|CWE|161917009^Recurrence of Symptoms After Treatment^SCT||N^No^HL70136||||||F
+OBX|125|CWE|391103005^Adverse Events After Treatment^SCT||Y^Yes^HL70136||||||F
+OBX|126|TX|42563-7^Adverse Event Description^LN|1|Rash||||||F
+OBX|127|CWE|INV918^Adverse Event Related to Treatment^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|128|SN|82311-2^Adverse Event Time to Onset^LN|1|^2|h^hour [time]^UCUM|||||F
+OBX|129|CWE|64750-3^Adverse Event Severity^LN|1|C1518404^Non-serious^UML||||||F
+OBX|130|TX|42563-7^Adverse Event Description^LN|2|Swollen lips (angioedema)||||||F
+OBX|131|CWE|INV918^Adverse Event Related to Treatment^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|132|SN|82311-2^Adverse Event Time to Onset^LN|2|^2|h^hour [time]^UCUM|||||F
+OBX|133|CWE|64750-3^Adverse Event Severity^LN|2|PHC2178^Medically important^CDCPHINVS||||||F
+OBX|134|ST|29303-5^Medication Administered^LN|1|Atovaquone-proguanil, advil, multivitamin||||||F
+OBX|135|CWE|INV1284^Medication Administered Relative to Treatment^PHINQUESTION|1|PHC2145^During 2 weeks before treatment^CDCPHINVS||||||F
+OBX|136|DT|91381-4^Medication Start Date^LN|1|20160505||||||F
+OBX|137|DT|91382-2^Medication Stop Date^LN|1|20160521||||||F
+OBX|138|SN|91383-0^Medication Duration^LN|1|^16||||||F
+OBX|139|ST|29303-5^Medication Administered^LN|2|Atovaquone-proguanil, advil, multivitamin||||||F
+OBX|140|CWE|INV1284^Medication Administered Relative to Treatment^PHINQUESTION|2|PHC2146^During 4 weeks after treatment^CDCPHINVS||||||F
+OBX|141|DT|91381-4^Medication Start Date^LN|2|20160524||||||F
+OBX|142|DT|91382-2^Medication Stop Date^LN|2|20160605||||||F
+OBX|143|SN|91383-0^Medication Duration^LN|2|^12||||||F

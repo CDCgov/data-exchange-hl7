@@ -1,0 +1,20 @@
+MSH|^~\&|Epic Lab^2.16.840.1.113883.3.1575^ISO|RC^2.16.840.1.113883.4.590^ISO|SDEDSS^2.16.840.1.114222.4.1.3661^ISO|SD.DOH^2.16.840.1.114222.4.1.3661^ISO|20200607061729|LABBACKGROUND|ORU^R01^ORU_R01|9BD5C_26C6_0_10001|P|2.5|||||USA||||PHLabReport-NoAck^HL7^2.16.840.1.113883.9.11^ISO
+SFT|Epic Systems Corporation^L^^^^ANSI&1.2.840&ISO^XX^^^1.2.840.114350|November 2019|Abril007|9.1.0.0||20200509004528
+PID|1||REDACTED^^^EPIC&MR&ISO^MRN~REDACTED^^^EPI&MRN&ISO^MR~140019990082476^^^SR&&ISO^SR||REDACTED^REDACTED^REDACTED^REDACTED^^^D||19500101|M||1002-5^^CDCREC^^^^2.5.1|REDACTED^^EAGLE BUTTE^SD^57625^USA^L^^DEWEY|||||||||||N^^HL70189^^^^2.5.1||||||||N|||20180920035226|1^1.2.840.114350.1.13.479.2.7.2.696570^ISO
+PD1|||MH RAPID CITY CLINIC FLORMANN ST^^101015|EAGLEBUTTE^EAGLE BUTTE INDIAN^HEALTH^SERVICE HOSPITAL^^^^^PROVID^^^^PROVID||||||||||None^^304
+NK1|1|REDACTED|FTH^^HL70063^^^^2.5.1|REDACTED^^EAGLE BUTTE^SD^57625^USA^^^DEWEY|REDACTED
+PV1|1|I|RCH SICU 2^SICU254^254-01^^^^^^^^|UR|||1942567250^LANGSTON^DENNIS^B^^^^^PROVID&REGIONAL HEALTH&ISO^^^^XX|||Med|||||||1942567250^LANGSTON^DENNIS^B^^^^^PROVID&REGIONAL HEALTH&ISO^^^^XX|||||||||||||||||||||||||||20200607044400||||||124812799
+ORC|RE|41674351^EPC^1.2.840.114350.1.13.479.2.7.2.798268^ISO|20RC-159M0008^Beaker^1.2.840.114350.1.13.479.2.7.3.798268.320^ISO|20RC-159M0008^Beaker^1.2.840.114350.1.13.479.2.7.3.798268.320^ISO||||||||COOLSO^COOLAHAN^SONYA^^^^^^PROVID&REGIONAL HEALTH&ISO^^^^XX||(605)755-8823^^^^^605^7558823|20200607050241||||||MH Rapid City Hospital^D^^^^REGIONAL HEALTH&1.2.840.114350.1.13.479.2.7.2.696570&ISO^XX^^^101010|353 FAIRMONT BLVD^^RAPID CITY^SD^57701-7375^USA^B^^PENNINGTON|(605)755-1000^^PH^^^605^7551000|353 Fairmont Blvd^^RAPID CITY^SD^57701^^C
+OBR|1|Till026^EPC^1.2.840.114350.1.13.479.2.7.2.798268^ISO|20RC-159M0008^Beaker^1.2.840.114350.1.13.479.2.7.3.798268.320^ISO|LAB6104A2^COVID-19 MOLECULAR (PCR)^MTEAP^^^^2.40^1.2|||20200607052100||||||COVID-19 NP sample collection can be used for Respiratory Pathogen Panel testing.||Swab^Swab^HL70487^^^^^|COOLSO^COOLAHAN^SONYA^^^^^^PROVID&REGIONAL HEALTH&ISO^^^^XX|(605)755-8823^^^^^605^7558823|||||20200607061700|||F|||||||&Lab&Background&User&
+NTE|1|L|COVID-19 NP sample collection can be used for Respiratory Pathogen Panel testing.
+NTE|2|L|A negative result may not rule out COVID-19 in the patient, as the sensitivity of the test depends on the timing of the specimen collection, type of specimen, and the quality of the specimen. Result should be correlated with patient's history and clinical presentation.
+NTE|3|L
+NTE|4|L|Testing was performed using the Xpert Xpress SARS-CoV-2 RT-PCR assay (Cepheid) on the GeneXpert Dx system.
+NTE|5|L|Fact sheets for this Emergency Use Authorization (EUA) assay can be found at the following links:
+NTE|6|L|For Healthcare Providers  https://www.fda.gov/media/136313/download
+NTE|7|L|For Patients  https://www.fda.gov/media/136312/download
+NTE|8|L
+NTE|9|L|Performance of this SARS-CoV-2 RNA test has only been established in individuals suspected of having COVID-19 by their healthcare provider.
+TQ1|1||||||20200607050300||R^^HL70485^^^^2.5.1
+OBX|1|ST|94500-6^SARS-CoV-2 RNA Resp Ql NAA+probe^LN^^^^2.66||Negative||Negative||||F|||20200607052100|||||20200607061724||||RCH LAB^D^^^^CLIA&1.2.3.4.5.6&ISO^XX^^^TESTLABID|353 FAIRMONT BLVD.^^RAPID CITY^SD^57701^^B
+SPM|1|^20RC-159M0008&Beaker&1.2.840.114350.1.13.479.2.7.3.798268.320&ISO||Swab^Swab^HL70487^^^^^||||Nasopharynx^Nasopharynx^^^^^^^|||||||||20200607052100|20200607052130

@@ -32,19 +32,14 @@ class Function {
     companion object {
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         const val TABLES_KEY_NAME = "tables"
-
-        // same in MmgSqlTransProcessMetadata
-        const val PROCESS_NAME = "mmgSQLTransformer"
-        // const val PROCESS_VERSION = "1.0.0"
-
-        const val PROCESS_STATUS_OK = "PROCESS_MMG_SQL_TRANSFORMER_OK"
-        const val PROCESS_STATUS_EXCEPTION = "PROCESS_MMG_SQL_TRANSFORMER_EXCEPTION"
-        const val PREVIOUS_PROCESS_NAME = "mmgBasedTransformer"
+        const val PROCESS_STATUS_OK = "SUCCESS"
+        const val PROCESS_STATUS_EXCEPTION = "FAILURE"
+        const val PREVIOUS_PROCESS_NAME = "MMG_BASED_TRANSFORMER"
 
     } // .companion object
 
 
-    @FunctionName("mmgSQLTransformer")
+    @FunctionName("MMG_BASED_SQL_TRANSFORMER")
     fun eventHubProcessor(
         @EventHubTrigger(
                 name = "msg", 
@@ -106,7 +101,7 @@ class Function {
                     prcName == PREVIOUS_PROCESS_NAME
                 } // .mmgBasedProcesses
                 val modelJson = mmgBasedProcessLast.asJsonObject["report"].asJsonObject
-                context.logger.info("------ modelJson: ------> $modelJson")
+             //   context.logger.info("------ modelJson: ------> $modelJson")
                 
                 // 
                 // Process Message for SQL Model
@@ -159,23 +154,22 @@ class Function {
                     context.logger.info("Partitioning blocks")
                     val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
                     context.logger.info("Mapping elements")
-                    val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !it.isRepeat }
-
+                    val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !(it.isRepeat || it.mayRepeat.contains("Y")) }
                     // Singles Non Repeats
                     val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepeats, profilesMap, modelJson)
-                     context.logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")
+              //       context.logger.info("singlesNonRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesNonRepeatsModel)}\n")
 
                     // Singles Repeats
                     val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
-                     context.logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")
+              //       context.logger.info("singlesRepeatsModel: -->\n\n${gsonWithNullsOn.toJson(singlesRepeatsModel)}\n")
 
                     // Repeated Blocks
                     val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
-                     context.logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
+               //      context.logger.info("repeatedBlocksModel: -->\n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
 
                     // Message Profile Identifier
                     val messageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
-                     context.logger.info("messageProfIdModel: -->\n\n${gsonWithNullsOn.toJson(messageProfIdModel)}\n")
+               //      context.logger.info("messageProfIdModel: -->\n\n${gsonWithNullsOn.toJson(messageProfIdModel)}\n")
 
                     // Compose the SQL Model from parts
                     val mmgSqlModel = messageProfIdModel + singlesNonRepeatsModel + mapOf(
@@ -183,14 +177,14 @@ class Function {
                     ) // .mmgSqlModel
 
                     updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_OK, mmgSqlModel, eventHubMD[messageIndex],
-                        evHubSender, eventHubSendOkName, gsonWithNullsOn, inputEvent, null)
+                        evHubSender, eventHubSendOkName, gsonWithNullsOn, inputEvent,   null, mmgKeyNames.asList())
                     context.logger.info("Processed OK for MMG-SQL fileName: $fileName, messageUUID: $messageUUID, ehDestination: $eventHubSendOkName")
 
                 } catch (e: Exception) {
-
                     context.logger.severe("Exception processing transformation: Unable to process Message fileName: $fileName, messageUUID: $messageUUID, due to exception: ${e.message}")
                     updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
-                        evHubSender, eventHubSendErrsName, gsonWithNullsOn, inputEvent, e)
+                        evHubSender, eventHubSendErrsName, gsonWithNullsOn, inputEvent, e, listOf()
+                    )
                     context.logger.info("Processed ERROR for MMG-SQL fileName: $fileName, messageUUID: $messageUUID, ehDestination: $eventHubSendErrsName")
                 } // .catch
 
@@ -212,16 +206,16 @@ class Function {
     } // .extractValue
 
     private fun updateMetadataAndDeliver(startTime: String, metadata: JsonObject, status: String, report: Map<String, Any?>?, eventHubMD: EventHubMetadata,
-        evHubSender: EventHubSender, evTopicName: String, gsonWithNullsOn: Gson, inputEvent: JsonObject, exception: Exception?) {
+        evHubSender: EventHubSender, evTopicName: String, gsonWithNullsOn: Gson, inputEvent: JsonObject, exception: Exception?, config: List<String>) {
 
-        val processMD = MmgSqlTransProcessMetadata(status=status, report=report, eventHubMD = eventHubMD)
+        val processMD = MmgSqlTransProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
         metadata.addArrayElement("processes", processMD)
 
         if (exception != null) {
             //TODO::  - update retry counts
-            val problem = Problem(PROCESS_NAME, exception, false, 0, 0)
+            val problem = Problem(MmgSqlTransProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
             val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
             inputEvent.add("summary", summary.toJsonElement())
         } else {

@@ -28,15 +28,16 @@ public class ProfileManagerTest {
             System.out.println("nist = " + nist);
         } catch (Exception e) {
             e.printStackTrace();
+            assert(false);
         }
     }
 
     @Test
     public void testValidateStrcutureValid() {
             try {
-                ProfileManager nistValidator = new ProfileManager(new ResourceFileFetcher(), "/NOTF_ORU_V3.0");
+                ProfileManager nistValidator = new ProfileManager(new ResourceFileFetcher(), "/COVID19_ELR-v2.3.1");
 
-                var nist = nistValidator.validate(getTestFile("hl7StructureValid.txt"));
+                var nist = nistValidator.validate(getTestFile("covidELR/231HL7TestFilewithHHSData.txt"));
                 System.out.println("nist.getStatus() = " + nist.getStatus());
                 System.out.println("nist.getErrorCounts() = " + nist.getErrorCounts());
                 System.out.println("nist.getErrorCounts().getStructure() = " + nist.getErrorCounts().getStructure());
@@ -47,6 +48,7 @@ public class ProfileManagerTest {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                assert(false);
             }
     }
 

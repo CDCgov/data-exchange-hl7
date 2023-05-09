@@ -10,7 +10,7 @@ import java.io.InputStream
  */
 interface ProfileFetcher {
     @Throws(InvalidFileException::class)
-    fun getFile(file: String): String
+    fun getFile(file: String, req: Boolean): String?
     @Throws(InvalidFileException::class)
-    fun getFileAsInputStream(file: String): InputStream
+    fun getFileAsInputStream(file: String, req: Boolean): InputStream?
 }

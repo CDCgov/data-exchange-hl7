@@ -1149,7 +1149,7 @@
           "priority": "R",
           "isRepeat": false,
           "mayRepeat": "N",
-          "valueSetCode": "N/A",
+          "valueSetCode": "PHVS_NotifiableEvent_Disease_Condition_CDC_NNDSS",
           "mappings": {
             "hl7v251": {
               "legacyIdentifier": "INV169",

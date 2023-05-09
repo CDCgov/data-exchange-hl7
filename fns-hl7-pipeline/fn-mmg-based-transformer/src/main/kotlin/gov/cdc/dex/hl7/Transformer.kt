@@ -12,6 +12,7 @@ import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.redisModels.ValueSetConcept
 import gov.cdc.dex.util.StringUtils
+import gov.cdc.dex.util.StringUtils.Companion.normalize
 
 class Transformer(redisProxy: RedisProxy)  {
 
@@ -32,6 +33,7 @@ class Transformer(redisProxy: RedisProxy)  {
         // private val PHIN_DATA_TYPE_KEY_NAME = "phin_data_type" // only used in dev
         private const val CODE_SYSTEM_CONCEPT_NAME_KEY_NAME = "code_system_concept_name"
         private const val CDC_PREFERRED_DESIGNATION_KEY_NAME =  "cdc_preferred_designation"
+        private const val MAX_BLOCK_NAME_LENGTH = 30
     }
 
         // --------------------------------------------------------------------------------------------------------
@@ -98,7 +100,11 @@ class Transformer(redisProxy: RedisProxy)  {
                 val obxLine = filterByIdentifier(obxLines, el.mappings.hl7v251.identifier)
                 val obxLineParts = if (obxLine.isNotEmpty()) obxLine[0].split("|") else listOf()
                 val segmentData = getSegmentData(obxLineParts, el.mappings.hl7v251.fieldPosition, el)
-                StringUtils.normalizeString(el.name) to segmentData
+                if (el.isRepeat || el.mayRepeat.contains("Y")) {
+                    StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH) to segmentData
+                } else {
+                    StringUtils.normalizeString(el.name) to segmentData
+                }
             } // .mmgPid.map
 
 
@@ -121,19 +127,13 @@ class Transformer(redisProxy: RedisProxy)  {
             // val jedis = redisProxy.getJedisClient()
             // there could be multiple MMGs each with MSH, PID -> filter out and only keep the one's from the last MMG 
             val mmgs = getMmgsFiltered(mmgsArr)
- 
             val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
-
-            val obxIdToElementMap = getObxIdToElementMap(mmgBlocks)
-
             val (_, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
 
             val messageLines = getMessageLines(hl7Content)
-
             val obxLines = messageLines.filter { it.startsWith("OBX|") }
-
             val blocksNonSingleModel = mmgBlocksNonSingle.associate { block ->
-
+                val obxIdToElementMap = block.elements.associateBy { element ->  element.mappings.hl7v251.identifier }
                 val msgLines = block.elements.flatMap { element ->
                     // logger.info("element: --> ${element.mappings.hl7v251.identifier}\n")
                     filterByIdentifier(obxLines, element.mappings.hl7v251.identifier)
@@ -174,8 +174,13 @@ class Transformer(redisProxy: RedisProxy)  {
                     mapFromMsg + mapFromElemNotInMsg
                 } // .blockElementsNameDataTupMap
                 // logger.info("\nblockElementsNameDataTupMap: --> ${Gson().toJson(blockElementsNameDataTupMap)}\n\n")
-
-                StringUtils.normalizeString(block.name) to blockElementsNameDataTupMap
+                // make sure the block is properly identified as a repeating block
+                val blockName = if (block.name.normalize().contains("repeating_group")) {
+                    block.name
+                } else {
+                    "${block.name} repeating group"
+                }
+                StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH) to blockElementsNameDataTupMap
             } // .blocksNonSingleModel
 
             
@@ -190,7 +195,7 @@ class Transformer(redisProxy: RedisProxy)  {
         //  ------------- Functions used in the transformation -------------
         // --------------------------------------------------------------------------------------------------------
 
-        private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
+           private fun filterByIdentifier(lines: List<String>, id: String) : List<String> {
             return lines.filter { line ->
                 val lineParts = line.split("|")
                 val obxId = lineParts[3].split("^")[0]
@@ -203,30 +208,36 @@ class Transformer(redisProxy: RedisProxy)  {
         } // .getMessageLines
 
 
-        private fun getObxIdToElementMap(blocks: List<Block>): Map<String, Element> {
-
-            val elems = blocks.flatMap { it.elements } // .mmgElemsBlocksSingle
-
-            return elems.associateBy { elem ->
-                elem.mappings.hl7v251.identifier
-            }
-        } // .getObxIdToElementMap
-
-
         /* private */ fun getMmgsFiltered(mmgs: Array<MMG>): Array<MMG> {
 
-            if ( mmgs.size > 1 ) { 
-                for ( index in 0..mmgs.size - 2) { // except the last one
+            if ( mmgs.size > 1 ) {
+                // remove message header block from all but last mmg
+                for ( index in 0..mmgs.size - 2) {
                     mmgs[index].blocks = mmgs[index].blocks.filter { block ->
-                        block.name != MMG_BLOCK_NAME_MESSAGE_HEADER //|| block.name == MMG_BLOCK_NAME_SUBJECT_RELATED
+                        block.name != MMG_BLOCK_NAME_MESSAGE_HEADER && block.elements.isNotEmpty()
                     } // .filter
                 } // .for
+                // remove duplicate blocks that occur in last and next-to-last mmgs
+                val lastMMG =  mmgs[mmgs.size - 1]
+                val nextToLastMMG = mmgs[mmgs.size - 2]
+                // compare blocks of elements in the mmgs
+                // if all the elements IDs in one block are all contained within another block,
+                // keep the bigger one
+                keepBiggerElementSet(lastMMG, nextToLastMMG)
+                keepBiggerElementSet(nextToLastMMG, lastMMG)
             } // .if
 
             return mmgs
         } // .getMmgsFiltered
 
-        
+    private fun keepBiggerElementSet(firstMMG: MMG, secondMMG: MMG) {
+        firstMMG.blocks.forEach { block ->
+            val blockElementIds = block.elements.map { elem -> elem.mappings.hl7v251.identifier }.toSet()
+            secondMMG.blocks = secondMMG.blocks.filter {
+                !blockElementIds.containsAll(it.elements.map { el -> el.mappings.hl7v251.identifier }.toSet())
+            }
+        }
+    }
         /* private */ fun getPhinDataTypes(): Map<String, List<PhinDataType>> {
             // logger.info("getPhinDataTypes, reading local file...")
 
@@ -250,7 +261,13 @@ class Transformer(redisProxy: RedisProxy)  {
                 val segmentDataFull = lineParts[dataFieldPosition].trim()
                 val phinDataTypesMap = getPhinDataTypes()
                 // logger.info("getSegmentData, phinDataTypesMap: --> ${phinDataTypesMap}")
-                val segmentDataArr = if (el.isRepeat) segmentDataFull.split("~") else listOf(segmentDataFull)
+                val segmentDataArr = if (segmentDataFull.contains("~")) {
+                    if (el.isRepeat || el.mayRepeat.contains("Y"))
+                        segmentDataFull.split("~")
+                    else
+                        listOf(segmentDataFull.split("~")[0])
+                } else listOf(segmentDataFull)
+
                 val segmentData = segmentDataArr.map { oneRepeat ->
                     val oneRepeatParts = oneRepeat.split("^")
                     if ( phinDataTypesMap.contains(el.mappings.hl7v251.dataType) ) {
@@ -268,7 +285,11 @@ class Transformer(redisProxy: RedisProxy)  {
                             val conceptCode = map1["identifier"]
                             var conceptJson = ""
                             if ((!valueSetCode.isNullOrEmpty() && valueSetCode != "N/A") && !conceptCode.isNullOrEmpty()) {
-                                conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
+                                try {
+                                    conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
+                                } catch (e : NullPointerException) {
+                                    println("ValueSetCode: $valueSetCode, conceptCode: $conceptCode not found in Redis cache")
+                                }
                             }
                             map1 /*+ map2 */ + if (conceptJson.isEmpty()) { // map2 used for dev only
                                 // No Redis entry!! for this value set code, concept code
@@ -301,7 +322,7 @@ class Transformer(redisProxy: RedisProxy)  {
                     } // .else
 
                 } // .segmentData
-                return if (el.isRepeat) segmentData else segmentData[0]
+                return if (el.isRepeat || el.mayRepeat.contains("Y")) segmentData else segmentData[0]
             } else {
                 return null
             }

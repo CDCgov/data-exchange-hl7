@@ -3,6 +3,7 @@ package gov.cdc.dex
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
+import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.model.StructureValidatorProcessMetadata
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper.addArrayElement
@@ -16,7 +17,8 @@ class EventHubPayloadTest {
         val eventInput = this::class.java.getResource("/mockEventHubPayload.json").readText()
         val root: JsonObject = JsonParser.parseString(eventInput) as JsonObject
 
-        val processMD = StructureValidatorProcessMetadata("SUCCESS", null)
+        val ehMD = EventHubMetadata(1, 1, null, "2023-01-01")
+        val processMD = StructureValidatorProcessMetadata("SUCCESS", null, ehMD, listOf())
         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
 
@@ -33,7 +35,7 @@ class EventHubPayloadTest {
         newPayload.addArrayElement("processes", processMD)
         println(newPayload)
 
-        val secondProcessMD = StructureValidatorProcessMetadata( "SUCCESS", null)
+        val secondProcessMD = StructureValidatorProcessMetadata( "SUCCESS", null, ehMD, listOf())
         secondProcessMD.startProcessTime = Date().toIsoString()
         secondProcessMD.endProcessTime = Date().toIsoString()
 

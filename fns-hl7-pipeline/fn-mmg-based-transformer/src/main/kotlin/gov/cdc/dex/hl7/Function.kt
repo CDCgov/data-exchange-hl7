@@ -29,12 +29,8 @@ import java.util.*
 class Function {
     
     companion object {
-        const val PROCESS_STATUS_OK = "PROCESS_MMG_BASED_TRANSFORMER_OK"
-        const val PROCESS_STATUS_EXCEPTION = "PROCESS_MMG_BASED_TRANSFORMER_EXCEPTION"
-
-        // same in MbtProcessMetadata
-        const val PROCESS_NAME = "mmgBasedTransformer"
-        // val PROCESS_VERSION = "1.0.0"
+        const val PROCESS_STATUS_OK = "SUCCESS"
+        const val PROCESS_STATUS_EXCEPTION = "FAILURE"
     } // .companion
 
     private fun extractValue(msg: String, path: String):String  {
@@ -42,7 +38,7 @@ class Function {
         return if (value.isDefined) value.get() //throw InvalidMessageException("Error extracting $path from HL7 message")
         else ""
     }
-    @FunctionName("mmgBasedTransformer")
+    @FunctionName("MMG_BASED_TRANSFORMER")
     fun eventHubProcessor(
         @EventHubTrigger(
                 name = "msg",
@@ -130,16 +126,16 @@ class Function {
                     val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
                     val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
                     val mmgBasedModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle
-                   // context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgBasedModel)}")
+                  //  context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgBasedModel)}")
                     context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel.size: --> ${mmgBasedModel.size}")
                     updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_OK, mmgBasedModel, eventHubMD[messageIndex],
-                        evHubSender, eventHubSendOkName, gsonWithNullsOn, inputEvent, null)
+                        evHubSender, eventHubSendOkName, gsonWithNullsOn, inputEvent, mmgKeyNames.asList(),null)
                     context.logger.info("Processed OK for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendOkName")
 
                 } catch (e: Exception) {
                     context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
                     updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
-                        evHubSender, eventHubSendErrsName, gsonWithNullsOn, inputEvent, e)
+                        evHubSender, eventHubSendErrsName, gsonWithNullsOn, inputEvent, listOf(), e)
                     context.logger.info("Processed ERROR for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendErrsName")
                     //e.printStackTrace()
                 } // .catch
@@ -156,16 +152,16 @@ class Function {
      
     } // .eventHubProcessor
     private fun updateMetadataAndDeliver(startTime: String, metadata: JsonObject, status: String, report: Map<String, Any?>?, eventHubMD: EventHubMetadata,
-                                         evHubSender: EventHubSender, evTopicName: String, gsonWithNullsOn: Gson, inputEvent: JsonObject, exception: Exception?) {
+                                         evHubSender: EventHubSender, evTopicName: String, gsonWithNullsOn: Gson, inputEvent: JsonObject, configs: List<String>, exception: Exception?) {
 
-        val processMD = MbtProcessMetadata(status=status, report=report, eventHubMD = eventHubMD)
+        val processMD = MbtProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, configs)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
         metadata.addArrayElement("processes", processMD)
 
         if (exception != null) {
             //TODO::  - update retry counts
-            val problem = Problem(PROCESS_NAME, exception, false, 0, 0)
+            val problem = Problem(MbtProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
             val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
             inputEvent.add("summary", summary.toJsonElement())
         } else {

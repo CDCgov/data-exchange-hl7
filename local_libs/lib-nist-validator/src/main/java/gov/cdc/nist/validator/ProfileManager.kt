@@ -4,13 +4,16 @@ import gov.nist.validation.report.Entry
 import gov.nist.validation.report.Report
 import hl7.v2.profile.XMLDeserializer
 import hl7.v2.validation.SyncHL7Validator
+
+import hl7.v2.validation.ValidationContextBuilder
 import hl7.v2.validation.content.DefaultConformanceContext
 import hl7.v2.validation.vs.ValueSetLibraryImpl
 import java.io.InputStream
-
+import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
 import java.util.logging.Logger
+
 
 /**
  *
@@ -41,16 +44,57 @@ class ProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
 
     init {
         logger.info("AUDIT:: Loading profile $profile")
+//        validator = loadOldProfiles(profileFetcher)
+        validator = loadNewProfiles(profileFetcher)
+    }
+
+    private fun loadNewProfiles(profileFetcher: ProfileFetcher): SyncHL7Validator {
         try {
-            val profileXML = profileFetcher.getFileAsInputStream("$profile/PROFILE.xml")
+            val profileXML = profileFetcher.getFileAsInputStream("$profile/PROFILE.xml", true)
+            val constraintsXML = profileFetcher.getFileAsInputStream("$profile/CONSTRAINTS.xml", false)
+            val valueSetLibraryXML = profileFetcher.getFileAsInputStream("$profile/VALUESETS.xml", false)
+            val valueSetBindingsXML = profileFetcher.getFileAsInputStream("$profile/VALUSETBINDINGS.xml", false)
+            val slicingsXML =profileFetcher.getFileAsInputStream("$profile/SLICINGS.xml", false)
+            val coConstraintsXML = profileFetcher.getFileAsInputStream("$profile/COCONSTRAINTS.xml",false)
+
+            // Create Validation Context object using builder
+            val ctxBuilder =  ValidationContextBuilder(profileXML)
+
+            constraintsXML?.let      {ctxBuilder.useConformanceContext(Arrays.asList(constraintsXML))}    // Optional
+            valueSetLibraryXML?.let  {ctxBuilder.useValueSetLibrary(valueSetLibraryXML)} // Optional
+            valueSetBindingsXML?.let {ctxBuilder.useVsBindings(valueSetBindingsXML)} // Optional
+            slicingsXML?.let         {ctxBuilder.useSlicingContext(slicingsXML)} // Optional
+            coConstraintsXML?.let    { ctxBuilder.useCoConstraintsContext(coConstraintsXML)} // Optional
+
+            val context = ctxBuilder.validationContext
+            val validator = SyncHL7Validator(context)
+            //Close Resources:
+            profileXML?.close()
+            constraintsXML?.close()
+            valueSetLibraryXML?.close()
+            valueSetBindingsXML?.close()
+            slicingsXML?.close()
+            coConstraintsXML?.close()
+            return validator
+        } catch (e: Error) {
+            logger.warning("UNABLE TO READ PROFILE: $profile with error:\n${e.message}")
+//            e.printStackTrace()
+            throw  InvalidFileException("Unable to parse profile file with error: ${e.message}")
+
+        }
+    }
+
+    private fun loadOldProfiles(profileFetcher: ProfileFetcher): SyncHL7Validator {
+        try {
+            val profileXML = profileFetcher.getFileAsInputStream("$profile/PROFILE.xml", true)
             // The get() at the end will throw an exception if something goes wrong
-             val profileX = XMLDeserializer.deserialize(profileXML).get()
+            val profileX = XMLDeserializer.deserialize(profileXML).get()
             // get ConformanceContext
-            val contextXML1 = profileFetcher.getFileAsInputStream("$profile/CONSTRAINTS.xml")
+            val contextXML1 = profileFetcher.getFileAsInputStream("$profile/CONSTRAINTS.xml", false)
             // The second conformance context XML file
             val confContexts = mutableListOf(contextXML1)
             val contextXML2:InputStream? =try {
-                profileFetcher.getFileAsInputStream("$profile/PREDICATES.xml")
+                profileFetcher.getFileAsInputStream("$profile/PREDICATES.xml", false)
             } catch (e: Exception) {
                 logger.fine("No Predicate Available for group $profile. Ignoring Predicate.")
                 //No predicate available... ignore file...
@@ -61,14 +105,15 @@ class ProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
             // The get() at the end will throw an exception if something goes wrong
             val conformanceContext = DefaultConformanceContext.apply(confContexts.toList()).get()
             // get ValueSetLibrary
-            val vsLibXML = profileFetcher.getFileAsInputStream("$profile/VALUESETS.xml")
+            val vsLibXML = profileFetcher.getFileAsInputStream("$profile/VALUESETS.xml", false)
             val valueSetLibrary = ValueSetLibraryImpl.apply(vsLibXML).get()
-            validator = SyncHL7Validator(profileX, valueSetLibrary, conformanceContext)
+            val validator = SyncHL7Validator(profileX, valueSetLibrary, conformanceContext)
             //Close Resources:
-            profileXML.close()
-            contextXML1.close()
-            vsLibXML.close()
+            profileXML?.close()
+            contextXML1?.close()
+            vsLibXML?.close()
             contextXML2?.close()
+            return validator
         } catch (e: Error) {
             logger.warning("UNABLE TO READ PROFILE: $profile with error:\n${e.message}")
 //            e.printStackTrace()
@@ -76,6 +121,7 @@ class ProfileManager(profileFetcher: ProfileFetcher, val profile: String) {
 
         }
     }
+
 
     @Throws(java.lang.Exception::class)
     fun validate(hl7Message: String): NistReport {

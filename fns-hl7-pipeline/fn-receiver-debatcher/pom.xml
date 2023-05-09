@@ -37,7 +37,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.10-SNAPSHOT</version>
+            <version>1.0.12-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.cdc.hl7</groupId>
@@ -61,7 +61,7 @@
         <!-- Test -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
+            <artifactId>kotlin-test-junit</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
@@ -99,7 +99,11 @@
             <scope>test</scope>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -249,16 +253,86 @@
                     </filesets>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
                 <configuration>
+                    <argLine> --illegal-access=permit </argLine>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <forkCount>2</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <argLine>${surefireArgLine}</argLine>
                     <environmentVariables>
-                        <REDIS_CACHE_NAME>tf-vocab-cache-dev.redis.cache.windows.net</REDIS_CACHE_NAME>
+                        <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
                         <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                        <EventHubConnectionString>${ehString}</EventHubConnectionString>
+                        <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>
+                        <BlobIngestContainerName>hl7ingress</BlobIngestContainerName>
+                        <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
+                        <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
                     </environmentVariables>
                 </configuration>
             </plugin>
+
+
+            <!--Jacoco Plugin -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/coverage-reports/jacoco.exec</destFile>
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+                            <excludes>
+                                <exclude>gov/cdc/dex/hl7/receiver/AzBlobCreateEventMessage*</exclude>
+                                <exclude>gov/cdc/dex/hl7/receiver/AzureBlobProxy.*</exclude>
+                                <exclude>gov/cdc/dex/hl7/receiver/EvHubData.*</exclude>
+                                <exclude>gov/cdc/dex/hl7/receiver/ReceiverProcessMetadata.*</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.70</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
