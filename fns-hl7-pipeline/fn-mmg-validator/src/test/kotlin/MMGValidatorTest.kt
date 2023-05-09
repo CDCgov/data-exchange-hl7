@@ -60,6 +60,11 @@ class MMGValidatorTest {
         testFolder("Hep")
     }
 
+    @Test
+    fun testMultiOBR() {
+        val report = validateMessage("/Hepatitis_V1_0_1_TM_TC01_HEP_A_Acute.txt")
+        println(report)
+    }
 
     @Test
     fun testInvalidMMG() {

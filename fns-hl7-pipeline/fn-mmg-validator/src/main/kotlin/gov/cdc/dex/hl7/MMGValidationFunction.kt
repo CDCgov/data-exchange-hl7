@@ -1,6 +1,7 @@
 package gov.cdc.dex.hl7
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.*
@@ -27,8 +28,7 @@ class MMGValidationFunction {
     
     companion object {
         private const val STATUS_ERROR = "ERROR"
-
-        val gson = Gson()
+        val gson: Gson = GsonBuilder().serializeNulls().create()
     } // .companion
 
     @FunctionName("mmgvalidator001")
@@ -93,11 +93,9 @@ class MMGValidationFunction {
                     }
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
                     //Send event
-                    context.logger.info("INPUT EVENT OUT: --> ${ gson.toJson(inputEvent) }")
-
                     val ehDestination = if (mmgReport.status == ReportStatus.MMG_VALID) eventHubSendOkName else eventHubSendErrsName
                     evHubSender.send(evHubTopicName=ehDestination, message=gson.toJson(inputEvent))
-                    context.logger.info("Processed for MMG validated messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, reportStatus: $mmgReport")
+                    context.logger.info("Processed ${mmgReport.status} messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
 
 
                 } catch (e: Exception) {
@@ -112,12 +110,12 @@ class MMGValidationFunction {
                     val summary = SummaryInfo(STATUS_ERROR, problem)
                     inputEvent.add("summary", summary.toJsonElement())
 
-                    evHubSender.send(evHubTopicName = eventHubSendErrsName, message = Gson().toJson(inputEvent))
+                    evHubSender.send(evHubTopicName = eventHubSendErrsName, message = gson.toJson(inputEvent))
                     // e.printStackTrace()
                 }
             } catch (e: Exception) {
                 context.logger.severe("Exception processing event hub message: Unable to process Message due to exception: ${e.message}")
-                evHubSender.send(evHubTopicName = eventHubSendErrsName, message = Gson().toJson(inputEvent))
+                evHubSender.send(evHubTopicName = eventHubSendErrsName, message = gson.toJson(inputEvent))
                 e.printStackTrace()
             }
         } // .message.forEach
