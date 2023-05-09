@@ -19,10 +19,11 @@ class ValidationTest {
 
     private fun validateMessage(fileName: String): NistReport {
         val testMessage = this::class.java.getResource(fileName).readText()
-//        val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get()
-        val phinSpec =testMessage.split("\n")[0].split("|")[20].split("^")[0]
+        val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get()
+     //   val phinSpec =testMessage.split("\r")[0].split("|")[20].split("^")[0]
         val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
 
+        println()
         val report = nistValidator.validate(testMessage)
         println("report: -->\n\n${gson.toJson(report)}\n")
         return report
@@ -42,7 +43,7 @@ class ValidationTest {
 
     @Test
     fun testValidateMessage() {
-       validateMessage("/Lyme_WithMMGWarnings.txt")
+       validateMessage("/FDD_V1.0.1_NTM9Crypto(F).txt")
     }
 
     @Test
