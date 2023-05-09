@@ -38,54 +38,6 @@ class DebatcherTest {
         }
     }
 
-//    @Test
-//    fun testDebatching() {
-//        val filePath = "/genV1/Genv1-Case-TestMessage1.HL7"
-//        val startTime = Date().toIsoString()
-//        val testFileIS = this::class.java.getResource(filePath).openStream()
-////        val testFileIS = this::class.java.getResource("/genV1/Genv1-Case-TestMessage1.HL7").openStream()
-//        val provenance = Provenance(
-//            eventId="123",
-//            eventTimestamp = startTime,
-//            filePath=filePath,
-//            fileTimestamp=startTime,
-//            fileSize=1234,
-//            singleOrBatch= Provenance.SINGLE_FILE,
-//            originalFileName ="blobName",
-//            systemProvider = "BLOB"
-//        )
-//        val currentLinesArr = arrayListOf<String>()
-//        var mshCount = 0
-//        BufferedReader(InputStreamReader(testFileIS)).use { br ->
-//            br.forEachLine {line ->
-//                val lineClean = line.trim().let { if ( it.startsWith(UTF_BOM) )  it.substring(1)  else it}
-//                if ( lineClean.startsWith("FHS") || lineClean.startsWith("BHS") || lineClean.startsWith("BTS") ) {
-//                    // batch line --Nothing to do here
-//                    provenance.singleOrBatch = Provenance.BATCH_FILE
-//                } else {
-//                    if ( lineClean.startsWith("MSH") ) {
-//                        mshCount++
-//                        if (mshCount > 1 ) {
-//                            provenance.singleOrBatch = Provenance.BATCH_FILE
-//                            println("Sending $provenance")
-//                            println("Message: ${currentLinesArr.joinToString("\n")}")
-//                            provenance.messageIndex++
-//                        }
-//
-//                        currentLinesArr.clear()
-//                    } // .if
-//                    currentLinesArr.add(lineClean)
-//                } // .else
-//            }
-//            if (mshCount > 0) {
-//                println("Sending last one: $provenance")
-//            } else {
-//                println("Message invalid - no MSH found")
-//            }
-//            println("Last Message: ${currentLinesArr.joinToString("\n")}")
-//        }
-//    }
-
     @Test fun testDebatcherWithErrs() {
         println("Starting debatcher test")
         val redisName: String = System.getenv("REDIS_CACHE_NAME")
@@ -203,26 +155,4 @@ class DebatcherTest {
         println("Processed and Sent to console Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
     }
 
-//    @Test
-//    fun testRemoveBomFromBlob() {
-//        val blobContainerClient = BlobServiceClientBuilder()
-//            .connectionString(System.getEnv("BLOB_STORAGE"))
-//            .buildClient()
-//            .getBlobContainerClient("hl7ingress")
-//
-//        val blobClient = blobContainerClient.getBlobClient("Genv2_2-0-1_TC08.txt")
-//        val reader = InputStreamReader( blobClient.openInputStream(), Charsets.UTF_8 )
-//        BufferedReader( reader ).use { br ->
-//            br.forEachLine { line ->
-//                var lineClean = line.trim()
-//                while (lineClean.startsWith(UTF_BOM)) {
-//                    //if (lineClean.startsWith(UTF_BOM)) {
-//                    println("Found BOM...")
-//                    lineClean = lineClean.substring(1)
-//                    println(line.length)
-//                    println(lineClean.length)
-//                }
-//            }
-//        }
-//    }
 }

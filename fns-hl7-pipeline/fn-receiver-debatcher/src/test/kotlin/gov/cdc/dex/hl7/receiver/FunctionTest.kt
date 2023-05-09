@@ -47,6 +47,10 @@ class FunctionTest {
         processFile("InvalidMessage.txt")
     }
 
+    @Test
+    fun process_ELRWithBlanks() {
+        processFile("CovidELRWithBlanks.txt")
+    }
 
     private fun getExecutionContext(): ExecutionContext {
         return object : ExecutionContext {
