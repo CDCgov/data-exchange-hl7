@@ -26,7 +26,7 @@ class Function {
     companion object {
         val gson: Gson = GsonBuilder().serializeNulls().create()
     }
-    //@FunctionName("Redactor")
+    @FunctionName("Redactor")
     fun eventHubProcessor(
         @EventHubTrigger(
             name = "msg",
@@ -109,7 +109,7 @@ class Function {
             authLevel = AuthorizationLevel.ANONYMOUS)
         request: HttpRequestMessage<Optional<String>>,
         context: ExecutionContext): HttpResponseMessage {
-        context.logger.info("------ Received Request: ------> request.body: --> $request.body")
+
         val hl7Message : String?
         val helper = Helper()
         try {
