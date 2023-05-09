@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PhinDataType(
 
-  @SerializedName("fieldNumber")  val fieldNumber: Long, 
+  @SerializedName("fieldNumber")  val fieldNumber: Int,
   @SerializedName("name")         val name: String, 
   @SerializedName("dataType")     val dataType: String,
   @SerializedName("maxLength")    val maxLength: String,

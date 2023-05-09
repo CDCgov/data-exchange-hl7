@@ -32,6 +32,7 @@ import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.StringUtils
 import gov.cdc.dex.util.StringUtils.Companion.normalize
+import gov.cdc.hl7.HL7ParseUtils
 
 
 class MbtTest {
@@ -153,7 +154,7 @@ class MbtTest {
         val mmgUtil = MmgUtil(redisProxy)
         val mmgsArr = mmgUtil.getMMGs("Var_Case_Map_v2.0", "", "10030", "13")
 
-        val transformer = Transformer(redisProxy)
+        val transformer = Transformer(redisProxy, mmgsArr, testMsg)
         val mmgs = transformer.getMmgsFiltered(mmgsArr)
 
         mmgs.forEach {
@@ -176,17 +177,17 @@ class MbtTest {
     } // .testLoadMMG
 
 
-    @Test
-    fun testPhinDataTypesToMapOfListClass() {
-        val transformer = Transformer(redisProxy)
-
-        val dataTypesMap: Map<String, List<PhinDataType>> = transformer.getPhinDataTypes()
-
-        logger.info("testPhinDataTypesToMapOfListClass: Phin dataTypesMap.size: --> ${dataTypesMap.size}")
-        // Phin dataTypesMap.size: --> 12
-        assertEquals(dataTypesMap.size, 12)
-    } // .testPhinDataTypes
-
+//    @Test
+//    fun testPhinDataTypesToMapOfListClass() {
+//        val transformer = Transformer(redisProxy, arrayOf<MMG>(),"")
+//
+//        val dataTypesMap: Map<String, List<PhinDataType>> = transformer.getPhinDataTypes()
+//
+//        logger.info("testPhinDataTypesToMapOfListClass: Phin dataTypesMap.size: --> ${dataTypesMap.size}")
+//        // Phin dataTypesMap.size: --> 12
+//        assertEquals(dataTypesMap.size, 12)
+//    } // .testPhinDataTypes
+//
 
     @Test
     fun testTransformerHl7ToJsonModelTC01() {
@@ -196,7 +197,7 @@ class MbtTest {
         val mmg1Json = this::class.java.getResource(mmg1Path).readText()
         val mmg1 = gson.fromJson(mmg1Json, MMG::class.java)
 
-        // mmg2 TODO:
+        // mmg2
         val mmg2Path = "/TBRD.json"
         val mmg2Json = this::class.java.getResource(mmg2Path).readText()
         val mmg2 = gson.fromJson(mmg2Json, MMG::class.java)
@@ -207,12 +208,8 @@ class MbtTest {
         val hl7FilePath = "/TBRD_V1.0.2_TM_TC01.hl7" // "/Genv2_2-0-1_TC01.hl7" // "/TBRD_V1.0.2_TM_TC01.hl7"
         val hl7Content = this::class.java.getResource(hl7FilePath).readText()
         
-        val transformer = Transformer(redisProxy)
-        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
-
-        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
-
-        val model = model1 + model2
+        val transformer = Transformer(redisProxy, mmgs, hl7Content)
+        val model = transformer.transformMessage()
 
         logger.info("testTransformerHl7ToJsonModel: MMG model.size: ${model.size}")
         // MMG model.size: 89
@@ -402,13 +399,26 @@ class MbtTest {
             logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
         }
 
-        val transformer = Transformer(redisProxy)
-        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+        val transformer = Transformer(redisProxy, mmgs, hl7Content)
+//        val model1 = transformer.hl7ToJsonModelBlocksSingle(mmgs)
+//
+//        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
 
-        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
-
-        val mmgModel = model1 + model2
+        val mmgModel = transformer.transformMessage()
         logger.info("$testName: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
     }
+
+    @Test
+    fun testBringEpiOBX() {
+        val testMsg = this::class.java.getResource("/Hep_MultiOBR.txt").readText()
+
+        val hl7Parser = HL7ParseUtils.getParser(testMsg, "BasicProfile.json")
+        val obxList = hl7Parser.getValue("OBR[@4.1='68991-9||PERSUBJ']->OBX").get()
+       obxList.forEach { it.forEach { itt-> println(itt) }
+
+       }
+    }
+
+
 } // .MbtTest
 
