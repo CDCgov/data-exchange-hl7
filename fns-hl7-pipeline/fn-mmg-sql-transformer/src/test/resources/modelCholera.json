@@ -922,8 +922,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": null,
-				"cdc_preferred_designation": null
+				"code_system_concept_name": "Alcoholism",
+				"cdc_preferred_designation": "Alcoholism (disorder)"
 			},
 			"medical_history_indicator": {
 				"identifier": "Y",
@@ -978,8 +978,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": null,
-				"cdc_preferred_designation": null
+				"code_system_concept_name": "Gastric Surgery",
+				"cdc_preferred_designation": "Gastrointestinal surgery service (qualifier value)"
 			},
 			"medical_history_indicator": {
 				"identifier": "Y",
@@ -1006,8 +1006,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": "Malignant neoplastic disease (disorder)",
-				"cdc_preferred_designation": "Cancer"
+				"code_system_concept_name": "Cancer",
+				"cdc_preferred_designation": "Malignant neoplastic disease (disorder)"
 			},
 			"medical_history_indicator": {
 				"identifier": "N",
@@ -1034,8 +1034,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": "Heart disease (disorder)",
-				"cdc_preferred_designation": "Heart Disease (specify)"
+				"code_system_concept_name": "Heart Disease",
+				"cdc_preferred_designation": "Heart disease (disorder)"
 			},
 			"medical_history_indicator": {
 				"identifier": "Y",
@@ -1062,8 +1062,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": null,
-				"cdc_preferred_designation": null
+				"code_system_concept_name": "Heart Failure",
+				"cdc_preferred_designation": "Heart failure (disorder)"
 			},
 			"medical_history_indicator": {
 				"identifier": "N",
@@ -1090,8 +1090,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": null,
-				"cdc_preferred_designation": null
+				"code_system_concept_name": "Immunodeficiency condition/immunodeficiency",
+				"cdc_preferred_designation": "Immunodeficiency disorder (disorder)"
 			},
 			"medical_history_indicator": {
 				"identifier": "UNK",
@@ -1146,8 +1146,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": null,
-				"cdc_preferred_designation": null
+				"code_system_concept_name": "Liver disease",
+				"cdc_preferred_designation": "Disorder of liver (disorder)"
 			},
 			"medical_history_indicator": {
 				"identifier": "Y",
@@ -1174,8 +1174,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": null,
-				"cdc_preferred_designation": null
+				"code_system_concept_name": "Peptic Ulcer",
+				"cdc_preferred_designation": "Peptic ulcer (disorder)"
 			},
 			"medical_history_indicator": {
 				"identifier": "N",
@@ -1202,8 +1202,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": null,
-				"cdc_preferred_designation": null
+				"code_system_concept_name": "Kidney Disease",
+				"cdc_preferred_designation": "Kidney disease (disorder)"
 			},
 			"medical_history_indicator": {
 				"identifier": "N",
@@ -1230,8 +1230,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": null,
-				"cdc_preferred_designation": null
+				"code_system_concept_name": "antacids or ulcer medications in the past 30 days",
+				"cdc_preferred_designation": "antacids or ulcer medications in the past 30 days"
 			},
 			"medical_history_indicator": {
 				"identifier": "Y",
@@ -1258,8 +1258,8 @@
 				"coding_system_version_id": null,
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
-				"code_system_concept_name": null,
-				"cdc_preferred_designation": null
+				"code_system_concept_name": "Hematological disease",
+				"cdc_preferred_designation": "Hematological disease"
 			},
 			"medical_history_indicator": {
 				"identifier": "Y",
@@ -1287,7 +1287,7 @@
 				"alternate_coding_system_version_id": null,
 				"original_text": null,
 				"code_system_concept_name": "Other",
-				"cdc_preferred_designation": "Other (specify)"
+				"cdc_preferred_designation": "Other"
 			},
 			"medical_history_indicator": {
 				"identifier": "Y",

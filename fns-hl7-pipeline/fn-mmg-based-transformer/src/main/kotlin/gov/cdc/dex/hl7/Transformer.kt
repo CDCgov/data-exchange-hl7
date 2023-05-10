@@ -25,7 +25,8 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         private const val OBR_4_1_EPI_ID = "68991-9"
-        private const val OBR_4_1_LEGACY = "PERSUBJ"
+        private const val OBR_4_1_LEGACY = "NOTF"
+        private const val OBR_4_1_SUBJECT = "PERSUBJ"
         private const val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header"
 
         // private val MMG_BLOCK_NAME_SUBJECT_RELATED = "Subject Related"
@@ -39,9 +40,7 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
         private const val MAX_BLOCK_NAME_LENGTH = 30
     }
 
-    // --------------------------------------------------------------------------------------------------------
-    //  ------------- hl7ToJsonModelBlocksSingle ------------- BLOCKS SINGLE
-    // --------------------------------------------------------------------------------------------------------
+
 
     fun transformMessage():Map<String, Any?> {
         val mmgBlocks = getMmgsFiltered(mmgs).flatMap { it.blocks } // .mmgBlocks
@@ -61,6 +60,7 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
                 "OBX" -> hl7Parser.getValue("${hl7Mapping.segmentType}[@3.1='${hl7Mapping.identifier}']-${hl7Mapping.fieldPosition}")
                 "OBR" -> hl7Parser.getValue("OBR[@4.1='68991-9||PERSUBJ']-${hl7Mapping.fieldPosition}")
                 else -> hl7Parser.getValue("${hl7Mapping.segmentType}-${hl7Mapping.fieldPosition}")
+
             }
             val mappedData = if (segmentData.isDefined) {
                 mapSegmentData(segmentData.get(), el)
