@@ -33,6 +33,8 @@ import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.StringUtils
 import gov.cdc.dex.util.StringUtils.Companion.normalize
 import gov.cdc.hl7.HL7ParseUtils
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 
 class MbtTest {
@@ -405,26 +407,24 @@ class MbtTest {
         return mmgUtil.getMMGs(mshProfile, mshCondition, eventCode, jurisdictionCode)
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun testTransformerWithRedis(testName: String, filePath: String) {
+        val time = measureTime {
+            val hl7Content = this::class.java.getResource(filePath).readText()
 
-        val hl7Content = this::class.java.getResource(filePath).readText()
-            .replace("\r\n", "\n")
-            .replace("\r", "\n")
-        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
-        val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
-        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
+            val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
+            val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
+            val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
 
-        mmgs.forEach {
-            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+            mmgs.forEach {
+                logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+            }
+
+            val transformer = Transformer(redisProxy, mmgs, hl7Content)
+            val mmgModel = transformer.transformMessage()
+            logger.info("$testName: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
         }
-
-        val transformer = Transformer(redisProxy, mmgs, hl7Content)
-//        val model1 = transformer.hl7ToJsonModelBlocksSingle(mmgs)
-//
-//        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
-
-        val mmgModel = transformer.transformMessage()
-        logger.info("$testName: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
+        logger.info("Method took $time")
     }
 
     @Test

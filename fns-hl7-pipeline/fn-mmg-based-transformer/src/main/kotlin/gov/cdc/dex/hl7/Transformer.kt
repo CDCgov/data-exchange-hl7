@@ -65,7 +65,10 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
             val mappedData = if (segmentData.isDefined) {
                 mapSegmentData(segmentData.get(), el)
             } else null
-            StringUtils.normalizeString(el.name) to mappedData
+            if (el.isRepeat || el.mayRepeat.contains("Y"))
+                StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH) to mappedData
+            else
+                StringUtils.normalizeString(el.name) to mappedData
         }
     } // .hl7ToJsonModelBlocksSingle
     // --------------------------------------------------------------------------------------------------------
@@ -84,8 +87,6 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
                 lineParts[4] to line
             }.groupBy({ it.first }, { it.second })
 
-            // logger.info("msgLinesByBlockNumMap.size: ${msgLinesByBlockNumMap.size}")
-
             //For each Group, create the Segment Data Map
             val blockElementsNameDataTupMap = msgLinesByBlockNumMap.map { (_, lines) ->
                 val mapFromMsg = lines.associate { line ->
@@ -100,11 +101,11 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
 //                    } else { //Should never happen
 //                        throw Exception("Unable to find OBX Identifier")
 //                    }
-                } // .lines
+                } // .line
 
                 // add block elements that are not found in the message lines
                 val elemsNotInLines = block.elements.filter { elemx ->
-                    val linesForObxId = filterByIdentifier(elemx.mappings.hl7v251.identifier)
+                    val linesForObxId = filterByIdentifier(lines, elemx.mappings.hl7v251.identifier)
                     linesForObxId.isEmpty()
                 } // .elemsNotInLines
 
@@ -130,6 +131,13 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
     // --------------------------------------------------------------------------------------------------------
     //  ------------- Functions used in the transformation -------------
     // --------------------------------------------------------------------------------------------------------
+    private fun filterByIdentifier(lines: List<String>, id: String): List<String> {
+        val group = lines.joinToString("\n")
+        val mappinglines = HL7StaticParser.getValue(group, "OBX[@3.1='$id']")
+        return if (mappinglines.isDefined()) {
+            mappinglines.get().flatten()
+        } else listOf()
+    }
     private fun filterByIdentifier(id: String): List<String> {
         val mappinglines = hl7Parser.getValue("OBX[@3.1='$id']")
         return if (mappinglines.isDefined()) {
