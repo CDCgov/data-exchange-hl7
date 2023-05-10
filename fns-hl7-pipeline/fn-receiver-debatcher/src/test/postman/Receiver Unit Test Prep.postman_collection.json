@@ -1,0 +1,409 @@
+{
+	"info": {
+		"_postman_id": "7a104478-b8fb-40a9-9a2b-618869194b51",
+		"name": "Receiver Unit Test Prep",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1848148",
+		"_collection_link": "https://gold-sunset-3610.postman.co/workspace/DEX~feb55f1d-34c3-4efc-bf1d-9bb9575c04ee/collection/1848148-7a104478-b8fb-40a9-9a2b-618869194b51?action=share&creator=1848148&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "upload Case file - happy path",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-tp-message_type",
+						"value": "CASE",
+						"description": "Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-route",
+						"value": "COVID19-ELR",
+						"description": "Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR]",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-reporting_jurisdiction",
+						"value": "13",
+						"description": "Required for message-type == ELR. The Sending jurisdiction for this message.",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-orginal_file_name",
+						"value": "Lyme_HappyPath.doNotDelete.txt",
+						"description": "Optional. The local file name before upload.",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-system_provider",
+						"value": "POSTMAN",
+						"description": "Optional. The system providing the uploaded file",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-original_file_timestamp",
+						"value": "2023-05-04T12:05:04.074",
+						"description": "Optional. The original timestamp of the file creation time.",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "MSH|^~\\&|SendAppName^2.16.840.1.114222.444^ISO|Sending-Facility^2.16.840.1.114222.444^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO\r\nPID|1||BDB_LAB_02^^^SendAppName&2.16.840.1.114222.3333&ISO||~^^^^^^S||19930601|F||2054-5^Black or African American^CDCREC|^^^47^37209^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||\r\nOBR|1||BDB_LAB_02^SendAppName^2.16.840.1.114222.3333^ISO|68991-9^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND\r\nOBX|1|ST|32624-9^Other Race Text^LN||Botswanan||||||F\r\nOBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|3|ST|21842-0^Other Birth Place^LN||Navajo Reservation||||||F\r\nOBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|5|TS|11368-8^Date of Illness Onset^LN||20180625||||||F\r\nOBX|6|TS|77976-9^Illness End Date^LN||20180710||||||F\r\nOBX|7|SN|77977-7^Illness Duration^LN||^15|d^day [time]^UCUM|||||F\r\nOBX|8|CWE|77996-7^Pregnancy Status^LN||Y^Yes^HL70136||||||F\r\nOBX|9|TS|77975-1^Diagnosis Date^LN||20180705||||||F\r\nOBX|10|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F\r\nOBX|11|TS|8656-1^Admission Date^LN||20180705||||||F\r\nOBX|12|TS|8649-6^Discharge Date^LN||20180710||||||F\r\nOBX|13|SN|78033-8^Duration of Hospital Stay in Days^LN||^5||||||F\r\nOBX|14|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F\r\nOBX|15|ST|77993-4^State Case Identifier^LN||340227||||||F\r\nOBX|16|ST|77997-5^Legacy Case Identifier^LN||34022747S012018||||||F\r\nOBX|17|SN|77998-3^Age at Case Investigation^LN||^25|a^year [time]^UCUM|||||F\r\nOBX|18|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F\r\nOBX|19|CWE|INV154^Imported State^PHINQUESTION||25^Massachusetts^FIPS5_2||||||F\r\nOBX|20|CWE|INV155^Imported City^PHINQUESTION||614554^Ipswich, MA, Essex^USGSGNIS||||||F\r\nOBX|21|CWE|INV156^Imported County^PHINQUESTION||25009^Essex, MA^FIPS6_4||||||F\r\nOBX|22|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|23|CWE|77985-0^State or Province of Exposure^LN|1|25^Massachusetts^FIPS5_2||||||F\r\nOBX|24|ST|77986-8^City of Exposure^LN|1|Lynn||||||F\r\nOBX|25|ST|77987-6^County of Exposure^LN|1|Essex||||||F\r\nOBX|26|CWE|77989-2^Transmission Mode^LN||418427004^Vector-borne transmission^SCT||||||F\r\nOBX|27|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F\r\nOBX|28|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F\r\nOBX|29|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F\r\nOBX|30|ST|77981-9^Case Outbreak Name^LN||N/A||||||F\r\nOBX|31|ST|77969-4^Jurisdiction Code^LN||S01||||||F\r\nOBX|32|CWE|48766-0^Reporting Source Type Code^LN||PHC247^Laboratory^CDCPHINVS||||||F\r\nOBX|33|ST|52831-5^Reporting Source ZIP Code^LN||37243||||||F\r\nOBX|34|CWE|77988-4^Binational Reporting Criteria^LN||PHC1141^Other situations that may require binational notification or coordination of response^CDCPHINVS||||||F\r\nOBX|35|ST|74549-7^Person Reporting to CDC - Name^LN||John Doe||||||F\r\nOBX|36|ST|74548-9^Person Reporting to CDC - Phone Number^LN||456-987-8888||||||F\r\nOBX|37|ST|74547-1^Person Reporting to CDC - Email^LN||john.doe@email.com||||||F\r\nOBX|38|DT|77979-3^Case Investigation Start Date^LN||20180628||||||F\r\nOBX|39|DT|77995-9^Date Reported^LN||20220229||||||F\r\nOBX|40|TS|77972-8^Earliest Date Reported to County^LN||20180912||||||F\r\nOBX|41|TS|77973-6^Earliest Date Reported to State^LN||20180912||||||F\r\nOBX|42|SN|77991-8^MMWR Week^LN||^37||||||F\r\nOBX|43|DT|77992-6^MMWR Year^LN||2025||||||F\r\nOBX|44|DT|77970-2^Date First Reported to PHD^LN||20180912||||||F\r\nOBX|45|CWE|77966-0^Reporting State^LN||47^Tennessee^FIPS5_2||||||F\r\nOBX|46|CWE|77967-8^Reporting County^LN||47003^Bedford, TN^FIPS6_4||||||F\r\nOBX|47|CWE|77968-6^National Reporting Jurisdiction^LN||47^TN^FIPS5_2||||||F\r\nOBX|48|TX|77999-1^Comment^LN||Patient was bitten by a tick during European backpacking trip||||||F\r\nOBX|49|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|69588003^Erythema Migrans^SCT||||||F\r\nOBX|50|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|N^No^HL70136||||||F\r\nOBX|51|CWE|INV929^Clinical Manifestation^PHINQUESTION|2|193093009^Bell's palsy^SCT||||||F\r\nOBX|52|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|2|N^No^HL70136||||||F\r\nOBX|53|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|233917008^Atrioventricular block^SCT||||||F\r\nOBX|54|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|N^No^HL70136||||||F\r\nOBX|55|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|48780006^Other cranial neuritis^SCT||||||F\r\nOBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F\r\nOBX|57|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|72274001^Radiculoneuropathy^SCT||||||F\r\nOBX|58|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|Y^Yes^HL70136||||||F\r\nOBX|59|CWE|INV929^Clinical Manifestation^PHINQUESTION|6|45170000^Encephalitis^SCT||||||F\r\nOBX|60|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|6|N^No^HL70136||||||F\r\nOBX|61|CWE|INV929^Clinical Manifestation^PHINQUESTION|7|62950007^Encephalomyelitis^SCT||||||F\r\nOBX|62|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|7|N^No^HL70136||||||F\r\nOBX|63|CWE|29303-5^Medication Administered^LN|1|3640^Doxycycline^RXNORM||||||F\r\nOBX|64|DT|86948-7^Date Treatment or Therapy Started^LN|1|20180705||||||F\r\nOBX|65|SN|67453-1^Treatment Duration^LN|1|^10|d^day^UCUM|||||F\r\nOBX|66|ST|85658-3^Current Occupation^LN|1|Carpenter||||||F\r\nOBX|67|ST|85078-4^Current Industry^LN|1|Lumber retail||||||F\r\nOBX|68|CE|85657-5^Current Industry Standardized^LN|1|4090^Lumber and other construction materials merchant wholesalers [4090]^CDCINDUSTRY2010||||||F\r\nOBX|69|CWE|INV290^Test Type^PHINQUESTION|1|16480-6^EIA/ELISA IgG^LN||||||F\r\nOBX|70|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F\r\nOBX|71|ST|LAB628^Test Result Quantitative^PHINQUESTION|1|2.5||||||F\r\nOBX|72|CWE|LAB115^Result Units^PHINQUESTION|1|{index_val}^index value^UCUM||||||F\r\nOBX|73|CWE|66746-9^Specimen Type^LN|1|119297000^Blood^SCT||||||F\r\nOBX|74|TS|68963-8^Specimen Collection Date/Time^LN|1|20180705||||||F"
+				},
+				"url": {
+					"raw": "{{TRANSPORT_URL}}/hl7ingress?filename=unitTests/Lyme_HappyPath.doNotDelete.txt",
+					"host": [
+						"{{TRANSPORT_URL}}"
+					],
+					"path": [
+						"hl7ingress"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "unitTests/Lyme_HappyPath.doNotDelete.txt"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload Case file - structure errors",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-tp-message_type",
+						"value": "CASE",
+						"description": "Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-route",
+						"value": "COVID19-ELR",
+						"description": "Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR]",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-reporting_jurisdiction",
+						"value": "13",
+						"description": "Required for message-type == ELR. The Sending jurisdiction for this message.",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-orginal_file_name",
+						"value": "GenV1_withStructureErrors.txt",
+						"description": "Optional. The local file name before upload.",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-system_provider",
+						"value": "POSTMAN",
+						"description": "Optional. The system providing the uploaded file",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-original_file_timestamp",
+						"value": "2023-05-04T12:05:04.074",
+						"description": "Optional. The original timestamp of the file creation time.",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "MSH|^~\\&|^2.16.840.1.114222.4.1.144.2^ISO|^2.16.840.1.114222.4.1.144^ISO|^^ISO|^2.16.840.1.114222^ISO|20091130133708||ORU^R01^ORU_R01|182012_20091130133708|P|2.5|||||||||NND_ORU_v2.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Gen_Case_Map_v1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO\r\nPID|1||182012^^^&2.16.840.1.114222.4.1.144.2&ISO||~^^^^^^S||19490214000000|M||1002-5^Amer.Ind./Alask.Nat.^2.16.840.1.113883.6.238~2106-3^White^2.16.840.1.113883.6.238|^^^08^^^^^101|||||||||||2186-5^Not Hispanic^2.16.840.1.113883.6.238\r\nOBR|1||182012^^2.16.840.1.114222.4.1.144.2^ISO|PERSUBJ^Person Subject^2.16.840.1.114222.4.5.274|||20091125000000|||||||||||||||20091130133708|||X||||||10230^Tuleremia^2.16.840.1.114222.4.5.277\r\nOBR|2||182012^^2.16.840.1.114222.4.1.144.2^ISO|NOTF^CASE NOTIFICATION^2.16.840.1.114222.4.5.274|||20091125000000|||||||||||||||20091130133708|||X||||||10230^Tuleremia^2.16.840.1.114222.4.5.277\r\nOBX|1|CWE|INV107^Case Jurisdiction Code^2.16.840.1.114222.4.5.232||101^PUEBLO^2.16.840.1.113883.6.93||||||F\r\nOBX|2|CWE|NOT116^National Reporting Jurisdiction^2.16.840.1.114222.4.5.232||08^Colorado^2.16.840.1.113883.6.92||||||F\r\nOBX|3|CWE|NOT109^Reporting State^2.16.840.1.114222.4.5.232||08^Colorado^2.16.840.1.113883.6.92||||||F\r\nOBX|4|ST|INV173^State Case ID^2.16.840.1.114222.4.5.232||CO182012||||||F\r\nOBX|5|TS|INV147^Investigation Start Date^2.16.840.1.114222.4.5.232||20091125000000||||||F\r\nOBX|6|TS|INV177^Date First Reported PHD^2.16.840.1.114222.4.5.232||20091125000000||||||F\r\nOBX|7|CWE|INV152^Case Disease Imported Code^2.16.840.1.114222.4.5.232||In State^PHC244^2.16.840.1.113883.6.238||||||F\r\nOBX|8|SN|INV2001^Age at case investigation^2.16.840.1.114222.4.5.232||^60|a^Years^2.16.840.1.113883.6.8|||||F\r\nOBX|9|CWE|INV163^Case Class Status Code^2.16.840.1.114222.4.5.232||410605003^Confirmed^2.16.840.1.113883.6.96||||||F\r\nOBX|10|SN|INV165^MMWR Week^2.16.840.1.114222.4.5.232||^test||||||F\r\nOBX|11|TS|INV166^MMWR Year^2.16.840.1.114222.4.5.232||2009||||||F\r\nOBX|12|CWE|INV150^Case outbreak indicator^2.16.840.1.114222.4.5.232||N^No^2.16.840.1.113883.12.136||||||F\r\nOBX|13|CWE|INV151^Case outbreak name^2.16.840.1.114222.4.5.232||||||||F\r\nOBX|14|CWE|INV178^Pregnancy Status^2.16.840.1.114222.4.5.232||UNK^Unknown^2.16.840.1.113883.5.1008||||||F\r\nOBX|15|TS|INV111^Date of Report^2.16.840.1.114222.4.5.232||20091125000000||||||F\r\nOBX|16|TS|INV120^Earliest Date Reported to County^2.16.840.1.114222.4.5.232||20091125000000||||||F\r\nOBX|17|TS|INV121^Earliest Date Reported to State^2.16.840.1.114222.4.5.232||20091125000000||||||F\r\nOBX|18|TS|INV136^Diagnosis date^2.16.840.1.114222.4.5.232||||||||F\r\nOBX|19|TS|INV137^Date of Illness Onset^2.16.840.1.114222.4.5.232||||||||F\r\nOBX|20|CWE|INV128^Was the patient hospitalized as a result of this event^2.16.840.1.114222.4.5.232||N^No^2.16.840.1.113883.12.136||||||F\r\nOBX|21|TS|INV146^Date Of Death^2.16.840.1.114222.4.5.232||||||||F\r\nOBX|22|CWE|INV145^Did the patient die from the condition under investigation^2.16.840.1.114222.4.5.232||N^No^2.16.840.1.113883.12.136||||||F\r\n"
+				},
+				"url": {
+					"raw": "{{TRANSPORT_URL}}/hl7ingress?filename=unitTests/GenV1_withStructureErrors.txt",
+					"host": [
+						"{{TRANSPORT_URL}}"
+					],
+					"path": [
+						"hl7ingress"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "unitTests/GenV1_withStructureErrors.txt"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload ELR - happy path",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-tp-message_type",
+						"value": "ELR",
+						"description": "Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-route",
+						"value": "COVID19-ELR",
+						"description": "Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR]",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-reporting_jurisdiction",
+						"value": "13",
+						"description": "Required for message-type == ELR. The Sending jurisdiction for this message.",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-orginal_file_name",
+						"value": "CovidELR.doNotDelete.txt",
+						"description": "Optional. The local file name before upload.",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-system_provider",
+						"value": "POSTMAN",
+						"description": "Optional. The system providing the uploaded file",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-original_file_timestamp",
+						"value": "2023-05-04T12:05:04.074",
+						"description": "Optional. The original timestamp of the file creation time.",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "MSH|^~\\&#|STARLIMS.TN.STAG^2.16.840.1.114222.4.3.3.2.34.2^ISO|TN.Nashville.SPHL^2.16.840.1.114222.4.1.175791^ISO|US WHO Collab LabSys^2.16.840.1.114222.4.3.3.7^ISO|CDC-EPI Surv Branch^2.16.840.1.114222.4.1.10416^ISO|20200402112311-0500||ORU^R01^ORU_R01|202004021123114321|T|2.5.1|||NE|NE|||||PHLabReport-NoAck^ELR251R1_Rcvr_Prof^2.16.840.1.113883.9.11^ISO~PHLIP_ELSM_251^PHLIP_Profile_Flu^2.16.840.1.113883.9.179^ISO\r\nSFT|Abbott Informatics|STARLIMS v11|STARLIMS11.Clin.Test|CL-439\r\nPID|1||PID00002664^^^TN.Nashville.SPHL&2.16.840.1.114222.4.1.175791&ISO^PI||~^^^^^^U|||F||2028-9^Asian^CDCREC^A^Asian^L|^^^TN^^USA^C|||||||||||N^Not Hispanic or Latino^HL70189\r\nORC|RE||N20V000174-01^STARLIMS.TN.STAG^2.16.840.1.114222.4.3.3.2.34.2^ISO||CM|D|||||||||||||||Belmont University Health Services|1900 Belmont Blvd^^Nashville^TN^37212^USA^L|^WPN^PH^^^615^4605506|1900 Belmont Blvd^^Nashville^TN^37212^USA^L\r\nOBR|1||N20V000174-01^STARLIMS.TN.STAG^2.16.840.1.114222.4.3.3.2.34.2^ISO|68991-9^Epidemiologically important information for public health reporting panel^LN|||20200402|||||||||||||||20200402112300-0500||LAB|F\r\nOBX|1|SN|29553-5^Age calculated^LN^Age^Age^L|1.1|^10|a^year^UCUM|||||F|||20200402|||||||||Nashville Central Laboratory^L^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^44D0659062|Nashville Central Laboratory^630 Hart Lane^Nashville^TN^37243^USA^B^^47037\r\nOBX|2|CWE|PLT249^Sample is related to program/study/event^PLT||PLR135^ILInet^PLR||||||F|||20200402|||||||||Nashville Central Laboratory^L^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^44D0659062|Nashville Central Laboratory^630 Hart Lane^Nashville^TN^37243^USA^B^^47037\r\nOBX|3|CX|PLT248^Identifier with assigning authority^PLT||47138^^^CDC-EPI Surv Branch&2.16.840.1.114222.4.1.10416&ISO^PRN||||||F|||20200402|||||||||Nashville Central Laboratory^L^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^44D0659062|Nashville Central Laboratory^630 Hart Lane^Nashville^TN^37243^USA^B^^47037\r\nORC|RE||N20V000174-01-4063^STARLIMS.TN.STAG^2.16.840.1.114222.4.3.3.2.34.2^ISO||CM|D|||||||||||||||Belmont University Health Services|1900 Belmont Blvd^^Nashville^TN^37212^USA^L|^WPN^PH^^^615^4605506|1900 Belmont Blvd^^Nashville^TN^37212^USA^L\r\nOBR|2||N20V000174-01-4063^STARLIMS.TN.STAG^2.16.840.1.114222.4.3.3.2.34.2^ISO|94500-6^SARS coronavirus 2 RNA^LN^4063^SARS-CoV-2^L|||20200402|||||||||||||||20200402112300-0500||LAB|F\r\nNTE|1|L|The SARS-CoV-2 Real-Time RT-PCR assay is only for use under a Food and Drug Administration’s Emergency Use Authorization. Fact Sheet for Healthcare Providers can be found at: https://www.fda.gov/media/136313/download. Fact Sheet for Patients can be found at: https://www.fda.gov/media/136312/download\r\nNTE|2|L|Performance of the Cepheid Xpert Xpress SARS-CoV-2 has only been established in nasopharyngeal swab specimens. Specimen types other than nasopharyngeal swab may give inaccurate results.\r\nOBX|1|CWE|94500-6^SARS coronavirus 2 RNA^LN|2.1|10828004^Positive^SCT||Negative||||F|||20200402|||||202004021114||||Nashville Central Laboratory^L^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^44D0659062|Nashville Central Laboratory^^Nashville^TN^37243^USA^L\r\nSPM|1|^N20000174&STARLIMS.TN.STAG&2.16.840.1.114222.4.3.3.2.34.2&ISO||258500001^Nasopharyngeal swab^SCT|||||||||||||20200402|20200402104700\r\n"
+				},
+				"url": {
+					"raw": "{{TRANSPORT_URL}}/hl7ingress?filename=unitTests/CovidELR.doNotDelete.txt",
+					"host": [
+						"{{TRANSPORT_URL}}"
+					],
+					"path": [
+						"hl7ingress"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "unitTests/CovidELR.doNotDelete.txt"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload file missing metadata",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-tp-message_type",
+						"value": "CASE",
+						"description": "Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-route",
+						"value": "COVID19-ELR",
+						"description": "Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR]",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-reporting_jurisdiction",
+						"value": "13",
+						"description": "Required for message-type == ELR. The Sending jurisdiction for this message.",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-orginal_file_name",
+						"value": "Lyme_HappyPath.doNotDelete.txt",
+						"description": "Optional. The local file name before upload.",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-system_provider",
+						"value": "POSTMAN",
+						"description": "Optional. The system providing the uploaded file",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-original_file_timestamp",
+						"value": "2023-05-04T12:05:04.074",
+						"description": "Optional. The original timestamp of the file creation time.",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "MSH|^~\\&|SendAppName^2.16.840.1.114222.444^ISO|Sending-Facility^2.16.840.1.114222.444^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO\r\nPID|1||BDB_LAB_02^^^SendAppName&2.16.840.1.114222.3333&ISO||~^^^^^^S||19930601|F||2054-5^Black or African American^CDCREC|^^^47^37209^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||\r\nOBR|1||BDB_LAB_02^SendAppName^2.16.840.1.114222.3333^ISO|68991-9^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND\r\nOBX|1|ST|32624-9^Other Race Text^LN||Botswanan||||||F\r\nOBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|3|ST|21842-0^Other Birth Place^LN||Navajo Reservation||||||F\r\nOBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|5|TS|11368-8^Date of Illness Onset^LN||20180625||||||F\r\nOBX|6|TS|77976-9^Illness End Date^LN||20180710||||||F\r\nOBX|7|SN|77977-7^Illness Duration^LN||^15|d^day [time]^UCUM|||||F\r\nOBX|8|CWE|77996-7^Pregnancy Status^LN||Y^Yes^HL70136||||||F\r\nOBX|9|TS|77975-1^Diagnosis Date^LN||20180705||||||F\r\nOBX|10|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F\r\nOBX|11|TS|8656-1^Admission Date^LN||20180705||||||F\r\nOBX|12|TS|8649-6^Discharge Date^LN||20180710||||||F\r\nOBX|13|SN|78033-8^Duration of Hospital Stay in Days^LN||^5||||||F\r\nOBX|14|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F\r\nOBX|15|ST|77993-4^State Case Identifier^LN||340227||||||F\r\nOBX|16|ST|77997-5^Legacy Case Identifier^LN||34022747S012018||||||F\r\nOBX|17|SN|77998-3^Age at Case Investigation^LN||^25|a^year [time]^UCUM|||||F\r\nOBX|18|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F\r\nOBX|19|CWE|INV154^Imported State^PHINQUESTION||25^Massachusetts^FIPS5_2||||||F\r\nOBX|20|CWE|INV155^Imported City^PHINQUESTION||614554^Ipswich, MA, Essex^USGSGNIS||||||F\r\nOBX|21|CWE|INV156^Imported County^PHINQUESTION||25009^Essex, MA^FIPS6_4||||||F\r\nOBX|22|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|23|CWE|77985-0^State or Province of Exposure^LN|1|25^Massachusetts^FIPS5_2||||||F\r\nOBX|24|ST|77986-8^City of Exposure^LN|1|Lynn||||||F\r\nOBX|25|ST|77987-6^County of Exposure^LN|1|Essex||||||F\r\nOBX|26|CWE|77989-2^Transmission Mode^LN||418427004^Vector-borne transmission^SCT||||||F\r\nOBX|27|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F\r\nOBX|28|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F\r\nOBX|29|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F\r\nOBX|30|ST|77981-9^Case Outbreak Name^LN||N/A||||||F\r\nOBX|31|ST|77969-4^Jurisdiction Code^LN||S01||||||F\r\nOBX|32|CWE|48766-0^Reporting Source Type Code^LN||PHC247^Laboratory^CDCPHINVS||||||F\r\nOBX|33|ST|52831-5^Reporting Source ZIP Code^LN||37243||||||F\r\nOBX|34|CWE|77988-4^Binational Reporting Criteria^LN||PHC1141^Other situations that may require binational notification or coordination of response^CDCPHINVS||||||F\r\nOBX|35|ST|74549-7^Person Reporting to CDC - Name^LN||John Doe||||||F\r\nOBX|36|ST|74548-9^Person Reporting to CDC - Phone Number^LN||456-987-8888||||||F\r\nOBX|37|ST|74547-1^Person Reporting to CDC - Email^LN||john.doe@email.com||||||F\r\nOBX|38|DT|77979-3^Case Investigation Start Date^LN||20180628||||||F\r\nOBX|39|DT|77995-9^Date Reported^LN||20220229||||||F\r\nOBX|40|TS|77972-8^Earliest Date Reported to County^LN||20180912||||||F\r\nOBX|41|TS|77973-6^Earliest Date Reported to State^LN||20180912||||||F\r\nOBX|42|SN|77991-8^MMWR Week^LN||^37||||||F\r\nOBX|43|DT|77992-6^MMWR Year^LN||2025||||||F\r\nOBX|44|DT|77970-2^Date First Reported to PHD^LN||20180912||||||F\r\nOBX|45|CWE|77966-0^Reporting State^LN||47^Tennessee^FIPS5_2||||||F\r\nOBX|46|CWE|77967-8^Reporting County^LN||47003^Bedford, TN^FIPS6_4||||||F\r\nOBX|47|CWE|77968-6^National Reporting Jurisdiction^LN||47^TN^FIPS5_2||||||F\r\nOBX|48|TX|77999-1^Comment^LN||Patient was bitten by a tick during European backpacking trip||||||F\r\nOBX|49|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|69588003^Erythema Migrans^SCT||||||F\r\nOBX|50|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|N^No^HL70136||||||F\r\nOBX|51|CWE|INV929^Clinical Manifestation^PHINQUESTION|2|193093009^Bell's palsy^SCT||||||F\r\nOBX|52|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|2|N^No^HL70136||||||F\r\nOBX|53|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|233917008^Atrioventricular block^SCT||||||F\r\nOBX|54|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|N^No^HL70136||||||F\r\nOBX|55|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|48780006^Other cranial neuritis^SCT||||||F\r\nOBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F\r\nOBX|57|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|72274001^Radiculoneuropathy^SCT||||||F\r\nOBX|58|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|Y^Yes^HL70136||||||F\r\nOBX|59|CWE|INV929^Clinical Manifestation^PHINQUESTION|6|45170000^Encephalitis^SCT||||||F\r\nOBX|60|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|6|N^No^HL70136||||||F\r\nOBX|61|CWE|INV929^Clinical Manifestation^PHINQUESTION|7|62950007^Encephalomyelitis^SCT||||||F\r\nOBX|62|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|7|N^No^HL70136||||||F\r\nOBX|63|CWE|29303-5^Medication Administered^LN|1|3640^Doxycycline^RXNORM||||||F\r\nOBX|64|DT|86948-7^Date Treatment or Therapy Started^LN|1|20180705||||||F\r\nOBX|65|SN|67453-1^Treatment Duration^LN|1|^10|d^day^UCUM|||||F\r\nOBX|66|ST|85658-3^Current Occupation^LN|1|Carpenter||||||F\r\nOBX|67|ST|85078-4^Current Industry^LN|1|Lumber retail||||||F\r\nOBX|68|CE|85657-5^Current Industry Standardized^LN|1|4090^Lumber and other construction materials merchant wholesalers [4090]^CDCINDUSTRY2010||||||F\r\nOBX|69|CWE|INV290^Test Type^PHINQUESTION|1|16480-6^EIA/ELISA IgG^LN||||||F\r\nOBX|70|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F\r\nOBX|71|ST|LAB628^Test Result Quantitative^PHINQUESTION|1|2.5||||||F\r\nOBX|72|CWE|LAB115^Result Units^PHINQUESTION|1|{index_val}^index value^UCUM||||||F\r\nOBX|73|CWE|66746-9^Specimen Type^LN|1|119297000^Blood^SCT||||||F\r\nOBX|74|TS|68963-8^Specimen Collection Date/Time^LN|1|20180705||||||F"
+				},
+				"url": {
+					"raw": "{{TRANSPORT_URL}}/hl7ingress?filename=unitTests/MissingMD.doNotDelete.txt",
+					"host": [
+						"{{TRANSPORT_URL}}"
+					],
+					"path": [
+						"hl7ingress"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "unitTests/MissingMD.doNotDelete.txt"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload Batch Message",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-tp-message_type",
+						"value": "CASE",
+						"description": "Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-route",
+						"value": "COVID19-ELR",
+						"description": "Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR]",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-reporting_jurisdiction",
+						"value": "13",
+						"description": "Required for message-type == ELR. The Sending jurisdiction for this message.",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-orginal_file_name",
+						"value": "BatchedMessage.doNotDelete.txt",
+						"description": "Optional. The local file name before upload.",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-system_provider",
+						"value": "POSTMAN",
+						"description": "Optional. The system providing the uploaded file",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-original_file_timestamp",
+						"value": "2023-05-04T12:05:04.074",
+						"description": "Optional. The original timestamp of the file creation time.",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "MSH|^~\\&|SendAppName^2.16.840.1.114222.444^ISO|Sending-Facility^2.16.840.1.114222.444^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO\r\nPID|1||BDB_LAB_02^^^SendAppName&2.16.840.1.114222.3333&ISO||~^^^^^^S||19930601|F||2054-5^Black or African American^CDCREC|^^^47^37209^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||\r\nOBR|1||BDB_LAB_02^SendAppName^2.16.840.1.114222.3333^ISO|68991-9^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND\r\nOBX|1|ST|32624-9^Other Race Text^LN||Botswanan||||||F\r\nOBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|3|ST|21842-0^Other Birth Place^LN||Navajo Reservation||||||F\r\nOBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|5|TS|11368-8^Date of Illness Onset^LN||20180625||||||F\r\nOBX|6|TS|77976-9^Illness End Date^LN||20180710||||||F\r\nOBX|7|SN|77977-7^Illness Duration^LN||^15|d^day [time]^UCUM|||||F\r\nOBX|8|CWE|77996-7^Pregnancy Status^LN||Y^Yes^HL70136||||||F\r\nOBX|9|TS|77975-1^Diagnosis Date^LN||20180705||||||F\r\nOBX|10|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F\r\nOBX|11|TS|8656-1^Admission Date^LN||20180705||||||F\r\nOBX|12|TS|8649-6^Discharge Date^LN||20180710||||||F\r\nOBX|13|SN|78033-8^Duration of Hospital Stay in Days^LN||^5||||||F\r\nOBX|14|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F\r\nOBX|15|ST|77993-4^State Case Identifier^LN||340227||||||F\r\nOBX|16|ST|77997-5^Legacy Case Identifier^LN||34022747S012018||||||F\r\nOBX|17|SN|77998-3^Age at Case Investigation^LN||^25|a^year [time]^UCUM|||||F\r\nOBX|18|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F\r\nOBX|19|CWE|INV154^Imported State^PHINQUESTION||25^Massachusetts^FIPS5_2||||||F\r\nOBX|20|CWE|INV155^Imported City^PHINQUESTION||614554^Ipswich, MA, Essex^USGSGNIS||||||F\r\nOBX|21|CWE|INV156^Imported County^PHINQUESTION||25009^Essex, MA^FIPS6_4||||||F\r\nOBX|22|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|23|CWE|77985-0^State or Province of Exposure^LN|1|25^Massachusetts^FIPS5_2||||||F\r\nOBX|24|ST|77986-8^City of Exposure^LN|1|Lynn||||||F\r\nOBX|25|ST|77987-6^County of Exposure^LN|1|Essex||||||F\r\nOBX|26|CWE|77989-2^Transmission Mode^LN||418427004^Vector-borne transmission^SCT||||||F\r\nOBX|27|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F\r\nOBX|28|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F\r\nOBX|29|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F\r\nOBX|30|ST|77981-9^Case Outbreak Name^LN||N/A||||||F\r\nOBX|31|ST|77969-4^Jurisdiction Code^LN||S01||||||F\r\nOBX|32|CWE|48766-0^Reporting Source Type Code^LN||PHC247^Laboratory^CDCPHINVS||||||F\r\nOBX|33|ST|52831-5^Reporting Source ZIP Code^LN||37243||||||F\r\nOBX|34|CWE|77988-4^Binational Reporting Criteria^LN||PHC1141^Other situations that may require binational notification or coordination of response^CDCPHINVS||||||F\r\nOBX|35|ST|74549-7^Person Reporting to CDC - Name^LN||John Doe||||||F\r\nOBX|36|ST|74548-9^Person Reporting to CDC - Phone Number^LN||456-987-8888||||||F\r\nOBX|37|ST|74547-1^Person Reporting to CDC - Email^LN||john.doe@email.com||||||F\r\nOBX|38|DT|77979-3^Case Investigation Start Date^LN||20180628||||||F\r\nOBX|39|DT|77995-9^Date Reported^LN||20220229||||||F\r\nOBX|40|TS|77972-8^Earliest Date Reported to County^LN||20180912||||||F\r\nOBX|41|TS|77973-6^Earliest Date Reported to State^LN||20180912||||||F\r\nOBX|42|SN|77991-8^MMWR Week^LN||^37||||||F\r\nOBX|43|DT|77992-6^MMWR Year^LN||2025||||||F\r\nOBX|44|DT|77970-2^Date First Reported to PHD^LN||20180912||||||F\r\nOBX|45|CWE|77966-0^Reporting State^LN||47^Tennessee^FIPS5_2||||||F\r\nOBX|46|CWE|77967-8^Reporting County^LN||47003^Bedford, TN^FIPS6_4||||||F\r\nOBX|47|CWE|77968-6^National Reporting Jurisdiction^LN||47^TN^FIPS5_2||||||F\r\nOBX|48|TX|77999-1^Comment^LN||Patient was bitten by a tick during European backpacking trip||||||F\r\nOBX|49|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|69588003^Erythema Migrans^SCT||||||F\r\nOBX|50|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|N^No^HL70136||||||F\r\nOBX|51|CWE|INV929^Clinical Manifestation^PHINQUESTION|2|193093009^Bell's palsy^SCT||||||F\r\nOBX|52|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|2|N^No^HL70136||||||F\r\nOBX|53|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|233917008^Atrioventricular block^SCT||||||F\r\nOBX|54|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|N^No^HL70136||||||F\r\nOBX|55|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|48780006^Other cranial neuritis^SCT||||||F\r\nOBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F\r\nOBX|57|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|72274001^Radiculoneuropathy^SCT||||||F\r\nOBX|58|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|Y^Yes^HL70136||||||F\r\nOBX|59|CWE|INV929^Clinical Manifestation^PHINQUESTION|6|45170000^Encephalitis^SCT||||||F\r\nOBX|60|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|6|N^No^HL70136||||||F\r\nOBX|61|CWE|INV929^Clinical Manifestation^PHINQUESTION|7|62950007^Encephalomyelitis^SCT||||||F\r\nOBX|62|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|7|N^No^HL70136||||||F\r\nOBX|63|CWE|29303-5^Medication Administered^LN|1|3640^Doxycycline^RXNORM||||||F\r\nOBX|64|DT|86948-7^Date Treatment or Therapy Started^LN|1|20180705||||||F\r\nOBX|65|SN|67453-1^Treatment Duration^LN|1|^10|d^day^UCUM|||||F\r\nOBX|66|ST|85658-3^Current Occupation^LN|1|Carpenter||||||F\r\nOBX|67|ST|85078-4^Current Industry^LN|1|Lumber retail||||||F\r\nOBX|68|CE|85657-5^Current Industry Standardized^LN|1|4090^Lumber and other construction materials merchant wholesalers [4090]^CDCINDUSTRY2010||||||F\r\nOBX|69|CWE|INV290^Test Type^PHINQUESTION|1|16480-6^EIA/ELISA IgG^LN||||||F\r\nOBX|70|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F\r\nOBX|71|ST|LAB628^Test Result Quantitative^PHINQUESTION|1|2.5||||||F\r\nOBX|72|CWE|LAB115^Result Units^PHINQUESTION|1|{index_val}^index value^UCUM||||||F\r\nOBX|73|CWE|66746-9^Specimen Type^LN|1|119297000^Blood^SCT||||||F\r\nOBX|74|TS|68963-8^Specimen Collection Date/Time^LN|1|20180705||||||F\r\nMSH|^~\\&|SendAppName^2.16.840.1.114222.1111^ISO|Sending-Facility^2.16.840.1.114222.1111^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO\r\nPID|1||TickborneLyme_TC01_Over25TickborneLyme_TC01_Over25TickborneLyme_TC01_Over25TickborneLyme_TC01_Over25TickborneLyme_TC01_Over25TickborneLyme_TC01_Over25TickborneLyme_TC01_Over25TickborneLyme_TC01_Over25^^^SendAppName&2.16.840.1.114222.1111&ISO||~^^^^^^S||19930601|F||2054-5^Black or African American^CDCREC|^^^47^37209^^^^47003|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||\r\nOBR|1||TickborneLyme_TC01^SendAppName^2.16.840.1.114222.1111^ISO|68991-9^Epidemiologic Information^LN|||20181211150000|||||||||||||||20181211150000|||F||||||11080^Lyme disease^NND\r\nOBX|1|ST|32624-9^Other Race Text^LN||Botswanan||||||F\r\nOBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|3|ST|21842-0^Other Birth Place^LN||Navajo Reservation||||||F\r\nOBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|5|TS|11368-8^Date of Illness Onset^LN||20180625||||||F\r\nOBX|6|TS|77976-9^Illness End Date^LN||20180710||||||F\r\nOBX|7|SN|77977-7^Illness Duration^LN||^15|d^day [time]^UCUM|||||F\r\nOBX|8|CWE|77996-7^Pregnancy Status^LN||Y^Yes^HL70136||||||F\r\nOBX|9|TS|77975-1^Diagnosis Date^LN||20180705||||||F\r\nOBX|10|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F\r\nOBX|11|TS|8656-1^Admission Date^LN||20180705||||||F\r\nOBX|12|TS|8649-6^Discharge Date^LN||20180710||||||F\r\nOBX|13|SN|78033-8^Duration of Hospital Stay in Days^LN||^5||||||F\r\nOBX|14|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F\r\nOBX|15|ST|77993-4^State Case Identifier^LN||340227||||||F\r\nOBX|16|ST|77997-5^Legacy Case Identifier^LN||34022747S012018||||||F\r\nOBX|17|SN|77998-3^Age at Case Investigation^LN||^25|a^year [time]^UCUM|||||F\r\nOBX|18|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F\r\nOBX|19|CWE|INV154^Imported State^PHINQUESTION||25^Massachusetts^FIPS5_2||||||F\r\nOBX|20|CWE|INV155^Imported City^PHINQUESTION||614554^Ipswich, MA, Essex^USGSGNIS||||||F\r\nOBX|21|CWE|INV156^Imported County^PHINQUESTION||25009^Essex, MA^FIPS6_4||||||F\r\nOBX|22|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F\r\nOBX|23|CWE|77985-0^State or Province of Exposure^LN|1|25^Massachusetts^FIPS5_2||||||F\r\nOBX|24|ST|77986-8^City of Exposure^LN|1|Lynn||||||F\r\nOBX|25|ST|77987-6^County of Exposure^LN|1|Essex||||||F\r\nOBX|26|CWE|77989-2^Transmission Mode^LN||418427004^Vector-borne transmission^SCT||||||F\r\nOBX|27|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F\r\nOBX|28|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F\r\nOBX|29|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F\r\nOBX|30|ST|77981-9^Case Outbreak Name^LN||N/A||||||F\r\nOBX|31|ST|77969-4^Jurisdiction Code^LN||S01||||||F\r\nOBX|32|CWE|48766-0^Reporting Source Type Code^LN||PHC247^Laboratory^CDCPHINVS||||||F\r\nOBX|33|ST|52831-5^Reporting Source ZIP Code^LN||37243||||||F\r\nOBX|34|CWE|77988-4^Binational Reporting Criteria^LN||PHC1141^Other situations that may require binational notification or coordination of response^CDCPHINVS||||||F\r\nOBX|35|ST|74549-7^Person Reporting to CDC - Name^LN||John Doe||||||F\r\nOBX|36|ST|74548-9^Person Reporting to CDC - Phone Number^LN||456-987-8888||||||F\r\nOBX|37|ST|74547-1^Person Reporting to CDC - Email^LN||john.doe@email.com||||||F\r\nOBX|38|DT|77979-3^Case Investigation Start Date^LN||20180628||||||F\r\nOBX|39|DT|77995-9^Date Reported^LN||20180912||||||F\r\nOBX|40|TS|77972-8^Earliest Date Reported to County^LN||20180912||||||F\r\nOBX|41|TS|77973-6^Earliest Date Reported to State^LN||20180912||||||F\r\nOBX|42|SN|77991-8^MMWR Week^LN||^37||||||F\r\nOBX|43|DT|77992-6^MMWR Year^LN||2018||||||F\r\nOBX|44|DT|77970-2^Date First Reported to PHD^LN||20180912||||||F\r\nOBX|45|CWE|77966-0^Reporting State^LN||47^Tennessee^FIPS5_2||||||F\r\nOBX|46|CWE|77967-8^Reporting County^LN||47003^Bedford, TN^FIPS6_4||||||F\r\nOBX|47|CWE|77968-6^National Reporting Jurisdiction^LN||47^TN^FIPS5_2||||||F\r\nOBX|48|TX|77999-1^Comment^LN||Patient was bitten by a tick during European backpacking trip||||||F\r\nOBX|49|CWE|INV929^Clinical Manifestation^PHINQUESTION|1|69588003^Erythema Migrans^SCT||||||F\r\nOBX|50|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F\r\nOBX|51|CWE|INV929^Clinical Manifestation^PHINQUESTION|2|193093009^Bell's palsy^SCT||||||F\r\nOBX|52|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|2|N^No^HL70136||||||F\r\nOBX|53|CWE|INV929^Clinical Manifestation^PHINQUESTION|3|233917008^Atrioventricular block^SCT||||||F\r\nOBX|54|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F\r\nOBX|55|CWE|INV929^Clinical Manifestation^PHINQUESTION|4|48780006^Other cranial neuritis^SCT||||||F\r\nOBX|56|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|4|N^No^HL70136||||||F\r\nOBX|57|CWE|INV929^Clinical Manifestation^PHINQUESTION|5|72274001^Radiculoneuropathy^SCT||||||F\r\nOBX|58|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|5|N^No^HL70136||||||F\r\nOBX|59|CWE|INV929^Clinical Manifestation^PHINQUESTION|6|45170000^Encephalitis^SCT||||||F\r\nOBX|60|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|6|N^No^HL70136||||||F\r\nOBX|61|CWE|INV929^Clinical Manifestation^PHINQUESTION|7|62950007^Encephalomyelitis^SCT||||||F\r\nOBX|62|CWE|INV930^Clinical Manifestation Indicator^PHINQUESTION|7|N^No^HL70136||||||F\r\nOBX|63|CWE|29303-5^Medication Administered^LN|1|3640^Doxycycline^RXNORM||||||F\r\nOBX|64|DT|86948-7^Date Treatment or Therapy Started^LN|1|20180705||||||F\r\nOBX|65|SN|67453-1^Treatment Duration^LN|1|^10|d^day^UCUM|||||F\r\nOBX|66|ST|85658-3^Current Occupation^LN|1|Carpenter||||||F\r\nOBX|67|ST|85078-4^Current Industry^LN|1|Lumber retail||||||F\r\nOBX|68|CE|85657-5^Current Industry Standardized^LN|1|4090^Lumber and other construction materials merchant wholesalers [4090]^CDCINDUSTRY2010||||||F\r\nOBX|69|CWE|INV290^Test Type^PHINQUESTION|1|20449-5^EIA/ELISA^LN||||||F\r\nOBX|70|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F\r\nOBX|71|ST|LAB628^Test Result Quantitative^PHINQUESTION|1|2.5||||||F\r\nOBX|72|CWE|LAB115^Result Units^PHINQUESTION|1|{index_val}^index value^UCUM||||||F\r\nOBX|73|CWE|66746-9^Specimen Type^LN|1|119297000^Blood^SCT||||||F\r\nOBX|74|TS|68963-8^Specimen Collection Date/Time^LN|1|20180705||||||F\r\nOBX|75|CWE|INV290^Test Type^PHINQUESTION|2|32667-8^PCR^LN||||||F\r\nOBX|76|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F\r\nOBX|77|CWE|LAB278^Organism Name^PHINQUESTION|2|76327009^Borrelia burgdorferi^SCT||||||F\r\nOBX|78|CWE|66746-9^Specimen Type^LN|2|119325001^Skin^SCT||||||F\r\nOBX|79|TS|68963-8^Specimen Collection Date/Time^LN|2|20180705||||||F"
+				},
+				"url": {
+					"raw": "{{TRANSPORT_URL}}/hl7ingress?filename=unitTests/BatchedMessage.doNotDelete.txt",
+					"host": [
+						"{{TRANSPORT_URL}}"
+					],
+					"path": [
+						"hl7ingress"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "unitTests/BatchedMessage.doNotDelete.txt"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload bad message",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-tp-message_type",
+						"value": "CASE",
+						"description": "Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-route",
+						"value": "COVID19-ELR",
+						"description": "Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR]",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-reporting_jurisdiction",
+						"value": "13",
+						"description": "Required for message-type == ELR. The Sending jurisdiction for this message.",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-tp-orginal_file_name",
+						"value": "NotAnHL7Message.doNotDelete.txt",
+						"description": "Optional. The local file name before upload.",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-system_provider",
+						"value": "POSTMAN",
+						"description": "Optional. The system providing the uploaded file",
+						"type": "text"
+					},
+					{
+						"key": "x-tp-original_file_timestamp",
+						"value": "2023-05-04T12:05:04.074",
+						"description": "Optional. The original timestamp of the file creation time.",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "### [0.0.18] - 2023-05-03\r\n - Added support for new conditions:\r\n\t- Cryptosporidiosis\r\n\t- Cyclosporiasis\r\n\t- Cholera and Vibriosis\r\n\t- Campylobacteriosis\r\n\t- Salmonellosis\r\n\t- STEC\r\n\t- Shigellosis\r\n\t- S Typhi and S Paratyphi\r\n\t- FoodNet\r\n\t- Candida Auris\r\n\t- CP-CRE\r\n - Updated Receiver to be able to handle files in sub folders.\r\n - Updated MMG-Based and MMG-SQL to support new feature of the new conditions\r\n\t- Elements mapped more than in one block\r\n\t- Handling properly complex fields that are not populated\r\n\t- Added check for empty single collections.\r\n - Create sub tables for repeating elements in repeating groups for MMG-in-SQL\r\n - Added unit test and code coverage to Receiver/Debatcher and Redactor functions.\r\n - Added support for file upload to cloud-transport service and support for up to 10Mb files.\r\n - Renamed MSH-21 column names to be one based instead of zero based.\r\n - Removed rule that validates OBR-22 against OBR-7\r\n - Added validation for MMWR week.\r\n - Updated PHIN Spec profiles to match discrepancies finding testing against MVPS\r\n - Fixed fortify scan Critical and High issues.\r\n - Updated Readme files with latest changes and features\r\n - Updated all process names and process status on all functions to be consistent.\r\n\r\n\r\n\r\n### [0.0.12] -2023-05-03\r\n  DEX Release 0.0.18\r\n\r\n  - Resolved intermittent failures of pulling data from Event hubs by fixing network issues.\r\n  - Created Gold tables for Lake of Segments.\r\n  - Refactored Raw and Bronze tables, removing redundant notebooks and using widget parameters for each event hub.\r\n  - Synced process names with changes made on FN pipelines.\r\n - Created consolidated table with Structure and MMG-Validation Rules for Silver and Gold tables.\r\n"
+				},
+				"url": {
+					"raw": "{{TRANSPORT_URL}}/hl7ingress?filename=unitTests/NotAnHL7Message.doNotDelete.txt",
+					"host": [
+						"{{TRANSPORT_URL}}"
+					],
+					"path": [
+						"hl7ingress"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "unitTests/NotAnHL7Message.doNotDelete.txt"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

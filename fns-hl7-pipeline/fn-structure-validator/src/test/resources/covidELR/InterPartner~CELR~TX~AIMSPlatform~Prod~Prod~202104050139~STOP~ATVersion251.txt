@@ -1,0 +1,24 @@
+MSH|^~\&|13^1.2.840.114350.1.13.72.2.7.2.695071^ISO|EH FARGO HOSPITAL LABORATORY^35D0978097^CLIA|||20200629053827|872300|ORU^R01^ORU_R01|D4F6C_F237_0_10017||2.5.1|||||USA||||PHLabReport-Ack^^2.16.840.1.114222.4.10.3^ISO||
+SFT|Epic Systems Corporation^L^^^^ANSI&1.2.840&ISO^XX^^^1.2.840.114350|August 2019|Bridges|8.9.0.0||20200109062453
+PID|1||REDACTED^^^&&ISO^CLINIC-PAT||REDACTED^REDACTED^REDACTED|NAME^^^|19771104|F||Caucasian|REDACTED^^FARGO^ND^58102^USA^P^^CASS||REDACTED~REDACTED|||||||||NON-HISPANIC||||||||N|||20180811073237|1^1.2.840.114350.1.13.72.2.7.2.696570^ISO|
+NTE|1|O|PT MUST BE SCHEDULED FOR 60 MINUTES WITH TIFFANY PICKARD, APRN, CNP.|
+NK1|1|REDACTED||^^^^^USA|REDACTED|||||||||||||||||||||||||||
+NK1|2|REDACTED||REDACTED^^FARGO^ND^58103^USA^^^CASS|REDACTED~REDACTED|||||||||||||||||||||||||||
+NK1|3|REDACTED||REDACTED^^FARGO^ND^58102^USA^^^CASS|REDACTED~REDACTED|||||||||||||||||||||||||||
+NK1|4|REDACTED|||REDACTED|||||||||||||||||||||||||||
+PV1|1||32HCIC^335^1^32H^^^^^^^|Emergency|||31743^NAME^NAME^MI^|||Gen Med|||||||30549^NAME^NAME^MI^||1205647670|||||||||||||||||||||||||20200628215110||||||
+ORC|RE|310779360^EPC^1.2.840.114350.1.13.72.2.7.2.798268^ISO|20FGH-181Z0004^Beaker^1.2.840.114350.1.13.72.2.7.3.798268.320^ISO|20FGH-181Z0004^Beaker^1.2.840.114350.1.13.72.2.7.3.798268.320^ISO||||||||||(701)364-8000^^^^^701^3648000|20200629041730||||||ESSENTIA HEALTH^D^^^^SMDC PRODUCTION SYSTEM&1.2.840.114350.1.13.72.2.7.2.696570&ISO^XX^^^10|400 EAST 3RD STREET^^DULUTH^MN^55805^^B|786-8364^^8^^^^7868364|3000 32ND AVENUE SOUTH^^FARGO^ND^58103^^C|||||||
+OBR|1|310779360^EPC^1.2.840.114350.1.13.72.2.7.2.798268^ISO|20FGH-181Z0004^Beaker^1.2.840.114350.1.13.72.2.7.3.798268.320^ISO|LABRAPIDSARSCOV2^STAT SARS-COV-2 RNA (COVID-19)^LRI-EAP|||20200629043200||||UNIT COLLECT||||||(701)364-8000^^^^^701^3648000|||||20200629053800|||F|||||||&Trautman&Jennifer&L&||||||||||||||||||
+NTE|1|L|Test detects target RNA by multiplexed real-time polymerase chain reaction (PCR) on the BioFire FilmArray Torch System.|
+NTE|2|L||
+NTE|3|L|Results should be used in combination with clinical observations, patient history and epidemiological information.|
+NTE|4|L||
+NTE|5|L|Results from this test should not be used as the sole basis for treatment or other patient management decisions.|
+NTE|6|L||
+NTE|7|L|The SARS-CoV-2 test is currently only for use under the Food and Drug Administration's Emergency Use Authorization.  Additional information about conditions of authorization for this test can be found at:|
+NTE|8|L|https://www.fda.gov/medical-devices/emergency-situations-medical-devices/emergency-use-authorizations|
+PRT|1|SP||OPO||||Essentia Health and Community Connect Partners^^urn:EssentiaHealth:CareEveryWherePRD^^^EPC^XX^^^urn:EssentiaHealth:CareEveryWherePRD|||||||
+TQ1|1||||||20200629043000||ROUTINE
+OBX|1|ST|94500-6^SARS-CoV-2 RNA Resp Ql NAA+probe^LN^^^^2.68||Negative||Not Detected||||F|||20200629043200||66964^TRAUTMAN^JENNIFER^L^|||20200629053817||||EH FARGO HOSPITAL LABORATORY^D^^^^CLIA&&ISO^CLIA^^^35D0978097|3000 32ND AVENUE SW^^FARGO^ND^58103^USA^B^^CASS||||||
+NTE|1|L|SARS-CoV-2 (COVID-19) target nucleic acids are not detected.  COVID-19 can not be completely ruled out as sensitivity of the test depends on the timing of specimen collection and quality of the specimen.|
+SPM|1|^Abril007&Beaker&1.2.840.114350.1.13.72.2.7.3.798268.320&ISO||Swab^Swab^^^^^^||||Nasopharynx^Nasopharynx^^^^^^^|||||||||20200629043200|20200629043651||||||

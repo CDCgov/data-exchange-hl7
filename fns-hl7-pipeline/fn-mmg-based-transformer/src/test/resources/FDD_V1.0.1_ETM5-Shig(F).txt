@@ -1,0 +1,151 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20160126120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~FDD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||FDD_SHG_TC01^^^SendAppName&2.16.840.1.114222.222&ISO||~^^^^^^S||19700301|F||2028-9^Asian^CDCREC|^^^42^15201^^^^42003|||||||||||2186-5^Not Hispanic or Latino^CDCREC|||||||
+OBR|1||FDD_SHG_PC01^SendAppName^2.16.840.1.114222^ISO|68991-9^Epidemiologic Information^LN|||20170802111655|||||||||||||||20170802111655|||F||||||11010^Shigellosis^NND
+OBX|1|ST|32624-9^Other Race Text^LN||Unknown||||||F
+OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|3|ST|21842-0^Other Birth Place^LN||No Other Birth Place||||||F
+OBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|5|TS|11368-8^Date of Illness Onset^LN||20170720||||||F
+OBX|6|TS|77976-9^Illness End Date^LN||20170801||||||F
+OBX|7|SN|77977-7^Illness Duration^LN||^13|d^day^UCUM|||||F
+OBX|8|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|9|TS|77975-1^Diagnosis Date^LN||20170725||||||F
+OBX|10|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|11|TS|8656-1^Admission Date^LN||20170723||||||F
+OBX|12|TS|8649-6^Discharge Date^LN||20170725||||||F
+OBX|13|SN|78033-8^Duration of Hospital Stay in Days^LN||^2||||||F
+OBX|14|CWE|77978-5^Subject Died^LN||UNK^Unknown^NULLFL||||||F
+OBX|15|ST|77993-4^State Case Identifier^LN||PA4872||||||F
+OBX|16|ST|77997-5^Legacy Case Identifier^LN||48432148S012015||||||F
+OBX|17|SN|77998-3^Age at Case Investigation^LN||^90|a^year^UCUM|||||F
+OBX|18|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F
+OBX|19|CWE|INV153^Imported Country^PHINQUESTION||USA^UNITED STATES^ISO3166_1||||||F
+OBX|20|CWE|INV154^Imported State^PHINQUESTION||13^Georgia^FIPS5_2||||||F
+OBX|21|CWE|INV155^Imported City^PHINQUESTION||351615^Atlanta^USGSGNIS||||||F
+OBX|22|CWE|INV156^Imported County^PHINQUESTION||13121^Fulton^FIPS6_4||||||F
+OBX|23|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES^ISO3166_1||||||F
+OBX|24|CWE|77985-0^State or Province of Exposure^LN|1|13^Georgia^FIPS5_2||||||F
+OBX|25|ST|77986-8^City of Exposure^LN|1|Atlanta||||||F
+OBX|26|ST|77987-6^County of Exposure^LN|1|Fulton||||||F
+OBX|27|CWE|77989-2^Transmission Mode^LN||416086007^Food-borne transmission^SCT||||||F
+OBX|28|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|29|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|30|CWE|77980-1^Case Outbreak Indicator^LN||Y^Yes^HL70136||||||F
+OBX|31|ST|77981-9^Case Outbreak Name^LN||SHIGELLAOUTPA291||||||F
+OBX|32|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|33|CWE|48766-0^Reporting Source Type Code^LN||ER^Emergency Room^ROLECODE||||||F
+OBX|34|ST|52831-5^Reporting Source ZIP Code^LN||17120||||||F
+OBX|35|CWE|77988-4^Binational Reporting Criteria^LN||PHC1139^Has case contacts in or from Mexico or Canada^CDCPHINVS||||||F
+OBX|36|ST|74549-7^Person Reporting to CDC - Name^LN||Baggins, Frodo||||||F
+OBX|37|ST|74548-9^Person Reporting to CDC - Phone Number^LN||555-457-8765||||||F
+OBX|38|ST|74547-1^Person Reporting to CDC - Email^LN||fbaggins@padoh.org||||||F
+OBX|39|DT|77979-3^Case Investigation Start Date^LN||20170729||||||F
+OBX|40|DT|77995-9^Date Reported^LN||20170729||||||F
+OBX|41|TS|77972-8^Earliest Date Reported to County^LN||20170730||||||F
+OBX|42|TS|77973-6^Earliest Date Reported to State^LN||20170729||||||F
+OBX|43|SN|77991-8^MMWR Week^LN||^30||||||F
+OBX|44|DT|77992-6^MMWR Year^LN||2017||||||F
+OBX|45|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20170731||||||F
+OBX|46|DT|77970-2^Date First Reported to PHD^LN||20170729||||||F
+OBX|47|CWE|77966-0^Reporting State^LN||42^Pennsylvania^FIPS5_2||||||F
+OBX|48|CWE|77967-8^Reporting County^LN||42043^Dauphin^FIPS6_4||||||F
+OBX|49|CWE|77968-6^National Reporting Jurisdiction^LN||36^NY^FIPS5_2||||||F
+OBX|50|TX|77999-1^Comment^LN||Shigellosis all fields||||||F
+OBX|51|TS|INV953^Date Case Report Form Completed^PHINQUESTION||20170730||||||F
+OBX|52|CWE|INV954^Case Information Completed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|53|CWE|FDD_Q_400^Second Hospitalization^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|54|TS|FDD_Q_401^Second Admission Date^PHINQUESTION||20170726||||||F
+OBX|55|TS|FDD_Q_402^Second Discharge Date^PHINQUESTION||20170801||||||F
+OBX|56|SN|INV955^Second Duration Of Hospital Stay In Days^PHINQUESTION||^6||||||F
+OBX|57|CWE|448551000124100^Transferred To Another Hospital^SCT||Y^Yes^HL70136||||||F
+OBX|58|CWE|309904001^Hospital ICU^SCT||Y^Yes^HL70136||||||F
+OBX|59|CWE|INV956^Immigrated Recently^PHINQUESTION||N^No^HL70136||||||F
+OBX|60|CWE|TRAVEL38^Travel Outside Usa Prior To Illness Onset Within Program Specific Timeframe^PHINQUESTION||N^No^HL70136||||||F
+OBX|61|SN|INV663^Specify Different Travel Exposure Window^PHINQUESTION||^4||||||F
+OBX|62|CWE|FDD_Q_1034^Travel Outside USA, 6 Months Before Illness Began^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|63|CWE|FDD_Q_1035^Countries Visited, 6 Months Before Illness Began^PHINQUESTION||MEX^Mexico^ISO3166_1||||||F
+OBX|64|CWE|FDD_Q_1036^Household Members Travel Outside USA, 6 Months Before Illness Began^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|65|CWE|FDD_Q_1037^Household Members Countries Visited, 6 Months Before Illness Began^PHINQUESTION||MEX^Mexico^ISO3166_1||||||F
+OBX|66|CWE|INV664^Did The Case Travel Domestically Prior To Illness Onset?^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|67|CWE|82754-3^Travel State^LN|1|48^Texas^FIPS5_2||||||F
+OBX|68|DT|TRAVEL06^Date Of Arrival To Travel Destination^PHINQUESTION|1|20170715||||||F
+OBX|69|DT|TRAVEL07^Date Of Departure From Travel Destination^PHINQUESTION|1|20170718||||||F
+OBX|70|CWE|82764-2^International Destination(s) of Recent Travel^LN|2|MEX^Mexico^ISO3166_1||||||F
+OBX|71|DT|TRAVEL06^Date Of Arrival To Travel Destination^PHINQUESTION|2|20170710||||||F
+OBX|72|DT|TRAVEL07^Date Of Departure From Travel Destination^PHINQUESTION|2|20170715||||||F
+OBX|73|SN|INV665^Specify Different Exposure Window^PHINQUESTION||^5||||||F
+OBX|74|CWE|FDD_Q_1028^Consumed Any Form Of Antacids, Within 30 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|75|CWE|FDD_Q_1029^Consumed Medications To Block Acids, Within 30 Days Before Illness^PHINQUESTION||220508^Tums^RXNORM||||||F
+OBX|76|CWE|FDD_Q_1030^Diagnosis Or Been Treated For Cancer (Including Leukemia/Lymphoma), In 6 Months Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|77|CWE|FDD_Q_1031^Diagnosis Or Been Treated For Diabetes, In 6 Months Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|78|CWE|FDD_Q_1032^Treatment By Abdominal Surgery, In 6 Months Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|79|CWE|FDD_Q_1033^Consumed Probiotics, Within 30 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|80|CWE|INV947^Antibiotic Used For Current Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|81|CWE|INV948^Name Of The Antibiotic Used For Current Illness^PHINQUESTION||722^Amoxicillin^RXNORM||||||F
+OBX|82|CWE|INV957^Antibiotic Used, 30 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|83|CWE|INV958^Name Of The Antibiotic Used, 30 Days Before Illness^PHINQUESTION||722^Amoxicillin^RXNORM||||||F
+OBX|84|TS|76425-8^Date Of Onset - Reported^LN||20170721||||||F
+OBX|85|CWE|56831-1^Problem Associated Signs And Symptoms^LN|1|62315008^Diarrhea^SCT||||||F
+OBX|86|CWE|INV919^Signs And Symptoms Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|87|CWE|56831-1^Problem Associated Signs And Symptoms^LN|2|386661006^Fever^SCT||||||F
+OBX|88|CWE|INV919^Signs And Symptoms Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|89|CWE|56831-1^Problem Associated Signs And Symptoms^LN|3|405729008^Bloody diarrhea^SCT||||||F
+OBX|90|CWE|INV919^Signs And Symptoms Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|91|CWE|56831-1^Problem Associated Signs And Symptoms^LN|4|OTH^Other^NULLFL||||||F
+OBX|92|CWE|INV919^Signs And Symptoms Indicator^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|93|CWE|FDD_Q_1038^Subject Outcome^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|94|CWE|FDD_Q_89^Case Identified By An Audit^PHINQUESTION||N^No^HL70136||||||F
+OBX|95|CWE|INV959^Case Interviewed By Public Health Staff^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|96|ST|FDD_Q_88^Foodborne Disease Outbreak Surveillance System (FDOSS) Outbreak ID Number^PHINQUESTION||FDOSS4512168798PA||||||F
+OBX|97|ST|FDD_Q_1129^State Outbreak Identification Number^PHINQUESTION||PA5451321||||||F
+OBX|98|CWE|FDD_Q_404^Type Of Outbreak^PHINQUESTION||416086007^Food-borne transmission^SCT||||||F
+OBX|99|ST|INV949^WGS ID Number^PHINQUESTION|1|5164913||||||F
+OBX|100|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|1|SPM424851||||||F
+OBX|101|CWE|82771-7^Performing Laboratory Type^LN|1|PHC645^Commercial laboratory^CDCPHINVS||||||F
+OBX|102|CWE|INV290^Test Type^PHINQUESTION|1|FDD_A_54^Microscopy^CDCPHINVS||||||F
+OBX|103|CWE|85069-3^Test Method^LN|1|FDD_A_43^Luminex^CDCPHINVS||||||F
+OBX|104|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|105|CWE|41852-5^Organism^LN|1|55462008^Shigella boydii Unspecified^SCT||||||F
+OBX|106|ST|LAB629^Test Result Text^PHINQUESTION|1|Positive||||||F
+OBX|107|ST|8251-1^Test Result Comments^LN|1|No additonal comments||||||F
+OBX|108|CWE|66746-9^Specimen Type^LN|1|119339001^Stool^SCT||||||F
+OBX|109|TS|68963-8^Specimen Collection Date/Time^LN|1|20170723||||||F
+OBX|110|TS|LAB595^Specimen Received Date/Time^PHINQUESTION|1|20170723||||||F
+OBX|111|TS|45375-3^Specimen Analyzed Date/Time^LN|1|20170723||||||F
+OBX|112|TS|82773-3^Date/Time Of Lab Result^LN|1|20170723||||||F
+OBX|113|CWE|LAB515^Sent To CDC^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|114|TS|85930-6^Date Specimen Sent To CDC^LN|1|20170723||||||F
+OBX|115|CWE|LAB331^Isolate sent to State Public Health Lab^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|116|ST|INV949^WGS ID Number^PHINQUESTION|2|397786||||||F
+OBX|117|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|2|SPM413749||||||F
+OBX|118|CWE|82771-7^Performing Laboratory Type^LN|2|PHC412^CDC laboratory^CDCPHINVS||||||F
+OBX|119|CWE|INV290^Test Type^PHINQUESTION|2|FDD_A_51^Antigen^CDCPHINVS||||||F
+OBX|120|CWE|85069-3^Test Method^LN|2|FDD_A_37^Premier EHEC (Meridian)^CDCPHINVS||||||F
+OBX|121|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F
+OBX|122|CWE|41852-5^Organism^LN|2|406496004^Shigella DYSENTERIAE 13^SCT||||||F
+OBX|123|ST|LAB629^Test Result Text^PHINQUESTION|2|Positive||||||F
+OBX|124|ST|8251-1^Test Result Comments^LN|2|No additional testing comments||||||F
+OBX|125|CWE|66746-9^Specimen Type^PHINQUESTION|2|119339001^Stool^SCT||||||F
+OBX|126|TS|68963-8^Specimen Collection Date/Time^LN|2|20170723||||||F
+OBX|127|TS|LAB595^Specimen Received Date/Time^PHINQUESTION|2|20170723||||||F
+OBX|128|TS|45375-3^Specimen Analyzed Date/Time^LN|2|20170724||||||F
+OBX|129|TS|82773-3^Date/Time Of Lab Result^LN|2|20170724||||||F
+OBX|130|CWE|LAB515^Sent To CDC^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|131|TS|85930-6^Date Specimen Sent To CDC^LN|2|20170723||||||F
+OBX|132|CWE|LAB331^Isolate Sent To State Public Health Lab^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|133|CWE|FDD_Q_1^Day Care Attendee^PHINQUESTION||N^No^HL70136||||||F
+OBX|134|CWE|FDD_Q_1111^Long term care facility resident^PHINQUESTION||N^No^HL70136||||||F
+OBX|135|CWE|FDD_Q_1109^Probable - Laboratory Diagnosed^PHINQUESTION||N^No^HL70136||||||F
+OBX|136|CWE|FDD_Q_1110^Probable - Epi Linked^PHINQUESTION||N^No^HL70136||||||F
+OBX|137|ST|85658-3^Current Occupation^LN|1|Administrative services managers||||||F
+OBX|138|CE|85659-1^Current Occupation Standardized^LN|1|0100^Administrative services managers^CDCOCCUPATION2010||||||F
+OBX|139|ST|85078-4^Current Industry^LN|1|Religious organizations||||||F
+OBX|140|CE|85657-5^Current  Industry Standardized^LN|1|8190^Hospitals^CDCINDUSTRY2010||||||F
+OBX|141|ST|85658-3^Current Occupation^LN|2|Medical scientists||||||F
+OBX|142|CE|85659-1^Current Occupation Standardized^LN|2|1650^Medical scientists^CDCOCCUPATION2010||||||F
+OBX|143|ST|85078-4^Current Industry^LN|2|Hospital||||||F
+OBX|144|CE|85657-5^Current  Industry Standardized^LN|2|8190^Hospitals^CDCINDUSTRY2010||||||F
+OBX|145|CWE|LABAST6^Antimicrobial Susceptibility Test Type^PHINQUESTION|1|19711^Amoxicillin/Clavulanate^RxNorm||||||F
+OBX|146|CWE|LABAST8^Antimicrobial Susceptibility Test Interpretation^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|147|CWE|LABAST6^Antimicrobial Susceptibility Test Type^PHINQUESTION|2|224901^Cefzil^RxNorm||||||F
+OBX|148|CWE|LABAST8^Antimicrobial Susceptibility Test Interpretation^PHINQUESTION|2|N^No^HL70136||||||F

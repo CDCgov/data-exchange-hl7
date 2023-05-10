@@ -1,4 +1,3 @@
-
 import com.google.gson.GsonBuilder
 import gov.cdc.dex.hl7.DateUtil
 import gov.cdc.dex.hl7.MmgValidator
@@ -7,23 +6,9 @@ import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.ReportStatus
 import gov.cdc.dex.hl7.model.ValidationIssueType
 import gov.cdc.dex.mmg.InvalidConditionException
-
-
-
 import org.junit.jupiter.api.Test
-
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.time.LocalDate
-import java.util.NoSuchElementException
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
-import java.time.format.ResolverStyle
-import java.util.Date
-import kotlin.test.assertEquals
 
 class MMGValidatorTest {
 
@@ -75,6 +60,11 @@ class MMGValidatorTest {
         testFolder("Hep")
     }
 
+    @Test
+    fun testMultiOBR() {
+        val report = validateMessage("/Hepatitis_V1_0_1_TM_TC01_HEP_A_Acute.txt")
+        println(report)
+    }
 
     @Test
     fun testInvalidMMG() {
@@ -208,9 +198,23 @@ class MMGValidatorTest {
     }
 
     @Test
+    fun testMMWRWeek() {
+        assert(DateUtil.validateMMWRWeek("1.5") != "OK")
+        assert(DateUtil.validateMMWRWeek("haha") != "OK")
+        assert(DateUtil.validateMMWRWeek("12") == "OK")
+        assert(DateUtil.validateMMWRWeek("1") == "OK")
+        assert(DateUtil.validateMMWRWeek("52") == "OK")
+        assert(DateUtil.validateMMWRWeek("53") != "OK")
+    }
+    @Test
     fun testInvalidDate() {
         val report = validateMessage("./Lyme_BadDate.txt")
-        println(report)
+
+    }
+
+    @Test
+    fun testInvalidWeek() {
+        validateMessage("./Lyme_BadWeek.txt")
     }
 
 }

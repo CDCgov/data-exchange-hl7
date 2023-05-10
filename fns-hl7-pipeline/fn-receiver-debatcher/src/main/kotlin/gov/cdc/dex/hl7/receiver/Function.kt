@@ -32,14 +32,11 @@ class Function {
         const val UTF_BOM = "\uFEFF"
         const val STATUS_SUCCESS = "SUCCESS"
         const val STATUS_ERROR = "ERROR"
-        const val MSH_9_PATH = "MSH-9"
-        const val MSH_21_1_1_PATH = "MSH-21[1].1"
         const val MSH_21_2_1_PATH = "MSH-21[2].1" // Generic or Arbo
         const val MSH_21_3_1_PATH = "MSH-21[3].1" // Condition
         const val EVENT_CODE_PATH = "OBR-31.1"
         const val JURISDICTION_CODE_PATH = "OBX[@3.1='77968-6']-5.1"
         const val ALT_JURISDICTION_CODE_PATH = "OBX[@3.1='NOT116']-5.1"
-        const val MAX_MESSAGE_SIZE = 1000000
         val gson: Gson = GsonBuilder().serializeNulls().create()
     }
     @FunctionName("receiverdebatcher001")
@@ -68,18 +65,17 @@ class Function {
         val azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
 
         if (messages != null) {
-            var nbrOfMessages = 0
-            for (message in messages) {
+            for ((nbrOfMessages, message) in messages.withIndex()) {
                 val eventArr = gson.fromJson(message, Array<AzBlobCreateEventMessage>::class.java)
                 val event = eventArr[0]
                 if ( event.eventType == BLOB_CREATED) {
                     context.logger.info("Received BLOB_CREATED event: --> $event")
                     // Pick up blob metadata
-                    val blobName = event.evHubData.url.split("/").last()
-                    context.logger.fine("Reading blob $blobName")
+                    val blobName= event.evHubData.url.substringAfter("/hl7ingress/")
+                    context.logger.fine("Reading blob: $blobName")
                     val blobClient = azBlobProxy.getBlobClient(blobName)
                     //Create Map of Metadata with lower case keys
-                    val metaDataMap = blobClient.properties.metadata.mapKeys { it.key.lowercase() }
+                    val metaDataMap =  blobClient.properties.metadata.mapKeys { it.key.lowercase() }
 
                     // Create Metadata for Provenance
                     val provenance = Provenance(
@@ -94,15 +90,13 @@ class Function {
                         originalFileTimestamp = metaDataMap["original_file_timestamp"]
                     ) // .hl7MessageMetadata
                     //Validate metadata
-                    val isValidMessage = validateMessageMetaData(metaDataMap, context);
-
-                    var messageType = metaDataMap["message_type"];
-
+                    val isValidMessage = validateMessageMetaData(metaDataMap, context)
+                    var messageType = metaDataMap["message_type"]
                     if(messageType.isNullOrEmpty()){
-                        messageType = HL7MessageType.UNKOWN.name;
+                        messageType = HL7MessageType.UNKOWN.name
                        }
 
-                    if(!isValidMessage){
+                    if (!isValidMessage){
                         // required Metadata is missing -- send to error queue
                         val (metadata, summary) = buildMetadata(STATUS_ERROR, eventHubMD[nbrOfMessages], startTime, provenance, "Message missing required Meta Data.")
                         // send empty array as message content when content is invalid
@@ -122,7 +116,7 @@ class Function {
                             if ( lineClean.startsWith("FHS") || lineClean.startsWith("BHS") || lineClean.startsWith("BTS") || lineClean.startsWith(("FTS")) ) {
                                 // batch line --Nothing to do here
                                 provenance.singleOrBatch = Provenance.BATCH_FILE
-                            } else {
+                            } else if (lineClean.isNotEmpty()) {
                                 if ( lineClean.startsWith("MSH") ) {
                                     mshCount++
                                     if ( mshCount > 1 ) {
@@ -152,7 +146,6 @@ class Function {
                         prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, evHubSender, evHubErrsName, context)
                     }
                 } // .if
-             nbrOfMessages++
             }
         } // .for
     } // .eventHubProcess
@@ -161,10 +154,10 @@ class Function {
         val eventCode = extractValue(message, EVENT_CODE_PATH)
 
         //READ FROM METADATA FOR ELR
-        val messageType = metaDataMap["message_type"];
+        val messageType = metaDataMap["message_type"]
         if(messageType == HL7MessageType.ELR.name){
-            val route = metaDataMap["route"]?.normalize();
-            val reportingJurisdiction = metaDataMap["reporting_jurisdiction"];
+            val route = metaDataMap["route"]?.normalize()
+            val reportingJurisdiction = metaDataMap["reporting_jurisdiction"]
             return DexMessageInfo(eventCode, route, null,  reportingJurisdiction, HL7MessageType.ELR)
         }
 
@@ -214,23 +207,23 @@ class Function {
     }
 
     private fun validateMessageMetaData(metaDataMap: Map<String, String>, context: ExecutionContext):Boolean {
-        var isValid = true;
-        //Check if required Meta data fields are present
-        val messageType = metaDataMap["message_type"];
-        val route = metaDataMap["route"];
-        val reportingJurisdiction = metaDataMap["reporting_jurisdiction"];
-        context.logger.info("MetaData Info: --> messageType: ${messageType}, route: ${route}, reportingJurisdiction: $reportingJurisdiction")
+        var isValid = true
+        //Check if required Metadata fields are present
+        val messageType = metaDataMap["message_type"]
+        val route = metaDataMap["route"]
+        val reportingJurisdiction = metaDataMap["reporting_jurisdiction"]
+        context.logger.info("Metadata Info: --> messageType: ${messageType}, route: ${route}, reportingJurisdiction: $reportingJurisdiction")
 
-        if(messageType.isNullOrEmpty()){
-            isValid = false;
+        if (messageType.isNullOrEmpty()){
+            isValid = false
         } else if (messageType == HL7MessageType.ELR.name){
-            if(route.isNullOrEmpty() || reportingJurisdiction.isNullOrEmpty()){
-                isValid = false;
+            if (route.isNullOrEmpty() || reportingJurisdiction.isNullOrEmpty()){
+                isValid = false
             }
         }
         context.logger.info("isValid: --> $isValid")
 
-        return isValid;
+        return isValid
     }
 
 

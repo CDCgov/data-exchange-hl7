@@ -1,0 +1,22 @@
+[{
+	"topic": "/subscriptions/01f9b1b1-a130-4031-ba25-71771007d3ca/resourceGroups/ocio-ede-dev-moderate-hl7-rg/providers/Microsoft.Storage/storageAccounts/tfedemessagestoragedev",
+	"subject": "/blobServices/default/containers/hl7ingress/blobs/unitTests/BatchedMessage.doNotDelete.txt",
+	"eventType": "Microsoft.Storage.BlobCreated",
+	"id": "7273cdb4-901e-000e-2db6-7e858d06cb75",
+	"data": {
+		"api": "PutBlob",
+		"clientRequestId": "8df0affa-6a06-4bd7-bea5-9ff48233652c",
+		"requestId": "7273cdb4-901e-000e-2db6-7e858d000000",
+		"eTag": "0x8DB4CCDDFF72FDE",
+		"contentType": "application/octet-stream",
+		"contentLength": "6416",
+		"blobType": "BlockBlob",
+		"url": "https://tfedemessagestoragedev.blob.core.windows.net/hl7ingress/unitTests/BatchedMessage.doNotDelete.txt",
+		"sequencer": "0000000000000000000000000001d01a00000000000031f0",
+		"identity": "$superuser"
+
+	},
+	"dataVersion": "",
+	"metadataVersion": "1",
+	"eventTime": "2023-05-04T18:32:11.2658945Z"
+}]

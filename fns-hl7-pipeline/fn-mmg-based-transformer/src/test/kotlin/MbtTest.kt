@@ -50,7 +50,7 @@ class MbtTest {
         private val gson = Gson()
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
 
-        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77966-0']-5.1"
+        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77968-6']-5.1"
         const val EVENT_CODE_PATH = "OBR-31.1"
 
     } // .companion 
@@ -269,6 +269,36 @@ class MbtTest {
     fun testMalaria() {
         testTransformerWithRedis("testMalaria", "/Malaria_V1.0.2__TC08.txt")
     }
+
+    @Test
+    fun testCRS() {
+        testTransformerWithRedis("testCRS", "/CRS_1-0_TC09.txt")
+    }
+
+    @Test
+    fun testCandidaAuris() {
+        testTransformerWithRedis("testCandidaAuris", "/C auris_1-0-1_TC01.txt")
+    }
+
+    @Test
+    fun testCPCRE() {
+        testTransformerWithRedis("testCPCRE", "/CP-CRE_1-0-1_TC01.txt")
+    }
+
+    @Test
+    fun testSalmonellosis() {
+        testTransformerWithRedis("testSalmonellosis", "/FDD_V1.0.1_ETM4-Sal(D).txt")
+    }
+
+    @Test
+    fun testShigellosis() {
+        testTransformerWithRedis("testShigellosis", "/FDD_V1.0.1_ETM5-Shig(F).txt")
+    }
+
+    @Test
+    fun testCholera() {
+        testTransformerWithRedis("testCholera", "/FDD_V1.0.1_ETM9-Cholera(F).txt")
+    }
     @Test
     fun testConditionNotSupportedException() {
 
@@ -281,7 +311,7 @@ class MbtTest {
 
                 val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
         
-                val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "11550")
+                val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, "9")
         
                 logger.info("testConditionNotSupportedException: for filePath: $filePath, mmgs.size: --> ${mmgs.size}")
         
@@ -296,6 +326,44 @@ class MbtTest {
 
     } // .testLoadMMG
 
+    @Test
+    fun testFilterMMGs() {
+        val filePath = "/FDD_V1.0.1_ETM5-Shig(F).txt"
+        val hl7Content = this::class.java.getResource(filePath).readText()
+        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
+        val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
+        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
+
+        if ( mmgs.size > 1 ) {
+            // remove message header block from all but last mmg
+            for (index in 0..mmgs.size - 2) {
+                mmgs[index].blocks = mmgs[index].blocks.filter { block ->
+                    block.name != "Message Header" && block.elements.isNotEmpty()
+                } // .filter
+            } // .for
+            // remove duplicate blocks that occur in last and next-to-last mmgs
+            val lastMMG = mmgs[mmgs.size - 1]
+            val nextToLastMMG = mmgs[mmgs.size - 2]
+            // compare each block in lastMMG with blocks in nextToLastMMG
+            // if the elements IDs are identical, remove it from nextToLastMMG
+            println("LastMMG --> ${lastMMG.name} : size ${lastMMG.blocks.size}")
+            println("Next to Last MMG --> ${nextToLastMMG.name} : size ${nextToLastMMG.blocks.size}")
+            keepBiggerElementSet(lastMMG, nextToLastMMG)
+            keepBiggerElementSet(nextToLastMMG, lastMMG)
+            println("After transform")
+            println("LastMMG --> ${lastMMG.name} : size ${lastMMG.blocks.size}")
+            println("Next to Last MMG --> ${nextToLastMMG.name} : size ${nextToLastMMG.blocks.size}")
+        }
+    }
+
+    private fun keepBiggerElementSet(firstMMG: MMG, secondMMG: MMG) {
+        firstMMG.blocks.forEach { block ->
+            val blockElementIds = block.elements.map { elem -> elem.mappings.hl7v251.identifier }.toSet()
+            secondMMG.blocks = secondMMG.blocks.filter {
+              !blockElementIds.containsAll(it.elements.map { el -> el.mappings.hl7v251.identifier }.toSet())
+            }
+        }
+    }
     @Test
     fun testMmgThrowsException() {
 
@@ -312,6 +380,19 @@ class MbtTest {
 
     } // .testMmgThrowsException
 
+    @Test
+    fun testFilterOBXs() {
+        val filePath = "/Hepatitis_V1_0_1_TM_TC02_HEP_B_ACUTE.txt"
+        val hl7Content = this::class.java.getResource(filePath).readText().trim()
+        val messageLines = hl7Content.split("\r")
+        val transformer = Transformer(redisProxy)
+     //   val start = System.currentTimeMillis()
+        val epiLines = transformer.getEpiOBXs(messageLines)
+     //   println(System.currentTimeMillis() - start)
+        assertTrue { epiLines.isNotEmpty() }
+        assertTrue { epiLines[0].split("|")[1].trim() == "1" }
+        assertTrue { epiLines.last().split("|")[1].trim() == "101" }
+    }
 
     private fun extractValue(msg: String, path: String): String  {
         val value = HL7StaticParser.getFirstValue(msg, path)
@@ -331,6 +412,8 @@ class MbtTest {
     private fun testTransformerWithRedis(testName: String, filePath: String) {
 
         val hl7Content = this::class.java.getResource(filePath).readText()
+            .replace("\r\n", "\n")
+            .replace("\r", "\n")
         val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
         val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
         val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)

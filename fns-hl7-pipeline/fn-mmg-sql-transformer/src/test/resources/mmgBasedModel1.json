@@ -66,8 +66,8 @@
 		"alternate_identifier": null,
 		"alternate_text": null,
 		"name_of_alternate_coding_system": null,
-		"code_system_concept_name": null,
-		"cdc_preferred_designation": null
+		"code_system_concept_name": "Ehrlichia chaffeensis",
+		"cdc_preferred_designation": "Ehrlichia chaffeensis"
 	},
 	"local_record_id": {
 		"entity_identifier": "TickborneTBRD_TC04",

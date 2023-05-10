@@ -32,19 +32,14 @@ class Function {
     companion object {
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         const val TABLES_KEY_NAME = "tables"
-
-        // same in MmgSqlTransProcessMetadata
-        const val PROCESS_NAME = "mmgSQLTransformer"
-        // const val PROCESS_VERSION = "1.0.0"
-
-        const val PROCESS_STATUS_OK = "PROCESS_MMG_SQL_TRANSFORMER_OK"
-        const val PROCESS_STATUS_EXCEPTION = "PROCESS_MMG_SQL_TRANSFORMER_EXCEPTION"
-        const val PREVIOUS_PROCESS_NAME = "mmgBasedTransformer"
+        const val PROCESS_STATUS_OK = "SUCCESS"
+        const val PROCESS_STATUS_EXCEPTION = "FAILURE"
+        const val PREVIOUS_PROCESS_NAME = "MMG_BASED_TRANSFORMER"
 
     } // .companion object
 
 
-    @FunctionName("mmgSQLTransformer")
+    @FunctionName("MMG_BASED_SQL_TRANSFORMER")
     fun eventHubProcessor(
         @EventHubTrigger(
                 name = "msg", 
@@ -220,7 +215,7 @@ class Function {
 
         if (exception != null) {
             //TODO::  - update retry counts
-            val problem = Problem(PROCESS_NAME, exception, false, 0, 0)
+            val problem = Problem(MmgSqlTransProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
             val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
             inputEvent.add("summary", summary.toJsonElement())
         } else {
