@@ -58,7 +58,7 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
             val hl7Mapping = el.mappings.hl7v251
             val segmentData = when (hl7Mapping.segmentType) {
                 "OBX" -> hl7Parser.getValue("${hl7Mapping.segmentType}[@3.1='${hl7Mapping.identifier}']-${hl7Mapping.fieldPosition}")
-                "OBR" -> hl7Parser.getValue("OBR[@4.1='68991-9||PERSUBJ']-${hl7Mapping.fieldPosition}")
+                "OBR" -> hl7Parser.getValue("OBR[@4.1='68991-9||PERSUBJ||NOTF']-${hl7Mapping.fieldPosition}")
                 else -> hl7Parser.getValue("${hl7Mapping.segmentType}-${hl7Mapping.fieldPosition}")
 
             }

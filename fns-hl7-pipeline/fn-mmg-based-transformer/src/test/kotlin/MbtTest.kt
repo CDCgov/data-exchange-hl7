@@ -381,14 +381,13 @@ class MbtTest {
     fun testFilterOBXs() {
         val filePath = "/Hepatitis_V1_0_1_TM_TC02_HEP_B_ACUTE.txt"
         val hl7Content = this::class.java.getResource(filePath).readText().trim()
-        val messageLines = hl7Content.split("\r")
-        val transformer = Transformer(redisProxy)
+
+        val parser = HL7ParseUtils.getParser(hl7Content, "BasicProfile.json")
      //   val start = System.currentTimeMillis()
-        val epiLines = transformer.getEpiOBXs(messageLines)
+        val epiLines = parser.getValue("OBR[@4.1='68991-9||PERSUBJ||NOTF']")
      //   println(System.currentTimeMillis() - start)
-        assertTrue { epiLines.isNotEmpty() }
-        assertTrue { epiLines[0].split("|")[1].trim() == "1" }
-        assertTrue { epiLines.last().split("|")[1].trim() == "101" }
+        assertTrue { epiLines.isDefined }
+        assertTrue { epiLines.get().flatten().size ==1}
     }
 
     private fun extractValue(msg: String, path: String): String  {
