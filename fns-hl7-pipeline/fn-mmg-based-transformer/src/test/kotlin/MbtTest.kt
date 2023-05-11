@@ -7,24 +7,15 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFails
-
 import org.slf4j.LoggerFactory
-
 import gov.cdc.dex.redisModels.MMG
-
-import gov.cdc.dex.redisModels.Condition2MMGMapping 
-
-import gov.cdc.dex.hl7.model.PhinDataType
-
+import gov.cdc.dex.redisModels.Condition2MMGMapping
 import gov.cdc.dex.hl7.Transformer
-
 import gov.cdc.dex.mmg.InvalidConditionException
-
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-
 import  gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.metadata.DexMessageInfo
 import gov.cdc.dex.metadata.HL7MessageType
@@ -49,7 +40,7 @@ class MbtTest {
 
         val REDIS_PREFIX_COONDITION = "condition:"
 
-        val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
+        val logger = LoggerFactory.getLogger(MbtTest::class.java.simpleName)
         private val gson = Gson()
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
 
@@ -409,7 +400,7 @@ class MbtTest {
 
     @OptIn(ExperimentalTime::class)
     private fun testTransformerWithRedis(testName: String, filePath: String) {
-        val time = measureTime {
+       val time = measureTime {
             val hl7Content = this::class.java.getResource(filePath).readText()
 
             val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
@@ -423,8 +414,8 @@ class MbtTest {
             val transformer = Transformer(redisProxy, mmgs, hl7Content)
             val mmgModel = transformer.transformMessage()
             logger.info("$testName: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
-        }
-        logger.info("Method took $time")
+       }
+       logger.info("Method took $time")
     }
 
     @Test
@@ -436,6 +427,17 @@ class MbtTest {
        obxList.forEach { it.forEach { itt-> println(itt) }
 
        }
+    }
+
+    @Test
+    fun testLabTemplate() {
+        val hl7Content = this::class.java.getResource("/CaseLab_001.txt").readText()
+        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
+        val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
+        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
+        val transformer = Transformer(redisProxy, mmgs, hl7Content)
+        val labsMap = transformer.hl7ToJsonModelLabTemplate(hl7Content)
+        println("Labs: ${gson.toJson(labsMap)}")
     }
 
 

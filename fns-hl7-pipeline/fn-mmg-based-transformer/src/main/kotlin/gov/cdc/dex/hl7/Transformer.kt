@@ -2,6 +2,7 @@ package gov.cdc.dex.hl7
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import gov.cdc.dex.TemplateTransformer
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.model.PhinDataType
 import gov.cdc.dex.redisModels.Block
@@ -12,6 +13,7 @@ import gov.cdc.dex.util.StringUtils
 import gov.cdc.dex.util.StringUtils.Companion.normalize
 import gov.cdc.hl7.HL7ParseUtils
 import gov.cdc.hl7.HL7StaticParser
+import java.lang.reflect.Type
 
 class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content: String) {
 
@@ -58,7 +60,7 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
             val hl7Mapping = el.mappings.hl7v251
             val segmentData = when (hl7Mapping.segmentType) {
                 "OBX" -> hl7Parser.getValue("${hl7Mapping.segmentType}[@3.1='${hl7Mapping.identifier}']-${hl7Mapping.fieldPosition}")
-                "OBR" -> hl7Parser.getValue("OBR[@4.1='68991-9||PERSUBJ||NOTF']-${hl7Mapping.fieldPosition}")
+                "OBR" -> hl7Parser.getValue("OBR[@4.1='$OBR_4_1_EPI_ID||$OBR_4_1_LEGACY']-${hl7Mapping.fieldPosition}")
                 else -> hl7Parser.getValue("${hl7Mapping.segmentType}-${hl7Mapping.fieldPosition}")
 
             }
@@ -91,16 +93,12 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
             val blockElementsNameDataTupMap = msgLinesByBlockNumMap.map { (_, lines) ->
                 val mapFromMsg = lines.associate { line ->
                     val obx3 = HL7StaticParser.getFirstValue(line, "OBX-3.1").get()
-//                    if (obx3.isDefined) {
-                        val el = obxIdToElementMap[obx3]!!
-                        val obx5 = HL7StaticParser.getValue(line, "OBX-5")
-                        val mappedData = if (obx5.isDefined)
-                             mapSegmentData(obx5.get(), el)
-                        else null
-                        StringUtils.normalizeString(el.name) to mappedData
-//                    } else { //Should never happen
-//                        throw Exception("Unable to find OBX Identifier")
-//                    }
+                    val el = obxIdToElementMap[obx3]!!
+                    val obx5 = HL7StaticParser.getValue(line, "OBX-5")
+                    val mappedData = if (obx5.isDefined)
+                         mapSegmentData(obx5.get(), el)
+                    else null
+                    StringUtils.normalizeString(el.name) to mappedData
                 } // .line
 
                 // add block elements that are not found in the message lines
@@ -127,20 +125,75 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
         return blocksNonSingleModel
     } // .hl7ToJsonModelBlocksNonSingle
 
+    // -------------------------------------------------------------------------------------------------------
+    //---------------------Lab Template--------------------------------
+    //--------------------------------------------------------------------------------------------------------
+    fun hl7ToJsonModelLabTemplate(hl7Content: String) : Map<String, List<Map<String, Any?>>>? {
+        val nonEpiOBRs = getNonEpiOBRs(hl7Content)
+        if (nonEpiOBRs.isNotEmpty()) {
+            val messageLines = hl7Content.split("\n")
+            nonEpiOBRs.forEach { obr ->
+                messageLines.indexOf(obr)
+            }
+            val bumblebee = TemplateTransformer.getTransformerWithResource("/labTemplate.json", "/BasicProfile.json")
+            val labsList = mutableListOf<Map<String, Any?>>()
+            nonEpiOBRs.forEach { obr ->
+                val obr4 = HL7StaticParser.getFirstValue(obr, "OBR[1]-4.1")
+                val identifier = obr4.get()
+    /*            val obxs = hl7Parser.getValue("OBR[@4.1='$identifier']->OBX")
+                val spms = hl7Parser.getValue("OBR[@4.1='$identifier']->SPM")
+                This does not work because OBR-4 is not necessarily different for each order :(
+     */
+                val labMessage = StringBuilder()
+                labMessage.append("$obr\n")
+                if (obxs.isDefined) {
+                    obxs.get().iterator().forEach { obxInnerArray ->
+                        obxInnerArray.iterator().forEach { obx ->
+                            labMessage.append("$obx\n")
+                        }
+                    }
+                }
+                if (spms.isDefined) {
+                    spms.get().iterator().forEach { spmInnerArray ->
+                        spmInnerArray.iterator().forEach { spm ->
+                            labMessage.append("${spm}\n")
+                        }
+                    }
+                }
+
+                val labMessageJsonString = bumblebee.transformMessage(labMessage.toString())
+                val mapType: Type = object : TypeToken<Map<String?, Any?>?>() {}.type
+                val labMap: Map<String, Any> = gson.fromJson(labMessageJsonString, mapType)
+                labsList.add(labMap)
+            }
+            return mapOf("lab_orders" to labsList)
+        }
+        return null
+    }
+
 
     // --------------------------------------------------------------------------------------------------------
     //  ------------- Functions used in the transformation -------------
     // --------------------------------------------------------------------------------------------------------
+    private fun getNonEpiOBRs(hl7Content: String) : List<String> {
+        val hl7MessageLines = hl7Content.split("\n")
+        return hl7MessageLines.filter { line ->
+            line.startsWith("OBR|")
+                    && line.split("|")[4].split("^")[0].trim() !in listOf(
+                OBR_4_1_EPI_ID, OBR_4_1_LEGACY, OBR_4_1_SUBJECT)
+        }
+    }
+
     private fun filterByIdentifier(lines: List<String>, id: String): List<String> {
         val group = lines.joinToString("\n")
         val mappinglines = HL7StaticParser.getValue(group, "OBX[@3.1='$id']")
-        return if (mappinglines.isDefined()) {
+        return if (mappinglines.isDefined) {
             mappinglines.get().flatten()
         } else listOf()
     }
     private fun filterByIdentifier(id: String): List<String> {
         val mappinglines = hl7Parser.getValue("OBX[@3.1='$id']")
-        return if (mappinglines.isDefined()) {
+        return if (mappinglines.isDefined) {
                  mappinglines.get().flatten()
             } else listOf()
     }
@@ -213,7 +266,7 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
                                 StringUtils.normalizeString(phinDataTypeEntry.name) to dt
                             }
                         } else
-                          StringUtils.normalizeString(phinDataTypeEntry.name) to dt
+                          StringUtils.normalizeString(phinDataTypeEntry.name) to null
                     }
                     // call vocab for preferred name and cdc preferred name
                     if (el.mappings.hl7v251.dataType in arrayOf(ELEMENT_CE, ELEMENT_CWE)) {
@@ -235,7 +288,7 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
                 } // .else
 
             }
-            return if (el.isRepeat || el.mayRepeat.contains("Y")) segmentData else segmentData[0]
+           return if (el.isRepeat || el.mayRepeat.contains("Y")) segmentData else segmentData[0]
         }
         return null
     }
@@ -249,21 +302,21 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
                 println("ValueSetCode: $valueSetCode, conceptCode: $conceptCode not found in Redis cache")
             }
         }
-    if (conceptJson.isEmpty())
-    { // map2 used for dev only
-        // No Redis entry!! for this value set code, concept code
-        return mapOf(
-            CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to null,
-            CDC_PREFERRED_DESIGNATION_KEY_NAME to null
-        )
-    } else {
-        // logger.info("ValueSetConcept conceptJson: --> $conceptJson")
-        val cobj: ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
-        return mapOf(
-            CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.codeSystemConceptName,
-            CDC_PREFERRED_DESIGNATION_KEY_NAME to cobj.cdcPreferredDesignation
-        )
-    }
+        return if (conceptJson.isEmpty())
+        { // map2 used for dev only
+            // No Redis entry!! for this value set code, concept code
+            mapOf(
+                CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to null,
+                CDC_PREFERRED_DESIGNATION_KEY_NAME to null
+            )
+        } else {
+            // logger.info("ValueSetConcept conceptJson: --> $conceptJson")
+            val cobj: ValueSetConcept = gson.fromJson(conceptJson, ValueSetConcept::class.java)
+            mapOf(
+                CODE_SYSTEM_CONCEPT_NAME_KEY_NAME to cobj.codeSystemConceptName,
+                CDC_PREFERRED_DESIGNATION_KEY_NAME to cobj.cdcPreferredDesignation
+            )
+        }
 }
 
     // } // .companion object
