@@ -1,43 +1,87 @@
 {
-  "place_order_number": "OBR-2",
-  "filler_order_number": "OBR-3",
-  "test_ordered_name": "OBR-4",
+  "placer_order_number": {
+    "entity_identifier": "OBR-2.1",
+    "namespace_id": "OBR-2.2",
+    "universal_id": "OBR-2.3",
+    "universal_id_type": "OBR-2.4"
+  },
+  "filler_order_number": {
+    "entity_identifier": "OBR-3.1",
+    "namespace_id": "OBR-3.2",
+    "universal_id": "OBR-3.3",
+    "universal_id_type": "OBR-3.4"
+  },
+  "test_ordered": {
+    "identifier": "OBR-4.1",
+    "text": "OBR-4.2",
+    "code_system": "OBR-4.3"
+  },
   "observation_datetime": "OBR-7",
   "specimen_action_code": "OBR-11",
-  "ordering_provider": "OBR-16",
-  "results_status_change": "OBR-22",
+  "ordering_provider_id":  "OBR-16.1",
+  "results_status_change_date": "OBR-22",
   "result_status": "OBR-25",
-  "parent_result": "OBR-26",
-  "parent_lab_order": "OBR-29",
-  "reason_for_study": "OBR-31",
-  "parent_universal_service_identifier": "OBR-50",
-  "tests_results": [
+  "parent_result": {
+    "observation_id": "OBR-26.1",
+    "observation_sub_id": "OBR-26.2",
+    "observation_value_descriptor": "OBR-26.3"
+  },
+  "parent_lab_order": {
+    "placer_assigned_id": "OBR-29.1",
+    "filler_assigned_id": "OBR-29.2"
+  },
+  "reason_for_study": {
+    "identifier": "OBR-31.1",
+    "text": "OBR-31.2",
+    "code_system": "OBR-31.3"
+  },
+  "parent_universal_service_identifier": {
+    "identifier": "OBR-50.1",
+    "text": "OBR-50.2",
+    "code_system": "OBR-50.3"
+  },
+  "test_results_rg": [
     {
-      "test_performed_name": "OBX-3",
-      "observation_subid": "OBX-4",
-      "result": "OBX-5",
+      "test_performed": {
+        "identifier": "OBX-3.1",
+        "text": "OBX-3.2",
+        "code_system": "OBX-3.3"
+      },
+      "observation_sub_id": "OBX-4",
+      "result": {
+        "component_1": "OBX-5.1",
+        "component_2": "OBX-5.2",
+        "component_3": "OBX-5.3",
+        "component_4": "OBX-5.4"
+      },
       "units_of_measure": "OBX-6",
       "result_range": "OBX-7",
       "interpretation_flag": "OBX-8",
       "result_status": "OBX-11",
       "specimen_collection_date": "OBX-14",
-      "test_method": "OBX-17",
+      "test_method": {
+        "identifier": "OBX-17.1",
+        "text": "OBX-17.2",
+        "code_system": "OBX-17.3"
+      },
       "specimen_analyzed_date": "OBX-19",
-      "performing_lab_name": "OBX-23",
-      "performing_person_name": "OBX-25",
+      "performing_lab_name": "OBX-23.1",
+      "performing_organization_director_id": "OBX-25.1",
       "comments": "NTE-3"
     }
     ],
     "isolate": {
-      "id_number": "OBX[@3.1='80398-1']-5.1",
-      "check_digit": "OBX[@3.1='80398-1']-5.2",
-      "check_digit_scheme": "OBX[@3.1='80398-1']-5.3",
-      "assigning_authority": {
-        "namespace_id": "OBX[@3.1='80398-1']-5.4.1",
-        "universal_id": "OBX[@3.1='80398-1']-5.4.2",
-        "universal_id_type": "OBX[@3.1='80398-1']-5.4.3"
+      "identifier": {
+        "id_number": "OBX[@3.1='80398-1']-5.1",
+        "check_digit": "OBX[@3.1='80398-1']-5.2",
+        "check_digit_scheme": "OBX[@3.1='80398-1']-5.3",
+        "assigning_authority": {
+          "namespace_id": "OBX[@3.1='80398-1']-5.4.1",
+          "universal_id": "OBX[@3.1='80398-1']-5.4.2",
+          "universal_id_type": "OBX[@3.1='80398-1']-5.4.3"
+        },
+        "identifier_type_code": "OBX[@3.1='80398-1']-5.5"
       },
-      "identifier_type_code": "OBX[@3.1='80398-1']-5.5",
       "assigning_facility": {
         "namespace_id": "OBX[@3.1='80398-1']-5.6.1",
         "universal_id": "OBX[@3.1='80398-1']-5.6.2",
@@ -51,15 +95,34 @@
       }
     },
     "specimen": {
-      "id": "SPM-2",
-      "placer_assigned_id": "SPM-2.1",
-      "filler_assigned_id": "SPM-2.2",
-      "type": "SPM-4",
-      "source_site": "SPM-8",
-      "role": "SPM-11",
-      "collection_amount": "SPM-12",
+      "identifier": {
+        "placer_assigned_id": "SPM-2.1",
+        "filler_assigned_id": "SPM-2.2"
+      },
+      "type": {
+        "id": "SPM-4.1",
+        "text": "SPM-4.2",
+        "code_system": "SPM-4.3"
+      },
+      "source_site": {
+        "id": "SPM-8.1",
+        "text": "SPM-8.2",
+        "code_system": "SPM-8.3"
+      },
+      "role": {
+        "id": "SPM-11.1",
+        "text": "SPM-11.2",
+        "code_system": "SPM-11.3"
+      },
+      "collection_amount": {
+        "quantity": "SPM-12.1",
+        "units": "SPM-12.2"
+      },
       "description": "SPM-14",
-      "collection_datetime": "SPM-17",
-      "received_datetime": "SPM-18"
+      "collection_datetime": {
+        "range_start": "SPM-17.1",
+        "range_end": "SPM-17.2"
+      },
+      "received_datetime": "SPM-18.1"
     }
 }

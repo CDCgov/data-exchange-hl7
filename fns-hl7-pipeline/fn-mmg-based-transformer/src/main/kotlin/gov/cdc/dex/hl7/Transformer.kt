@@ -1,6 +1,7 @@
 package gov.cdc.dex.hl7
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import gov.cdc.dex.TemplateTransformer
 import gov.cdc.dex.azure.RedisProxy
@@ -23,7 +24,7 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
 
     companion object {
         //  val logger: Logger = LoggerFactory.getLogger(Transformer::class.java.simpleName)
-        private val gson = Gson()
+        private val gson: Gson = GsonBuilder().serializeNulls().create()
 
         const val MMG_BLOCK_TYPE_SINGLE = "Single"
         private const val OBR_4_1_EPI_ID = "68991-9"
@@ -50,7 +51,8 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
 
         val singleElem = hl7ToJsonModelBlocksSingle(mmgBlocksSingle)
         val repeatElem = hl7ToJsonModelBlocksNonSingle(mmgBlocksRepeat)
-        return singleElem + repeatElem
+        val labElem = hl7ToJsonModelLabTemplate(hl7Content)
+        return if (labElem == null) singleElem + repeatElem else singleElem + repeatElem + labElem
     }
     //? @Throws(Exception::class)
     private fun hl7ToJsonModelBlocksSingle(mmgBlocksSingle: List<Block> ): Map<String, Any?> {
@@ -131,19 +133,14 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
     fun hl7ToJsonModelLabTemplate(hl7Content: String) : Map<String, List<Map<String, Any?>>>? {
         val nonEpiOBRs = getNonEpiOBRs(hl7Content)
         if (nonEpiOBRs.isNotEmpty()) {
-            val messageLines = hl7Content.split("\n")
-            nonEpiOBRs.forEach { obr ->
-                messageLines.indexOf(obr)
-            }
             val bumblebee = TemplateTransformer.getTransformerWithResource("/labTemplate.json", "/BasicProfile.json")
             val labsList = mutableListOf<Map<String, Any?>>()
             nonEpiOBRs.forEach { obr ->
-                val obr4 = HL7StaticParser.getFirstValue(obr, "OBR[1]-4.1")
-                val identifier = obr4.get()
-    /*            val obxs = hl7Parser.getValue("OBR[@4.1='$identifier']->OBX")
-                val spms = hl7Parser.getValue("OBR[@4.1='$identifier']->SPM")
-                This does not work because OBR-4 is not necessarily different for each order :(
-     */
+                val obr3 = HL7StaticParser.getFirstValue(obr, "OBR[1]-3.1")
+                val identifier = obr3.get()
+                val obxs = hl7Parser.getValue("OBR[@3.1='$identifier']->OBX")
+                val spms = hl7Parser.getValue("OBR[@3.1='$identifier']->SPM")
+
                 val labMessage = StringBuilder()
                 labMessage.append("$obr\n")
                 if (obxs.isDefined) {
@@ -166,7 +163,7 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
                 val labMap: Map<String, Any> = gson.fromJson(labMessageJsonString, mapType)
                 labsList.add(labMap)
             }
-            return mapOf("lab_orders" to labsList)
+            return mapOf("lab_orders_rg" to labsList)
         }
         return null
     }
