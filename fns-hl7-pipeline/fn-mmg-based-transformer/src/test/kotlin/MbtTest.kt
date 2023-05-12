@@ -430,17 +430,6 @@ class MbtTest {
     }
 
     @Test
-    fun testLabTemplate() {
-        val hl7Content = this::class.java.getResource("/CaseLab_001.txt").readText()
-        val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
-        val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
-        val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
-        val transformer = Transformer(redisProxy, mmgs, hl7Content)
-        val labsMap = transformer.hl7ToJsonModelLabTemplate(hl7Content)
-        println("Labs: ${gson.toJson(labsMap)}")
-    }
-
-    @Test
     fun testCaseMessageWithLabTemplate() {
         val hl7Content = this::class.java.getResource("/CaseLab_001.txt").readText()
         val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
@@ -448,7 +437,7 @@ class MbtTest {
         val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
         val transformer = Transformer(redisProxy, mmgs, hl7Content)
         val caseMessage = transformer.transformMessage()
-        println("Case with Labs: ${gson.toJson(caseMessage)}")
+        println("Case with Labs: ${gsonWithNullsOn.toJson(caseMessage)}")
     }
 
 

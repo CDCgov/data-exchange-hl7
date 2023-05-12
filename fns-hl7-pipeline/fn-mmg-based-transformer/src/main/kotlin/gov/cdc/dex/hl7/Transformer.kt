@@ -51,20 +51,18 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
 
         val singleElem = hl7ToJsonModelBlocksSingle(mmgBlocksSingle)
         val repeatElem = hl7ToJsonModelBlocksNonSingle(mmgBlocksRepeat)
-        val labElem = hl7ToJsonModelLabTemplate(hl7Content)
+        val labElem = hl7ToJsonModelLabTemplateMMG()
         return if (labElem == null) singleElem + repeatElem else singleElem + repeatElem + labElem
     }
     //? @Throws(Exception::class)
-    private fun hl7ToJsonModelBlocksSingle(mmgBlocksSingle: List<Block> ): Map<String, Any?> {
+    private fun hl7ToJsonModelBlocksSingle(mmgBlocksSingle: List<Block>): Map<String, Any?> {
         val mmgElemsBlocksSingle = mmgBlocksSingle.flatMap { it.elements } // .mmgElemsBlocksSingle
-
         return mmgElemsBlocksSingle.associate { el ->
             val hl7Mapping = el.mappings.hl7v251
             val segmentData = when (hl7Mapping.segmentType) {
                 "OBX" -> hl7Parser.getValue("${hl7Mapping.segmentType}[@3.1='${hl7Mapping.identifier}']-${hl7Mapping.fieldPosition}")
                 "OBR" -> hl7Parser.getValue("OBR[@4.1='$OBR_4_1_EPI_ID||$OBR_4_1_LEGACY']-${hl7Mapping.fieldPosition}")
-                else -> hl7Parser.getValue("${hl7Mapping.segmentType}-${hl7Mapping.fieldPosition}")
-
+                else ->  hl7Parser.getValue("${hl7Mapping.segmentType}-${hl7Mapping.fieldPosition}")
             }
             val mappedData = if (segmentData.isDefined) {
                 mapSegmentData(segmentData.get(), el)
@@ -130,7 +128,7 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
     // -------------------------------------------------------------------------------------------------------
     //---------------------Lab Template--------------------------------
     //--------------------------------------------------------------------------------------------------------
-    fun hl7ToJsonModelLabTemplate(hl7Content: String) : Map<String, List<Map<String, Any?>>>? {
+    fun hl7ToJsonModelLabTemplate() : Map<String, List<Map<String, Any?>>>? {
         val nonEpiOBRs = getNonEpiOBRs(hl7Content)
         if (nonEpiOBRs.isNotEmpty()) {
             val bumblebee = TemplateTransformer.getTransformerWithResource("/labTemplate.json", "/BasicProfile.json")
@@ -168,6 +166,94 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
         return null
     }
 
+    private fun labModelBlocksRepeat(blocks: List<Block>, labSegments: String) : Map<String, Any?> {
+        val labModel = blocks.associate { block ->
+            val obxElems = block.elements.sortedBy { it.mappings.hl7v251.fieldPosition }
+            val msgLines = labSegments.split("\n").filter { it.startsWith("OBX|") }
+            //create the Segment Data Map
+            val dataMapList = mutableListOf<Map<String, Any?>>()
+            msgLines.forEach { line ->
+                val record = mutableMapOf<String, Any?>()
+                obxElems.forEach { el ->
+                    val hl7Mapping = el.mappings.hl7v251
+                    val mappedData: Any?
+                    var useElement = true
+                    val fieldData =
+                        HL7StaticParser.getValue(line, "${hl7Mapping.segmentType}-${hl7Mapping.fieldPosition}")
+                    if (fieldData.isDefined) {
+                        if (hl7Mapping.fieldPosition == 5) {
+                            val obx2 = HL7StaticParser.getValue(line, "OBX-2")
+                            if (obx2.isDefined) {
+                                val dataType = obx2.get()[0][0]
+                                if (dataType in listOf("CE", "CWE") && hl7Mapping.dataType == "CE") {
+                                    val obx5 = fieldData.get().flatten()[0].split("^")
+                                    val obx5text = if (obx5.size > 1) obx5[1] else ""
+                                    if (el.name.normalize().contains("coded_organism")) {
+                                        if (!obx5text.lowercase().contains("organism")) {
+                                            useElement = false
+                                        }
+                                    }
+                                } else if (dataType != hl7Mapping.dataType) {
+                                    useElement = false
+                                }
+                            } else {
+                                useElement = false
+                            }
+                        }
+                        if (useElement) {
+                            mappedData = mapSegmentData(fieldData.get(), el)
+                            record.putIfAbsent(StringUtils.normalizeString(el.name), mappedData)
+                        } else {
+                            record.putIfAbsent(StringUtils.normalizeString(el.name), null)
+                        }
+                    } else {
+                        record.putIfAbsent(StringUtils.normalizeString(el.name), null)
+                    }
+                }
+                dataMapList.add(record)
+            }
+            StringUtils.getNormalizedShortName(block.name, MAX_BLOCK_NAME_LENGTH) to dataMapList
+        }
+        return labModel
+    }
+
+    private fun labModelBlocksSingle(labBlocksSingle: List<Block>, labContent: String): Map<String, Any?> {
+        val localHL7Parser: HL7ParseUtils = HL7ParseUtils.getParser(labContent, "./BasicProfile.json")
+        val mmgElemsBlocksSingle = labBlocksSingle.flatMap { it.elements }
+        return mmgElemsBlocksSingle.associate { el ->
+            val hl7Mapping = el.mappings.hl7v251
+            val segmentData =
+                localHL7Parser.getValue("${hl7Mapping.segmentType}-${hl7Mapping.fieldPosition}")
+            val mappedData = if (segmentData.isDefined) {
+                mapSegmentData(segmentData.get(), el)
+            } else null
+            if (el.isRepeat || el.mayRepeat.contains("Y"))
+                StringUtils.getNormalizedShortName(el.name, MAX_BLOCK_NAME_LENGTH) to mappedData
+            else
+                StringUtils.normalizeString(el.name) to mappedData
+        }
+    }
+    private fun hl7ToJsonModelLabTemplateMMG(): Map<String, Any?>? {
+        val nonEpiOBRs = getNonEpiOBRs(hl7Content)
+        if (nonEpiOBRs.isNotEmpty()) {
+            val labTemplate = this::class.java.getResource("/lab_template_v3.json")?.readText(Charsets.UTF_8)
+            if (!labTemplate.isNullOrEmpty()) {
+                val labMMG = gson.fromJson(labTemplate, MMG::class.java)
+                val (labBlocksSingle, labBlocksRepeat) = labMMG.blocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+                val labModelList = mutableListOf<Map<String, Any?>>()
+                nonEpiOBRs.forEach { obr ->
+                    val labMessage = getLabForThisOBR(obr)
+                    val labSinglesModel = labModelBlocksSingle(labBlocksSingle, labMessage)
+                    val labRepeatsModel = labModelBlocksRepeat(labBlocksRepeat, labMessage)
+                    val combinedModel = labSinglesModel + labRepeatsModel
+                    labModelList.add(combinedModel)
+                }
+                return mapOf("lab_optional_rg" to labModelList)
+            }
+        }
+        return null
+    }
+
 
     // --------------------------------------------------------------------------------------------------------
     //  ------------- Functions used in the transformation -------------
@@ -180,16 +266,50 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
                 OBR_4_1_EPI_ID, OBR_4_1_LEGACY, OBR_4_1_SUBJECT)
         }
     }
+    private fun getLabForThisOBR(obr: String) : String {
+        val labMessageBuilder = StringBuilder()
+        val obr3 = HL7StaticParser.getFirstValue(obr, "OBR[1]-3.1")
+        val identifier = obr3.get()
+        val obxs = hl7Parser.getValue("OBR[@3.1='$identifier']->OBX")
+        val spms = hl7Parser.getValue("OBR[@3.1='$identifier']->SPM")
+        labMessageBuilder.append("$obr\n")
+        if (obxs.isDefined) {
+            obxs.get().iterator().forEach { obxInnerArray ->
+                obxInnerArray.iterator().forEach { obx ->
+                    labMessageBuilder.append("$obx\n")
+                }
+            }
+        }
+        if (spms.isDefined) {
+            spms.get().iterator().forEach { spmInnerArray ->
+                spmInnerArray.iterator().forEach { spm ->
+                    labMessageBuilder.append("${spm}\n")
+                }
+            }
+        }
+        return labMessageBuilder.toString()
+    }
 
-    private fun filterByIdentifier(lines: List<String>, id: String): List<String> {
+    private fun getLabSegments() : String {
+        val nonEpiOBRs = getNonEpiOBRs(hl7Content)
+        val labMessageBuilder = StringBuilder()
+        if (nonEpiOBRs.isNotEmpty()) {
+            nonEpiOBRs.forEach { obr ->
+                labMessageBuilder.append(getLabForThisOBR(obr))
+            }
+        }
+        return labMessageBuilder.toString()
+    }
+
+     private fun filterByIdentifier(lines: List<String>, id: String): List<String> {
         val group = lines.joinToString("\n")
         val mappinglines = HL7StaticParser.getValue(group, "OBX[@3.1='$id']")
         return if (mappinglines.isDefined) {
             mappinglines.get().flatten()
         } else listOf()
     }
-    private fun filterByIdentifier(id: String): List<String> {
-        val mappinglines = hl7Parser.getValue("OBX[@3.1='$id']")
+    private fun filterByIdentifier(id: String, hl7ParserInstance: HL7ParseUtils = hl7Parser): List<String> {
+        val mappinglines = hl7ParserInstance.getValue("OBX[@3.1='$id']")
         return if (mappinglines.isDefined) {
                  mappinglines.get().flatten()
             } else listOf()
@@ -290,15 +410,20 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
         return null
     }
 
-    private fun getPhinVadsConcepts(valueSetCode: String?, conceptCode: String?): Map<String, String?> {
-        var conceptJson = ""
+    private fun getConceptOrEmptyString(valueSetCode: String?, conceptCode: String?) : String {
         if ((!valueSetCode.isNullOrEmpty() && valueSetCode != "N/A") && !conceptCode.isNullOrEmpty()) {
-            try {
-                conceptJson = redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
+            return try {
+                redisClient.hget(REDIS_VOCAB_NAMESPACE + valueSetCode, conceptCode)
             } catch (e : NullPointerException) {
                 println("ValueSetCode: $valueSetCode, conceptCode: $conceptCode not found in Redis cache")
+                ""
             }
         }
+        return ""
+    }
+    private fun getPhinVadsConcepts(valueSetCode: String?, conceptCode: String?): Map<String, String?> {
+        val conceptJson = getConceptOrEmptyString(valueSetCode, conceptCode)
+
         return if (conceptJson.isEmpty())
         { // map2 used for dev only
             // No Redis entry!! for this value set code, concept code
