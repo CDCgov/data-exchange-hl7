@@ -556,45 +556,7 @@
             }
           }
         },
-        {
-          "id": "e173195a-d3b8-4112-bfcd-c09dffe29ceb",
-          "guideId": "1c89083d-8b2d-417e-bab7-84907d756a52",
-          "guideInternalVersion": 0,
-          "blockId": "3",
-          "ordinal": 3,
-          "name": "Notification Type",
-          "description": "Type of notification. Notification types are \"Individual Case\",  \"Environmental\", \"Summary\", and \"Laboratory Report\".",
-          "comments": "",
-          "status": "Final",
-          "dataType": "Coded",
-          "businessRules": "",
-          "isUnitOfMeasure": false,
-          "legacyCodeSystem": "PHINQUESTION",
-          "codeSystem": "PHINQUESTION",
-          "legacyPriority": "R",
-          "priority": 1,
-          "isRepeat": false,
-          "mayRepeat": "N",
-          "valueSetCode": "PHVS_NotificationSectionHeader_CDC",
-          "mappings": {
-            "hl7v251": {
-              "legacyIdentifier": "NOT101",
-              "identifier": "NOT101",
-              "messageContext": "Second OBR Segment-OBR-4-Universal Service ID.",
-              "dataType": "CE",
-              "segmentType": "OBR",
-              "obrPosition": 2,
-              "fieldPosition": 4,
-              "componentPosition": -1,
-              "usage": "R",
-              "cardinality": "[1..1]",
-              "literalFieldValues": {},
-              "repeatingGroupElementType": "NO",
-              "implementationNotes": "Literal Value:  'NOTF^Individual Case Notification^CDCPHINVS'\n\nNo UID or label is passed in the message.",
-              "sampleSegment": ""
-            }
-          }
-        },
+
         {
           "id": "92164302-592b-4b2e-860c-156e4e4ed19a",
           "guideId": "1c89083d-8b2d-417e-bab7-84907d756a52",
