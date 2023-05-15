@@ -50,6 +50,15 @@ data class Element(
                  else ".1"
             p
         }
+        "OBR" -> { //take obrPosition into consideration...
+            var path = "${mappings.hl7v251.segmentType}[${mappings.hl7v251.obrPosition}]-${mappings.hl7v251.fieldPosition}"
+            if (mappings.hl7v251.componentPosition != -1)
+                path += ".${mappings.hl7v251.componentPosition}"
+            else if (listOf("CE", "CWE").contains(mappings.hl7v251.dataType)) {
+                path += ".1"
+            }
+            path
+        }
         else ->  {
             var path = "${mappings.hl7v251.segmentType}-${mappings.hl7v251.fieldPosition}"
             if (mappings.hl7v251.componentPosition != -1)
