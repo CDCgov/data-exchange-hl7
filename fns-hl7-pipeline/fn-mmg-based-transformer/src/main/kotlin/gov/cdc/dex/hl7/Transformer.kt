@@ -212,7 +212,12 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
                 }
                 dataMapList.add(record)
             }
-            StringUtils.getNormalizedShortName(block.name, MAX_BLOCK_NAME_LENGTH) to dataMapList
+            val blockName = if (block.name.normalize().contains("repeating_group")) {
+                block.name
+            } else {
+                "${block.name} repeating group"
+            }
+            StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH) to dataMapList
         }
         return labModel
     }

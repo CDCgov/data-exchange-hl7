@@ -20,7 +20,7 @@
 			"guideId": "3bafcec7-e98e-57d5-8ab5-dee0f237d6fb",
 			"ordinal": 2,
 			"type": "Single",
-			"name": "Laboratory Template",
+			"name": "Lab Template",
 			"startingDescription": "START: [Optional/Preferred] Laboratory Template - Note that everything in the laboratory template represents one ORDER_OBSERVATION Group in the message.",
 			"endingDescription": "END: [Optional/Preferred] Laboratory Template",
 			"shouldDisplayName": false,
