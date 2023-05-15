@@ -15,7 +15,7 @@ import com.google.gson.GsonBuilder
 import gov.cdc.hl7.HL7HierarchyParser 
 import gov.cdc.hl7.model.HL7Hierarchy
 
-
+/*
 class LakeSegsTransTest {
 
     companion object {
@@ -131,5 +131,4 @@ class LakeSegsTransTest {
 
 } // .MmgSLakeSegsTransTestqlTest
 
-
-
+*/

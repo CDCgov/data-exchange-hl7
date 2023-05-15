@@ -32,9 +32,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.13.10</version>
+        </dependency>
+        <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
             <version>1.0.12-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>C:\Projects\data-exchange-hl7\libs\lib-dex-commons-1.0.12-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <!-- Azure Functions Java Library -->

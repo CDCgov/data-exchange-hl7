@@ -7,9 +7,12 @@ import gov.cdc.dex.hl7.model.ReportStatus
 import gov.cdc.dex.hl7.model.ValidationIssueType
 import gov.cdc.dex.mmg.InvalidConditionException
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import java.nio.file.Files
 import java.nio.file.Paths
 
+@Disabled("Disabled: remote system unavailable")
 class MMGValidatorTest {
 
     companion object {

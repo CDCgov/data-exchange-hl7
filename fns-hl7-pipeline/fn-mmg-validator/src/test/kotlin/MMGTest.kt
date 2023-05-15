@@ -1,13 +1,12 @@
 
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.MmgValidator
-
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
 import gov.cdc.dex.hl7.model.*
-
 import gov.cdc.hl7.HL7StaticParser
-
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 
 class MMGTest {
 
@@ -18,6 +17,7 @@ class MMGTest {
         println(mmgJson)
     }
 
+    @Disabled("Remote system unavailable")
     @Test
     fun testRemoveMSH21FromGenV2() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
@@ -30,6 +30,7 @@ class MMGTest {
         println(genV2NoMSH.blocks.size)
     }
 
+    @Disabled("Remote system unavailable")
     @Test
     fun testMMGUtilGetMMG() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
@@ -38,6 +39,7 @@ class MMGTest {
         mmgs.forEach { println(it)}
     }
 
+    @Disabled("Remote system unavailable")
     @Test
     fun testGetSegments() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
@@ -78,6 +80,7 @@ class MMGTest {
         println(subList.size())
     }
 
+    @Disabled("Remote system unavailable")
     @Test
     fun testInvalidCode() {
         try {
