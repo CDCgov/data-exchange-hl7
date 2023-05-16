@@ -846,7 +846,8 @@
       "maxLength": "2",
       "usage": "O",
       "cardinality": "[0..1]",
-      "conformance": ""
+      "conformance": "",
+      "preferred": true
     },
     {
       "fieldNumber": 2,
@@ -865,7 +866,8 @@
       "maxLength": "3",
       "usage": "O",
       "cardinality": "[0..1]",
-      "conformance": ""
+      "conformance": "",
+      "preferred": true
     },{
       "fieldNumber": 4,
       "name": "Number2",
@@ -873,7 +875,8 @@
       "maxLength": "20",
       "usage": "O",
       "cardinality": "[0..1]",
-      "conformance": ""
+      "conformance": "",
+      "preferred": true
     }
   ]
 }
