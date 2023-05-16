@@ -216,7 +216,7 @@ class MmgValidator {
             }
         } else {
             val allSegs = msgValues.joinToString("\n") //join all segments to extract all Values.
-            val segValues = HL7StaticParser.getValue(allSegs, element.getValuePath())
+            val segValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
 //            val segValuesFlat = if (segValues.isDefined) segValues.get().flatten() else listOf()
             checkSingleGroupCardinality(hl7Message, minCardinality, maxCardinality, null, element, segValues, report)
 
