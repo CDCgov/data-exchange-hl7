@@ -226,7 +226,7 @@
       "cardinality": "[0..1]",
       "conformance": "",
       "notes": "",
-      "preferred": true
+      "preferred": false
     },
     {
       "fieldNumber": 5,
@@ -237,7 +237,7 @@
       "cardinality": "[0..1]",
       "conformance": "",
       "notes": "",
-      "preferred": true
+      "preferred": false
     },
     {
       "fieldNumber": 6,
@@ -324,6 +324,30 @@
       "notes": ""
     }
   ],
+  "EIP": [
+    {
+      "fieldNumber": 1,
+      "name": "Placer Assigned Identifier",
+      "dataType": "EI",
+      "maxLength": "427",
+      "usage": "RE",
+      "cardinality": "[0..1]",
+      "conformance": "",
+      "notes": "",
+      "preferred": true
+    },
+    {
+      "fieldNumber": 2,
+      "name": "Filler Assigned Identifier",
+      "dataType": "EI",
+      "maxLength": "427",
+      "usage": "RE",
+      "cardinality": "[0..1]",
+      "conformance": "",
+      "notes": "",
+      "preferred": true
+    }
+   ],
   "CX": [
     {
       "fieldNumber": 1,

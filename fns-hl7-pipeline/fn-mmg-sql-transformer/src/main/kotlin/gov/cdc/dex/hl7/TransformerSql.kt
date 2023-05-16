@@ -1,15 +1,7 @@
 package gov.cdc.dex.hl7
 
-//import org.slf4j.LoggerFactory
-// import gov.cdc.dex.redisModels.ValueSetConcept
-
-// import com.google.gson.Gson
-// import com.google.gson.reflect.TypeToken
-
-import com.fasterxml.jackson.databind.JsonMappingException
-import com.google.gson.JsonElement
-import com.google.gson.JsonNull
-import com.google.gson.JsonObject
+import com.google.gson.*
+import com.google.gson.reflect.TypeToken
 import gov.cdc.dex.hl7.model.PhinDataType
 import gov.cdc.dex.redisModels.Block
 import gov.cdc.dex.redisModels.Element
@@ -17,11 +9,13 @@ import gov.cdc.dex.redisModels.MMG
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.util.StringUtils
 import gov.cdc.dex.util.StringUtils.Companion.normalize
+import java.lang.reflect.Type
 import java.util.*
 
 class TransformerSql {
 
     companion object {
+        private val gson: Gson = GsonBuilder().serializeNulls().create()
         private const val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header"
         const val SEPARATOR = "_"
         private const val ELEMENT_CE = "CE"
@@ -31,6 +25,7 @@ class TransformerSql {
         private const val MESSAGE_PROFILE_IDENTIFIER_EL_NAME = "message_profile_identifier"
         private const val MESSAGE_PROFILE_ID_ALTERNATE_NAME = "message_profile_id"
         private const val MAX_BLOCK_NAME_LENGTH = 30
+        const val MMG_BLOCK_TYPE_SINGLE = "Single"
     } // .companion object
 
 
@@ -212,6 +207,42 @@ class TransformerSql {
             }// .forEach block
         return tables
     } // .repeatedBlocksToSqlModel
+
+    fun mapLabTemplate(profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?>? {
+        val labTemplate = this::class.java.getResource("/lab_template_v3.json")?.readText(Charsets.UTF_8)
+        if (!labTemplate.isNullOrEmpty()) {
+            val labMMG = gson.fromJson(labTemplate, MMG::class.java)
+            val (labBlocksSingle, labBlocksRepeat) = labMMG.blocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+            // should be 2 blocks: Lab Template (single) and Tests Performed (repeat)
+            // a little deceiving, because the whole thing (Lab Template + Tests Performed sub-table) repeats
+            val (labTemplateSingles, labTemplateRepeats) = labBlocksSingle[0].elements.partition { !it.isRepeat && !it.mayRepeat.contains("Y") }
+            val labRecords = modelJson["lab_optional_rg"].asJsonArray
+            val labRecordsList = mutableListOf<Map<String, Any?>>()
+            val labTestResultsList = mutableListOf<Map<String, Any?>>()
+            if (!labRecords.isEmpty) {
+                labRecords.forEach { record ->
+                    val labRecordSingles = singlesNonRepeatsToSqlModel(labTemplateSingles, profilesMap, record.asJsonObject)
+                    val labRecordRepeats = singlesRepeatsToSqlModel(labTemplateRepeats, profilesMap, record.asJsonObject)
+                    val labRecordRepeatGroup = repeatedBlocksToSqlModel(labBlocksRepeat, profilesMap, record.asJsonObject)
+                    // create a unique ID that matches the tests performed to the record
+                    val idColumn = mapOf("lab_optional_rg_id" to UUID.randomUUID().toString().toJsonElement())
+                    labRecordsList.add(idColumn + labRecordSingles + labRecordRepeats)
+                    if (labRecordRepeatGroup.containsKey("tests_performed_rg")) {
+                        val testsPerformed = labRecordRepeatGroup["tests_performed_rg"] as JsonArray
+                        val mapType: Type = object : TypeToken<Map<String?, Any?>?>() {}.type
+                        testsPerformed.forEach { test ->
+                            val testMap : Map<String, Any> = gson.fromJson(test, mapType)
+                            labTestResultsList.add(idColumn + testMap)
+                        }
+                    }
+                }
+                return mapOf("lab_optional_rg" to labRecordsList.toList()) +
+                        mapOf("lab_optional_rg_test_results" to labTestResultsList.toList())
+            }
+        }
+        return null
+    }
+
     private fun mapSingleElement(bmaObj: JsonObject, elName: String, elementsInBlock: List<Element>, profilesMap: Map<String, List<PhinDataType>>) : Map<String, JsonElement> {
         val elMod = bmaObj[elName]
         val mmgElement =
