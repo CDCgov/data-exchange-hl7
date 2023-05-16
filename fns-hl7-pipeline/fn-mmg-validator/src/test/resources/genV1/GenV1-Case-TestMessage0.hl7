@@ -1,0 +1,23 @@
+MSH|^~\&|NBS.AK.Prod^2.16.840.1.114222.4.3.4.18.1.1^ISO|AKNBS^2.16.840.1.114222.4.1.3656^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222.4.3.2.2.3.618.3^ISO|20210228190012.098||ORU^R01^ORU_R01|NOT11323693AK012021-02-28T19:00:12.098|P|2.5.1|||||||||NND_ORU_v2.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Gen_Case_Map_v1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||PSN15953767AK01^^^NBS.AK.Prod&2.16.840.1.114222.4.3.4.18.1.1&ISO||~^^^^^^S||19630902|M||2054-5^Black or African American^2.16.840.1.113883.6.238|^^^22^70808^^^^22033|||||||||||2186-5^Not Hispanic or Latino^2.16.840.1.113883.6.238
+OBR|1|""|CAS11376784AK01^NBS.AK.Prod^2.16.840.1.114222.4.3.4.18.1.1^ISO|PERSUBJa^Person Subject^2.16.840.1.114222.4.5.274|||20210207120811.663|||||||||||||||20210207120811.663|||F||||||11010^Shigellosis^2.16.840.1.114222.4.5.277
+OBR|2|""|CAS11376784AK01^NBS.AK.Prod^2.16.840.1.114222.4.3.4.18.1.1^ISO|NOTF^Individual Case Notification^2.16.840.1.114222.4.5.274|||20210207120811.663|||||||||||||||20210207120811.663|||F||||||11010^Shigellosis^2.16.840.1.114222.4.5.277
+OBX|1|CWE|INV107^Jurisdiction Code^2.16.840.1.114222.4.5.232^INV107^Jurisdiction^L||||||||F
+OBX|2|CWE|INV109^Case Investigation Status Code^2.16.840.1.114222.4.5.232^INV109^Investigation Status^L||29179001a^Closed^2.16.840.1.113883.6.96||||||F
+OBX|3|TS|INV111^Date of Report/Referral^2.16.840.1.114222.4.5.232^INV111^Date of Report^L||20210207000000.000||||||F
+OBX|4|ST|INV118^Reporting Source Zip Code^2.16.840.1.114222.4.5.232^INV118^Zip^L||70808||||||F
+OBX|5|TS|INV121^Earliest Date Reported to State^2.16.840.1.114222.4.5.232^INV121^Earliest Date Reported to State^L||20210207000000.000||||||F
+OBX|6|CWE|INV128^Was the patient hospitalized as a result of this event?^2.16.840.1.114222.4.5.232^INV128^Was the patient hospitalized for this illness?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|7|TS|INV136^Diagnosis Date^2.16.840.1.114222.4.5.232^INV136^Diagnosis Date^L||20210201000000.000||||||F
+OBX|8|TS|INV137^Date of Illness Onset^2.16.840.1.114222.4.5.232^INV137^Illness Onset Date^L||20210130000000.000||||||F
+OBX|9|CWE|INV145^Did the patient die from this illness?^2.16.840.1.114222.4.5.232^INV145^Did the patient die from this illness?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|10|TS|INV147^Investigation Start Date^2.16.840.1.114222.4.5.232^INV147^Investigation Start Date^L||20210207000000.000||||||F
+OBX|11|CWE|INV150^Case Outbreak Indicator^2.16.840.1.114222.4.5.232^INV150^Is this case part of an outbreak?^L||N^No^2.16.840.1.113883.12.136||||||F
+OBX|12|CWE|INV152^Case Disease Imported Code^2.16.840.1.114222.4.5.232^INV152^Where was the disease acquired^L||UNK^Unknown^2.16.840.1.113883.5.1008||||||F
+OBX|13|TS|INV162^Confirmation Date^2.16.840.1.114222.4.5.232^INV162^Confirmation Date^L||20210207000000.000||||||F
+OBX|14|CWE|INV163^Case Class Status Code^2.16.840.1.114222.4.5.232^INV163^Case Status^L||2931005a^Probable diagnosis^2.16.840.1.113883.6.96||||||F
+OBX|15|SN|INV165^MMWR Week^2.16.840.1.114222.4.5.232^INV165^MMWR Week^L||^01||||||F
+OBX|16|TS|INV166^MMWR Year^2.16.840.1.114222.4.5.232^INV166^MMWR Year^L||2021||||||F
+OBX|17|SN|INV2001^Age at case investigation^2.16.840.1.114222.4.5.232^INV2001^Reported Age^L||^59|a^year [time]^2.16.840.1.113883.6.8|||||F
+OBX|18|CWE|NOT109^Reporting State^2.16.840.1.114222.4.5.232^NOT109^Reporting State^L||22^Alaska^2.16.840.1.113883.6.92||||||F
+OBX|19|CWE|NOT116^National Reporting Jurisdiction^2.16.840.1.114222.4.5.232^NOT116^National Reporting Jurisdiction^L||22a^Alaska^2.16.840.1.113883.6.92||||||F
