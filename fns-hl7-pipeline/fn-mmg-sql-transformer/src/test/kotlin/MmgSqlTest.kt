@@ -71,7 +71,7 @@ class MmgSqlTest {
         val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
         println("profilesMap.size: --> ${profilesMap.size}")
 
-        assertEquals(profilesMap.size, 12)
+        assertEquals(profilesMap.size, 13)
         println("======END TEST=====================\n")
     } // .testDefaultPhinProfiles
 
