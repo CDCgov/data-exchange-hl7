@@ -149,26 +149,26 @@ class TransformerSql {
                     blocks.filter { it.name == blk.name }[0].elements.associateBy {elem ->
                         elem.mappings.hl7v251.identifier}.values.toList()
                 } else {
-                    blocks.filter { it.name == blk.name }[0].elements.associateBy {elem ->
-                        elem.name}.values.toList()
+                    blocks.filter { it.name == blk.name }[0].elements
                 }
                 val (repeaters, singles) = elementsInBlock.partition { it.isRepeat || it.mayRepeat.contains("Y") }
                 val tableRows = mutableListOf<Map<String, JsonElement>>()
                 val subTables = mutableMapOf<String, MutableList<Map<String, JsonElement>>>()
                 val idColName = StringUtils.getNormalizedShortName("${blkName}_id")
+                val repeatersNames = if (repeaters.isNotEmpty()) {
+                    repeaters.map { StringUtils.normalizeString(it.name) }
+                } else {
+                    listOf()
+                }
+                val singlesNames = singles.map { StringUtils.normalizeString(it.name) }
 
                 blkModelArr.forEach { bma ->
                         val bmaObj = bma.asJsonObject
                         // for each repeated element, create a separate table
                         // a unique ID matches each record with the parent table record
-                        val repeatersNames = if (repeaters.isNotEmpty()) {
-                            repeaters.map { StringUtils.normalizeString(it.name) }
-                        } else {
-                            listOf()
-                        }
+
                         // get the singles for the main table
                         val flattenedSingles = if (singles.isNotEmpty()) {
-                            val singlesNames = singles.map { StringUtils.normalizeString(it.name) }
                             singlesNames.map { elName ->
                                 mapSingleElement(bmaObj, elName, singles, profilesMap)
                             }.reduce { acc, map -> acc + map }
@@ -228,7 +228,6 @@ class TransformerSql {
                 labRecords.forEach { record ->
                     val labRecordSingles = singlesNonRepeatsToSqlModel(labTemplateSingles, profilesMap, record.asJsonObject)
                     val labRecordRepeats = singlesRepeatsToSqlModel(labTemplateRepeats, profilesMap, record.asJsonObject)
-                    // TODO: Repeat Group is not working -- missing actual test results
                     val labRecordRepeatGroup = repeatedBlocksToSqlModel(labBlocksRepeat, profilesMap, record.asJsonObject, isLabTemplate = true)
                     // create a unique ID that matches the tests performed to the record
                     val idColumn = mapOf("lab_optional_rg_id" to UUID.randomUUID().toString().toJsonElement())
