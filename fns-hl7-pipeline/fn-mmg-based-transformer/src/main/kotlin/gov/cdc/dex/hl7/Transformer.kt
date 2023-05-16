@@ -223,7 +223,7 @@ class Transformer( redisProxy: RedisProxy, val mmgs: Array<MMG>, val hl7Content:
     }
 
     private fun labModelBlocksSingle(labBlocksSingle: List<Block>, labContent: String): Map<String, Any?> {
-        val localHL7Parser: HL7ParseUtils = HL7ParseUtils.getParser(labContent, "./BasicProfile.json")
+        val localHL7Parser: HL7ParseUtils = HL7ParseUtils.getParser(labContent, "BasicProfile.json")
         val mmgElemsBlocksSingle = labBlocksSingle.flatMap { it.elements }
         return mmgElemsBlocksSingle.associate { el ->
             val hl7Mapping = el.mappings.hl7v251
