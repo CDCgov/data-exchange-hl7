@@ -134,7 +134,7 @@ class TransformerSql {
         return StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH)
     }
 
-    fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
+    fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject, isLabTemplate: Boolean = false) : Map<String, Any?> {
         val tables = mutableMapOf<String, Any?>()
         blocks.forEach { blk ->
             val blkName = getNormalizedBlockName(blk)
@@ -145,8 +145,13 @@ class TransformerSql {
             } else {
                 val blkModelArr = blkData.asJsonArray  //array of data for this repeating block
                 // need to determine up front if there are any repeating elements within this repeat block
-                val elementsInBlock = blocks.filter { it.name == blk.name }[0].elements.associateBy {elem ->
-                    elem.mappings.hl7v251.identifier}.values.toList()
+                val elementsInBlock = if (!isLabTemplate) {
+                    blocks.filter { it.name == blk.name }[0].elements.associateBy {elem ->
+                        elem.mappings.hl7v251.identifier}.values.toList()
+                } else {
+                    blocks.filter { it.name == blk.name }[0].elements.associateBy {elem ->
+                        elem.name}.values.toList()
+                }
                 val (repeaters, singles) = elementsInBlock.partition { it.isRepeat || it.mayRepeat.contains("Y") }
                 val tableRows = mutableListOf<Map<String, JsonElement>>()
                 val subTables = mutableMapOf<String, MutableList<Map<String, JsonElement>>>()
@@ -223,7 +228,8 @@ class TransformerSql {
                 labRecords.forEach { record ->
                     val labRecordSingles = singlesNonRepeatsToSqlModel(labTemplateSingles, profilesMap, record.asJsonObject)
                     val labRecordRepeats = singlesRepeatsToSqlModel(labTemplateRepeats, profilesMap, record.asJsonObject)
-                    val labRecordRepeatGroup = repeatedBlocksToSqlModel(labBlocksRepeat, profilesMap, record.asJsonObject)
+                    // TODO: Repeat Group is not working -- missing actual test results
+                    val labRecordRepeatGroup = repeatedBlocksToSqlModel(labBlocksRepeat, profilesMap, record.asJsonObject, isLabTemplate = true)
                     // create a unique ID that matches the tests performed to the record
                     val idColumn = mapOf("lab_optional_rg_id" to UUID.randomUUID().toString().toJsonElement())
                     labRecordsList.add(idColumn + labRecordSingles + labRecordRepeats)
