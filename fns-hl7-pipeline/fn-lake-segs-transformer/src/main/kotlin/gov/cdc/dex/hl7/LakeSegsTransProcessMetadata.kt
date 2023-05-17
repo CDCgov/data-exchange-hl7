@@ -10,7 +10,7 @@ data class LakeSegsTransProcessMetadata (override val status: String,  val repor
     : ProcessMetadata(PROCESS_NAME, PROCESS_VERSION,status,eventHubMD,config) {
 
         companion object  {
-            const val PROCESS_NAME = "lakeSegsTransformer"
+            const val PROCESS_NAME = "LAKE-SEGMENTS-TRANSFORMER"
             const val PROCESS_VERSION = "1.0.0"
         } // .companion object
 
