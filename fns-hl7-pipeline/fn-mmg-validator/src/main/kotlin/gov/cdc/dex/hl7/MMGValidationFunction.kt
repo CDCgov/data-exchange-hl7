@@ -1,6 +1,7 @@
 package gov.cdc.dex.hl7
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.*
@@ -27,8 +28,7 @@ class MMGValidationFunction {
     
     companion object {
         private const val STATUS_ERROR = "ERROR"
-
-        val gson = Gson()
+        val gson: Gson = GsonBuilder().serializeNulls().create()
     } // .companion
 
     @FunctionName("mmgvalidator001")
@@ -48,9 +48,8 @@ class MMGValidationFunction {
         val eventHubSendOkName = System.getenv("EventHubSendOkName")
         val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
         val evHubSender = EventHubSender(evHubConnStr)
-//        val ehSender = EventHubSender(evHubConnStr)
 
-        message.forEachIndexed{
+        message.forEachIndexed {
                 messageIndex : Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             // context.logger.info("singleMessage: --> $singleMessage")
@@ -61,16 +60,26 @@ class MMGValidationFunction {
                 val metadata = inputEvent["metadata"].asJsonObject
                 val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                val mmgInfo = JsonHelper.getStringArrayFromJsonArray(JsonHelper.getValueFromJson("message_info.mmgs", inputEvent).asJsonArray)
-                context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 try {
+                    context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                     val mmgValidator = MmgValidator()
                     val validationReport = mmgValidator.validate(hl7Content)
-
                     context.logger.info("MMG Validation Report size for for messageUUID: $messageUUID, filePath: $filePath, size --> " + validationReport.size)
                     val mmgReport = MmgReport( validationReport)
 
+                    // document the MMGs used to validate the message
+                    var mmgInfo = try {
+                        JsonHelper.getStringArrayFromJsonArray(JsonHelper.getValueFromJson("message_info.mmgs", inputEvent).asJsonArray)
+                    } catch (e: Exception) {
+                        arrayOf()
+                    }
+                    // 'validate' function is actually getting its own list of MMGs based on the message --
+                    // so, if the message_info list is empty/null, we can try to get it from mmgValidator
+                    // (exception will already have been thrown if mmgValidator could not determine the MMGs)
+                    if (mmgInfo.isEmpty() && mmgValidator.mmgs.isNotEmpty()) {
+                        mmgInfo = mmgValidator.mmgs.map { "mmg:${it.name}" }.toTypedArray()
+                    }
                     val processMD = MmgValidatorProcessMetadata(mmgReport.status.toString(), mmgReport,eventHubMD[messageIndex],
                         mmgInfo.toList())
                     processMD.startProcessTime = startTime
@@ -84,11 +93,9 @@ class MMGValidationFunction {
                     }
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
                     //Send event
-                    context.logger.info("INPUT EVENT OUT: --> ${ gson.toJson(inputEvent) }")
-
                     val ehDestination = if (mmgReport.status == ReportStatus.MMG_VALID) eventHubSendOkName else eventHubSendErrsName
                     evHubSender.send(evHubTopicName=ehDestination, message=gson.toJson(inputEvent))
-                    context.logger.info("Processed for MMG validated messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, reportStatus: $mmgReport")
+                    context.logger.info("Processed ${mmgReport.status} messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
 
 
                 } catch (e: Exception) {
@@ -103,11 +110,12 @@ class MMGValidationFunction {
                     val summary = SummaryInfo(STATUS_ERROR, problem)
                     inputEvent.add("summary", summary.toJsonElement())
 
-                    evHubSender.send(evHubTopicName = eventHubSendErrsName, message = Gson().toJson(inputEvent))
+                    evHubSender.send(evHubTopicName = eventHubSendErrsName, message = gson.toJson(inputEvent))
                     // e.printStackTrace()
                 }
             } catch (e: Exception) {
                 context.logger.severe("Exception processing event hub message: Unable to process Message due to exception: ${e.message}")
+                evHubSender.send(evHubTopicName = eventHubSendErrsName, message = gson.toJson(inputEvent))
                 e.printStackTrace()
             }
         } // .message.forEach
@@ -162,5 +170,6 @@ class MMGValidationFunction {
             .body(message)
             .build()
     }
+
 } // .Function
 

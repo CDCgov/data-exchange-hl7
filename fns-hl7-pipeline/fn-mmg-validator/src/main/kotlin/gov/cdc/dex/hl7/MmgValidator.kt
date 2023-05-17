@@ -34,10 +34,7 @@ class MmgValidator {
 
     private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     private val mmgUtil = MmgUtil(redisProxy)
-
-
-
-
+    val mmgs : Array<MMG> = arrayOf()
     fun validate(hl7Message: String): List<ValidationIssue> {
         val mmgs = getMMGFromMessage(hl7Message)
         val report = mutableListOf<ValidationIssue>()
@@ -69,14 +66,20 @@ class MmgValidator {
                         }
                     }
                     //Content checks
-                    if (msgSegments.isDefined)  {
-                        val msgValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
-                        if (msgValues.isDefined) {
-                            checkVocab(element, msgValues.get(), hl7Message, report)
-                            if (element.mappings.hl7v251.dataType in DATE_DATA_TYPES) {
-                                this.checkDateContent(element, msgValues.get(), hl7Message, report)
-                            } else if (element.mappings.hl7v251.identifier in listOf(MMWR_WEEK_CODE, MMWR_WEEK_LEGACY_CODE)) {
-                                this.checkMMWRWeek(element, msgValues.get(), hl7Message, report)
+                   if (!("OBR" == element.mappings.hl7v251.segmentType && 31 == element.mappings.hl7v251.fieldPosition)) {
+                        if (msgSegments.isDefined) {
+                            val msgValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
+                            if (msgValues.isDefined) {
+                                checkVocab(element, msgValues.get(), hl7Message, report)
+                                if (element.mappings.hl7v251.dataType in DATE_DATA_TYPES) {
+                                    this.checkDateContent(element, msgValues.get(), hl7Message, report)
+                                } else if (element.mappings.hl7v251.identifier in listOf(
+                                        MMWR_WEEK_CODE,
+                                        MMWR_WEEK_LEGACY_CODE
+                                    )
+                                ) {
+                                    this.checkMMWRWeek(element, msgValues.get(), hl7Message, report)
+                                }
                             }
                         }
                     }
@@ -213,7 +216,7 @@ class MmgValidator {
             }
         } else {
             val allSegs = msgValues.joinToString("\n") //join all segments to extract all Values.
-            val segValues = HL7StaticParser.getValue(allSegs, element.getValuePath())
+            val segValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
 //            val segValuesFlat = if (segValues.isDefined) segValues.get().flatten() else listOf()
             checkSingleGroupCardinality(hl7Message, minCardinality, maxCardinality, null, element, segValues, report)
 
@@ -345,22 +348,13 @@ class MmgValidator {
         } //.forEach Outer Array
     }
 
-    //Some Look ps are reused - storing them so no need to re-download them from Redis.
-    private val valueSetMap = mutableMapOf<String, List<String>>()
-    //    private val mapper = jacksonObjectMapper()
     @Throws(InvalidConceptKey::class)
     fun isConceptValid(key: String, concept: String): Boolean {
-       // if (valueSetMap[key] === null) {
-            // logger.debug("Retrieving $key from Redis")
-        var conceptExists :Boolean = false
-
           try {
-               conceptExists = redisProxy.getJedisClient().hexists(REDIS_VOCAB_NAMESPACE + key, concept)
-          }catch(e:Exception){
+              return redisProxy.getJedisClient().hexists(REDIS_VOCAB_NAMESPACE + key, concept)
+          } catch (e:Exception){
               throw InvalidConceptKey("Unable to retrieve concept values for $key")
           }
-
-        return conceptExists
     }
 
     private fun getCategory(usage: String): ValidationIssueCategoryType {

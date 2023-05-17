@@ -171,10 +171,20 @@ class Function {
                     val messageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
                //      context.logger.info("messageProfIdModel: -->\n\n${gsonWithNullsOn.toJson(messageProfIdModel)}\n")
 
+                    // Optional Lab Template
+                    val labTemplateModel = if (modelJson.keySet().contains("lab_optional_rg")) {
+                         transformer.mapLabTemplate(profilesMap, modelJson)
+                    } else null
+
                     // Compose the SQL Model from parts
-                    val mmgSqlModel = messageProfIdModel + singlesNonRepeatsModel + mapOf(
-                        TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel,
-                    ) // .mmgSqlModel
+                    val mmgSqlModel = if (labTemplateModel == null) {
+                        messageProfIdModel + singlesNonRepeatsModel + mapOf(
+                            TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel)
+                    } else {
+                        messageProfIdModel + singlesNonRepeatsModel + mapOf(
+                            TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel + labTemplateModel)
+                    }
+                     // .mmgSqlModel
 
                     updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_OK, mmgSqlModel, eventHubMD[messageIndex],
                         evHubSender, eventHubSendOkName, gsonWithNullsOn, inputEvent,   null, mmgKeyNames.asList())
