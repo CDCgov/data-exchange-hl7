@@ -26,10 +26,6 @@ class Function {
     
     companion object {
 
-        // same in LakeSegsTransProcessMetadata
-        const val PROCESS_NAME = "LAKE_OF_SEGMENTS_TRANSFORMER"
-        // const val PROCESS_VERSION = "1.0.0"
-
         val PROCESS_STATUS_OK = "SUCCESS"
         val PROCESS_STATUS_EXCEPTION = "FAILURE"
 
@@ -249,7 +245,7 @@ class Function {
         gsonWithNullsOn: Gson
     ) {
         //TODO::  - update retry counts
-        val problem = Problem(PROCESS_NAME, e, false, 0, 0)
+        val problem = Problem(LakeSegsTransProcessMetadata.PROCESS_NAME, e, false, 0, 0)
         val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
         inputEvent.add("summary", summary.toJsonElement())
 
