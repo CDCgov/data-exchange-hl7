@@ -4,6 +4,7 @@ package gov.cdc.hl7.bumblebee
 
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
+import gov.cdc.hl7.HL7StaticParser
 
 import org.junit.jupiter.api.Test
 
@@ -124,8 +125,28 @@ class TestHL7Transform {
         println(json)
     }
 
+    fun String.normalize(): String {
+        return normalizeString(this)
+    }
+
+    fun normalizeString(str: String): String {
+        val replaceableChars = mapOf(
+           " " to "_",
+           "-" to "_",
+           "/" to "_",
+           "." to "_",
+           "&" to "_and_")
+        var rr1 = str.trim().lowercase()
+        replaceableChars.forEach {
+            rr1 = rr1.replace(it.key, it.value)
+        }
+        //remove duplicate underscores based on replacements above and remove all other unknown chars
+        return rr1.replace("(_)\\1+".toRegex(), "_" ).replace("[^A-Z a-z 0-9 _\\.]".toRegex(), "")
+    }
     @Test
     fun loadProfiles() {
+        val message = this::class.java.getResource("/COVID.txt").readText()
+
         val content = this::class.java.getResource("/PhinGuideProfile.json").readText()
 
         val gson = GsonBuilder()
@@ -134,9 +155,171 @@ class TestHL7Transform {
 
         val profile: Profile = gson.fromJson(content, Profile::class.java)
 
+        val defaultFieldsProfileContent = this::class.java.getResource("/DefaultFieldsProfile.json").readText()
+
+        val defaultFieldsProfileGson = Gson()
+
+        val defaultProfile: Profile = defaultFieldsProfileGson.fromJson(defaultFieldsProfileContent, Profile::class.java)
+        println("defaultProfile")
+        println(defaultProfile)
+        /*println((defaultProfile.getSegmentField("HD")?.get(0))?.name)
+        println((defaultProfile.getSegmentField("HD")?.get(1))?.name)
+        println((defaultProfile.getSegmentField("HD")?.get(2))?.name)*/
+
+        println("Profile")
         println(profile)
         println("\n\nMSH Fields")
-        profile.getSegmentField("MSH")?.forEach { println(it)}
+        val fullHl7 = JsonObject()
+
+        val lines =message.split("\n")
+        lines.forEach {
+            if (it.startsWith("MSH|")) {
+                val msh = JsonObject()
+
+                val msg = it
+                println("Hello")
+                val encodeChars = msg.split("|")[1]
+               // val sendApplication = msg.split("|")[2]
+                println(it.split("|")[1])
+                println(HL7StaticParser.getFirstValue(msg, "MSH-3[1]."+1+"").get())
+                println(HL7StaticParser.getFirstValue(msg, "MSH-3[1].2").get())
+                println(HL7StaticParser.getFirstValue(msg, "MSH-3[1].3").get())
+                println("GoodBye")
+
+                profile.getSegmentField("MSH")?.forEach {
+                    println(it)
+                    println(it.name)
+                    println(it.dataType)
+                    if(it.fieldNumber==1) {
+                        msh.addProperty(normalizeString(it.name), "|")
+                    }
+                    if(it.fieldNumber==2){
+                        msh.addProperty(normalizeString(it.name), encodeChars)
+                    }
+                    if(it.fieldNumber>=3){
+                        val msh_4 = JsonObject()
+                        val field = it.fieldNumber;
+
+                        if(it.dataType=="TS" || it.dataType=="ST" || it.dataType=="NM"){
+                            val value = HL7StaticParser.getFirstValue(msg, "MSH-"+field+"[1]")
+                            if(value.isDefined){
+                                msh.addProperty(normalizeString(it.name), value.get())
+                            }else{
+                                msh.add(normalizeString(it.name), JsonNull.INSTANCE)
+                            }
+                        }
+                        else{
+                            if(it.cardinality=="[2..3]"){
+                                val jArray = JsonArray()
+                                val value = HL7StaticParser.getValue(
+                                    msg,
+                                    "MSH-" + field
+                                )
+                                val valueFlat = value.get().flatten()
+                                valueFlat.forEachIndexed { idx, itt ->
+                                    val msh21 = JsonObject()
+                                    val compParts = itt.split("^")
+                                    defaultProfile.getSegmentField(it.dataType)?.forEachIndexed { cidx, comp ->
+
+                                        val key = comp.name
+                                        if(key!=null) {
+                                            msh21.addProperty(normalizeString(key), compParts[cidx])
+                                        }else{
+                                            msh21.add(normalizeString(key), JsonNull.INSTANCE)
+                                        }
+                                    }
+                                    jArray.add(msh21)
+                                }
+                                msh.add(normalizeString(it.name), jArray)
+                            }else {
+                                defaultProfile.getSegmentField(it.dataType)?.forEach {
+                                    val value = HL7StaticParser.getFirstValue(
+                                        msg,
+                                        "MSH-" + field + "[1]." + it.fieldNumber + ""
+                                    )
+                                    if (value.isDefined) {
+                                        msh_4.addProperty(normalizeString(it.name), value.get())
+                                    } else {
+                                        msh_4.add(normalizeString(it.name), JsonNull.INSTANCE)
+                                    }
+                                }
+                                msh.add(normalizeString(it.name), msh_4)
+                            }
+                        }
+                    }
+                }
+                fullHl7.add("MSH", msh)
+            }else {
+                val childrenArray = JsonArray()
+                val msh = JsonObject()
+                val msg = it
+                if(it.startsWith("PID|")) {
+                    val pidObject = JsonObject()
+                    profile.getSegmentField("PID")?.forEach {
+                        println("..............PID............")
+                        println(it)
+                        println(it.name)
+                        println(it.dataType)
+                        val msh_4 = JsonObject()
+                        val field = it.fieldNumber;
+
+                        if (it.dataType == "SI" || it.dataType == "IS" || it.dataType == "ID" ||
+                            it.dataType == "TS" || it.dataType == "ST" || it.dataType == "NM"
+                        ) {
+                            println("PID-1" + HL7StaticParser.getFirstValue(msg, "PID-1").get())
+                            println("PID-1[1]" + HL7StaticParser.getFirstValue(msg, "PID-1[1]").get())
+
+
+                            val value = HL7StaticParser.getFirstValue(msg, "PID-" + field + "[1]")
+                            if (value.isDefined) {
+                                msh.addProperty(normalizeString(it.name), value.get())
+                            } else {
+                                msh.add(normalizeString(it.name), JsonNull.INSTANCE)
+                            }
+                        }else if(it.dataType == "CX" || it.dataType == "CE"
+                            || it.dataType == "XPN" || it.dataType == "XAD"){
+                            defaultProfile.getSegmentField(it.dataType)?.forEach {
+                                if(it.dataType=="HD" && it.cardinality=="[1..1]"){
+                                    var childObject = JsonObject()
+                                    defaultProfile.getSegmentField(it.dataType)?.forEach {
+                                        val value = HL7StaticParser.getFirstValue(
+                                            msg,
+                                            "PID-" + field + "[1]." + it.fieldNumber + ""
+                                        )
+                                        if (value.isDefined) {
+                                            childObject.addProperty(normalizeString(it.name), value.get())
+                                        } else {
+                                            childObject.add(normalizeString(it.name), JsonNull.INSTANCE)
+                                        }
+                                    }
+                                    msh_4.add(normalizeString(it.name), childObject)
+                                }else {
+                                    val value = HL7StaticParser.getFirstValue(
+                                        msg,
+                                        "PID-" + field + "[1]." + it.fieldNumber + ""
+                                    )
+                                    if (value.isDefined) {
+                                        msh_4.addProperty(normalizeString(it.name), value.get())
+                                    } else {
+                                        msh_4.add(normalizeString(it.name), JsonNull.INSTANCE)
+                                    }
+                                }
+                            }
+                            msh.add(normalizeString(it.name), msh_4)
+                        }
+
+                        pidObject.add("PID", msh)
+                    }
+                    childrenArray.add(pidObject)
+                    fullHl7.add("Children", childrenArray)
+                }
+println("childrenarray")
+                println(childrenArray)
+            }
+        }
+        val json = GsonBuilder().serializeNulls().create().toJson(fullHl7)
+        println("Updated Schema")
+        println(json)
     }
     @Test
     fun loadFieldDef() {
@@ -146,5 +329,9 @@ class TestHL7Transform {
 
         val profile: Profile = gson.fromJson(content, Profile::class.java)
         println(profile)
+        println((profile.getSegmentField("HD")?.get(0))?.name)
+        println((profile.getSegmentField("HD")?.get(1))?.name)
+        println((profile.getSegmentField("HD")?.get(2))?.name)
+        println(profile.segmentFields.keys);
     }
 }
