@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken
 import gov.cdc.hl7.HL7StaticParser
 
 import org.junit.jupiter.api.Test
-
+import scala.Option
 
 
 class TestHL7Transform {
@@ -149,9 +149,7 @@ class TestHL7Transform {
 
         val content = this::class.java.getResource("/PhinGuideProfile.json").readText()
 
-        val gson = GsonBuilder()
-                //.registerTypeAdapter(Map::class.java, HashMap::class.java)
-                .create()
+        val gson = GsonBuilder().create()
 
         val profile: Profile = gson.fromJson(content, Profile::class.java)
 
@@ -160,36 +158,18 @@ class TestHL7Transform {
         val defaultFieldsProfileGson = Gson()
 
         val defaultProfile: Profile = defaultFieldsProfileGson.fromJson(defaultFieldsProfileContent, Profile::class.java)
-        println("defaultProfile")
-        println(defaultProfile)
-        /*println((defaultProfile.getSegmentField("HD")?.get(0))?.name)
-        println((defaultProfile.getSegmentField("HD")?.get(1))?.name)
-        println((defaultProfile.getSegmentField("HD")?.get(2))?.name)*/
-
-        println("Profile")
-        println(profile)
-        println("\n\nMSH Fields")
         val fullHl7 = JsonObject()
 
         val lines =message.split("\n")
+        val childrenArray = JsonArray()
         lines.forEach {
             if (it.startsWith("MSH|")) {
                 val msh = JsonObject()
-
                 val msg = it
-                println("Hello")
                 val encodeChars = msg.split("|")[1]
-               // val sendApplication = msg.split("|")[2]
-                println(it.split("|")[1])
-                println(HL7StaticParser.getFirstValue(msg, "MSH-3[1]."+1+"").get())
-                println(HL7StaticParser.getFirstValue(msg, "MSH-3[1].2").get())
-                println(HL7StaticParser.getFirstValue(msg, "MSH-3[1].3").get())
-                println("GoodBye")
 
                 profile.getSegmentField("MSH")?.forEach {
-                    println(it)
-                    println(it.name)
-                    println(it.dataType)
+
                     if(it.fieldNumber==1) {
                         msh.addProperty(normalizeString(it.name), "|")
                     }
@@ -202,34 +182,14 @@ class TestHL7Transform {
 
                         if(it.dataType=="TS" || it.dataType=="ST" || it.dataType=="NM"){
                             val value = HL7StaticParser.getFirstValue(msg, "MSH-"+field+"[1]")
-                            if(value.isDefined){
-                                msh.addProperty(normalizeString(it.name), value.get())
-                            }else{
-                                msh.add(normalizeString(it.name), JsonNull.INSTANCE)
-                            }
+                            addProperty(value, msh, it)
                         }
                         else{
                             if(it.cardinality=="[2..3]"){
                                 val jArray = JsonArray()
-                                val value = HL7StaticParser.getValue(
-                                    msg,
-                                    "MSH-" + field
-                                )
-                                val valueFlat = value.get().flatten()
-                                valueFlat.forEachIndexed { idx, itt ->
-                                    val msh21 = JsonObject()
-                                    val compParts = itt.split("^")
-                                    defaultProfile.getSegmentField(it.dataType)?.forEachIndexed { cidx, comp ->
 
-                                        val key = comp.name
-                                        if(key!=null) {
-                                            msh21.addProperty(normalizeString(key), compParts[cidx])
-                                        }else{
-                                            msh21.add(normalizeString(key), JsonNull.INSTANCE)
-                                        }
-                                    }
-                                    jArray.add(msh21)
-                                }
+                                messageProfileIdentifier(msg, field, defaultProfile, it, jArray)
+
                                 msh.add(normalizeString(it.name), jArray)
                             }else {
                                 defaultProfile.getSegmentField(it.dataType)?.forEach {
@@ -237,11 +197,7 @@ class TestHL7Transform {
                                         msg,
                                         "MSH-" + field + "[1]." + it.fieldNumber + ""
                                     )
-                                    if (value.isDefined) {
-                                        msh_4.addProperty(normalizeString(it.name), value.get())
-                                    } else {
-                                        msh_4.add(normalizeString(it.name), JsonNull.INSTANCE)
-                                    }
+                                    addProperty(value, msh, it)
                                 }
                                 msh.add(normalizeString(it.name), msh_4)
                             }
@@ -250,32 +206,26 @@ class TestHL7Transform {
                 }
                 fullHl7.add("MSH", msh)
             }else {
-                val childrenArray = JsonArray()
+
                 val msh = JsonObject()
                 val msg = it
-                if(it.startsWith("PID|")) {
+                val segmentField = it.split("|")[0]
+
+                println(segmentField)
+                if(it.startsWith(segmentField+"|")) {
                     val pidObject = JsonObject()
-                    profile.getSegmentField("PID")?.forEach {
-                        println("..............PID............")
-                        println(it)
-                        println(it.name)
-                        println(it.dataType)
+                    profile.getSegmentField(segmentField)?.forEach {
+
                         val msh_4 = JsonObject()
                         val field = it.fieldNumber;
 
                         if (it.dataType == "SI" || it.dataType == "IS" || it.dataType == "ID" ||
                             it.dataType == "TS" || it.dataType == "ST" || it.dataType == "NM"
                         ) {
-                            println("PID-1" + HL7StaticParser.getFirstValue(msg, "PID-1").get())
-                            println("PID-1[1]" + HL7StaticParser.getFirstValue(msg, "PID-1[1]").get())
+                            val value = HL7StaticParser.getFirstValue(msg, segmentField+"-" + field + "[1]")
 
+                            addProperty(value, msh, it)
 
-                            val value = HL7StaticParser.getFirstValue(msg, "PID-" + field + "[1]")
-                            if (value.isDefined) {
-                                msh.addProperty(normalizeString(it.name), value.get())
-                            } else {
-                                msh.add(normalizeString(it.name), JsonNull.INSTANCE)
-                            }
                         }else if(it.dataType == "CX" || it.dataType == "CE"
                             || it.dataType == "XPN" || it.dataType == "XAD"){
                             defaultProfile.getSegmentField(it.dataType)?.forEach {
@@ -284,43 +234,78 @@ class TestHL7Transform {
                                     defaultProfile.getSegmentField(it.dataType)?.forEach {
                                         val value = HL7StaticParser.getFirstValue(
                                             msg,
-                                            "PID-" + field + "[1]." + it.fieldNumber + ""
+                                            segmentField+"-" + field + "[1]." + it.fieldNumber + ""
                                         )
-                                        if (value.isDefined) {
-                                            childObject.addProperty(normalizeString(it.name), value.get())
-                                        } else {
-                                            childObject.add(normalizeString(it.name), JsonNull.INSTANCE)
-                                        }
+                                        addProperty(value, msh, it)
+
                                     }
                                     msh_4.add(normalizeString(it.name), childObject)
                                 }else {
                                     val value = HL7StaticParser.getFirstValue(
                                         msg,
-                                        "PID-" + field + "[1]." + it.fieldNumber + ""
+                                        segmentField+"-" + field + "[1]." + it.fieldNumber + ""
                                     )
-                                    if (value.isDefined) {
-                                        msh_4.addProperty(normalizeString(it.name), value.get())
-                                    } else {
-                                        msh_4.add(normalizeString(it.name), JsonNull.INSTANCE)
-                                    }
+                                    addProperty(value, msh, it)
+
                                 }
                             }
                             msh.add(normalizeString(it.name), msh_4)
                         }
-
-                        pidObject.add("PID", msh)
+                        pidObject.add(segmentField, msh)
                     }
                     childrenArray.add(pidObject)
-                    fullHl7.add("Children", childrenArray)
                 }
-println("childrenarray")
+                println("childrenarray")
                 println(childrenArray)
+                fullHl7.add("Children", childrenArray)
             }
         }
         val json = GsonBuilder().serializeNulls().create().toJson(fullHl7)
-        println("Updated Schema")
+        println("RESULT!!!!")
         println(json)
     }
+
+    private fun messageProfileIdentifier(
+        msg: String,
+        field: Int,
+        defaultProfile: Profile,
+        it: HL7SegmentField,
+        jArray: JsonArray
+    ) {
+        val value = HL7StaticParser.getValue(
+            msg,
+            "MSH-" + field
+        )
+        val valueFlat = value.get().flatten()
+        valueFlat.forEachIndexed { idx, itt ->
+            val msh21 = JsonObject()
+            val compParts = itt.split("^")
+            defaultProfile.getSegmentField(it.dataType)?.forEachIndexed { cidx, comp ->
+
+                val key = comp.name
+                if (key != null) {
+                    msh21.addProperty(normalizeString(key), compParts[cidx])
+                } else {
+                    msh21.add(normalizeString(key), JsonNull.INSTANCE)
+                }
+            }
+            jArray.add(msh21)
+        }
+    }
+
+    private fun addProperty(
+        value: Option<String>,
+        msh: JsonObject,
+        it: HL7SegmentField
+    ): JsonObject {
+        if (value.isDefined) {
+            msh.addProperty(normalizeString(it.name), value.get())
+        } else {
+            msh.add(normalizeString(it.name), JsonNull.INSTANCE)
+        }
+        return msh
+    }
+
     @Test
     fun loadFieldDef() {
         val content = this::class.java.getResource("/DefaultFieldsProfile.json").readText()
