@@ -31,8 +31,6 @@ class Function {
     companion object {
         const val PROCESS_STATUS_OK = "SUCCESS"
         const val PROCESS_STATUS_EXCEPTION = "FAILURE"
-
-        val gsonWithNullsOn = GsonBuilder().serializeNulls().create()
     } // .companion
 
     private fun extractValue(msg: String, path: String):String  {
@@ -48,7 +46,7 @@ class Function {
                 connection = "EventHubConnectionString",
                 consumerGroup = "%EventHubConsumerGroup%",
             )
-        message: List<String?>,
+                message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext) {
 
@@ -59,8 +57,6 @@ class Function {
         val REDIS_PWD = System.getenv("REDIS_CACHE_KEY")
         
         val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
-
-        // context.logger.info("received event: --> $message") 
 
         // set up the 2 out event hubs
         val evHubConnStr = System.getenv("EventHubConnectionString")
@@ -81,8 +77,12 @@ class Function {
 
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
                 // context.logger.info("singleMessage: --> $singleMessage")
-                val hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent) //inputEvent["content"].asString
-                val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
+                val hl7ContentBase64 = inputEvent["content"].asString
+                val hl7ContentDecodedBytes = Base64.getDecoder().decode(hl7ContentBase64)
+                val hl7Content = String(hl7ContentDecodedBytes)
+                val metadata = inputEvent["metadata"].asJsonObject
+                val provenance = metadata["provenance"].asJsonObject
+                val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
                 val messageInfo = inputEvent["message_info"].asJsonObject
 
@@ -90,6 +90,10 @@ class Function {
                 val mmgUtil = MmgUtil(redisProxy)
 
                 try {
+                    // 
+                    // Process Message 
+                    // ----------------------------------------------
+
                     // get MMG(s) for the message:
                     val eventCode = messageInfo["event_code"].asString
                     val jurisdictionCode = messageInfo["reporting_jurisdiction"].asString
@@ -113,21 +117,23 @@ class Function {
                     if (mmgs.isEmpty()) {
                         throw Exception ("Unable to find MMGs for message.")
                     }
-                    mmgs.forEach {
-                        context.logger.info("MMG Info for messageUUID: $messageUUID, " + "filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}")
-                    }
-                    val transformer = Transformer(redisProxy, mmgs, hl7Content)
-                    val mmgBasedModel = transformer.transformMessage()
+                    mmgs.forEach { context.logger.info("MMG Info for messageUUID: $messageUUID, " +
+                            "filePath: $filePath, MMG: --> ${it.name}, BLOCKS: --> ${it.blocks.size}") }
+                    val transformer = Transformer(redisProxy)
+                    val mmgModelBlocksSingle = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
+                    val mmgModelBlocksNonSingle = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
+                    // TODO: add call to hl7ToJsonModelLabTemplate
+                    val mmgBasedModel = mmgModelBlocksSingle + mmgModelBlocksNonSingle
                   //  context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel: --> ${gsonWithNullsOn.toJson(mmgBasedModel)}")
                     context.logger.info("mmgModel for messageUUID: $messageUUID, filePath: $filePath, mmgModel.size: --> ${mmgBasedModel.size}")
-                    updateMetadataAndDeliver(startTime, PROCESS_STATUS_OK, mmgBasedModel, eventHubMD[messageIndex],
-                        evHubSender, eventHubSendOkName,  inputEvent, null)
+                    updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_OK, mmgBasedModel, eventHubMD[messageIndex],
+                        evHubSender, eventHubSendOkName, Transformer.gson, inputEvent, mmgKeyNames.asList(),null)
                     context.logger.info("Processed OK for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendOkName")
 
                 } catch (e: Exception) {
                     context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
-                    updateMetadataAndDeliver(startTime, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
-                        evHubSender, eventHubSendErrsName,  inputEvent, e)
+                    updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
+                        evHubSender, eventHubSendErrsName, Transformer.gson, inputEvent, listOf(), e)
                     context.logger.info("Processed ERROR for MMG Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendErrsName")
                     //e.printStackTrace()
                 } // .catch
@@ -143,17 +149,12 @@ class Function {
        // redisProxy.getJedisClient().close()
      
     } // .eventHubProcessor
-    private fun updateMetadataAndDeliver(startTime: String, status: String, report: Map<String, Any?>?, eventHubMD: EventHubMetadata,
-                                         evHubSender: EventHubSender, evTopicName: String, inputEvent: JsonObject,  exception: Exception?) {
+    private fun updateMetadataAndDeliver(startTime: String, metadata: JsonObject, status: String, report: Map<String, Any?>?, eventHubMD: EventHubMetadata,
+                                         evHubSender: EventHubSender, evTopicName: String, gsonWithNullsOn: Gson, inputEvent: JsonObject, configs: List<String>, exception: Exception?) {
 
-
-        val messageInfo = inputEvent["message_info"].asJsonObject
-        val mmgList =  JsonHelper.getStringArrayFromJsonArray(messageInfo["mmgs"].asJsonArray)
-        val processMD = MbtProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, mmgList.toList())
+        val processMD = MbtProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, configs)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
-
-        val metadata =  JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
         metadata.addArrayElement("processes", processMD)
 
         if (exception != null) {

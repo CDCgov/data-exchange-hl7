@@ -11,5 +11,5 @@ data class DexMessageInfo (
 )
 
 enum class HL7MessageType {
-    CASE, ELR, UNKOWN
+    CASE, ELR, UNKNOWN
 }

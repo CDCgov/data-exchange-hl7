@@ -575,7 +575,7 @@
           "priority": 1,
           "isRepeat": false,
           "mayRepeat": "N",
-          "valueSetCode": "PHVS_NotificationSectionHeader_CDC",
+          "valueSetCode": "",
           "mappings": {
             "hl7v251": {
               "legacyIdentifier": "NOT101",

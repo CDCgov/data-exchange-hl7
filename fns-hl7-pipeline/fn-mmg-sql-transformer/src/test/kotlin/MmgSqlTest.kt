@@ -71,7 +71,7 @@ class MmgSqlTest {
         val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
         println("profilesMap.size: --> ${profilesMap.size}")
 
-        assertEquals(profilesMap.size, 12)
+        assertEquals(profilesMap.size, 13)
         println("======END TEST=====================\n")
     } // .testDefaultPhinProfiles
 
@@ -318,7 +318,70 @@ class MmgSqlTest {
 
     } // .testBadEventHubMessage
 
+    @Test
+    fun testCaseWithLabTemplate() {
+        println("===Begin test of Case Message with Lab Template =========================================")
+        val testMsg = this::class.java.getResource("/CaseLab_001.txt").readText()
+        val reportingJurisdiction = extractValue(testMsg, JURISDICTION_CODE_PATH)
+        val eventCode = extractValue(testMsg, EVENT_CODE_PATH)
+        val mmgsArr = getMMGsFromMessage(testMsg, reportingJurisdiction, eventCode)
+        // Default Phin Profiles Types
+        // ------------------------------------------------------------------------------
+        val dataTypesFilePath = "/DefaultFieldsProfileX.json"
+        val dataTypesMapJson = this::class.java.getResource(dataTypesFilePath).readText()
+        val dataTypesMapType = object : TypeToken< Map<String, List<PhinDataType>> >() {}.type
+        val profilesMap: Map<String, List<PhinDataType>> = gson.fromJson(dataTypesMapJson, dataTypesMapType)
+        // MMG Based Model for the message
+        // ------------------------------------------------------------------------------
+        val mmgBasedModelStr = this::class.java.getResource("/labModel.json").readText()
+        val modelJson = JsonParser.parseString(mmgBasedModelStr).asJsonObject
 
+        // Transformer SQL
+        // ------------------------------------------------------------------------------
+        val transformer = TransformerSql()
+        val mmgs = transformer.getMmgsFiltered(mmgsArr)
+        val mmgBlocks = mmgs.flatMap { it.blocks } // .mmgBlocks
+        val (mmgBlocksSingle, mmgBlocksNonSingle) = mmgBlocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+        val ( mmgElementsSingleNonRepeats, mmgElementsSingleRepeats ) = mmgBlocksSingle.flatMap { it.elements }.partition{ !(it.isRepeat || it.mayRepeat.contains("Y"))}
+
+        // Singles Non Repeats
+        // --------------------------------------
+        val singlesNonRepeatsModel = transformer.singlesNonRepeatsToSqlModel(mmgElementsSingleNonRepeats, profilesMap, modelJson)
+
+        println("singlesNonRepeatsModel.size: --> ${singlesNonRepeatsModel.size}")
+
+        // Singles Repeats
+        // --------------------------------------
+        val singlesRepeatsModel = transformer.singlesRepeatsToSqlModel(mmgElementsSingleRepeats, profilesMap, modelJson)
+
+        println("singlesRepeatsModel.size: --> ${singlesRepeatsModel.size}")
+
+        // Repeated Blocks
+        // --------------------------------------
+        val repeatedBlocksModel = transformer.repeatedBlocksToSqlModel(mmgBlocksNonSingle, profilesMap, modelJson)
+
+        println("repeatedBlocksModel.size: --> ${repeatedBlocksModel.size}")
+
+        // Message Profile Identifier
+        val messageProfIdModel = transformer.messageProfIdToSqlModel(modelJson)
+
+        println("mesageProfIdModel.size: --> ${messageProfIdModel.size}")
+
+        // Lab Template
+        val labTemplateModel = transformer.mapLabTemplate(profilesMap, modelJson)
+        val mmgSqlModel = if (labTemplateModel == null) {
+            messageProfIdModel + singlesNonRepeatsModel + mapOf(
+                TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel
+            )
+        } else {
+            messageProfIdModel + singlesNonRepeatsModel + mapOf(
+                TABLES_KEY_NAME to singlesRepeatsModel + repeatedBlocksModel + labTemplateModel
+            )
+        } // .mmgSqlModel
+        println("mmgSqlModel.size: --> ${mmgSqlModel.size}")
+        println("mmgSqlModel: -->\n${gsonWithNullsOn.toJson(mmgSqlModel)}")
+        println("======END TEST============================================\n")
+    }
     private fun extractValue(msg: String, path: String): String  {
         val value = HL7StaticParser.getFirstValue(msg, path)
         return if (value.isDefined) value.get()

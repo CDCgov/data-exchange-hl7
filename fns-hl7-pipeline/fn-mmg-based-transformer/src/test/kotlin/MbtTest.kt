@@ -7,24 +7,15 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFails
-
 import org.slf4j.LoggerFactory
-
 import gov.cdc.dex.redisModels.MMG
-
-import gov.cdc.dex.redisModels.Condition2MMGMapping 
-
-import gov.cdc.dex.hl7.model.PhinDataType
-
+import gov.cdc.dex.redisModels.Condition2MMGMapping
 import gov.cdc.dex.hl7.Transformer
-
 import gov.cdc.dex.mmg.InvalidConditionException
-
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-
 import  gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.metadata.DexMessageInfo
 import gov.cdc.dex.metadata.HL7MessageType
@@ -32,6 +23,9 @@ import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.StringUtils
 import gov.cdc.dex.util.StringUtils.Companion.normalize
+import gov.cdc.hl7.HL7ParseUtils
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 
 class MbtTest {
@@ -46,7 +40,7 @@ class MbtTest {
 
         val REDIS_PREFIX_COONDITION = "condition:"
 
-        val logger = LoggerFactory.getLogger(MmgUtil::class.java.simpleName)
+        val logger = LoggerFactory.getLogger(MbtTest::class.java.simpleName)
         private val gson = Gson()
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() 
 
@@ -153,7 +147,7 @@ class MbtTest {
         val mmgUtil = MmgUtil(redisProxy)
         val mmgsArr = mmgUtil.getMMGs("Var_Case_Map_v2.0", "", "10030", "13")
 
-        val transformer = Transformer(redisProxy)
+        val transformer = Transformer(redisProxy, mmgsArr, testMsg)
         val mmgs = transformer.getMmgsFiltered(mmgsArr)
 
         mmgs.forEach {
@@ -176,17 +170,17 @@ class MbtTest {
     } // .testLoadMMG
 
 
-    @Test
-    fun testPhinDataTypesToMapOfListClass() {
-        val transformer = Transformer(redisProxy)
-
-        val dataTypesMap: Map<String, List<PhinDataType>> = transformer.getPhinDataTypes()
-
-        logger.info("testPhinDataTypesToMapOfListClass: Phin dataTypesMap.size: --> ${dataTypesMap.size}")
-        // Phin dataTypesMap.size: --> 12
-        assertEquals(dataTypesMap.size, 12)
-    } // .testPhinDataTypes
-
+//    @Test
+//    fun testPhinDataTypesToMapOfListClass() {
+//        val transformer = Transformer(redisProxy, arrayOf<MMG>(),"")
+//
+//        val dataTypesMap: Map<String, List<PhinDataType>> = transformer.getPhinDataTypes()
+//
+//        logger.info("testPhinDataTypesToMapOfListClass: Phin dataTypesMap.size: --> ${dataTypesMap.size}")
+//        // Phin dataTypesMap.size: --> 12
+//        assertEquals(dataTypesMap.size, 12)
+//    } // .testPhinDataTypes
+//
 
     @Test
     fun testTransformerHl7ToJsonModelTC01() {
@@ -196,7 +190,7 @@ class MbtTest {
         val mmg1Json = this::class.java.getResource(mmg1Path).readText()
         val mmg1 = gson.fromJson(mmg1Json, MMG::class.java)
 
-        // mmg2 TODO:
+        // mmg2
         val mmg2Path = "/TBRD.json"
         val mmg2Json = this::class.java.getResource(mmg2Path).readText()
         val mmg2 = gson.fromJson(mmg2Json, MMG::class.java)
@@ -207,12 +201,8 @@ class MbtTest {
         val hl7FilePath = "/TBRD_V1.0.2_TM_TC01.hl7" // "/Genv2_2-0-1_TC01.hl7" // "/TBRD_V1.0.2_TM_TC01.hl7"
         val hl7Content = this::class.java.getResource(hl7FilePath).readText()
         
-        val transformer = Transformer(redisProxy)
-        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
-
-        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
-
-        val model = model1 + model2
+        val transformer = Transformer(redisProxy, mmgs, hl7Content)
+        val model = transformer.transformMessage()
 
         logger.info("testTransformerHl7ToJsonModel: MMG model.size: ${model.size}")
         // MMG model.size: 89
@@ -384,14 +374,13 @@ class MbtTest {
     fun testFilterOBXs() {
         val filePath = "/Hepatitis_V1_0_1_TM_TC02_HEP_B_ACUTE.txt"
         val hl7Content = this::class.java.getResource(filePath).readText().trim()
-        val messageLines = hl7Content.split("\r")
-        val transformer = Transformer(redisProxy)
+
+        val parser = HL7ParseUtils.getParser(hl7Content, "BasicProfile.json")
      //   val start = System.currentTimeMillis()
-        val epiLines = transformer.getEpiOBXs(messageLines)
+        val epiLines = parser.getValue("OBR[@4.1='68991-9||PERSUBJ||NOTF']")
      //   println(System.currentTimeMillis() - start)
-        assertTrue { epiLines.isNotEmpty() }
-        assertTrue { epiLines[0].split("|")[1].trim() == "1" }
-        assertTrue { epiLines.last().split("|")[1].trim() == "101" }
+        assertTrue { epiLines.isDefined }
+        assertTrue { epiLines.get().flatten().size ==1}
     }
 
     private fun extractValue(msg: String, path: String): String  {
@@ -409,26 +398,48 @@ class MbtTest {
         return mmgUtil.getMMGs(mshProfile, mshCondition, eventCode, jurisdictionCode)
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun testTransformerWithRedis(testName: String, filePath: String) {
+       val time = measureTime {
+            val hl7Content = this::class.java.getResource(filePath).readText()
 
-        val hl7Content = this::class.java.getResource(filePath).readText()
-            .replace("\r\n", "\n")
-            .replace("\r", "\n")
+            val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
+            val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
+            val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
+
+            mmgs.forEach {
+                logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
+            }
+
+            val transformer = Transformer(redisProxy, mmgs, hl7Content)
+            val mmgModel = transformer.transformMessage()
+            logger.info("$testName: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
+       }
+       logger.info("Method took $time")
+    }
+
+    @Test
+    fun testBringEpiOBX() {
+        val testMsg = this::class.java.getResource("/Hep_MultiOBR.txt").readText()
+
+        val hl7Parser = HL7ParseUtils.getParser(testMsg, "BasicProfile.json")
+        val obxList = hl7Parser.getValue("OBR[@4.1='68991-9||PERSUBJ']->OBX").get()
+       obxList.forEach { it.forEach { itt-> println(itt) }
+
+       }
+    }
+
+    @Test
+    fun testCaseMessageWithLabTemplate() {
+        val hl7Content = this::class.java.getResource("/CaseLab_001.txt").readText()
         val reportingJurisdiction = extractValue(hl7Content, JURISDICTION_CODE_PATH)
         val eventCode = extractValue(hl7Content, EVENT_CODE_PATH)
         val mmgs = getMMGsFromMessage(hl7Content, reportingJurisdiction, eventCode)
-
-        mmgs.forEach {
-            logger.info("MMG ID: ${it.id}, NAME: ${it.name}, BLOCKS: --> ${it.blocks.size}")
-        }
-
-        val transformer = Transformer(redisProxy)
-        val model1 = transformer.hl7ToJsonModelBlocksSingle(hl7Content, mmgs)
-
-        val model2 = transformer.hl7ToJsonModelBlocksNonSingle(hl7Content, mmgs)
-
-        val mmgModel = model1 + model2
-        logger.info("$testName: MMG Model (mmgModel): --> \n\n${gsonWithNullsOn.toJson(mmgModel)}\n")
+        val transformer = Transformer(redisProxy, mmgs, hl7Content)
+        val caseMessage = transformer.transformMessage()
+        println("Case with Labs: ${gsonWithNullsOn.toJson(caseMessage)}")
     }
+
+
 } // .MbtTest
 

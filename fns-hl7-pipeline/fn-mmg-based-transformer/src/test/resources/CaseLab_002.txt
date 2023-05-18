@@ -1,0 +1,30 @@
+MSH|^~\&|NCDPH NCEDSS^2.16.840.1.113883.3.591.3.1^ISO|NCDPH EDS^2.16.840.1.113883.3.591.1.1^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20190718103912.753||ORU^R01^ORU_R01|STD20190717180325238|P|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~STD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||PCJFAHYVWDHS^^^NCDPH EDS&2.16.840.1.113883.3.591.1.1&ISO||~^^^^^^S||19860330|M||2054-5^Black or African American^CDCREC|^^^37^27292^^^^37057^37057061500|||||||||||UNK^unknown^NULLFL
+OBR|1||101504584^NCDPH NCEDSS^2.16.840.1.113883.3.591.3.1^ISO|68991-9^Epidemiologic Information^LN|||20190820000000|||||||||||||||20190717190526|||C||||||10274^Chlamydia trachomatis infection^NND
+OBX|1|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|2|TS|11368-8^Date of Illness Onset^LN||1||||||F
+OBX|3|TS|77975-1^Diagnosis Date^LN||20190419||||||F
+OBX|4|ST|77993-4^State Case Identifier^LN||101504584||||||F
+OBX|5|SN|77998-3^Age at Case Investigation^LN||=^21|a^year [time]^UCUM|||||F
+OBX|6|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|7|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|8|ST|77969-4^Jurisdiction Code^LN||37||||||F
+OBX|9|CWE|48766-0^Reporting Source Type Code^LN||OTH^other^NULLFL||||||F
+OBX|10|ST|74549-7^Person Reporting to CDC - Name^LN||Mike Lindell||||||F
+OBX|11|ST|74548-9^Person Reporting to CDC - Phone Number^LN||229-446-1333||||||F
+OBX|12|ST|74547-1^Person Reporting to CDC - Email^LN||Mike.Lindel@dhhs.nc.gov||||||F
+OBX|13|DT|77979-3^Case Investigation Start Date^LN||20190711||||||F
+OBX|14|DT|77995-9^Date Reported^LN||20190711||||||F
+OBX|15|TS|77973-6^Earliest Date Reported to State^LN||20190711||||||F
+OBX|16|SN|77991-8^MMWR Week^LN||=^28||||||F
+OBX|17|DT|77992-6^MMWR Year^LN||2019||||||F
+OBX|18|DT|77970-2^Date First Reported to PHD^LN||20190711||||||F
+OBX|19|CWE|77966-0^Reporting State^LN||37^North Carolina^FIPS5_2||||||F
+OBX|20|CWE|77967-8^Reporting County^LN||37057^Davidson^FIPS6_4||||||F
+OBX|21|CWE|77968-6^National Reporting Jurisdiction^LN||37^NC^FIPS5_2||||||F
+OBX|22|DT|STD099^Date of Initial Health Exam Associated with Case Report "Health Event"^PHINQUESTION||20190709||||||F
+OBX|23|DT|STD105^Treatment Date^PHINQUESTION||20190711||||||F
+OBX|24|CWE|INV892^HIV Status Documented Through eHARS Record Search^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBR|2||1050300740^NCDPH NCEDSS^2.16.840.1.113883.3.591.3.1^ISO|30954-2^Laboratory Information^LN|||20190709|||||||||||||||20190710|||F
+OBX|1|CWE|43304-5^C trach rRNA XXX Ql NAA+probe   \F\\F\  Chlamydia trachomatis rRNA: Probe.amp.tar^LN||10828004^Positive^SCT||Negative||||F|||20190709|||||20190710||||Laboratory Corporation of America (LabCorp - 1447 York Court, Burlington, NC 27215)
+SPM|1|^19070609580||119324002^Specimen of unknown material (specimen)^SCT|||||||||||||20190709|20190709
