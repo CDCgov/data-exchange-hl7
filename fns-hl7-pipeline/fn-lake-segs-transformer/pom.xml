@@ -276,9 +276,8 @@
                     <argLine>${surefireArgLine}</argLine>
                     <environmentVariables>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
-                        <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
-                        <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
-                        <EventHubSendELROkName>hl7-structure-elr-ok</EventHubSendELROkName>
+                        <EventHubSendOkName>hl7-lake-segments-ok</EventHubSendOkName>
+                        <EventHubSendErrsName>hl7-lake-segments-err</EventHubSendErrsName>
                     </environmentVariables>
                 </configuration>
             </plugin>
