@@ -2,11 +2,9 @@ package gov.cdc.hl7.bumblebee
 
 import com.google.gson.*
 import gov.cdc.hl7.HL7ParseUtils
+import gov.cdc.hl7.bumblebee.StringUtils.Companion.normalize
 import gov.cdc.hl7.model.HL7Hierarchy
 
-enum class  CARDINALITY_ENUM {
-    CARDINALITY_UNK, CARDINALITY_MANY
-}
 
 class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl7Parser: HL7ParseUtils) {
     companion object {
@@ -41,11 +39,6 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
         val msh =fullHL7.get("MSH").asJsonObject
         msh.addProperty("file_separator", "|")
         msh.addProperty("encoding_characters", "^~\\&")
-
-        //Profile as Pivot
-//        profile.segmentDefinition?.forEach {
-//            processSegment(null, it.key, it.value, fullHL7)
-//        }
         return fullHL7
 
     }
@@ -97,15 +90,13 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
                     val compArray = fieldRepeatItem.split("^")
                     components.forEach { component ->
                         val compVal = getValueFromMessage(compArray, component.fieldNumber -1 )
-                           // if (compArray.size > component.fieldNumber - 1) compArray[component.fieldNumber - 1] else null
                         //Handle subcomponents...
                         val subComponents = fieldProfile.getSegmentField(component.dataType)
                         if (!subComponents.isNullOrEmpty()) {
-                            val subCompArray = compVal?.split("&")
                             val subCompJsonObj = JsonObject()
+                            val subCompArray = compVal?.split("&")
                             subComponents.forEach { subComp ->
                                 val subCompVal = getValueFromMessage(subCompArray, subComp.fieldNumber - 1)
-                                   // if (subCompArray != null && subCompArray.size > subComp.fieldNumber - 1) subCompArray[subComp.fieldNumber - 1] else null
                                 subCompJsonObj.addValueOrNull(subCompVal, subComp.name)
                             }
                             compJsonObj.add(component.name.normalize(), subCompJsonObj)
@@ -122,7 +113,7 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
 
 
         }
-        if (!seg.children().isEmpty) {//Do not change to isNotEmpty.
+        if (!seg.children().isEmpty) {
             val childArray = JsonArray()
             segJson.add("children", childArray)
             seg.children().foreach { childSeg ->
@@ -145,109 +136,11 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
             }
     }
 
-
-
-    private fun processSegment(parentSeg: String?, seg: String, segConfig: SegmentConfig, parentJson: JsonElement) {
-        //Does message has this seg?
-
-        val segMsg = if (parentSeg == null) hl7Parser.getValue(seg)
-        else hl7Parser.getValue("$parentSeg->$seg")
-
-        if (segMsg.isDefined && segMsg.get().size > 0) {
-            segMsg.get().flatten().forEachIndexed { segIndex, segValue ->
-                val segJson = JsonObject()
-                if (parentJson.isJsonObject)
-                    parentJson.asJsonObject.add(seg, segJson)
-                else {
-                    val segArrayJson = JsonObject()
-                    segArrayJson.add(seg, segJson)
-                    parentJson.asJsonArray.add(segArrayJson)
-                }
-                val segArray = segValue.split("|")
-                val fieldIndexSkew = if (seg == "MSH") 1 else 0
-                profile.getSegmentField(seg)?.forEach { segField ->
-                    val fieldVal =
-                        if (segArray.size > (segField.fieldNumber - fieldIndexSkew)) segArray[segField.fieldNumber - fieldIndexSkew] else null
-
-                    val fieldRepeat = fieldVal?.split("~")
-                    val jsonArrayValues: JsonArray? =
-                        if (fieldRepeat != null && fieldRepeat.size > 1) JsonArray() else null
-                    if (fieldRepeat != null && fieldRepeat.size > 1)
-                        segJson.add(segField.name, jsonArrayValues)
-                    val components = fieldProfile.getSegmentField(segField.dataType)
-                    fieldRepeat?.forEach { fieldRepeatItem ->
-                        val segFieldObj = if (fieldRepeat.size == 1)
-                            segJson else JsonObject()
-
-                        if (components == null) {
-                            //It's a primitive, assign value:
-                            segFieldObj.addValueOrNull(fieldRepeatItem, segField.name )
-                            jsonArrayValues?.add(segFieldObj)
-                        } else {
-                            val compJsonObj = JsonObject()
-                            val compArray = fieldRepeatItem.split("^")
-                            components.forEach { component ->
-                                val compVal =
-                                    if (compArray.size > component.fieldNumber - 1) compArray[component.fieldNumber - 1] else null
-                                //Handle subcomponents...
-                                val subComponents = fieldProfile.getSegmentField(component.dataType)
-                                if (!subComponents.isNullOrEmpty()) {
-                                    val subCompArray = compVal?.split("&")
-                                    val subCompJsonObj = JsonObject()
-                                    subComponents.forEach { subComp ->
-                                        val subCompVal =
-                                            if (subCompArray != null && subCompArray.size > subComp.fieldNumber - 1) subCompArray[subComp.fieldNumber - 1] else null
-                                        subCompJsonObj.addValueOrNull(subCompVal, subComp.name)
-                                    }
-                                    compJsonObj.add(component.name, subCompJsonObj)
-                                } else {
-                                    compJsonObj.addValueOrNull(compVal, component.name)
-                                }
-                            }
-                            if (fieldRepeat.size > 1)
-                                jsonArrayValues?.add(compJsonObj)
-                            else
-                                segFieldObj.add(segField.name.normalize(), compJsonObj)
-                        }
-
-                    }
-                }
-                if (!segConfig.children.isNullOrEmpty()) {//Do not change to isNotEmpty.
-                    val childArray = JsonArray()
-                    segJson.add("children", childArray)
-                    segConfig.children.forEach { childSeg ->
-                        processSegment("$seg[${segIndex + 1}]", childSeg.key, childSeg.value, childArray)
-                    }
-                }
-            }
-        }
-    }
-
-
-
-    fun JsonObject.addValueOrNull(value: String?, name: String) {
+   fun JsonObject.addValueOrNull(value: String?, name: String) {
         if (!value.isNullOrEmpty())
             this.addProperty(name.normalize(), value)
         else this.add(name.normalize(),JsonNull.INSTANCE)
     }
 
-    fun String.normalize(): String {
-        return normalizeString(this)
-    }
 
-    fun normalizeString(str: String): String {
-        val replaceableChars = mapOf(
-            " " to "_",
-            "-" to "_",
-            "/" to "_",
-            "." to "_",
-            "&" to "_and_"
-        )
-        var rr1 = str.trim().lowercase()
-        replaceableChars.forEach {
-            rr1 = rr1.replace(it.key, it.value)
-        }
-        //remove duplicate underscores based on replacements above and remove all other unknown chars
-        return rr1.replace("(_)\\1+".toRegex(), "_").replace("[^A-Z a-z 0-9 _\\.]".toRegex(), "")
-    }
 }
