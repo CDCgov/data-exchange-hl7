@@ -1,10 +1,11 @@
+## Redactor Function for HL7 Pipeline
+
 # TL;DR>
 This service redacts PII data out of the original message. Redacted fields are configurable.
 	
 	
 # Details:
-The Redactor service uses the HL7-PET library to perform redaction on specific fields based on configuration files. 
-It loads different configuration files for CASE messages vs. ELR messages. It inspects specific fields (defined as HL7 paths, e.g., PID[1]-11.9) for the presence of any value and, if populated, it will substitute a value into the field based on the configured rule.
+The Redactor service uses the HL7-PET library to perform redaction on specific fields based on configuration files, loading different configuration files for CASE messages vs. ELR messages. It inspects specific fields (defined as HL7 paths, e.g., PID[1]-11.9) for the presence of any value and, if populated, will substitute a value into the field based on the configured rule.
 	
 ## PID-5
 It was agreed that for PID-5, we don't want to fully "fix" the message.
@@ -17,7 +18,7 @@ Then, it proceeds to redact **PID-5[1]** and possibly **PID-5[2]** to remove any
 
 If **PID-5[2]** is not the appropriate value, Redactor will remove the PII data from the message and the Structure Validator will error out this message. 
 
-Therefore it is important that STLTs send **PID-5[2]** as defined on the PHIN Spec with the exact value of "^^^^^^S.
+Therefore, it is important that STLTs send **PID-5[2]** as defined on the PHIN Spec, with the exact value of "^^^^^^S".
 
 Ex.:
 
