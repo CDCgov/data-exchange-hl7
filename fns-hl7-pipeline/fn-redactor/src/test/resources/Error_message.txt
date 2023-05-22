@@ -1,0 +1,11 @@
+{"content":"TVNIfF5+XCZ8UkR8TUFZTyBDTElOSUMgREVQVC4gT0YgTEFCIE1FRCBBTkQgUEFUSE9MT0dZXjExMjM0NTY3ODkwNDAwMDJeQ0xJQXxWVERPSHxWVHwyMDIwMDQyMTA1MDh8fE9SVV5SMDF8MjAyMDA0MjEwNT
+ A4NzQ0NzcxNHxEfDIuMy4xClBJRHwxfEFEMTJEMV4xMTE1XjI4MnwyODExMTU1Xl5eXlBJXk1BWU8gQ0xJTklDIExBQlMtUk9DSCBTVVBFUklPUiBEUiYyNEQxMDQwNTkyMSZDTElBfk0xMDAwMDAwOTBeXl5eUFReQlJBVFRMRUJPUk8gTUVNT1JJQUwgSE9TUHx8UGVyZm9ybWFuY2U1MSo0MDAwMl5UZXN0fH
+ wxOTYwMDEwMnxNfHx8MTIzNCBUZXN0IFN0cmVldF5eXkdBXjMwMzA5fHxeXl5eXjgwMF41NTUxMjEyCk9SQ3x8fHx8fHx8fHx8fHx8fHx8fHx8fEJSQVRUTEVCT1JPIE1FTU9SSUFMIEhPU1B8MTcgQkVMTU9OVCBBVkVeXkJSQVRUTEVCT1JPXlZUXjA1MzAxNjYxM3xeXl5eXjgwMl4yNTc4MzY5fDE3IEJFTE
+ 1PTlQgQVZFXl5CUkFUVExFQk9ST15WVF4wNTMwMTY2MTMKT0JSfDF8fFRBQTIzNXxeXl5DT1ZJRF5TQVJTIENPUk9OQVZJUlVTIDIgUk5BIERFVEVDVElPTiwgVl5MfHx8MjAyMTAxMjkwOTU1fHx8fHx8fDIwMjAwMjIyMjAwNXxeXk5BU09QSEFSWU5YfDEyMzQ1Njc4OV5UZXN0XlByb3ZpZGRkZXJ8fHx8fH
+ wyMDIwMDQyMzA0MDd8fHxGCk9CWHwxfENFfDk0NTAxLTReTUVSUy1Db1YgUk5BIFJlc3AgUWwgTkFBK3Byb2JlXkxOfHwyNjAzNzMwMDFeREVURUNURUReU0NUfHxVTkRFVEVDVEVEfEFBfHx8Rnx8fDIwMjAwMTE5MDQwNzAwfDI0RDEwNDA1OTJeTUFZTyBDTElOSUMgTEFCUy1ST0NIIFNVUEVSSU9SIERSXk
+ NMSUE=","message_info":{"event_code":"","route":"covid19_elr","mmgs":null,"reporting_jurisdiction":"13","type":"ELR"},"metadata":{"provenance":{"event_id":"866024c9-a01e-0015-4e81-6cbb8e069468","event_timestamp":"2023-04-11T14:22:34
+ .4964204Z","file_uuid":"d1b2cb9b-4a84-4f00-9922-597138f40aa9","file_path":"https://tfedemessagestoragedev.blob.core.windows.net/hl7ingress/postman-mcq1-16c8673c-6f2c-40be-8b47-d6498f5160df.txt","file_timestamp":"2023-04-11T10:22:34-
+ 04:00","file_size":824,"single_or_batch":"SINGLE","message_hash":"2de6368bd0251f4b5406a005f356ad57","ext_system_provider":"POSTMAN","ext_original_file_name":"postman-mcq1-16c8673c-6f2c-40be-8b47-d6498f5160df.txt","message_index":1,"
+ ext_original_file_timestamp":"2023-03-09T12:05:04.074"},"processes":[{"status":"SUCCESS","process_name":"RECEIVER","process_version":"1.0.0","eventhub_queued_time":"","eventhub_offset":99,"eventhub_sequence_number":1,"start_processi
+ ng_time":"2023-04-23T20:50:31.221-04:00","end_processing_time":"2023-04-23T20:50:34.708-04:00"}]},"summary":{"current_status":"RECEIVED","problem":null},"message_uuid":"9cd896a7-cca0-49b8-b292-72735b76a8c3","metadata_version":"1.0.1
+ "}

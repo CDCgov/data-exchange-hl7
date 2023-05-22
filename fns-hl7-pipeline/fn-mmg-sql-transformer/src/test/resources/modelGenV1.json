@@ -31,40 +31,6 @@
 		"assigning_jurisdiction": null,
 		"assigning_agency_or_department": null
 	},
-	"subject_name_type": [
-		{
-			"family_name": null,
-			"given_name": null,
-			"second_and_further_given_names_or_initials_thereof": null,
-			"suffix": null,
-			"prefix": null,
-			"degree": null,
-			"name_type_code": null,
-			"name_representation_code": null,
-			"name_context": null,
-			"name_validity_range": null,
-			"name_assembly_order": null,
-			"effective_date": null,
-			"expiration_date": null,
-			"professional_suffix": null
-		},
-		{
-			"family_name": null,
-			"given_name": null,
-			"second_and_further_given_names_or_initials_thereof": null,
-			"suffix": null,
-			"prefix": null,
-			"degree": null,
-			"name_type_code": "S",
-			"name_representation_code": null,
-			"name_context": null,
-			"name_validity_range": null,
-			"name_assembly_order": null,
-			"effective_date": null,
-			"expiration_date": null,
-			"professional_suffix": null
-		}
-	],
 	"birth_date": "19490214000000",
 	"subjects_sex": "M",
 	"race_category": [
@@ -94,7 +60,7 @@
 	"subjects_address_zip_code": "30329",
 	"ethnic_group_code": {
 		"identifier": "2186-5",
-		"text": "Not Hispanic",
+		"text": "Not Hispanic",
 		"name_of_coding_system": "2.16.840.1.113883.6.238",
 		"alternate_identifier": null,
 		"alternate_text": null,
@@ -109,24 +75,24 @@
 		"universal_id_type": "ISO"
 	},
 	"subject_type": {
-		"identifier": "PERSUBJ",
-		"text": "Person Subject",
+		"identifier": "NOTF",
+		"text": "CASE NOTIFICATION",
 		"name_of_coding_system": "2.16.840.1.114222.4.5.274",
 		"alternate_identifier": null,
 		"alternate_text": null,
 		"name_of_alternate_coding_system": null,
-		"code_system_concept_name": "Person Subject",
-		"cdc_preferred_designation": "Person Subject"
+		"code_system_concept_name": "Individual Case Notification",
+		"cdc_preferred_designation": "Individual Case Notification"
 	},
 	"notification_type": {
-		"identifier": "PERSUBJ",
-		"text": "Person Subject",
+		"identifier": "NOTF",
+		"text": "CASE NOTIFICATION",
 		"name_of_coding_system": "2.16.840.1.114222.4.5.274",
 		"alternate_identifier": null,
 		"alternate_text": null,
 		"name_of_alternate_coding_system": null,
-		"code_system_concept_name": "Person Subject",
-		"cdc_preferred_designation": "Person Subject"
+		"code_system_concept_name": "Individual Case Notification",
+		"cdc_preferred_designation": "Individual Case Notification"
 	},
 	"date_first_submitted": "20230101115959",
 	"date_of_report": "20230101115959",
@@ -274,7 +240,7 @@
 	},
 	"case_disease_imported_code": {
 		"identifier": "PHC245",
-		"text": "Out of jurisdiction, from another jurisdiction within state",
+		"text": "Out of jurisdiction, from another jurisdiction within state",
 		"name_of_coding_system": "2.16.840.1.114222.4.5.274",
 		"alternate_identifier": "4",
 		"alternate_text": "5",
@@ -326,7 +292,7 @@
 	},
 	"imported_county": {
 		"identifier": "13067",
-		"text": "Cobb, GA",
+		"text": "Cobb, GA",
 		"name_of_coding_system": "2.16.840.1.113883.6.93",
 		"alternate_identifier": null,
 		"alternate_text": null,
@@ -339,7 +305,7 @@
 	},
 	"transmission_mode": {
 		"identifier": "416380006",
-		"text": "Airborne Transmission",
+		"text": "Airborne Transmission",
 		"name_of_coding_system": "2.16.840.1.113883.6.96",
 		"alternate_identifier": null,
 		"alternate_text": null,

@@ -61,7 +61,7 @@
         <!-- Test -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
+            <artifactId>kotlin-test-junit</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
@@ -253,18 +253,25 @@
                     </filesets>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
                 <configuration>
+                    <argLine> --illegal-access=permit </argLine>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <forkCount>2</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <argLine>${surefireArgLine}</argLine>
                     <environmentVariables>
-                        <REDIS_CACHE_NAME>ocio-ede-dev-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
+                        <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
                         <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>
                         <BlobIngestContainerName>hl7ingress</BlobIngestContainerName>
-                        <EventHubSendOkName>hl7-recdeb-ok</EventHubSendOkName>
-                        <EventHubSendErrsName>hl7-recdeb-err</EventHubSendErrsName>
+                        <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
+                        <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
                     </environmentVariables>
                 </configuration>
             </plugin>

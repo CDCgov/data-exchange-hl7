@@ -1,24 +1,21 @@
 package gov.cdc.dex.hl7
 
-//import org.slf4j.LoggerFactory
-// import gov.cdc.dex.redisModels.ValueSetConcept
-
-// import com.google.gson.Gson
-// import com.google.gson.reflect.TypeToken
-
-import com.google.gson.JsonElement
-import com.google.gson.JsonNull
-import com.google.gson.JsonObject
+import com.google.gson.*
+import com.google.gson.reflect.TypeToken
 import gov.cdc.dex.hl7.model.PhinDataType
 import gov.cdc.dex.redisModels.Block
 import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
+import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.util.StringUtils
 import gov.cdc.dex.util.StringUtils.Companion.normalize
+import java.lang.reflect.Type
+import java.util.*
 
 class TransformerSql {
 
     companion object {
+        private val gson: Gson = GsonBuilder().serializeNulls().create()
         private const val MMG_BLOCK_NAME_MESSAGE_HEADER = "Message Header"
         const val SEPARATOR = "_"
         private const val ELEMENT_CE = "CE"
@@ -28,6 +25,7 @@ class TransformerSql {
         private const val MESSAGE_PROFILE_IDENTIFIER_EL_NAME = "message_profile_identifier"
         private const val MESSAGE_PROFILE_ID_ALTERNATE_NAME = "message_profile_id"
         private const val MAX_BLOCK_NAME_LENGTH = 30
+        const val MMG_BLOCK_TYPE_SINGLE = "Single"
     } // .companion object
 
 
@@ -127,86 +125,129 @@ class TransformerSql {
     // --------------------------------------------------------------------------------------------------------
     //  ------------- MMG Elements that are Repeated Blocks -------------
     // --------------------------------------------------------------------------------------------------------
-    fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?> {
-        var listOfLists = false
-        val repeatedBlocksModel = blocks.associate { blk ->
-            val blockName = if (blk.name.normalize().contains("repeating_group")) {
-                blk.name
-            } else {
-                "${blk.name} repeating group"
-            }
-            val blkName = StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH)
-            val blkModel = modelJson[blkName]
+    private fun getNormalizedBlockName(block: Block) : String {
+        val blockName = if (block.name.normalize().contains("repeating_group")) {
+            block.name
+        } else {
+            "${block.name} repeating group"
+        }
+        return StringUtils.getNormalizedShortName(blockName, MAX_BLOCK_NAME_LENGTH)
+    }
 
-            if (blkModel == null || blkModel.isJsonNull || blkModel.asJsonArray.isEmpty) {
-                blkName to null// we want null, not an empty array
+    fun repeatedBlocksToSqlModel(blocks: List<Block>, profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject, isLabTemplate: Boolean = false) : Map<String, Any?> {
+        val tables = mutableMapOf<String, Any?>()
+        blocks.forEach { blk ->
+            val blkName = getNormalizedBlockName(blk)
+            val blkData = modelJson[blkName]
+
+            if (blkData == null || blkData.isJsonNull || blkData.asJsonArray.isEmpty) {
+                tables[blkName] = JsonNull.INSTANCE // we want null, not an empty array
             } else {
-                val blkModelArr = blkModel.asJsonArray  //array of data for this repeating block
+                val blkModelArr = blkData.asJsonArray  //array of data for this repeating block
                 // need to determine up front if there are any repeating elements within this repeat block
-             //   val elementsInBlock = blocks.filter { it.name == blk.name }[0].elements
-                val elementsInBlock = blocks.filter { it.name == blk.name }[0].elements.associateBy {elem ->
-                    elem.mappings.hl7v251.identifier}.values.toList()
-                val elementNames = elementsInBlock.map { StringUtils.normalizeString(it.name) }
+                val elementsInBlock = if (!isLabTemplate) {
+                    blocks.filter { it.name == blk.name }[0].elements.associateBy {elem ->
+                        elem.mappings.hl7v251.identifier}.values.toList()
+                } else {
+                    blocks.filter { it.name == blk.name }[0].elements
+                }
                 val (repeaters, singles) = elementsInBlock.partition { it.isRepeat || it.mayRepeat.contains("Y") }
+                val tableRows = mutableListOf<Map<String, JsonElement>>()
+                val subTables = mutableMapOf<String, MutableList<Map<String, JsonElement>>>()
+                val idColName = StringUtils.getNormalizedShortName("${blkName}_id")
+                val repeatersNames = if (repeaters.isNotEmpty()) {
+                    repeaters.map { StringUtils.normalizeString(it.name) }
+                } else {
+                    listOf()
+                }
+                val singlesNames = singles.map { StringUtils.normalizeString(it.name) }
 
-                val mOut =
-                    blkModelArr.map { bma ->
+                blkModelArr.forEach { bma ->
                         val bmaObj = bma.asJsonObject
-                        // logger.info("blkName: --> ${blkName}, elementsNames: ${elementNames}")
-                        if (repeaters.isEmpty()) {
-                            // we only have single elements to map
-                            elementNames.map { elName ->
-                                mapSingleElement(bmaObj, elName, elementsInBlock, profilesMap)
-                            }.reduce { acc, next -> acc + next }// .elementNames.map
-                        } else {
-                            listOfLists = true // we will need to fix this at the end
-                            // for each repeated element, we need a separate row in the table that also
-                            // duplicates the non-repeating elements
-                            val repeatersNames = repeaters.map { StringUtils.normalizeString(it.name) }
-                             // get the singles that we will need to repeat for each row
-                            val singlesNames = singles.map { StringUtils.normalizeString(it.name) }
-                            val flattenedSingles = singlesNames.map { elName ->
+                        // for each repeated element, create a separate table
+                        // a unique ID matches each record with the parent table record
+
+                        // get the singles for the main table
+                        val flattenedSingles = if (singles.isNotEmpty()) {
+                            singlesNames.map { elName ->
                                 mapSingleElement(bmaObj, elName, singles, profilesMap)
-                            }.reduce {acc, map -> acc + map}
-                            val rows = mutableListOf<Map<String, JsonElement>>()
-                            repeatersNames.forEach { elName ->
-                                // extract each element of the array and create a new Json object
-                                // with the same key as the key to the array
-                                if (bmaObj[elName] == null || bmaObj[elName].isJsonNull || bmaObj[elName].asJsonArray.isEmpty) {
-                                    rows.add(flattenedSingles + mapOf(elName to (bmaObj[elName] as JsonNull)))
+                            }.reduce { acc, map -> acc + map }
+                        } else {
+                            mapOf()
+                        }
+                        // add a column for the unique ID
+                        val idColumn = mapOf(idColName to UUID.randomUUID().toString().toJsonElement())
+                        tableRows.add(idColumn + flattenedSingles)
+
+                        //create a table for each repeating element
+                        //include the unique id to link it back to the parent table record
+                        repeatersNames.forEach { elName ->
+                            val subTableName = "${blkName}_${StringUtils.getNormalizedShortName(elName)}"
+                            // extract each element of the array and create a new Json object
+                            // with a key that combines the block name and element name
+                            if (!(bmaObj[elName] == null || bmaObj[elName].isJsonNull || bmaObj[elName].asJsonArray.isEmpty)) {
+                                val arrayData = bmaObj[elName].asJsonArray
+                                val rows = mutableListOf<Map<String, JsonElement>>()
+                                for (arrayDatum in arrayData) {
+                                    val newObject = JsonObject()
+                                    newObject.add(elName, arrayDatum)
+                                    rows.add(idColumn + mapSingleElement(newObject, elName, repeaters, profilesMap))
+                                }
+                                if (subTables[subTableName] != null) {
+                                    subTables[subTableName]?.addAll(rows)
                                 } else {
-                                    val arrayData = bmaObj[elName].asJsonArray
-                                    for (arrayDatum in arrayData) {
-                                        val newObject = JsonObject()
-                                        newObject.add(elName, arrayDatum)
-                                        val flattenedRepeat =
-                                            mapSingleElement(newObject, elName, repeaters, profilesMap)
-                                        rows.add(flattenedSingles + flattenedRepeat)
-                                    }
+                                    subTables[subTableName] = rows
                                 }
                             }
-                            rows.toList()
                         }
-                    } //blkModelArr.map
-                if (listOfLists) {
-                    // unwrap this list of lists into a single list
-                    listOfLists = false
-                    val newList = mutableListOf<Any>()
-                    mOut.forEach{
-                        listInIt ->
-                        if (listInIt is Iterable<*>) newList.addAll(listInIt as Collection<Any>) //IntelliJ will highlight this but it's OK
+                    } // .forEach array in this block
+                    // add the main rg table
+                    tables[blkName] = tableRows.toTypedArray().toJsonElement()
+                    // add any sub-tables
+                    subTables.keys.forEach { key ->
+                        tables[key] = subTables[key]?.toTypedArray()?.toJsonElement()
                     }
-                    blkName to newList
-                } else {
-                    blkName to mOut
-                }
+                }// .else
 
-            }// .else
-
-        } // .repeatedBlocksModel
-        // logger.info("repeatedBlocksModel: --> \n\n${gsonWithNullsOn.toJson(repeatedBlocksModel)}\n")
-        return repeatedBlocksModel
+            }// .forEach block
+        return tables
     } // .repeatedBlocksToSqlModel
+
+    fun mapLabTemplate(profilesMap: Map<String, List<PhinDataType>>, modelJson: JsonObject) : Map<String, Any?>? {
+        val labTemplate = this::class.java.getResource("/lab_template_v3.json")?.readText(Charsets.UTF_8)
+        if (!labTemplate.isNullOrEmpty()) {
+            val labMMG = gson.fromJson(labTemplate, MMG::class.java)
+            val (labBlocksSingle, labBlocksRepeat) = labMMG.blocks.partition { it.type == MMG_BLOCK_TYPE_SINGLE }
+            // should be 2 blocks: Lab Template (single) and Tests Performed (repeat)
+            // a little deceiving, because the whole thing (Lab Template + Tests Performed sub-table) repeats
+            val (labTemplateSingles, labTemplateRepeats) = labBlocksSingle[0].elements.partition { !it.isRepeat && !it.mayRepeat.contains("Y") }
+            val labRecords = modelJson["lab_optional_rg"].asJsonArray
+            val labRecordsList = mutableListOf<Map<String, Any?>>()
+            val labTestResultsList = mutableListOf<Map<String, Any?>>()
+            if (!labRecords.isEmpty) {
+                labRecords.forEach { record ->
+                    val labRecordSingles = singlesNonRepeatsToSqlModel(labTemplateSingles, profilesMap, record.asJsonObject)
+                    val labRecordRepeats = singlesRepeatsToSqlModel(labTemplateRepeats, profilesMap, record.asJsonObject)
+                    val labRecordRepeatGroup = repeatedBlocksToSqlModel(labBlocksRepeat, profilesMap, record.asJsonObject, isLabTemplate = true)
+                    // create a unique ID that matches the tests performed to the record
+                    val idColumn = mapOf("lab_optional_rg_id" to UUID.randomUUID().toString().toJsonElement())
+                    labRecordsList.add(idColumn + labRecordSingles + labRecordRepeats)
+                    if (labRecordRepeatGroup.containsKey("tests_performed_rg")) {
+                        val testsPerformed = labRecordRepeatGroup["tests_performed_rg"] as JsonArray
+                        val mapType: Type = object : TypeToken<Map<String?, Any?>?>() {}.type
+                        testsPerformed.forEach { test ->
+                            val testMap : Map<String, Any> = gson.fromJson(test, mapType)
+                            labTestResultsList.add(idColumn + testMap)
+                        }
+                    }
+                }
+                return mapOf("lab_optional_rg" to labRecordsList.toList()) +
+                        mapOf("lab_optional_rg_test_results" to labTestResultsList.toList())
+            }
+        }
+        return null
+    }
+
     private fun mapSingleElement(bmaObj: JsonObject, elName: String, elementsInBlock: List<Element>, profilesMap: Map<String, List<PhinDataType>>) : Map<String, JsonElement> {
         val elMod = bmaObj[elName]
         val mmgElement =
@@ -216,7 +257,6 @@ class TransformerSql {
         val sqlPreferred = if (!isPrimitive) {
             profilesMap[mmgElDataType]!!.filter { it.preferred }
         } else listOf()
-        //logger.info("blkName: --> ${blkName}, elName: $elName, bmaObj: ${bmaObj}")
         return if (elMod == null || elMod.isJsonNull) {
              if (isPrimitive) {
                 mapOf(elName to elMod)

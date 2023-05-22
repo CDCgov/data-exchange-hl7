@@ -4,6 +4,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.19] - 2023-05-17
+	- Handling Lab Templates for MMG-Based and MMG-in-SQL
+	- Created Plan for Performance testing and ran some baselines in DEV env.
+	- Added Unit test for Receiver, Redactor and Structure Validator.
+	- Improvements on MMG-In-SQL configuration to reduce null values
+	- Added logic to MMG-Based and MMG-In-SQL to handle only EPI Observation
+	- Ignoring empty lines when ingesting HL7 message
+	- Removed validation of NND value set against OBR-31 (event code)
+	- Handling subcomponents on MMG-Based schema
+	- Properly validating different OBR fields on GenV1
+
+### [0.0.18] - 2023-05-03
+ - Added support for new conditions:
+	- Cryptosporidiosis
+	- Cyclosporiasis
+	- Cholera and Vibriosis
+	- Campylobacteriosis
+	- Salmonellosis
+	- STEC
+	- Shigellosis
+	- S Typhi and S Paratyphi
+	- FoodNet
+	- Candida Auris
+	- CP-CRE
+ - Updated Receiver to be able to handle files in sub folders.
+ - Updated MMG-Based and MMG-SQL to support new feature of the new conditions
+	- Elements mapped more than in one block
+	- Handling properly complex fields that are not populated
+	- Added check for empty single collections.
+ - Create sub tables for repeating elements in repeating groups for MMG-in-SQL
+ - Added unit test and code coverage to Receiver/Debatcher and Redactor functions.
+ - Added support for file upload to cloud-transport service and support for up to 10Mb files.
+ - Renamed MSH-21 column names to be one based instead of zero based.
+ - Removed rule that validates OBR-22 against OBR-7
+ - Added validation for MMWR week.
+ - Updated PHIN Spec profiles to match discrepancies finding testing against MVPS
+ - Fixed fortify scan Critical and High issues.
+ - Updated Readme files with latest changes and features
+ - Updated all process names and process status on all functions to be consistent.
+
+
+
 ### [0.0.17] - 2023-04-19
   - Redacting ELR messages
   - Updated NIST Profiles to remove rules not present in MVPS 

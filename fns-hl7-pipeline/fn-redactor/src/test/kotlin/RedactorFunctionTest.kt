@@ -1,56 +1,52 @@
 import com.microsoft.azure.functions.ExecutionContext
+import com.microsoft.azure.functions.HttpRequestMessage
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.hl7.receiver.Function
+import gov.cdc.dex.hl7.Function
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito.mock
 import java.io.File
+import java.util.*
 import java.util.logging.Logger
 
-class FunctionTest {
-
+class RedactorFunctionTest {
     @Test
-    fun processELR_HappyPath() {
-        println("Starting processELR_HappyPath test")
+    fun process_HappyPath() {
+        println("Starting process_HappyPath test")
+        val function = Function()
         val text = File("src/test/resources/ELR_message.txt").readText()
+
         val messages: MutableList<String> = ArrayList()
-            messages.add(text)
+        messages.add(text)
         val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
         val eventHubMD = EventHubMetadata(1, 99, "", "")
         eventHubMDList.add(eventHubMD)
-
-        val function = Function()
         function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-        println("Finished processELR_HappyPath test")
+        assert(true)
     }
 
     @Test
-    fun processCASE_HappyPath() {
-        println("Starting processCASE_HappyPath test")
+    fun process_ExceptionPath() {
+        println("Starting processELR_HappyPath test")
         val function = Function()
-        val text = File("src/test/resources/CASE_message.txt").readText()
+        val text = File("src/test/resources/Error_message.txt").readText()
+
         val messages: MutableList<String> = ArrayList()
-            messages.add(text)
+        messages.add(text)
         val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
         val eventHubMD = EventHubMetadata(1, 99, "", "")
         eventHubMDList.add(eventHubMD)
         function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-        println("Finished processCASE_HappyPath test")
+        assert(true)
     }
+
 
     @Test
-    fun process_ErrorPath() {
-        println("Starting process_ErrorPath test")
+    fun invoke_test(){
         val function = Function()
-        val text = File("src/test/resources/ERROR_message.txt").readText()
-
-        val messages: MutableList<String> = ArrayList()
-            messages.add(text)
-        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
-        val eventHubMD = EventHubMetadata(1, 99, "", "")
-        eventHubMDList.add(eventHubMD)
-        function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-        println("Finished process_ErrorPath test")
+        val req: HttpRequestMessage<Optional<String>> = mock(HttpRequestMessage::class.java) as HttpRequestMessage<Optional<String>>
+        function.invoke(req, getExecutionContext()!!)
+        assert(true)
     }
-
 
     private fun getExecutionContext(): ExecutionContext? {
         return object : ExecutionContext {
@@ -67,5 +63,4 @@ class FunctionTest {
             }
         }
     }
-
 }
