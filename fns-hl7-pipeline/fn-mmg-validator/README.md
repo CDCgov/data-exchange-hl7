@@ -65,7 +65,7 @@ The following rules are checked against each HL7 message:
 * **Invalid OBX segments** - if an OBX-3 code is present in the message that is not mapped in the MMG, it will be flagged as a Warning
 * **Observation Sub ID (OBX-4)** - Makes sure Observation Sub ID is populated for repeating elements of the MMG
 * **Dates** - Make sure dates are sent in appropriate HL7 format and are valid date values
-* **MMWR Year** -Validates that MMWR Year is a valid year (this violates our pattern of fully configurable rules; this one is hardcoded but was requested by customer to be included)
+* **MMWR Year** - Validates that MMWR Year is a valid year (this violates our pattern of fully configurable rules; this one is hardcoded but was requested by customer to be included)
 
 
 
