@@ -7,16 +7,16 @@ This service receives HL7 data uploaded to DEX and makes it available to be proc
 	
 	
 # Details:
-The Receiver Debatcher service listens to BlobCreate events on a given container in AZ blob storage and process those files.
+The Receiver Debatcher service listens to BlobCreate events on a given container in AZ blob storage and processes those files.
 
-Files dropped here can be single HL7 files or batches of HL7 files. Batches might optionally contain HL7 Batch headers (FHS, BHS) and Footer (FTS, BTS) segments.
+Files dropped here can be single HL7 files or batches of HL7 files. Batches might optionally contain HL7 Batch header (FHS, BHS) and Footer (FTS, BTS) segments.
 
-An AZ Container is setup with Events to generate a new Event on BlobCreate to push messages to an event hub topic. (<code>hl7-file-dropped</code>). This service will be a consumer of such topic and further process the event.
+An AZ Container is setup with Events to generate a new Event on BlobCreate to push messages to an event hub topic. (<code>hl7-file-dropped</code>). This service will be a consumer of such a topic and further process the event.
 
 Each file must be uploaded with certain metadata attached to that object, as follows:
-- **message_type**: [Required] Indicates whether the message being uploaded is a "CASE" message or "ELR" message. (Only those two values are suported so far.)
-- **reporting_jurisdiction**: [Required if message_type == "ELR"] Indicates the Jurisdiction submitting the message. ELR does not contain information about reporting jurisdiction within the message and therefore it must be provided as metadata.
-- **route**: [Required if message_type == "ELR"] Indicates the program owning this message and where should it be routed to. Currently, only the value "COVID19_ELR"  is supported for route.
+- **message_type**: [Required] Indicates whether the message being uploaded is a "CASE" message or an "ELR" message. (Only those two values are suported so far.)
+- **reporting_jurisdiction**: [Required if message_type == "ELR"] Indicates the Jurisdiction submitting the message. ELR does not contain information about reporting jurisdiction within the message, and therefore it must be provided as metadata.
+- **route**: [Required if message_type == "ELR"] Indicates the program owning this message and to where should it be routed. Currently, only the value "COVID19_ELR"  is supported for route.
 - **system_provider**: [Optional] Indicates which system is performing the upload. Ex.: DEX_Upload, PHINMS, Mercury, etc.
 - **orginal_file_name**: [Optional] Uploader can identify the original file name from the system of origin.
 - **original_file_timestamp**: [Optional] Uploader can identify the original file timestamp from the system of origin.
