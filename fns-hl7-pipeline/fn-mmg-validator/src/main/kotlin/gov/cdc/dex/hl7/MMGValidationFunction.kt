@@ -42,7 +42,7 @@ class MMGValidationFunction {
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext) {
 
-        val startTime =  Date().toIsoString()
+        //val startTime =  Date().toIsoString()
         // context.logger.info("received event: --> $message")
         val evHubConnStr = System.getenv("EventHubConnectionString")
         val eventHubSendOkName = System.getenv("EventHubSendOkName")
@@ -60,6 +60,7 @@ class MMGValidationFunction {
                 val metadata = inputEvent["metadata"].asJsonObject
                 val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
+                val startTime =  Date().toIsoString()
 
                 try {
                     context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
