@@ -23,14 +23,6 @@ class RedisProxy( redisName: String,  redisKey:String,  redisPort: Int = 6380)  
     }
     private val logger = LoggerFactory.getLogger(RedisProxy::class.java.simpleName)
 
-//    private val jedis = Jedis(redisName, redisPort, DefaultJedisClientConfig.builder()
-//        .password(redisKey)
-//        .ssl(true)
-//        .timeoutMillis(400000)
-//        .build()
-//
-//    )
-
     private val jedisPool = JedisPool(jedisPoolConfig, redisName,redisPort, 400000, redisKey,true)
     init {
         logger.info("REDIS connection established with $redisName")

@@ -145,7 +145,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <configuration>
                         <environmentVariables>
-                            <REDIS_CACHE_NAME>ocio-ede-dev-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
+                            <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
                             <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
                         </environmentVariables>
                     </configuration>

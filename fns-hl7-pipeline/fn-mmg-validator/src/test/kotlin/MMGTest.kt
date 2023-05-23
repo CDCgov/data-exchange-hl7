@@ -10,6 +10,9 @@ import gov.cdc.hl7.HL7StaticParser
 import org.junit.jupiter.api.Test
 
 class MMGTest {
+    private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
+    private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+    private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
 
     @Test
     fun testLoadMMG() {
@@ -22,7 +25,7 @@ class MMGTest {
     fun testRemoveMSH21FromGenV2() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
-        val mmgs = MmgValidator().getMMGFromMessage(testMsg)
+        val mmgs = MmgValidator(redisProxy).getMMGFromMessage(testMsg)
         val genV2 = mmgs[0]
         val genV2NoMSH = genV2
         println(genV2NoMSH.blocks.size)
@@ -34,7 +37,7 @@ class MMGTest {
     fun testMMGUtilGetMMG() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
-        val mmgs = MmgValidator().getMMGFromMessage(testMsg)
+        val mmgs = MmgValidator(redisProxy).getMMGFromMessage(testMsg)
         mmgs.forEach { println(it)}
     }
 
@@ -42,7 +45,7 @@ class MMGTest {
     fun testGetSegments() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
-        val mmgs = MmgValidator().getMMGFromMessage(testMsg)
+        val mmgs = MmgValidator(redisProxy).getMMGFromMessage(testMsg)
         mmgs.forEach { mmg ->
             mmg.blocks.forEach { block ->
                 block.elements.forEach { element ->

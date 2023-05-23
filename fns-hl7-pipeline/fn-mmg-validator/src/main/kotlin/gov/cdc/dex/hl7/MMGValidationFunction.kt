@@ -8,6 +8,7 @@ import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
+import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.MmgValidatorProcessMetadata
 import gov.cdc.dex.hl7.model.ReportStatus
@@ -29,8 +30,10 @@ class MMGValidationFunction {
     companion object {
         private const val STATUS_ERROR = "ERROR"
         val gson: Gson = GsonBuilder().serializeNulls().create()
+        private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
+        private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
     } // .companion
-
+    private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     @FunctionName("mmgvalidator001")
     fun eventHubProcessor(
         @EventHubTrigger(
@@ -52,6 +55,7 @@ class MMGValidationFunction {
         message.forEachIndexed {
                 messageIndex : Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+            var jedisConn = redisProxy.getJedisClient()
             // context.logger.info("singleMessage: --> $singleMessage")
             try {
                 val hl7ContentBase64 = JsonHelper.getValueFromJson("content", inputEvent).asString
@@ -64,7 +68,7 @@ class MMGValidationFunction {
 
                 try {
                     context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
-                    val mmgValidator = MmgValidator()
+                    val mmgValidator = MmgValidator(redisProxy)
                     val validationReport = mmgValidator.validate(hl7Content)
                     context.logger.info("MMG Validation Report size for for messageUUID: $messageUUID, filePath: $filePath, size --> " + validationReport.size)
                     val mmgReport = MmgReport( validationReport)
@@ -145,7 +149,7 @@ class MMGValidationFunction {
         val validationReport : List<ValidationIssue>
         try {
             context.logger.info("Validating message...")
-            mmgValidator = MmgValidator()
+            mmgValidator = MmgValidator(redisProxy)
             validationReport = mmgValidator.validate(hl7Message)
         } catch (e : Exception) {
             if (e is NoSuchElementException || e is InvalidConditionException) {
