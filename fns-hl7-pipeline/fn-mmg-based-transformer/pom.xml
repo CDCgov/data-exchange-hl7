@@ -221,6 +221,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
                     <environmentVariables>
                         <REDIS_CACHE_NAME>ocio-ede-dev-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
