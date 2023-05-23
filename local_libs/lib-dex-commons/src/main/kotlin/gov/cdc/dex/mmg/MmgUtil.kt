@@ -45,7 +45,6 @@ class MmgUtil(val redisProxy: RedisProxy)  {
                 }
                 mmgs += mmg1
             }
-
             return mmgs
         }
 
@@ -65,7 +64,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         var mmg2KeyNames = arrayOf<String>()
         // condition-specific profile from message
         var msh21_3In = msh21_3?.normalize()
-        var jedisConn = redisProxy.getJedisClient()
+        val jedisConn = redisProxy.getJedisClient()
 
         if (msh21_2.normalize() in legacy_mmgs) {
             // msh_21_3 is empty, make it same as msh_21_2
@@ -94,12 +93,9 @@ class MmgUtil(val redisProxy: RedisProxy)  {
                             val appliesHere = jedisConn.sismember(case.appliesTo, jurisdictionCode)
                             if (appliesHere) {
                                 mmg2KeyNames += case.mmgs //returns a list of mmg keys
-                                messageInfo.route = "${mmg2KeyNames.last().replace(REDIS_MMG_PREFIX, "")}_${
-                                    case.appliesTo.replace(
-                                        REDIS_GROUP_PREFIX,
-                                        ""
-                                    )
-                                }"
+                                messageInfo.route = "${mmg2KeyNames.last()
+                                    .replace(REDIS_MMG_PREFIX, "")}_${case.appliesTo
+                                        .replace(REDIS_GROUP_PREFIX,"")}"
                                 specialCaseAdded = true
                                 break
                             }
@@ -120,7 +116,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
             }
             messageInfo.mmgKeyList = mmg2KeyNames.toList()
         } finally{
-            jedisConn.close()
+            redisProxy.releaseJedisClient(jedisConn)
         }
         return messageInfo
     }
