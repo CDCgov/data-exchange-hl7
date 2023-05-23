@@ -1,4 +1,5 @@
 import com.google.gson.GsonBuilder
+import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.DateUtil
 import gov.cdc.dex.hl7.MmgValidator
 import gov.cdc.dex.hl7.exception.InvalidMessageException
@@ -14,13 +15,16 @@ class MMGValidatorTest {
 
     companion object {
         private val gson = GsonBuilder().serializeNulls().disableHtmlEscaping().create()
+        private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
+        private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+        private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     } // .companion object
 
 
     private fun validateMessage(fileName: String): MmgReport {
         val testMsg = this::class.java.getResource(fileName).readText().trim()
 
-        val mmgValidator = MmgValidator( )
+        val mmgValidator = MmgValidator(redisProxy)
         val validationReport = mmgValidator.validate(testMsg)
 
         println("validationReport: -->\n\n${gson.toJson(validationReport)}\n")

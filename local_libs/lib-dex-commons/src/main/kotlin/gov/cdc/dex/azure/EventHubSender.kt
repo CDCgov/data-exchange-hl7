@@ -3,13 +3,12 @@ package gov.cdc.dex.azure
 import com.azure.messaging.eventhubs.*
 
 class EventHubSender (val evHubConnStr: String, ) {
-    fun send(  evHubTopicName: String, message: String ) {
+    fun send(evHubTopicName: String, message: String ) {
         val producer = EventHubClientBuilder()
             .connectionString(evHubConnStr,  evHubTopicName)
             .buildProducerClient()
 
-        val hl7EventData = EventData(message)
-        val allEvents = arrayOf<EventData>(hl7EventData)
+        val allEvents = arrayOf(EventData(message))
 
         var eventDataBatch = producer.createBatch()
         allEvents.forEach {eventData ->
