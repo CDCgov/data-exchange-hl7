@@ -61,6 +61,12 @@ class StringUtils {
             return newName
         }
 
+         fun String?.getOrDefault(default: String):String {
+            return if (this == null) {
+                return default
+            } else this
+        }
+
     }
 
 }
