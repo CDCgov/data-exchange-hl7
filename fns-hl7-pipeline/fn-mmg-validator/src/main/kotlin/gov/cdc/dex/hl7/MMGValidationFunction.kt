@@ -30,10 +30,12 @@ class MMGValidationFunction {
     companion object {
         private const val STATUS_ERROR = "ERROR"
         val gson: Gson = GsonBuilder().serializeNulls().create()
-        private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
-        private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+//        private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
+//        private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+
+        val fnConfig = FunctionConfig()
     } // .companion
-    private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
+//    private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     @FunctionName("mmgvalidator001")
     fun eventHubProcessor(
         @EventHubTrigger(
@@ -44,19 +46,20 @@ class MMGValidationFunction {
                 message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext) {
-
+        context.logger.info("DEX::Received Event!")
         //val startTime =  Date().toIsoString()
         // context.logger.info("received event: --> $message")
-        val evHubConnStr = System.getenv("EventHubConnectionString")
-        val eventHubSendOkName = System.getenv("EventHubSendOkName")
-        val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
-        val evHubSender = EventHubSender(evHubConnStr)
+//        val evHubConnStr = System.getenv("EventHubConnectionString")
+//        val eventHubSendOkName = System.getenv("EventHubSendOkName")
+//        val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
+//        val evHubSender = EventHubSender(evHubConnStr)
 
+        val mmgValidator = MmgValidator(fnConfig.redisProxy)
         message.forEachIndexed {
                 messageIndex : Int, singleMessage: String? ->
+            context.logger.info("DEX::Processing message $messageIndex")
+            val startTime =  Date().toIsoString()
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-            var jedisConn = redisProxy.getJedisClient()
-            // context.logger.info("singleMessage: --> $singleMessage")
             try {
                 val hl7ContentBase64 = JsonHelper.getValueFromJson("content", inputEvent).asString
                 val hl7ContentDecodedBytes = Base64.getDecoder().decode(hl7ContentBase64)
@@ -64,13 +67,11 @@ class MMGValidationFunction {
                 val metadata = inputEvent["metadata"].asJsonObject
                 val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                val startTime =  Date().toIsoString()
 
                 try {
-                    context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
-                    val mmgValidator = MmgValidator(redisProxy)
+                    context.logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                     val validationReport = mmgValidator.validate(hl7Content)
-                    context.logger.info("MMG Validation Report size for for messageUUID: $messageUUID, filePath: $filePath, size --> " + validationReport.size)
+                    context.logger.info("DEX::Message Validated!")
                     val mmgReport = MmgReport( validationReport)
 
                     // document the MMGs used to validate the message
@@ -98,14 +99,14 @@ class MMGValidationFunction {
                     }
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
                     //Send event
-                    val ehDestination = if (mmgReport.status == ReportStatus.MMG_VALID) eventHubSendOkName else eventHubSendErrsName
-                    evHubSender.send(evHubTopicName=ehDestination, message=gson.toJson(inputEvent))
-                    context.logger.info("Processed ${mmgReport.status} messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination")
+                    val ehDestination = if (mmgReport.status == ReportStatus.MMG_VALID) fnConfig.evHubOkName else fnConfig.evHubErrorName
+                    fnConfig.evHubSender.send(evHubTopicName=ehDestination, message=gson.toJson(inputEvent))
+                    context.logger.info("DEX::Processed messageUUID: $messageUUID, ehDestination: $ehDestination, status: ${mmgReport.status}")
 
 
                 } catch (e: Exception) {
                     //TODO::  - update retry counts
-                    context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                    context.logger.severe("DEX::Unable to process Message due to exception: ${e.message}")
                     val processMD = MmgValidatorProcessMetadata ("MMG_VALIDATOR_EXCEPTION", null, eventHubMD[messageIndex], listOf())
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
@@ -115,12 +116,12 @@ class MMGValidationFunction {
                     val summary = SummaryInfo(STATUS_ERROR, problem)
                     inputEvent.add("summary", summary.toJsonElement())
 
-                    evHubSender.send(evHubTopicName = eventHubSendErrsName, message = gson.toJson(inputEvent))
+                    fnConfig.evHubSender.send(evHubTopicName = fnConfig.evHubErrorName, message = gson.toJson(inputEvent))
                     // e.printStackTrace()
                 }
             } catch (e: Exception) {
-                context.logger.severe("Exception processing event hub message: Unable to process Message due to exception: ${e.message}")
-                evHubSender.send(evHubTopicName = eventHubSendErrsName, message = gson.toJson(inputEvent))
+                context.logger.severe("DEX::Exception processing event hub message: Unable to process Message due to exception: ${e.message}")
+                fnConfig.evHubSender.send(evHubTopicName = fnConfig.evHubErrorName, message = gson.toJson(inputEvent))
                 e.printStackTrace()
             }
         } // .message.forEach
@@ -149,7 +150,7 @@ class MMGValidationFunction {
         val validationReport : List<ValidationIssue>
         try {
             context.logger.info("Validating message...")
-            mmgValidator = MmgValidator(redisProxy)
+            mmgValidator = MmgValidator(fnConfig.redisProxy)
             validationReport = mmgValidator.validate(hl7Message)
         } catch (e : Exception) {
             if (e is NoSuchElementException || e is InvalidConditionException) {
