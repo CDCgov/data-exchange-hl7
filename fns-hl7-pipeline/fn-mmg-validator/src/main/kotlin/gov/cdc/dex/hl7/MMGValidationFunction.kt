@@ -83,9 +83,9 @@ class MMGValidationFunction {
                     // 'validate' function is actually getting its own list of MMGs based on the message --
                     // so, if the message_info list is empty/null, we can try to get it from mmgValidator
                     // (exception will already have been thrown if mmgValidator could not determine the MMGs)
-                    if (mmgInfo.isEmpty() && mmgValidator.mmgs.isNotEmpty()) {
-                        mmgInfo = mmgValidator.mmgs.map { "mmg:${it.name}" }.toTypedArray()
-                    }
+//                    if (mmgInfo.isEmpty() && mmgValidator.mmgs.isNotEmpty()) {
+//                        mmgInfo = mmgValidator.mmgs.map { "mmg:${it.name}" }.toTypedArray()
+//                    }
                     val processMD = MmgValidatorProcessMetadata(mmgReport.status.toString(), mmgReport,eventHubMD[messageIndex],
                         mmgInfo.toList())
                     processMD.startProcessTime = startTime

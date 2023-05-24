@@ -15,7 +15,7 @@ import redis.clients.jedis.Jedis
 import scala.Option
 
 
-class MmgValidator(val redisProxy: RedisProxy) {
+class MmgValidator(private val redisProxy: RedisProxy) {
     companion object {
         private val logger = LoggerFactory.getLogger(MmgValidator::class.java.simpleName)
         const val GENVx_PROFILE_PATH = "MSH-21[2].1"
@@ -29,13 +29,11 @@ class MmgValidator(val redisProxy: RedisProxy) {
         const val MMWR_WEEK_CODE = "77991-8"
         const val MMWR_WEEK_LEGACY_CODE = "INV165"
     }
-//    private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
-//    private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
     private val REDIS_VOCAB_NAMESPACE = "vocab:"
 
-   // private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     private val mmgUtil = MmgUtil(redisProxy)
-    val mmgs : Array<MMG> = arrayOf()
+
+
     fun validate(hl7Message: String): List<ValidationIssue> {
         val mmgs = getMMGFromMessage(hl7Message)
         val report = mutableListOf<ValidationIssue>()
@@ -226,7 +224,7 @@ class MmgValidator(val redisProxy: RedisProxy) {
                 }
             }
         } else {
-            val allSegs = msgValues.joinToString("\n") //join all segments to extract all Values.
+//            val allSegs = msgValues.joinToString("\n") //join all segments to extract all Values.
             val segValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
 //            val segValuesFlat = if (segValues.isDefined) segValues.get().flatten() else listOf()
             checkSingleGroupCardinality(hl7Message, minCardinality, maxCardinality, null, element, segValues, report)
