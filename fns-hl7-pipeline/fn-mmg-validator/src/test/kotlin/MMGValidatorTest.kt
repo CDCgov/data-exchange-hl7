@@ -32,7 +32,7 @@ class MMGValidatorTest {
     }
     @Test
     fun testLogMMGValidatorReport() {
-        val report = validateMessage("/arbo/ARBOVIRAL_V1_3_TM_CN_TC01.txt")
+        validateMessage("/arbo/ARBOVIRAL_V1_3_TM_CN_TC01.txt")
     } // .testLogMMGValidatorReport
 
 
@@ -73,7 +73,7 @@ class MMGValidatorTest {
     @Test
     fun testInvalidMMG() {
         try {
-            val report = validateMessage("/BDB_LAB_13.txt")
+            validateMessage("/BDB_LAB_13.txt")
             assert(false)
         } catch (e: NoSuchElementException) {
             println("Exception properly thrown - can't validate this message lacking event code")
@@ -88,7 +88,7 @@ class MMGValidatorTest {
             .forEach {
                 println("==================  ${it.fileName} ")
                 try {
-                    val report = validateMessage("/$folderName/${it.fileName}")
+                    validateMessage("/$folderName/${it.fileName}")
 
                 } catch(e: InvalidMessageException ) {
                     println(e.message)
@@ -145,7 +145,7 @@ class MMGValidatorTest {
     @Test
     fun testMessageWithMissingMSH212() {
         try {
-            val report = validateMessage("/Lyme_WithMissingMSH212.txt")
+            validateMessage("/Lyme_WithMissingMSH212.txt")
         } catch (e : Exception) {
             println(e.message)
             assert(e is NoSuchElementException)
@@ -155,7 +155,7 @@ class MMGValidatorTest {
     @Test
     fun testMessageWithMissingJursidiction() {
         try {
-            val report = validateMessage("/Lyme_WithMissingJurCode.txt")
+            validateMessage("/Lyme_WithMissingJurCode.txt")
         } catch (e : Exception) {
             println(e.message)
             assert(e is NoSuchElementException)
@@ -165,7 +165,7 @@ class MMGValidatorTest {
     @Test
     fun testMessageWithMissingOBR31() {
         try {
-            val report = validateMessage("/Lyme_WithMissingOBR31.txt")
+           validateMessage("/Lyme_WithMissingOBR31.txt")
         } catch (e : Exception) {
             println(e.message)
             assert(e is NoSuchElementException)
@@ -175,7 +175,7 @@ class MMGValidatorTest {
     @Test
     fun testMessageWithInvalidOBR31() {
         try {
-            val report = validateMessage("/Lyme_WithInvalidOBR31.txt")
+            validateMessage("/Lyme_WithInvalidOBR31.txt")
         } catch (e : Exception) {
             println(e.message)
             assert(e is InvalidConditionException)
@@ -212,7 +212,7 @@ class MMGValidatorTest {
     }
     @Test
     fun testInvalidDate() {
-        val report = validateMessage("./Lyme_BadDate.txt")
+        validateMessage("./Lyme_BadDate.txt")
 
     }
 
