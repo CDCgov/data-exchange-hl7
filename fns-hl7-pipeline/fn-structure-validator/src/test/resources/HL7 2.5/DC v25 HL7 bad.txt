@@ -1,0 +1,7 @@
+MSH|^~\&|NYSDOH ECLRS|NY State DOH^99NYELR999^CLIA|DC-ELR|DCDOH|20210112000000||ORU^R01^ORU_R01|1610605960226-2|P|2.5.1|||||USA||||
+SFT|Unknown|Unknown||Unknown
+PID|1|||15200108433652^^^^XX^NYSDOH&&L|^^^^^^S||1983|M|||^^Washington^DC^20009^^H|||||||||||Non-Hispan
+ORC|RE||-A||||||||||||||||||Event Medical Services PC - UWS|252 Columbus Avenue^^New York^NY^10023|^WPN^PH^^^212^4014045|252 Columbus Avenue^^New York^NY^10023
+OBR|1||-A||||20210112000000|||||||||Unknown^Weiss^Stuart^B|^WPN^PH^^^917^9212490|||||20210112000000|||F
+OBX|1|TX|94534-5^SARS coronavirus 2 RdRp gene [Presence] in Respiratory specimen by NAA with probe detection^LN||Neg||||||F||608G608|20210112000000|NY State Dept. of Health^99NYELR999^CLIA||||20210112000000|||||
+SPM|1|^44770922||^Ant Nasal|||||||||||||20210112000000|

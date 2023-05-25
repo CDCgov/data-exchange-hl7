@@ -1,0 +1,32 @@
+MSH|^~\&|CERNER|WDL^52D0391886^CLIA|vCMR|WEDSS|20210126084226||ORU^R01|1682300360T244824277|P|2.3.1
+PID|1||1-21-026-01037^^^WDL&52D0391886&CLIA^PI^WDL&52D0391886&CLIA||^^^^^^^s||19770624|F||W|^^MUSKEGO^WI^53150^DONOTSEND|||||||126998136|||||||0
+ORC|RE|1-21-026-01037|1-21-026-01037^WDL^52D0391886^CLIA||||||20210126084226|||1003164443^BUDDHADEV^PAKHADI^^^^^^Unspecified Identifier||^^^^^414^8057600|||||||Froedtert Hospital-2|9200 W. Wisconsin Ave^^Milwaukee^WI^53226|^^^^^414^8057600|9200 W. Wisconsin Ave^^Milwaukee^WI^53226
+OBR|1|1-21-026-01037|1-21-026-01037^WDL^52D0391886^CLIA|^^^7000450^Influenza/COVID-19 Nucleic Acid Amplification Test^L|||20210126025000|||||||20210126025900|&Nasophar|1003164443^BUDDHADEV^PAKHADI^^^^^^Unspecified Identifier|^^^^^414^8057600|||1-21-026-01037||20210126084225||GL|F||1^^^20210126025012^^RT~^^^^^PR|||||||||20210126025000
+OBX|1|ST|94502-2^SARS-rel CoV RNA Resp Ql NAA+probe^LN^7000451^SARS-CoV-2 Nucleic Acid Amplified Test^L|1|Not Detected||Not Detected||||F|||20210126084225|^WDL
+NTE|1||Not Detected results do not preclude SARS-CoV-2 infection and should
+NTE|2||not be used as the sole basis for treatment or patient management
+NTE|3||decisions.
+NTE|4
+NTE|5||Test performed using Roche SARS-CoV-2 & Influenza A/B assay.  Cobas
+NTE|6||SARS-CoV-2 & Influenza A/B is a real-time PCR assay intended for the
+NTE|7||qualitative detection and differentiation of SARS-CoV-2 (COVID-19),
+NTE|8||influenza A virus and/or influenza B virus nucleic acid.  This assay
+NTE|9||has Emergency Use Authorization (EUA) from the U.S. Food and Drug
+NTE|10||Administration for specimens collected from individuals suspected of
+NTE|11||respiratory viral infection consistent with COVID-19.  Test
+NTE|12||performance characteristics were determined by the Wisconsin
+NTE|13||Diagnostic Laboratories Microbiology/Molecular Department.  This
+NTE|14||laboratory is certified under the Clinical Laboratory Improvements
+NTE|15||Amendment of 1988 (CLIA) as qualified to perform high complexity
+NTE|16||clinical laboratory testing.
+OBX|2|ST|92142-9^FLUAV RNA Resp Ql NAA+probe^LN^7000452^Influenza A Nucleic Acid Amplified Test^L|1|Negative||Negative||||F|||20210126084225|^WDL
+OBX|3|ST|92141-1^FLUBV RNA Resp Ql NAA+probe^LN^7000453^Influenza B Nucleic Acid Amplified Test^L|1|Negative||Negative||||F|||20210126084225|^WDL
+OBX|4|ST|95417-2^First test for condition of interest^LN^4500867^First COVID Test?^L|1|Yes||||||F|||20210126025020|^WDL
+OBX|5|TX|67098-4^Reason for test or procedure^LN^4500866^Reason for COVID Test?^L|1|Symptomatic as defined by CDC - Continue to select symptoms||||||F|||20210126025020|^WDL
+OBX|6|ST|75325-1^Symptom^LN^4500877^Symptoms?^L|1|Yes||||||F|||20210126025948|^WDL
+OBX|7|ST|75325-1^Symptom^LN^4500872^Symptoms^L|1|Fever||||||F|||20210126025020|^WDL
+OBX|8|TX|65222-2^Date and time of symptom onset^LN^4500876^Date of Symptom Onset^L|1|19/Jan/2021 06:06:00:00||||||F|||20210126025020|^WDL
+OBX|9|ST|95418-0^Employed in a healthcare setting^LN^4500868^Healthcare worker?^L|1|No||||||F|||20210126025020|^WDL
+OBX|10|ST|82810-3^Pregnancy status^LN^4500869^Pregnant?^L|1|No||||||F|||20210126025020|^WDL
+OBX|11|ST|95421-4^Resides in a congregate care setting^LN^4500873^Work or live in congregate setting?^L|1|No||||||F|||20210126025020|^WDL
+OBX|12|ST|77974-4^Patient was hospitalized because of this condition^LN^4500878^Hospitalized?^L|1|No||||||F|||20210126025020|^WDL

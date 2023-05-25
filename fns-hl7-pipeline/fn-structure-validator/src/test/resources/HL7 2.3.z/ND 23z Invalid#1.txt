@@ -1,0 +1,7 @@
+MSH|^~\&|STARLIMS|NDPHL^35D0691722^CLIA|UFB|DREAMS|202007060844||ORU^R01|20200706859652|P|2.3.z
+PID|1|1319656|1319656|1319656|Halcrow^Steven^^^^^U||19871220|M||U|2115 26th Ave S^^Grand Forks^ND^58201^^U^^Grand Forks||7013604330^^^^^701^3604330|||||||||U
+OBR|1|02723|A20202723001|94500-6^SARS coronavirus 2 RNA [Presence] in Respiratory specimen by NAA with probe detection^LN^2068^Thermo Fisher COVID-19 PCR^L|||20200702||||N|||20200704|181195007&Nasal|^Deere^Joshua|||||||||F
+NTE|1||Report edited on 07.06.2020 to reflect accurate patient result.
+ZLR||ALTRU HOSPITAL LABORATORY|PO BOX 6002  Attn: Microbiology^^GRAND FORKS^ND^58206-6002
+OBX|1|CE|94500-6^^LN||260373001^Detected^SN|||A|||F|||202007042244
+NTE|1||Interpretation: The 2019 Novel Coronavirus was detected.  The Thermo Fisher COVID-19 assay is an emergency use authorized (EUA) method.  The assay has been internally validated by the North Dakota Department of Health.  This assay is for in vitro diagnostic use under FDA Emergency Use Authorization only.

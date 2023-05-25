@@ -1,0 +1,11 @@
+MSH|^~\&|EOHL7|BIOREFERENCE LABORATORIES^31D0652945^CLIA|MDSS|MDHHS|202005290823|10036158|ORU^R01|9106858|P|2.3.z
+PID|1|200526350825|31D0652945@0000036158@202005290823|306390|^^^^^^^S||19500101|F||UNKNOWN|^^^MI|||||||||||U
+NTE|1|P|NON FASTING
+ORC|RE|306390^CV800|400109633||CM||202005281328|||||1124240858^G^AMBER|||202005261500
+OBR|1|306390|99ELRMISSING|TH68-0^Novel Coronavirus COVID-19 Nasal/Nasopharynx||202005261500|202005261500|||||||202005281328||1124240858^G^AMBER||||GeneDx|21D0969951|202005290821|||F
+OBX|1|ST|94500-6^2019-nCoV RNA XXX NAA+probe-Imp^LN^TH68-0^COVID-19 Nasal/Nasopharynx^BRLI||Positive for 2019-nCoV||Not Detected|A|||F|||202005290821|MD3||OBX171^OBX172|OBX18
+NTE|1|L|NOTE: The COVID-19 assay has been cleared by the U.S. Food and Drug
+NTE|2|L|Administration under the Emergency Use Authorization (EUA). BioReference
+NTE|3|L|Laboratories and GeneDx are designated as high complexity laboratories by the
+NTE|4|L|Clinical Laboratory Improvement Amendments of 1988(CLIA) and are qualified to
+NTE|5|L|perform this test. ASSAY INFORMATION: Real Time RT-PCR
