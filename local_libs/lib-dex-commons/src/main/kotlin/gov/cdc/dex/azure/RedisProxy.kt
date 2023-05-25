@@ -23,14 +23,14 @@ class RedisProxy( redisName: String,  redisKey:String,  redisPort: Int = 6380, s
         val jedisPoolConfig = JedisPoolConfig().apply {
             maxTotal =       System.getenv("REDIS_POOL_MAX_TOTAL").getOrDefault("300").toInt()
             maxIdle =        System.getenv("REDIS_POOL_MAX_IDLE").getOrDefault("300").toInt()
-            minIdle =        System.getenv("REDIS_POOL_MIN_IDLE").getOrDefault("20").toInt()
+            minIdle =        System.getenv("REDIS_POOL_MIN_IDLE").getOrDefault("30").toInt()
             testOnBorrow =   System.getenv("REDIS_POOL_TEST_ON_BORROW").getOrDefault("true").toBoolean()
             testWhileIdle =  System.getenv("REDIS_POOL_TEST_WHILE_IDLE").getOrDefault("true").toBoolean()
             this.testOnCreate = false
             this.testOnReturn = false
 
         }
-        val timeout = System.getenv("REDIS_POOL_TIMEOUT").getOrDefault("4000").toInt()
+        val timeout = System.getenv("REDIS_POOL_TIMEOUT").getOrDefault("300000").toInt()
 
         jedisPool = JedisPool(jedisPoolConfig, redisName,redisPort, timeout, redisKey,ssl)
 
