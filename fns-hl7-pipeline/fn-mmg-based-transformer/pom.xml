@@ -10,9 +10,6 @@
     <packaging>jar</packaging>
 
     <name>DEX Fns-Pipeline :: mmg-based-transformer</name>
-    <scm>
-        <developerConnection>scm:git:https://github.com/CDCgov/data-exchange-hl7.git</developerConnection>
-    </scm>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
