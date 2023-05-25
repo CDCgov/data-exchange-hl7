@@ -19,7 +19,7 @@
         <java_version>11</java_version>
         <kotlin.version>1.7.20</kotlin.version>
         <functions.version>3.0.0</functions.version>
-        <functions.plugin.version>1.19.0</functions.plugin.version>
+        <functions.plugin.version>1.26.0</functions.plugin.version>
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
         <functionAppName>ocio-ede-${environment-id}-hl7-mmg-based-transformer</functionAppName>
