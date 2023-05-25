@@ -55,6 +55,9 @@ class MMGValidationFunction {
 //        val evHubSender = EventHubSender(evHubConnStr)
 
         val mmgValidator = MmgValidator(fnConfig.redisProxy)
+        val validMsgsList = mutableListOf<String>()
+        val badMsgsList = mutableListOf<String>()
+
         message.forEachIndexed {
                 messageIndex : Int, singleMessage: String? ->
             context.logger.info("DEX::Processing message $messageIndex")
@@ -99,9 +102,13 @@ class MMGValidationFunction {
                     }
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
                     //Send event
-                    val ehDestination = if (mmgReport.status == ReportStatus.MMG_VALID) fnConfig.evHubOkName else fnConfig.evHubErrorName
-                    fnConfig.evHubSender.send(evHubTopicName=ehDestination, message=gson.toJson(inputEvent))
-                    context.logger.info("DEX::Processed messageUUID: $messageUUID, ehDestination: $ehDestination, status: ${mmgReport.status}")
+//                    val ehDestination = if (mmgReport.status == ReportStatus.MMG_VALID) fnConfig.evHubOkName else fnConfig.evHubErrorName
+                    if (mmgReport.status == ReportStatus.MMG_VALID)
+                        validMsgsList.add(gson.toJson(inputEvent))
+                    else
+                        badMsgsList.add(gson.toJson(inputEvent))
+//                    fnConfig.evHubSender.send(evHubTopicName=ehDestination, message=gson.toJson(inputEvent))
+                    context.logger.info("DEX::Processed messageUUID: $messageUUID, status: ${mmgReport.status}")
 
 
                 } catch (e: Exception) {
@@ -115,16 +122,20 @@ class MMGValidationFunction {
                     val problem = Problem(MmgValidatorProcessMetadata.MMG_VALIDATOR_PROCESS, e, false, 0, 0)
                     val summary = SummaryInfo(STATUS_ERROR, problem)
                     inputEvent.add("summary", summary.toJsonElement())
-
-                    fnConfig.evHubSender.send(evHubTopicName = fnConfig.evHubErrorName, message = gson.toJson(inputEvent))
+                    badMsgsList.add(gson.toJson(inputEvent))
+                    //fnConfig.evHubSender.send(evHubTopicName = fnConfig.evHubErrorName, message = gson.toJson(inputEvent))
                     // e.printStackTrace()
                 }
             } catch (e: Exception) {
                 context.logger.severe("DEX::Exception processing event hub message: Unable to process Message due to exception: ${e.message}")
-                fnConfig.evHubSender.send(evHubTopicName = fnConfig.evHubErrorName, message = gson.toJson(inputEvent))
+                badMsgsList.add(gson.toJson(inputEvent))
+                //fnConfig.evHubSender.send(evHubTopicName = fnConfig.evHubErrorName, message = gson.toJson(inputEvent))
                 e.printStackTrace()
             }
         } // .message.forEach
+        //Send all messages in batch:
+        fnConfig.evHubSender.send(fnConfig.evHubOkName, validMsgsList.toList())
+        fnConfig.evHubSender.send(fnConfig.evHubErrorName, badMsgsList.toList())
     } // .eventHubProcessor
 
     @FunctionName("validate-mmg")
