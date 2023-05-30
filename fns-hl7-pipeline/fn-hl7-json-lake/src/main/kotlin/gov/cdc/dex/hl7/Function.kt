@@ -77,23 +77,18 @@ class Function {
                 val profileFilePath = "/PhinGuidProfile.json"
                 val profile = this::class.java.getResource(profileFilePath).readText()
                 try {
-                    val bumblebee = HL7JsonTransformer.getTransformerWithResource(inputEvent.asString, profile)
-                    val fullHL7 = bumblebee.transformMessage()
-
-                    val processMD = HL7JSONLakeProcessMetadata(
-                        status = PROCESS_STATUS_OK, eventHubMD = eventHubMD[messageIndex], report = fullHL7,
-                        config = listOf(profileFilePath)
+                    processMessage(
+                        inputEvent,
+                        profile,
+                        eventHubMD,
+                        messageIndex,
+                        profileFilePath,
+                        startTime,
+                        metadata,
+                        evHubSender,
+                        eventHubSendOkName,
+                        gsonWithNullsOn
                     )
-
-                    // process time
-                    processMD.startProcessTime = startTime
-                    processMD.endProcessTime = Date().toIsoString()
-
-                    metadata.addArrayElement("processes", processMD)
-
-                    // enable for model
-
-                    evHubSender.send(evHubTopicName = eventHubSendOkName, message = gsonWithNullsOn.toJson(inputEvent))
                 } catch (e: Exception) {
 
                     context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
@@ -115,6 +110,36 @@ class Function {
 
     } // .eventHubProcessor
 
+    private fun processMessage(
+        inputEvent: JsonObject,
+        profile: String,
+        eventHubMD: List<EventHubMetadata>,
+        messageIndex: Int,
+        profileFilePath: String,
+        startTime: String,
+        metadata: JsonObject,
+        evHubSender: EventHubSender,
+        eventHubSendOkName: String,
+        gsonWithNullsOn: Gson
+    ) {
+        val bumblebee = HL7JsonTransformer.getTransformerWithResource(inputEvent.asString, profile)
+        val fullHL7 = bumblebee.transformMessage()
+
+        val processMD = HL7JSONLakeProcessMetadata(
+            status = PROCESS_STATUS_OK, eventHubMD = eventHubMD[messageIndex], report = fullHL7,
+            config = listOf(profileFilePath)
+        )
+
+        // process time
+        processMD.startProcessTime = startTime
+        processMD.endProcessTime = Date().toIsoString()
+
+        metadata.addArrayElement("processes", processMD)
+
+        // enable for model
+
+        evHubSender.send(evHubTopicName = eventHubSendOkName, message = gsonWithNullsOn.toJson(inputEvent))
+    }
 
 
     @FunctionName("HL7_JSON_LAKE_TRANSFORMER_ELR")
@@ -160,26 +185,17 @@ class Function {
                     // read the profile
                     val profileFilePath = "/PhinGuidProfile.json"
                     val profile = this::class.java.getResource(profileFilePath).readText()
-
-                    val bumblebee = HL7JsonTransformer.getTransformerWithResource(inputEvent.asString, profile)
-                    val fullHL7 = bumblebee.transformMessage()
-
-                    val processMD = HL7JSONLakeProcessMetadata(
-                        status = PROCESS_STATUS_OK, eventHubMD = eventHubMD[messageIndex], report = fullHL7,
-                        config = listOf(profileFilePath)
-                    )
-
-                    // process time
-                    processMD.startProcessTime = startTime
-                    processMD.endProcessTime = Date().toIsoString()
-
-                    metadata.addArrayElement("processes", processMD)
-
-                    // enable for model
-
-                    evHubSender.send(
-                        evHubTopicName = eventHubSendELROkName,
-                        message = gsonWithNullsOn.toJson(inputEvent)
+                    processMessage(
+                        inputEvent,
+                        profile,
+                        eventHubMD,
+                        messageIndex,
+                        profileFilePath,
+                        startTime,
+                        metadata,
+                        evHubSender,
+                        eventHubSendELROkName,
+                        gsonWithNullsOn
                     )
                 }
                 catch (e: Exception) {
