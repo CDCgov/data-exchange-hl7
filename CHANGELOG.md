@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+
+
+### [0.0.20] - 2023-05-31
+	- Created method to convert HL7 message into JSON, based on HL7-PET profiles.
+	- Created AZ function to process hl7 messages into JSON model based on method above.
+	- Updated HL7 Usage in Gen v1 MMG to "R" for all fields whose Cardinality is [1..1]
+	- Removed ZLR segments from Covid19 ELR Nist Profiles
+	- Improving logging statements of Receiver/Debatcher
+	- Added Code coverage for Lake Of Segments
+	- Improved Redis Proxy to use Connection pooling
+	- Removed constraint for HD fields that requires a valid OID
+	- Changed Unescaped delimiter errors from Error to Warning
+	- Using Class level configuration for Fn to improve performance - read configuration only once on class lifecycle
+
+
 ### [0.0.19] - 2023-05-17
 	- Handling Lab Templates for MMG-Based and MMG-in-SQL
 	- Created Plan for Performance testing and ran some baselines in DEV env.
