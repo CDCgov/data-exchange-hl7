@@ -35,16 +35,19 @@ class MmgUtil(val redisProxy: RedisProxy)  {
 
     @Throws(InvalidConditionException::class)
     fun getMMGs(mmgKeyList: Array<String>): Array<MMG> {
-        var mmgs : Array<MMG> = arrayOf()
-        for (keyName: String in mmgKeyList) {
-            val mmg1 = gson.fromJson(redisProxy.getJedisClient().get(keyName), MMG::class.java)
-            //REMOVE MSH-21 from GenV2: when condition specific is also defining it with new cardinality of [3..3]
-            if (keyName.contains(GEN_V2_MMG)) {
-                mmg1.blocks = mmg1.blocks.filter { it.name != "Message Header" }
+        redisProxy.getJedisClient().use { jedisConn ->
+            var mmgs: Array<MMG> = arrayOf()
+            for (keyName: String in mmgKeyList) {
+                val mmg1 = gson.fromJson(jedisConn.get(keyName), MMG::class.java)
+                //REMOVE MSH-21 from GenV2: when condition specific is also defining it with new cardinality of [3..3]
+                if (keyName.contains(GEN_V2_MMG)) {
+                    mmg1.blocks = mmg1.blocks.filter { it.name != "Message Header" }
+                }
+                mmgs += mmg1
             }
-            mmgs += mmg1
+            return mmgs
         }
-        return mmgs
+
      }
 
     @Throws(InvalidConditionException::class)
@@ -61,6 +64,7 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         var mmg2KeyNames = arrayOf<String>()
         // condition-specific profile from message
         var msh21_3In = msh21_3?.normalize()
+        val jedisConn = redisProxy.getJedisClient()
 
         if (msh21_2.normalize() in legacy_mmgs) {
             // msh_21_3 is empty, make it same as msh_21_2
@@ -71,43 +75,49 @@ class MmgUtil(val redisProxy: RedisProxy)  {
         } // .else
 
         // get the condition code entry. Needed for both routing and mmgs
-        val eventCodeEntry =
-            gson.fromJson( redisProxy.getJedisClient().get(REDIS_CONDITION_PREFIX + eventCode) , Condition2MMGMapping::class.java)
-                ?: throw InvalidConditionException("Condition $eventCode not found in mapping table.")
+        try {
+            val eventCodeEntry =
+                gson.fromJson(jedisConn.get(REDIS_CONDITION_PREFIX + eventCode), Condition2MMGMapping::class.java)
+                    ?: throw InvalidConditionException("Condition $eventCode not found in mapping table.")
 
-        if (!msh21_3In.isNullOrEmpty()  && !eventCodeEntry.profiles.isNullOrEmpty()) {
-            // filter condition's profiles for a match on msh-21[3]
-            var specialCaseAdded = false
-            val profileMatches = eventCodeEntry.profiles.filter { profile -> profile.name == msh21_3In }
-            if (profileMatches.isNotEmpty()) {
-                val profile = profileMatches[0]
-                // look at special cases first, if any exist
-                if (!profile.specialCases.isNullOrEmpty()) {
-                    for (case: SpecialCase in profile.specialCases) {
-                        // see if the jurisdiction code is a member of the group to which this case applies
-                        val appliesHere = redisProxy.getJedisClient().sismember(case.appliesTo, jurisdictionCode)
-                        if (appliesHere) {
-                            mmg2KeyNames += case.mmgs //returns a list of mmg keys
-                            messageInfo.route = "${mmg2KeyNames.last().replace(REDIS_MMG_PREFIX, "")}_${case.appliesTo.replace(REDIS_GROUP_PREFIX, "")}"
-                            specialCaseAdded = true
-                            break
-                        }
-                    } // .for
-                } // .if special cases
+            if (!msh21_3In.isNullOrEmpty() && !eventCodeEntry.profiles.isNullOrEmpty()) {
+                // filter condition's profiles for a match on msh-21[3]
+                var specialCaseAdded = false
+                val profileMatches = eventCodeEntry.profiles.filter { profile -> profile.name == msh21_3In }
+                if (profileMatches.isNotEmpty()) {
+                    val profile = profileMatches[0]
+                    // look at special cases first, if any exist
+                    if (!profile.specialCases.isNullOrEmpty()) {
+                        for (case: SpecialCase in profile.specialCases) {
+                            // see if the jurisdiction code is a member of the group to which this case applies
+                            val appliesHere = jedisConn.sismember(case.appliesTo, jurisdictionCode)
+                            if (appliesHere) {
+                                mmg2KeyNames += case.mmgs //returns a list of mmg keys
+                                messageInfo.route = "${mmg2KeyNames.last()
+                                    .replace(REDIS_MMG_PREFIX, "")}_${case.appliesTo
+                                        .replace(REDIS_GROUP_PREFIX,"")}"
+                                specialCaseAdded = true
+                                break
+                            }
+                        } // .for
+                    } // .if special cases
 
-                if (!specialCaseAdded) {
-                    // no special cases apply; use the regular mmgs for this profile+condition
-                    mmg2KeyNames += profile.mmgs
-                    messageInfo.route = mmg2KeyNames.last().replace(REDIS_MMG_PREFIX, "")
+                    if (!specialCaseAdded) {
+                        // no special cases apply; use the regular mmgs for this profile+condition
+                        mmg2KeyNames += profile.mmgs
+                        messageInfo.route = mmg2KeyNames.last().replace(REDIS_MMG_PREFIX, "")
+                    }
+                } else {
+                    throw InvalidConditionException("Condition $eventCode does not match the profile $msh21_3In.")
                 }
             } else {
-                throw InvalidConditionException("Condition $eventCode does not match the profile $msh21_3In.")
+                // no condition-specific MMGs -- route to Generic
+                messageInfo.route = "${msh21_2.normalize()}_${eventCodeEntry.category.normalize()}"
             }
-        } else {
-            // no condition-specific MMGs -- route to Generic
-            messageInfo.route = "${msh21_2.normalize()}_${eventCodeEntry.category.normalize()}"
+            messageInfo.mmgKeyList = mmg2KeyNames.toList()
+        } finally{
+            redisProxy.releaseJedisClient(jedisConn)
         }
-        messageInfo.mmgKeyList = mmg2KeyNames.toList()
         return messageInfo
     }
 } // // .MmgUtil

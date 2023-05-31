@@ -1,33 +1,47 @@
 package gov.cdc.dex.azure
 
+import gov.cdc.dex.util.StringUtils.Companion.getOrDefault
 import org.slf4j.LoggerFactory
-import redis.clients.jedis.DefaultJedisClientConfig
-import redis.clients.jedis.Jedis
-import java.io.Closeable
+import redis.clients.jedis.*
 
-class RedisProxy( redisName: String,  redisKey:String,  redisPort: Int = 6380) : Closeable {
+class RedisProxy( redisName: String,  redisKey:String,  redisPort: Int = 6380, ssl: Boolean = true)  {
     companion object {
-        const val REDIS_CACHE_NAME_PROP_NAME: String = "REDIS_CACHE_NAME"
-        const val REDIS_PWD_PROP_NAME: String        = "REDIS_CACHE_KEY"
-        const val REDIS_PORT_PROP_NAME: String       = "REDIS_PORT"
-    }
-    private val logger = LoggerFactory.getLogger(RedisProxy::class.java.simpleName)
+        private val logger = LoggerFactory.getLogger(RedisProxy::class.java.simpleName)
 
-    private val jedis = Jedis(redisName, redisPort, DefaultJedisClientConfig.builder()
-        .password(redisKey)
-        .ssl(true)
-        .timeoutMillis(400000)
-        .build()
-    )
+        const val REDIS_CACHE_NAME_PROP_NAME: String = "REDIS_CACHE_NAME"
+        const val REDIS_PWD_PROP_NAME: String = "REDIS_CACHE_KEY"
+        const val REDIS_PORT_PROP_NAME: String = "REDIS_PORT"
+
+
+
+    }
+
+     val jedisPool:JedisPool
+
     init {
         logger.info("REDIS connection established with $redisName")
+        val jedisPoolConfig = JedisPoolConfig().apply {
+            maxTotal =       System.getenv("REDIS_POOL_MAX_TOTAL").getOrDefault("300").toInt()
+            maxIdle =        System.getenv("REDIS_POOL_MAX_IDLE").getOrDefault("300").toInt()
+            minIdle =        System.getenv("REDIS_POOL_MIN_IDLE").getOrDefault("30").toInt()
+            testOnBorrow =   System.getenv("REDIS_POOL_TEST_ON_BORROW").getOrDefault("true").toBoolean()
+            testWhileIdle =  System.getenv("REDIS_POOL_TEST_WHILE_IDLE").getOrDefault("true").toBoolean()
+            this.testOnCreate = false
+            this.testOnReturn = false
+
+        }
+        val timeout = System.getenv("REDIS_POOL_TIMEOUT").getOrDefault("300000").toInt()
+
+        jedisPool = JedisPool(jedisPoolConfig, redisName,redisPort, timeout, redisKey,ssl)
+
+        jedisPool.preparePool()
     }
 
     fun getJedisClient(): Jedis {
-        return jedis
+        return jedisPool.resource
     }
 
-    override fun close() {
-        jedis.close()
+    fun releaseJedisClient(conn: Jedis) {
+        conn.close()
     }
 }

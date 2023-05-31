@@ -5,9 +5,14 @@ This library holds common code to be used by all other services on the HL7 pipel
 Functionality as development progresses will increase. Here's a list of current functionality:
 
 ## Redis Proxy
-This class is a proxy to interact with AZ Redis Cache. It's very basic - it only creates a client (currently using Jedis) with a single connection to Redis and closes that connection when the reference is garbage collected.
+This class is a proxy to interact with AZ Redis Cache. 
+RedisProxy uses a JedisPool (with defaults of 300 max connections and 30 minIdle). Clients using this class can request
+a connection with <code>conn = proxy.getJedisClient()</code>, and release it by calling the close directly on it,
+<code>conn.close()</code> or by invoking <code>proxy.releaseJedisClient(conn)</code>
 
-The basic usage of this class is to a) Instantiate a redis proxy passing redis parameters and b) getting access to the client via getJedisClient()
+
+The basic usage of this class is to a) Instantiate a redis proxy passing redis parameters and 
+b) getting access to the client via getJedisClient()
 
 Ex.:
 
@@ -18,6 +23,21 @@ Ex.:
 	val redisProxy=RedisProxy(REDIS_CACHE_NAME,REDIS_PWD)
 	redisProxy.getJedisClient().get("mykey")
 ```
+The RedisProxy and connection pool can be configured with the following environment variables:
+* REDIS_POOL_MAX_TOTAL: Default 300. Sets the maximum numbers of connections for this pool.
+* REDIS_POOL_MAX_IDLE: Default 300. Sets the maximum number of idle connections for this pool. Suggested to be the same as maxTotal
+* REDIS_POOL_MIN_IDLE: Default 30. Sets the minimun number of idle connections for this pool.
+* REDIS_POOL_TEST_ON_BORROW: Default true. Indicates if connection should be tested upon request to be used.
+* REDIS_POOL_TEST_WHILE_IDLE: Default true. Indicates if connection should be tested while idle.
+* REDIS_POOL_TIMEOUT: Default 300000 (5 min). Timeout in milliseconds for the connection.
+
+You can also configure different ports (Default 6380) and enable SSL (default true) by passing extra parameters to the 
+constructor:
+
+```kotlin
+	val redisProxy=RedisProxy(REDIS_CACHE_NAME,REDIS_PWD, 6379, false)
+```
+
 ### Redis POJOs (or POKOs - Plain Old Kotlin Objects )
 We have data classes for the entities we are storing on Redis. Currently we save 3 types of entities on our redis cache:
 * Value Sets from PHIN VADS. We can use ValueSetConcept to read those entities. (They are stored as HashMaps, therefore, must use methods like jedis.hget to read them
@@ -31,13 +51,15 @@ This class provides basic functionality for submitting new messages to a specifi
 Ex.:
 ``` kotlin
     val evHubSender=EventHubSender(evHubConnStr)
-     …
-   evHubSender.send(evHubTopicName=ehDestination,message=gson.toJson(inputEvent))
+   
+    evHubSender.send(evHubTopicName=ehDestination,message=gson.toJson(inputEvent))
 ```
 Where:
 *  evHubConnStr is the AZ connection String to the Event Hub namespace you're connecting to.
 *  ehDestination is the name of the event hub topic we're sending the message to
 * gso.toJson(inputEvent) is the message we're sending (as a json string in this case).
+
+You can also send a List of messages to be sent to your event hub destination as a batch.
 
 ## Metadata POJOs 
 The package gov.cdc.dex.metadata contains several data classes that handles all the metadata enrichment we add to a given HL7 message.

@@ -11,7 +11,6 @@ import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
-import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.mmg.InvalidConditionException
 import gov.cdc.dex.mmg.MmgUtil
@@ -21,6 +20,7 @@ import gov.cdc.dex.util.StringUtils.Companion.normalize
 import gov.cdc.hl7.HL7StaticParser
 import java.io.*
 import java.util.*
+import java.util.logging.Logger
 
 
 /**
@@ -38,6 +38,8 @@ class Function {
         const val JURISDICTION_CODE_PATH = "OBX[@3.1='77968-6']-5.1"
         const val ALT_JURISDICTION_CODE_PATH = "OBX[@3.1='NOT116']-5.1"
         val gson: Gson = GsonBuilder().serializeNulls().create()
+
+        val fnConfig = FunctionConfig()
     }
     @FunctionName("receiverdebatcher001")
     fun eventHubProcessor(
@@ -49,31 +51,31 @@ class Function {
                 messages: List<String>?,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext) {
+        context.logger.info("DEX::Received BLOB_CREATED event!")
 
-        val startTime = Date().toIsoString()
-        // context.logger.info("message: --> " + message)
-        val evHubName = System.getenv("EventHubSendOkName")
-        val evHubErrsName = System.getenv("EventHubSendErrsName")
-        val evHubConnStr = System.getenv("EventHubConnectionString")
-        val blobIngestContName = System.getenv("BlobIngestContainerName")
-        val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
-        val redisName: String = System.getenv("REDIS_CACHE_NAME")
-        val redisKey: String = System.getenv("REDIS_CACHE_KEY")
-        val redisProxy = RedisProxy(redisName, redisKey)
-        val mmgUtil = MmgUtil(redisProxy)
-        val evHubSender = EventHubSender(evHubConnStr)
-        val azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
+//        val evHubName = System.getenv("EventHubSendOkName")
+//        val evHubErrsName = System.getenv("EventHubSendErrsName")
+//        val evHubConnStr = System.getenv("EventHubConnectionString")
+//        val blobIngestContName = System.getenv("BlobIngestContainerName")
+//        val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
+//        val redisName: String = System.getenv("REDIS_CACHE_NAME")
+//        val redisKey: String = System.getenv("REDIS_CACHE_KEY")
+//        val redisProxy = RedisProxy(redisName, redisKey)
+//        val mmgUtil = MmgUtil(redisProxy)
+//        val evHubSender = EventHubSender(evHubConnStr)
+//        val azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
 
         if (messages != null) {
             for ((nbrOfMessages, message) in messages.withIndex()) {
+                val startTime = Date().toIsoString()
                 val eventArr = gson.fromJson(message, Array<AzBlobCreateEventMessage>::class.java)
                 val event = eventArr[0]
                 if ( event.eventType == BLOB_CREATED) {
-                    context.logger.info("Received BLOB_CREATED event: --> $event")
+
                     // Pick up blob metadata
                     val blobName= event.evHubData.url.substringAfter("/hl7ingress/")
-                    context.logger.fine("Reading blob: $blobName")
-                    val blobClient = azBlobProxy.getBlobClient(blobName)
+                    context.logger.info("DEX::Reading blob: $blobName")
+                    val blobClient = fnConfig.azBlobProxy.getBlobClient(blobName)
                     //Create Map of Metadata with lower case keys
                     val metaDataMap =  blobClient.properties.metadata.mapKeys { it.key.lowercase() }
 
@@ -92,16 +94,16 @@ class Function {
                     //Validate metadata
                     val isValidMessage = validateMessageMetaData(metaDataMap, context)
                     var messageType = metaDataMap["message_type"]
-                    if(messageType.isNullOrEmpty()){
-                        messageType = HL7MessageType.UNKOWN.name
-                       }
+                    if(messageType.isNullOrEmpty()) {
+                        messageType = HL7MessageType.UNKNOWN.name
+                    }
 
                     if (!isValidMessage){
                         // required Metadata is missing -- send to error queue
                         val (metadata, summary) = buildMetadata(STATUS_ERROR, eventHubMD[nbrOfMessages], startTime, provenance, "Message missing required Meta Data.")
                         // send empty array as message content when content is invalid
                         //Put Unknown as message type if messageType is missing else use messageType
-                        prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, evHubSender, evHubErrsName, context)
+                        prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName, context)
                         return
                     }
 
@@ -122,9 +124,9 @@ class Function {
                                     if ( mshCount > 1 ) {
                                         provenance.singleOrBatch = Provenance.BATCH_FILE
                                         provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
-                                        val messageInfo = getMessageInfo(metaDataMap, mmgUtil, currentLinesArr.joinToString("\n" ))
+                                        val messageInfo = getMessageInfo(metaDataMap, fnConfig.mmgUtil, currentLinesArr.joinToString("\n" ), context.logger)
                                         val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
-                                        prepareAndSend(currentLinesArr, messageInfo, metadata, summary, evHubSender, evHubName, context)
+                                        prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName, context)
                                         provenance.messageIndex++
                                     }
                                     currentLinesArr.clear()
@@ -137,43 +139,47 @@ class Function {
                     provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
                     if (mshCount > 0) {
                         val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
-                        val messageInfo = getMessageInfo(metaDataMap, mmgUtil, currentLinesArr.joinToString("\n" ))
-                        prepareAndSend(currentLinesArr, messageInfo, metadata, summary, evHubSender, evHubName, context)
+                        val messageInfo = getMessageInfo(metaDataMap, fnConfig.mmgUtil, currentLinesArr.joinToString("\n" ), context.logger)
+                        prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName, context)
                     } else {
                         // no valid message -- send to error queue
                         val (metadata, summary) = buildMetadata(STATUS_ERROR, eventHubMD[nbrOfMessages], startTime, provenance, "No valid message found.")
                         // send empty array as message content when content is invalid
-                        prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, evHubSender, evHubErrsName, context)
+                        prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName, context)
                     }
                 } // .if
             }
         } // .for
     } // .eventHubProcess
 
-    private fun getMessageInfo(metaDataMap: Map<String, String>, mmgUtil: MmgUtil, message: String): DexMessageInfo {
-        val eventCode = extractValue(message, EVENT_CODE_PATH)
+    private fun getMessageInfo(metaDataMap: Map<String, String>, mmgUtil: MmgUtil, message: String, logger: Logger): DexMessageInfo {
+            val startTime = System.currentTimeMillis()
+            val eventCode = extractValue(message, EVENT_CODE_PATH)
+            //READ FROM METADATA FOR ELR
+            val messageType = metaDataMap["message_type"]
+            if (messageType == HL7MessageType.ELR.name) {
+                val route = metaDataMap["route"]?.normalize()
+                val reportingJurisdiction = metaDataMap["reporting_jurisdiction"]
+                return DexMessageInfo(eventCode, route, null, reportingJurisdiction, HL7MessageType.ELR)
+            }
 
-        //READ FROM METADATA FOR ELR
-        val messageType = metaDataMap["message_type"]
-        if(messageType == HL7MessageType.ELR.name){
-            val route = metaDataMap["route"]?.normalize()
-            val reportingJurisdiction = metaDataMap["reporting_jurisdiction"]
-            return DexMessageInfo(eventCode, route, null,  reportingJurisdiction, HL7MessageType.ELR)
-        }
+            val msh21Gen = extractValue(message, MSH_21_2_1_PATH)
+            val msh21Cond = extractValue(message, MSH_21_3_1_PATH)
 
-        val msh21Gen = extractValue(message, MSH_21_2_1_PATH)
-        val msh21Cond = extractValue(message, MSH_21_3_1_PATH)
+            var jurisdictionCode = extractValue(message, JURISDICTION_CODE_PATH)
+            if (jurisdictionCode.isEmpty()) {
+                jurisdictionCode = extractValue(message, ALT_JURISDICTION_CODE_PATH)
+            }
 
-        var jurisdictionCode = extractValue(message, JURISDICTION_CODE_PATH)
-        if (jurisdictionCode.isEmpty()) {
-            jurisdictionCode = extractValue(message, ALT_JURISDICTION_CODE_PATH)
-        }
+            return try {
+                mmgUtil.getMMGMessageInfo(msh21Gen, msh21Cond, eventCode, jurisdictionCode)
+            } catch (e: InvalidConditionException) {
+                DexMessageInfo(eventCode, null, null, jurisdictionCode, HL7MessageType.CASE)
+            } finally {
+                logger.info("DEX::Retrieve REDIS info in ${System.currentTimeMillis() - startTime} ms.")
+            }
 
-        return try {
-            mmgUtil.getMMGMessageInfo(msh21Gen, msh21Cond, eventCode, jurisdictionCode)
-        } catch (e : InvalidConditionException) {
-            DexMessageInfo(eventCode, null, null,  jurisdictionCode, HL7MessageType.CASE)
-        }
+
 
     }
 
@@ -198,11 +204,10 @@ class Function {
     private fun prepareAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String, context: ExecutionContext) {
         val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
         val msgEvent = DexEventPayload(contentBase64, messageInfo, metadata, summary)
-        context.logger.info("Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
+        context.logger.info("DEX::Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
         val jsonMessage = gson.toJson(msgEvent)
         eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
-        context.logger.info("full message: $jsonMessage")
-        context.logger.info("Processed and Sent to event hub $eventHubName Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
+        context.logger.info("DEX::Processed and Sent to event hub $eventHubName Message: --> messageUUID: ${msgEvent.messageUUID}")
         //println(msgEvent)
     }
 
@@ -212,7 +217,6 @@ class Function {
         val messageType = metaDataMap["message_type"]
         val route = metaDataMap["route"]
         val reportingJurisdiction = metaDataMap["reporting_jurisdiction"]
-        context.logger.info("Metadata Info: --> messageType: ${messageType}, route: ${route}, reportingJurisdiction: $reportingJurisdiction")
 
         if (messageType.isNullOrEmpty()){
             isValid = false
@@ -221,10 +225,11 @@ class Function {
                 isValid = false
             }
         }
-        context.logger.info("isValid: --> $isValid")
+        context.logger.info("DEX::Metadata Info: --> isValid: $isValid;  messageType: ${messageType}, route: ${route}, reportingJurisdiction: $reportingJurisdiction")
 
         return isValid
     }
+
 
 
 } // .class  Function
