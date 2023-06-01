@@ -113,7 +113,7 @@
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 
         <!-- Plugins Dependencies Versions -->
-        <pluginManagement>
+        <!-- <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>com.microsoft.azure</groupId>
@@ -141,7 +141,7 @@
                     <version>3.1.0</version>
                 </plugin>
             </plugins>
-        </pluginManagement>
+        </pluginManagement> -->
 
         <plugins>
             <plugin>
