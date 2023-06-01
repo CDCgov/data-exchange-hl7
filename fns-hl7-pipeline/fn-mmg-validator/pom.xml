@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>mmg-validator</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>DEX Fns-Pipeline :: mmg-validator</name>
@@ -15,11 +15,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.7.20</kotlin.version>
         <functions.version>3.0.0</functions.version>
-        <functions.plugin.version>1.26.0</functions.plugin.version>
+        <functions.plugin.version>1.16.0</functions.plugin.version>
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
 
-        <functionAppName>ocio-ede-${environment-id}-hl7-mmg-validator</functionAppName>
+        <!--functionAppName>ocio-ede-${environment-id}-hl7-mmg-validator</functionAppName -->
+        <functionAppName>TestMMGValidator</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
 
         <slf4j.version>2.0.5</slf4j.version>
@@ -32,9 +33,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.13.10</version>
+        </dependency>
+        <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.15-SNAPSHOT</version>
+            <version>1.0.12-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>C:\Projects\CDC\data-exchange-hl7\libs\lib-dex-commons-1.0.12-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <!-- Azure Functions Java Library -->
@@ -145,7 +153,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <configuration>
                         <environmentVariables>
-                            <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
+                            <REDIS_CACHE_NAME>ocio-ede-dev-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
                             <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
                         </environmentVariables>
                     </configuration>
