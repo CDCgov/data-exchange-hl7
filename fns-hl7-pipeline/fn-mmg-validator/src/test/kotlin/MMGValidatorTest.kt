@@ -20,7 +20,7 @@ class MMGValidatorTest {
     private fun validateMessage(fileName: String): MmgReport {
         val testMsg = this::class.java.getResource(fileName).readText().trim()
 
-        val mmgValidator = MmgValidator( )
+        val mmgValidator = MmgValidator()
         val validationReport = mmgValidator.validate(testMsg)
 
         println("validationReport: -->\n\n${gson.toJson(validationReport)}\n")

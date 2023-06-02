@@ -2,10 +2,7 @@ package gov.cdc.dex.hl7
 
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
-import gov.cdc.dex.hl7.model.ValidationErrorMessage
-import gov.cdc.dex.hl7.model.ValidationIssue
-import gov.cdc.dex.hl7.model.ValidationIssueCategoryType
-import gov.cdc.dex.hl7.model.ValidationIssueType
+import gov.cdc.dex.hl7.model.*
 import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
@@ -14,7 +11,7 @@ import org.slf4j.LoggerFactory
 import scala.Option
 
 
-class MmgValidator {
+class MmgValidator() {
     companion object {
         private val logger = LoggerFactory.getLogger(MmgValidator::class.java.simpleName)
         const val GENVx_PROFILE_PATH = "MSH-21[2].1"

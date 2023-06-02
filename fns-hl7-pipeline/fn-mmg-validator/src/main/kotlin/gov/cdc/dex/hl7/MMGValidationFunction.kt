@@ -25,7 +25,7 @@ import java.util.*
  * Azure Functions with Event Hub Trigger.
  */
 class MMGValidationFunction {
-    
+
     companion object {
         private const val STATUS_ERROR = "ERROR"
         val gson: Gson = GsonBuilder().serializeNulls().create()
@@ -34,10 +34,10 @@ class MMGValidationFunction {
     @FunctionName("mmgvalidator001")
     fun eventHubProcessor(
         @EventHubTrigger(
-                name = "msg", 
+                name = "msg",
                 eventHubName = "%EventHubReceiveName%",
                 connection = "EventHubConnectionString",
-                consumerGroup = "%EventHubConsumerGroup%",) 
+                consumerGroup = "%EventHubConsumerGroup%",)
                 message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext) {
