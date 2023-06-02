@@ -8,10 +8,13 @@ import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
 import gov.cdc.hl7.HL7StaticParser
 import org.slf4j.LoggerFactory
+import redis.clients.jedis.Jedis
 import scala.Option
 
 
-class MmgValidator() {
+
+class MmgValidator(private val redisProxy: RedisProxy) {
+
     companion object {
         private val logger = LoggerFactory.getLogger(MmgValidator::class.java.simpleName)
         const val GENVx_PROFILE_PATH = "MSH-21[2].1"
@@ -25,13 +28,11 @@ class MmgValidator() {
         const val MMWR_WEEK_CODE = "77991-8"
         const val MMWR_WEEK_LEGACY_CODE = "INV165"
     }
-    private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
-    private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
     private val REDIS_VOCAB_NAMESPACE = "vocab:"
 
-    private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     private val mmgUtil = MmgUtil(redisProxy)
-    val mmgs : Array<MMG> = arrayOf()
+
+
     fun validate(hl7Message: String): List<ValidationIssue> {
         val mmgs = getMMGFromMessage(hl7Message)
         val report = mutableListOf<ValidationIssue>()
@@ -44,45 +45,55 @@ class MmgValidator() {
     private fun validateMMGRules(hl7Message: String, mmgs: Array<MMG>, report: MutableList<ValidationIssue>) {
         //  val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
         // logger.debug("validate started blocks.size: --> $allBlocks")
-        mmgs.forEach { mmg ->
-           mmg.blocks.forEach { block ->
-               block.elements.forEach { element ->
-                  val msgSegments = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
-                    val valueList = if(msgSegments.isDefined)
-                        msgSegments.get().flatten()
-                    else listOf()
-                    //Observation Sub-ID Check for Repeating Blocks
-                    validateObservationSubId(hl7Message, block.type in listOf("Repeat", "RepeatParentChild"), element, valueList, report)
-                    //Cardinality Check!
-                    checkCardinality(hl7Message, block.type in listOf("Repeat", "RepeatParentChild"), element, valueList, report)
-                    // Data type check: (Don't check Data type for Units of measure - fieldPosition is 6, not 5 - can't use isUnitOfMeasure field.)
-                    if ("OBX" == element.mappings.hl7v251.segmentType && 5 == element.mappings.hl7v251.fieldPosition) {
-                        val dataTypeSegments = HL7StaticParser.getListOfMatchingSegments(hl7Message, element.mappings.hl7v251.segmentType, getSegIdx(element))
-                        for ( k in dataTypeSegments.keys().toList()) {
-                           checkDataType(element, dataTypeSegments[k].get()[2], k.toString().toInt(), report )
+         redisProxy.getJedisClient().use { jedisConn ->
+            mmgs.forEach { mmg ->
+                mmg.blocks.forEach { block ->
+                    block.elements.forEach { element ->
+                        val msgSegments = HL7StaticParser.getValue(hl7Message, element.getSegmentPath())
+                        val valueList = if (msgSegments.isDefined)
+                            msgSegments.get().flatten()
+                        else listOf()
+                        //Observation Sub-ID Check for Repeating Blocks
+                        validateObservationSubId(hl7Message,
+                            block.type in listOf("Repeat", "RepeatParentChild"),
+                            element,valueList,report)
+                        //Cardinality Check!
+                        checkCardinality(hl7Message,
+                            block.type in listOf("Repeat", "RepeatParentChild"),
+                            element, valueList,report)
+                        // Data type check: (Don't check Data type for Units of measure - fieldPosition is 6, not 5 - can't use isUnitOfMeasure field.)
+                        if ("OBX" == element.mappings.hl7v251.segmentType && 5 == element.mappings.hl7v251.fieldPosition) {
+                            val dataTypeSegments = HL7StaticParser.getListOfMatchingSegments(
+                                hl7Message,
+                                element.mappings.hl7v251.segmentType,
+                                getSegIdx(element)
+                            )
+                            for (k in dataTypeSegments.keys().toList()) {
+                                checkDataType(element, dataTypeSegments[k].get()[2], k.toString().toInt(), report)
+                            }
                         }
-                    }
-                    //Content checks
-                   if (!("OBR" == element.mappings.hl7v251.segmentType && 31 == element.mappings.hl7v251.fieldPosition)) {
-                        if (msgSegments.isDefined) {
-                            val msgValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
-                            if (msgValues.isDefined) {
-                                checkVocab(element, msgValues.get(), hl7Message, report)
-                                if (element.mappings.hl7v251.dataType in DATE_DATA_TYPES) {
-                                    this.checkDateContent(element, msgValues.get(), hl7Message, report)
-                                } else if (element.mappings.hl7v251.identifier in listOf(
-                                        MMWR_WEEK_CODE,
-                                        MMWR_WEEK_LEGACY_CODE
-                                    )
-                                ) {
-                                    this.checkMMWRWeek(element, msgValues.get(), hl7Message, report)
+                        //Content checks
+                        if (!("OBR" == element.mappings.hl7v251.segmentType && 31 == element.mappings.hl7v251.fieldPosition)) {
+                            if (msgSegments.isDefined) {
+                                val msgValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
+                                if (msgValues.isDefined) {
+                                    checkVocab(element, msgValues.get(), hl7Message, report, jedisConn)
+                                    if (element.mappings.hl7v251.dataType in DATE_DATA_TYPES) {
+                                        this.checkDateContent(element, msgValues.get(), hl7Message, report)
+                                    } else if (element.mappings.hl7v251.identifier in listOf(
+                                            MMWR_WEEK_CODE,
+                                            MMWR_WEEK_LEGACY_CODE
+                                        )
+                                    ) {
+                                        this.checkMMWRWeek(element, msgValues.get(), hl7Message, report)
+                                    }
                                 }
                             }
                         }
-                    }
-                } // .for element
-            } // .for block
-        }// .for mmg
+                    } // .for element
+                } // .for block
+            }// .for mmg
+        } //. for use
     } // .validate
 
 
@@ -212,7 +223,7 @@ class MmgValidator() {
                 }
             }
         } else {
-            val allSegs = msgValues.joinToString("\n") //join all segments to extract all Values.
+//            val allSegs = msgValues.joinToString("\n") //join all segments to extract all Values.
             val segValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
 //            val segValuesFlat = if (segValues.isDefined) segValues.get().flatten() else listOf()
             checkSingleGroupCardinality(hl7Message, minCardinality, maxCardinality, null, element, segValues, report)
@@ -275,12 +286,12 @@ class MmgValidator() {
 
     } // .checkDataType
 
-    private fun checkVocab(elem: Element, msgValues: Array<Array<String>>, message: String, report:MutableList<ValidationIssue> ) {
+    private fun checkVocab(elem: Element, msgValues: Array<Array<String>>, message: String, report:MutableList<ValidationIssue>,jedisConn:Jedis ) {
         if (!elem.valueSetCode.isNullOrEmpty() && "N/A" != elem.valueSetCode) {
             msgValues.forEachIndexed { outIdx, outArray ->
                 outArray.forEachIndexed { _, inElem ->
                     //if (concepts.filter { it.conceptCode == inElem }.isEmpty()) {
-                    if (!isConceptValid( elem.valueSetCode!!, inElem )) {
+                    if (!isConceptValid( elem.valueSetCode!!, inElem,jedisConn )) {
                         val lineNbr = getLineNumber(message, elem, outIdx)
                         val issue = ValidationIssue(
                             getCategory(elem.mappings.hl7v251.usage),
@@ -346,9 +357,9 @@ class MmgValidator() {
     }
 
     @Throws(InvalidConceptKey::class)
-    fun isConceptValid(key: String, concept: String): Boolean {
+    fun isConceptValid(key: String, concept: String,jedisConn:Jedis): Boolean {
           try {
-              return redisProxy.getJedisClient().hexists(REDIS_VOCAB_NAMESPACE + key, concept)
+              return jedisConn.hexists(REDIS_VOCAB_NAMESPACE + key, concept)
           } catch (e:Exception){
               throw InvalidConceptKey("Unable to retrieve concept values for $key")
           }
