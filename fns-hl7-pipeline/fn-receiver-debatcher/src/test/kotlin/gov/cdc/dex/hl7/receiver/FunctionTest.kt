@@ -62,6 +62,7 @@ class FunctionTest {
         var dexEvtPayLoad = processFile("BatchMessage.txt")
         assertNotNull(dexEvtPayLoad)
         assertEquals(HL7MessageType.CASE,dexEvtPayLoad.messageInfo.type)
+        assertEquals("BATCH", dexEvtPayLoad.metadata.provenance.singleOrBatch)
         assertNotNull(dexEvtPayLoad.metadata.processes)
         assertEquals("RECEIVED", dexEvtPayLoad.summary.currentStatus)
         assertNull(dexEvtPayLoad.summary.problem)
@@ -72,7 +73,7 @@ class FunctionTest {
         assertNotNull(dexEvtPayLoad)
         assertEquals(HL7MessageType.CASE,dexEvtPayLoad.messageInfo.type)
         assertNotNull(dexEvtPayLoad.metadata.processes)
-        println(dexEvtPayLoad)
+        assertEquals("SINGLE", dexEvtPayLoad.metadata.provenance.singleOrBatch)
         assertEquals("REJECTED", dexEvtPayLoad.summary.currentStatus)
         assertNotNull(dexEvtPayLoad.summary.problem)
     }
