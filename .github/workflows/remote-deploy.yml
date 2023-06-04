@@ -20,7 +20,7 @@ jobs:
         run: |
           echo ${{ github.workspace }} 
           if [ ! -d data-exchange-hl7 ]; then git clone https://github.com/kave/github-app-token.git; fi;
-          tree -d /home/runner/work/cdc-coe-atlantis-test/cdc-coe-atlantis-test
+          tree -d /home/runner/work/
           cd github-app-token
           sudo gem install jwt
           echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > app-private-key.pem
