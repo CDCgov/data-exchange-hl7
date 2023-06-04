@@ -13,6 +13,7 @@ on:
     branches:
       - 'develop'
       - '!main'
+      - '**'
     paths:
       - fns-hl7-pipeline/**
       - mrr/**
