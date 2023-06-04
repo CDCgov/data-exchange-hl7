@@ -1,4 +1,4 @@
-name: Trigger HL7 Deploy Workflow
+name: Trigger HL7 CI/CD Workflow
 
 on:
   workflow_dispatch:
