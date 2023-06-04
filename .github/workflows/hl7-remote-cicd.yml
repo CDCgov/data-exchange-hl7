@@ -9,7 +9,6 @@ on:
         type: choice
         options:
         - deploy-mmg-based-transformer.yml
-        - deploy-mmg-based-transformer.yml
         - deploy-mmg-sql-transformer.yml
         - deploy-receiver-debatcher.yml
         - deploy-redactor.yml

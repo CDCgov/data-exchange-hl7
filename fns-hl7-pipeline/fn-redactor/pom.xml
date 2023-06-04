@@ -28,7 +28,8 @@
             <version>${azure.functions.java.library.version}</version>
         </dependency>
 
-        <!-- Test -->
+        <!--- Test -->
+        <!--       -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
