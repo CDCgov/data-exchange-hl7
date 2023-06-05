@@ -288,8 +288,8 @@
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>
                         <BlobIngestContainerName>hl7ingress</BlobIngestContainerName>
-                        <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
-                        <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
+                        <EventHubSendOkName>hl7-recdeb-ok</EventHubSendOkName>
+                        <EventHubSendErrsName>hl7-recdeb-err</EventHubSendErrsName>
                     </environmentVariables>
                 </configuration>
             </plugin>
