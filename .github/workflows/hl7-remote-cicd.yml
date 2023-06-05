@@ -88,7 +88,7 @@ jobs:
             done
             echo "matrix=$(printf '%s\n' "${workflows[@]}" | jq -R . | jq -cs )" >> $GITHUB_OUTPUT
 
-        - name: Gen GitHub App Access Token 
+        - name: Gen GitHub App Access Token For Manual Trigger
           id: github-app-token
           run: |
             echo ${{ github.workspace }} 
@@ -100,7 +100,6 @@ jobs:
             chmod +x ./get-github-app-access-token.sh;
             . ./get-github-app-access-token.sh;
             echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
-            echo "access_token=${TOKEN}" >> "$GITHUB_OUTPUT"
         - name: Manually Dispatch Remote CICD Trigger Event 
           id: manual-devops-wkflow-dispatch
           if: github.event_name == 'workflow_dispatch'
@@ -123,12 +122,25 @@ jobs:
         workflow_id: ${{fromJson(needs.setup-remote-cicd-trigger.outputs.matrix)}}
     environment: dev
     steps:
+        - name: Gen GitHub App Access Token for Automated Trigger
+          id: github-app-token
+          run: |
+            echo ${{ github.workspace }} 
+            if [ ! -d data-exchange-hl7 ]; then git clone https://github.com/kave/github-app-token.git; fi;
+            sudo tree -df
+            cd github-app-token
+            sudo gem install jwt
+            echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > app-private-key.pem
+            chmod +x ./get-github-app-access-token.sh;
+            . ./get-github-app-access-token.sh;
+            echo "access_token=${TOKEN}" >> "$GITHUB_ENV"  
+
         - name: Automatically Dispatch Remote CICD Trigger Event 
           id: auto-devops-wkflow-dispatch
           if: ${{ matrix.workflow_id != '' }} 
           uses: actions/github-script@v6
           with:
-              github-token: ${{ needs.setup-remote-cicd-trigger.outputs.cdcent-token }}
+              github-token: ${{ env.access_token }}
               script: |
                   await github.rest.actions.createWorkflowDispatch({
                     owner: 'cdcent',
