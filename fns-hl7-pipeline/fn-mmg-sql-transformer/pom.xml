@@ -46,7 +46,7 @@
             <artifactId>azure-functions-java-library</artifactId>
             <version>${functions.version}</version>
         </dependency>
-
+        <!--  -->
         <!-- Kotlin -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
