@@ -13,8 +13,8 @@ on:
         - deploy-receiver-debatcher.yml
         - deploy-redactor.yml
         # These are placeholders - have not been implemented yet
-        # - deploy-lake-segs-transformer.yml
-        # - deploy-mmg-validator.yml
+         - deploy-lake-segs-transformer.yml
+         - deploy-mmg-validator.yml
         # - deploy-hl7-json-lake.yml
         # - deploy-structure-validator.yml
         # - dep-loy-cache-loader.yml
