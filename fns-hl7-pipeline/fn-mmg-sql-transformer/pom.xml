@@ -46,7 +46,7 @@
             <artifactId>azure-functions-java-library</artifactId>
             <version>${functions.version}</version>
         </dependency>
-        <!--  -->
+
         <!-- Kotlin -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -113,7 +113,7 @@
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 
         <!-- Plugins Dependencies Versions -->
-        <pluginManagement>
+        <!-- <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>com.microsoft.azure</groupId>
@@ -141,21 +141,28 @@
                     <version>3.1.0</version>
                 </plugin>
             </plugins>
-        </pluginManagement>
+        </pluginManagement> -->
 
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
+                <version>${functions.plugin.version}</version>
                 <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
+                    <appServicePlanName>${functionServicePlan}</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                     <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
                     </auth>
+                    <runtime>
+                        <!-- runtime os, could be windows, linux or docker-->
+                        <os>linux</os>
+                        <javaVersion>${java_version}</javaVersion>
+                    </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
                         <property>
@@ -184,6 +191,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -210,6 +218,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -231,6 +240,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
 
                 <executions>
                     <execution>
