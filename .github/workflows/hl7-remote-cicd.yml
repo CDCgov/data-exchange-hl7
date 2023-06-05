@@ -19,19 +19,10 @@ on:
         # - deploy-structure-validator.yml
         # - dep-loy-cache-loader.yml
         # - deploy-svc-cloud-transport.yml
-  pull_request:
-    branches:
-      - 'develop'
-      - 'main'
-    paths:
-    - fns-hl7-pipeline/**
-    - mrr/**
-    - svc-cloud-transport/**
   push:
     branches:
       - 'develop'
       - '!main'
-      - '**'
     paths:
       - fns-hl7-pipeline/**
       - mrr/**
