@@ -37,39 +37,102 @@ on:
       - mrr/**
       - svc-cloud-transport/**
 jobs:
-  invoke-remote-cicd-trigger:
+  setup-remote-cicd-trigger:
     permissions: write-all
     runs-on: ubuntu-latest
     environment: dev
     outputs:
-      cdcent-access-token: ${{ steps.github-app-token.outputs.accesstoken }}
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      commit_sha7: ${{ steps.getsha.outputs.sha7 }}
+      commit_sha: ${{ steps.getsha.outputs.sha }}
+      cdcent-token: ${{ steps.github-app-token.outputs.access_token }}
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
-      - id: az-login
-        name: Log in with Azure
-        uses: azure/login@v1
-        with:
-          creds: "${{ secrets.AZURE_CREDENTIALS }}"
-      - id: github-app-token
-        name: Gen GitHub App Access Token
-        run: |
-          echo ${{ github.workspace }} 
-          if [ ! -d data-exchange-hl7 ]; then git clone https://github.com/kave/github-app-token.git; fi;
-          sudo tree -df
-          cd github-app-token
-          sudo gem install jwt
-          echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > app-private-key.pem
-          chmod +x ./get-github-app-access-token.sh;
-          . ./get-github-app-access-token.sh;
-          echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
-      - id: dispatch-devops-wkflow
-        name: Dispatch Remote CICD Trigger Event
-        uses: actions/github-script@v6
-        with:
-            github-token: ${{ env.access_token }}
-            script: |
+        - uses: actions/checkout@v3
+          with:
+              ref: ${{ github.ref_name }}
+              fetch-depth: 0
+        - name: Base SHA
+          id: base-sha
+          run: echo "sha=$(git rev-parse origin/main)" >> $GITHUB_OUTPUT
+        
+        - name: Get short SHA
+          id: getsha
+          run: | 
+            echo "sha7=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_OUTPUT
+            echo "sha=$(echo ${GITHUB_SHA})" >> $GITHUB_OUTPUT
+
+         # Dynamically create a matrix of workflow IDs based on folder changes in current commit
+         # Convert workflow shell array into a stringified JSON so it can be bound to matrix workflow_id property used in invoke job
+        - name: Determine HL7 Workflow(s) to Trigger
+          id: set-matrix
+          run: |
+            workflows=()
+            commitfldrs=$(git diff-tree --no-commit-id --name-only ${{ steps.getsha.outputs.sha }} -r)
+            echo " Changed Files and Folders = $commitfldrs"
+            case $commitfldrs in
+              *fn-lake-segs-transformer*) workflows+=("deploy-lake-segs-transformer.yml") ;;&
+              *fn-mmg-based-transformer*) workflows+=("deploy-mmg-based-transformer.yml") ;;&
+              *fn-mmg-sql-transformer*) workflows+=("deploy-mmg-sql-transformer.yml") ;;&
+              *fn-mmg-validator*) workflows+=("deploy-mmg-validator.yml") ;;&
+              *fn-receiver-debatcher*) workflows+=("deploy-receiver-debatcher.yml") ;;&
+              *fn-redactor*) workflows+=("deploy-redactor.yml") ;;&
+              *fn-structure-validator*) workflows+=("deploy-structure-validator.yml") ;;&
+              *mrr*) workflows+=("deploy-cache-loader.yml") ;;&
+              *) ;;
+            esac
+            for value in "${workflows[@]}"
+            do
+                echo $value
+            done
+            echo "matrix=$(printf '%s\n' "${workflows[@]}" | jq -R . | jq -cs )" >> $GITHUB_OUTPUT
+
+        - name: Gen GitHub App Access Token 
+          id: github-app-token
+          run: |
+            echo ${{ github.workspace }} 
+            if [ ! -d data-exchange-hl7 ]; then git clone https://github.com/kave/github-app-token.git; fi;
+            sudo tree -df
+            cd github-app-token
+            sudo gem install jwt
+            echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > app-private-key.pem
+            chmod +x ./get-github-app-access-token.sh;
+            . ./get-github-app-access-token.sh;
+            echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
+            echo "access_token=${TOKEN}" >> "$GITHUB_OUTPUT"
+        - name: Manually Dispatch Remote CICD Trigger Event 
+          id: manual-devops-wkflow-dispatch
+          if: github.event_name == 'workflow_dispatch'
+          uses: actions/github-script@v6
+          with:
+             github-token: ${{ env.access_token }}
+             script: |
                   await github.rest.actions.createWorkflowDispatch({
                     owner: 'cdcent',
                     repo: 'data-exchange-hl7-devops',
                     workflow_id: '${{ github.event.inputs.data-exchange-hl7-workflow }}',
+                    ref: 'main'
+                  })
+  invoke-remote-cicd-trigger:
+    needs: setup-remote-cicd-trigger
+    permissions: write-all
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        workflow_id: ${{fromJson(needs.setup-remote-cicd-trigger.outputs.matrix)}}
+    environment: dev
+    steps:
+        - name: Automatically Dispatch Remote CICD Trigger Event 
+          id: auto-devops-wkflow-dispatch
+          if: ${{ matrix.workflow_id != '' }} 
+          uses: actions/github-script@v6
+          with:
+              github-token: ${{ needs.setup-remote-cicd-trigger.outputs.cdcent-token }}
+              script: |
+                  await github.rest.actions.createWorkflowDispatch({
+                    owner: 'cdcent',
+                    repo: 'data-exchange-hl7-devops',
+                    workflow_id: '${{ matrix.workflow_id }}',
                     ref: 'main'
                   })
