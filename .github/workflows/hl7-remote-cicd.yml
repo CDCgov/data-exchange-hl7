@@ -50,13 +50,9 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
         - uses: actions/checkout@v3
-          with:
-              ref: ${{ github.ref_name }}
-              fetch-depth: 0
         - name: Base SHA
           id: base-sha
-          run: echo "sha=$(git rev-parse origin/main)" >> $GITHUB_OUTPUT
-        
+          run: echo "sha=$(git rev-parse origin/main)" >> $GITHUB_OUTPUT   
         - name: Get short SHA
           id: getsha
           run: | 
