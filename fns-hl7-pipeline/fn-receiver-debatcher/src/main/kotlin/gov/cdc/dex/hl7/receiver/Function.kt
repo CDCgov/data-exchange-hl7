@@ -50,26 +50,10 @@ class Function {
                 connection = "EventHubConnectionString") 
                 messages: List<String>?,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext): DexEventPayload {
+        context: ExecutionContext): DexEventPayload? {
         context.logger.info("DEX::Received BLOB_CREATED event!")
 
-//        val evHubName = System.getenv("EventHubSendOkName")
-//        val evHubErrsName = System.getenv("EventHubSendErrsName")
-//        val evHubConnStr = System.getenv("EventHubConnectionString")
-//        val blobIngestContName = System.getenv("BlobIngestContainerName")
-//        val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
-//        val redisName: String = System.getenv("REDIS_CACHE_NAME")
-//        val redisKey: String = System.getenv("REDIS_CACHE_KEY")
-//        val redisProxy = RedisProxy(redisName, redisKey)
-//        val mmgUtil = MmgUtil(redisProxy)
-//        val evHubSender = EventHubSender(evHubConnStr)
-//        val azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
-
-          var dexMsgInfo = DexMessageInfo("", "", null, "", HL7MessageType.UNKNOWN)
-          var prv = Provenance("", "", "", "", "", 0, "", "", "", "", 0, null)
-          var dexMetaData = DexMetadata(prv, listOf())
-          var summaryInfo = SummaryInfo(", null")
-          var msgEvent = DexEventPayload("", dexMsgInfo, dexMetaData, summaryInfo, "", "")
+        var msgEvent:DexEventPayload? = null
 
         if (messages != null) {
             for ((nbrOfMessages, message) in messages.withIndex()) {
@@ -141,15 +125,15 @@ class Function {
                         } // .BufferedReader
                         // Send last message
                         provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
-                        if (mshCount > 0) {
+                        msgEvent = if (mshCount > 0) {
                             val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
                             val messageInfo = getMessageInfo(metaDataMap, fnConfig.mmgUtil, currentLinesArr.joinToString("\n" ), context.logger)
-                            msgEvent = prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName, context)
+                            prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName, context)
                         } else {
                             // no valid message -- send to error queue
                             val (metadata, summary) = buildMetadata(STATUS_ERROR, eventHubMD[nbrOfMessages], startTime, provenance, "No valid message found.")
                             // send empty array as message content when content is invalid
-                            msgEvent = prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName, context)
+                            prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName, context)
                         }
                     }
                 } // .if

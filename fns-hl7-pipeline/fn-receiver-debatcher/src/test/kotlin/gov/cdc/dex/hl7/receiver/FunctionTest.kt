@@ -13,7 +13,7 @@ import kotlin.test.assertNull
 
 class FunctionTest {
 
-    private fun processFile(filename: String): DexEventPayload {
+    private fun processFile(filename: String): DexEventPayload? {
         println("Start processing $filename ")
         val text = this::class.java.getResource("/$filename").readText()
         val messages = listOf(text)
