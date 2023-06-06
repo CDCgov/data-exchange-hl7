@@ -12,8 +12,9 @@ on:
         - deploy-mmg-sql-transformer.yml
         - deploy-receiver-debatcher.yml
         - deploy-redactor.yml
+        - deploy-lake-segs-transformer.yml
+        - deploy-cache-loader.yml
         # These are placeholders - have not been implemented yet
-        # - deploy-lake-segs-transformer.yml
         # - deploy-mmg-validator.yml
         # - deploy-hl7-json-lake.yml
         # - deploy-structure-validator.yml
