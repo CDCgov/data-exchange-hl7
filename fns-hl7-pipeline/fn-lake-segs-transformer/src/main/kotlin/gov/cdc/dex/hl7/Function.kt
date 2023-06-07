@@ -29,6 +29,8 @@ class Function {
         val PROCESS_STATUS_OK = "SUCCESS"
         val PROCESS_STATUS_EXCEPTION = "FAILURE"
 
+        val fnConfig = FunctionConfig()
+
     } // .companion object
 
 
@@ -45,15 +47,15 @@ class Function {
 
         // context.logger.info("------ received event: ------> message: --> $message") 
 
-        val startTime =  Date().toIsoString()
+
 
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
         // Set up the 2 out Event Hubs: OK and Errs
-        val evHubConnStr = System.getenv("EventHubConnectionString")
+       /* val evHubConnStr = System.getenv("EventHubConnectionString")
         val eventHubSendOkName = System.getenv("EventHubSendOkName")
         val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
-        val evHubSender = EventHubSender(evHubConnStr)
+        val evHubSender = EventHubSender(evHubConnStr)*/
 
         // 
         // Process each Event Hub Message
@@ -62,6 +64,7 @@ class Function {
         message.forEachIndexed {
                 messageIndex: Int, singleMessage: String? ->
             // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
+            val startTime =  Date().toIsoString()
             try {
 
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
@@ -86,22 +89,22 @@ class Function {
                         hl7Content,
                         startTime,
                         metadata,
-                        eventHubSendOkName,
-                        evHubSender,
+                        fnConfig.eventHubSendOkName,
+                        fnConfig.evHubSender,
                         eventHubMD[messageIndex],
                         gsonWithNullsOn,
                         inputEvent
                     )
-                    context.logger.info("Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendOkName")
+                    context.logger.info("Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendOkName")
 
                 } catch (e: Exception) {
 
                     context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
 
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
-                    processMessageError(e, inputEvent, eventHubSendErrsName, evHubSender, gsonWithNullsOn)
+                    processMessageError(e, inputEvent, fnConfig.eventHubSendErrsName, fnConfig.evHubSender, gsonWithNullsOn)
 
-                    context.logger.info("Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendErrsName")
+                    context.logger.info("Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendErrsName")
                 } // .catch
 
             } catch (e: Exception) {
@@ -131,15 +134,15 @@ class Function {
 
         // context.logger.info("------ received event: ------> message: --> $message")
 
-        val startTime =  Date().toIsoString()
+
 
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
-        // Set up the 2 out Event Hubs: OK and Errs
+     /*   // Set up the 2 out Event Hubs: OK and Errs
         val evHubConnStr = System.getenv("EventHubConnectionString")
         val eventHubSendOkName = System.getenv("EventHubSendOkName")
         val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
-        val evHubSender = EventHubSender(evHubConnStr)
+        val evHubSender = EventHubSender(evHubConnStr)*/
 
         //
         // Process each Event Hub Message
@@ -148,6 +151,7 @@ class Function {
         message.forEachIndexed {
                 messageIndex: Int, singleMessage: String? ->
             // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
+            val startTime =  Date().toIsoString()
             try {
 
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
@@ -173,22 +177,22 @@ class Function {
                         hl7Content,
                         startTime,
                         metadata,
-                        eventHubSendOkName,
-                        evHubSender,
+                        fnConfig.eventHubSendOkName,
+                        fnConfig.evHubSender,
                         eventHubMD[messageIndex],
                         gsonWithNullsOn,
                         inputEvent
                     )
 
-                    context.logger.info("Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendOkName")
+                    context.logger.info("Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendOkName")
 
                 } catch (e: Exception) {
 
                     context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
-                    processMessageError(e, inputEvent, eventHubSendErrsName, evHubSender, gsonWithNullsOn)
+                    processMessageError(e, inputEvent, fnConfig.eventHubSendErrsName, fnConfig.evHubSender, gsonWithNullsOn)
 
-                    context.logger.info("Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $eventHubSendErrsName")
+                    context.logger.info("Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendErrsName")
                 } // .catch
 
             } catch (e: Exception) {
