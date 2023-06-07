@@ -3,20 +3,38 @@
     "MSH": {
       "cardinality": "[1..1]",
       "children": {
+        "SFT": {
+          "cardinality": "[0..*]"
+        },
         "PID": {
           "cardinality": "[1..1]",
           "children": {
+            "PD1": {
+              "cardinality": "[0..1]"
+            },
             "NTE": {
               "cardinality": "[0..*]"
+            },
+            "NK1": {
+              "cardinality": "[0..*]"
+            },
+            "PV1": {
+              "cardinality": "[1..1]"
+            },
+            "PV2": {
+              "cardinality": "[0..1]"
             }
           }
         },
-        "SFT": {
-          "cardinality": "[0..*]"
+        "ORC": {
+          "cardinality": "[0..1]"
         },
         "OBR": {
           "cardinality": "[1..*]",
           "children": {
+            "TQ1": {
+              "cardinality": "[0..1]"
+            },
             "OBX": {
               "cardinality": "[0..*]",
               "children": {
@@ -38,7 +56,6 @@
             }
           }
         }
-
       }
     }
   },
@@ -507,6 +524,281 @@
     "notes": ""
   }
 ],
+    "ORC": [
+      {
+          "fieldNumber": 1,
+          "name": "Order Control",
+          "dataType": "ID",
+          "usage": "O",
+          "cardinality": "[0..1]",
+          "conformance": "",
+          "notes": ""
+        },{
+        "fieldNumber": 2,
+        "name": "Place Order Number",
+        "dataType": "EI",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 3,
+        "name": "Filler Order Number",
+        "dataType": "EI",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 4,
+        "name": "Place Group Number",
+        "dataType": "EI",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 5,
+        "name": "Order Status",
+        "dataType": "ID",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 6,
+        "name": "Response Flag",
+        "dataType": "ID",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 7,
+        "name": "Quantity/Timing",
+        "dataType": "ST",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 8,
+        "name": "Parent",
+        "dataType": "EIP",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 9,
+        "name": "Date/Time of Transaction",
+        "dataType": "DTM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 10,
+        "name": "Entered By",
+        "dataType": "XCN",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 11,
+        "name": "Verified By",
+        "dataType": "XCN",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 12,
+        "name": "Ordering Provider",
+        "dataType": "XCN",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 13,
+        "name": "Enterer's Location",
+        "dataType": "PL",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 14,
+        "name": "Call Back Phone Number",
+        "dataType": "XTN",
+        "usage": "O",
+        "cardinality": "[0..2]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 15,
+        "name": "Order Effective Date/Time",
+        "dataType": "DTM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 16,
+        "name": "Order Control Code Reason",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 17,
+        "name": "Entering Organization",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 18,
+        "name": "Entering Device",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 19,
+        "name": "Action By",
+        "dataType": "XCN",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 20,
+        "name": "Advanced Beneficiary Notice Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 21,
+        "name": "Ordering Facility Name",
+        "dataType": "XON",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 22,
+        "name": "Ordering Facility Address",
+        "dataType": "XAD",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 23,
+        "name": "Ordering Facility Phone Number",
+        "dataType": "XTN",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 24,
+        "name": "Ordering Provider Address",
+        "dataType": "XAD",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 25,
+        "name": "Order Status Modifier",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 26,
+        "name": "Advanced Beneficiary Notice Override Reason",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 27,
+        "name": "Filler's Expected Availability Date/Time",
+        "dataType": "DTM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 28,
+        "name": "Confidentiality Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 29,
+        "name": "Order Type",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 30,
+        "name": "Enterer Authorization Mode",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 31,
+        "name": "Parent Universal Service Identifier",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 32,
+        "name": "Advanced Beneficiary Notice Date",
+        "dataType": "DT",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 33,
+        "name": "Alternate Placer Order Number",
+        "dataType": "CX",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 34,
+        "name": "Order Workflow Profile",
+        "dataType": "EI",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      }
+    ],
     "OBR":  [
   {
     "fieldNumber": 1,
@@ -1112,6 +1404,1317 @@
         "maxLength": "60",
         "usage": "O",
         "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }
+    ],
+    "SPM": [
+      {
+        "fieldNumber": 1,
+        "name": "Set ID",
+        "dataType": "SI",
+        "maxLength": "4",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 2,
+        "name": "Specimen ID",
+        "dataType": "EIP",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 3,
+        "name": "Speciment Parent Ids",
+        "dataType": "EIP",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 4,
+        "name": "Specimen Type",
+        "dataType": "CWE",
+        "usage": "R",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 5,
+        "name": "Specimen Type Modifier",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 6,
+        "name": "Speciment Additives",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 7,
+        "name": "Specimen Collection Method",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 8,
+        "name": "Specimen Source Site",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 9,
+        "name": "Speciment Source Site Modifier",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 10,
+        "name": "Specimen Collection Site",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 11,
+        "name": "Specimen Role",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 12,
+        "name": "Speciment Collection Amount",
+        "dataType": "CQ",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 13,
+        "name": "Grouped Specimen Count",
+        "dataType": "NM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 14,
+        "name": "Specimen Description",
+        "dataType": "ST",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 15,
+        "name": "Specimen Handling Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 16,
+        "name": "Specimen Risk Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 17,
+        "name": "Specimen Collection Date/Time",
+        "dataType": "DR",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 18,
+        "name": "Specimen Received Date/time",
+        "dataType": "DTM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 19,
+        "name": "Specimen Expiration Date/Time",
+        "dataType": "DTM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 20,
+        "name": "Specimen Availability",
+        "dataType": "ID",
+        "maxLength": "1",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 21,
+        "name": "Specimen Reject Reason",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 22,
+        "name": "Specimen Quality",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 23,
+        "name": "Specimen Appropriateness",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 24,
+        "name": "Specimen Condition",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 25,
+        "name": "Specimen Current Quantity",
+        "dataType": "CQ",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 26,
+        "name": "Number Of Specimen Containers",
+        "dataType": "NM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 27,
+        "name": "Container Type",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 28,
+        "name": "Container Condition",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 29,
+        "name": "Specimen Child Role",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 30,
+        "name": "Accession Id",
+        "dataType": "CX",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 31,
+        "name": "Other Specimen Id",
+        "dataType": "CX",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 32,
+        "name": "Shipment Id",
+        "dataType": "EI",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }
+    ],
+    "TQ1": [
+     {
+       "fieldNumber": 1,
+       "name": "Set ID",
+       "dataType": "SI",
+       "maxLength": "4",
+       "usage": "O",
+       "cardinality": "[0..1]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 2,
+       "name": "Quantity",
+       "dataType": "CQ",
+       "usage": "O",
+       "cardinality": "[0..1]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 3,
+       "name": "Repeat Pattern",
+       "dataType": "RPT",
+       "usage": "O",
+       "cardinality": "[0..*]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 4,
+       "name": "Explicit Time",
+       "dataType": "TM",
+       "usage": "O",
+       "cardinality": "[0..*]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 5,
+       "name": "Relative Time And Units",
+       "dataType": "CQ",
+       "usage": "O",
+       "cardinality": "[0..*]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 6,
+       "name": "Service Duration",
+       "dataType": "CQ",
+       "usage": "O",
+       "cardinality": "[0..1]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 7,
+       "name": "Start Date/Time",
+       "dataType": "DTM",
+       "usage": "O",
+       "cardinality": "[0..1]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 8,
+       "name": "End Date/Time",
+       "dataType": "DTM",
+       "usage": "O",
+       "cardinality": "[0..1]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 9,
+       "name": "Priority",
+       "dataType": "CWE",
+       "usage": "O",
+       "cardinality": "[0..*]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 10,
+       "name": "Condition Text",
+       "dataType": "TX",
+       "usage": "O",
+       "cardinality": "[0..1]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 11,
+       "name": "Text Instruction",
+       "dataType": "TX",
+       "usage": "O",
+       "cardinality": "[0..1]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 12,
+       "name": "Conjunction",
+       "dataType": "ID",
+       "usage": "O",
+       "cardinality": "[0..1]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 13,
+       "name": "Occurrence Duration",
+       "dataType": "CQ",
+       "usage": "O",
+       "cardinality": "[0..1]",
+       "conformance": "",
+       "notes": ""
+     },{
+       "fieldNumber": 14,
+       "name": "Total Occurrences",
+       "dataType": "NM",
+       "usage": "O",
+       "cardinality": "[0..1]",
+       "conformance": "",
+       "notes": ""
+     }
+   ],
+    "PD1": [
+      {
+        "fieldNumber": 1,
+        "name": "Living Dependency",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 2,
+        "name": "Living Arrangement",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 3,
+        "name": "Patient Primary Facility",
+        "dataType": "XON",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 4,
+        "name": "Patient Primary Care Provider Name and ID no",
+        "dataType": "ST",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 5,
+        "name": "Student Indicator",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 6,
+        "name": "Handicap",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 7,
+        "name": "Living Will Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 8,
+        "name": "Organ Donor Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 9,
+        "name": "Separate Bill",
+        "dataType": "ID",
+        "maxLength": 1,
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 10,
+        "name": "Duplicate Patient",
+        "dataType": "CX",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 11,
+        "name": "Publicity Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 12,
+        "name": "Protection Indicator",
+        "dataType": "ID",
+        "maxLength": 1,
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 13,
+        "name": "Protection Indicator Effective Date",
+        "dataType": "DT",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 14,
+        "name": "Place of Worship",
+        "dataType": "XON",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 15,
+        "name": "Advance Directive Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 16,
+        "name": "Immunization Registry Status",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 17,
+        "name": "Immunization Registry Status Effective Date",
+        "dataType": "DT",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 18,
+        "name": "Publicity Code Effective date",
+        "dataType": "DT",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 19,
+        "name": "Military Branch",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 20,
+        "name": "Military Rank/Grade",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 21,
+        "name": "Military Status",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 2,
+        "name": "Advance Directive Last Verified Date",
+        "dataType": "DT",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }
+    ],
+    "PV1": [
+      {
+        "fieldNumber": 1,
+        "name": "Set Id",
+        "dataType": "SI",
+        "maxLength": 4,
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 2,
+        "name": "Patient Class",
+        "dataType": "CWE",
+        "usage": "R",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 3,
+        "name": "Assigned Patient Location",
+        "dataType": "PL",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 4,
+        "name": "Admission Type",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 5,
+        "name": "Preadmit Number",
+        "dataType": "CX",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 6,
+        "name": "Prior Patient Location",
+        "dataType": "PL",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 7,
+        "name": "Attending Doctor",
+        "dataType": "XCN",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 8,
+        "name": "Referring Doctor",
+        "dataType": "XCN",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 9,
+        "name": "Consulting Doctor",
+        "dataType": "XCN",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 10,
+        "name": "Hospital Service",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 11,
+        "name": "Temporary Location",
+        "dataType": "PL",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 12,
+        "name": "Preadmit Test Indicator",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 13,
+        "name": "Re-admission  indicator",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 14,
+        "name": "Admin Source",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 15,
+        "name": "Ambulatory Status",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 16,
+        "name": "VIP Indicator",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 17,
+        "name": "Admitting Doctor",
+        "dataType": "XCN",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 18,
+        "name": "Patient Type",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 19,
+        "name": "Visit Number",
+        "dataType": "CX",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 20,
+        "name": "Financial Class",
+        "dataType": "FC",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 21,
+        "name": "Charge Price Indicator",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 22,
+        "name": "Courtesy Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 23,
+        "name": "Credit Rating",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 24,
+        "name": "Contract Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 25,
+        "name": "Contract Effective Date",
+        "dataType": "DT",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 26,
+        "name": "Contract Amount",
+        "dataType": "NM",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 27,
+        "name": "Contract Period",
+        "dataType": "NM",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 28,
+        "name": "Interest Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 29,
+        "name": "Transfer to Bad Debt Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 30,
+        "name": "Transfer to Bad Debt Date",
+        "dataType": "DT",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 31,
+        "name": "Bad Debt Agency Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 32,
+        "name": "Bad Debt Transfer Amount",
+        "dataType": "NM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 33,
+        "name": "Bad debt Recovery Amount",
+        "dataType": "NM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 34,
+        "name": "Delete Account Indicator",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 35,
+        "name": "Delete Account Date",
+        "dataType": "DT",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 36,
+        "name": "Discharge Disposition",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 37,
+        "name": "Discharged To Location",
+        "dataType": "DLD",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 38,
+        "name": "Diet Type",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 39,
+        "name": "Servicing Facility",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 40,
+        "name": "Bed Status",
+        "dataType": "ST",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 41,
+        "name": "Account Status",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 42,
+        "name": "Pending Location",
+        "dataType": "PL",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 43,
+        "name": "Prior Temporary Location",
+        "dataType": "PL",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 44,
+        "name": "Admin Date/Time",
+        "dataType": "DTM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 45,
+        "name": "Discharge Date/Time",
+        "dataType": "DTM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 46,
+        "name": "Current Patient Balance",
+        "dataType": "NM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 47,
+        "name": "Total Charges",
+        "dataType": "NM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 48,
+        "name": "Total Adjustments",
+        "dataType": "NM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 49,
+        "name": "Total Payments",
+        "dataType": "NM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 50,
+        "name": "Alternate Visit Id",
+        "dataType": "CX",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 51,
+        "name": "Visit Indicator",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 52,
+        "name": "Other Healthcare Provider",
+        "dataType": "ST",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 53,
+        "name": "Service Episode Description",
+        "dataType": "ST",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 54,
+        "name": "Service Episode Identifier",
+        "dataType": "CX",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }
+    ],
+    "NK1": [
+      {
+        "fieldNumber": 1,
+        "name": "Set ID",
+        "dataType": "SI",
+        "maxLength": 4,
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 2,
+        "name": "Name",
+        "dataType": "ST",
+        "usage": "X",
+        "cardinality": "[0..0]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 3,
+        "name": "Relationship",
+        "dataType": "CE",
+        "usage": "RE",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 4,
+        "name": "Address",
+        "dataType": "XAD",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 5,
+        "name": "Phone Number",
+        "dataType": "ST",
+        "usage": "X",
+        "cardinality": "[0..0]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 6,
+        "name": "Business Phone Number",
+        "dataType": "ST",
+        "usage": "X",
+        "cardinality": "[0..0]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 7,
+        "name": "Contact Role",
+        "dataType": "CE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 8,
+        "name": "Start Date",
+        "dataType": "DT",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 9,
+        "name": "End Date",
+        "dataType": "DT",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 10,
+        "name": "Next of Kin/Assoc Parties Job Title",
+        "dataType": "ST",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 11,
+        "name": "Next of Kin/Assoc Parties Job Code/Class",
+        "dataType": "JCC",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 12,
+        "name": "Next of Kin/ Assoc Parties Employee Number",
+        "dataType": "CX",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 13,
+        "name": "Organization Name - NK1",
+        "dataType": "XON",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 14,
+        "name": "Marital Status",
+        "dataType": "CE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 15,
+        "name": "Administrative Sex",
+        "dataType": "IS",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 16,
+        "name": "Date/Time of Birth",
+        "dataType": "TS",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 17,
+        "name": "Living Dependency",
+        "dataType": "IS",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 18,
+        "name": "Ambulatory Status",
+        "dataType": "IS",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 19,
+        "name": "Citizenship",
+        "dataType": "CE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 20,
+        "name": "Primary Language",
+        "dataType": "CE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 21,
+        "name": "Living Arrangements",
+        "dataType": "IS",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 22,
+        "name": "Publicity Code",
+        "dataType": "CE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 23,
+        "name": "Protection Indicator",
+        "dataType": "ID",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 24,
+        "name": "Student Indicator",
+        "dataType": "IS",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 25,
+        "name": "Religion",
+        "dataType": "CE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 26,
+        "name": "Mother's Maiden Name",
+        "dataType": "ST",
+        "usage": "X",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 27,
+        "name": "Nationality",
+        "dataType": "CE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 28,
+        "name": "Ethnic Group",
+        "dataType": "CE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 29,
+        "name": "Contact Reason",
+        "dataType": "CE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 30,
+        "name": "Contact Person's Name",
+        "dataType": "ST",
+        "usage": "X",
+        "cardinality": "[0..0]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 31,
+        "name": "Contact Person's Telephone Number",
+        "dataType": "ST",
+        "usage": "X",
+        "cardinality": "[0..0]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 32,
+        "name": "Contact Person's Address",
+        "dataType": "XAD",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 33,
+        "name": "Next of Kin/Associated party's Identifier",
+        "dataType": "ST",
+        "usage": "X",
+        "cardinality": "[0..0]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 34,
+        "name": "Job Status",
+        "dataType": "IS",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 35,
+        "name": "Race",
+        "dataType": "CE",
+        "usage": "RE",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 36,
+        "name": "Handicap",
+        "dataType": "IS",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 37,
+        "name": "Contact Person SSN",
+        "dataType": "ST",
+        "usage": "X",
+        "cardinality": "[0..0]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 38,
+        "name": "Next of Kin Birthplace",
+        "dataType": "ST",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      },{
+        "fieldNumber": 39,
+        "name": "VIP Indicator",
+        "dataType": "ST",
+        "usage": "X",
+        "cardinality": "[0..0]",
         "conformance": "",
         "notes": ""
       }
