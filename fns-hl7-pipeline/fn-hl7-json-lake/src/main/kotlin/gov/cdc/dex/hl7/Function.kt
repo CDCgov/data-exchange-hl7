@@ -117,7 +117,7 @@ class Function {
         eventHubSendOkName: String
     ) {
         val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-        val bumblebee = HL7JsonTransformer.getTransformerWithResource(hl7message, fnConfig.profile)
+        val bumblebee = HL7JsonTransformer.getTransformerWithResource(hl7message, FunctionConfig.PROFILE_FILE_PATH)
         val fullHL7 = bumblebee.transformMessage()
 
         val processMD = HL7JSONLakeProcessMetadata(
