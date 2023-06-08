@@ -16,7 +16,7 @@ on:
         - deploy-mmg-validator.yml
         - deploy-hl7-json-lake.yml
         - deploy-structure-validator.yml
-        - dep-loy-cache-loader.yml
+        - deploy-cache-loader.yml
         # - deploy-svc-cloud-transport.yml
   pull_request:
     branches:
