@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>gov.cdc.dex</groupId>
+    <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>svc-cloud-transport</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
@@ -275,6 +275,7 @@
                 </executions>
             </plugin>
 
+	    <!-- https://github.com/microsoft/azure-maven-plugins/blob/develop/azure-webapp-maven-plugin/README.md#configuration -->
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-webapp-maven-plugin</artifactId>
@@ -289,15 +290,16 @@
                     <appServicePlanName>${functionServicePlan}</appServicePlanName>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                     <region>${functionRegion}</region>
-
+		    
                     <runtime>
                         <os>Linux</os>
-                        <javaVersion>Java 11</javaVersion>
                         <webContainer>Java SE</webContainer>
+			<javaVersion>Java 11</javaVersion>
                     </runtime>
                     <deployment>
                         <resources>
                             <resource>
+			        <type>jar</type>
                                 <directory>${project.basedir}/target</directory>
                                 <includes>
                                     <include>*.jar</include>
