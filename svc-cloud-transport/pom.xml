@@ -279,18 +279,21 @@
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-webapp-maven-plugin</artifactId>
-                <version>2.2.0</version>
+                <version>2.9.0</version>
                 <configuration>
-                    <schemaVersion>v2</schemaVersion>
+    		    <schemaVersion>v2</schemaVersion>
+		    <resourceGroup>${functionResourceGroup}</resourceGroup>
+
                     <appName>cloud-svc-transport-${environment-id}-eastus</appName>
                     <appServicePlanResourceGroup>${functionResourceGroup}</appServicePlanResourceGroup>
-                     <!-- function app resource group -->
-                    <resourceGroup>${functionResourceGroup}</resourceGroup>
-                    <!-- function app service plan name -->
+
                     <appServicePlanName>${functionServicePlan}</appServicePlanName>
-                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <region>${functionRegion}</region>
-		    
+                    <subscriptionId>${subscriptionID}</subscriptionId>
+		    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
                     <runtime>
                         <os>Linux</os>
                         <webContainer>Java SE</webContainer>
