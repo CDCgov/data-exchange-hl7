@@ -13,8 +13,8 @@ on:
         - deploy-receiver-debatcher.yml
         - deploy-redactor.yml
         - deploy-lake-segs-transformer.yml
-        - deploy-mmg-validator.yml
-        - deploy-hl7-json-lake.yml
+#        - deploy-mmg-validator.yml
+#        - deploy-hl7-json-lake.yml
         - deploy-structure-validator.yml
         - deploy-cache-loader.yml
         # - deploy-svc-cloud-transport.yml
