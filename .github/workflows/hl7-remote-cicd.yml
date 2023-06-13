@@ -18,13 +18,12 @@ on:
         - deploy-structure-validator.yml
         - deploy-cache-loader.yml
         # - deploy-svc-cloud-transport.yml
-  pull_request:
+  push:
     branches:
       - 'develop'
-      - 'main'
     paths:
     - fns-hl7-pipeline/**
-    - mrr/**
+    - fn-cache-loader/**
     - svc-cloud-transport/**
 jobs:
   invoke-manual-cicd-trigger:
