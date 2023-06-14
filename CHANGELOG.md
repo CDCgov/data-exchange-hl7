@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.21] - 2023-06-14
+
+	- Added Hepatitis 2.0 MMG
+	- Added PHLIP FLU and PHLIP VPD Profiles
+	- Bug fixes on PHIN Spec 3.x
+	- Enhancements on Function for Performance purposes
+	- Improved HL7 Transform to not populate fully empty objects
+	- Unit test and coverage for MMG-Validator
+	- Added redaction fields for PHLIP
+	- Adding CI/CD process to deploy code changes after PRs.
 
 
 
