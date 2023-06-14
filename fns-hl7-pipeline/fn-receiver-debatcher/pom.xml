@@ -112,37 +112,35 @@
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 
         <!-- Plugins Dependencies Versions -->
-        <!-- <pluginManagement> -->
-        <!--     <plugins> -->
-        <!--         <plugin> -->
-        <!--             <groupId>com.microsoft.azure</groupId> -->
-        <!--             <artifactId>azure-functions-maven-plugin</artifactId> -->
-        <!--             <version>${functions.plugin.version}</version> -->
-        <!--         </plugin> -->
-        <!--         <plugin> -->
-        <!--             <groupId>org.jetbrains.kotlin</groupId> -->
-        <!--             <artifactId>kotlin-maven-plugin</artifactId> -->
-        <!--             <version>${kotlin.version}</version> -->
-        <!--         </plugin> -->
-        <!--         <plugin> -->
-        <!--             <groupId>org.apache.maven.plugins</groupId> -->
-        <!--             <artifactId>maven-resources-plugin</artifactId> -->
-        <!--             <version>3.1.0</version> -->
-        <!--         </plugin> -->
-        <!--         <plugin> -->
-        <!--             <groupId>org.apache.maven.plugins</groupId> -->
-        <!--             <artifactId>maven-dependency-plugin</artifactId> -->
-        <!--             <version>3.1.1</version> -->
-        <!--         </plugin> -->
-        <!--         <plugin> -->
-        <!--             <groupId>org.apache.maven.plugins</groupId> -->
-        <!--             <artifactId>maven-clean-plugin</artifactId> -->
-        <!--             <version>3.1.0</version> -->
-        <!--         </plugin> -->
-        <!--     </plugins> -->
-        <!-- </pluginManagement> -->
-
-	
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.microsoft.azure</groupId>
+                    <artifactId>azure-functions-maven-plugin</artifactId>
+                    <version>${functions.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-maven-plugin</artifactId>
+                    <version>${kotlin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
 
         <plugins>
             <plugin>
