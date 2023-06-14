@@ -8,5 +8,5 @@ NTE|3|text|Note obx 1a
 NTE|$|text|Note obx 1b
 OBR|2|""|A0803798^^Maven EDSS^ISO|NOTF^Notification Subject^2.16.840.1.114222.4.5.274|||20110103000000|||||||||||||||20111231000000|||C||||||10220^Tuberculosis^2.16.840.1.114222.4.5.277
 NTE|5|text|Note obr 2
-OBX|2|ST|Q1|1|Q2||||||F
+OBX|2|SN|Q1|1|+^2^-^4||||||F
 NTE|6|text|Note obx 2
