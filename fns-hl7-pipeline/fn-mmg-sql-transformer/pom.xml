@@ -217,6 +217,11 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.1.1</version>
                 <executions>
@@ -289,7 +294,7 @@
         <repository>
             <id>ede-releases</id>
             <url>${maven-releases-url}</url>
-        </repository>
+	</repository>
         <snapshotRepository>
             <id>ede-snapshots</id>
             <url>${maven-snapshot-url}</url>

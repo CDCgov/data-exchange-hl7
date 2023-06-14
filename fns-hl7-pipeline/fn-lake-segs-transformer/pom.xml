@@ -112,10 +112,10 @@
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <version>${functions.plugin.version}</version>
                 <configuration>
-                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
+                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
@@ -176,6 +176,11 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -310,7 +315,7 @@
         <repository>
             <id>ede-releases</id>
             <url>${maven-releases-url}</url>
-        </repository>
+	</repository>
         <snapshotRepository>
             <id>ede-snapshots</id>
             <url>${maven-snapshot-url}</url>
