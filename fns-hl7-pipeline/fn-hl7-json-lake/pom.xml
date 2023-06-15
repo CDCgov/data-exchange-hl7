@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>hl7-json-lake-fn</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>DEX HL7-JSON-Lake-Pipeline :: hl7l-json-lake-fn</name>
