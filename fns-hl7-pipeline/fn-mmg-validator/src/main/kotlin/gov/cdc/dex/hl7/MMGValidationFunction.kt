@@ -7,8 +7,6 @@ import com.google.gson.JsonParser
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.azure.EventHubSender
-import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.MmgValidatorProcessMetadata
 import gov.cdc.dex.hl7.model.ReportStatus
@@ -45,7 +43,7 @@ class MMGValidationFunction {
                 consumerGroup = "%EventHubConsumerGroup%",)
                 message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext) {
+        context: ExecutionContext): JsonObject{
         context.logger.info("DEX::Received Event!")
         //val startTime =  Date().toIsoString()
         // context.logger.info("received event: --> $message")
@@ -57,12 +55,13 @@ class MMGValidationFunction {
         val mmgValidator = MmgValidator(fnConfig.redisProxy)
         val validMsgsList = mutableListOf<String>()
         val badMsgsList = mutableListOf<String>()
+        var inputEvent = JsonObject()
 
         message.forEachIndexed {
                 messageIndex : Int, singleMessage: String? ->
             context.logger.info("DEX::Processing message $messageIndex")
             val startTime =  Date().toIsoString()
-            val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+            inputEvent = JsonParser.parseString(singleMessage) as JsonObject
             try {
                 val hl7ContentBase64 = JsonHelper.getValueFromJson("content", inputEvent).asString
                 val hl7ContentDecodedBytes = Base64.getDecoder().decode(hl7ContentBase64)
@@ -109,8 +108,6 @@ class MMGValidationFunction {
                         badMsgsList.add(gson.toJson(inputEvent))
 //                    fnConfig.evHubSender.send(evHubTopicName=ehDestination, message=gson.toJson(inputEvent))
                     context.logger.info("DEX::Processed messageUUID: $messageUUID, status: ${mmgReport.status}")
-
-
                 } catch (e: Exception) {
                     //TODO::  - update retry counts
                     context.logger.severe("DEX::Unable to process Message due to exception: ${e.message}")
@@ -136,6 +133,7 @@ class MMGValidationFunction {
         //Send all messages in batch:
         fnConfig.evHubSender.send(fnConfig.evHubOkName, validMsgsList.toList())
         fnConfig.evHubSender.send(fnConfig.evHubErrorName, badMsgsList.toList())
+        return inputEvent
     } // .eventHubProcessor
 
     @FunctionName("validate-mmg")

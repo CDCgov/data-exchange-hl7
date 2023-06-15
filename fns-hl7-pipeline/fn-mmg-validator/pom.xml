@@ -247,6 +247,26 @@
                     </filesets>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <argLine> --illegal-access=permit </argLine>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <forkCount>2</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <argLine>${surefireArgLine}</argLine>
+                    <environmentVariables>
+                        <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
+                        <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                        <EventHubConnectionString>${ehString}</EventHubConnectionString>
+                        <EventHubSendOkName>hl7-mmg-validation-ok</EventHubSendOkName>
+                        <EventHubSendErrsName>hl7-mmg-validation-err</EventHubSendErrsName>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
             <!-- added for jacoco -->
             <plugin>
                 <groupId>org.jacoco</groupId>
