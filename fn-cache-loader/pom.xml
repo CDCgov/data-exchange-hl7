@@ -267,5 +267,4 @@
             <url>${maven-snapshot-url}</url>
         </snapshotRepository>
     </distributionManagement>
-      
 </project>
