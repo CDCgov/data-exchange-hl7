@@ -25,6 +25,8 @@ class Function {
 
     companion object {
         val gson: Gson = GsonBuilder().serializeNulls().create()
+
+        val fnConfig = FunctionConfig()
     }
     @FunctionName("Redactor")
     fun eventHubProcessor(
@@ -40,22 +42,19 @@ class Function {
     ) {
         //context.logger.info("------ received event: ------> message: --> $message")
 
-        val startTime = Date().toIsoString()
-        val evHubNameOk = System.getenv("EventHubSendOkName")
-        val evHubNameErrs = System.getenv("EventHubSendErrsName")
-        val evHubConnStr = System.getenv("EventHubConnectionString")
 
-        val ehSender = EventHubSender(evHubConnStr)
-        var hl7Content : String
-        var metadata : JsonObject
-        var filePath : String
-        var messageUUID : String
         val helper = Helper()
 
         var nbrOfMessages = 0
         message.forEach { singleMessage: String? ->
            // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
+            val startTime = Date().toIsoString()
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+            var hl7Content : String
+            var metadata : JsonObject
+            var filePath : String
+            var messageUUID : String
+
             try {
                 // Extract from event
                 hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
@@ -66,7 +65,7 @@ class Function {
 
                 val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
 
-                context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+                context.logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 val report = helper.getRedactedReport(hl7Content, messageType)
                 if(report != null) {
@@ -82,19 +81,18 @@ class Function {
                     //Update Summary element.
                     val summary = SummaryInfo("REDACTED")
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                    context.logger.info("Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $evHubNameOk ")
-                    ehSender.send(evHubNameOk, gson.toJson(inputEvent))
+                    context.logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
+                    fnConfig.evHubSender.send(fnConfig.evHubOkName, gson.toJson(inputEvent))
                 }
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
-                context.logger.severe("Unable to process Message due to exception: ${e.message}")
-                e.printStackTrace()
+                context.logger.severe("DEX:: Unable to process Message due to exception: ${e.message}")
                 val problem = Problem(RedactorProcessMetadata.REDACTOR_PROCESS, e, false, 0, 0)
 
                 val summary = SummaryInfo("FAILURE", problem)
                 inputEvent.add("summary", summary.toJsonElement())
-                ehSender.send(evHubNameErrs, gson.toJson(inputEvent))
+                fnConfig.evHubSender.send(fnConfig.evHubErrorName, gson.toJson(inputEvent))
             }
             nbrOfMessages++
 

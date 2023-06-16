@@ -7,18 +7,9 @@ This service creates a HL7 JSON Lake from a given HL7 message.
 
 # Details:
 
-## Lake of Segments schema:
+## HL7 Json Model
 
-Each segment in the HL7 message gets broken down into the following fields:
-
-- **Segment_number**: a sequential number of that given segment, matching the line number.
-- **Segment**: The actual segment this record represents. The full string with the entire segment is present here.
-- **Parent_segments**: The full hierarchy of the parent segments for the segment represented in this record. For MSH segments, parent_segment will be NULL. All other segments should have at least one parent.
-
-Ex.:
-- Parent segment of a PID is the MSH.
-- Parent segment of an OBR is the MSH.
-- Parent segment of an OBX is the MSH and the OBR.
+The Json model is created based on HL7-PET profiles that indicates the segment hierarchy
 
 The hierarchy of segments is fully configurable. Currently, we're using the following configuration:
 
