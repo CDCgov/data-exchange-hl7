@@ -21,6 +21,7 @@ import gov.cdc.hl7.HL7StaticParser
 import java.io.*
 import java.util.*
 import java.util.logging.Logger
+import org.slf4j.LoggerFactory
 
 
 /**
@@ -40,6 +41,7 @@ class Function {
         val gson: Gson = GsonBuilder().serializeNulls().create()
 
         val fnConfig = FunctionConfig()
+        private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
     }
     @FunctionName("receiverdebatcher001")
     fun eventHubProcessor(
@@ -51,7 +53,8 @@ class Function {
                 messages: List<String>?,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext): DexEventPayload? {
-        context.logger.info("DEX::Received BLOB_CREATED event!")
+        
+        logger.info("DEX::Received BLOB_CREATED event!")
 
         var msgEvent:DexEventPayload? = null
 
@@ -64,7 +67,7 @@ class Function {
 
                     // Pick up blob metadata
                     val blobName= event.evHubData.url.substringAfter("/hl7ingress/")
-                    context.logger.info("DEX::Reading blob: $blobName")
+                    logger.info("DEX::Reading blob: $blobName")
                     val blobClient = fnConfig.azBlobProxy.getBlobClient(blobName)
                     //Create Map of Metadata with lower case keys
                     val metaDataMap =  blobClient.properties.metadata.mapKeys { it.key.lowercase() }
@@ -82,7 +85,7 @@ class Function {
                         originalFileTimestamp = metaDataMap["original_file_timestamp"]
                     ) // .hl7MessageMetadata
                     //Validate metadata
-                    val isValidMessage = validateMessageMetaData(metaDataMap, context)
+                    val isValidMessage = validateMessageMetaData(metaDataMap)
                     var messageType = metaDataMap["message_type"]
                     if(messageType.isNullOrEmpty()) {
                         messageType = HL7MessageType.UNKNOWN.name
@@ -93,7 +96,7 @@ class Function {
                         val (metadata, summary) = buildMetadata(STATUS_ERROR, eventHubMD[nbrOfMessages], startTime, provenance, "Message missing required Meta Data.")
                         // send empty array as message content when content is invalid
                         //Put Unknown as message type if messageType is missing else use messageType
-                        msgEvent = prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName, context)
+                        msgEvent = prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
                     } else {
                         // Read Blob File by Lines
                         // -------------------------------------
@@ -112,9 +115,9 @@ class Function {
                                         if ( mshCount > 1 ) {
                                             provenance.singleOrBatch = Provenance.BATCH_FILE
                                             provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
-                                            val messageInfo = getMessageInfo(metaDataMap, fnConfig.mmgUtil, currentLinesArr.joinToString("\n" ), context.logger)
+                                            val messageInfo = getMessageInfo(metaDataMap, fnConfig.mmgUtil, currentLinesArr.joinToString("\n" ))
                                             val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
-                                            msgEvent = prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName, context)
+                                            msgEvent = prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName)
                                             provenance.messageIndex++
                                         }
                                         currentLinesArr.clear()
@@ -127,13 +130,13 @@ class Function {
                         provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
                         msgEvent = if (mshCount > 0) {
                             val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
-                            val messageInfo = getMessageInfo(metaDataMap, fnConfig.mmgUtil, currentLinesArr.joinToString("\n" ), context.logger)
-                            prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName, context)
+                            val messageInfo = getMessageInfo(metaDataMap, fnConfig.mmgUtil, currentLinesArr.joinToString("\n" ))
+                            prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName)
                         } else {
                             // no valid message -- send to error queue
                             val (metadata, summary) = buildMetadata(STATUS_ERROR, eventHubMD[nbrOfMessages], startTime, provenance, "No valid message found.")
                             // send empty array as message content when content is invalid
-                            prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName, context)
+                            prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
                         }
                     }
                 } // .if
@@ -142,7 +145,7 @@ class Function {
         return msgEvent
     } // .eventHubProcess
 
-    private fun getMessageInfo(metaDataMap: Map<String, String>, mmgUtil: MmgUtil, message: String, logger: Logger): DexMessageInfo {
+    private fun getMessageInfo(metaDataMap: Map<String, String>, mmgUtil: MmgUtil, message: String): DexMessageInfo {
             val startTime = System.currentTimeMillis()
             val eventCode = extractValue(message, EVENT_CODE_PATH)
             //READ FROM METADATA FOR ELR
@@ -191,18 +194,18 @@ class Function {
         return DexMetadata(provenance, listOf(processMD)) to summary
     }
 
-    private fun prepareAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String, context: ExecutionContext) : DexEventPayload {
+    private fun prepareAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String) : DexEventPayload {
         val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
         val msgEvent = DexEventPayload(contentBase64, messageInfo, metadata, summary)
-        context.logger.info("DEX::Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
+        logger.info("DEX::Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
         val jsonMessage = gson.toJson(msgEvent)
         eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
-        context.logger.info("DEX::Processed and Sent to event hub $eventHubName Message: --> messageUUID: ${msgEvent.messageUUID}")
+        logger.info("DEX::Processed and Sent to event hub $eventHubName Message: --> messageUUID: ${msgEvent.messageUUID}")
         //println(msgEvent)
         return msgEvent
     }
 
-    private fun validateMessageMetaData(metaDataMap: Map<String, String>, context: ExecutionContext):Boolean {
+    private fun validateMessageMetaData(metaDataMap: Map<String, String>):Boolean {
         var isValid = true
         //Check if required Metadata fields are present
         val messageType = metaDataMap["message_type"]
@@ -216,8 +219,7 @@ class Function {
                 isValid = false
             }
         }
-        context.logger.info("DEX::Metadata Info: --> isValid: $isValid;  messageType: ${messageType}, route: ${route}, reportingJurisdiction: $reportingJurisdiction")
-
+        logger.info("DEX::Metadata Info: --> isValid: $isValid;  messageType: ${messageType}, route: ${route}, reportingJurisdiction: $reportingJurisdiction")
         return isValid
     }
 

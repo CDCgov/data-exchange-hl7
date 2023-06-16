@@ -17,7 +17,7 @@ import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
-
+import org.slf4j.LoggerFactory
 
 /**
  * Azure function with event hub trigger to redact messages   */
