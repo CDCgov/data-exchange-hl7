@@ -16,6 +16,7 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
+import org.slf4j.LoggerFactory
 
 
 /**
@@ -30,6 +31,7 @@ class Function {
         val PROCESS_STATUS_EXCEPTION = "FAILURE"
 
         val fnConfig = FunctionConfig()
+        private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
 
     } // .companion object
 
@@ -71,7 +73,7 @@ class Function {
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
 
-                context.logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+                logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 // 
                 // Process Message for SQL Model
@@ -87,22 +89,22 @@ class Function {
                         gsonWithNullsOn,
                         inputEvent
                     )
-                    context.logger.info("DEX::Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendOkName")
+                    logger.info("DEX::Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendOkName")
 
                 } catch (e: Exception) {
 
-                    context.logger.severe("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
+                    logger.severe("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
 
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
                     processMessageError(e, inputEvent, fnConfig.eventHubSendErrsName, fnConfig.evHubSender, gsonWithNullsOn)
 
-                    context.logger.info("Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendErrsName")
+                    logger.info("Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendErrsName")
                 } // .catch
 
             } catch (e: Exception) {
 
                // message is bad, can't extract fields based on schema expected
-                context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                logger.severe("Unable to process Message due to exception: ${e.message}")
                 e.printStackTrace()
 
             } // .catch
@@ -151,7 +153,7 @@ class Function {
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
 
-                context.logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+                logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 //
                 // Process Message for SQL Model
@@ -169,21 +171,21 @@ class Function {
                         inputEvent
                     )
 
-                    context.logger.info("DEX::Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendOkName")
+                    logger.info("DEX::Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendOkName")
 
                 } catch (e: Exception) {
 
-                    context.logger.severe("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
+                    logger.severe("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
                     processMessageError(e, inputEvent, fnConfig.eventHubSendErrsName, fnConfig.evHubSender, gsonWithNullsOn)
 
-                    context.logger.info("DEX::Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendErrsName")
+                    logger.info("DEX::Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendErrsName")
                 } // .catch
 
             } catch (e: Exception) {
 
                 // message is bad, can't extract fields based on schema expected
-                context.logger.severe("DEX::Unable to process Message due to exception: ${e.message}")
+                logger.severe("DEX::Unable to process Message due to exception: ${e.message}")
 
             } // .catch
 
