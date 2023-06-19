@@ -5,11 +5,9 @@ import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.hl7.RedactInfo
 import scala.Tuple2
 import java.io.FileNotFoundException
-import java.util.*
 
 
 class Helper {
-    private val PATH_PID_5_2 = "PID-5[2]"
 
     fun getRedactedReport(msg: String, messageType: String, route: String = ""): Tuple2<String, List<RedactInfo>>? {
         val dIdentifier = DeIdentifier()
@@ -32,7 +30,7 @@ class Helper {
         val fileSuffix = "_config.txt"
         val routeConfigFile = "${route.lowercase()}$fileSuffix"
         val typeConfigFile = "${messageType.lowercase()}$fileSuffix"
-        // return without the '/' in front for use in metadata
+        // return without the '/' in front of the name for use in metadata
         return if (route.isNotEmpty() && this::class.java.getResource("/$routeConfigFile") != null) {
             routeConfigFile
         } else {
