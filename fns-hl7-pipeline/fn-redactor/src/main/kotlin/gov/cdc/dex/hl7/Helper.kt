@@ -33,7 +33,7 @@ class Helper {
         val routeConfigFile = "${route.lowercase()}$fileSuffix"
         val typeConfigFile = "${messageType.lowercase()}$fileSuffix"
         // return without the '/' in front for use in metadata
-        return if (this::class.java.getResource("/$routeConfigFile") != null) {
+        return if (route.isNotEmpty() && this::class.java.getResource("/$routeConfigFile") != null) {
             routeConfigFile
         } else {
             typeConfigFile
