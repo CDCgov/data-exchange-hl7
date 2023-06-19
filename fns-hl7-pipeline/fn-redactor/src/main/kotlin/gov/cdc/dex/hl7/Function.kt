@@ -62,7 +62,12 @@ class Function {
                 messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
 
                 val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
-                val route =  JsonHelper.getValueFromJson("message_info.route", inputEvent).asString
+                val routeElement = JsonHelper.getValueFromJson("message_info.route", inputEvent)
+                val route = if (routeElement.isJsonNull) {
+                    ""
+                } else {
+                    routeElement.asString
+                }
 
                 context.logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
