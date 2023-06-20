@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fn-redactor</groupId>
-    <artifactId>fn-redactor</artifactId>
+    <groupId>gov.cdc.dataexchange</groupId>
+    <artifactId>redactor</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
+    <!---->
     <name>Azure Java Functions</name>
 
     <properties>
@@ -65,31 +66,64 @@
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-          <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+
+	<!-- Plugins Dependencies Versions -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.microsoft.azure</groupId>
+                    <artifactId>azure-functions-maven-plugin</artifactId>
+                    <version>${functions.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-maven-plugin</artifactId>
+                    <version>${kotlin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <version>${azure.functions.maven.plugin.version}</version>
-                <configuration>
-                    <!-- function app name -->
-                    <appName>${functionAppName}</appName>
-                    <!-- function app resource group -->
+               <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
-                    <!-- function app service plan name -->
-                    <appServicePlanName>${functionServicePlan}</appServicePlanName>
-                    <!-- function app region-->
-                    <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details#supported-regions for all valid values -->
+                    <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-
+                    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
-                        <javaVersion>11</javaVersion>
-
+                        <javaVersion>${java_version}</javaVersion>
                     </runtime>
                     <appSettings>
+                        <!-- Run Azure Function from package file by default -->
+                        <property>
+                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
+                            <value>1</value>
+                        </property>
                         <property>
                             <name>FUNCTIONS_EXTENSION_VERSION</name>
                             <value>~4</value>
@@ -97,10 +131,6 @@
                         <property>
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
-                        </property>
-                        <property>
-                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
-                            <value>1</value>
                         </property>
                     </appSettings>
                 </configuration>
@@ -116,7 +146,7 @@
             <!--Remove obj folder generated by .NET SDK in maven clean-->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -125,6 +155,13 @@
                     </filesets>
                 </configuration>
             </plugin>
+
+	    <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+	    
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
@@ -179,10 +216,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
                     <environmentVariables>
                         <REDIS_CACHE_NAME>ocio-ede-dev-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
@@ -194,14 +228,6 @@
                         <EventHubSendOkName>hl7-redacted-ok</EventHubSendOkName>
                         <EventHubSendErrsName>hl7-recdeb-err</EventHubSendErrsName>
                     </environmentVariables>
-                </configuration>
-            </plugin>
-            <!--Jacoco Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
-                <configuration>
                     <argLine>
                         --illegal-access=permit
                     </argLine>
@@ -211,6 +237,7 @@
                     <argLine>${surefireArgLine}</argLine>
                 </configuration>
             </plugin>
+            <!--Jacoco Plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -262,4 +289,15 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>ede-releases</id>
+            <url>${maven-releases-url}</url>
+	</repository>
+        <snapshotRepository>
+            <id>ede-snapshots</id>
+            <url>${maven-snapshot-url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

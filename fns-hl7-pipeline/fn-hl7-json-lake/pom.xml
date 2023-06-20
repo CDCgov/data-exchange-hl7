@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>hl7-json-lake-fn</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>DEX HL7-JSON-Lake-Pipeline :: hl7l-json-lake-fn</name>
@@ -16,7 +16,7 @@
         <java_version>11</java_version>
         <kotlin.version>1.7.20</kotlin.version>
         <functions.version>3.0.0</functions.version>
-        <functions.plugin.version>1.19.0</functions.plugin.version>
+        <functions.plugin.version>1.26.0</functions.plugin.version>
         <maven.compiler.sjource>1.11</maven.compiler.sjource>
         <maven.compiler.target>1.11</maven.compiler.target>
         <functionAppName>ocio-ede-${environment-id}-hl7-json-lake-fn</functionAppName>
@@ -117,11 +117,15 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <version>${functions.plugin.version}</version>
-                <configuration>
+               <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
+                    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
@@ -185,6 +189,13 @@
                     </filesets>
                 </configuration>
             </plugin>
+	    
+	    <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+	    
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -198,6 +209,14 @@
         </plugins>
     </build>
 
-
-
+    <distributionManagement>
+        <repository>
+            <id>ede-releases</id>
+            <url>${maven-releases-url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ede-snapshots</id>
+            <url>${maven-snapshot-url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
