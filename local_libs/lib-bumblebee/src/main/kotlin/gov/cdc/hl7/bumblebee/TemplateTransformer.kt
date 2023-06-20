@@ -1,4 +1,4 @@
-package gov.cdc.ncezid.bumblebee
+package gov.cdc.hl7.bumblebee
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule

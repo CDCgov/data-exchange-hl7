@@ -1,5 +1,7 @@
 package test.gov.cdc.dex
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonNull
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import gov.cdc.dex.azure.EventHubMetadata
@@ -79,4 +81,13 @@ class MetadataTest {
 
         println(event)
     }
+
+//    @Test
+//    fun testNullValuesInJson() {
+//        val elem: JsonElement = JsonNull.INSTANCE
+//
+//        print(elem)
+//        //try {
+//        val str = elem.asString
+//    }
 }

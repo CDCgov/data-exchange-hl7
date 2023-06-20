@@ -143,7 +143,7 @@ internal class MmgUtilTest {
 
         val keys = redisProxy.getJedisClient().keys("mmg:*")
         println(keys)
-        val mapping = redisProxy.getJedisClient().get("condition:10110")
+        val mapping = redisProxy.getJedisClient().get("condition:10530")
         println(mapping)
     }
     @Test
@@ -187,4 +187,15 @@ internal class MmgUtilTest {
         println(routeList)
     }
 
+    @Test
+    fun testGetMMGInfoForBotulism() {
+        val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
+        val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
+
+        val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
+
+        val mmgUtil = MmgUtil(redisProxy)
+        val msgInfo = mmgUtil.getMMGMessageInfo("Gen_Case_Map_v1.0", null, "10530", "13")
+        print(msgInfo)
+    }
 }

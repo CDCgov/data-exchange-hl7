@@ -1,4 +1,4 @@
-package gov.cdc.ncezid.bumblebee
+package gov.cdc.hl7.bumblebee
 
 import groovy.json.JsonSlurper
 

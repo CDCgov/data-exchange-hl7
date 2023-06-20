@@ -171,8 +171,8 @@ publishing {
             }
 
             credentials {
-                username "$nexusUsername"
-                password "$nexusPassword"
+                username "uhc7-su"
+                password "P8!r12~N"
             }
         }
     }

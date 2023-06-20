@@ -1595,120 +1595,6 @@
 			"travel_state": null
 		}
 	],
-									
-   
-											 
-							 
-					   
-								   
-								 
-						   
-											
-									 
-											   
-						  
-										   
-										   
-	 
-									
-					  
-				  
-									   
-								 
-						   
-											
-									 
-											   
-						  
-									  
-									  
-	
-	
-   
-											 
-							  
-					
-								   
-								 
-						   
-											
-									 
-											   
-						  
-										
-										
-	 
-									
-					  
-				  
-									   
-								 
-						   
-											
-									 
-											   
-						  
-									  
-									  
-	
-	
-   
-											 
-							  
-							  
-								   
-								 
-						   
-											
-									 
-											   
-						  
-											   
-												  
-	 
-									
-					  
-				  
-									   
-								 
-						   
-											
-									 
-											   
-						  
-									  
-									  
-	
-	
-   
-											 
-						
-					
-									  
-								 
-						   
-											
-									 
-											   
-						  
-										
-												  
-	 
-									
-					  
-				 
-									   
-								 
-						   
-											
-									 
-											   
-						  
-									 
-									 
-	
-   
-   
 	"lab_interpretive_diagnostic_rg": [
 		{
 			"wgs_id_number": "3976543",
@@ -2017,53 +1903,11 @@
 				"code_system_concept_name": "Yes",
 				"cdc_preferred_designation": "Yes"
 			}
-		},
-   
-									
+		},								
 		{
 			"problem_associated_signs_and_symptoms": {
 				"identifier": "405729008",
 				"text": "Bloody diarrhea",
-									
-										 
-								 
-						   
-											
-									 
-											   
-						  
-														
-														
-	 
-				 
-							 
-				  
-										 
-								 
-						   
-											
-									 
-											   
-						  
-									  
-									  
-	 
-				   
-							 
-					  
-										 
-								 
-						   
-											
-									 
-											   
-						  
-										  
-																		  
-	 
-				   
-							 
-					   
 				"name_of_coding_system": "SCT",
 				"alternate_identifier": null,
 				"alternate_text": null,
@@ -2075,38 +1919,6 @@
 				"cdc_preferred_designation": "Bloody diarrhea"
 			},
 			"signs_and_symptoms_indicator": {
-							  
-													  
-								   
-								 
-						   
-											
-									 
-											   
-						  
-																					 
-																					  
-	 
-								  
-												 
-					 
-							  
-					
-								   
-								 
-						   
-											
-									 
-											   
-						  
-										
-										
-	 
-											   
-											 
-											 
-										 
-				   
 				"identifier": "Y",
 				"text": "Yes",
 				"name_of_coding_system": "HL70136",
@@ -2119,22 +1931,6 @@
 				"code_system_concept_name": "Yes",
 				"cdc_preferred_designation": "Yes"
 			}
-										   
-											   
-					  
-				  
-									   
-								 
-						   
-											
-									 
-											   
-						  
-									  
-									  
-	 
-									
-					   
 		},
 		{
 			"problem_associated_signs_and_symptoms": {
@@ -2152,103 +1948,6 @@
 				"cdc_preferred_designation": "other (specify)"
 			},
 			"signs_and_symptoms_indicator": {
-							 
-				  
-										 
-								 
-						   
-											
-									 
-											   
-						  
-									  
-									  
-	 
-				   
-							 
-					  
-										 
-								 
-						   
-											
-									 
-											   
-						  
-										  
-																		  
-	 
-				   
-							 
-					   
-								   
-								 
-						   
-											
-									 
-											   
-						  
-															 
-										   
-	 
-				
-							  
-															
-								   
-								 
-						   
-											
-									 
-											   
-						  
-																				
-																				 
-	 
-									 
-					
-					   
-						 
-									
-								 
-						   
-											
-									 
-											   
-						  
-															   
-															   
-	 
-					 
-							  
-					
-								   
-								 
-						   
-											
-									 
-											   
-						  
-										
-										
-	 
-											   
-											 
-											 
-										 
-				   
-					  
-				  
-									   
-								 
-						   
-											
-									 
-											   
-						  
-									  
-									  
-	 
-										   
-											   
 				"identifier": "N",
 				"text": "No",
 				"name_of_coding_system": "HL70136",
@@ -2260,9 +1959,7 @@
 				"original_text": null,
 				"code_system_concept_name": "No",
 				"cdc_preferred_designation": "No"
-			}
-							
-							   
+			}		   
 		}
 	],
 	"industry_and_occupation_rg": [
