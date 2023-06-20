@@ -96,6 +96,8 @@
             <groupId>gov.cdc.hl7</groupId>
             <artifactId>hl7-pet_2.13</artifactId>
             <version>${hl7pet.version}</version>
+            <scope>system</scope>
+            <systemPath>C:\Projects\CDC\data-exchange-hl7\libs\hl7-pet_2.13-1.2.7.2.jar</systemPath>
         </dependency>
 
         <dependency>
