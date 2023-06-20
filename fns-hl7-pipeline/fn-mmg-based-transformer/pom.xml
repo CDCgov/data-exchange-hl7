@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>mmg-based-transformer</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
+    
+   <!---->
     <name>DEX Fns-Pipeline :: mmg-based-transformer</name>
 
     <properties>
@@ -16,7 +16,7 @@
         <java_version>11</java_version>
         <kotlin.version>1.7.20</kotlin.version>
         <functions.version>3.0.0</functions.version>
-        <functions.plugin.version>1.19.0</functions.plugin.version>
+        <functions.plugin.version>1.26.0</functions.plugin.version>
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
         <functionAppName>ocio-ede-${environment-id}-hl7-mmg-based-transformer</functionAppName>
@@ -72,7 +72,7 @@
             <version>${azevhub.version}</version>
         </dependency>
 
-       <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -102,44 +102,13 @@
             <groupId>gov.cdc.hl7</groupId>
             <artifactId>hl7-pet_2.13</artifactId>
             <version>${hl7pet.version}</version>
-          </dependency>
+        </dependency>
 
     </dependencies>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
-
-        <!-- Plugins Dependencies Versions -->
-<!--        <pluginManagement>-->
-<!--            <plugins>-->
-<!--                <plugin>-->
-<!--                    <groupId>com.microsoft.azure</groupId>-->
-<!--                    <artifactId>azure-functions-maven-plugin</artifactId>-->
-<!--                    <version>${functions.plugin.version}</version>-->
-<!--                </plugin>-->
-<!--                <plugin>-->
-<!--                    <groupId>org.jetbrains.kotlin</groupId>-->
-<!--                    <artifactId>kotlin-maven-plugin</artifactId>-->
-<!--                    <version>${kotlin.version}</version>-->
-<!--                </plugin>-->
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-resources-plugin</artifactId>-->
-<!--                    <version>3.1.0</version>-->
-<!--                </plugin>-->
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-dependency-plugin</artifactId>-->
-<!--                    <version>3.1.1</version>-->
-<!--                </plugin>-->
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-clean-plugin</artifactId>-->
-<!--                    <version>3.1.0</version>-->
-<!--                </plugin>-->
-<!--            </plugins>-->
-<!--        </pluginManagement>-->
 
         <plugins>
             <plugin>
@@ -151,6 +120,10 @@
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
+                    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
@@ -189,15 +162,15 @@
                 <executions>
                     <execution>
                         <id>compile</id>
-                        <goals> 
-                            <goal>compile</goal> 
+                        <goals>
+                            <goal>compile</goal>
                         </goals>
                     </execution>
 
                     <execution>
                         <id>test-compile</id>
-                        <goals> 
-                            <goal>test-compile</goal> 
+                        <goals>
+                            <goal>test-compile</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -206,6 +179,7 @@
             <!-- Remove obj folder generated by .NET SDK in maven clean -->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
+                <version>3.2.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -216,7 +190,13 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
                     <environmentVariables>
                         <REDIS_CACHE_NAME>ocio-ede-dev-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
@@ -227,6 +207,14 @@
         </plugins>
     </build>
 
-    
-
+    <distributionManagement>
+        <repository>
+            <id>ede-releases</id>
+            <url>${maven-releases-url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ede-snapshots</id>
+            <url>${maven-snapshot-url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

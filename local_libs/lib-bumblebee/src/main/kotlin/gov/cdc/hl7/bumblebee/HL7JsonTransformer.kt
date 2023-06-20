@@ -63,7 +63,7 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
 //        val fieldIndexSkew = if (segID == "MSH") 1 else 0
         profile.getSegmentField(segID)?.forEach { segField ->
             //Add A JsonObject if max cardinality is 1, array otherwise.
-            val fieldJsonNode = if (getCardinality(segField.cardinality) == "1")
+            var fieldJsonNode = if (getCardinality(segField.cardinality) == "1")
                 JsonObject()
             else {
                 JsonArray()
@@ -78,9 +78,10 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
             val components =  fieldProfile.getSegmentField(dataTypeToUse)
             val fieldRepeat = fieldVal?.split("~")
             if (components == null) { //No components - it's primitive, just add value!
-                if (fieldJsonNode.isJsonObject)
+                if (fieldJsonNode.isJsonObject) {
                     segJson.addValueOrNull(fieldRepeat?.get(0), segField.name)
-                else
+                    fieldJsonNode.asJsonObject.addProperty(segField.name.normalize(), fieldRepeat?.get(0))
+                } else
                     if (fieldRepeat != null && fieldRepeat[0].isNotEmpty()) {
                         fieldJsonNode.asJsonArray.add(fieldRepeat[0])
                     }
@@ -88,29 +89,43 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
                 fieldRepeat?.forEach { fieldRepeatItem ->
                     val compJsonObj = JsonObject()
                     val compArray = fieldRepeatItem.split("^")
+                    var compHasValue:Boolean = false
                     components.forEach { component ->
                         val compVal = getValueFromMessage(compArray, component.fieldNumber -1 )
+                        compHasValue = compHasValue || (compVal != null && compVal.isNotEmpty() && compVal.replace("&", "").trim() != null)
                         //Handle subcomponents...
                         val subComponents = fieldProfile.getSegmentField(component.dataType)
                         if (!subComponents.isNullOrEmpty()) {
                             val subCompJsonObj = JsonObject()
                             val subCompArray = compVal?.split("&")
+                            var subHasValue: Boolean = false
                             subComponents.forEach { subComp ->
                                 val subCompVal = getValueFromMessage(subCompArray, subComp.fieldNumber - 1)
                                 subCompJsonObj.addValueOrNull(subCompVal, subComp.name)
+                                subHasValue = subHasValue || subCompVal != null
                             }
-                            compJsonObj.add(component.name.normalize(), subCompJsonObj)
+                            if (subHasValue)
+                                compJsonObj.add(component.name.normalize(), subCompJsonObj)
+                            else
+                                compJsonObj.add(component.name.normalize(), JsonNull.INSTANCE)
                         } else {
                             compJsonObj.addValueOrNull(compVal, component.name)
                         }
                     }
-                    if (fieldJsonNode.isJsonArray)
+                    if (fieldJsonNode.isJsonArray && compHasValue)
                         fieldJsonNode.asJsonArray.add(compJsonObj)
-                    else
-                        segJson.add(segField.name.normalize(), compJsonObj)
+                    else {
+                        if (compHasValue) {
+                            segJson.add(segField.name.normalize(), compJsonObj)
+                            fieldJsonNode = compJsonObj
+                        } else
+                            segJson.add(segField.name.normalize(), JsonNull.INSTANCE)
+                    }
                 }
             }
-
+            //Fix empty JsonNode if no values were found.
+            if ((fieldJsonNode.isJsonObject && fieldJsonNode.asJsonObject.size() == 0))
+                segJson.add(segField.name.normalize(), JsonNull.INSTANCE)
 
         }
         if (!seg.children().isEmpty) {

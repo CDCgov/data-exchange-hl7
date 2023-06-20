@@ -2,10 +2,7 @@ package gov.cdc.dex.hl7
 
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
-import gov.cdc.dex.hl7.model.ValidationErrorMessage
-import gov.cdc.dex.hl7.model.ValidationIssue
-import gov.cdc.dex.hl7.model.ValidationIssueCategoryType
-import gov.cdc.dex.hl7.model.ValidationIssueType
+import gov.cdc.dex.hl7.model.*
 import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.redisModels.Element
 import gov.cdc.dex.redisModels.MMG
@@ -15,7 +12,9 @@ import redis.clients.jedis.Jedis
 import scala.Option
 
 
-class MmgValidator(val redisProxy: RedisProxy) {
+
+class MmgValidator(private val redisProxy: RedisProxy) {
+
     companion object {
         private val logger = LoggerFactory.getLogger(MmgValidator::class.java.simpleName)
         const val GENVx_PROFILE_PATH = "MSH-21[2].1"
@@ -29,13 +28,11 @@ class MmgValidator(val redisProxy: RedisProxy) {
         const val MMWR_WEEK_CODE = "77991-8"
         const val MMWR_WEEK_LEGACY_CODE = "INV165"
     }
-    private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
-    private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
     private val REDIS_VOCAB_NAMESPACE = "vocab:"
 
-   // private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     private val mmgUtil = MmgUtil(redisProxy)
-    val mmgs : Array<MMG> = arrayOf()
+
+
     fun validate(hl7Message: String): List<ValidationIssue> {
         val mmgs = getMMGFromMessage(hl7Message)
         val report = mutableListOf<ValidationIssue>()
@@ -57,21 +54,13 @@ class MmgValidator(val redisProxy: RedisProxy) {
                             msgSegments.get().flatten()
                         else listOf()
                         //Observation Sub-ID Check for Repeating Blocks
-                        validateObservationSubId(
-                            hl7Message,
+                        validateObservationSubId(hl7Message,
                             block.type in listOf("Repeat", "RepeatParentChild"),
-                            element,
-                            valueList,
-                            report
-                        )
+                            element,valueList,report)
                         //Cardinality Check!
-                        checkCardinality(
-                            hl7Message,
+                        checkCardinality(hl7Message,
                             block.type in listOf("Repeat", "RepeatParentChild"),
-                            element,
-                            valueList,
-                            report
-                        )
+                            element, valueList,report)
                         // Data type check: (Don't check Data type for Units of measure - fieldPosition is 6, not 5 - can't use isUnitOfMeasure field.)
                         if ("OBX" == element.mappings.hl7v251.segmentType && 5 == element.mappings.hl7v251.fieldPosition) {
                             val dataTypeSegments = HL7StaticParser.getListOfMatchingSegments(
@@ -234,7 +223,7 @@ class MmgValidator(val redisProxy: RedisProxy) {
                 }
             }
         } else {
-            val allSegs = msgValues.joinToString("\n") //join all segments to extract all Values.
+//            val allSegs = msgValues.joinToString("\n") //join all segments to extract all Values.
             val segValues = HL7StaticParser.getValue(hl7Message, element.getValuePath())
 //            val segValuesFlat = if (segValues.isDefined) segValues.get().flatten() else listOf()
             checkSingleGroupCardinality(hl7Message, minCardinality, maxCardinality, null, element, segValues, report)
@@ -369,7 +358,6 @@ class MmgValidator(val redisProxy: RedisProxy) {
 
     @Throws(InvalidConceptKey::class)
     fun isConceptValid(key: String, concept: String,jedisConn:Jedis): Boolean {
-
           try {
               return jedisConn.hexists(REDIS_VOCAB_NAMESPACE + key, concept)
           } catch (e:Exception){

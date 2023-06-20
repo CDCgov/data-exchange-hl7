@@ -1,0 +1,79 @@
+  {
+    "message_info": {
+      "event_code": "10370",
+      "route": "congenital_rubella_syndrome",
+      "mmgs": [
+        "mmg:generic_mmg_v2_0",
+        "mmg:congenital_rubella_syndrome"
+      ],
+      "reporting_jurisdiction": "06",
+      "type": "CASE"
+    },
+    "metadata": {
+      "provenance": {
+        "event_id": "6436e88a-901e-001e-26bb-9840e5066d21",
+        "event_timestamp": "2023-06-06T21:10:38.6591935Z",
+        "file_uuid": "335bb9b3-9a2a-4d83-a6f0-cfecb00db5b7",
+        "file_path": "https://tfedemessagestoragedev.blob.core.windows.net/hl7ingress/upload-quq6-crs_1_0_tc03_txt.txt",
+        "file_timestamp": "2023-06-06T21:10:38+00:00",
+        "file_size": 4798,
+        "single_or_batch": "SINGLE",
+        "message_hash": "3a30ca219e16c95a73a46c22a4e3b65d",
+        "ext_system_provider": null,
+        "ext_original_file_name": "upload-quq6-crs_1_0_tc03_txt.txt",
+        "message_index": 1,
+        "ext_original_file_timestamp": null
+      },
+      "processes": [
+        {
+          "status": "SUCCESS",
+          "process_name": "RECEIVER",
+          "process_version": "1.0.0",
+          "eventhub_queued_time": "2023-06-06T21:10:38.836",
+          "eventhub_offset": 360777260992,
+          "eventhub_sequence_number": 1407,
+          "configs": [],
+          "start_processing_time": "2023-06-07T01:12:13.419+00:00",
+          "end_processing_time": "2023-06-07T01:12:13.884+00:00"
+        },
+        {
+          "status": "SUCCESS",
+          "report": {
+            "entries": [
+              {
+                "path": "NK1-3",
+                "rule": "",
+                "lineNumber": 3
+              }
+            ],
+            "status": "SUCCESS"
+          },
+          "eventHubMetadata": {
+            "SequenceNumber": 2636,
+            "Offset": 343597591232,
+            "PartitionKey": null,
+            "EnqueuedTimeUtc": "2023-06-07T01:12:15.116"
+          },
+          "config": [
+            "/case_pid_config.txt"
+          ],
+          "process_name": "REDACTOR",
+          "process_version": "1.0.0",
+          "eventhub_queued_time": "2023-06-07T01:12:15.116",
+          "eventhub_offset": 343597591232,
+          "eventhub_sequence_number": 2636,
+          "configs": [
+            "/case_pid_config.txt"
+          ],
+          "start_processing_time": "2023-06-07T01:12:15.23+00:00",
+          "end_processing_time": "2023-06-07T01:12:15.382+00:00"
+        }
+      ]
+    },
+    "summary": {
+      "current_status": "REDACTED",
+      "problem": null
+    },
+    "message_uuid": "38e33a12-c046-4bf6-8c8f-4a10316e453e",
+    "metadata_version": "1.0.1"
+  }
