@@ -19,7 +19,8 @@
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
 
-        <functionAppName>ocio-ede-${environment-id}-hl7-mmg-validator</functionAppName>
+        <!--functionAppName>ocio-ede-${environment-id}-hl7-mmg-validator</functionAppName -->
+        <functionAppName>TestMMGValidator</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
 
         <slf4j.version>2.0.5</slf4j.version>
@@ -41,7 +42,7 @@
             <artifactId>lib-dex-commons</artifactId>
             <version>1.0.12-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>C:\Projects\data-exchange-hl7\libs\lib-dex-commons-1.0.12-SNAPSHOT.jar</systemPath>
+            <systemPath>C:\Projects\CDC\data-exchange-hl7\libs\lib-dex-commons-1.0.12-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <!-- Azure Functions Java Library -->

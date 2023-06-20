@@ -27,7 +27,7 @@ class MMGValidationFunction {
     
     companion object {
         private const val STATUS_ERROR = "ERROR"
-
+        
         val gson = Gson()
     } // .companion
 
