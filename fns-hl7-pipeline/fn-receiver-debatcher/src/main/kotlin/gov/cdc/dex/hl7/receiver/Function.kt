@@ -37,6 +37,7 @@ class Function {
         const val EVENT_CODE_PATH = "OBR-31.1"
         const val JURISDICTION_CODE_PATH = "OBX[@3.1='77968-6']-5.1"
         const val ALT_JURISDICTION_CODE_PATH = "OBX[@3.1='NOT116']-5.1"
+        const val LOCAL_RECORD_ID_PATH = "OBR-3.1"
         val gson: Gson = GsonBuilder().serializeNulls().create()
 
         val fnConfig = FunctionConfig()
@@ -113,6 +114,7 @@ class Function {
                                             provenance.singleOrBatch = Provenance.BATCH_FILE
                                             provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
                                             val messageInfo = getMessageInfo(metaDataMap, fnConfig.mmgUtil, currentLinesArr.joinToString("\n" ), context.logger)
+
                                             val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
                                             msgEvent = prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName, context)
                                             provenance.messageIndex++
@@ -128,6 +130,7 @@ class Function {
                         msgEvent = if (mshCount > 0) {
                             val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
                             val messageInfo = getMessageInfo(metaDataMap, fnConfig.mmgUtil, currentLinesArr.joinToString("\n" ), context.logger)
+                            context.logger.info("message info --> ${gson.toJson(messageInfo)}")
                             prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName, context)
                         } else {
                             // no valid message -- send to error queue
@@ -143,31 +146,36 @@ class Function {
     } // .eventHubProcess
 
     private fun getMessageInfo(metaDataMap: Map<String, String>, mmgUtil: MmgUtil, message: String, logger: Logger): DexMessageInfo {
-            val startTime = System.currentTimeMillis()
-            val eventCode = extractValue(message, EVENT_CODE_PATH)
-            //READ FROM METADATA FOR ELR
-            val messageType = metaDataMap["message_type"]
-            if (messageType == HL7MessageType.ELR.name) {
-                val route = metaDataMap["route"]?.normalize()
-                val reportingJurisdiction = metaDataMap["reporting_jurisdiction"]
-                return DexMessageInfo(eventCode, route, null, reportingJurisdiction, HL7MessageType.ELR)
-            }
+        val startTime = System.currentTimeMillis()
+        val eventCode = extractValue(message, EVENT_CODE_PATH)
+        val localRecordID = extractValue(message, LOCAL_RECORD_ID_PATH)
+        val messageType = metaDataMap["message_type"]
 
-            val msh21Gen = extractValue(message, MSH_21_2_1_PATH)
-            val msh21Cond = extractValue(message, MSH_21_3_1_PATH)
+        //READ FROM METADATA FOR ELR
+        if (messageType == HL7MessageType.ELR.name) {
+            val route = metaDataMap["route"]?.normalize()
+            val reportingJurisdiction = metaDataMap["reporting_jurisdiction"]
+            return DexMessageInfo(eventCode, route, null, reportingJurisdiction, HL7MessageType.ELR, localRecordID)
+        }
 
-            var jurisdictionCode = extractValue(message, JURISDICTION_CODE_PATH)
-            if (jurisdictionCode.isEmpty()) {
-                jurisdictionCode = extractValue(message, ALT_JURISDICTION_CODE_PATH)
-            }
+        //GET CASE DATA ELEMENTS
+        val msh21Gen = extractValue(message, MSH_21_2_1_PATH)
+        val msh21Cond = extractValue(message, MSH_21_3_1_PATH)
 
-            return try {
-                mmgUtil.getMMGMessageInfo(msh21Gen, msh21Cond, eventCode, jurisdictionCode)
-            } catch (e: InvalidConditionException) {
-                DexMessageInfo(eventCode, null, null, jurisdictionCode, HL7MessageType.CASE)
-            } finally {
-                logger.info("DEX::Retrieve REDIS info in ${System.currentTimeMillis() - startTime} ms.")
-            }
+        var jurisdictionCode = extractValue(message, JURISDICTION_CODE_PATH)
+        if (jurisdictionCode.isEmpty()) {
+            jurisdictionCode = extractValue(message, ALT_JURISDICTION_CODE_PATH)
+        }
+
+        return try {
+            val dmi = mmgUtil.getMMGMessageInfo(msh21Gen, msh21Cond, eventCode, jurisdictionCode)
+            dmi.localRecordID = localRecordID
+            dmi
+        } catch (e: InvalidConditionException) {
+            DexMessageInfo(eventCode, null, null, jurisdictionCode, HL7MessageType.CASE, localRecordID)
+        } finally {
+            logger.info("DEX::Retrieve REDIS info in ${System.currentTimeMillis() - startTime} ms.")
+        }
 
 
 
