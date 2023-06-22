@@ -104,7 +104,7 @@ class Function {
             } catch (e: Exception) {
 
                // message is bad, can't extract fields based on schema expected
-                logger.severe("Unable to process Message due to exception: ${e.message}")
+                logger.error("Unable to process Message due to exception: ${e.message}")
                 e.printStackTrace()
 
             } // .catch

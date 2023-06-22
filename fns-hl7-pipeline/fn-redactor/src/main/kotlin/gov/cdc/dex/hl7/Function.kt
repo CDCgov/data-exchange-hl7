@@ -87,7 +87,7 @@ class Function {
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
-                logger.severe("DEX:: Unable to process Message due to exception: ${e.message}")
+                logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
                 val problem = Problem(RedactorProcessMetadata.REDACTOR_PROCESS, e, false, 0, 0)
 
                 val summary = SummaryInfo("FAILURE", problem)

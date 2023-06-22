@@ -126,7 +126,7 @@ class MMGValidationFunction {
                     // e.printStackTrace()
                 }
             } catch (e: Exception) {
-                logger.severe("DEX::Exception processing event hub message: Unable to process Message due to exception: ${e.message}")
+                logger.error("DEX::Exception processing event hub message: Unable to process Message due to exception: ${e.message}")
                 badMsgsList.add(gson.toJson(inputEvent))
                 //fnConfig.evHubSender.send(evHubTopicName = fnConfig.evHubErrorName, message = gson.toJson(inputEvent))
                 e.printStackTrace()

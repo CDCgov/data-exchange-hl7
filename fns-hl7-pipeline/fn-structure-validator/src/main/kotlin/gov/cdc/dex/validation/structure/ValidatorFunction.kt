@@ -109,19 +109,19 @@ class ValidatorFunction {
                     "OK"
                 }
                 logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
-                logger.finest("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
+                logger.info("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
                 ehSender.send(ehDestination, gson.toJson(inputEvent))
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
-                logger.severe("Unable to process Message due to exception: ${e.message}")
+                logger.error("Unable to process Message due to exception: ${e.message}")
                 val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[msgNumber], listOf())
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
                 metadata.addArrayElement("processes", processMD)
                 val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, e, false, 0, 0)
                 val summary = SummaryInfo("STRUCTURE_ERROR", problem)
-                logger.severe("metadata in exception: $metadata")
+                logger.error("metadata in exception: $metadata")
                 logger.info("inputEvent in exception:$inputEvent")
                 inputEvent.add("summary", summary.toJsonElement())
                 ehSender.send(evHubNameErrs, gson.toJson(inputEvent))
