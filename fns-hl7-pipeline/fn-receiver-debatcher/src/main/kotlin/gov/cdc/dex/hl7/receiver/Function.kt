@@ -78,7 +78,7 @@ class Function {
                         fileTimestamp=blobClient.properties.lastModified.toIsoString(),
                         fileSize=blobClient.properties.blobSize,
                         singleOrBatch=Provenance.SINGLE_FILE,
-                        originalFileName =blobName,
+                        originalFileName =metaDataMap["original_file_name"],
                         systemProvider = metaDataMap["system_provider"],
                         originalFileTimestamp = metaDataMap["original_file_timestamp"]
                     ) // .hl7MessageMetadata
