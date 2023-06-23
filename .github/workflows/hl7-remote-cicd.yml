@@ -14,10 +14,10 @@ on:
         - deploy-redactor.yml
         - deploy-lake-segs-transformer.yml
 #        - deploy-mmg-validator.yml
-#        - deploy-hl7-json-lake.yml
+        - deploy-hl7-json-lake.yml
         - deploy-structure-validator.yml
         - deploy-cache-loader.yml
-        # - deploy-svc-cloud-transport.yml
+        - deploy-svc-cloud-transport.yml
   push:
     branches:
       - 'develop'
@@ -82,19 +82,20 @@ jobs:
             echo "sha=$(echo ${GITHUB_SHA})" >> $GITHUB_OUTPUT
 
           # Dynamically create a matrix of workflow IDs based on folder changes in current commit
-          # Convert workflow shell array into a stringified JSON so it can be bound to matrix workflow_id property used in invoke job
+          # Convert workflow shell array into a stringified JSON so it can be bound to matrix workflow_id property used in invoke job     
         - name: Determine HL7 Workflow(s) to Trigger
           id: set-matrix
           run: |
-            if  [[ "${{ github.event_name }}" -eq 'pull_request' ]]
+            if  [[ ${{ github.event_name }} == 'pull_request' ]];
             then
               commitfldrs=$(git diff-tree --no-commit-id --name-only -r origin/${{ github.event.pull_request.base.ref }} -r ${{ github.event.pull_request.head.sha }})
             else
-              commitfldrs=$(git diff-tree --no-commit-id --name-only -r HEAD..origin/main)
+              commitfldrs=$(git log -m -1 --name-only --pretty="format:"${{ github.sha }})
             fi
+              
             workflows=()
         
-            echo " Changed Files and Folders in HL7 Build Workspace = $commitfldrs"
+            echo " HL7 Files Changed in PR commit = $commitfldrs"
             case $commitfldrs in
               *fn-lake-segs-transformer*) workflows+=("deploy-lake-segs-transformer.yml") ;;&
               *fn-mmg-based-transformer*) workflows+=("deploy-mmg-based-transformer.yml") ;;&
@@ -103,7 +104,9 @@ jobs:
               *fn-receiver-debatcher*) workflows+=("deploy-receiver-debatcher.yml") ;;&
               *fn-redactor*) workflows+=("deploy-redactor.yml") ;;&
               *fn-structure-validator*) workflows+=("deploy-structure-validator.yml") ;;&
-              *mrr*) workflows+=("deploy-cache-loader.yml") ;;&
+              *fn-hl7-json-lake*) workflows+=("deploy-json-lake.yml") ;;&
+              *fn-cache-loader*) workflows+=("deploy-cache-loader.yml") ;;&
+              *svc-cloud-transport*) workflows+=("")
               *) ;;
             esac
             for value in "${workflows[@]}"
