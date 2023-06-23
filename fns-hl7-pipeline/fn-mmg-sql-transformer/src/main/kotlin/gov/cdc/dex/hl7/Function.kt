@@ -34,6 +34,8 @@ class Function {
         const val TABLES_KEY_NAME = "tables"
         const val PROCESS_STATUS_OK = "SUCCESS"
         const val PROCESS_STATUS_EXCEPTION = "FAILURE"
+        const val SUMMARY_STATUS_OK = "MMG-IN-SQL-TRANSFORMED"
+        const val SUMMARY_STATUS_ERROR = "MMG-IN-SQL-ERROR"
         const val PREVIOUS_PROCESS_NAME = "MMG_BASED_TRANSFORMER"
 
     } // .companion object
@@ -226,10 +228,10 @@ class Function {
         if (exception != null) {
             //TODO::  - update retry counts
             val problem = Problem(MmgSqlTransProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
-            val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
+            val summary = SummaryInfo(SUMMARY_STATUS_ERROR, problem)
             inputEvent.add("summary", summary.toJsonElement())
         } else {
-            inputEvent.add("summary", (SummaryInfo(status, null).toJsonElement()))
+            inputEvent.add("summary", (SummaryInfo(SUMMARY_STATUS_OK, null).toJsonElement()))
         }
         // enable for model
         val inputEventOut = gsonWithNullsOn.toJson(inputEvent)
