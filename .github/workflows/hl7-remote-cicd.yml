@@ -7,24 +7,52 @@ on:
         description: 'HL7 application CI/CD workflow that you want to trigger in data-exchange-hl7-devops remote repo to deploy to the development environment'
         required: true
         type: choice
+        default: 'deploy-mmg-based-transformer.yml'
         options:
         - deploy-mmg-based-transformer.yml
         - deploy-mmg-sql-transformer.yml
         - deploy-receiver-debatcher.yml
         - deploy-redactor.yml
         - deploy-lake-segs-transformer.yml
-#        - deploy-mmg-validator.yml
+        - deploy-mmg-validator.yml
         - deploy-hl7-json-lake.yml
         - deploy-structure-validator.yml
         - deploy-cache-loader.yml
         - deploy-svc-cloud-transport.yml
+      environment:
+        description: 'HL7 auto deploy target environment'
+        required: true
+        type: choice
+        default: 'dev'
+        options:
+          - dev
+          - tst
+      data-exchange-hl7-branch:
+        description: 'Repo Branch that you want to deploy to the development environment'
+        default: 'develop'
+        required: true
+        type: string
+  # pull_request:
+  #   types:
+  #     - synchronize
+  #     - opened
+  #   branches:
+  #     - 'develop'
+  #     - 'main'
+  #     - '*'
+  #   paths:
+  #   - fns-hl7-pipeline/**
+  #   - fn-cache-loader/**
+  #   - svc-cloud-transport/**
   push:
     branches:
       - 'develop'
+      - 'main'
     paths:
     - fns-hl7-pipeline/**
     - fn-cache-loader/**
     - svc-cloud-transport/**
+  
 jobs:
   invoke-manual-cicd-trigger:
     if: github.event_name == 'workflow_dispatch'
@@ -46,18 +74,35 @@ jobs:
             chmod +x ./get-github-app-access-token.sh;
             . ./get-github-app-access-token.sh;
             echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
+
+        # - name: Dump GitHub context
+        #   env:
+        #     GITHUB_CONTEXT: ${{ toJson(github) }}
+        #   run: echo '$GITHUB_CONTEXT'
+               
         - name: Manually Dispatch Remote CICD Trigger Event 
           id: manual-devops-wkflow-dispatch
-          uses: actions/github-script@v6
+          uses: actions/github-script@v6.4.1
           with:
-             github-token: ${{ env.access_token }}
-             script: |
-                  await github.rest.actions.createWorkflowDispatch({
-                    owner: 'cdcent',
-                    repo: 'data-exchange-hl7-devops',
-                    workflow_id: '${{ github.event.inputs.data-exchange-hl7-workflow }}',
-                    ref: 'main'
-                  })
+            debug: ${{ secrets.ACTIONS_RUNNER_DEBUG }}
+            github-token: '${{ env.access_token }}'
+            script: |
+              try {
+                const result = await github.rest.actions.createWorkflowDispatch({
+                  owner: 'cdcent',
+                  repo: 'data-exchange-hl7-devops',
+                  workflow_id: '${{ github.event.inputs.data-exchange-hl7-workflow }}',
+                  ref: 'main',
+                  inputs: {
+                    environment: '${{ github.event.inputs.environment }}',
+                    'data-exchange-hl7-branch': '${{ github.event.inputs.data-exchange-hl7-branch  }}'
+                  }
+                })
+                console.log(result);
+              } catch(error) {
+                console.error(error);
+                core.setFailed(error);
+              }
   prepare-remote-autodeploy:
     permissions: write-all
     if: github.event_name != 'workflow_dispatch'
@@ -67,36 +112,70 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       commit_sha7: ${{ steps.getsha.outputs.sha7 }}
       commit_sha: ${{ steps.getsha.outputs.sha }}
+      merge_branch: ${{ steps.gettargetbranch.outputs.target_branch }}
+      deploy_target: ${{ steps.gettarget.outputs.target_environment }}
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-        - uses: actions/checkout@v3
+        - name: Get PR Commits
+          if:  ${{ github.event_name }} == 'pull_request'  
+          uses: actions/checkout@v3
+          with:
+              ref: ${{ github.event.pull_request.head.sha }}
+              fetch-depth: 0     
+        - name: Get User Commits
+          uses: actions/checkout@v3
           with:
               ref: ${{ github.ref }}
-              fetch-depth: 0       
+              fetch-depth: 0  
         - name: Get short SHA
           id: getsha
           run: | 
-            echo "sha7=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_OUTPUT
-            echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
-            echo "sha=$(echo ${GITHUB_SHA})" >> $GITHUB_OUTPUT
+            echo "sha7=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_ENV"
+            echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
+            echo "sha=$(echo ${GITHUB_SHA})" >> "$GITHUB_ENV"
+            
+        # - name: Dump GitHub context
+        #   env:
+        #     GITHUB_CONTEXT: ${{ toJson(github) }}
+        #   run: echo '$GITHUB_CONTEXT'
 
-          # Dynamically create a matrix of workflow IDs based on folder changes in current commit
-          # Convert workflow shell array into a stringified JSON so it can be bound to matrix workflow_id property used in invoke job     
-        - name: Determine HL7 Workflow(s) to Trigger
-          id: set-matrix
+        - name: Get PR Merge Target Branch
+          id: gettargetbranch
           run: |
             if  [[ ${{ github.event_name }} == 'pull_request' ]];
             then
-              commitfldrs=$(git diff-tree --no-commit-id --name-only -r origin/${{ github.event.pull_request.base.ref }} -r ${{ github.event.pull_request.head.sha }})
+              echo "target_branch=${{ github.base_ref }}" >> "$GITHUB_ENV"
+              echo "target_branch=${{ github.base_ref }}" >> "$GITHUB_OUTPUT"
             else
-              commitfldrs=$(git log -m -1 --name-only --pretty="format:"${{ github.sha }})
+              echo "target_branch=${{ github.ref_name }}" >>  "$GITHUB_ENV"
+              echo "target_branch=${{ github.ref_name }}" >>  "$GITHUB_OUTPUT"
             fi
-              
+
+        - name: Get Deploy Target
+          id: gettarget
+          run: |
+             if  [[ ${{ env.target_branch }} == 'main' ]];
+             then
+               echo "target_environment=tst" >>  "$GITHUB_ENV"
+               echo "target_environment=tst" >>  "$GITHUB_OUTPUT"
+             else
+               echo "target_environment=dev" >>  "$GITHUB_ENV"
+               echo "target_environment=dev" >>  "$GITHUB_OUTPUT"
+             fi
+          # Create a list (matrix) of workflow IDs to trigger based on folders impacted by file changes in current branch
+          # Convert workflow shell array into a stringified JSON so it can be bound to matrix workflow_id property used in invoke job
+          # Autodeploy on Push (merge) to develop or main branch. All other Push events targeting feature branches will be trated as 
+          # Pull_Request event and will trigger CI (unit test) workflow     
+        - name: Determine HL7 Workflow(s) to Trigger
+          id: set-matrix
+          run: |
             workflows=()
-        
-            echo " HL7 Files Changed in PR commit = $commitfldrs"
-            case $commitfldrs in
+            commitfldrs=$(git log -m -1 --name-only --pretty="format:"${{ github.sha }})
+            echo " Files Changed in PR commit: $commitfldrs"
+            if  [[ ${{ github.event_name }} == 'push' && (${{ github.ref_name }} == 'develop' || ${{ github.ref_name }} == 'main' ) ]];
+            then
+              case $commitfldrs in
               *fn-lake-segs-transformer*) workflows+=("deploy-lake-segs-transformer.yml") ;;&
               *fn-mmg-based-transformer*) workflows+=("deploy-mmg-based-transformer.yml") ;;&
               *fn-mmg-sql-transformer*) workflows+=("deploy-mmg-sql-transformer.yml") ;;&
@@ -106,21 +185,43 @@ jobs:
               *fn-structure-validator*) workflows+=("deploy-structure-validator.yml") ;;&
               *fn-hl7-json-lake*) workflows+=("deploy-json-lake.yml") ;;&
               *fn-cache-loader*) workflows+=("deploy-cache-loader.yml") ;;&
-              *svc-cloud-transport*) workflows+=("")
+              *svc-cloud-transport*) workflows+=("deploy-svc-cloud-transport.yml") ;;&
               *) ;;
-            esac
+              esac
+            else
+              case $commitfldrs in
+              *fn-lake-segs-transformer*) workflows+=("ci-lake-segs-transformer.yml") ;;&
+              *fn-mmg-based-transformer*) workflows+=("ci-mmg-based-transformer.yml") ;;&
+              *fn-mmg-sql-transformer*) workflows+=("ci-mmg-sql-transformer.yml") ;;&
+              *fn-mmg-validator*) workflows+=("ci-mmg-validator.yml") ;;&
+              *fn-receiver-debatcher*) workflows+=("ci-receiver-debatcher.yml") ;;&
+              *fn-redactor*) workflows+=("ci-redactor.yml") ;;&
+              *fn-structure-validator*) workflows+=("ci-structure-validator.yml") ;;&
+              *fn-hl7-json-lake*) workflows+=("ci-json-lake.yml") ;;&
+              *fn-cache-loader*) workflows+=("ci-cache-loader.yml") ;;&
+              *) ;;
+              esac
+            fi
             for value in "${workflows[@]}"
             do
-                echo $value
+              echo "$value will be triggered as part of this PR"
+              echo "matrix=${workflows[@]}" >> "$GITHUB_ENV"
+              echo "matrix=${workflows[@]}" >> "$GITHUB_OUTPUT"
             done
-            echo "matrix=$(printf '%s\n' "${workflows[@]}" | jq -R . | jq -cs )" >> $GITHUB_OUTPUT
-    
+             echo "matrix=$(printf '%s\n' "${workflows[@]}" | jq -R . | jq -cs )" >> "$GITHUB_OUTPUT"
+             echo "matrix=$(printf '%s\n' "${workflows[@]}" | jq -R . | jq -cs )" >> "$GITHUB_ENV"
+             echo "deploy workflows=${workflows[@]}"
+        - name: No CI/CD Notification
+          id: no-deploy-notice
+          if: fromJson(env.matrix)[0] == null                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+          run: |
+              echo "No deployable changes Detected in HL7 Validation Build Workspace"
+             
   trigger-remote-autodeploy:
+    if: ${{ github.event_name != 'workflow_dispatch' && fromJson(needs.prepare-remote-autodeploy.outputs.matrix)[0] != null }}
     needs: prepare-remote-autodeploy
-    permissions: write-all
-    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
-    name: Invoke ${{ matrix.workflow_id }}
+    name: Invoke ${{ matrix.workflow_id }} Remote Deploy                                                                      
     strategy:
       matrix:
         workflow_id: ${{fromJson(needs.prepare-remote-autodeploy.outputs.matrix)}}
@@ -137,23 +238,29 @@ jobs:
             echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > app-private-key.pem
             chmod +x ./get-github-app-access-token.sh;
             . ./get-github-app-access-token.sh;
-            echo "access_token=${TOKEN}" >> "$GITHUB_ENV"  
+            echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
 
         - name: Automatically Dispatch Remote CICD Trigger Event 
           id: auto-devops-wkflow-dispatch
-          if: ${{ matrix.workflow_id != '' }} 
-          uses: actions/github-script@v6
+          if: ${{ matrix.workflow_id != '' }}
+          uses: actions/github-script@v6.4.1
           with:
-              github-token: ${{ env.access_token }}
-              script: |
-                  await github.rest.actions.createWorkflowDispatch({
-                    owner: 'cdcent',
-                    repo: 'data-exchange-hl7-devops',
-                    workflow_id: '${{ matrix.workflow_id }}',
-                    ref: 'main'
-                  })
-        - name: No Change Notification 
-          id: no-change-notice
-          if: ${{ matrix.workflow_id == '' }} 
-          run: |
-               echo "No deployable changes Detected in HL7 Validation Build Workspace"
+            debug: ${{ secrets.ACTIONS_RUNNER_DEBUG }}
+            github-token: '${{ env.access_token }}'
+            script: |
+              try {
+                const result = await github.rest.actions.createWorkflowDispatch({
+                  owner: 'cdcent',
+                  repo: 'data-exchange-hl7-devops',
+                  workflow_id: '${{ matrix.workflow_id }}',
+                  ref: 'main',
+                  inputs: {
+                    environment: '${{ needs.prepare-remote-autodeploy.outputs.deploy_target }}',
+                    'data-exchange-hl7-branch': '${{ needs.prepare-remote-autodeploy.outputs.merge_branch }}'
+                  }
+                })
+                console.log(result);
+              } catch(error) {
+                console.error(error);
+                core.setFailed(error);
+              }      
