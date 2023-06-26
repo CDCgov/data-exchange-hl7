@@ -20,7 +20,6 @@ import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
 import org.slf4j.LoggerFactory
 
-
 /**
  * Azure function with event hub trigger for the Lake of Segments transformer
  * Takes an HL7 message and converts it to a lake of segments based on the HL7 dependency tree
@@ -34,7 +33,9 @@ class Function {
         const val SUMMARY_STATUS_OK = "LAKE-SEGMENTS-TRANSFORMED"
         const val SUMMARY_STATUS_ERROR = "LAKE-SEGMENTS-ERROR"
         val fnConfig = FunctionConfig()
+        private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create()
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
+
     } // .companion object
 
 
@@ -48,13 +49,27 @@ class Function {
                 message: List<String?>,
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext) {
-        // context.logger.info("------ received event: ------> message: --> $message") 
 
-        val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
+        processMessages(message, eventHubMD)
 
-        // Process each Event Hub Message
-        // ----------------------------------------------
-       // message.forEach { singleMessage: String? ->
+    } // .eventHubProcessor
+
+    @FunctionName("LAKE_OF_SEGMENTS_TRANSFORMER_ELR")
+    fun eventHubELRProcessor(
+        @EventHubTrigger(
+            name = "msg",
+            eventHubName = "%EventHubReceiveNameELR%",
+            connection = "EventHubConnectionString",
+            consumerGroup = "%EventHubConsumerGroupELR%",)
+        message: List<String?>,
+        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
+        context: ExecutionContext) {
+
+        processMessages(message, eventHubMD)
+
+    } // .eventHubProcessor
+
+    private fun processMessages(message: List<String?>, eventHubMD: List<EventHubMetadata>) {
         message.forEachIndexed {
                 messageIndex: Int, singleMessage: String? ->
             // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
@@ -75,78 +90,6 @@ class Function {
 
                 logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
-                // 
-                // Process Message for SQL Model
-                // ----------------------------------------------
-                try {
-                    processMessage(
-                        hl7Content,
-                        startTime,
-                        metadata,
-                        fnConfig.eventHubSendOkName,
-                        fnConfig.evHubSender,
-                        eventHubMD[messageIndex],
-                        gsonWithNullsOn,
-                        inputEvent
-                    )
-                    logger.info("DEX::Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendOkName")
-
-                } catch (e: Exception) {
-
-                    logger.severe("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
-
-                    //publishing the message  to the eventhubSendErrsName topic using EventHub
-                    processMessageError(e, inputEvent, fnConfig.eventHubSendErrsName, fnConfig.evHubSender, gsonWithNullsOn)
-
-                    logger.info("Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendErrsName")
-                } // .catch
-
-            } catch (e: Exception) {
-
-               // message is bad, can't extract fields based on schema expected
-                logger.error("Unable to process Message due to exception: ${e.message}")
-                e.printStackTrace()
-
-            } // .catch
-
-    } // .eventHubProcessor
-
-    @FunctionName("LAKE_OF_SEGMENTS_TRANSFORMER_ELR")
-    fun eventHubELRProcessor(
-        @EventHubTrigger(
-            name = "msg",
-            eventHubName = "%EventHubReceiveNameELR%",
-            connection = "EventHubConnectionString",
-            consumerGroup = "%EventHubConsumerGroupELR%",)
-        message: List<String?>,
-        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext) {
-
-        processMessages(message, context, eventHubMD)
-
-    } // .eventHubProcessor
-
-    private fun processMessages(message: List<String?>, context: ExecutionContext, eventHubMD: List<EventHubMetadata>) {
-        message.forEachIndexed {
-                messageIndex: Int, singleMessage: String? ->
-            // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
-            val startTime =  Date().toIsoString()
-            try {
-
-                val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-                // context.logger.info("------ inputEvent: ------>: --> $inputEvent")
-
-                // Extract from event
-                val hl7ContentBase64 = inputEvent["content"].asString
-                val hl7ContentDecodedBytes = Base64.getDecoder().decode(hl7ContentBase64)
-                val hl7Content = String(hl7ContentDecodedBytes)
-                val metadata = inputEvent["metadata"].asJsonObject
-                val provenance = metadata["provenance"].asJsonObject
-                val filePath = provenance["file_path"].asString
-                val messageUUID = inputEvent["message_uuid"].asString
-
-                logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath")
-
                 //
                 // Process Message for SQL Model
                 // ----------------------------------------------
@@ -155,39 +98,32 @@ class Function {
                 try {
                     // read the profile
                     val profile = this::class.java.getResource(profileFilePath).readText()
-                    
-                   processMessage(
-                        hl7Content,
-                        startTime,
-                        metadata,
-                        fnConfig.eventHubSendOkName,
-                        fnConfig.evHubSender,
-                        eventHubMD[messageIndex],
-                        gsonWithNullsOn,
-                        inputEvent
-                    )
 
-                    logger.info("DEX::Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendOkName")
                     // Transform to Lake of Segments
                     val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
+                    logger.info("DEX::Processed OK for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendOkName}")
+
                     // deliver
                     updateMetadataAndDeliver(startTime, PROCESS_STATUS_OK, lakeSegsModel, eventHubMD[messageIndex],
                         fnConfig.evHubSender, fnConfig.eventHubSendOkName, inputEvent, null, config
                     )
                 } catch (e: Exception) {
 
-                    logger.severe("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
+                    logger.error("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
+
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
                     updateMetadataAndDeliver(startTime, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
                         fnConfig.evHubSender, fnConfig.eventHubSendErrsName, inputEvent, e, config)
 
-                    logger.info("DEX::Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendErrsName")
+                    logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
                 } // .catch
 
             } catch (e: Exception) {
+
                 // message is bad, can't extract fields based on schema expected
-                logger.severe("DEX::Unable to process Message due to exception: ${e.message}")
+                logger.error("Unable to process Message due to exception: ${e.message}")
                 e.printStackTrace()
+
             } // .catch
 
         } // .message.forEach
@@ -221,4 +157,3 @@ class Function {
 
 
 } // .Function
-
