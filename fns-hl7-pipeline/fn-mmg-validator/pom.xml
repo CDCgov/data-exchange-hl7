@@ -322,7 +322,7 @@
 
         </plugins>
     </build>
-	<distributionManagement>
+    <distributionManagement>
         <repository>
             <id>ede-releases</id>
             <url>${maven-releases-url}</url>
