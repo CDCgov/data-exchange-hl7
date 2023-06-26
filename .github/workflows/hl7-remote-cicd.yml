@@ -181,10 +181,10 @@ jobs:
               case $commitfldrs in
               *fn-lake-segs-transformer*) workflows+=("deploy-lake-segs-transformer.yml") ;;&
               *fn-mmg-based-transformer*) workflows+=("deploy-mmg-based-transformer.yml") ;;&
-              *fn-mmg-sql-transformer*) workflows+=("ci-mmg-sql-transformer.yml") ;;&
-              *fn-mmg-validator*) workflows+=("ci-mmg-validator.yml") ;;&
+              *fn-mmg-sql-transformer*) workflows+=("deploy-mmg-sql-transformer.yml") ;;&
+              *fn-mmg-validator*) workflows+=("deploy-mmg-validator.yml") ;;&
               *fn-receiver-debatcher*) workflows+=("deploy-receiver-debatcher.yml") ;;&
-              *fn-redactor*) workflows+=("ci-redactor.yml") ;;&
+              *fn-redactor*) workflows+=("deploy-redactor.yml") ;;&
               *fn-structure-validator*) workflows+=("deploy-structure-validator.yml") ;;&
               *fn-hl7-json-lake*) workflows+=("deploy-json-lake.yml") ;;&
               *fn-cache-loader*) workflows+=("deploy-cache-loader.yml") ;;&
