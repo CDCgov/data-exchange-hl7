@@ -31,6 +31,19 @@ on:
         default: 'develop'
         required: true
         type: string
+  pull_request:
+  types:
+    - synchronize
+    - opened
+  branches:
+    - 'develop'
+    - 'main'
+    - '*'
+  paths:
+  - fns-hl7-pipeline/**
+  - fn-cache-loader/**
+  - svc-cloud-transport/**
+  
   push:
     branches:
       - 'develop'
@@ -175,7 +188,7 @@ jobs:
               *fn-redactor*) workflows+=("ci-redactor.yml") ;;&
               *fn-structure-validator*) workflows+=("ci-structure-validator.yml") ;;&
               *fn-hl7-json-lake*) workflows+=("ci-json-lake.yml") ;;&
-              *fn-cache-loader*) workflows+=("ci-cache-loader.yml") ;;&
+              *fn-cache-loader*) workflows+=("deploy-cache-loader.yml") ;;&
               *) ;;
               esac
             fi
@@ -230,7 +243,7 @@ jobs:
                   owner: 'cdcent',
                   repo: 'data-exchange-hl7-devops',
                   workflow_id: '${{ matrix.workflow_id }}',
-                  ref: 'main',
+                  ref: 'CDC-893 Deploy Cache Loader',
                   inputs: {
                     environment: '${{ needs.prepare-remote-cicd.outputs.deploy_target }}',
                     'data-exchange-hl7-branch': '${{ needs.prepare-remote-cicd.outputs.merge_branch }}'
