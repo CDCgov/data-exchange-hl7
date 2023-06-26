@@ -191,7 +191,7 @@ jobs:
             else
               case $commitfldrs in
               *fn-lake-segs-transformer*) workflows+=("ci-lake-segs-transformer.yml") ;;&
-              *fn-mmg-based-transformer*) workflows+=("ci-mmg-based-transformer.yml") ;;&
+              *fn-mmg-based-transformer*) workflows+=("deploy-mmg-based-transformer.yml") ;;&
               *fn-mmg-sql-transformer*) workflows+=("ci-mmg-sql-transformer.yml") ;;&
               *fn-mmg-validator*) workflows+=("ci-mmg-validator.yml") ;;&
               *fn-receiver-debatcher*) workflows+=("ci-receiver-debatcher.yml") ;;&
