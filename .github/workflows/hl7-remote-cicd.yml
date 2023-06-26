@@ -223,6 +223,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Invoke ${{ matrix.workflow_id }} Remote Deploy                                                                      
     strategy:
+      fail-fast: false
       matrix:
         workflow_id: ${{fromJson(needs.prepare-remote-autodeploy.outputs.matrix)}}
     environment: dev
@@ -263,4 +264,4 @@ jobs:
               } catch(error) {
                 console.error(error);
                 core.setFailed(error);
-              }      
+              }
