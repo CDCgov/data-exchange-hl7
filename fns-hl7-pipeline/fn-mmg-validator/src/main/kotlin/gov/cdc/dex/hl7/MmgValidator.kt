@@ -44,7 +44,7 @@ class MmgValidator(private val redisProxy: RedisProxy) {
 
     private fun validateMMGRules(hl7Message: String, mmgs: Array<MMG>, report: MutableList<ValidationIssue>) {
         //  val allBlocks:Int  =  mmgs.map { it.blocks.size }.sum()
-         logger.debug("validate started blocks.size: --> $allBlocks")
+         // logger.debug("validate started blocks.size: --> $allBlocks")
          redisProxy.getJedisClient().use { jedisConn ->
             mmgs.forEach { mmg ->
                 mmg.blocks.forEach { block ->
