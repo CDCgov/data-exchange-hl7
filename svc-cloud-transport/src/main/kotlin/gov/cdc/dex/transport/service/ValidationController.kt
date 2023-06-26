@@ -62,8 +62,8 @@ class ValidationController(private val cloudStorage: CloudStorage) {
 
         validator.reportMap( hl7Content ) match {
         
-            case Success(report) => println(report)
-            case Failure(e) => println("error: " + e.getMessage() )
+            case Success(report) => reportData = reportData + "report msg :${report._1}"
+            case Failure(e) => reportData = reportData + "error: " + e.getMessage()
         
         }
         return reportData;
