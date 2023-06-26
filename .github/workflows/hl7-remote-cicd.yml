@@ -242,7 +242,7 @@ jobs:
                   owner: 'cdcent',
                   repo: 'data-exchange-hl7-devops',
                   workflow_id: '${{ matrix.workflow_id }}',
-                  ref: 'CDC-893 Deploy Cache Loader',
+                  ref: 'CDC-893-configure-cache-loader-to-deploy-to-azure-tst',
                   inputs: {
                     environment: '${{ needs.prepare-remote-cicd.outputs.deploy_target }}',
                     'data-exchange-hl7-branch': '${{ needs.prepare-remote-cicd.outputs.merge_branch }}'
