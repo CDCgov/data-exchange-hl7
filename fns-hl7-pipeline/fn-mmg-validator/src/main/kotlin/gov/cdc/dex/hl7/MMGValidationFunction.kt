@@ -112,7 +112,7 @@ class MMGValidationFunction {
                     logger.info("DEX::Processed messageUUID: $messageUUID, status: ${mmgReport.status}")
                 } catch (e: Exception) {
                     //TODO::  - update retry counts
-                    logger.severe("DEX::Unable to process Message due to exception: ${e.message}")
+                    logger.error("DEX::Unable to process Message due to exception: ${e.message}")
                     val processMD = MmgValidatorProcessMetadata ("MMG_VALIDATOR_EXCEPTION", null, eventHubMD[messageIndex], listOf())
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
