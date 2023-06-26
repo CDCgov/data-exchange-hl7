@@ -187,7 +187,7 @@ jobs:
               *fn-redactor*) workflows+=("ci-redactor.yml") ;;&
               *fn-structure-validator*) workflows+=("ci-structure-validator.yml") ;;&
               *fn-hl7-json-lake*) workflows+=("ci-json-lake.yml") ;;&
-              *fn-cache-loader*) workflows+=("ci-cache-loader.yml") ;;&
+              *fn-cache-loader*) workflows+=("deploy-cache-loader.yml") ;;&
               *) ;;
               esac
             fi
