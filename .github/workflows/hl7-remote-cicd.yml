@@ -212,10 +212,10 @@ jobs:
              echo "matrix=$(printf '%s\n' "${workflows[@]}" | jq -R . | jq -cs )" >> "$GITHUB_ENV"
              echo "deploy workflows=${workflows[@]}"
         - name: No CI/CD Notification
-          id: no-deploy-notice
+          id: no-cicd-notice
           if: fromJson(env.matrix)[0] == null                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
           run: |
-              echo "No deployable changes Detected in HL7 Validation Build Workspace"
+              echo "No testable,deployable changes Detected in HL7 Validation Build Workspace"
              
   trigger-remote-autodeploy:
     if: ${{ github.event_name != 'workflow_dispatch' && fromJson(needs.prepare-remote-autodeploy.outputs.matrix)[0] != null }}
