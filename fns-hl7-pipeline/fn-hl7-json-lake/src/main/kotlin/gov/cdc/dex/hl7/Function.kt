@@ -1,9 +1,6 @@
 package gov.cdc.dex.hl7
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
+import com.google.gson.*
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.BindingName
 import com.microsoft.azure.functions.annotation.EventHubTrigger
@@ -29,9 +26,10 @@ class Function {
 
     companion object {
 
-        val PROCESS_STATUS_OK = "SUCCESS"
-        val PROCESS_STATUS_EXCEPTION = "FAILURE"
-
+        const val PROCESS_STATUS_OK = "SUCCESS"
+        const val PROCESS_STATUS_EXCEPTION = "FAILURE"
+        const val SUMMARY_STATUS_OK = "HL7-JSON-LAKE-TRANSFORMED"
+        const val SUMMARY_STATUS_ERROR = "HL7-JSON-LAKE-ERROR"
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create()
 
         val fnConfig = FunctionConfig()
@@ -84,19 +82,21 @@ class Function {
                 val messageUUID = inputEvent["message_uuid"].asString
 
                 try {
-                    processMessage(
-                        inputEvent,
-                        eventHubMD[messageIndex],
-                        startTime,
-                        metadata,
-                        fnConfig.eventHubSendOkName
-                    )
+                    val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
+                    val bumblebee = HL7JsonTransformer.getTransformerWithResource(hl7message, FunctionConfig.PROFILE_FILE_PATH)
+                    val fullHL7 = bumblebee.transformMessage()
+                    updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_OK, fullHL7, eventHubMD[messageIndex],
+                        fnConfig.evHubSender, fnConfig.eventHubSendOkName, gsonWithNullsOn, inputEvent, null,
+                        listOf(FunctionConfig.PROFILE_FILE_PATH))
+                    context.logger.info("Processed OK for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendOkName}")
                 } catch (e: Exception) {
                     context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
-                    processMessageError(e,inputEvent,fnConfig.eventHubSendOkName,fnConfig.evHubSender)
+                    updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
+                        fnConfig.evHubSender, fnConfig.eventHubSendErrsName, gsonWithNullsOn, inputEvent, e,
+                        listOf(FunctionConfig.PROFILE_FILE_PATH))
 
-                    context.logger.info("Processed for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
+                    context.logger.info("Processed ERROR for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
                 } // .catch
 
             } catch (e: Exception) {
@@ -109,44 +109,29 @@ class Function {
         }
     }
 
-    private fun processMessage(
-        inputEvent: JsonObject,
-        eventHubMD: EventHubMetadata,
-        startTime: String,
-        metadata: JsonObject,
-        eventHubSendOkName: String
-    ) {
-        val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-        val bumblebee = HL7JsonTransformer.getTransformerWithResource(hl7message, FunctionConfig.PROFILE_FILE_PATH)
-        val fullHL7 = bumblebee.transformMessage()
+    private fun updateMetadataAndDeliver(startTime: String, metadata: JsonObject, status: String, report: JsonObject?, eventHubMD: EventHubMetadata,
+                                         evHubSender: EventHubSender, evTopicName: String, gsonWithNullsOn: Gson, inputEvent: JsonObject, exception: Exception?, config: List<String>) {
 
-        val processMD = HL7JSONLakeProcessMetadata(
-            status = PROCESS_STATUS_OK, eventHubMD = eventHubMD, report = fullHL7,
-            config = listOf(FunctionConfig.PROFILE_FILE_PATH)
-        )
-
-        // process time
+        val processMD = HL7JSONLakeProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
-
         metadata.addArrayElement("processes", processMD)
 
+        if (exception != null) {
+            //TODO::  - update retry counts
+            val problem = Problem(HL7JSONLakeProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
+            val summary = SummaryInfo(SUMMARY_STATUS_ERROR, problem)
+            inputEvent.add("summary", summary.toJsonElement())
+        } else {
+            inputEvent.add("summary", (SummaryInfo(SUMMARY_STATUS_OK, null).toJsonElement()))
+        }
         // enable for model
-        fnConfig.evHubSender.send(evHubTopicName = eventHubSendOkName, message = gsonWithNullsOn.toJson(inputEvent))
-    }
+        val inputEventOut = gsonWithNullsOn.toJson(inputEvent)
+        evHubSender.send(
+            evHubTopicName = evTopicName,
+            message = inputEventOut
+        )
 
-
-
-
-
-    private fun processMessageError(
-        e: Exception, inputEvent: JsonObject, eventHubSendErrsName: String, evHubSender: EventHubSender) {
-        //TODO::  - update retry counts
-        val problem = Problem(HL7JSONLakeProcessMetadata.PROCESS_NAME, e, false, 0, 0)
-        val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
-        inputEvent.add("summary", summary.toJsonElement())
-
-        evHubSender.send(evHubTopicName = eventHubSendErrsName, message = gsonWithNullsOn.toJson(inputEvent))
     }
 
 } // .Function

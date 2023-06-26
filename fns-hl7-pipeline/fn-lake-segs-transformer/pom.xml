@@ -8,7 +8,7 @@
     <artifactId>lake-segs-transfomer</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <!-- -->
+    <!-- --><!-- --><!-- -->
     <name>DEX Fns-Pipeline :: lake-segs-transfomer</name>
 
     <properties>
@@ -118,10 +118,10 @@
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <version>${functions.plugin.version}</version>
                 <configuration>
-                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
+                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
@@ -182,6 +182,11 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -311,4 +316,15 @@
             </plugin>
         </plugins>
     </build>
+    
+    <distributionManagement>
+        <repository>
+            <id>ede-releases</id>
+            <url>${maven-releases-url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ede-snapshots</id>
+            <url>${maven-snapshot-url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

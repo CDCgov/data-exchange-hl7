@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "1.0.15-SNAPSHOT"
+version = "1.0.16-SNAPSHOT"
 
 repositories {
     maven {
@@ -30,8 +30,8 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-tst-dex-cache.redis.cache.windows.net",
-                       "REDIS_CACHE_KEY"  to findProperty("redisTSTKey"),
+    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-dev-dex-cache.redis.cache.windows.net",
+                       "REDIS_CACHE_KEY"  to findProperty("redisDevKey"),
                         "EVENT_HUB_CONNECT_STR" to findProperty("eventHubConnStr")
     ))
 //    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-tst-dex-cache.redis.cache.windows.net",

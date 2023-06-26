@@ -10,9 +10,11 @@ import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
+import gov.cdc.dex.hl7.model.Segment
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
+import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
@@ -21,18 +23,18 @@ import org.slf4j.LoggerFactory
 
 /**
  * Azure function with event hub trigger for the Lake of Segments transformer
- * Takes an HL7 message and converts it to an lake of segments based on the HL7 dependency tree
+ * Takes an HL7 message and converts it to a lake of segments based on the HL7 dependency tree
  */
 class Function {
     
     companion object {
 
-        val PROCESS_STATUS_OK = "SUCCESS"
-        val PROCESS_STATUS_EXCEPTION = "FAILURE"
-
+        const val PROCESS_STATUS_OK = "SUCCESS"
+        const val PROCESS_STATUS_EXCEPTION = "FAILURE"
+        const val SUMMARY_STATUS_OK = "LAKE-SEGMENTS-TRANSFORMED"
+        const val SUMMARY_STATUS_ERROR = "LAKE-SEGMENTS-ERROR"
         val fnConfig = FunctionConfig()
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
-
     } // .companion object
 
 
@@ -44,14 +46,12 @@ class Function {
                 connection = "EventHubConnectionString",
                 consumerGroup = "%EventHubConsumerGroupCASE%",)
                 message: List<String?>,
-        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
+        @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext) {
-
         // context.logger.info("------ received event: ------> message: --> $message") 
 
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
 
-        // 
         // Process each Event Hub Message
         // ----------------------------------------------
        // message.forEach { singleMessage: String? ->
@@ -109,11 +109,7 @@ class Function {
 
             } // .catch
 
-        } // .message.forEach
-     
     } // .eventHubProcessor
-
-
 
     @FunctionName("LAKE_OF_SEGMENTS_TRANSFORMER_ELR")
     fun eventHubELRProcessor(
@@ -126,15 +122,11 @@ class Function {
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext) {
 
-        // context.logger.info("------ received event: ------> message: --> $message")
+        processMessages(message, context, eventHubMD)
 
-        val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create() //.setPrettyPrinting().create()
+    } // .eventHubProcessor
 
-
-        //
-        // Process each Event Hub Message
-        // ----------------------------------------------
-       // message.forEach { singleMessage: String? ->
+    private fun processMessages(message: List<String?>, context: ExecutionContext, eventHubMD: List<EventHubMetadata>) {
         message.forEachIndexed {
                 messageIndex: Int, singleMessage: String? ->
             // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
@@ -158,8 +150,12 @@ class Function {
                 //
                 // Process Message for SQL Model
                 // ----------------------------------------------
+                val profileFilePath = "/BasicProfile.json"
+                val config = listOf(profileFilePath)
                 try {
-
+                    // read the profile
+                    val profile = this::class.java.getResource(profileFilePath).readText()
+                    
                    processMessage(
                         hl7Content,
                         startTime,
@@ -172,75 +168,57 @@ class Function {
                     )
 
                     logger.info("DEX::Processed for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendOkName")
-
+                    // Transform to Lake of Segments
+                    val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
+                    // deliver
+                    updateMetadataAndDeliver(startTime, PROCESS_STATUS_OK, lakeSegsModel, eventHubMD[messageIndex],
+                        fnConfig.evHubSender, fnConfig.eventHubSendOkName, inputEvent, null, config
+                    )
                 } catch (e: Exception) {
 
                     logger.severe("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
-                    processMessageError(e, inputEvent, fnConfig.eventHubSendErrsName, fnConfig.evHubSender, gsonWithNullsOn)
+                    updateMetadataAndDeliver(startTime, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
+                        fnConfig.evHubSender, fnConfig.eventHubSendErrsName, inputEvent, e, config)
 
                     logger.info("DEX::Processed for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.eventHubSendErrsName")
                 } // .catch
 
             } catch (e: Exception) {
-
                 // message is bad, can't extract fields based on schema expected
                 logger.severe("DEX::Unable to process Message due to exception: ${e.message}")
-
+                e.printStackTrace()
             } // .catch
 
         } // .message.forEach
 
-    } // .eventHubProcessor
+    }
+    private fun updateMetadataAndDeliver(startTime: String, status: String, report: List<Segment>?, eventHubMD: EventHubMetadata,
+                                         evHubSender: EventHubSender, evTopicName: String, inputEvent: JsonObject, exception: Exception?, config: List<String>) {
 
-    private fun processMessage(
-        hl7Content: String,
-        startTime: String,
-        metadata: JsonObject,
-        eventHubSendELROkName: String,
-        evHubSender: EventHubSender,
-        eventHubMD: EventHubMetadata,
-        gsonWithNullsOn: Gson,
-        inputEvent: JsonObject
-    ){
-        // read the profile
-        val profileFilePath = "/BasicProfile.json"
-        val profile = this::class.java.getResource(profileFilePath).readText()
-
-        // Transformer to Lake of Segments
-        // ------------------------------------------------------------------------------
-        val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
-
-        val processMD = LakeSegsTransProcessMetadata(status = PROCESS_STATUS_OK, eventHubMD = eventHubMD, report = lakeSegsModel,
-            config = listOf(profileFilePath)
-        )
-
-        // process time
+        val processMD = LakeSegsTransProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
 
+        val metadata =  JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
         metadata.addArrayElement("processes", processMD)
 
+        if (exception != null) {
+            //TODO::  - update retry counts
+            val problem = Problem(LakeSegsTransProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
+            val summary = SummaryInfo(SUMMARY_STATUS_ERROR, problem)
+            inputEvent.add("summary", summary.toJsonElement())
+        } else {
+            inputEvent.add("summary", (SummaryInfo(SUMMARY_STATUS_OK, null).toJsonElement()))
+        }
         // enable for model
-
-        evHubSender.send(evHubTopicName = eventHubSendELROkName, message = gsonWithNullsOn.toJson(inputEvent))
-
+        val inputEventOut = gsonWithNullsOn.toJson(inputEvent)
+        evHubSender.send(
+            evHubTopicName = evTopicName,
+            message = inputEventOut
+        )
     }
 
-    private fun processMessageError(
-        e: Exception,
-        inputEvent: JsonObject,
-        eventHubSendErrsName: String,
-        evHubSender: EventHubSender,
-        gsonWithNullsOn: Gson
-    ) {
-        //TODO::  - update retry counts
-        val problem = Problem(LakeSegsTransProcessMetadata.PROCESS_NAME, e, false, 0, 0)
-        val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
-        inputEvent.add("summary", summary.toJsonElement())
-
-        evHubSender.send(evHubTopicName = eventHubSendErrsName, message = gsonWithNullsOn.toJson(inputEvent))
-    }
 
 } // .Function
 
