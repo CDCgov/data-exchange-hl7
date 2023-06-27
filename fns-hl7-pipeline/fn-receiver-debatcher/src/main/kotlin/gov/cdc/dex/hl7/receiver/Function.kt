@@ -69,7 +69,7 @@ class Function {
                     val blobClient = fnConfig.azBlobProxy.getBlobClient(blobName)
                     //Create Map of Metadata with lower case keys
                     val metaDataMap =  blobClient.properties.metadata.mapKeys { it.key.lowercase() }
-                    
+
                     // Create Metadata for Provenance
                     val provenance = Provenance(
                         eventId=event.id,
@@ -78,7 +78,7 @@ class Function {
                         fileTimestamp=blobClient.properties.lastModified.toIsoString(),
                         fileSize=blobClient.properties.blobSize,
                         singleOrBatch=Provenance.SINGLE_FILE,
-                        originalFileName =metaDataMap["orginal_file_name"] ?: blobName,
+                        originalFileName =metaDataMap["original_file_name"] ?: blobName,
                         systemProvider = metaDataMap["system_provider"],
                         originalFileTimestamp = metaDataMap["original_file_timestamp"]
                     ) // .hl7MessageMetadata
