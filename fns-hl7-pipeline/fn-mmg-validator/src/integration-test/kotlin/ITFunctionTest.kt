@@ -2,6 +2,7 @@ import com.google.gson.JsonObject
 import com.microsoft.azure.functions.ExecutionContext
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.hl7.MMGValidationFunction
+import gov.cdc.dex.hl7.model.ReportStatus
 import gov.cdc.dex.util.JsonHelper
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -30,16 +31,16 @@ class ITFunctionTest {
         assertTrue(filtered.isNotEmpty(), "Asserting process named MMG-VALIDATOR exists")
         if (filtered.isNotEmpty()) {
              assertEquals(
-                "MMG_VALID",
+                ReportStatus.MMG_VALID.toString(),
                 filtered[0].asJsonObject["status"].asString,
-                "Asserting status == MMG_VALID"
+                "Asserting status == ${ReportStatus.MMG_VALID}"
             )
         }
         val outputSummary = output.asJsonObject["summary"].asJsonObject
         assertEquals(
-            "MMG_VALID",
+            ReportStatus.MMG_VALID.toString(),
             outputSummary["current_status"].asString,
-            "Asserting summary.current_status == MMG_VALID"
+            "Asserting summary.current_status == ${ReportStatus.MMG_VALID}"
         )
         assertTrue(outputSummary["problem"].isJsonNull, "Asserting summary.problem is JsonNull")
 

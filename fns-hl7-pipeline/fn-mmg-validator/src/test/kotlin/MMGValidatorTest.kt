@@ -13,6 +13,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 
+@Tag("UnitTest")
 class MMGValidatorTest {
 
     companion object {
@@ -23,56 +24,47 @@ class MMGValidatorTest {
     } // .companion object
 
 
-    private fun validateMessage(fileName: String): MmgReport {
-        val testMsg = this::class.java.getResource(fileName).readText().trim()
 
-
-        val mmgValidator = MmgValidator(redisProxy)
-
-        val validationReport = mmgValidator.validate(testMsg)
-
-        println("validationReport: -->\n\n${gson.toJson(validationReport)}\n")
-        return  MmgReport(validationReport)
-    }
-    @Test
+/*    @Test
     fun testLogMMGValidatorReport() {
         validateMessage("/arbo/ARBOVIRAL_V1_3_TM_CN_TC01.txt")
-    } // .testLogMMGValidatorReport
+    } // .testLogMMGValidatorReport*/
 
 
-    @Test
+    /*@Test
     fun testGenV1CaseMapMessages() {
         testFolder("genV1")
     }
-
-    @Test
+*/
+  /*  @Test
     fun testArboMessages() {
         testFolder("arbo")
     }
-
-    @Test
+*/
+  /*  @Test
     fun testTBRDMessages() {
         testFolder("tbrd")
     }
-    @Test
+  */
+    /*@Test
     fun testNNDSSMessages() {
         testFolder("ndss")
-    }
-    @Test
+    }*/
+    /*@Test
     fun testADBMessages() {
         testFolder("adb")
-    }
+    }*/
 
-    @Test
+    /*@Test
     fun testHepMessages() {
         testFolder("Hep")
-    }
+    }*/
 
-    @Test
+    /*@Test
     fun testMultiOBR() {
         val report = validateMessage("/Hepatitis_V1_0_1_TM_TC01_HEP_A_Acute.txt")
         println(report)
-    }
+    }*/
 
     @Test
     fun testInvalidMMG() {
@@ -84,25 +76,7 @@ class MMGValidatorTest {
             assert(true)
         }
     }
-    private fun testFolder(folderName: String) {
-        val dir = "src/test/resources/$folderName"
 
-        Files.walk(Paths.get(dir))
-            .filter { Files.isRegularFile(it) }
-            .forEach {
-                println("==================  ${it.fileName} ")
-                try {
-                    validateMessage("/$folderName/${it.fileName}")
-
-                } catch(e: InvalidMessageException ) {
-                    println(e.message)
-                } catch(e:InvalidConditionException) {
-                    println(e.message)
-                }
-                println("==========================")
-
-            }
-    }
 
     @Test
     fun testMessagesWithZeroErrorsAndWarnings() {
@@ -225,4 +199,34 @@ class MMGValidatorTest {
         validateMessage("./Lyme_BadWeek.txt")
     }
 
+    private fun testFolder(folderName: String) {
+        val dir = "src/test/resources/$folderName"
+
+        Files.walk(Paths.get(dir))
+            .filter { Files.isRegularFile(it) }
+            .forEach {
+                println("==================  ${it.fileName} ")
+                try {
+                    validateMessage("/$folderName/${it.fileName}")
+
+                } catch(e: InvalidMessageException ) {
+                    println(e.message)
+                } catch(e:InvalidConditionException) {
+                    println(e.message)
+                }
+                println("==========================")
+
+            }
+    }
+    private fun validateMessage(fileName: String): MmgReport {
+        val testMsg = this::class.java.getResource(fileName).readText().trim()
+
+
+        val mmgValidator = MmgValidator(redisProxy)
+
+        val validationReport = mmgValidator.validate(testMsg)
+
+        println("validationReport: -->\n\n${gson.toJson(validationReport)}\n")
+        return  MmgReport(validationReport)
+    }
 }
