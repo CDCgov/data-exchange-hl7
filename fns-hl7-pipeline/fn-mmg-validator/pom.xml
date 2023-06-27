@@ -8,7 +8,7 @@
     <artifactId>mmg-validator</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <!-- --><!-- -->
+    <!-- --><!-- --><!---->
     <name>DEX Fns-Pipeline :: mmg-validator</name>
 
     <properties>
