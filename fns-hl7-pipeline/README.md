@@ -10,7 +10,7 @@ HL7 pipeline functions project: receiver-debatcher, redactor, structure-validato
 - Code for a redactor function - proof-of-concept:
 [redactor](https://github.com/CDCgov/data-exchange-hl7/tree/develop/fns-hl7-pipeline/fn-redactor)
 
-#### HL7 structural-validator function - validates HL7 structure using PHIN Spec profiles created in the IGAMT tool
+#### HL7 structure-validator function - validates HL7 structure using PHIN Spec profiles created in the IGAMT tool
 - Code for a structure-validator function - proof-of-concept:
 [structure-validator](https://github.com/CDCgov/data-exchange-hl7/tree/develop/fns-hl7-pipeline/fn-structure-validator)
 
