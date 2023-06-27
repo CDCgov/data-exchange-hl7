@@ -7,16 +7,18 @@ import gov.cdc.dex.hl7.model.MmgReport
 import gov.cdc.dex.hl7.model.ReportStatus
 import gov.cdc.dex.hl7.model.ValidationIssueType
 import gov.cdc.dex.mmg.InvalidConditionException
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
+
 
 class MMGValidatorTest {
 
     companion object {
         private val gson = GsonBuilder().serializeNulls().disableHtmlEscaping().create()
-        private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
-        private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+        private val REDIS_NAME = System.getenv("REDIS_CACHE_NAME")
+        private val REDIS_KEY  = System.getenv("REDIS_CACHE_KEY")
         private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
     } // .companion object
 

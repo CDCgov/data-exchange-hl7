@@ -1,25 +1,21 @@
-
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.MmgValidator
-
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
 import gov.cdc.dex.hl7.model.*
-
 import gov.cdc.hl7.HL7StaticParser
-
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import redis.clients.jedis.Jedis
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
+@Tag("UnitTest")
 class MMGTest {
-    private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
-    private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+    private val REDIS_NAME = System.getenv("REDIS_CACHE_NAME")
+    private val REDIS_KEY  = System.getenv("REDIS_CACHE_KEY")
     private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
-
-    @Test
-    fun testLoadMMG() {
-        val mmgName = "GEN_SUMMARY_CASE_MAP_v1.0"
-        val mmgJson = this::class.java.getResource("/mmgs/" + mmgName + ".json" ).readText()
-        println(mmgJson)
-    }
 
     @Test
     fun testRemoveMSH21FromGenV2() {
@@ -27,10 +23,8 @@ class MMGTest {
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgs = MmgValidator(redisProxy).getMMGFromMessage(testMsg)
         val genV2 = mmgs[0]
-        val genV2NoMSH = genV2
-        println(genV2NoMSH.blocks.size)
-        genV2NoMSH.blocks = genV2.blocks.filter {it.name != "Message Header"}
-        println(genV2NoMSH.blocks.size)
+        val genV2NoMSHBlocks = genV2.blocks.filter {it.name != "Message Header"}
+        assertEquals(genV2NoMSHBlocks.size, genV2.blocks.size - 1, "Asserting Message Header block removed")
     }
 
     @Test
@@ -39,6 +33,11 @@ class MMGTest {
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgs = MmgValidator(redisProxy).getMMGFromMessage(testMsg)
         mmgs.forEach { println(it)}
+        assertEquals(mmgs.size, 2, "Asserting 2 MMGs returned")
+        if (mmgs.size == 2) {
+            assertEquals(mmgs[0].name, "Generic Version 2.0.1", "Asserting first MMG is Gen v2" )
+            assertEquals(mmgs[1].name, "Lyme Disease", "Asserting second MMG is Lyme Disease")
+        }
     }
 
     @Test
@@ -82,21 +81,31 @@ class MMGTest {
     }
 
     @Test
+    @OptIn(ExperimentalTime::class)
     fun testInvalidCode() {
         try {
-            val REDIS_CACHE_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
-            val REDIS_CACHE_KEY = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
-            val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_CACHE_KEY)
             val vocabKey = "vocab:UNKNOWN_KEY"
-            val conceptStr = redisProxy.getJedisClient()
-                .hgetAll(vocabKey) //?: throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
-            if (conceptStr.isNullOrEmpty()) {
+            println("getting client")
+            val client: Jedis
+            var conceptStr: String = ""
+            val clientTime = measureTime {
+                client = redisProxy.getJedisClient()
+            }
+            println("Time to get client: $clientTime")
+            val conceptTime = measureTime {
+                println("getting concept")
+                conceptStr = client
+                    .hgetAll(vocabKey).toString() //?: throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
+            }
+            println("Time to get concept: $conceptTime")
+            if (conceptStr.isEmpty()) {
+                println("exception")
                 throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
             }
-            println(conceptStr)
         } catch (e: InvalidConceptKey) {
             assert(true)
             println("Exception properly thrown: ${e.message}")
+
         }
     }
 
