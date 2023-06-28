@@ -38,7 +38,7 @@ class RedisProxyTest {
         val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_PWD)
         val totaltime = measureTime {
             println("Redis Proxy to use $REDIS_CACHE_NAME")
-            for (i in 1..5) {
+            for (i in 1..500) {
                 val time = measureTime {
                     redisProxy.getJedisClient().use { jedis -> jedis.ping() }
                 }
