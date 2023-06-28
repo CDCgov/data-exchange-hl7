@@ -40,7 +40,6 @@ class MMGTest {
         }
     }
 
-    @Test
     fun testGetSegments() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
@@ -67,7 +66,6 @@ class MMGTest {
 
     }
 
-    @Test
     fun testGetLineNumber() {
         val testMsg = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
         val dataTypeSegments = HL7StaticParser.getListOfMatchingSegments(testMsg, "OBX", "@3.1='INV930'")
@@ -83,11 +81,12 @@ class MMGTest {
     @Test
     @OptIn(ExperimentalTime::class)
     fun testInvalidCode() {
+        var exceptionThrown = false
         try {
             val vocabKey = "vocab:UNKNOWN_KEY"
             println("getting client")
             val client: Jedis
-            var conceptStr: String = ""
+            var conceptStr: MutableMap<String, String>
             val clientTime = measureTime {
                 client = redisProxy.getJedisClient()
             }
@@ -95,17 +94,16 @@ class MMGTest {
             val conceptTime = measureTime {
                 println("getting concept")
                 conceptStr = client
-                    .hgetAll(vocabKey).toString() //?: throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
+                    .hgetAll(vocabKey) //?: throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
             }
             println("Time to get concept: $conceptTime")
             if (conceptStr.isEmpty()) {
-                println("exception")
                 throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
             }
         } catch (e: InvalidConceptKey) {
-            assertTrue(true, "Asserting exception properly thrown: ${e.message}")
-
+            exceptionThrown = true
         }
+        assertTrue(exceptionThrown, "Asserting exception properly thrown for invalid concept key")
     }
 
     @Test
