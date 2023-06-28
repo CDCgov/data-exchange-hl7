@@ -22,9 +22,9 @@ class MMGTest {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgs = MmgValidator(redisProxy).getMMGFromMessage(testMsg)
-        val genV2 = mmgs[0]
+        val genV2 = mmgs[0]  //gen v2 mmg provided by getMMGFromMessage should not contain message header
         val genV2NoMSHBlocks = genV2.blocks.filter {it.name != "Message Header"}
-        assertEquals(genV2NoMSHBlocks.size, genV2.blocks.size - 1, "Asserting Message Header block removed")
+        assertEquals(genV2NoMSHBlocks.size, genV2.blocks.size, "Asserting Message Header block removed")
     }
 
     @Test
