@@ -19,7 +19,7 @@
         <functions.plugin.version>1.19.0</functions.plugin.version>
         <maven.compiler.sjource>1.11</maven.compiler.sjource>
         <maven.compiler.target>1.11</maven.compiler.target>
-        <functionAppName>ocio-ede-${environment-id}-hl7-json-lake-fn</functionAppName>
+        <functionAppName>ocio-ede-${environment-id}-hl7-json-lake-transformer</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
 
         <slf4j.version>2.0.3</slf4j.version>

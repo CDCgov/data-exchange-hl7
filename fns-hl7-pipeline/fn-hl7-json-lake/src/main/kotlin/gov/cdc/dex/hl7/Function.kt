@@ -92,16 +92,16 @@ class Function {
                         fnConfig.eventHubSendOkName
                     )
                 } catch (e: Exception) {
-                    context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
+                    context.logger.severe("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
                     processMessageError(e,inputEvent,fnConfig.eventHubSendOkName,fnConfig.evHubSender)
 
-                    context.logger.info("Processed for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
+                    context.logger.info("DEX::Processed for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
                 } // .catch
 
             } catch (e: Exception) {
                 // message is bad, can't extract fields based on schema expected
-                context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                context.logger.severe("DEX::Unable to process Message due to exception: ${e.message}")
                 e.printStackTrace()
 
             } // .catch
