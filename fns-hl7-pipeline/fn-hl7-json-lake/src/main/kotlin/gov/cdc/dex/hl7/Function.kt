@@ -85,7 +85,6 @@ class Function {
                     val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
                     val bumblebee = HL7JsonTransformer.getTransformerWithResource(hl7message, FunctionConfig.PROFILE_FILE_PATH)
                     val fullHL7 = bumblebee.transformMessage()
-                    println(fullHL7)
                     updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_OK, fullHL7, eventHubMD[messageIndex],
                         fnConfig.evHubSender, fnConfig.eventHubSendOkName, gsonWithNullsOn, inputEvent, null,
                         listOf(FunctionConfig.PROFILE_FILE_PATH))
