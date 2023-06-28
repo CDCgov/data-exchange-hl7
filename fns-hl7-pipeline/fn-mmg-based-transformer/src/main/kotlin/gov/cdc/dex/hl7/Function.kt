@@ -31,6 +31,8 @@ class Function {
     companion object {
         const val PROCESS_STATUS_OK = "SUCCESS"
         const val PROCESS_STATUS_EXCEPTION = "FAILURE"
+        const val SUMMARY_STATUS_OK = "MMG-BASED-TRANSFORMED"
+        const val SUMMARY_STATUS_ERROR = "MMG-BASED-ERROR"
 
         val gsonWithNullsOn = GsonBuilder().serializeNulls().create()
     } // .companion
@@ -159,10 +161,10 @@ class Function {
         if (exception != null) {
             //TODO::  - update retry counts
             val problem = Problem(MbtProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
-            val summary = SummaryInfo(PROCESS_STATUS_EXCEPTION, problem)
+            val summary = SummaryInfo(SUMMARY_STATUS_ERROR, problem)
             inputEvent.add("summary", summary.toJsonElement())
         } else {
-            inputEvent.add("summary", (SummaryInfo(status, null).toJsonElement()))
+            inputEvent.add("summary", (SummaryInfo(SUMMARY_STATUS_OK, null).toJsonElement()))
         }
         // enable for model
         val inputEventOut = gsonWithNullsOn.toJson(inputEvent)

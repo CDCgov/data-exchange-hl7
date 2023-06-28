@@ -33,7 +33,7 @@
 						"disabled": true
 					},
 					{
-						"key": "x-tp-orginal_file_name",
+						"key": "x-tp-original_file_name",
 						"value": "Lyme_HappyPath.doNotDelete.txt",
 						"description": "Optional. The local file name before upload.",
 						"type": "text"
@@ -99,7 +99,7 @@
 						"disabled": true
 					},
 					{
-						"key": "x-tp-orginal_file_name",
+						"key": "x-tp-original_file_name",
 						"value": "GenV1_withStructureErrors.txt",
 						"description": "Optional. The local file name before upload.",
 						"type": "text"
@@ -163,7 +163,7 @@
 						"type": "text"
 					},
 					{
-						"key": "x-tp-orginal_file_name",
+						"key": "x-tp-original_file_name",
 						"value": "CovidELR.doNotDelete.txt",
 						"description": "Optional. The local file name before upload.",
 						"type": "text"
@@ -230,7 +230,7 @@
 						"disabled": true
 					},
 					{
-						"key": "x-tp-orginal_file_name",
+						"key": "x-tp-original_file_name",
 						"value": "Lyme_HappyPath.doNotDelete.txt",
 						"description": "Optional. The local file name before upload.",
 						"type": "text",
@@ -299,7 +299,7 @@
 						"disabled": true
 					},
 					{
-						"key": "x-tp-orginal_file_name",
+						"key": "x-tp-original_file_name",
 						"value": "BatchedMessage.doNotDelete.txt",
 						"description": "Optional. The local file name before upload.",
 						"type": "text"
@@ -365,7 +365,7 @@
 						"disabled": true
 					},
 					{
-						"key": "x-tp-orginal_file_name",
+						"key": "x-tp-original_file_name",
 						"value": "NotAnHL7Message.doNotDelete.txt",
 						"description": "Optional. The local file name before upload.",
 						"type": "text"
