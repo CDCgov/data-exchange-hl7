@@ -36,7 +36,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.16-SNAPSHOT</version>
+            <version>1.0.15-SNAPSHOT</version>
         </dependency>
 
         <!-- Azure Functions Java Library -->
@@ -246,6 +246,11 @@
                     <environmentVariables>
                         <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
                         <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                        <REDIS_POOL_MAX_TOTAL>50</REDIS_POOL_MAX_TOTAL>
+                        <REDIS_POOL_MAX_IDLE>50</REDIS_POOL_MAX_IDLE>
+                        <REDIS_POOL_MIN_IDLE>5</REDIS_POOL_MIN_IDLE>
+                        <REDIS_POOL_TEST_ON_BORROW>false</REDIS_POOL_TEST_ON_BORROW>
+                        <REDIS_POOL_TEST_WHILE_IDLE>false</REDIS_POOL_TEST_WHILE_IDLE>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <EventHubSendOkName>hl7-mmg-validation-ok</EventHubSendOkName>
                         <EventHubSendErrsName>hl7-mmg-validation-err</EventHubSendErrsName>
@@ -271,6 +276,12 @@
                             <environmentVariables>
                                 <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
                                 <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                                <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                                <REDIS_POOL_MAX_TOTAL>50</REDIS_POOL_MAX_TOTAL>
+                                <REDIS_POOL_MAX_IDLE>50</REDIS_POOL_MAX_IDLE>
+                                <REDIS_POOL_MIN_IDLE>5</REDIS_POOL_MIN_IDLE>
+                                <REDIS_POOL_TEST_ON_BORROW>false</REDIS_POOL_TEST_ON_BORROW>
+                                <REDIS_POOL_TEST_WHILE_IDLE>false</REDIS_POOL_TEST_WHILE_IDLE>
                                 <EventHubConnectionString>${ehString}</EventHubConnectionString>
                                 <EventHubSendOkName>hl7-mmg-validation-ok</EventHubSendOkName>
                                 <EventHubSendErrsName>hl7-mmg-validation-err</EventHubSendErrsName>
