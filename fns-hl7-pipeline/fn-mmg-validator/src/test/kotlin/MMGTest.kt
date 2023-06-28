@@ -103,8 +103,7 @@ class MMGTest {
                 throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
             }
         } catch (e: InvalidConceptKey) {
-            assert(true)
-            println("Exception properly thrown: ${e.message}")
+            assertTrue(true, "Asserting exception properly thrown: ${e.message}")
 
         }
     }
@@ -116,9 +115,9 @@ class MMGTest {
         val issues = listOf(v1, v2)
 
         val report = MmgReport(issues)
-        println("status: ${report.status}")
-        println("errors: ${report.errorCount}")
-        println("warnings: ${report.warningCount}")
+        assertEquals("MMG_ERRORS", report.status.toString(), "Asserting report status == MMG_ERRORS when Error is present")
+        assertEquals(1, report.errorCount, "Asserting report error count == 1")
+        assertEquals(1, report.warningCount, "Asserting report warning count == 1")
     }
 
     @Test
@@ -128,9 +127,9 @@ class MMGTest {
         val issues = listOf(v1, v2)
 
         val report = MmgReport(issues)
-        println("status: ${report.status}")
-        println("errors: ${report.errorCount}")
-        println("warnings: ${report.warningCount}")
+        assertEquals("MMG_VALID", report.status.toString(), "Asserting report status == MMG_VALID when no Error is present")
+        assertEquals(0, report.errorCount, "Asserting report error count == 0")
+        assertEquals(2, report.warningCount, "Asserting report warning count == 2")
     }
 
     @Test
@@ -138,8 +137,8 @@ class MMGTest {
         val issues = listOf<ValidationIssue>()
 
         val report = MmgReport(issues)
-        println("status: ${report.status}")
-        println("errors: ${report.errorCount}")
-        println("warnings: ${report.warningCount}")
+        assertEquals("MMG_VALID", report.status.toString(), "Asserting report status == MMG_VALID when no Error is present")
+        assertEquals(0, report.errorCount, "Asserting report error count == 0")
+        assertEquals(0, report.warningCount, "Asserting report warning count == 0")
     }
 }
