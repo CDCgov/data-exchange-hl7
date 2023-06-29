@@ -302,7 +302,7 @@
             </plugin>
 
 
-            <!--Jacoco Plugin -->
+            <!--Jacoco Plugin --><!--Jacoco Plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
