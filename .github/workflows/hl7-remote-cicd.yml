@@ -242,7 +242,7 @@ jobs:
                   owner: 'cdcent',
                   repo: 'data-exchange-hl7-devops',
                   workflow_id: '${{ matrix.workflow_id }}',
-                  ref: 'HL7-2192-create-unit-test-receiver-debatcher',
+                  ref: 'main',
                   inputs: {
                     environment: '${{ needs.prepare-remote-cicd.outputs.deploy_target }}',
                     'data-exchange-hl7-branch': '${{ needs.prepare-remote-cicd.outputs.merge_branch }}'
