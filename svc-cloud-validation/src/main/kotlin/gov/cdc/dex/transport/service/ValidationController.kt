@@ -81,9 +81,10 @@ class ValidationController(private val cloudStorage: CloudStorage) {
         conn.setRequestProperty("x-tp-message_type", msgType)
         conn.setRequestProperty("x-tp-route", "COVID19-ELR")
         var os: OutputStream
-        try(os = conn.getOutputStream()) {
-            byte[] input = jsonInputString.getBytes("utf-8");
-            os.write(input, 0, input.length);
+        try {
+            val os = conn.getOutputStream()
+            val input = payLoad.toByteArray();
+            os.write(input, 0, input.size);
         }
         var br : BufferedReader? = null
         try {
