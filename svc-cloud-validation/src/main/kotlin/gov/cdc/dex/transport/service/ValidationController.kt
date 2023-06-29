@@ -53,11 +53,11 @@ class ValidationController(private val cloudStorage: CloudStorage) {
     private fun validateMessage(hl7Content: String): String{
         var reportData = ""
 
-        var redactorReport = this.getContent(this.redactorUrl, hl7Content)
+        var redactorReport = this.getContent(URL(this.redactorUrl), hl7Content, "ELR")
 
-        var structureReport = this.getContent(this.structureUrl, hl7Content)
+        var structureReport = this.getContent(URL(this.structureUrl), hl7Content, "CASE")
 
-        var validationReport = this.getContent(this.validationUrl, hl7Content)
+        var validationReport = this.getContent(URL(this.validationUrl), hl7Content, "CASE")
 
         reportData = redactorReport + structureReport + validationReport
 
@@ -72,12 +72,14 @@ class ValidationController(private val cloudStorage: CloudStorage) {
             .toMap()
     }
 
-    private fun getContent(url: URL, payLoad : String): String {
+    private fun getContent(url: URL, payLoad : String, msgType: String): String {
         val sb = StringBuilder()
         val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "POST"
         conn.doOutput = true
         conn.setRequestProperty("Accept", "application/json")
+        conn.setRequestProperty("x-tp-message_type", msgType)
+        conn.setRequestProperty("x-tp-route", "COVID19-ELR")
         var os: OutputStream
         try(os = conn.getOutputStream()) {
             byte[] input = jsonInputString.getBytes("utf-8");
