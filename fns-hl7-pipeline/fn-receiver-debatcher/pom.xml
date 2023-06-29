@@ -8,7 +8,7 @@
     <artifactId>receiver-debatcher</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <!----><!---->
+    <!----><!----><!---->
     <name>DEX Fns-Pipeline :: receiver-debatcher</name>
 
     <properties>
