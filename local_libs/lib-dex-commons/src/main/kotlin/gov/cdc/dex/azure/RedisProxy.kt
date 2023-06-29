@@ -16,7 +16,7 @@ class RedisProxy( redisName: String,  redisKey:String,  redisPort: Int = 6380, s
 
     }
 
-     val jedisPool:JedisPool
+    val jedisPool:JedisPool
 
     init {
         logger.info("REDIS connection established with $redisName")

@@ -1,10 +1,10 @@
 import gov.cdc.dex.hl7.model.ValidationIssueCategoryType
 import org.junit.jupiter.api.Test
 
-class TestCardinaltyMatch {
+class TestCardinalityMatch {
     operator fun Regex.contains(text: CharSequence): Boolean = this.matches(text)
 
-    fun getCardinality(cardinality: String)  {
+    private fun getCardinality(cardinality: String)  {
         val card1Re = """\d+|\*""".toRegex()
         val cards = card1Re.findAll(cardinality)
         val card1 = cards.elementAt(0).value
@@ -22,7 +22,7 @@ class TestCardinaltyMatch {
         }
     }
     @Test
-    fun testCardinaltiy() {
+    fun testCardinality() {
         getCardinality("[0..1]")
         getCardinality("[0..*]")
         getCardinality("[1..1]")
