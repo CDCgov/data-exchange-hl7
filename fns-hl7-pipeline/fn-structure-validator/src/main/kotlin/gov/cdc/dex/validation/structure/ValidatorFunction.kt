@@ -28,7 +28,10 @@ class ValidatorFunction {
     companion object {
         private const val PHIN_SPEC_PROFILE = "MSH-21[1].1" //Not able to use HL7-PET due to scala version conflicts with NistValidator.
         private const val ELR_SPEC_PROFILE = "MSH-12"
+        const val PROCESS_STATUS_OK = "SUCCESS"
+        const val PROCESS_STATUS_EXCEPTION = "FAILURE"
         private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
+        private const val NIST_INVALID_MESSAGE = "STRUCTURE_ERRORS"
         private const val HL7_MSH = "MSH|"
         private const val HL7_SUBDELIMITERS = "^~\\&"
         private var logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
@@ -85,14 +88,14 @@ class ValidatorFunction {
                 //val phinSpec = getProfile(hl7Content, messageUUID, filePath, PHIN_SPEC_PROFILE)
                 report = validateMessage(hl7Content, messageUUID, filePath, HL7MessageType.valueOf(messageType), route)
                 //preparing EventHub payload:
-                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[msgNumber], listOf(getProfileName(hl7Content, HL7MessageType.valueOf(messageType), route )))
+                val processMD = StructureValidatorProcessMetadata(PROCESS_STATUS_OK, report, eventHubMD[msgNumber], listOf(getProfileName(hl7Content, HL7MessageType.valueOf(messageType), route )))
 
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
 
                 metadata.addArrayElement("processes", processMD)
                 //Update Summary element.
-                val summary = SummaryInfo(report.status ?: "Unknown")
+                val summary = SummaryInfo(report.status!!)
                 if (NIST_VALID_MESSAGE != report.status) {
                     summary.problem =
                         Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, "Message failed Structure Validation")
@@ -114,12 +117,12 @@ class ValidatorFunction {
             } catch (e: Exception) {
                 //TODO::  - update retry counts
                 log.severe("Unable to process Message due to exception: ${e.message}")
-                val processMD = StructureValidatorProcessMetadata(report.status ?: "Unknown", report, eventHubMD[msgNumber], listOf())
+                val processMD = StructureValidatorProcessMetadata(PROCESS_STATUS_EXCEPTION, report, eventHubMD[msgNumber], listOf())
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
                 metadata.addArrayElement("processes", processMD)
                 val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, e, false, 0, 0)
-                val summary = SummaryInfo("STRUCTURE_ERROR", problem)
+                val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
                 log.severe("metadata in exception: $metadata")
                 log.info("inputEvent in exception:$inputEvent")
                 inputEvent.add("summary", summary.toJsonElement())
@@ -177,7 +180,16 @@ class ValidatorFunction {
             throw InvalidMessageException("Unable to process message: Unable to retrieve PHIN Specification from $PHIN_SPEC_PROFILE$exMessage")
         }
         val nistValidator = ProfileManager(ResourceFileFetcher(), "/$profileName")
-        return nistValidator.validate(hl7Message)
+        val report = nistValidator.validate(hl7Message)
+        // normalize report status to STRUCTURE_ERRORS if any ERROR status is returned
+        report.status = if ("ERROR" in report.status + "") {
+            NIST_INVALID_MESSAGE
+        } else if (report.status.isNullOrEmpty()) {
+            "Unknown"
+        } else {
+            report.status + ""
+        }
+        return report
     }
 
     private fun validateHL7Delimiters(hl7Message: String) {
