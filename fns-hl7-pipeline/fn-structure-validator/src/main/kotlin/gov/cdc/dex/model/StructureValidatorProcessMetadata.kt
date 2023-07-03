@@ -10,4 +10,5 @@ data class StructureValidatorProcessMetadata (override val status: String, val r
         const val VALIDATOR_PROCESS = "STRUCTURE-VALIDATOR"
         const val VALIDATOR_VERSION = "1.0.0"
     }
+
 }

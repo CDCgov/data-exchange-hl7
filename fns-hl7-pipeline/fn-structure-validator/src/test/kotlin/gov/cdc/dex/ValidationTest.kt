@@ -2,15 +2,17 @@ package gov.cdc.dex
 
 import com.google.gson.GsonBuilder
 import gov.cdc.dex.metadata.HL7MessageType
+import gov.cdc.dex.validation.structure.ValidatorFunction
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
 
-
+@Tag("UnitTest")
 class ValidationTest {
 
     companion object {
@@ -25,6 +27,13 @@ class ValidationTest {
 
         println()
         val report = nistValidator.validate(testMessage)
+        report.status = if ("ERROR" in report.status + "") {
+            "STRUCTURE_ERRORS"
+        } else if (report.status.isNullOrEmpty()) {
+            "Unknown"
+        } else {
+            report.status + ""
+        }
         println("report: -->\n\n${gson.toJson(report)}\n")
         return report
     }
@@ -92,6 +101,13 @@ class ValidationTest {
                     }
                     val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec}")
                     val report = nistValidator.validate(testMsg)
+                    report.status = if ("ERROR" in report.status + "") {
+                        "STRUCTURE_ERRORS"
+                    } else if (report.status.isNullOrEmpty()) {
+                        "Unknown"
+                    } else {
+                        report.status + ""
+                    }
                     println("Status: ${report.status}; Errors: ${report.errorCounts}; Warnings: ${report.warningcounts}")
                 } catch(e: Exception) {
                     println(e.message)
