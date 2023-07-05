@@ -288,6 +288,10 @@
                     <!-- function app service plan name -->
                     <appServicePlanName>${functionServicePlan}</appServicePlanName>
                     <subscriptionId>${subscriptionID}</subscriptionId>
+                    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
                     <region>${functionRegion}</region>
 
                     <runtime>
