@@ -35,6 +35,18 @@ class FunctionTest {
         }
 
     }
+
+    @Test
+    fun testRedactorPHLIPVPD(){
+        val msg = this::class.java.getResource("/Mumps-VPD.txt")?.readText()
+        val helper = Helper()
+        val report = msg?.let { helper.getRedactedReport(it,"ELR", "phlip_vpd") }
+        if (report != null) {
+            println("report msg :${report._1}")
+            println("report List: ${report._2()?.toList()}")
+        }
+
+    }
     @Test
     fun extractValue(){
         val helper = Helper()
@@ -59,8 +71,8 @@ class FunctionTest {
 //    val redactJson = w?.toJsonElement()
 //
 //    println("redactJson: $redactJson")
-
-            val processMD = RedactorProcessMetadata("OK", rw, EventHubMetadata(1, 1, null, "20230101"), listOf())
+            val config = listOf(helper.getConfigFileName("CASE"))
+            val processMD = RedactorProcessMetadata("OK", rw, EventHubMetadata(1, 1, null, "20230101"), config)
 
             println(processMD)
 
