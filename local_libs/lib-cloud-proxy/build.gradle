@@ -13,8 +13,8 @@ group "gov.cdc.dex"
 
 repositories {
     maven {
-        url "https://imagehub.cdc.gov/repository/maven-ede-group/"
-        allowInsecureProtocol = true
+        url "https://imagehub.cdc.gov/repository/maven-ede-group/";
+        setAllowInsecureProtocol(true);
     }
 }
 
