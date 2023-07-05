@@ -48,7 +48,7 @@ endpoints:
 
 azure:
   blob:
-    container: hl7ingress
+    container: hl7ingress2
     connectStr: ${CONNECT_STR}
     health:
 #      enabled: true # (default = false)
