@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>gov.cdc.dex</groupId>
+    <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>svc-cloud-transport</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
-    <!----><!-- -->
+    <version>1.0.0-SNAPSHOT</version>
     <parent>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-parent</artifactId>
@@ -275,17 +274,18 @@
                 </executions>
             </plugin>
 
+	    <!-- https://github.com/microsoft/azure-maven-plugins/blob/develop/azure-webapp-maven-plugin/README.md#configuration -->
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-webapp-maven-plugin</artifactId>
-                <version>2.2.0</version>
+                <version>2.11.0</version>
                 <configuration>
-                    <schemaVersion>v2</schemaVersion>
-                    <appName>cloud-svc-transport-${environment-id}-eastus</appName>
+    		    <schemaVersion>v2</schemaVersion>
+		    <resourceGroup>${functionResourceGroup}</resourceGroup>
+
+                    <appName> ocio-ede-${environment-id}-hl7-svc-transport</appName>
                     <appServicePlanResourceGroup>${functionResourceGroup}</appServicePlanResourceGroup>
-                     <!-- function app resource group -->
-                    <resourceGroup>${functionResourceGroup}</resourceGroup>
-                    <!-- function app service plan name -->
+
                     <appServicePlanName>${functionServicePlan}</appServicePlanName>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                     <auth>
@@ -293,11 +293,15 @@
                         <serverId>azure-service-principal</serverId>
                     </auth>
                     <region>${functionRegion}</region>
-
+                    <subscriptionId>${subscriptionID}</subscriptionId>
+		    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
                     <runtime>
                         <os>Linux</os>
-                        <javaVersion>Java 11</javaVersion>
                         <webContainer>Java SE</webContainer>
+			<javaVersion>Java 11</javaVersion>
                     </runtime>
                     <deployment>
                         <resources>
