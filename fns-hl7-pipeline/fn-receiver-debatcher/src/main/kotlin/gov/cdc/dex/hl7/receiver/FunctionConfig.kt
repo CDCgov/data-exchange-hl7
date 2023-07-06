@@ -13,7 +13,7 @@ class FunctionConfig {
 
     val evHubOkName: String = System.getenv("EventHubSendOkName")
     val evHubErrorName: String = System.getenv("EventHubSendErrsName")
-    val azureBlobContainer: String = System.getenv("AZURE_BLOB_CONTAINER") ?: "hl7ingress"
+    val blobIngestContName = System.getenv("BlobIngestContainerName")
     init {
          //Init Event Hub connections
          val evHubConnStr = System.getenv("EventHubConnectionString")
@@ -26,7 +26,6 @@ class FunctionConfig {
          mmgUtil = MmgUtil(redisProxy)
 
          //Init Azure Storage connection
-         val blobIngestContName = System.getenv("BlobIngestContainerName")
          val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
          azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
     }
