@@ -13,7 +13,7 @@ class FunctionConfig {
 
     val evHubOkName: String = System.getenv("EventHubSendOkName")
     val evHubErrorName: String = System.getenv("EventHubSendErrsName")
-
+    val azureBlobContainer: String = System.getenv("AZURE_BLOB_CONTAINER") ?: "hl7ingress"
     init {
          //Init Event Hub connections
          val evHubConnStr = System.getenv("EventHubConnectionString")
