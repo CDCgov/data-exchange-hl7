@@ -48,7 +48,7 @@ class ValidatorFunction {
         ) message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext
-    ) {
+    ): JsonObject {
 
         val startTime =  Date().toIsoString()
 
@@ -81,6 +81,7 @@ class ValidatorFunction {
                 val route = if (routeJson is JsonPrimitive) routeJson.asString else ""
 
                 log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
+
                 //Main FN Logic
                 //val phinSpec = getProfile(hl7Content, messageUUID, filePath, PHIN_SPEC_PROFILE)
                 report = validateMessage(hl7Content, messageUUID, filePath, HL7MessageType.valueOf(messageType), route)
@@ -111,6 +112,10 @@ class ValidatorFunction {
                 log.finest("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
                 ehSender.send(ehDestination, gson.toJson(inputEvent))
 
+                if(msgNumber == message.lastIndex){
+                    return inputEvent
+                }
+
             } catch (e: Exception) {
                 //TODO::  - update retry counts
                 log.severe("Unable to process Message due to exception: ${e.message}")
@@ -124,9 +129,11 @@ class ValidatorFunction {
                 log.info("inputEvent in exception:$inputEvent")
                 inputEvent.add("summary", summary.toJsonElement())
                 ehSender.send(evHubNameErrs, gson.toJson(inputEvent))
+                return inputEvent 
             }
-        }
-    }
+        } // foreachIndexed
+        return JsonObject()
+    } //.run
 
     private fun getEhDestination(
         messageType: String,
@@ -155,8 +162,6 @@ class ValidatorFunction {
         return profileName
     }
 
-
-
     private fun getSafeEnvVariable(varName: String): String {
         val varValue = System.getenv(varName)
         if (varValue.isNullOrEmpty()) {
@@ -164,7 +169,6 @@ class ValidatorFunction {
         }
         return varValue
     }
-
 
     private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String, messageType: HL7MessageType, route: String): NistReport {
         validateHL7Delimiters(hl7Message)
@@ -250,7 +254,6 @@ class ValidatorFunction {
             )
         }
     }
-
 }
 
 private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
