@@ -19,11 +19,10 @@
         <exec.mainClass>gov.cdc.dex.transport.service.Application</exec.mainClass>
         <kotlinVersion>1.7.20</kotlinVersion>
     </properties>
-
     <repositories>
         <repository>
             <id>central</id>
-            <url>http://repo1.maven.org/maven2/</url>
+            <url>https://repo1.maven.org/maven2/</url>
         </repository>
         <repository>
             <id>nexus</id>
@@ -34,7 +33,6 @@
             <url>https://imagehub.cdc.gov/repository/maven-ede-snapshot/</url>
         </repository>
     </repositories>
-
     <dependencies>
         <dependency>
             <groupId>gov.cdc.dex</groupId>
@@ -119,7 +117,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -127,7 +124,6 @@
                 <artifactId>micronaut-maven-plugin</artifactId>
                 <version>3.5.2</version>
             </plugin>
-
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -280,12 +276,10 @@
                 <artifactId>azure-webapp-maven-plugin</artifactId>
                 <version>2.11.0</version>
                 <configuration>
-    		    <schemaVersion>v2</schemaVersion>
-		    <resourceGroup>${functionResourceGroup}</resourceGroup>
-
-                    <appName> ocio-ede-${environment-id}-hl7-svc-transport</appName>
+                    <schemaVersion>v2</schemaVersion>
+                    <resourceGroup>${functionResourceGroup}</resourceGroup>
+                    <appName>ocio-ede-${environment-id}-hl7-svc-transport</appName>
                     <appServicePlanResourceGroup>${functionResourceGroup}</appServicePlanResourceGroup>
-
                     <appServicePlanName>${functionServicePlan}</appServicePlanName>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                     <auth>
@@ -294,14 +288,10 @@
                     </auth>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-		    <auth>
-                        <type>service_principal</type>
-                        <serverId>azure-service-principal</serverId>
-                    </auth>
                     <runtime>
                         <os>Linux</os>
                         <webContainer>Java SE</webContainer>
-			<javaVersion>Java 11</javaVersion>
+                        <javaVersion>Java 11</javaVersion>
                     </runtime>
                     <deployment>
                         <resources>
