@@ -30,20 +30,27 @@ class RedactorFunctionTest {
         eventHubMDList.add(eventHubMD)
         val inputEvent : JsonObject = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
 
+        // Validate Summary.current_status is successful
         val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
-        // Validate current_status is successful
         if (summaryObj != null) {
             Assertions.assertEquals("REDACTED", summaryObj.get("current_status").asString)
         }
-        // Validate process Object is valid
-        val metadata = inputEvent.get("metadata")
-        kotlin.io.println("metadata: $metadata")
+        // // Validate process Object is valid
+        // val metadata = inputEvent.get("metadata")
+        // Assertions.assertTrue(metadata != null)
+        // kotlin.io.println("metadata: $metadata")
+        // Validate Process Metadata has been added to the array of proccesses
+        val jarr: JsonArray? = inputEvent.get("processes").asJsonArray
+        if(jarr != null){
+            val item = jarr.getJSONObject(0)
+            Assertions.assertTrue(item.get("metadata") != null)
+        }
 
     }
 
     @Test
     fun process_ExceptionPath() {
-        println("Starting processELR_HappyPath test")
+        println("Starting processELR_ExceptionPath test")
         val function = Function()
         val text = File("src/test/resources/Error_message.txt").readText()
 
@@ -60,6 +67,12 @@ class RedactorFunctionTest {
             Assertions.assertEquals("FAILURE", summaryObj.get("current_status").asString)
         }
         // Validate Process MD w/ appropriate assertion? > metadata > processes
+        // Validate Process Metadata has been added to the array of proccesses
+        val jarr: JsonArray? = inputEvent.get("processes").asJsonArray
+        if(jarr != null){
+            val item = jarr.getJSONObject(0)
+            Assertions.assertTrue(item.get("metadata") != null)
+        }
 
     }
 
