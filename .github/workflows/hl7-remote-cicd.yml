@@ -222,7 +222,7 @@ jobs:
     if: ${{ github.event_name != 'workflow_dispatch' && fromJson(needs.prepare-remote-cicd.outputs.matrix)[0] != null }}
     needs: prepare-remote-cicd
     runs-on: ubuntu-latest
-    name: Remotely Trigger ${{ matrix.workflow_id }} Workflow                                                                      
+    name: Dispatch ${{ matrix.workflow_id }} Workflow                                                                      
     strategy:
       fail-fast: false
       matrix:
