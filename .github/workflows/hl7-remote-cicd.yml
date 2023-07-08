@@ -82,7 +82,7 @@ jobs:
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
               inputs: '{ "environment": "${{ github.event.inputs.environment }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
-              ref: 'HL7-2277-MMGBasedTransformerTest'
+              ref: 'HL7-2286-ReusableCITemplate'
               wait-for-completion: true
               wait-for-completion-timeout: 45m
               wait-for-completion-interval: 30s
@@ -251,7 +251,7 @@ jobs:
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
               inputs: '{ "environment": "${{ needs.prepare-remote-cicd.outputs.deploy_target }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
-              ref: 'HL7-2277-MMGBasedTransformerTest'
+              ref: 'HL7-2286-ReusableCITemplate'
               wait-for-completion: true
               wait-for-completion-timeout: 45m
               wait-for-completion-interval: 30s
