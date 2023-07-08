@@ -31,6 +31,18 @@ on:
         default: 'develop'
         required: true
         type: string
+  pull_request:
+    types:
+       - synchronize
+       - opened
+    branches:
+      - 'develop'
+      - 'main'
+      - '*'
+    paths:
+    - fns-hl7-pipeline/**
+    - fn-cache-loader/**
+    - svc-cloud-transport/**
   push:
     branches:
       - 'develop'
