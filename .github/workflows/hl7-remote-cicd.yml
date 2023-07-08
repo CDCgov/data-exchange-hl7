@@ -233,7 +233,7 @@ jobs:
                   ref: 'main',
                   inputs: {
                     environment: '${{ needs.prepare-remote-cicd.outputs.deploy_target }}',
-                    'data-exchange-hl7-branch': '${{ needs.prepare-remote-cicd.outputs.merge_branch }}'
+                    'data-exchange-hl7-branch': 'HL7-2277-MMGBasedTransformerTest'
                   }
                 })
                 console.log(result);
