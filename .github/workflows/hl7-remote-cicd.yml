@@ -76,27 +76,39 @@ jobs:
                
         - name: Manually Dispatch Remote CICD Trigger Event 
           id: manual-devops-wkflow-dispatch
-          uses: actions/github-script@v6.4.1
+          uses: aurelien-baudet/workflow-dispatch@v2
           with:
-            debug: ${{ secrets.ACTIONS_RUNNER_DEBUG }}
-            github-token: '${{ env.access_token }}'
-            script: |
-              try {
-                const result = await github.rest.actions.createWorkflowDispatch({
-                  owner: 'cdcent',
-                  repo: 'data-exchange-hl7-devops',
-                  workflow_id: '${{ github.event.inputs.data-exchange-hl7-workflow }}',
-                  ref: 'main',
-                  inputs: {
-                    environment: '${{ github.event.inputs.environment }}',
-                    'data-exchange-hl7-branch': '${{ github.event.inputs.data-exchange-hl7-branch  }}'
-                  }
-                })
-                console.log(result);
-              } catch(error) {
-                console.error(error);
-                core.setFailed(error);
-              }
+              workflow: '${{ github.event.inputs.data-exchange-hl7-workflow }}'
+              repo: cdcent/data-exchange-hl7-devops
+              token: ${{ env.access_token }}
+              inputs: '{ "environment": "${{ github.event.inputs.environment }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
+              ref: 'HL7-2277-MMGBasedTransformerTest'
+              wait-for-completion: true
+              wait-for-completion-timeout: 45m
+              wait-for-completion-interval: 30s
+              display-workflow-run-url: true
+              workflow-logs: true
+          # uses: actions/github-script@v6.4.1
+          # with:
+          #   debug: ${{ secrets.ACTIONS_RUNNER_DEBUG }}
+          #   github-token: '${{ env.access_token }}'
+          #   script: |
+          #     try {
+          #       const result = await github.rest.actions.createWorkflowDispatch({
+          #         owner: 'cdcent',
+          #         repo: 'data-exchange-hl7-devops',
+          #         workflow_id: '${{ github.event.inputs.data-exchange-hl7-workflow }}',
+          #         ref: 'main',
+          #         inputs: {
+          #           environment: '${{ github.event.inputs.environment }}',
+          #           'data-exchange-hl7-branch': '${{ github.event.inputs.data-exchange-hl7-branch  }}'
+          #         }
+          #       })
+          #       console.log(result);
+          #     } catch(error) {
+          #       console.error(error);
+          #       core.setFailed(error);
+          #     }
   prepare-remote-cicd:
     permissions: write-all
     if: github.event_name != 'workflow_dispatch'
@@ -229,27 +241,41 @@ jobs:
             chmod +x ./get-github-app-access-token.sh;
             . ./get-github-app-access-token.sh;
             echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
+        
         - name: Automatically Dispatch Remote CICD Trigger Event 
           id: auto-devops-wkflow-dispatch
           if: ${{ matrix.workflow_id != '' }}
-          uses: actions/github-script@v6.4.1
+          uses: aurelien-baudet/workflow-dispatch@v2
           with:
-            debug: ${{ secrets.ACTIONS_RUNNER_DEBUG }}
-            github-token: '${{ env.access_token }}'
-            script: |
-              try {
-                const result = await github.rest.actions.createWorkflowDispatch({
-                  owner: 'cdcent',
-                  repo: 'data-exchange-hl7-devops',
-                  workflow_id: '${{ matrix.workflow_id }}',
-                  ref: 'HL7-2277-MMGBasedTransformerTest',
-                  inputs: {
-                    environment: '${{ needs.prepare-remote-cicd.outputs.deploy_target }}',
-                    'data-exchange-hl7-branch': '${{ needs.prepare-remote-cicd.outputs.merge_branch }}'
-                  }
-                })
-                console.log(result);
-              } catch(error) {
-                console.error(error);
-                core.setFailed(error);
-              }
+              workflow: ${{ matrix.workflow_id }}
+              repo: cdcent/data-exchange-hl7-devops
+              token: ${{ env.access_token }}
+              inputs: '{ "environment": "${{ needs.prepare-remote-autodeploy.outputs.deploy_target }}", "data-exchange-hl7-branch": ${{ needs.prepare-remote-autodeploy.outputs.merge_branch }} }'
+              ref: 'HL7-2277-MMGBasedTransformerTest'
+              wait-for-completion: true
+              wait-for-completion-timeout: 15m
+              wait-for-completion-interval: 30s
+              display-workflow-run-url: true
+              workflow-logs: true        
+
+        #   uses: actions/github-script@v6.4.1
+        #   with:
+        #     debug: ${{ secrets.ACTIONS_RUNNER_DEBUG }}
+        #     github-token: '${{ env.access_token }}'
+        #     script: |
+        #       try {
+        #         const result = await github.rest.actions.createWorkflowDispatch({
+        #           owner: 'cdcent',
+        #           repo: 'data-exchange-hl7-devops',
+        #           workflow_id: '${{ matrix.workflow_id }}',
+        #           ref: 'HL7-2277-MMGBasedTransformerTest',
+        #           inputs: {
+        #             environment: '${{ needs.prepare-remote-cicd.outputs.deploy_target }}',
+        #             'data-exchange-hl7-branch': '${{ needs.prepare-remote-cicd.outputs.merge_branch }}'
+        #           }
+        #         })
+        #         console.log(result);
+        #       } catch(error) {
+        #         console.error(error);
+        #         core.setFailed(error);
+        #       }
