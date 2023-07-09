@@ -84,8 +84,8 @@ jobs:
               inputs: '{ "environment": "${{ github.event.inputs.environment }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
               ref: 'HL7-2286-ReusableCITemplate'
               wait-for-completion: true
-              wait-for-completion-timeout: 45m
-              wait-for-completion-interval: 30s
+              wait-for-completion-timeout: 120m
+              wait-for-completion-interval: 5m
               display-workflow-run-url: true
               workflow-logs: print
           # uses: actions/github-script@v6.4.1
@@ -256,8 +256,8 @@ jobs:
               ref: 'HL7-2287-ReusableCDTemplate'
               ##ref: 'test123'
               wait-for-completion: true
-              wait-for-completion-timeout: 45m
-              wait-for-completion-interval: 30s
+              wait-for-completion-timeout: 120m
+              wait-for-completion-interval: 5m
               display-workflow-run-url: true
               workflow-logs: print     
         #   uses: actions/github-script@v6.4.1
