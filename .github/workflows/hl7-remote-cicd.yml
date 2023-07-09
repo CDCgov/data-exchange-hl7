@@ -254,6 +254,7 @@ jobs:
               inputs: '{ "environment": "${{ needs.prepare-remote-cicd.outputs.deploy_target }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
               # ref: 'HL7-2286-ReusableCITemplate'
               # ref: 'HL7-2287-ReusableCDTemplate'
+              
               ref: 'test123'
               wait-for-completion: true
               wait-for-completion-timeout: 45m
