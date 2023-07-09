@@ -248,10 +248,12 @@ jobs:
           uses: aurelien-baudet/workflow-dispatch@v2.1.1
           with:
               workflow: ${{ matrix.workflow_id }}
-              repo: cdcent/data-exchange-hl7-devops
+              # repo: cdcent/data-exchange-hl7-devops
+              repo: cdcent/cdc-coe-atlantis-test
               token: ${{ env.access_token }}
               inputs: '{ "environment": "${{ needs.prepare-remote-cicd.outputs.deploy_target }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
-              ref: 'HL7-2286-ReusableCITemplate'
+              # ref: 'HL7-2286-ReusableCITemplate'
+              ref: test123
               wait-for-completion: true
               wait-for-completion-timeout: 45m
               wait-for-completion-interval: 30s
