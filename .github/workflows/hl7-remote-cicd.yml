@@ -38,7 +38,6 @@ on:
     branches:
       - 'develop'
       - 'main'
-      - '*'
     paths:
     - fns-hl7-pipeline/**
     - fn-cache-loader/**
@@ -88,7 +87,6 @@ jobs:
               wait-for-completion-interval: 5m
               display-workflow-run-url: true
               workflow-logs: print
-              
           # uses: actions/github-script@v6.4.1
           # with:
           #   debug: ${{ secrets.ACTIONS_RUNNER_DEBUG }}
@@ -249,7 +247,7 @@ jobs:
           uses: aurelien-baudet/workflow-dispatch@v2.1.1
           with:
               workflow: ${{ matrix.workflow_id }}
-              repo: cdcent/data-exchange-hl7-devops             
+              repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
               inputs: '{ "environment": "${{ needs.prepare-remote-cicd.outputs.deploy_target }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
               ref: 'main'
