@@ -26,7 +26,7 @@ public class HL7JsonLakeFunctionTest {
         // Validate Process Metadata has been added to the array of proccesses
         val jarr: JsonArray? = inputEvent.get("processes").asJsonArray
         if(jarr != null){
-            val item = jarr.getJSONObject(0)
+            val item: JsonObject = jarr.get(0).getAsJsonObject()
             Assertions.assertTrue(item.get("metadata") != null)
         }
 
