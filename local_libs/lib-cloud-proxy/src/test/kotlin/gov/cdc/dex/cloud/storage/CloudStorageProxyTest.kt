@@ -1,12 +1,16 @@
 package gov.cdc.dex.cloud.storage
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.util.*
 
 import javax.inject.Inject
 
 @MicronautTest
+@Tag("UnitTest")
 internal class CloudStorageProxyTest {
 
     @Inject
@@ -14,13 +18,9 @@ internal class CloudStorageProxyTest {
 
     @Test
     fun listFolders() {
-//        val configs = s3Proxy.listFolders("cf-daart-hl7-dropbucket-dev")
-//        val configs = cloudStorage.listFolders("cf-daart-nist-profiles-dev")
-        val configs = cloudStorage.list("hl7ingress", 10)
+        val configs = cloudStorage.listFolders("hl7ingress")
         configs.forEach { println("Folder: $it")}
-        if (configs.isEmpty()) {
-            println("NO FOLDERS FOUND ON THIS BUCKET!")
-        }
+        assertFalse(configs.isEmpty(), "Asserting folders exist in container hl7ingress")
     }
 
     //@Test
@@ -31,17 +31,19 @@ internal class CloudStorageProxyTest {
 
     @Test
     fun testGetFile() {
-        val file = cloudStorage.getFile("ARBO_1.0_rj.json")
-        println("${file.fileName} =>  ${file.content}")
+        val file = cloudStorage.getFile("unitTests/Lyme_HappyPath.doNotDelete.txt")
+        assertNotNull(file, "Asserting file is not null")
     }
     @Test
     fun testUploadFileNoMetadata() {
         val file = cloudStorage.saveFile("hl7ingress", "testFile-${UUID.randomUUID()}.txt", "Hi There", null, "text/plain" )
+        assertNotNull(file, "Asserting file uploaded")
     }
 
     @Test
     fun testUploadFileWithMetadata() {
         val metadata = mapOf("test" to "meta1")
         val file = cloudStorage.saveFile("hl7ingress", "/test/testFile-${UUID.randomUUID()}.txt", "Hi There", metadata, "text/plain" )
+        assertNotNull(file, "Asserting file with metadata uploaded")
     }
 }
