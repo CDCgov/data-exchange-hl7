@@ -13,5 +13,6 @@ azure:
     container: hl7ingress
 
   asq:
-    connectionStr: ${SPIKE_QUEUE_CONNECT_STR}
+   # connectionStr: ${SPIKE_QUEUE_CONNECT_STR}
+    connectionStr: ""
     queueName: csv-spike-drop
