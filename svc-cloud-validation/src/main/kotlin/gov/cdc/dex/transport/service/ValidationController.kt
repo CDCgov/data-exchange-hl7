@@ -1,7 +1,4 @@
 package gov.cdc.dex.transport.service
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
 
 import gov.cdc.dex.cloud.storage.CloudStorage
 import io.micronaut.http.HttpRequest
@@ -25,6 +22,8 @@ import java.net.URL
 import java.io.BufferedReader
 import java.io.OutputStream
 import gov.cdc.dex.util.JsonHelper.toJsonElement
+
+import com.google.gson.*
 
 
 /**
@@ -61,9 +60,10 @@ class ValidationController(private val cloudStorage: CloudStorage) {
 
         var validationReport = this.getContent(URL(this.validationUrl), redactedMessage, "CASE")
 
-        val jsonData = JsonObject()
-        jsonData.add("StructureReport", structureReport.asJsonObject)
-        jsonData.add("ValidationReport", validationReport.asJsonObject)
+        JSONObject jsonData = new JSONObject();
+
+        jsonData.put("StructureReport", structureReport)
+        jsonData.put("ValidationReport", validationReport)
         reportData = jsonData.toString()
 
         return reportData
