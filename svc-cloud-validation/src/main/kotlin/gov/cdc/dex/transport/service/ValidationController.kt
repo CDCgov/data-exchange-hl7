@@ -17,13 +17,15 @@ import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.multipart.CompletedFileUpload
 import org.slf4j.LoggerFactory
 import java.util.*
-import gov.cdc.dex.hl7.Helper
-import cdc.xlr.structurevalidator._
+//import gov.cdc.dex.hl7.Helper
+//import cdc.xlr.structurevalidator._
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.io.BufferedReader
 import java.io.OutputStream
+import gov.cdc.dex.util.JsonHelper.toJsonElement
+
 
 /**
  *
@@ -35,12 +37,12 @@ import java.io.OutputStream
 class ValidationController(private val cloudStorage: CloudStorage) {
     private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
     val gson: Gson = GsonBuilder().serializeNulls().create()
-    val redactorUrl = "{{REDACTOR_URL}}/api/redactorReport"
-    val structureUrl = "{{STRUCTURE_URL}}/api/structure"
-    val validationUrl = "{{MMG_VALIDATOR_URL}}/api/validate-mmg"
+    val redactorUrl = System.getenv("REDACTOR_URL") + "/api/redactorReport"
+    val structureUrl = System.getenv("STRUCTURE_URL") + "/api/structure"
+    val validationUrl = System.getenv("MMG_VALIDATOR_URL") + "/api/validate-mmg"
+    val elrType = System.getenv("ELR_TYPE")
 
-
-    @Post(value = "/default", consumes = [MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN])
+    @Post(value = "/validation", consumes = [MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN])
     fun uploadContentDefault(
         @Body content: String,
         @QueryValue fileContentType: String = MediaType.TEXT_PLAIN
@@ -53,15 +55,18 @@ class ValidationController(private val cloudStorage: CloudStorage) {
     private fun validateMessage(hl7Content: String): String{
         var reportData = ""
 
-        var redactorReport = this.getContent(URL(this.redactorUrl), hl7Content, "ELR")
+        var redactedMessage = this.getContent(URL(this.redactorUrl), hl7Content, "ELR")
 
-        var structureReport = this.getContent(URL(this.structureUrl), hl7Content, "CASE")
+        var structureReport = this.getContent(URL(this.structureUrl), redactedMessage, "CASE")
 
-        var validationReport = this.getContent(URL(this.validationUrl), hl7Content, "CASE")
+        var validationReport = this.getContent(URL(this.validationUrl), redactedMessage, "CASE")
 
-        reportData = redactorReport + structureReport + validationReport
+        val jsonData = JsonObject()
+        jsonData.add("StructureReport", structureReport.asJsonObject)
+        jsonData.add("ValidationReport", validationReport.asJsonObject)
+        reportData = jsonData.toString()
 
-        return reportData;
+        return reportData
     }
 
     private fun getMetadata(request: HttpRequest<Any>): Map<String, String> {
@@ -79,12 +84,14 @@ class ValidationController(private val cloudStorage: CloudStorage) {
         conn.doOutput = true
         conn.setRequestProperty("Accept", "application/json")
         conn.setRequestProperty("x-tp-message_type", msgType)
-        conn.setRequestProperty("x-tp-route", "COVID19-ELR")
+        conn.setRequestProperty("x-tp-route", elrType)
         var os: OutputStream
         try {
             val os = conn.getOutputStream()
-            val input = payLoad.toByteArray();
-            os.write(input, 0, input.size);
+            val input = payLoad.toByteArray()
+            os.write(input, 0, input.size)
+        }catch(e:Exception){
+            throw Exception("Error reading output stream: ${e.message}")
         }
         var br : BufferedReader? = null
         try {
@@ -104,28 +111,5 @@ class ValidationController(private val cloudStorage: CloudStorage) {
         }
         return sb.toString()
     }
-
-
-    @Get(value = "/{bucket:[a-zA-Z0-9-_\\.\\/]+}/{key}")
-    fun getContent(@PathVariable bucket: String, @PathVariable key: String): String  {
-        log.info("AUDIT - Getting file content ${bucket} -> $key")
-        return cloudStorage.getFileContent(bucket, key)
-    }
-
-    @Get(value = "/default/{key:[a-zA-Z0-9-_\\.\\/]+}")
-    fun getContentDefault(@PathVariable key: String) = cloudStorage.getFileContent(key)
-
-    @Get(value = "/{bucket}/{key}/metadata")
-    fun getMetadata(@PathVariable bucket: String, @PathVariable key: String) = cloudStorage.getMetadata(bucket, key)
-
-    @Get(value = "/default/{key}/metadata")
-    fun getMetadataDefault(@PathVariable key: String) = cloudStorage.getMetadata(key)
-
-    @Delete(value = "/{bucket}/{key}")
-    fun deleteObject(@PathVariable bucket: String, @PathVariable key: String) = cloudStorage.deleteFile(bucket, key)
-
-    @Delete(value = "/default/{key}")
-    fun deleteObjectDefault(@PathVariable key: String) = cloudStorage.deleteFile(key)
-
 
 }
