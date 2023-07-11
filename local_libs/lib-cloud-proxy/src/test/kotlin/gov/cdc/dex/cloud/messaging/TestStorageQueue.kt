@@ -17,7 +17,18 @@ class TestStorageQueue {
             val msgs = messaging.receiveMessage()
             msgs.forEach {
                 println(it.key())
+                assertNotNull(it.key())
             }
         } while (msgs.isNotEmpty())
+    }
+
+    @Test
+    fun getQueueUrl() {
+        assertNotNull(messaging.getQueueUrl())
+    }
+
+    @Test
+    fun healthCheck() {
+        assertNotNull(messaging.healthCheck())
     }
 }

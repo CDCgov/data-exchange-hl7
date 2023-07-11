@@ -19,21 +19,26 @@ internal class CloudStorageProxyTest {
         val configs = cloudStorage.list("hl7ingress", 10)
         configs.forEach { println("Folder: $it")}
         if (configs.isEmpty()) {
+            assertNotNull(configs, () -> "NO FOLDERS IN THIS BUCKET")
             println("NO FOLDERS FOUND ON THIS BUCKET!")
         }
     }
 
-    //@Test
+    @Test
     fun testListFilesInFolder() {
         val configs = cloudStorage.list(5, "ingress/hl7/QA/FDD/FDD_MMG_V1.0/")
         configs.forEach { println("file: $it")}
+        assertNotNull(it)
     }
 
     @Test
     fun testGetFile() {
         val file = cloudStorage.getFile("ARBO_1.0_rj.json")
         println("${file.fileName} =>  ${file.content}")
+        assertNotNull(file.fileName)
+        assertNotNull(file.content)
     }
+    
     @Test
     fun testUploadFileNoMetadata() {
         val file = cloudStorage.saveFile("hl7ingress", "testFile-${UUID.randomUUID()}.txt", "Hi There", null, "text/plain" )
