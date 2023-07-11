@@ -4,21 +4,27 @@ import org.junit.jupiter.api.Test
 import com.google.gson.JsonParser
 import gov.cdc.hl7.HL7ParseUtils
 import gov.cdc.hl7.HL7StaticParser
+import org.junit.jupiter.api.Tag
+import kotlin.test.assertEquals
 
 //import gov.cdc.dex.TemplateTransformer
 class TestTransformation {
 
 
     val EPI_OBR = "68991-9"
+    @Tag("UnitTest")
     @Test
     fun testTransformation() {
         val bumblebee = TemplateTransformer.getTransformerWithResource("/labTemplate.json", "/BasicProfile.json")
         val message = this::class.java.getResource("/RawHL7DataCELR.txt").readText()
         val hl7Parser : HL7ParseUtils = HL7ParseUtils.getParser(message, "BasicProfile.json")
-        val obrs = hl7Parser.getValue("OBR").get().toList()
-        val epiOBRs = hl7Parser.getValue("OBR[@4.1='$EPI_OBR||NOTF||PERSUBJ']").get().toList()
-        val nonEpiOBRs = obrs.filter{ innerArray -> innerArray !in epiOBRs }
+        val obrs : List<String> = hl7Parser.getValue("OBR").get().flatten()
+        val epiOBRs = hl7Parser.getValue("OBR[@4.1='$EPI_OBR||NOTF||PERSUBJ']").get().flatten()
+        val nonEpiOBRs = obrs.filter { it -> it !in epiOBRs }
         println("obrs: ${obrs.size}, epiOBRs: ${epiOBRs.size}, nonEpiOBRS: ${nonEpiOBRs.size}")
+        assertEquals(3, obrs.size, "Assert 3 OBRs")
+        assertEquals(2, epiOBRs.size, "Assert 2 EPI OBRs")
+        assertEquals(1, nonEpiOBRs.size, "Assert 1 non-EPI OBR")
 
 //
 //        val lines =message.split("\n")
