@@ -9,7 +9,6 @@
     <packaging>jar</packaging>
     
     <name>DEX Fns-Pipeline :: mmg-based-transformer</name>
-    <!---->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java_version>11</java_version>
