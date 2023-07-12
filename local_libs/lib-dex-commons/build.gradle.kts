@@ -61,8 +61,10 @@ publishing {
             val snapshotsRepoUrl = "https://imagehub.cdc.gov/repository/maven-ede-snapshot/"
             url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
             name = "nexus"
-            username = "uhc7-su"
-            password = "tLb5K9$oywiMFoPTSFXh5"
+            credentials(PasswordCredentials::class) {
+                username = "uhc7-su"
+                password = "tLb5K9$oywiMFoPTSFXh5"
+            }
         }
     }
 }
