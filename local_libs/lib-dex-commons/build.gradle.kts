@@ -62,8 +62,8 @@ publishing {
             url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
             name = "nexus"
             credentials(PasswordCredentials::class) {
-                username = System.getenv("NEXUS_USERNAME")
-                password = System.getenv("NEXUS_PASSWORD")
+                username = "uhc7-su"
+                password = "P8!r12~N"
             }
         }
     }
