@@ -21,7 +21,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.io.BufferedReader
 import java.io.OutputStream
-import gov.cdc.dex.util.JsonHelper.toJsonElement
 
 import com.google.gson.*
 
@@ -60,10 +59,10 @@ class ValidationController(private val cloudStorage: CloudStorage) {
 
         var validationReport = this.getContent(URL(this.validationUrl), redactedMessage, "CASE")
 
-        JSONObject jsonData = new JSONObject();
+        var jsonData = JsonObject()
 
-        jsonData.put("StructureReport", structureReport)
-        jsonData.put("ValidationReport", validationReport)
+        jsonData.add("StructureReport", JsonParser.parseString(gson.toJson(structureReport)))
+        jsonData.add("ValidationReport", JsonParser.parseString(gson.toJson(validationReport)))
         reportData = jsonData.toString()
 
         return reportData
