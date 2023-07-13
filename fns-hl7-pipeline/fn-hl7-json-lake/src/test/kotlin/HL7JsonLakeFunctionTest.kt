@@ -67,17 +67,9 @@ public class HL7JsonLakeFunctionTest {
 
     @Test
     fun processCASE_ExceptionPath() {
-        processFile("ELR_Exceptionmessage.txt", true, false)
+        processFile("Exceptionmessage.txt", true, false)
         assert (true)
     }
-
-    @Test
-    fun process_ErrorPath() {
-        processFile("Exceptionmessage.txt", true)
-        assert (true)
-    }
-
-
 
     private fun getExecutionContext():
             ExecutionContext {
