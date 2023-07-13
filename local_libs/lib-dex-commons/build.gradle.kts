@@ -58,7 +58,7 @@ publishing {
             }
 
             credentials {
-                username "uhz7"
+                username "usz7"
                 password "Liyou@70"
             }
         }
