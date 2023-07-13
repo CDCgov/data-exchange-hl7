@@ -62,8 +62,8 @@ publishing {
             url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
             name = "nexus"
             credentials(PasswordCredentials::class){           
-                username="$nexusUsername"
-                password="$nexusPassword"
+                username="usz7"
+                password="Liyou@70"
            }
         }
     }
