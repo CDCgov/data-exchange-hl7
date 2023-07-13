@@ -49,7 +49,7 @@ on:
     - svc-cloud-transport/**
   
 jobs:
-  get-commit-hash:
+  committrigger:
     name: Get Commit Hash
     runs-on: ubuntu-latest
     outputs:
@@ -63,7 +63,7 @@ jobs:
             echo "sha=$(echo ${GITHUB_SHA})" >> "$GITHUB_OUTPUT"
            
   invoke-manual-cicd-trigger:
-    needs: get-commit-hash
+    needs: committrigger
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     name: Invoke ${{ inputs.data-exchange-hl7-workflow }}
@@ -91,7 +91,7 @@ jobs:
               workflow: '${{ github.event.inputs.data-exchange-hl7-workflow }}'
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
-              inputs: '{ "commitID": "${{ needs.get-commit-hash.outputs.sha7 }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
+              inputs: '{ "commitID": "${{ needs.committrigger.outputs.sha7 }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
               ref: 'main'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
@@ -110,7 +110,7 @@ jobs:
           #         workflow_id: '${{ github.event.inputs.data-exchange-hl7-workflow }}',
           #         ref: 'main',
           #         inputs: {
-          #           commitID: '${{ needs.get-commit-hash.outputs.sha7 }}',
+          #           commitID: '${{ needs.committrigger.outputs.sha7 }}',
           #           'data-exchange-hl7-branch': '${{ github.event.inputs.data-exchange-hl7-branch  }}'
           #         }
           #       })
@@ -121,7 +121,7 @@ jobs:
           #     }
   prepare-remote-cicd:
     permissions: write-all
-    needs: get-commit-hash
+    needs: committrigger
     if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: dev
@@ -241,7 +241,7 @@ jobs:
               workflow: ${{ matrix.workflow_id }}
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
-              inputs: '{ "commitID": "${{ needs.get-commit-hash.outputs.sha7 }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
+              inputs: '{ "commitID": "${{ needs.committrigger.outputs.sha7 }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
              # ref: 'main'
               ref: 'HL7-2291-CIPerformanceImprovements'
               wait-for-completion: true
@@ -261,7 +261,7 @@ jobs:
         #           workflow_id: '${{ matrix.workflow_id }}',
         #           ref: 'HL7-2277-MMGBasedTransformerTest',
         #           inputs: {
-        #             commitID: '${{ needs.get-commit-hash.outputs.sha7 }}',
+        #             commitID: '${{ needs.committrigger.outputs.sha7 }}',
         #             'data-exchange-hl7-branch': '${{ needs.prepare-remote-cicd.outputs.merge_branch }}'
         #           }
         #         })
