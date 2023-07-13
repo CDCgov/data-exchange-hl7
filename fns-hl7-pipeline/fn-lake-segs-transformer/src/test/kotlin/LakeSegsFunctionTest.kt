@@ -14,41 +14,45 @@ public class LakeSegsFunctionTest {
         val function = Function()
 
         if(isCase){
-            function.eventHubCASEProcessor(messages, eventHubMDList, getExecutionContext())
+           return function.eventHubCASEProcessor(messages, eventHubMDList, getExecutionContext())
         }else{
-            function.eventHubELRProcessor(messages, eventHubMDList, getExecutionContext())
+           return function.eventHubELRProcessor(messages, eventHubMDList, getExecutionContext())
         }
-        println("Finished processing $filename ")
+        //println("Finished processing $filename ")
     }
 
     @Test
     fun processELR_HappyPath() {
-        processFile("ELR_message.txt", false)
-        assert (true)
+        var summary = processFile("ELR_message.txt", false)
+        assertThat(summary.current_status, "LAKE-SEGMENTS-TRANSFORMED")
     }
 
     @Test
     fun processELR_ExceptionPath() {
-        processFile("ELR_Exceptionmessage.txt", false)
-        assert (true)
+        var summary = processFile("ELR_Exceptionmessage.txt", false)
+        asserThat(summary.current_status, "LAKE-SEGMENTS-ERROR")
+        assertNotNull(summary.problem)
+        
     }
 
     @Test
     fun processCASE_HappyPath() {
-        processFile("CASE_message.txt", true)
-        assert (true)
+        var summary = processFile("CASE_message.txt", true)
+        asserThat(summary.current_status, "LAKE-SEGMENTS-TRANSFORMED")
     }
 
     @Test
     fun processCASE_ExceptionPath() {
-        processFile("ELR_Exceptionmessage.txt", true)
-        assert (true)
+        var summary = processFile("ELR_Exceptionmessage.txt", true)
+        asserThat(summary.current_status, "LAKE-SEGMENTS-ERROR")
+        assertNotNull(summary.problem)
     }
 
     @Test
     fun process_ErrorPath() {
-        processFile("Exceptionmessage.txt", true)
-        assert (true)
+        var summary = processFile("Exceptionmessage.txt", true)
+        asserThat(summary.current_status, "LAKE-SEGMENTS-ERROR")
+        assertNotNull(summary.problem)
     }
 
     private fun getExecutionContext():
