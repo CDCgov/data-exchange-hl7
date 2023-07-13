@@ -49,23 +49,25 @@ tasks.withType<KotlinCompile> {
 
 
 publishing {
+    repositories {
+        maven {
+            if(version.toString().endsWith("SNAPSHOT")){
+                url 'https://imagehub.cdc.gov/repository/maven-ede-snapshot/'
+            } else {
+                url 'https://imagehub.cdc.gov/repository/maven-ede/'
+            }
+
+            credentials {
+                username "uhz7"
+                password "Liyou@70"
+            }
+        }
+    }
     publications {
         create<MavenPublication>("myLibrary") {
             from(components["java"])
         }
     }
-
-    repositories {
-        maven {
-            val releasesRepoUrl  = "https://imagehub.cdc.gov/repository/maven-ede/"
-            val snapshotsRepoUrl = "https://imagehub.cdc.gov/repository/maven-ede-snapshot/"
-            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
-            name = "nexus"
-            credentials(PasswordCredentials::class) {
-                username = "uhc7-su"
-                password = "tLb5K9$oywiMFoPTSFXh5"
-            }
-        }
-    }
+    
 }
 
