@@ -86,7 +86,7 @@ jobs:
         - name: Get short SHA
           id: getsha
           run: | 
-            echo "commitID=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_OUTPUT"
+            echo "commitID=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_OUTPUT
         - name: Manually Dispatch Remote CICD Trigger Event 
           id: manual-devops-wkflow-dispatch
           uses: aurelien-baudet/workflow-dispatch@v2.1.1
@@ -235,7 +235,10 @@ jobs:
             chmod +x ./get-github-app-access-token.sh;
             . ./get-github-app-access-token.sh;
             echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
-        
+        - name: Get short SHA
+          id: getsha
+          run: | 
+            echo "commitID=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_OUTPUT
         - name: Automatically Dispatch Remote CICD Trigger Event 
           id: auto-devops-wkflow-dispatch
           if: ${{ matrix.workflow_id != '' }}
