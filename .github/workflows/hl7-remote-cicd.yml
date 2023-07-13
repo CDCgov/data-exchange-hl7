@@ -20,7 +20,7 @@ on:
         - deploy-svc-cloud-transport.yml
       commitID:
         description: 'Trigger Commit'
-        required: true
+        required: false
         type: string
       data-exchange-hl7-branch:
         description: 'Repo Branch that you want to deploy to the development/test environment'
