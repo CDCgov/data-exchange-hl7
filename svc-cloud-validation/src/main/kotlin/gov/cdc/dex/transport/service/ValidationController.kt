@@ -31,7 +31,7 @@ import com.google.gson.*
  * @Created - 6/23/23
  * @Author USY6@cdc.gov
  */
-@Controller("/")
+@Controller("/validation")
 class ValidationController(private val cloudStorage: CloudStorage) {
     private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
     val gson: Gson = GsonBuilder().serializeNulls().create()
