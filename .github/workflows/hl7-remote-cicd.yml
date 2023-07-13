@@ -51,17 +51,18 @@ on:
 jobs:
   get-commit-hash:
     runs-on: ubuntu-latest
+    outputs:
+      commit_sha7: ${{ steps.getsha.outputs.commitID }}
+      commit_sha: ${{ steps.getsha.outputs.sha }}
     steps:
         - name: Get short SHA
           id: getsha
           run: | 
             echo "commitID=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_OUTPUT"
             echo "sha=$(echo ${GITHUB_SHA})" >> "$GITHUB_OUTPUT"
-          outputs:
-            commit_sha7: ${{ steps.getsha.outputs.commitID }}
-            commit_sha: ${{ steps.getsha.outputs.sha }}
-            
+
   invoke-manual-cicd-trigger:
+    needs: get-commit-hash
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     name: Invoke ${{ inputs.data-exchange-hl7-workflow }}
@@ -119,6 +120,7 @@ jobs:
           #     }
   prepare-remote-cicd:
     permissions: write-all
+    needs: get-commit-hash
     if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: dev
