@@ -51,15 +51,16 @@ on:
 jobs:
   get-commit-hash:
     runs-on: ubuntu-latest
-    name: Get short SHA
-    id: getsha
-    run: | 
-      echo "commitID=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_OUTPUT"
-      echo "sha=$(echo ${GITHUB_SHA})" >> "$GITHUB_OUTPUT"
-    outputs:
-      commit_sha7: ${{ steps.getsha.outputs.commitID }}
-      commit_sha: ${{ steps.getsha.outputs.sha }}
-
+    steps:
+        - name: Get short SHA
+          id: getsha
+          run: | 
+            echo "commitID=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_OUTPUT"
+            echo "sha=$(echo ${GITHUB_SHA})" >> "$GITHUB_OUTPUT"
+          outputs:
+            commit_sha7: ${{ steps.getsha.outputs.commitID }}
+            commit_sha: ${{ steps.getsha.outputs.sha }}
+            
   invoke-manual-cicd-trigger:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
