@@ -49,21 +49,21 @@ on:
     - svc-cloud-transport/**
   
 jobs:
-  committrigger:
-    name: Get Commit Hash
-    runs-on: ubuntu-latest
-    outputs:
-      sha7: ${{ steps.getsha.outputs.commitID }}
-      sha: ${{ steps.getsha.outputs.sha }}
-    steps:
-        - name: Get short SHA
-          id: getsha
-          run: | 
-            echo "commitID=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_OUTPUT"
-            echo "sha=$(echo ${GITHUB_SHA})" >> "$GITHUB_OUTPUT"
+  # committrigger:
+  #   name: Get Commit Hash
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     sha7: ${{ steps.getsha.outputs.commitID }}
+  #     sha: ${{ steps.getsha.outputs.sha }}
+  #   steps:
+  #       - name: Get short SHA
+  #         id: getsha
+  #         run: | 
+  #           echo "commitID=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_OUTPUT"
+  #           echo "sha=$(echo ${GITHUB_SHA})" >> "$GITHUB_OUTPUT"
            
   invoke-manual-cicd-trigger:
-    needs: committrigger
+  #  needs: committrigger
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     name: Invoke ${{ inputs.data-exchange-hl7-workflow }}
@@ -83,7 +83,10 @@ jobs:
             chmod +x ./get-github-app-access-token.sh;
             . ./get-github-app-access-token.sh;
             echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
-               
+        - name: Get short SHA
+          id: getsha
+          run: | 
+            echo "commitID=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_OUTPUT"
         - name: Manually Dispatch Remote CICD Trigger Event 
           id: manual-devops-wkflow-dispatch
           uses: aurelien-baudet/workflow-dispatch@v2.1.1
@@ -91,7 +94,7 @@ jobs:
               workflow: '${{ github.event.inputs.data-exchange-hl7-workflow }}'
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
-              inputs: '{ "commitID": "${{ needs.committrigger.outputs.sha7 }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
+              inputs: '{ "commitID": "${{ steps.getsha.outputs.commitID }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
               ref: 'main'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
@@ -121,7 +124,7 @@ jobs:
           #     }
   prepare-remote-cicd:
     permissions: write-all
-    needs: committrigger
+   # needs: committrigger
     if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: dev
@@ -241,7 +244,7 @@ jobs:
               workflow: ${{ matrix.workflow_id }}
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
-              inputs: '{ "commitID": "${{ needs.committrigger.outputs.sha7 }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
+              inputs: '{ "commitID": "${{ steps.getsha.outputs.commitID }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
              # ref: 'main'
               ref: 'HL7-2291-CIPerformanceImprovements'
               wait-for-completion: true
