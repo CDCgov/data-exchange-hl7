@@ -11,10 +11,10 @@ plugins {
 version "$revision"
 group "gov.cdc.dex"
 
-
 repositories {
     maven {
-        url "https://imagehub.cdc.gov/repository/maven-ede-group/"
+        url "https://imagehub.cdc.gov/repository/maven-ede-group/";
+        setAllowInsecureProtocol(true);
     }
 }
 
