@@ -225,7 +225,7 @@ jobs:
         - name: Get Commit SHA
           id: getsha
           run: | 
-            echo "commitID=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_OUTPUT
+            echo "commitID=$(echo ${GITHUB_SHA})" >> $GITHUB_OUTPUT
         - name: Automatically Dispatch Remote CICD Trigger Event 
           id: auto-devops-wkflow-dispatch
           if: ${{ matrix.workflow_id != '' }}
