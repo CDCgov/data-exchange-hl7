@@ -30,9 +30,10 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-dev-dex-cache.redis.cache.windows.net",
-                       "REDIS_CACHE_KEY"  to findProperty("redisDevKey"),
-                        "EVENT_HUB_CONNECT_STR" to findProperty("eventHubConnStr")
+    environment(mapOf(
+        "REDIS_CACHE_NAME" to System.getProperty("REDIS_CACHE_NAME") ?: "ocio-ede-dev-dex-cache.redis.cache.windows.net",
+        "REDIS_CACHE_KEY" to System.getProperty("REDIS_CACHE_KEY") ?: findProperty("redisDevKey"),
+        "EVENT_HUB_CONNECT_STR" to System.getProperty("EVENTHUB_CONNECTIONSTRING") ?: findProperty("eventHubConnStr")
     ))
 //    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-tst-dex-cache.redis.cache.windows.net",
 //        "REDIS_CACHE_KEY"  to findProperty("redisTSTKey")
