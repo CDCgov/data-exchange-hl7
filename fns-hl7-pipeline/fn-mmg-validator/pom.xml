@@ -45,7 +45,7 @@
             <version>${functions.version}</version>
         </dependency>
 
-        <!-- Kotlin -->
+        <!-- Kotlin  -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
