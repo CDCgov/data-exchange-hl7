@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       data-exchange-hl7-workflow:
-        description: 'HL7 application CI/CD workflow that you want to trigger in data-exchange-hl7-devops remote repo to deploy to the development environment'
+        description: '(Required) Specify one HL7 app CI/CD workflow to trigger in remote CDCEnt/data-exchange-hl7-devops repo'
         required: true
         type: choice
         default: 'deploy-mmg-based-transformer.yml'
@@ -19,11 +19,11 @@ on:
         - deploy-cache-loader.yml
         - deploy-svc-cloud-transport.yml
       commitID:
-        description: 'Specific Commit Hash used to Trigger CI/CD Workflow'
+        description: '(Optional) Specify Commit Hash to redeploy specific version'
         required: false
         type: string
       data-exchange-hl7-branch:
-        description: 'Repo Branch that you want to autodeploy to the development or test environment'
+        description: '(Optional) Specify Source Branch containing changes to deploy to the development or test environment. Defaults to Develop'
         default: 'develop'
         required: true
         type: string
