@@ -9,7 +9,7 @@
         <artifactId>micronaut-parent</artifactId>
         <version>3.8.5</version>
     </parent>
-    <!---->
+
     <properties>
         <packaging>jar</packaging>
         <jdk.version>11</jdk.version>
