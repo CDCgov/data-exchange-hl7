@@ -237,23 +237,7 @@
             </plugin>
         </plugins>
     </build>
-    <profile>
-        <id>github-prod-repository</id>
-        <activation>
-            <property>
-                <name>usegithubrepo</name>
-            </property>
-        </activation>
-        <properties>
-        </properties>
-        <distributionManagement>
-            <repository>
-                <id>github</id>
-                <name>HL7 GitHub Package Registry - CDCGov </name>
-                <url>https://maven.pkg.github.com/CDCgov/data-exchange-hl7</url> 
-            </repository>
-        </distributionManagement>
-    </profile>
+ 
     <distributionManagement>
         <repository>
             <id>ede-releases</id>
