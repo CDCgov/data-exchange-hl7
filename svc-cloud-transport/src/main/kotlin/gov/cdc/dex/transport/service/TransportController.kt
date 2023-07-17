@@ -98,6 +98,11 @@ class TransportController(private val cloudStorage: CloudStorage) {
             .toMap()
     }
 
+    @Get(value = "/")
+    fun getRootPingResponse() : String {
+        return "hello"
+    }
+
     @Get(value = "/{bucket}")
     fun getListOfFiles(@PathVariable bucket: String, @QueryValue prefix: String? = null): List<String> {
         log.info("AUDIT - Getting List of files")
