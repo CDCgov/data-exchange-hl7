@@ -37,7 +37,6 @@ class ValidationController(private val cloudStorage: CloudStorage) {
     private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
     val gson: Gson = GsonBuilder().serializeNulls().create()
 
-
     val redactorUrl = System.getenv("REDACTOR_URL") + "/api/redactorReport"
     val structureUrl = System.getenv("STRUCTURE_URL") + "/api/structure"
     val validationUrl = System.getenv("MMG_VALIDATOR_URL") + "/api/validate-mmg"
@@ -46,21 +45,22 @@ class ValidationController(private val cloudStorage: CloudStorage) {
     @Post(value = "/validation", consumes = [MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN])
     fun uploadContentDefault(
         @Body content: String,
-        @QueryValue fileContentType: String = MediaType.TEXT_PLAIN
+        @QueryValue fileContentType: String = MediaType.TEXT_PLAIN,
+        request: HttpRequest<Any>
     ): HttpResponse<Any> {
-        val resultData = this.validateMessage(content);
+        val resultData = this.validateMessage(request, content);
 
         return HttpResponse.ok(gson.toJson(resultData))
     }
 
-    private fun validateMessage(hl7Content: String): String{
+    private fun validateMessage(request: HttpRequest<Any>, hl7Content: String): String{
         var reportData = ""
 
-        var redactedMessage = this.getContent(URL(this.redactorUrl), hl7Content, "ELR")
+        var redactedMessage = this.getContent(URL(this.redactorUrl), hl7Content, getMetadata(request))
 
-        var structureReport = this.getContent(URL(this.structureUrl), redactedMessage, "CASE")
+        var structureReport = this.getContent(URL(this.structureUrl), redactedMessage, getMetadata(request))
 
-        var validationReport = this.getContent(URL(this.validationUrl), redactedMessage, "CASE")
+        var validationReport = this.getContent(URL(this.validationUrl), redactedMessage, getMetadata(request))
 
         var jsonData = JsonObject()
 
@@ -71,22 +71,14 @@ class ValidationController(private val cloudStorage: CloudStorage) {
         return reportData
     }
 
-    private fun getMetadata(request: HttpRequest<Any>): Map<String, String> {
-        val headers = request.headers
-        return headers
-            .filter { it.key.startsWith("x-tp-") }
-            .map { it.key.substring(5) to it.value.joinToString<String?>(";") }
-            .toMap()
-    }
-
-    private fun getContent(url: URL, payLoad : String, msgType: String): String {
+    private fun getContent(url: URL, payLoad : String, metadata: Map<String, String>? = null): String {
         val sb = StringBuilder()
         val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "POST"
         conn.doOutput = true
         conn.setRequestProperty("Accept", "application/json")
-        conn.setRequestProperty("x-tp-message_type", msgType)
-        conn.setRequestProperty("x-tp-route", elrType)
+        conn.setRequestProperty("x-tp-message_type", metadata?.get("message_type"))
+        conn.setRequestProperty("x-tp-route", metadata?.get("route"))
         var os: OutputStream
         try {
             val os = conn.getOutputStream()
@@ -114,4 +106,11 @@ class ValidationController(private val cloudStorage: CloudStorage) {
         return sb.toString()
     }
 
+    private fun getMetadata(request: HttpRequest<Any>): Map<String, String> {
+        val headers = request.headers
+        return headers
+            .filter { it.key.startsWith("x-tp-") }
+            .map { it.key.substring(5) to it.value.joinToString<String?>(";") }
+            .toMap()
+    }
 }
