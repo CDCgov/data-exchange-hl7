@@ -10,7 +10,7 @@ class EventHubSenderTest {
 
     @Test
     fun testSendEmptyList() {
-        val ehConnStr = System.getenv("EVENT_HUB_CONNECT_STR")
+        val ehConnStr = System.getenv("EVENTHUB_CONNECTIONSTRING")
         val sender = EventHubSender(ehConnStr)
 
         sender.send("eh_unittest", listOf())
