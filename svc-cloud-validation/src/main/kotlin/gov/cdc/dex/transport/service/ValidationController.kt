@@ -1,4 +1,4 @@
-package gov.cdc.dex.transport.service
+package gov.cdc.dex.validation.service
 
 import gov.cdc.dex.cloud.storage.CloudStorage
 import io.micronaut.http.HttpRequest
@@ -25,6 +25,7 @@ import java.io.OutputStream
 import com.google.gson.*
 
 
+
 /**
  *
  *
@@ -35,6 +36,8 @@ import com.google.gson.*
 class ValidationController(private val cloudStorage: CloudStorage) {
     private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
     val gson: Gson = GsonBuilder().serializeNulls().create()
+
+
     val redactorUrl = System.getenv("REDACTOR_URL") + "/api/redactorReport"
     val structureUrl = System.getenv("STRUCTURE_URL") + "/api/structure"
     val validationUrl = System.getenv("MMG_VALIDATOR_URL") + "/api/validate-mmg"
