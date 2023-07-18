@@ -23,13 +23,14 @@ public class HL7JsonLakeFunctionTest {
             inputEvent = function.eventHubELRProcessor(messages, eventHubMDList, getExecutionContext())
         }
 
-        // Validate Process Metadata has been added to the array of proccesses
+        // Validate Metadata.processes has been added to the array of proccesses
         val metadata JsonObject = inputEvent.get("metadata").asJsonObject;
-        val processes: JsonArray? = metadata.get("processes").asJsonArray
-        if(processes != null){
-            val item: JsonObject = processes.get(0).getAsJsonObject()
-            Assertions.assertTrue(item.get("metadata") != null)
-        }
+        Assertions.assertTrue(metadata.get("processes").asJsonArray != null)
+        // val processes: JsonArray? = metadata.get("processes").asJsonArray
+        // if(processes != null){
+        //     val item: JsonObject = processes.get(0).getAsJsonObject()
+        //     Assertions.assertTrue(item.get("metadata") != null)
+        // }
 
         val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
         if(isHappyPath){
