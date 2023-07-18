@@ -24,24 +24,20 @@ public class HL7JsonLakeFunctionTest {
         }
 
         // Validate Metadata.processes has been added to the array of proccesses
-        val metadata JsonObject = inputEvent.get("metadata").asJsonObject;
-        Assertions.assertTrue(metadata.get("processes").asJsonArray != null)
-        // val processes: JsonArray? = metadata.get("processes").asJsonArray
-        // if(processes != null){
-        //     val item: JsonObject = processes.get(0).getAsJsonObject()
-        //     Assertions.assertTrue(item.get("metadata") != null)
-        // }
+        val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
+        if(metadata != null){
+            val processes: JsonArray? = metadata.get("processes").asJsonArray
+            Assertions.assertTrue(processes != null)
+        }
 
         val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
-        if(isHappyPath){
-            // Validate Summary.current_status is successful
-            if (summaryObj != null) {
-                Assertions.assertEquals("REDACTED", summaryObj.get("current_status").asString)
+        if (summaryObj != null){
+            if(isHappyPath){
+                // Validate Summary.current_status is successful
+                Assertions.assertEquals("SUCCESS", summaryObj.get("current_status").asString)
             }
-        }
-        else{
-            // Validate current_status is unsuccessful
-            if (summaryObj != null) {
+            else{
+                // Validate current_status is unsuccessful
                 Assertions.assertEquals("FAILURE", summaryObj.get("current_status").asString)
             }
         }
@@ -73,8 +69,7 @@ public class HL7JsonLakeFunctionTest {
         assert (true)
     }
 
-    private fun getExecutionContext():
-            ExecutionContext {
+    private fun getExecutionContext():ExecutionContext {
         return object :ExecutionContext {
             override fun getLogger():Logger {
                 return Logger.getLogger(Function:: class.java.name)
