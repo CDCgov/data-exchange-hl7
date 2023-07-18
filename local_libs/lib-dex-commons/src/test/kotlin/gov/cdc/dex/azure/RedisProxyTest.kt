@@ -21,7 +21,7 @@ class RedisProxyTest {
 
     @Test
     fun testLoadRedisWithProps() {
-        val REDIS_CACHE_NAME: String = "ocio-ede-dev-dex-cache.redis.cache.windows.net"
+        val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
         val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
 
         val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
