@@ -67,7 +67,7 @@ class Function {
                 if ( event.eventType == BLOB_CREATED) {
 
                     // Pick up blob metadata
-                    val blobName= event.evHubData.url.substringAfter("/hl7ingress/")
+                    val blobName= event.evHubData.url.substringAfter("/${fnConfig.blobIngestContName}/")
                     logger.info("DEX::Reading blob: $blobName")
                     val blobClient = fnConfig.azBlobProxy.getBlobClient(blobName)
                     //Create Map of Metadata with lower case keys

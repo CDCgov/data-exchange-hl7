@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+### [0.0.23] - 2023-07-12
+ 	- Separated Unit test and Integration test for MMG Validator.
+ 	- Updated Structure Validator to use only Structure Error status for errors.
+	- Parameterized container name on Receiver/Debatcher
+	- Added Ping method to svc-cloud-transport for Azure requirements.
+
+
+### [0.0.22] - 2023-06-28
+
+	- Improved redactor to load different configuration for different message types/routes.
+	- Value set errors on Structure Validator set to warning.
+	- Updated summary metadata on all functions
+	- Adding local_record_id to message_info metadata.
+	- Fixed Original_file_name metadata 
+	- Updated the upload_messages.py script to use multiple threads
+	- Implementing CI/CD for continuous delivery to DEV/TST.
+
 ### [0.0.21] - 2023-06-14
 
 	- Added Hepatitis 2.0 MMG

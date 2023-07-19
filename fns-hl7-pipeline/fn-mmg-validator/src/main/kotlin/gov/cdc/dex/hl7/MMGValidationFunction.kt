@@ -32,10 +32,11 @@ class MMGValidationFunction {
         private var logger = LoggerFactory.getLogger(MMGValidationFunction::class.java.simpleName)
 //        private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
 //        private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
-
         val fnConfig = FunctionConfig()
+
     } // .companion
 //    private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
+
     @FunctionName("mmgvalidator001")
     fun eventHubProcessor(
         @EventHubTrigger(
