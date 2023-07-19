@@ -16,34 +16,51 @@ import org.junit.jupiter.api.Assertions
 
 class ValidatorFunctionTest {
 
-    private fun processFile(filename: String) {
+    private fun processFile(filename: String,  isHappyPath:Boolean) {
         println("Start processing $filename ")
         val text = this::class.java.getResource("/$filename").readText()
         val messages = listOf(text)
-
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
-
         val function = ValidatorFunction()
-        function.run(messages, eventHubMDList, getExecutionContext())
-        println("Finished processing $filename ")
+        val executionContext: ExecutionContext = getExecutionContext()
+        val inputEvent : JsonObject = function.run(messages, eventHubMDList, executionContext)
 
+        val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
+        if(metadata != null){
+            val processes: JsonArray? = metadata.get("processes").asJsonArray
+            Assertions.assertTrue(processes != null)
+        }
+
+        val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
+        if (summaryObj != null){
+            if(isHappyPath){
+                // Validate Summary.current_status is successful
+                Assertions.assertEquals("SUCCESS", summaryObj.get("current_status").asString)
+            }
+            else{
+                // Validate current_status is unsuccessful
+                Assertions.assertEquals("FAILURE", summaryObj.get("current_status").asString)
+            }
+        }
+
+        println("Finished processing $filename ")
     }
 
     @Test
     fun processELR_HappyPath() {
-        processFile("ELR_message.txt")
+        processFile("ELR_message.txt", true)
         assert(true)
     }
 
     @Test
     fun processELR_ExceptionPath() {
-        processFile("ELR_Exceptionmessage.txt")
+        processFile("ELR_Exceptionmessage.txt", false)
         assert(true)
     }
 
     @Test
     fun processCASE_HappyPath() {
-        processFile("CASE_message.txt")
+        processFile("CASE_message.txt", true)
         assert(true)
     }
 
@@ -52,57 +69,6 @@ class ValidatorFunctionTest {
         val function = ValidatorFunction()
         val req: HttpRequestMessage<Optional<String>> = mock(HttpRequestMessage::class.java) as HttpRequestMessage<Optional<String>>
         assertThrows<NullPointerException> { function.invoke(req) }
-    }
-
-    @Test
-    fun process_HappyPath() {
-        println("Starting process_HappyPath test")
-        val function = ValidatorFunction()
-        val text = File("src/test/resources/ELR_message.txt").readText()
-        val messages: MutableList<String> = ArrayList()
-        messages.add(text)
-        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
-        val eventHubMD = EventHubMetadata(1, 99, "", "")
-        eventHubMDList.add(eventHubMD)
-        val inputEvent : JsonObject = function.run(messages, eventHubMDList, getExecutionContext()!!)
-
-        // Validate Summary.current_status is successful
-        val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
-        if (summaryObj != null) {
-            Assertions.assertEquals("SUCCESS", summaryObj.get("current_status").asString)
-        }
-        // Validate Process Metadata has been added to the array of proccesses
-        val jarr: JsonArray? = inputEvent.get("processes").asJsonArray
-        if(jarr != null){
-            val item: JsonObject = jarr.get(0).getAsJsonObject()
-            Assertions.assertTrue(item.get("metadata") != null)
-        }
-    }
-
-    @Test
-    fun process_ExceptionPath() {
-        println("Starting processELR_Exception Path test")
-        val function = ValidatorFunction()
-        val text = File("src/test/resources/Error_message.txt").readText()
-        val messages: MutableList<String> = ArrayList()
-        messages.add(text)
-        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
-        val eventHubMD = EventHubMetadata(1, 99, "", "")
-        eventHubMDList.add(eventHubMD)
-        val inputEvent = function.run(messages, eventHubMDList, getExecutionContext()!!)
-
-        val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
-        // Validate current_status is unsuccessful
-        if (summaryObj != null) {
-            Assertions.assertEquals("FAILURE", summaryObj.get("current_status").asString)
-        }
-        // Validate Process Metadata has been added to the array of proccesses
-        val jarr: JsonArray? = inputEvent.get("processes").asJsonArray
-        if(jarr != null){
-            val item: JsonObject = jarr.get(0).getAsJsonObject()
-            Assertions.assertTrue(item.get("metadata") != null)
-        }
-
     }
 
     private fun getExecutionContext(): ExecutionContext {
