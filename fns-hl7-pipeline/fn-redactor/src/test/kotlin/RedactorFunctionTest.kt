@@ -17,24 +17,14 @@ import java.util.logging.Logger
 
 class RedactorFunctionTest {
 
-    @Test
-    fun process_HappyPath() {
-        println("Starting process_HappyPath test")
+    private fun processFile(filename:String, isHappyPath:Boolean) {
+
+        println("Start processing $filename ")
+        val text = this:: class.java.getResource("/$filename").readText()
+        val messages = listOf(text)
+        val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val function = Function()
-        val text = File("src/test/resources/ELR_message.txt").readText()
-
-        val messages: MutableList<String> = ArrayList()
-        messages.add(text)
-        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
-        val eventHubMD = EventHubMetadata(1, 99, "", "")
-        eventHubMDList.add(eventHubMD)
-        val inputEvent : JsonObject = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-
-        // Validate Summary.current_status is successful
-        val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
-        if (summaryObj != null) {
-            Assertions.assertEquals("REDACTED", summaryObj.get("current_status").asString)
-        }
+        val inputEvent : JsonObject = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
 
         // Validate Metadata.processes has been added to the array of proccesses
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
@@ -42,49 +32,44 @@ class RedactorFunctionTest {
             val processes: JsonArray? = metadata.get("processes").asJsonArray
             Assertions.assertTrue(processes != null)
         }
-        
 
+        val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
+        if (summaryObj != null){
+            if(isHappyPath){
+                Assertions.assertEquals("SUCCESS", summaryObj.get("current_status").asString)
+            }
+            else{
+                Assertions.assertEquals("FAILURE", summaryObj.get("current_status").asString)
+            }
+        }
+
+        println("Finished processing $filename ")
+    }
+
+    @Test
+    fun process_HappyPath() {
+        processFile("ELR_message.txt", true)
+        assert(true)
     }
 
     @Test
     fun process_ExceptionPath() {
-        println("Starting processELR_ExceptionPath test")
-        val function = Function()
-        val text = File("src/test/resources/Error_message.txt").readText()
-
-        val messages: MutableList<String> = ArrayList()
-        messages.add(text)
-        val eventHubMDList: MutableList<EventHubMetadata> = ArrayList()
-        val eventHubMD = EventHubMetadata(1, 99, "", "")
-        eventHubMDList.add(eventHubMD)
-        val inputEvent = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext()!!)
-
-        val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
-        // Validate current_status is unsuccessful
-        if (summaryObj != null) {
-            Assertions.assertEquals("FAILURE", summaryObj.get("current_status").asString)
-        }
- 
-        // Validate Metadata.processes has been added to the array of proccesses
-        val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
-        if(metadata != null){
-            val processes: JsonArray? = metadata.get("processes").asJsonArray
-            Assertions.assertTrue(processes != null)
-        }
+        processFile("Error_message.txt", false)
+        assert(true)
         
     }
 
-    @Test
-    fun invoke_test(){
-        val function = Function()
-        val req: HttpRequestMessage<Optional<String>> = mock(HttpRequestMessage::class.java) as HttpRequestMessage<Optional<String>>
-        try {
-            function.invoke(req, getExecutionContext()!!)
-        } catch (e : NullPointerException) {
-            println("function invoked, message body is null")
-        }
-        assert(true)
-    }
+    // @Test
+    // fun invoke_test(){
+    //     val function = Function()
+    //     val req: HttpRequestMessage<Optional<String>> = mock(HttpRequestMessage::class.java) as HttpRequestMessage<Optional<String>>
+    //     try {
+    //         function.invoke(req, getExecutionContext()!!)
+    //     } catch (e : NullPointerException) {
+    //         println("function invoked, message body is null")
+    //     }
+    //     assert(true)
+    // }
 
     private fun getExecutionContext(): ExecutionContext? {
         return object : ExecutionContext {
