@@ -35,16 +35,14 @@ class RedactorFunctionTest {
         if (summaryObj != null) {
             Assertions.assertEquals("REDACTED", summaryObj.get("current_status").asString)
         }
-        // // Validate process Object is valid
-        // val metadata = inputEvent.get("metadata")
-        // Assertions.assertTrue(metadata != null)
-        // kotlin.io.println("metadata: $metadata")
-        // Validate Process Metadata has been added to the array of proccesses
-        val jarr: JsonArray? = inputEvent.get("processes").asJsonArray
-        if(jarr != null){
-            val item: JsonObject = jarr.get(0).getAsJsonObject()
-            Assertions.assertTrue(item.get("metadata") != null)
+
+        // Validate Metadata.processes has been added to the array of proccesses
+        val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
+        if(metadata != null){
+            val processes: JsonArray? = metadata.get("processes").asJsonArray
+            Assertions.assertTrue(processes != null)
         }
+        
 
     }
 
@@ -66,13 +64,14 @@ class RedactorFunctionTest {
         if (summaryObj != null) {
             Assertions.assertEquals("FAILURE", summaryObj.get("current_status").asString)
         }
-        // Validate Process MD w/ appropriate assertion? > metadata > processes
-        // Validate Process Metadata has been added to the array of proccesses
-        val jarr: JsonArray? = inputEvent.get("processes").asJsonArray
-        if(jarr != null){
-            val item: JsonObject = jarr.get(0).getAsJsonObject()
-            Assertions.assertTrue(item.get("metadata") != null)
+ 
+        // Validate Metadata.processes has been added to the array of proccesses
+        val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
+        if(metadata != null){
+            val processes: JsonArray? = metadata.get("processes").asJsonArray
+            Assertions.assertTrue(processes != null)
         }
+        
     }
 
     @Test
