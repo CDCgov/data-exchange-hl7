@@ -46,6 +46,11 @@
             <artifactId>hl7-pet_2.13</artifactId>
             <version>${hl7pet.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.10</version>
+        </dependency>
         <!-- Azure Functions Java Library -->
         <!--  -->
         <dependency>
