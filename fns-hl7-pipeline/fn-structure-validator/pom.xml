@@ -2,17 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>gov.cdc.dex</groupId>
-    <artifactId>structure-validator-fn</artifactId>
+    <groupId>gov.cdc.dataexchange</groupId>
+    <artifactId>structure-validator</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <name>Azure Java Functions</name>
-
+    <!---->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
-        <azure.functions.maven.plugin.version>1.19.0</azure.functions.maven.plugin.version>
+        <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
 
         <functionAppName>ocio-ede-${environment-id}-hl7-structure-validator</functionAppName>
@@ -98,24 +97,33 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <version>${azure.functions.maven.plugin.version}</version>
-                <configuration>
-                    <!-- function app name -->
-                    <appName>${functionAppName}</appName>
-                    <!-- function app resource group -->
+               <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
-                    <!-- function app service plan name -->
-                    <appServicePlanName>${functionServicePlan}</appServicePlanName>
-                    <subscriptionId>${subscriptionID}</subscriptionId>
+                    <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
+                    <subscriptionId>${subscriptionID}</subscriptionId>
+                    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
                         <javaVersion>${java.version}</javaVersion>
                     </runtime>
                     <appSettings>
+                        <!-- Run Azure Function from package file by default -->
+                        <property>
+                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
+                            <value>1</value>
+                        </property>
                         <property>
                             <name>FUNCTIONS_EXTENSION_VERSION</name>
                             <value>~4</value>
+                        </property>
+                        <property>
+                            <name>FUNCTIONS_WORKER_RUNTIME</name>
+                            <value>java</value>
                         </property>
                     </appSettings>
                 </configuration>
@@ -140,6 +148,13 @@
                     </filesets>
                 </configuration>
             </plugin>
+
+	    <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+	    
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
@@ -199,8 +214,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.1.0</version>
                 <configuration>
+                    <groups>UnitTest</groups>
                     <argLine>
                         --illegal-access=permit
                     </argLine>
@@ -215,6 +231,40 @@
                         <EventHubSendELROkName>hl7-structure-elr-ok</EventHubSendELROkName>
                     </environmentVariables>
                 </configuration>
+            </plugin>
+            <!-- Add failsafe plugin for integration testing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <groups>IntegrationTest</groups>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
+                                <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                                <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                                <REDIS_POOL_MAX_TOTAL>50</REDIS_POOL_MAX_TOTAL>
+                                <REDIS_POOL_MAX_IDLE>50</REDIS_POOL_MAX_IDLE>
+                                <REDIS_POOL_MIN_IDLE>5</REDIS_POOL_MIN_IDLE>
+                                <REDIS_POOL_TEST_ON_BORROW>false</REDIS_POOL_TEST_ON_BORROW>
+                                <REDIS_POOL_TEST_WHILE_IDLE>false</REDIS_POOL_TEST_WHILE_IDLE>
+                                <EventHubConnectionString>${ehString}</EventHubConnectionString>
+                                <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
+                                <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
+                                <EventHubSendELROkName>hl7-structure-elr-ok</EventHubSendELROkName>
+                            </environmentVariables>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -269,4 +319,15 @@
             </plugin>
         </plugins>
     </build>
+      
+    <distributionManagement>
+        <repository>
+            <id>ede-releases</id>
+            <url>${maven-releases-url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ede-snapshots</id>
+            <url>${maven-snapshot-url}</url>
+        </snapshotRepository>
+    </distributionManagement>  
 </project>

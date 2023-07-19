@@ -5,17 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>gov.cdc.dataexchange</groupId>
-    <artifactId>mmg-lake-segs-transfomer</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>lake-segs-transfomer</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
-    <name>DEX Fns-Pipeline :: mmg-lake-segs-transfomer</name>
+    
+    <name>DEX Fns-Pipeline :: lake-segs-transfomer</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.7.10</kotlin.version>
         <functions.version>2.1.0</functions.version>
-        <functions.plugin.version>1.16.0</functions.plugin.version>
+        <functions.plugin.version>1.26.0</functions.plugin.version>
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
 
@@ -39,7 +39,7 @@
             <artifactId>lib-dex-commons</artifactId>
             <version>${libdexcommon.version}</version>
         </dependency>
-        
+
         <!-- Azure Functions Java Library -->
         <dependency>
             <groupId>com.microsoft.azure.functions</groupId>
@@ -68,7 +68,7 @@
             <version>${azevhub.version}</version>
         </dependency>
 
-       <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -100,53 +100,31 @@
             <artifactId>hl7-pet_2.13</artifactId>
             <version>${hl7pet.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 
-        <!-- Plugins Dependencies Versions -->
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.microsoft.azure</groupId>
-                    <artifactId>azure-functions-maven-plugin</artifactId>
-                    <version>${functions.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-maven-plugin</artifactId>
-                    <version>${kotlin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.1.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
+                <version>${functions.plugin.version}</version>
                 <configuration>
-                    <subscriptionId>${subscriptionID}</subscriptionId>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
+                    <subscriptionId>${subscriptionID}</subscriptionId>
+                    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
+                    <runtime>
+                        <!-- runtime os, could be windows, linux or docker-->
+                        <os>linux</os>
+                        <javaVersion>${java_version}</javaVersion>
+                    </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
                         <property>
@@ -175,6 +153,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -200,7 +179,13 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -222,19 +207,19 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-
+                <version>${kotlin.version}</version>
                 <executions>
                     <execution>
                         <id>compile</id>
-                        <goals> 
-                            <goal>compile</goal> 
+                        <goals>
+                            <goal>compile</goal>
                         </goals>
                     </execution>
 
                     <execution>
                         <id>test-compile</id>
-                        <goals> 
-                            <goal>test-compile</goal> 
+                        <goals>
+                            <goal>test-compile</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -243,6 +228,7 @@
             <!-- Remove obj folder generated by .NET SDK in maven clean -->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
+                <version>3.2.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -251,19 +237,88 @@
                     </filesets>
                 </configuration>
             </plugin>
+
+            <!--Jacoco Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
+                    <argLine>
+                        --illegal-access=permit
+                    </argLine>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <forkCount>2</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <argLine>${surefireArgLine}</argLine>
                     <environmentVariables>
+                        <EventHubConnectionString>${ehString}</EventHubConnectionString>
+                        <EventHubSendOkName>hl7-lake-segments-ok</EventHubSendOkName>
+                        <EventHubSendErrsName>hl7-lake-segments-err</EventHubSendErrsName>
                         <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
                         <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
                     </environmentVariables>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/coverage-reports/jacoco.exec</destFile>
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.70</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
     
-
+    <distributionManagement>
+        <repository>
+            <id>ede-releases</id>
+            <url>${maven-releases-url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ede-snapshots</id>
+            <url>${maven-snapshot-url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

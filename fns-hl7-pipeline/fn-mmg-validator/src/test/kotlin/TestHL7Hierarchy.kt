@@ -6,8 +6,8 @@ class TestHL7Hierarchy {
 
     @Test
     fun testLoadHierarchy() {
-        val msg = this::class.java.getResource("/Lyme_HappyPath.txt").readText()
-        val profile = this::class.java.getResource("/BasicProfile.json").readText()
+         this::class.java.getResource("/Lyme_HappyPath.txt").readText()
+        this::class.java.getResource("/BasicProfile.json").readText()
 
      //   val tree = HL7HierarchyParser.parseMessageHierarchyFromJson(msg, profile)
 

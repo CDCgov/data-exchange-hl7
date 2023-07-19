@@ -1,0 +1,1383 @@
+{
+    "segmentFields": {
+        "HD": [
+            {
+                "fieldNumber": 1,
+                "name": "Namespace ID",
+                "dataType": "IS",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Universal ID",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "REGEX:<<OID>>",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Universal ID Type",
+                "dataType": "ID",
+                "maxLength": "6",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "ISO",
+                "notes": ""
+            }
+        ],
+        "MSG": [
+            {
+                "fieldNumber": 1,
+                "name": "Message Code",
+                "dataType": "ID",
+                "maxLength": "3",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Trigger Event",
+                "dataType": "ID",
+                "maxLength": "3",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Universal ID Type",
+                "dataType": "ID",
+                "maxLength": "7",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "ISO",
+                "notes": ""
+            }
+        ],
+        "PT": [
+            {
+                "fieldNumber": 1,
+                "name": "Processing ID",
+                "dataType": "ID",
+                "maxLength": "1",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "REGEX:[D|T|P]",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Processing Mode",
+                "dataType": "ID",
+                "maxLength": "1",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "VID": [
+            {
+                "fieldNumber": 1,
+                "name": "Version ID",
+                "dataType": "ID",
+                "maxLength": "5",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Internationalization Code",
+                "dataType": "CE",
+                "maxLength": "841",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "International Version ID",
+                "dataType": "CE",
+                "maxLength": "841",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "CE": [
+            {
+                "fieldNumber": 1,
+                "name": "Identifier",
+                "dataType": "ST",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "C(R/RE)->!1",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Name of Coding System",
+                "dataType": "ID",
+                "maxLength": "199",
+                "usage": "C(R/X)->1",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 4,
+                "name": "Alternate Identifier",
+                "dataType": "ST",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 5,
+                "name": "Alternate Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 6,
+                "name": "Name of Alternate Coding System",
+                "dataType": "ID",
+                "maxLength": "199",
+                "usage": "C(R/X)->4",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "CWE": [
+            {
+                "fieldNumber": 1,
+                "name": "Identifier",
+                "dataType": "ST",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Name of Coding System",
+                "dataType": "ID",
+                "maxLength": "199",
+                "usage": "C(R/X)->1",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 4,
+                "name": "Alternate Identifier",
+                "dataType": "ST",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 5,
+                "name": "Alternate Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 6,
+                "name": "Name of Alternate Coding System",
+                "dataType": "ID",
+                "maxLength": "199",
+                "usage": "C(R/X)->4",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 7,
+                "name": "Coding System Version ID",
+                "dataType": "ST",
+                "maxLength": "10",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 8,
+                "name": "Alternate Coding System Version ID",
+                "dataType": "ST",
+                "maxLength": "10",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 9,
+                "name": "Original Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "EI": [
+            {
+                "fieldNumber": 1,
+                "name": "Entity Identifier",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Namespace ID",
+                "dataType": "IS",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Universal ID",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 4,
+                "name": "Universal ID Type",
+                "dataType": "ID",
+                "maxLength": "6",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "CX": [
+            {
+                "fieldNumber": 1,
+                "name": "ID Number",
+                "dataType": "ST",
+                "maxLength": "15",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Check Digit",
+                "dataType": "ST",
+                "maxLength": "1",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Check Digit Scheme",
+                "dataType": "ID",
+                "maxLength": "20",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 4,
+                "name": "Assigning Authority",
+                "dataType": "HD",
+                "maxLength": "227",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 5,
+                "name": "Identifier Type Code",
+                "dataType": "ID",
+                "maxLength": "5",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 6,
+                "name": "Assigning Facility",
+                "dataType": "HD",
+                "maxLength": "227",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 7,
+                "name": "Effective Date",
+                "dataType": "DT",
+                "maxLength": "8",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 8,
+                "name": "Expiration Date",
+                "dataType": "DT",
+                "maxLength": "8",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 9,
+                "name": "Assigning Jurisdiction",
+                "dataType": "CWE",
+                "maxLength": "1063",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 10,
+                "name": "Assigning Agency or Department",
+                "dataType": "CWE",
+                "maxLength": "1063",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "XPN": [
+            {
+                "fieldNumber": 1,
+                "name": "Family Name",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Given name",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Second and Further Given names or Initials Thereof",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 4,
+                "name": "Suffix",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 5,
+                "name": "Prefix",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 6,
+                "name": "Degree",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": "Deprecated as of HL7 2.5"
+            },
+            {
+                "fieldNumber": 7,
+                "name": "Name Type Code",
+                "dataType": "ID",
+                "maxLength": "1",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 8,
+                "name": "Name Representation Code",
+                "dataType": "ST",
+                "maxLength": "1",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 9,
+                "name": "Name Context",
+                "dataType": "CE",
+                "maxLength": "841",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 10,
+                "name": "Name Validity Range",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 11,
+                "name": "Name Assembly Order",
+                "dataType": "ID",
+                "maxLength": "1",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 12,
+                "name": "Effective Date",
+                "dataType": "TS",
+                "maxLength": "26",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 13,
+                "name": "Expiration DAte",
+                "dataType": "TS",
+                "maxLength": "26",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 14,
+                "name": "Professional Suffix",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "XAD": [
+            {
+                "fieldNumber": 1,
+                "name": "Street Address",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Other Designation",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "City",
+                "dataType": "ST",
+                "maxLength": "50",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 4,
+                "name": "State or Province",
+                "dataType": "ST",
+                "maxLength": "50",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 5,
+                "name": "Postal Code",
+                "dataType": "ST",
+                "maxLength": "12",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 6,
+                "name": "Country",
+                "dataType": "ID",
+                "maxLength": "3",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 7,
+                "name": "Address Type",
+                "dataType": "ID",
+                "maxLength": "3",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 8,
+                "name": "Other Geographic Designation",
+                "dataType": "ST",
+                "maxLength": "50",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 9,
+                "name": "County/Parish Code",
+                "dataType": "IS",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 10,
+                "name": "Census Tract",
+                "dataType": "IS",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 11,
+                "name": "Address Representation Code",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": "Deprecated as of HL7 v 2.5"
+            },
+            {
+                "fieldNumber": 12,
+                "name": "Address Validity Range",
+                "dataType": "ST",
+                "maxLength": "0",
+                "usage": "X",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 13,
+                "name": "Effeective Date",
+                "dataType": "TS",
+                "maxLength": "26",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 14,
+                "name": "Expiration Date",
+                "dataType": "TS",
+                "maxLength": "26",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "XTN": [
+            {
+                "fieldNumber": 1,
+                "name": "Telephone Number",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "Telecommunication Use Code",
+                "dataType": "ID",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ,{
+                "fieldNumber": 3,
+                "name": "Telecommunication Equipment Type",
+                "dataType": "ID",
+                "usage": "R",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 4,
+                "name": "Communicaton Address",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 5,
+                "name": "Country Code",
+                "dataType": "SNM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 6,
+                "name": "Area/City Code",
+                "dataType": "SNM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 7,
+                "name": "Local Number",
+                "dataType": "SNM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 8,
+                "name": "Extension",
+                "dataType": "SNM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 9,
+                "name": "Any Text",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 10,
+                "name": "Extension Prefix",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 11,
+                "name": "Speed Dial Code",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 12,
+                "name": "Unformatted Telephone Number",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 13,
+                "name": "Effective Start Date",
+                "dataType": "DTM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 14,
+                "name": "Expiration Date",
+                "dataType": "DTM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 15,
+                "name": "Expiration Reason",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 16,
+                "name": "Protetion Code",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 17,
+                "name": "Shared Telecommunication Identifier",
+                "dataType": "EI",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 18,
+                "name": "Preference Order",
+                "dataType": "NM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "ID": [
+            {
+                "fieldNumber": 1,
+                "name": "Coded Value for HL7-Defined Table",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "IS": [
+            {
+                "fieldNumber": 1,
+                "name": "Coded Value for HL7-Defnited Table",
+                "dataType": "ST",
+                "maxLength": "20",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "SI": [
+            {
+                "fieldNumber": 1,
+                "name": "Sequence ID",
+                "dataType": "NM",
+                "maxLength": "4",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ": A non-negative integer in the form of a NM field"
+            }
+        ],
+        "XON": [
+            {
+                "fieldNumber": 1,
+                "name": "Organization Name",
+                "dataType": "ST",
+                "maxLength": "50",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Organization Name Type Code",
+                "dataType": "IS",
+                "maxLength": "20",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Id Number",
+                "dataType": "NM",
+                "maxLength": "4",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 4,
+                "name": "Identifier Check Digit",
+                "dataType": "NM",
+                "maxLength": "4",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 5,
+                "name": "check Digit Scheme",
+                "dataType": "ID",
+                "maxLength": "3",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 6,
+                "name": "Assigning Authority",
+                "dataType": "HD",
+                "maxLength": "227",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 7,
+                "name": "Identifier Type Code",
+                "dataType": "ID",
+                "maxLength": "5",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 8,
+                "name": "Assigning Facility",
+                "dataType": "HD",
+                "maxLength": "227",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 9,
+                "name": "Name Representation Code",
+                "dataType": "ID",
+                "maxLength": "1",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 10,
+                "name": "Organization Identifier",
+                "dataType": "ST",
+                "maxLength": "20",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            }
+
+        ],
+        "XCN": [
+            {
+                "fieldNumber": 1,
+                "name": "Person Identifier",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "Family Name",
+                "dataType": "FN",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 3,
+                "name": "Given Name",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 4,
+                "name": "Secpnd And Further Given Names or Intials thereof",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 5,
+                "name": "Suffix",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 6,
+                "name": "Prefix",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 7,
+                "name": "Degree",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 8,
+                "name": "Source Table",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 9,
+                "name": "Assigning Authority",
+                "dataType": "HD",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 10,
+                "name": "Name Type Code",
+                "dataType": "ID",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 11,
+                "name": "Identifier Check Digit",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 12,
+                "name": "Check Digit Scheme",
+                "dataType": "ID",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 13,
+                "name": "Identifier Type Code",
+                "dataType": "ID",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 14,
+                "name": "Assigning Facility",
+                "dataType": "HD",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 15,
+                "name": "Name Representation Code",
+                "dataType": "ID",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 16,
+                "name": "Name Context",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 17,
+                "name": "Name Validity Range",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 18,
+                "name": "Name Assembly Order",
+                "dataType": "ID",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 19,
+                "name": "Effective Date",
+                "dataType": "DTM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 20,
+                "name": "Expiration Date",
+                "dataType": "DTM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 21,
+                "name": "Professional Suffix",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 22,
+                "name": "Assigning Jurisdiction",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 23,
+                "name": "Assigning Agency or Department",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 24,
+                "name": "Security Check",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 25,
+                "name": "Security Check Scheme",
+                "dataType": "ID",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "FC": [
+            {
+                "fieldNumber": 1,
+                "name": "FInancial Class Code",
+                "dataType": "CWE",
+                "usage": "R",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "Effective Date",
+                "dataType": "DTM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "PL": [
+            {
+                "fieldNumber": 1,
+                "name": "Point of Care",
+                "dataType": "HD",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "Room",
+                "dataType": "HD",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 3,
+                "name": "Bed",
+                "dataType": "HD",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 4,
+                "name": "Facility",
+                "dataType": "HD",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 5,
+                "name": "Location Status",
+                "dataType": "IS",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 6,
+                "name": "Person Location Type",
+                "dataType": "IS",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 7,
+                "name": "Building",
+                "dataType": "HD",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 8,
+                "name": "Floor",
+                "dataType": "HD",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 9,
+                "name": "Location Description",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 10,
+                "name": "Comprehensive Location Identifier",
+                "dataType": "EI",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 11,
+                "name": "Assigning Authority For Location",
+                "dataType": "HD",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "DLD": [
+            {
+                "fieldNumber": 1,
+                "name": "Discharge To Location",
+                "dataType": "CWE",
+                "usage": "R",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "Effective Date",
+                "dataType": "DTM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "JCC": [
+            {
+                "fieldNumber": 1,
+                "name": "Job Code",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "Job Class",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 3,
+                "name": "Job Description Text",
+                "dataType": "TX",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "FN": [
+            {
+                "fieldNumber": 1,
+                "name": "Surname",
+                "dataType": "ST",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "Own Surname Prefix",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 3,
+                "name": "Own Surname",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 4,
+                "name": "Surname Prefix Frm Partner/Spouse",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 5,
+                "name": "Surname From Partner/Spouse",
+                "dataType": "ST",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ]
+    }
+}

@@ -3,24 +3,26 @@ package gov.cdc.dex.azure
 import com.azure.messaging.eventhubs.*
 
 class EventHubSender (val evHubConnStr: String, ) {
-    fun send(  evHubTopicName: String, message: String ) {
+
+
+    fun send(evHubTopicName: String, message: String ) {
+        send(evHubTopicName, listOf(message))
+    }
+
+    fun send(evHubTopicName: String, messages:List<String>) {
         val producer = EventHubClientBuilder()
             .connectionString(evHubConnStr,  evHubTopicName)
             .buildProducerClient()
-
-        val hl7EventData = EventData(message)
-        val allEvents = arrayOf<EventData>(hl7EventData)
-
         var eventDataBatch = producer.createBatch()
-        allEvents.forEach {eventData ->
+        messages.forEach {msg ->
             // try to add the event from the array to the batch
-            if (!eventDataBatch.tryAdd(eventData)) {
+            if (!eventDataBatch.tryAdd(EventData(msg))) {
                 // if the batch is full, send it and then create a new batch
                 producer.send(eventDataBatch)
                 eventDataBatch = producer.createBatch()
 
                 // Try to add that event that couldn't fit before.
-                if (!eventDataBatch.tryAdd(eventData)) {
+                if (!eventDataBatch.tryAdd(EventData(msg))) {
                     throw IllegalArgumentException("Event is too large for an empty batch. Max size: "
                             + eventDataBatch.maxSizeInBytes
                     )

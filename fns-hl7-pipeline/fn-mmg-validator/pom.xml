@@ -6,18 +6,19 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>mmg-validator</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <name>DEX Fns-Pipeline :: mmg-validator</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.7.20</kotlin.version>
         <functions.version>3.0.0</functions.version>
-        <functions.plugin.version>1.16.0</functions.plugin.version>
+        <functions.plugin.version>1.26.0</functions.plugin.version>
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
+        <skip.integration.tests>true</skip.integration.tests>
+        <skip.unit.tests>false</skip.unit.tests>
 
         <functionAppName>ocio-ede-${environment-id}-hl7-mmg-validator</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
@@ -34,7 +35,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
-            <version>1.0.14-SNAPSHOT</version>
+            <version>1.0.15-SNAPSHOT</version>
         </dependency>
 
         <!-- Azure Functions Java Library -->
@@ -44,7 +45,7 @@
             <version>${functions.version}</version>
         </dependency>
 
-        <!-- Kotlin -->
+        <!-- Kotlin  -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
@@ -111,57 +112,26 @@
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
-
-        <!-- Plugins Dependencies Versions -->
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.microsoft.azure</groupId>
-                    <artifactId>azure-functions-maven-plugin</artifactId>
-                    <version>${functions.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-maven-plugin</artifactId>
-                    <version>${kotlin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.1.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration>
-                        <environmentVariables>
-                            <REDIS_CACHE_NAME>ocio-ede-dev-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
-                            <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
-                        </environmentVariables>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
+                <version>${functions.plugin.version}</version>
                 <configuration>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
+                    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
+
+                    <runtime>
+                        <!-- runtime os, could be windows, linux or docker-->
+                        <os>linux</os>
+                        <javaVersion>11</javaVersion>
+                    </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
                         <property>
@@ -194,6 +164,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -220,6 +191,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -241,7 +213,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-
+                <version>${kotlin.version}</version>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -255,13 +227,73 @@
                         <goals>
                             <goal>test-compile</goal>
                         </goals>
+
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <groups>UnitTest</groups>
+                    <argLine> --illegal-access=permit </argLine>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <forkCount>2</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <argLine>${surefireArgLine}</argLine>
+                    <environmentVariables>
+                        <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
+                        <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                        <REDIS_POOL_MAX_TOTAL>50</REDIS_POOL_MAX_TOTAL>
+                        <REDIS_POOL_MAX_IDLE>50</REDIS_POOL_MAX_IDLE>
+                        <REDIS_POOL_MIN_IDLE>5</REDIS_POOL_MIN_IDLE>
+                        <REDIS_POOL_TEST_ON_BORROW>false</REDIS_POOL_TEST_ON_BORROW>
+                        <REDIS_POOL_TEST_WHILE_IDLE>false</REDIS_POOL_TEST_WHILE_IDLE>
+                        <EventHubConnectionString>${ehString}</EventHubConnectionString>
+                        <EventHubSendOkName>hl7-mmg-validation-ok</EventHubSendOkName>
+                        <EventHubSendErrsName>hl7-mmg-validation-err</EventHubSendErrsName>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+            <!-- Add failsafe plugin for integration testing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <groups>IntegrationTest</groups>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
+                                <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                                <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                                <REDIS_POOL_MAX_TOTAL>50</REDIS_POOL_MAX_TOTAL>
+                                <REDIS_POOL_MAX_IDLE>50</REDIS_POOL_MAX_IDLE>
+                                <REDIS_POOL_MIN_IDLE>5</REDIS_POOL_MIN_IDLE>
+                                <REDIS_POOL_TEST_ON_BORROW>false</REDIS_POOL_TEST_ON_BORROW>
+                                <REDIS_POOL_TEST_WHILE_IDLE>false</REDIS_POOL_TEST_WHILE_IDLE>
+                                <EventHubConnectionString>${ehString}</EventHubConnectionString>
+                                <EventHubSendOkName>hl7-mmg-validation-ok</EventHubSendOkName>
+                                <EventHubSendErrsName>hl7-mmg-validation-err</EventHubSendErrsName>
+                            </environmentVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Remove obj folder generated by .NET SDK in maven clean -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -270,7 +302,77 @@
                     </filesets>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+
+
+            <!-- added for jacoco -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/coverage-reports/jacoco.exec</destFile>
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+                            <excludes>
+                                <exclude>gov/cdc/dex/model/MmgValidatorProcessMetadata*</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.70</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>ede-releases</id>
+            <url>${maven-releases-url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ede-snapshots</id>
+            <url>${maven-snapshot-url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

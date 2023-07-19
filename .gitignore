@@ -324,3 +324,10 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# local development files
+.local
+
+# maven release plugin
+pom.xml.tag
+pom.xml.releaseBackup
