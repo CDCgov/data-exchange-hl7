@@ -36,7 +36,7 @@ class RedactorFunctionTest {
         val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
         if (summaryObj != null){
             if(isHappyPath){
-                Assertions.assertEquals("SUCCESS", summaryObj.get("current_status").asString)
+                Assertions.assertEquals("REDACTED", summaryObj.get("current_status").asString)
             }
             else{
                 Assertions.assertEquals("FAILURE", summaryObj.get("current_status").asString)
