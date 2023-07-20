@@ -31,18 +31,6 @@ class ValidatorFunctionTest {
             Assertions.assertTrue(processes != null)
         }
 
-        // val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
-        // if (summaryObj != null){
-        //     if(isHappyPath){
-        //         // Validate Summary.current_status is successful
-        //         Assertions.assertEquals("SUCCESS", summaryObj.get("current_status").asString)
-        //     }
-        //     else{
-        //         // Validate current_status is unsuccessful
-        //         Assertions.assertEquals("FAILURE", summaryObj.get("current_status").asString)
-        //     }
-        // }
-
         println("Finished processing $filename ")
     }
 
@@ -63,13 +51,6 @@ class ValidatorFunctionTest {
         processFile("CASE_message.txt", true)
         assert(true)
     }
-
-    // @Test
-    // fun invoke_test(){
-    //     val function = ValidatorFunction()
-    //     val req: HttpRequestMessage<Optional<String>> = mock(HttpRequestMessage::class.java) as HttpRequestMessage<Optional<String>>
-    //     assertThrows<NullPointerException> { function.invoke(req) }
-    // }
 
     private fun getExecutionContext(): ExecutionContext {
         return object : ExecutionContext {
