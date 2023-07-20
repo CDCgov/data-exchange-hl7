@@ -8,7 +8,7 @@
     <artifactId>hl7-json-lake-fn</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
+    
     <name>DEX Fns-Pipeline :: hl7-json-lake-fn</name>
 
     <properties>
@@ -259,14 +259,14 @@
         </plugins>
     </build>
 
-<!--    <distributionManagement>-->
-<!--        <repository>-->
-<!--            <id>ede-releases</id>-->
-<!--            <url>${maven-releases-url}</url>-->
-<!--        </repository>-->
-<!--        <snapshotRepository>-->
-<!--            <id>ede-snapshots</id>-->
-<!--            <url>${maven-snapshot-url}</url>-->
-<!--        </snapshotRepository>-->
-<!--    </distributionManagement>-->
+    <distributionManagement>
+        <repository>
+            <id>ede-releases</id>
+            <url>${maven-releases-url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ede-snapshots</id>
+            <url>${maven-snapshot-url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
