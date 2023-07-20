@@ -59,18 +59,6 @@ class RedactorFunctionTest {
         
     }
 
-    // @Test
-    // fun invoke_test(){
-    //     val function = Function()
-    //     val req: HttpRequestMessage<Optional<String>> = mock(HttpRequestMessage::class.java) as HttpRequestMessage<Optional<String>>
-    //     try {
-    //         function.invoke(req, getExecutionContext()!!)
-    //     } catch (e : NullPointerException) {
-    //         println("function invoked, message body is null")
-    //     }
-    //     assert(true)
-    // }
-
     private fun getExecutionContext(): ExecutionContext? {
         return object : ExecutionContext {
             override fun getLogger(): Logger {
