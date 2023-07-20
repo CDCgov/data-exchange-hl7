@@ -193,7 +193,7 @@ jobs:
               *lib-bumblebee*) workflows+=("ci-lib-bumblebee.yml") ;;&
               *lib-cloud-proxy*) workflows+=("ci-lib-cloud-proxy.yml") ;;&
               *lib-dex-commons*) workflows+=("ci-lib-dex-commons.yml") ;;&
-              *lib-nist-validator*) workflows+=("ci-lib-nist-validator.yml") ;;&   
+              *lib-nist-validator*) workflows+=("publish-nist-validator-lib.yml") ;;&   
               *) ;;
               esac
             fi
