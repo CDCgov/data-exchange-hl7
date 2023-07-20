@@ -4,7 +4,7 @@
     <artifactId>lib-nist-validator</artifactId>
     <name>lib-nist-validator</name>
     <version>${revision}</version>
-
+    <!---->
     <properties>
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>

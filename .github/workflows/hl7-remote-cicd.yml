@@ -176,7 +176,7 @@ jobs:
               *lib-bumblebee*) workflows+=("publish-bumblebee-lib.yml") ;;&
               *lib-cloud-proxy*) workflows+=("publish-cloud-proxy-lib.yml") ;;&
               *lib-dex-commons*) workflows+=("publish-dex-commons-lib.yml") ;;&
-              *lib-mist-validator*) workflows+=("publish-nist-validator-lib.yml") ;;&            
+              *lib-nist-validator*) workflows+=("publish-nist-validator-lib.yml") ;;&            
               *) ;;
               esac
             else
@@ -193,7 +193,7 @@ jobs:
               *lib-bumblebee*) workflows+=("ci-lib-bumblebee.yml") ;;&
               *lib-cloud-proxy*) workflows+=("ci-lib-cloud-proxy.yml") ;;&
               *lib-dex-commons*) workflows+=("ci-lib-dex-commons.yml") ;;&
-              *lib-mist-validator*) workflows+=("ci-lib-nist-validator.yml") ;;&   
+              *lib-nist-validator*) workflows+=("ci-lib-nist-validator.yml") ;;&   
               *) ;;
               esac
             fi
