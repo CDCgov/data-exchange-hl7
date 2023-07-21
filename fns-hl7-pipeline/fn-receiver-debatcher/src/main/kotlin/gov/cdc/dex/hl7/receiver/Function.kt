@@ -70,6 +70,15 @@ class Function {
                     //Create Map of Metadata with lower case keys
                     val metaDataMap =  blobClient.properties.metadata.mapKeys { it.key.lowercase() }
 
+                    // Add source Metadata
+                    val otherMetadata: MutableMap<String, String> = HashMap()
+                    metaDataMap.forEach { (k, v) ->
+                        val knownMetadataKeys = arrayOf("event_id","event_timestamp","file_uuid","file_path","file_timestamp","file_size","single_or_batch","message_hash","ext_system_provider","ext_original_file_name","message_index","ext_original_file_timestamp","source_metadata")
+                        if(!knownMetadataKeys.contains(k)){
+                            otherMetadata[k] = v
+                        }
+                     }
+
                     // Create Metadata for Provenance
                     val provenance = Provenance(
                         eventId=event.id,
@@ -80,8 +89,10 @@ class Function {
                         singleOrBatch=Provenance.SINGLE_FILE,
                         originalFileName =metaDataMap["original_file_name"] ?: blobName,
                         systemProvider = metaDataMap["system_provider"],
-                        originalFileTimestamp = metaDataMap["original_file_timestamp"]
+                        originalFileTimestamp = metaDataMap["original_file_timestamp"],
+                        sourceMetadata = otherMetadata.toList()
                     ) // .hl7MessageMetadata
+
                     //Validate metadata
                     val isValidMessage = validateMessageMetaData(metaDataMap, context)
                     var messageType = metaDataMap["message_type"]
