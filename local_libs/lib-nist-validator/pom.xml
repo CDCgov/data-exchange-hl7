@@ -15,7 +15,7 @@
 
     <repositories>
         <repository>
-            <id>nexus</id>
+            <id>imagehub</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede-group/</url>
         </repository>
     </repositories>
