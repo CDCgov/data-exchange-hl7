@@ -3,30 +3,29 @@
     <groupId>gov.cdc.dex</groupId>
     <artifactId>lib-nist-validator</artifactId>
     <name>lib-nist-validator</name>
-    <version>${revision}</version>
-
+    <version>1.3.5-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <properties>
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <kotlin.version>1.7.20</kotlin.version>
         <nist.version>1.6.3</nist.version>
-        <revision>1.3.5-SNAPSHOT</revision>
     </properties>
 
     <repositories>
         <repository>
-            <id>nexus</id>
+            <id>imagehub</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede-group/</url>
         </repository>
     </repositories>
     <distributionManagement>
         <snapshotRepository>
-            <id>nexus</id>
+            <id>ede-snapshots</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede-snapshot/</url>
         </snapshotRepository>
         <repository>
-            <id>nexus</id>
+            <id>ede-releases</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede/</url>
         </repository>
     </distributionManagement>
