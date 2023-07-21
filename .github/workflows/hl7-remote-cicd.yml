@@ -21,7 +21,7 @@ on:
         - publish-nist-validator-lib.yml
         - publish-dex-commons-lib.yml
         - publish-cloud-proxy-lib.yml
-        - publish-bumblebess-lib.yml
+        - publish-bumblebee-lib.yml
       commitID:
         description: '(Optional) Enter Full Commit Hash to trigger redeploy of prior version'
         required: false
@@ -88,7 +88,6 @@ jobs:
               token: ${{ env.access_token }}
               inputs: '{ "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
               ref: 'main'
-              #ref: 'HL7-2265-PubishNistValidator'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
               wait-for-completion-interval: 5m
@@ -193,7 +192,7 @@ jobs:
               *lib-bumblebee*) workflows+=("ci-lib-bumblebee.yml") ;;&
               *lib-cloud-proxy*) workflows+=("ci-lib-cloud-proxy.yml") ;;&
               *lib-dex-commons*) workflows+=("ci-lib-dex-commons.yml") ;;&
-              *lib-nist-validator*) workflows+=("publish-nist-validator-lib.yml") ;;&   
+              *lib-nist-validator*) workflows+=("ci-iib-nist-validator.yml") ;;&   
               *) ;;
               esac
             fi
