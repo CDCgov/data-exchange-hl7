@@ -26,11 +26,11 @@
     </repositories>
     <distributionManagement>
         <snapshotRepository>
-            <id>nexus</id>
+            <id>ede-snapshots</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede-snapshot/</url>
         </snapshotRepository>
         <repository>
-            <id>nexus</id>
+            <id>ede-releases</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede/</url>
         </repository>
     </distributionManagement>
