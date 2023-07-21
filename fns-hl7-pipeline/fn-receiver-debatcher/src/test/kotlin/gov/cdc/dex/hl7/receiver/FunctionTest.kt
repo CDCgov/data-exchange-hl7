@@ -1,6 +1,7 @@
 package gov.cdc.dex.hl7.receiver
 
 import com.microsoft.azure.functions.ExecutionContext
+import com.microsoft.azure.functions.OutputBinding
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.DexEventPayload
 import gov.cdc.dex.metadata.HL7MessageType
@@ -20,7 +21,9 @@ class FunctionTest {
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
 
         val function = Function()
-        return function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
+//        val outputBinding = OutputBinding<List<String>>()
+        return function.eventHubProcessor(text, EventHubMetadata(1, 99, "", ""), getCosmoOutputBound(), getExecutionContext())
+        //return null
     }
 
     @Test
@@ -103,5 +106,17 @@ class FunctionTest {
             }
         }
     }
+    private fun getCosmoOutputBound(): OutputBinding<String> {
+        return object: OutputBinding<String> {
+            var values: String = ""
+            override fun setValue(p0: String?) {
+                p0.let { values = p0!! }
+            }
 
+            override fun getValue(): String {
+                return values
+            }
+
+        }
+    }
 }
