@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>lake-segs-transfomer</artifactId>
-    <version>1.0.0-2023-07-24-054048-eae051d</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <name>DEX Fns-Pipeline :: lake-segs-transfomer</name>
