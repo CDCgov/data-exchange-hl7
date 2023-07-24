@@ -10,6 +10,13 @@
     <packaging>jar</packaging>
     <name>DEX Fns-Pipeline :: mmg-validator</name>
 
+    <scm>
+        <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
+        <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>   
+        <url>https://github.com/CDCgov/data-exchange-hl7</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.7.20</kotlin.version>
@@ -239,6 +246,22 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        <configuration>
+                            <classifier>${environment-id}</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
@@ -313,8 +336,6 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>3.1.1</version>
             </plugin>
-
-
             <!-- added for jacoco -->
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -367,7 +388,32 @@
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                <execution>
+                    <phase>validate</phase>
+                    <goals>
+                    <goal>create</goal>
+                    </goals>
+                </execution>
+                </executions>
+                <configuration>
+                <doCheck>false</doCheck>
+                <doUpdate>false</doUpdate>
+                <format>{0,number}</format>
+                <items>
+                    <item>buildNumber</item>
+                </items>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.8.1</version>
+            </plugin>
         </plugins>
     </build>
     <distributionManagement>
