@@ -142,10 +142,6 @@
                             <value>true</value>
                         </property>
                         <property>
-                            <name>ApplicationInsightsAgent_EXTENSION_VERSION</name>
-                            <value>~3</value>
-                        </property>
-                        <property>
                             <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
                             <value>None</value>
                         </property>
