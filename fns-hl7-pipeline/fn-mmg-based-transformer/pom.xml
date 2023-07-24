@@ -5,7 +5,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>mmg-based-transformer</artifactId>
-    <version>1.0.0-2023-07-24-030419-62cd453-2023-07-24-040204-b183209</version>
+    <version>1.0.0-2023-07-24-030419-62cd453-2023-07-24-040204-b183209-2023-07-24-051825-3ede6b5</version>
     <packaging>jar</packaging>
     <name>DEX Fns-Pipeline :: mmg-based-transformer</name>
     
