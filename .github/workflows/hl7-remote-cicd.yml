@@ -87,8 +87,7 @@ jobs:
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
               inputs: '{ "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
-              #ref: 'main'
-              ref: 'HL7-2224-Staging-Deploy'
+              ref: 'main'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
               wait-for-completion-interval: 90s
@@ -248,8 +247,7 @@ jobs:
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
               inputs: '{ "commitID": "${{ steps.getsha.outputs.commitID }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
-              #ref: 'main'
-              ref: 'HL7-2224-Staging-Deploy'
+              ref: 'main'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
               wait-for-completion-interval: 90s
