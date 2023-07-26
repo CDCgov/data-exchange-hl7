@@ -16,7 +16,7 @@ import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
-
+import org.slf4j.LoggerFactory
 
 /**
  * Azure function with event hub trigger to redact messages   */
@@ -24,7 +24,7 @@ class Function {
 
     companion object {
         val gson: Gson = GsonBuilder().serializeNulls().create()
-
+        private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
         val fnConfig = FunctionConfig()
     }
     @FunctionName("Redactor")
@@ -38,7 +38,10 @@ class Function {
         message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext
-    ): JsonObject {
+    ) {
+        //context.logger.info("------ received event: ------> message: --> $message")
+
+
         val helper = Helper()
 
         message.forEachIndexed { msgIndex: Int, singleMessage: String? ->
@@ -66,17 +69,15 @@ class Function {
                     routeElement.asString
                 }
 
-                context.logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
-                context.logger.info("Index: $msgIndex, Last Index: ${message.lastIndex} ")
-                val report = helper.getRedactedReport(hl7Content, messageType, route)
+                logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
+                val report = helper.getRedactedReport(hl7Content, messageType, route)
                 if(report != null) {
                     val rReport = RedactorReport(report._2())
                     val configFileName : List<String> = listOf(helper.getConfigFileName(messageType, route))
                     val processMD = RedactorProcessMetadata(rReport.status, report = rReport, eventHubMD[msgIndex], configFileName)
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
-                    context.logger.info("Process MD: ${processMD} ")
 
                     metadata.addArrayElement("processes", processMD)
                     val newContentBase64 = Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
@@ -84,27 +85,22 @@ class Function {
                     //Update Summary element.
                     val summary = SummaryInfo("REDACTED")
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                    context.logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
+                    logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
                     fnConfig.evHubSender.send(fnConfig.evHubOkName, gson.toJson(inputEvent))
-                    if (msgIndex == message.lastIndex){
-                        return inputEvent
-                    }
                 }
-                if (msgIndex == message.lastIndex){
-                    return inputEvent
-                }
+
             } catch (e: Exception) {
                 //TODO::  - update retry counts
-                context.logger.severe("DEX:: Unable to process Message due to exception: ${e.message}")
+                logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
                 val problem = Problem(RedactorProcessMetadata.REDACTOR_PROCESS, e, false, 0, 0)
 
                 val summary = SummaryInfo("FAILURE", problem)
                 inputEvent.add("summary", summary.toJsonElement())
                 fnConfig.evHubSender.send(fnConfig.evHubErrorName, gson.toJson(inputEvent))
-                return inputEvent
             }
+
         } // .eventHubProcessor
-        return JsonObject()
+
     }
 
     @FunctionName("redactorReport")
