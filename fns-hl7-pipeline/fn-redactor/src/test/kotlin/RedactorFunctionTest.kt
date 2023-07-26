@@ -71,7 +71,7 @@ class RedactorFunctionTest {
     //     assert(true)
     // }
 
-    private fun getExecutionContext(): ExecutionContext? {
+    private fun getExecutionContext(): ExecutionContext {
         return object : ExecutionContext {
             override fun getLogger(): Logger {
                 return Logger.getLogger(FunctionTest::class.java.name)
