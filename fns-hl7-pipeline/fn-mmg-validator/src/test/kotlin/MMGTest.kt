@@ -1,36 +1,30 @@
-
 import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.MmgValidator
-
 import gov.cdc.dex.hl7.exception.InvalidConceptKey
 import gov.cdc.dex.hl7.model.*
-
 import gov.cdc.hl7.HL7StaticParser
-
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import redis.clients.jedis.Jedis
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
+@Tag("UnitTest")
 class MMGTest {
-    private val REDIS_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
-    private val REDIS_KEY  = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
+    private val REDIS_NAME = System.getenv("REDIS_CACHE_NAME")
+    private val REDIS_KEY  = System.getenv("REDIS_CACHE_KEY")
     private val redisProxy = RedisProxy(REDIS_NAME, REDIS_KEY)
-
-    @Test
-    fun testLoadMMG() {
-        val mmgName = "GEN_SUMMARY_CASE_MAP_v1.0"
-        val mmgJson = this::class.java.getResource("/mmgs/" + mmgName + ".json" ).readText()
-        println(mmgJson)
-    }
 
     @Test
     fun testRemoveMSH21FromGenV2() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgs = MmgValidator(redisProxy).getMMGFromMessage(testMsg)
-        val genV2 = mmgs[0]
-        val genV2NoMSH = genV2
-        println(genV2NoMSH.blocks.size)
-        genV2NoMSH.blocks = genV2.blocks.filter {it.name != "Message Header"}
-        println(genV2NoMSH.blocks.size)
+        val genV2 = mmgs[0]  //gen v2 mmg provided by getMMGFromMessage should not contain message header
+        val genV2NoMSHBlocks = genV2.blocks.filter {it.name != "Message Header"}
+        assertEquals(genV2NoMSHBlocks.size, genV2.blocks.size, "Asserting Message Header block removed")
     }
 
     @Test
@@ -39,9 +33,13 @@ class MMGTest {
         val testMsg = this::class.java.getResource(filePath).readText()
         val mmgs = MmgValidator(redisProxy).getMMGFromMessage(testMsg)
         mmgs.forEach { println(it)}
+        assertEquals(mmgs.size, 2, "Asserting 2 MMGs returned")
+        if (mmgs.size == 2) {
+            assertEquals(mmgs[0].name, "Generic Version 2.0.1", "Asserting first MMG is Gen v2" )
+            assertEquals(mmgs[1].name, "Lyme Disease", "Asserting second MMG is Lyme Disease")
+        }
     }
 
-    @Test
     fun testGetSegments() {
         val filePath = "/Lyme_V1.0.2_TM_TC01.hl7"
         val testMsg = this::class.java.getResource(filePath).readText()
@@ -68,7 +66,6 @@ class MMGTest {
 
     }
 
-    @Test
     fun testGetLineNumber() {
         val testMsg = this::class.java.getResource("/Lyme_V1.0.2_TM_TC01.hl7").readText()
         val dataTypeSegments = HL7StaticParser.getListOfMatchingSegments(testMsg, "OBX", "@3.1='INV930'")
@@ -82,22 +79,31 @@ class MMGTest {
     }
 
     @Test
+    @OptIn(ExperimentalTime::class)
     fun testInvalidCode() {
+        var exceptionThrown = false
         try {
-            val REDIS_CACHE_NAME = System.getenv(RedisProxy.REDIS_CACHE_NAME_PROP_NAME)
-            val REDIS_CACHE_KEY = System.getenv(RedisProxy.REDIS_PWD_PROP_NAME)
-            val redisProxy = RedisProxy(REDIS_CACHE_NAME, REDIS_CACHE_KEY)
             val vocabKey = "vocab:UNKNOWN_KEY"
-            val conceptStr = redisProxy.getJedisClient()
-                .hgetAll(vocabKey) //?: throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
-            if (conceptStr.isNullOrEmpty()) {
+            println("getting client")
+            val client: Jedis
+            var conceptStr: MutableMap<String, String>
+            val clientTime = measureTime {
+                client = redisProxy.getJedisClient()
+            }
+            println("Time to get client: $clientTime")
+            val conceptTime = measureTime {
+                println("getting concept")
+                conceptStr = client
+                    .hgetAll(vocabKey) //?: throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
+            }
+            println("Time to get concept: $conceptTime")
+            if (conceptStr.isEmpty()) {
                 throw InvalidConceptKey("Unable to retrieve concept values for $vocabKey")
             }
-            println(conceptStr)
         } catch (e: InvalidConceptKey) {
-            assert(true)
-            println("Exception properly thrown: ${e.message}")
+            exceptionThrown = true
         }
+        assertTrue(exceptionThrown, "Asserting exception properly thrown for invalid concept key")
     }
 
     @Test
@@ -107,9 +113,9 @@ class MMGTest {
         val issues = listOf(v1, v2)
 
         val report = MmgReport(issues)
-        println("status: ${report.status}")
-        println("errors: ${report.errorCount}")
-        println("warnings: ${report.warningCount}")
+        assertEquals("MMG_ERRORS", report.status.toString(), "Asserting report status == MMG_ERRORS when Error is present")
+        assertEquals(1, report.errorCount, "Asserting report error count == 1")
+        assertEquals(1, report.warningCount, "Asserting report warning count == 1")
     }
 
     @Test
@@ -119,9 +125,9 @@ class MMGTest {
         val issues = listOf(v1, v2)
 
         val report = MmgReport(issues)
-        println("status: ${report.status}")
-        println("errors: ${report.errorCount}")
-        println("warnings: ${report.warningCount}")
+        assertEquals("MMG_VALID", report.status.toString(), "Asserting report status == MMG_VALID when no Error is present")
+        assertEquals(0, report.errorCount, "Asserting report error count == 0")
+        assertEquals(2, report.warningCount, "Asserting report warning count == 2")
     }
 
     @Test
@@ -129,8 +135,8 @@ class MMGTest {
         val issues = listOf<ValidationIssue>()
 
         val report = MmgReport(issues)
-        println("status: ${report.status}")
-        println("errors: ${report.errorCount}")
-        println("warnings: ${report.warningCount}")
+        assertEquals("MMG_VALID", report.status.toString(), "Asserting report status == MMG_VALID when no Error is present")
+        assertEquals(0, report.errorCount, "Asserting report error count == 0")
+        assertEquals(0, report.warningCount, "Asserting report warning count == 0")
     }
 }
