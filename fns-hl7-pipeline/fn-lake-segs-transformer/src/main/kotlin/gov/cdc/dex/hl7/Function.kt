@@ -46,9 +46,9 @@ class Function {
                 consumerGroup = "%EventHubConsumerGroupCASE%",)
                 message: List<String?>,
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext) {
+        context: ExecutionContext) : JsonObject {
 
-        processMessages(message, context, eventHubMD)
+        return processMessages(message, context, eventHubMD)
 
     } // .eventHubProcessor
 
@@ -61,13 +61,13 @@ class Function {
             consumerGroup = "%EventHubConsumerGroupELR%",)
         message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext) {
+        context: ExecutionContext) : JsonObject {
 
-        processMessages(message, context, eventHubMD)
+        return processMessages(message, context, eventHubMD)
 
     } // .eventHubProcessor
 
-    private fun processMessages(message: List<String?>, context: ExecutionContext, eventHubMD: List<EventHubMetadata>) {
+    private fun processMessages(message: List<String?>, context: ExecutionContext, eventHubMD: List<EventHubMetadata>) : JsonObject {
         message.forEachIndexed {
                 messageIndex: Int, singleMessage: String? ->
             // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
@@ -105,6 +105,8 @@ class Function {
                     updateMetadataAndDeliver(startTime, PROCESS_STATUS_OK, lakeSegsModel, eventHubMD[messageIndex],
                         fnConfig.evHubSender, fnConfig.eventHubSendOkName, inputEvent, null, config
                     )
+
+                    return inputEvent
                 } catch (e: Exception) {
 
                     context.logger.severe("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
@@ -114,6 +116,8 @@ class Function {
                         fnConfig.evHubSender, fnConfig.eventHubSendErrsName, inputEvent, e, config)
 
                     context.logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
+
+                    return inputEvent
                 } // .catch
 
             } catch (e: Exception) {
@@ -121,11 +125,11 @@ class Function {
                 // message is bad, can't extract fields based on schema expected
                 context.logger.severe("Unable to process Message due to exception: ${e.message}")
                 e.printStackTrace()
-
+                return JsonObject()
             } // .catch
 
         } // .message.forEach
-
+        return JsonObject()
     }
     private fun updateMetadataAndDeliver(startTime: String, status: String, report: List<Segment>?, eventHubMD: EventHubMetadata,
                                          evHubSender: EventHubSender, evTopicName: String, inputEvent: JsonObject, exception: Exception?, config: List<String>) {
