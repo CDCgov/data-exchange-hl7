@@ -4,7 +4,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>cache-loader</artifactId>
-    <version>1.0.0-2023-07-24-130451-d897e58</version>
+    <version>1.0.0-2023-07-24-130451-d897e58-2023-07-26-145814-fff93ee</version>
     <packaging>jar</packaging>
 
     <name>Azure Java Functions</name>
