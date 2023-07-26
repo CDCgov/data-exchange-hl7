@@ -18,7 +18,7 @@ import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
-
+import org.slf4j.LoggerFactory
 
 /**
  * Azure function with event hub trigger for the Lake of Segments transformer
@@ -34,6 +34,8 @@ class Function {
         const val SUMMARY_STATUS_ERROR = "LAKE-SEGMENTS-ERROR"
         val fnConfig = FunctionConfig()
         private val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create()
+        private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
+
     } // .companion object
 
 
@@ -48,7 +50,7 @@ class Function {
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext) {
 
-        processMessages(message, context, eventHubMD)
+        processMessages(message, eventHubMD)
 
     } // .eventHubProcessor
 
@@ -63,11 +65,11 @@ class Function {
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext) {
 
-        processMessages(message, context, eventHubMD)
+        processMessages(message, eventHubMD)
 
     } // .eventHubProcessor
 
-    private fun processMessages(message: List<String?>, context: ExecutionContext, eventHubMD: List<EventHubMetadata>) {
+    private fun processMessages(message: List<String?>, eventHubMD: List<EventHubMetadata>) {
         message.forEachIndexed {
                 messageIndex: Int, singleMessage: String? ->
             // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
@@ -86,7 +88,7 @@ class Function {
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
 
-                context.logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+                logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 //
                 // Process Message for SQL Model
@@ -99,7 +101,7 @@ class Function {
 
                     // Transform to Lake of Segments
                     val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
-                    context.logger.info("DEX::Processed OK for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendOkName}")
+                    logger.info("DEX::Processed OK for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendOkName}")
 
                     // deliver
                     updateMetadataAndDeliver(startTime, PROCESS_STATUS_OK, lakeSegsModel, eventHubMD[messageIndex],
@@ -107,19 +109,19 @@ class Function {
                     )
                 } catch (e: Exception) {
 
-                    context.logger.severe("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
+                    logger.error("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
 
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
                     updateMetadataAndDeliver(startTime, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
                         fnConfig.evHubSender, fnConfig.eventHubSendErrsName, inputEvent, e, config)
 
-                    context.logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
+                    logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
                 } // .catch
 
             } catch (e: Exception) {
 
                 // message is bad, can't extract fields based on schema expected
-                context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                logger.error("Unable to process Message due to exception: ${e.message}")
                 e.printStackTrace()
 
             } // .catch
@@ -155,4 +157,3 @@ class Function {
 
 
 } // .Function
-

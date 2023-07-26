@@ -4,13 +4,15 @@ import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.HttpRequestMessage
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.validation.structure.ValidatorFunction
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.util.*
 import java.util.logging.Logger
 import org.mockito.Mockito.mock
 
-class ValidatorFunctionTest {
+
+class ITValidatorFunctionTest {
 
     private fun processFile(filename: String) {
         println("Start processing $filename ")
@@ -26,18 +28,21 @@ class ValidatorFunctionTest {
     }
 
     @Test
+    @Tag("IntegrationTest")
     fun processELR_HappyPath() {
         processFile("ELR_message.txt")
         assert(true)
     }
 
     @Test
+    @Tag("IntegrationTest")
     fun processELR_ExceptionPath() {
         processFile("ELR_Exceptionmessage.txt")
         assert(true)
     }
 
     @Test
+    @Tag("IntegrationTest")
     fun processCASE_HappyPath() {
         processFile("CASE_message.txt")
         assert(true)
@@ -45,6 +50,7 @@ class ValidatorFunctionTest {
 
     @Test
     fun invoke_test(){
+        // this doesn't seem to work as an Integration test -- get "NoSuchMethodException" instead of NullPointerException
         val function = ValidatorFunction()
         val req: HttpRequestMessage<Optional<String>> = mock(HttpRequestMessage::class.java) as HttpRequestMessage<Optional<String>>
         assertThrows<NullPointerException> { function.invoke(req) }
