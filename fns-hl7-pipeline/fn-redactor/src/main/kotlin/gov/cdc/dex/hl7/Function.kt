@@ -16,7 +16,7 @@ import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
-
+import org.slf4j.LoggerFactory
 
 /**
  * Azure function with event hub trigger to redact messages   */
@@ -24,7 +24,7 @@ class Function {
 
     companion object {
         val gson: Gson = GsonBuilder().serializeNulls().create()
-
+        private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
         val fnConfig = FunctionConfig()
     }
     @FunctionName("Redactor")
@@ -68,6 +68,7 @@ class Function {
 
                 context.logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                 context.logger.info("Index: $msgIndex, Last Index: ${message.lastIndex} ")
+
                 val report = helper.getRedactedReport(hl7Content, messageType, route)
 
                 if(report != null) {
@@ -84,7 +85,7 @@ class Function {
                     //Update Summary element.
                     val summary = SummaryInfo("REDACTED")
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                    context.logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
+                    logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
                     fnConfig.evHubSender.send(fnConfig.evHubOkName, gson.toJson(inputEvent))
                     if (msgIndex == message.lastIndex){
                         return inputEvent
@@ -95,7 +96,7 @@ class Function {
                 }
             } catch (e: Exception) {
                 //TODO::  - update retry counts
-                context.logger.severe("DEX:: Unable to process Message due to exception: ${e.message}")
+                logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
                 val problem = Problem(RedactorProcessMetadata.REDACTOR_PROCESS, e, false, 0, 0)
 
                 val summary = SummaryInfo("FAILURE", problem)

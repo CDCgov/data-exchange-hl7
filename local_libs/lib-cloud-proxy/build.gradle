@@ -11,10 +11,10 @@ plugins {
 version "$revision"
 group "gov.cdc.dex"
 
-
 repositories {
     maven {
-        url "https://imagehub.cdc.gov/repository/maven-ede-group/"
+        url "https://imagehub.cdc.gov/repository/maven-ede-group/";
+        setAllowInsecureProtocol(true);
     }
 }
 
@@ -171,9 +171,9 @@ publishing {
             }
 
             credentials {
-                username "uhc7-su"
-                password "P8!r12~N"
-            }
+                username= System.getenv("IMAGEHUB_USERNAME")
+                password= System.getenv("IMAGEHUB_PASSWORD")  
+          }
         }
     }
     publications {
