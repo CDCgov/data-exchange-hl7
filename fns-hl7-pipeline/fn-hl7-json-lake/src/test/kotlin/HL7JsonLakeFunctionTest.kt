@@ -29,16 +29,15 @@ public class HL7JsonLakeFunctionTest {
             val processes: JsonArray? = metadata.get("processes").asJsonArray
             Assertions.assertTrue(processes != null)
         }
-
         val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
         if (summaryObj != null){
             if(isHappyPath){
                 // Validate Summary.current_status is successful
-                Assertions.assertEquals("SUCCESS", summaryObj.get("current_status").asString)
+                Assertions.assertEquals("HL7-JSON-LAKE-TRANSFORMED", summaryObj.get("current_status").asString)
             }
             else{
                 // Validate current_status is unsuccessful
-                Assertions.assertEquals("FAILURE", summaryObj.get("current_status").asString)
+                Assertions.assertEquals("HL7-JSON-LAKE-ERROR", summaryObj.get("current_status").asString)
             }
         }
 
