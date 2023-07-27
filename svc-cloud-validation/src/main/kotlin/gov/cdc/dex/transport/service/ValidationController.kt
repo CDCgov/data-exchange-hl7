@@ -1,6 +1,5 @@
 package gov.cdc.dex.validation.service
 
-import gov.cdc.dex.cloud.storage.CloudStorage
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
@@ -33,19 +32,17 @@ import com.google.gson.*
  * @Author USY6@cdc.gov
  */
 @Controller("/validation")
-class ValidationController(private val cloudStorage: CloudStorage) {
+class ValidationController() {
     private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
     val gson: Gson = GsonBuilder().serializeNulls().create()
 
     val redactorUrl = System.getenv("REDACTOR_URL") + "/api/redactorReport"
     val structureUrl = System.getenv("STRUCTURE_URL") + "/api/structure"
-    val validationUrl = System.getenv("MMG_VALIDATOR_URL") + "/api/validate-mmg"
     val elrType = System.getenv("ELR_TYPE")
 
-    @Post(value = "/validation", consumes = [MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN])
+    @Post(value = "/", consumes = [MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN])
     fun uploadContentDefault(
         @Body content: String,
-        @QueryValue fileContentType: String = MediaType.TEXT_PLAIN,
         request: HttpRequest<Any>
     ): HttpResponse<Any> {
         val resultData = this.validateMessage(request, content);
@@ -60,12 +57,9 @@ class ValidationController(private val cloudStorage: CloudStorage) {
 
         var structureReport = this.getContent(URL(this.structureUrl), redactedMessage, getMetadata(request))
 
-        var validationReport = this.getContent(URL(this.validationUrl), redactedMessage, getMetadata(request))
-
         var jsonData = JsonObject()
 
         jsonData.add("StructureReport", JsonParser.parseString(gson.toJson(structureReport)))
-        jsonData.add("ValidationReport", JsonParser.parseString(gson.toJson(validationReport)))
         reportData = jsonData.toString()
 
         return reportData
