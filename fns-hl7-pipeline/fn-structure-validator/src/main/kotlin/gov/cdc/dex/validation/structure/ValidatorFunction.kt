@@ -153,7 +153,7 @@ class ValidatorFunction {
                 HL7MessageType.CASE -> HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
                     .uppercase(Locale.getDefault())
                 HL7MessageType.ELR -> "${route.uppercase()}-v${HL7StaticParser.getFirstValue(hl7Content, ELR_SPEC_PROFILE).get().uppercase()}"
-                else -> throw InvalidMessageException("Invalid Message Type: $messageType. Please specify CASE")
+                else -> throw InvalidMessageException("Invalid Message Type: $messageType. Please specify CASE or ELR")
             }
         return profileName
     }
