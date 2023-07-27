@@ -4,11 +4,16 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>cache-loader</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-2023-07-24-130451-d897e58</version>
     <packaging>jar</packaging>
 
     <name>Azure Java Functions</name>
-
+    <scm>
+        <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
+        <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>   
+        <url>https://github.com/CDCgov/data-exchange-hl7</url>
+        <tag>HEAD</tag>
+    </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
@@ -253,6 +258,32 @@
                         <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
                     </environmentVariables>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                <execution>
+                    <phase>validate</phase>
+                    <goals>
+                    <goal>create</goal>
+                    </goals>
+                </execution>
+                </executions>
+                <configuration>
+                <doCheck>false</doCheck>
+                <doUpdate>false</doUpdate>
+                <format>{0,number}</format>
+                <items>
+                    <item>buildNumber</item>
+                </items>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.8.1</version>
             </plugin>
         </plugins>
     </build>

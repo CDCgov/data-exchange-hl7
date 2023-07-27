@@ -56,8 +56,8 @@ class ValidatorFunction {
         val startTime =  Date().toIsoString()
 
         // context.logger.info("Event received message.size: ${message.size}")
-        val log = context.logger
-        log.info("Event Message received: $message.")
+        // val log = context.logger
+        logger.info("Event Message received: $message.")
 
         val evHubNameOk = getSafeEnvVariable("EventHubSendOkName")
         val evHubNameErrs = getSafeEnvVariable("EventHubSendErrsName")
@@ -69,6 +69,7 @@ class ValidatorFunction {
         message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             // context.logger.info("singleMessage: --> $singleMessage")
+            logger.info("singleMessage: --> $singleMessage")
             var report = NistReport()
             var metadata = JsonObject()
 
@@ -83,7 +84,7 @@ class ValidatorFunction {
                 val routeJson = JsonHelper.getValueFromJson("message_info.route", inputEvent)
                 val route = if (routeJson is JsonPrimitive) routeJson.asString else ""
 
-                log.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
+                logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                 //Main FN Logic
                 //val phinSpec = getProfile(hl7Content, messageUUID, filePath, PHIN_SPEC_PROFILE)
                 report = validateMessage(hl7Content, messageUUID, filePath, HL7MessageType.valueOf(messageType), route)
@@ -110,21 +111,24 @@ class ValidatorFunction {
                 } else {
                     "OK"
                 }
-                log.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
-                log.finest("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
+                logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
+                logger.info("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
                 ehSender.send(ehDestination, gson.toJson(inputEvent))
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
-                log.severe("Unable to process Message due to exception: ${e.message}")
+                logger.error("Unable to process Message due to exception: ${e.message}")
                 val processMD = StructureValidatorProcessMetadata(PROCESS_STATUS_EXCEPTION, report, eventHubMD[msgNumber], listOf())
+                
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
                 metadata.addArrayElement("processes", processMD)
                 val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, e, false, 0, 0)
                 val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
-                log.severe("metadata in exception: $metadata")
-                log.info("inputEvent in exception:$inputEvent")
+                
+                logger.error("metadata in exception: $metadata")
+                logger.info("inputEvent in exception:$inputEvent")
+
                 inputEvent.add("summary", summary.toJsonElement())
                 ehSender.send(evHubNameErrs, gson.toJson(inputEvent))
             }
