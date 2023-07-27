@@ -7,9 +7,8 @@ import gov.cdc.dex.mmg.MmgUtil
 class FunctionConfig {
 
     val azBlobProxy:AzureBlobProxy
-//    val redisProxy:RedisProxy
-    val mmgUtil: MmgUtil
     val evHubSender: EventHubSender
+    val eventCodes = mutableMapOf<String, Pair<String, String>>()
 
     val evHubOkName: String = System.getenv("EventHubSendOkName")
     val evHubErrorName: String = System.getenv("EventHubSendErrsName")
@@ -19,14 +18,11 @@ class FunctionConfig {
          val evHubConnStr = System.getenv("EventHubConnectionString")
          evHubSender = EventHubSender(evHubConnStr)
 
-         //Init Redis Connections
-         val redisName: String = System.getenv("REDIS_CACHE_NAME")
-         val redisKey: String = System.getenv("REDIS_CACHE_KEY")
-         val redisProxy = RedisProxy(redisName, redisKey)
-         mmgUtil = MmgUtil(redisProxy)
-
          //Init Azure Storage connection
          val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
          azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
+
+        //Load Event Codes
+
     }
 }
