@@ -73,7 +73,7 @@ class Function {
                     // Add source Metadata
                     val otherMetadata: MutableMap<String, String> = HashMap()
                     metaDataMap.forEach { (k, v) ->
-                        val knownMetadataKeys = arrayOf("event_id","event_timestamp","file_uuid","file_path","file_timestamp","file_size","single_or_batch","message_hash","ext_system_provider","ext_original_file_name","message_index","ext_original_file_timestamp","source_metadata")
+                        val knownMetadataKeys = arrayOf("message_type","route","reporting_jurisdiction","original_file_name","original_file_timestamp","system_provider")
                         if(!knownMetadataKeys.contains(k)){
                             otherMetadata[k] = v
                         }
