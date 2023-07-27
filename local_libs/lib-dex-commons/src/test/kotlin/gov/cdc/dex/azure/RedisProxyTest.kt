@@ -23,7 +23,9 @@ class RedisProxyTest {
     fun testLoadRedisWithProps() {
         val REDIS_CACHE_NAME: String = System.getenv("REDIS_CACHE_NAME")
         val REDIS_PWD: String =        System.getenv("REDIS_CACHE_KEY")
-
+        println("Running testLoadRedisWithProps")
+        println("REDIS_CACHE_NAME: $REDIS_CACHE_NAME")
+        println("REDIS_CACHE_KEY: $REDIS_PWD")
         val redisProxy = RedisProxy(REDIS_CACHE_NAME,REDIS_PWD )
         assert(true)
     }

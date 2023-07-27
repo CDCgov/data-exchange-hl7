@@ -148,6 +148,14 @@
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
                         </property>
+                        <property>
+                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
+                            <value>None</value>
+                        </property>
                     </appSettings>
                 </configuration>
                 <executions>
@@ -159,7 +167,22 @@
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        <configuration>
+                            <classifier>${environment-id}</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
@@ -237,7 +260,7 @@
             </plugin>
         </plugins>
     </build>
- 
+
     <distributionManagement>
         <repository>
             <id>ede-releases</id>

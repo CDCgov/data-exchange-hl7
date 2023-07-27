@@ -10,6 +10,13 @@
     <packaging>jar</packaging>
     
     <name>DEX Fns-Pipeline :: receiver-debatcher</name>
+    
+    <scm>
+        <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
+        <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>   
+        <url>https://github.com/CDCgov/data-exchange-hl7</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,6 +52,11 @@
             <groupId>gov.cdc.hl7</groupId>
             <artifactId>hl7-pet_2.13</artifactId>
             <version>${hl7pet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.10</version>
         </dependency>
         <!-- Azure Functions Java Library -->
         <!--  -->
@@ -180,6 +192,14 @@
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
                         </property>
+                        <property>
+                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
+                            <value>None</value>
+                        </property>
                     </appSettings>
                 </configuration>
                 <executions>
@@ -235,6 +255,22 @@
                             <overWriteIfNewer>true</overWriteIfNewer>
                             <includeScope>runtime</includeScope>
                             <excludeArtifactIds>azure-functions-java-library</excludeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        <configuration>
+                            <classifier>${environment-id}</classifier>
                         </configuration>
                     </execution>
                 </executions>
@@ -357,7 +393,32 @@
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                <execution>
+                    <phase>validate</phase>
+                    <goals>
+                    <goal>create</goal>
+                    </goals>
+                </execution>
+                </executions>
+                <configuration>
+                <doCheck>false</doCheck>
+                <doUpdate>false</doUpdate>
+                <format>{0,number}</format>
+                <items>
+                    <item>buildNumber</item>
+                </items>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.8.1</version>
+            </plugin>
         </plugins>
     </build>
 
