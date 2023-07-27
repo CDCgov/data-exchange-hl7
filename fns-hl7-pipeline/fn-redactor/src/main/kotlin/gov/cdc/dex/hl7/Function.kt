@@ -66,8 +66,7 @@ class Function {
                     routeElement.asString
                 }
 
-                context.logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
-                context.logger.info("Index: $msgIndex, Last Index: ${message.lastIndex} ")
+				logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 val report = helper.getRedactedReport(hl7Content, messageType, route)
 
