@@ -76,7 +76,7 @@ class Function {
                     val processMD = RedactorProcessMetadata(rReport.status, report = rReport, eventHubMD[msgIndex], configFileName)
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
-                    context.logger.info("Process MD: ${processMD} ")
+                    logger.info("Process MD: ${processMD} ")
 
                     metadata.addArrayElement("processes", processMD)
                     val newContentBase64 = Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
