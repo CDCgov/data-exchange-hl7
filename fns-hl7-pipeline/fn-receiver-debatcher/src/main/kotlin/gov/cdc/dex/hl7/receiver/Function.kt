@@ -111,7 +111,7 @@ class Function {
                                         if ( mshCount > 1 ) {
                                             provenance.singleOrBatch = Provenance.BATCH_FILE
                                             provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
-                                            val messageInfo = DexMessageInfo(null, null, null, null, HL7MessageType.CASE)
+                                            val messageInfo =  getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n" ))
                                             val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
                                             msgEvent = prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName)
                                             provenance.messageIndex++
