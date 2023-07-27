@@ -51,12 +51,10 @@ class ValidatorFunction {
         ) message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext
-    ) {
+    ): JsonObject {
 
         val startTime =  Date().toIsoString()
 
-        // context.logger.info("Event received message.size: ${message.size}")
-        // val log = context.logger
         logger.info("Event Message received: $message.")
 
         val evHubNameOk = getSafeEnvVariable("EventHubSendOkName")
@@ -68,7 +66,6 @@ class ValidatorFunction {
 
         message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-            // context.logger.info("singleMessage: --> $singleMessage")
             logger.info("singleMessage: --> $singleMessage")
             var report = NistReport()
             var metadata = JsonObject()
@@ -86,7 +83,6 @@ class ValidatorFunction {
 
                 logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                 //Main FN Logic
-                //val phinSpec = getProfile(hl7Content, messageUUID, filePath, PHIN_SPEC_PROFILE)
                 report = validateMessage(hl7Content, messageUUID, filePath, HL7MessageType.valueOf(messageType), route)
                 //preparing EventHub payload:
                 val processMD = StructureValidatorProcessMetadata(PROCESS_STATUS_OK, report, eventHubMD[msgNumber], listOf(getProfileName(hl7Content, HL7MessageType.valueOf(messageType), route )))
@@ -96,7 +92,7 @@ class ValidatorFunction {
 
                 metadata.addArrayElement("processes", processMD)
                 //Update Summary element.
-                val summary = SummaryInfo(report.status!!)
+                val summary = SummaryInfo(report.status ?: "Unknown")
                 if (NIST_VALID_MESSAGE != report.status) {
                     summary.problem =
                         Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, "Message failed Structure Validation")
@@ -105,35 +101,41 @@ class ValidatorFunction {
 
                 //Send event
                 val ehDestination = getEhDestination(messageType, report, evHubNameOk, evHubNameELROk, evHubNameErrs)
-                //val ehDestination = if (NIST_VALID_MESSAGE == report.status) evHubNameOk else evHubNameErrs
                 val destIndicator = if (ehDestination == evHubNameErrs) {
                     "ERROR"
                 } else {
                     "OK"
                 }
+
                 logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
                 logger.info("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
+
                 ehSender.send(ehDestination, gson.toJson(inputEvent))
+
+                if(msgNumber == message.lastIndex){
+                    return inputEvent
+                }
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
                 logger.error("Unable to process Message due to exception: ${e.message}")
                 val processMD = StructureValidatorProcessMetadata(PROCESS_STATUS_EXCEPTION, report, eventHubMD[msgNumber], listOf())
-                
                 processMD.startProcessTime = startTime
                 processMD.endProcessTime = Date().toIsoString()
                 metadata.addArrayElement("processes", processMD)
                 val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, e, false, 0, 0)
                 val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
-                
+
                 logger.error("metadata in exception: $metadata")
                 logger.info("inputEvent in exception:$inputEvent")
 
                 inputEvent.add("summary", summary.toJsonElement())
                 ehSender.send(evHubNameErrs, gson.toJson(inputEvent))
+                return inputEvent 
             }
-        }
-    }
+        } // foreachIndexed
+        return JsonObject()
+    } //.run
 
     private fun getEhDestination(
         messageType: String,
@@ -162,8 +164,6 @@ class ValidatorFunction {
         return profileName
     }
 
-
-
     private fun getSafeEnvVariable(varName: String): String {
         val varValue = System.getenv(varName)
         if (varValue.isNullOrEmpty()) {
@@ -171,7 +171,6 @@ class ValidatorFunction {
         }
         return varValue
     }
-
 
     private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String, messageType: HL7MessageType, route: String): NistReport {
         validateHL7Delimiters(hl7Message)
@@ -183,9 +182,9 @@ class ValidatorFunction {
                 else { "." } // do not add file information if processed via https request
             throw InvalidMessageException("Unable to process message: Unable to retrieve PHIN Specification from $PHIN_SPEC_PROFILE$exMessage")
         }
+
         val nistValidator = ProfileManager(ResourceFileFetcher(), "/$profileName")
         val report = nistValidator.validate(hl7Message)
-        // normalize report status to STRUCTURE_ERRORS if any ERROR status is returned
         report.status = if ("ERROR" in report.status + "") {
             NIST_INVALID_MESSAGE
         } else if (report.status.isNullOrEmpty()) {
@@ -266,7 +265,6 @@ class ValidatorFunction {
             )
         }
     }
-
 }
 
 private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
