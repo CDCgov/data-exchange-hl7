@@ -2,7 +2,7 @@ package gov.cdc.dex.hl7.receiver
 
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.azure.RedisProxy
-import gov.cdc.dex.mmg.MmgUtil
+import gov.cdc.dex.util.PathUtils
 
 class FunctionConfig {
 
@@ -23,6 +23,10 @@ class FunctionConfig {
          azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
 
         //Load Event Codes
+        eventCodes = loadEventCodes("event_codes")
+    }
 
+    private fun loadEventCodes(directory: String) : Map<String, Pair<String,String>> {
+        val dir = PathUtils.getResourcePath(directory)
     }
 }
