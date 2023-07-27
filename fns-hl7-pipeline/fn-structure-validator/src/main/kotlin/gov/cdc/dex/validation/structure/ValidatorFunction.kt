@@ -27,7 +27,7 @@ import java.util.*
 class ValidatorFunction {
     companion object {
         private const val PHIN_SPEC_PROFILE = "MSH-21[1].1" //Not able to use HL7-PET due to scala version conflicts with NistValidator.
-        // private const val ELR_SPEC_PROFILE = "MSH-12"
+        private const val ELR_SPEC_PROFILE = "MSH-12"
         const val PROCESS_STATUS_OK = "SUCCESS"
         const val PROCESS_STATUS_EXCEPTION = "FAILURE"
         private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
@@ -152,7 +152,7 @@ class ValidatorFunction {
             when (messageType) {
                 HL7MessageType.CASE -> HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
                     .uppercase(Locale.getDefault())
-                // HL7MessageType.ELR -> "${route.uppercase()}-v${HL7StaticParser.getFirstValue(hl7Content, ELR_SPEC_PROFILE).get().uppercase()}"
+                HL7MessageType.ELR -> "${route.uppercase()}-v${HL7StaticParser.getFirstValue(hl7Content, ELR_SPEC_PROFILE).get().uppercase()}"
                 else -> throw InvalidMessageException("Invalid Message Type: $messageType. Please specify CASE")
             }
         return profileName
@@ -228,7 +228,7 @@ class ValidatorFunction {
         val messageType = if (!request.headers["x-tp-message_type"].isNullOrEmpty()) {
             request.headers["x-tp-message_type"].toString()
         } else {
-            return buildHttpResponse("BAD REQUEST: Message Type ('CASE') " +
+            return buildHttpResponse("BAD REQUEST: Message Type ('CASE' or 'ELR') " +
                     "must be specified in the HTTP Header as 'x-tp-message_type'. " +
                     "Please correct the HTTP header and try again.",
                 HttpStatus.BAD_REQUEST,
@@ -237,7 +237,15 @@ class ValidatorFunction {
         val route = if (!request.headers["x-tp-route"].isNullOrEmpty()) {
             request.headers["x-tp-route"].toString()
         } else {
-           ""
+            if (messageType == "ELR") {
+                return buildHttpResponse("BAD REQUEST: ELR message must specify a route" +
+                        " in the HTTP header as 'x-tp-route'. " +
+                        "Please correct the HTTP header and try again.",
+                    HttpStatus.BAD_REQUEST,
+                    request)
+            } else {
+                ""
+            }
         }
 
         return try {

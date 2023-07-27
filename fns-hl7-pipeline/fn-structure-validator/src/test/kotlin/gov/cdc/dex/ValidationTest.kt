@@ -40,9 +40,7 @@ class ValidationTest {
     @Test
     fun testELRMessage() {
         val testMessage = this::class.java.getResource("/covidELR/2.3.1 HL7 Test File with HHS Data.txt")?.readText()
-
         val nistValidator = ProfileManager(ResourceFileFetcher(), "/COVID19_ELR-v2.3.1")
-
         val report = nistValidator.validate(testMessage!!)
         println("report: -->\n\n${gson.toJson(report)}\n")
         //
