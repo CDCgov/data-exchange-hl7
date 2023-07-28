@@ -63,7 +63,8 @@ class MetadataTest {
             messageHash = "1234",
             systemProvider = "Unit Test",
             originalFileName = "localFile.txt",
-            originalFileTimestamp = "2022-10-01T12:00:00.0Z"
+            originalFileTimestamp = "2022-10-01T12:00:00.0Z",
+            sourceMetadata = null
         )
 
         val problem = Problem("UNIT-TEST", "java.lang.Exception", null, "Mock error for unit test", false, 0, 1)
