@@ -55,24 +55,6 @@ class Function {
 
     } // .eventHubProcessor
 
-    @FunctionName("HL7_JSON_LAKE_TRANSFORMER_ELR")
-    fun eventHubELRProcessor(
-        @EventHubTrigger(
-            name = "msg",
-            eventHubName = "%EventHubReceiveNameELR%",
-            connection = "EventHubConnectionString",
-            consumerGroup = "%EventHubConsumerGroupELR%",)
-        messages: List<String?>,
-        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext): JsonObject {
-        //
-        // Process each Event Hub Message
-        // ----------------------------------------------
-        // message.forEach { singleMessage: String? ->
-        return processAllMessages(messages, eventHubMD, context)
-
-    } // .eventHubProcessor
-
     private fun processAllMessages( messages: List<String?>, eventHubMD: List<EventHubMetadata>, context: ExecutionContext):JsonObject {
         messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
             val startTime = Date().toIsoString()
