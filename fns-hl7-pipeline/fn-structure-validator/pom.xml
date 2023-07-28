@@ -278,7 +278,6 @@
                                 <EventHubConnectionString>${ehString}</EventHubConnectionString>
                                 <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
                                 <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
-                                <EventHubSendELROkName>hl7-structure-elr-ok</EventHubSendELROkName>
                             </environmentVariables>
                         </configuration>
                     </execution>
