@@ -30,7 +30,6 @@ class FunctionConfig {
 
         //Load Event Codes
         eventCodes = loadEventCodes()
-        println(eventCodes.entries)
     }
 
     private fun loadEventCodes() : Map<String, Map<String, String>> {
