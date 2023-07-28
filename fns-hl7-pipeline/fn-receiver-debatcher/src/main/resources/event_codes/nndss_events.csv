@@ -1,162 +1,162 @@
-Category,Program,Condition Code,Condition Name,
-Hepatitis,NCHHSTP,10100,Hepatitis B acute,
-Hepatitis,NCHHSTP,10101,Hepatitis C acute,
-Hepatitis,NCHHSTP,10103,Hepatitis E acute,
-Hepatitis,NCHHSTP,10104,Hepatitis B perinatal infection,
-Hepatitis,NCHHSTP,10105,Hepatitis B virus infection chronic,
-Hepatitis,NCHHSTP,10106,Hepatitis C Chronic,
-Hepatitis,NCHHSTP,10110,Hepatitis A acute,
-Hepatitis,NCHHSTP,50248,Hepatitis C perinatal infection,
-Tuberculosis,NCHHSTP,10220,Tuberculosis,
-Tuberculosis,NCHHSTP,50258,Latent TB Infection,
-Sexually Transmitted Diseases,NCHHSTP,10273,Chancroid,
-Sexually Transmitted Diseases,NCHHSTP,10274,Chlamydia trachomatis infection,
-Sexually Transmitted Diseases,NCHHSTP,10280,Gonorrhea,
-Sexually Transmitted Diseases,NCHHSTP,10316,"Syphilis, congenital",
-Sexually Transmitted Diseases,NCHHSTP,10313,"Syphilis, early non-primary, non-secondary",
-Sexually Transmitted Diseases,NCHHSTP,10311,"Syphilis, primary",
-Sexually Transmitted Diseases,NCHHSTP,10312,"Syphilis, secondary",
-Sexually Transmitted Diseases,NCHHSTP,10310,"Syphilis, total primary and secondary",
-Sexually Transmitted Diseases,NCHHSTP,10320,"Syphilis, unknown duration or late",
-Vaccine Preventable Diseases,NCIRD,10030,Varicella (Chickenpox),
-Vaccine Preventable Diseases,NCIRD,10040,Diphtheria,
-Vaccine Preventable Diseases,NCIRD,10140,Measles (rubeola),
-Vaccine Preventable Diseases,NCIRD,10180,Mumps,
-Vaccine Preventable Diseases,NCIRD,10190,Pertussis,
-Vaccine Preventable Diseases,NCIRD,10200,Rubella,
-Vaccine Preventable Diseases,NCIRD,10210,Tetanus,
-Vaccine Preventable Diseases,NCIRD,10370,"Rubella, congenital syndrome",
-Vaccine Preventable Diseases,NCIRD,10405,"Poliovirus infection, nonparalytic ",
-Vaccine Preventable Diseases,NCIRD,10410,"Poliomyelitis, paralytic",
-Coronavirus,NCIRD,10575,Severe Acute Respiratory Syndrome (SARS)-associated Coronavirus disease (SARS-CoV),
-Influenza,NCIRD,11061,Influenza-associated pediatric mortality,
-Influenza,NCIRD,11062,"Novel influenza A virus infections, initial detections of",
-Coronavirus,NCIRD,11065,Coronavirus Disease 2019 (COVID-19)  ,
-Coronavirus,NCIRD,11066,Multisystem Inflammatory Syndrome (MIS) associated with Coronavirus Disease 2019 (COVID-19),
-Neurological,NCIRD,11120,Acute flaccid myelitis,
-RSV-associated death,NCIRD,11646,Respiratory Syncytial Virus-Associated Deaths,
-Streptococcal toxic shock syndrome,NCIRD,11700,Streptococcal toxic shock syndrome,
-Zoonotic,NCEZID,10020,Brucellosis,
-Arboviral Diseases,NCEZID,10049,"West Nile virus disease, non-neuroinvasive",
-Arboviral Diseases,NCEZID,10051,"St. Louis encephalitis virus disease, neuroinvasive",
-Arboviral Diseases,NCEZID,10052,"Western equine encephalitis virus disease, neuroinvasive",
-Arboviral Diseases,NCEZID,10053,"Eastern equine encephalitis virus disease, neuroinvasive",
-Arboviral Diseases,NCEZID,10054,"California serogroup virus diseases, neuroinvasive",
-Arboviral Diseases,NCEZID,10055,Venezuelan equine encephalitis virus neuroinvasive disease,
-Arboviral Diseases,NCEZID,10056,"West Nile virus disease, neuroinvasive",
-Arboviral Diseases,NCEZID,10057,"Powassan virus disease, neuroinvasive",
-Arboviral Diseases,NCEZID,10058,"Cache Valley virus disease, neuroinvasive",
-Arboviral Diseases,NCEZID,10059,"Japanese encephalitis virus disease, neuroinvasive",
-Arboviral Diseases,NCEZID,10061,"California serogroup virus diseases, non-neuroinvasive",
-Arboviral Diseases,NCEZID,10062,"Eastern equine encephalitis virus disease, non-neuroinvasive",
-Arboviral Diseases,NCEZID,10063,"Powassan virus disease, non-neuroinvasive",
-Arboviral Diseases,NCEZID,10064,"St. Louis encephalitis virus disease, non-neuroinvasive",
-Arboviral Diseases,NCEZID,10065,"Western equine encephalitis virus disease, non-neuroinvasive",
-Arboviral Diseases,NCEZID,10066,"Cache Valley virus disease, non-neuroinvasive",
-Arboviral Diseases,NCEZID,10067,Venezuelan equine encephalitis virus non-neuroinvasive disease,
-Arboviral Diseases,NCEZID,10068,"Japanese encephalitis virus disease, non-neuroinvasive",
-Arboviral Diseases,NCEZID,10072,"Other Arboviral diseases, not otherwise specified",
-Arboviral Diseases,NCEZID,10073,Chikungunya virus diseases,
-Arboviral Diseases,NCEZID,10074,Tick-borne Encephalitis viruses,
-Arboviral Diseases,NCEZID,10078,"Jamestown Canyon virus disease, neuroinvasive",
-Arboviral Diseases,NCEZID,10079,"Jamestown Canyon virus disease, non-neuroinvasive",
-Arboviral Diseases,NCEZID,10081,"La Crosse virus disease, neuroinvasive",
-Arboviral Diseases,NCEZID,10082,"La Crosse virus disease, non-neuroinvasive",
-Arboviral Diseases,NCEZID,10093,Colorado tick fever virus disease,
-Vectorborne Diseases,NCEZID,10230,Tularemia,
-Vectorborne Diseases,NCEZID,10250,Spotted Fever Rickettsiosis,
-Vectorborne Diseases,NCEZID,10255,Q fever,
-Vectorborne Diseases,NCEZID,10257,"Q fever, acute",
-Vectorborne Diseases,NCEZID,10258,"Q fever, chronic",
-Zoonotic,NCEZID,10340,"Rabies, animal",
-Zoonotic,NCEZID,10350,Anthrax,
-Hansen disease (Leprosy),NCEZID,10380,Hansen's disease (Leprosy),
-Zoonotic,NCEZID,10390,Leptospirosis,
-Vectorborne Diseases,NCEZID,10440,Plague,
-Zoonotic,NCEZID,10460,"Rabies, human",
-Enteric Diseases,NCEZID,10470,Cholera (toxigenic Vibrio cholerae O1 or O139),
-Toxic-shock syndrome (other than streptococcal),NCEZID,10520,Toxic-shock syndrome (other than streptococcal),
-Botulism,NCEZID,10530,"Botulism, foodborne",
-Botulism,NCEZID,10540,"Botulism, infant",
-Botulism,NCEZID,10548,"Botulism, other unspecified",
-Botulism,NCEZID,10549,"Botulism, wound",
-Botulism,NCEZID,10550,"Botulism, other (includes wound)",
-Enteric Diseases,NCEZID,10640,Listeriosis,
-Arboviral Diseases,NCEZID,10660,Yellow fever ,
-Arboviral Diseases,NCEZID,10680,Dengue,
-Enteric Diseases,NCEZID,11010,Shigellosis,
-Enteric Diseases,NCEZID,11020,Campylobacteriosis,
-Vectorborne Diseases,NCEZID,11080,Lyme disease,
-Vectorborne Diseases,NCEZID,11085,Anaplasma phagocytophilum,
-Vectorborne Diseases,NCEZID,11086,Ehrlichia chaffeensis ,
-Vectorborne Diseases,NCEZID,11087,"Ehrlichiosis/Anaplasmosis, undetermined",
-Vectorborne Diseases,NCEZID,11088,Ehrlichia chaffeensis,
-Vectorborne Diseases,NCEZID,11089,Ehrlichia ewingii,
-Vectorborne Diseases,NCEZID,11090,Anaplasma phagocytophilum,
-Vectorborne Diseases,NCEZID,11091,"Ehrlichiosis/Anaplasmosis, undetermined",
-Enteric Diseases,NCEZID,11545,"Vibriosis (any species of the family Vibrionaceae, other than toxigenic Vibrio cholerae O1 or O139)",
-Enteric Diseases,NCEZID,11550,Hemolytic uremic syndrome postdiarrheal,
-Enteric Diseases,NCEZID,11563,Shiga toxin-producing Escherichia coli (STEC),
-Enteric Diseases,NCEZID,11565,Yersiniosis (non-pestis),
-Enteric Diseases,NCEZID,11566,Enterotoxigenic E.coli (ETEC) ,
-Enteric Diseases,NCEZID,11570,Giardiasis,
-Enteric Diseases,NCEZID,11580,Cryptosporidiosis,
-Zoonotic,NCEZID,11585,Melioidosis,
-Zoonotic,NCEZID,11590,Hantavirus pulmonary syndrome,
-Zoonotic,NCEZID,11610,"Hantavirus infection, non-Hantavirus Pulmonary Syndrome",
-Hemorrhagic fevers,NCEZID,11630,Ebola hemorrhagic fever,
-Hemorrhagic fevers,NCEZID,11631,Marburg fever,
-Hemorrhagic fevers,NCEZID,11632,Lassa fever,
-Hemorrhagic fevers,NCEZID,11637,Machupo hemorrhagic fever,
-Hemorrhagic fevers,NCEZID,11638,Junín hemorrhagic fever,
-Hemorrhagic fevers,NCEZID,11639,Sabia-associated hemorrhagic fever,
-Hemorrhagic fevers,NCEZID,11640,Crimean-Congo hemorrhagic fever,
-Hemorrhagic fevers,NCEZID,11644,Lujo virus,
-Hemorrhagic fevers,NCEZID,11648,Guanarito hemorrhagic fever,
-Hemorrhagic fevers,NCEZID,11649,Chapare hemorrhagic fever,
-Vancomycin-intermediate Staphylococcus aureus (VISA),NCEZID,11663,Vancomycin-intermediate Staphylococcus aureus (VISA),
-Vancomycin-resistant Staphylococcus aureus (VRSA),NCEZID,11665,Vancomycin-resistant Staphylococcus aureus (VRSA),
-Arboviral Diseases,NCEZID,11704,Dengue-like illness,
-Arboviral Diseases,NCEZID,11705,"Dengue, severe",
-Arboviral Diseases,NCEZID,11712,Keystone virus disease,
-Arboviral Diseases,NCEZID,11718,California encephalitis virus disease,
-Arboviral Diseases,NCEZID,11724,Trivittatus virus disease,
-Arboviral Diseases,NCEZID,11726,Zika virus disease ,
-Arboviral Diseases,NCEZID,11734,Snowshoe hare virus disease,
-Arboviral Diseases,NCEZID,11736,Zika Virus Congenital Infection,
-Vaccine Preventable Diseases,NCEZID,11800,Smallpox,
-Zoonotic,NCEZID,11801,Mpox,
-Coccidioidomycosis,NCEZID,11900,Coccidioidomycosis,
-Fungal disease,NCEZID,11910,Blastomycosis,
-Fungal disease,NCEZID,11915,Histoplasmosis,
-Arboviral Diseases,NCEZID,50221,"Zika virus infection, non-congenital",
-Arboviral Diseases,NCEZID,50222,"Zika virus infection, congenital",
-Arboviral Diseases,NCEZID,50223,"Zika virus disease, non-congenital",
-Arboviral Diseases,NCEZID,50224,"Zika virus disease, congenital",
-Parasitic Diseases,NCEZID,50225,Acanthamoeba disease (excluding keratitis),
-Parasitic Diseases,NCEZID,50226,Balamuthia mandrillaris disease,
-Parasitic Diseases,NCEZID,50227,Naegleria fowleri causing Primary Amebic Meningoencephalitis,
-Arboviral Diseases,NCEZID,50237,"Flavivirus disease, not otherwise specified",
-Carbapenem Resistant Infections,NCEZID,50244,Carbapenemase-producing carbapenem-resistant Enterobacteriaceae (CP-CRE),
-Fungal disease,NCEZID,50263,"Candida auris, clinical",
-Fungal disease,NCEZID,50264,"Candida auris, screening",
-Enteric Diseases,NCEZID,50265,Salmonellosis (excluding S. Typhi infection and S. Paratyphi infection),
-Enteric Diseases,NCEZID,50266,"Salmonella enterica serotypes Paratyphi A, B (tartrate negative) and C (S. Paratyphi) infection",
-Enteric Diseases,NCEZID,50267,Salmonella enterica Typhi (S.Typhi) infection,
-Vectorborne Diseases,NCEZID,50269,Alpha-gal syndrome,
-Enteric Diseases,NCEZID,50270,"Carbapenemase-Producing Organisms (CPO), clinical",
-Enteric Diseases,NCEZID,50271,"Carbapenemase-Producing Organisms (CPO), screening",
-Toxic exposure,NCEH,32016,Carbon monoxide poisoning,
-Zoonotic,CGH,12010,Babesiosis,
-Zoonotic,CGH,10270,Trichinellosis,
-Vectorborne Diseases,CGH,10130,Malaria,
-Enteric Diseases,CGH,11575,Cyclosporiasis,
-Parasitic Diseases,CGH,12036,Strongyloidiasis,
-Vaccine Preventable Diseases,NCIRD,10590,"Haemophilus influenzae, invasive disease",
-Vaccine Preventable Diseases,NCIRD,11723,Invasive pneumococcal disease,
-Legionellosis,NCIRD,10490,Legionellosis,
-Vaccine Preventable Diseases,NCIRD,10150,Meningococcal disease (Neisseria meningitidis),
-Condition in EIP ABCs,NCIRD,50261,Neonatal sepsis,
-Zoonotic,NCIRD,10450,Psittacosis (Ornithosis),
-Condition in EIP ABCs,NCIRD,11710,"Streptococcal disease, invasive, group A (Streptococcus pyogenes)",
-Condition in EIP ABCs,NCIRD,11715,"Streptococcal disease, invasive, group B (Streptococcus agalactiae)",
+Category,Program,Condition Code,Condition Name
+Zoonotic,NCEZID,10020,Brucellosis
+Vaccine Preventable Diseases,NCIRD,10030,Varicella (Chickenpox)
+Vaccine Preventable Diseases,NCIRD,10040,Diphtheria
+Arboviral Diseases,NCEZID,10049,"West Nile virus disease, non-neuroinvasive"
+Arboviral Diseases,NCEZID,10051,"St. Louis encephalitis virus disease, neuroinvasive"
+Arboviral Diseases,NCEZID,10052,"Western equine encephalitis virus disease, neuroinvasive"
+Arboviral Diseases,NCEZID,10053,"Eastern equine encephalitis virus disease, neuroinvasive"
+Arboviral Diseases,NCEZID,10054,"California serogroup virus diseases, neuroinvasive"
+Arboviral Diseases,NCEZID,10055,Venezuelan equine encephalitis virus neuroinvasive disease
+Arboviral Diseases,NCEZID,10056,"West Nile virus disease, neuroinvasive"
+Arboviral Diseases,NCEZID,10057,"Powassan virus disease, neuroinvasive"
+Arboviral Diseases,NCEZID,10058,"Cache Valley virus disease, neuroinvasive"
+Arboviral Diseases,NCEZID,10059,"Japanese encephalitis virus disease, neuroinvasive"
+Arboviral Diseases,NCEZID,10061,"California serogroup virus diseases, non-neuroinvasive"
+Arboviral Diseases,NCEZID,10062,"Eastern equine encephalitis virus disease, non-neuroinvasive"
+Arboviral Diseases,NCEZID,10063,"Powassan virus disease, non-neuroinvasive"
+Arboviral Diseases,NCEZID,10064,"St. Louis encephalitis virus disease, non-neuroinvasive"
+Arboviral Diseases,NCEZID,10065,"Western equine encephalitis virus disease, non-neuroinvasive"
+Arboviral Diseases,NCEZID,10066,"Cache Valley virus disease, non-neuroinvasive"
+Arboviral Diseases,NCEZID,10067,Venezuelan equine encephalitis virus non-neuroinvasive disease
+Arboviral Diseases,NCEZID,10068,"Japanese encephalitis virus disease, non-neuroinvasive"
+Arboviral Diseases,NCEZID,10072,"Other Arboviral diseases, not otherwise specified"
+Arboviral Diseases,NCEZID,10073,Chikungunya virus diseases
+Arboviral Diseases,NCEZID,10074,Tick-borne Encephalitis viruses
+Arboviral Diseases,NCEZID,10078,"Jamestown Canyon virus disease, neuroinvasive"
+Arboviral Diseases,NCEZID,10079,"Jamestown Canyon virus disease, non-neuroinvasive"
+Arboviral Diseases,NCEZID,10081,"La Crosse virus disease, neuroinvasive"
+Arboviral Diseases,NCEZID,10082,"La Crosse virus disease, non-neuroinvasive"
+Arboviral Diseases,NCEZID,10093,Colorado tick fever virus disease
+Hepatitis,NCHHSTP,10100,"Hepatitis B, acute"
+Hepatitis,NCHHSTP,10101,"Hepatitis C, acute"
+Hepatitis,NCHHSTP,10103,"Hepatitis E, acute"
+Hepatitis,NCHHSTP,10104,"Hepatitis B, perinatal infection"
+Hepatitis,NCHHSTP,10105,"Hepatitis B virus infection, chronic"
+Hepatitis,NCHHSTP,10106,"Hepatitis C, Chronic"
+Hepatitis,NCHHSTP,10110,"Hepatitis A, acute"
+Vectorborne Diseases,CGH,10130,Malaria
+Vaccine Preventable Diseases,NCIRD,10140,Measles (rubeola)
+Vaccine Preventable Diseases,NCIRD,10150,Meningococcal disease (Neisseria meningitidis)
+Vaccine Preventable Diseases,NCIRD,10180,Mumps
+Vaccine Preventable Diseases,NCIRD,10190,Pertussis
+Vaccine Preventable Diseases,NCIRD,10200,Rubella
+Vaccine Preventable Diseases,NCIRD,10210,Tetanus
+Tuberculosis,NCHHSTP,10220,Tuberculosis
+Zoonotic,NCEZID,10230,Tularemia
+Vectorborne Diseases,NCEZID,10250,Spotted Fever Rickettsiosis
+Zoonotic,NCEZID,10255,Q fever
+Zoonotic,NCEZID,10257,"Q fever, acute"
+Zoonotic,NCEZID,10258,"Q fever, chronic"
+Zoonotic,CGH,10270,Trichinellosis
+Sexually Transmitted Diseases,NCHHSTP,10273,Chancroid
+Sexually Transmitted Diseases,NCHHSTP,10274,Chlamydia trachomatis infection
+Sexually Transmitted Diseases,NCHHSTP,10280,Gonorrhea
+Sexually Transmitted Diseases,NCHHSTP,10310,"Syphilis, total primary and secondary"
+Sexually Transmitted Diseases,NCHHSTP,10311,"Syphilis, primary"
+Sexually Transmitted Diseases,NCHHSTP,10312,"Syphilis, secondary"
+Sexually Transmitted Diseases,NCHHSTP,10313,"Syphilis, early non-primary, non-secondary"
+Sexually Transmitted Diseases,NCHHSTP,10316,"Syphilis, congenital"
+Sexually Transmitted Diseases,NCHHSTP,10320,"Syphilis, unknown duration or late"
+Zoonotic,NCEZID,10340,"Rabies, animal"
+Zoonotic,NCEZID,10350,Anthrax
+Vaccine Preventable Diseases,NCIRD,10370,"Rubella, congenital syndrome"
+Hansen disease (Leprosy),NCEZID,10380,Hansen's disease (Leprosy)
+Zoonotic,NCEZID,10390,Leptospirosis
+Vaccine Preventable Diseases,NCIRD,10405,"Poliovirus infection, nonparalytic "
+Vaccine Preventable Diseases,NCIRD,10410,"Poliomyelitis, paralytic"
+Zoonotic,NCEZID,10440,Plague
+Zoonotic,NCIRD,10450,Psittacosis (Ornithosis)
+Zoonotic,NCEZID,10460,"Rabies, human"
+Enteric Diseases,NCEZID,10470,Cholera (toxigenic Vibrio cholerae O1 or O139)
+Legionellosis,NCIRD,10490,Legionellosis
+Toxic-shock syndrome (other than streptococcal),NCEZID,10520,Toxic-shock syndrome (other than streptococcal)
+Botulism,NCEZID,10530,"Botulism, foodborne"
+Botulism,NCEZID,10540,"Botulism, infant"
+Botulism,NCEZID,10548,"Botulism, other unspecified"
+Botulism,NCEZID,10549,"Botulism, wound"
+Botulism,NCEZID,10550,"Botulism, other (includes wound)"
+Coronavirus,NCIRD,10575,Severe Acute Respiratory Syndrome (SARS)-associated Coronavirus disease (SARS-CoV)
+Vaccine Preventable Diseases,NCIRD,10590,"Haemophilus influenzae, invasive disease"
+Enteric Diseases,NCEZID,10640,Listeriosis
+Arboviral Diseases,NCEZID,10660,Yellow fever 
+Arboviral Diseases,NCEZID,10680,Dengue
+Enteric Diseases,NCEZID,11010,Shigellosis
+Enteric Diseases,NCEZID,11020,Campylobacteriosis
+Influenza,NCIRD,11061,Influenza-associated pediatric mortality
+Influenza,NCIRD,11062,"Novel influenza A virus infections, initial detections of"
+Coronavirus,NCIRD,11065,Coronavirus Disease 2019 (COVID-19)
+Coronavirus,NCIRD,11066,Multisystem Inflammatory Syndrome (MIS) associated with Coronavirus Disease 2019 (COVID-19)
+Vectorborne Diseases,NCEZID,11080,Lyme disease
+Vectorborne Diseases,NCEZID,11085,Anaplasma phagocytophilum
+Vectorborne Diseases,NCEZID,11086,Ehrlichia chaffeensis 
+Vectorborne Diseases,NCEZID,11087,"Ehrlichiosis/Anaplasmosis, undetermined"
+Vectorborne Diseases,NCEZID,11088,Ehrlichia chaffeensis
+Vectorborne Diseases,NCEZID,11089,Ehrlichia ewingii
+Vectorborne Diseases,NCEZID,11090,Anaplasma phagocytophilum
+Vectorborne Diseases,NCEZID,11091,"Ehrlichiosis/Anaplasmosis, undetermined"
+Neurological,NCIRD,11120,Acute flaccid myelitis
+Enteric Diseases,NCEZID,11545,"Vibriosis (any species of the family Vibrionaceae, other than toxigenic Vibrio cholerae O1 or O139)"
+Enteric Diseases,NCEZID,11550,Hemolytic uremic syndrome postdiarrheal
+Enteric Diseases,NCEZID,11563,Shiga toxin-producing Escherichia coli (STEC)
+Enteric Diseases,NCEZID,11565,Yersiniosis (non-pestis)
+Enteric Diseases,NCEZID,11566,Enterotoxigenic E.coli (ETEC) 
+Enteric Diseases,NCEZID,11570,Giardiasis
+Enteric Diseases,CGH,11575,Cyclosporiasis
+Enteric Diseases,NCEZID,11580,Cryptosporidiosis
+Zoonotic,NCEZID,11585,Melioidosis
+Zoonotic,NCEZID,11590,Hantavirus pulmonary syndrome
+Zoonotic,NCEZID,11610,"Hantavirus infection, non-Hantavirus Pulmonary Syndrome"
+Hemorrhagic fevers,NCEZID,11630,Ebola hemorrhagic fever
+Hemorrhagic fevers,NCEZID,11631,Marburg fever
+Hemorrhagic fevers,NCEZID,11632,Lassa fever
+Hemorrhagic fevers,NCEZID,11637,Machupo hemorrhagic fever
+Hemorrhagic fevers,NCEZID,11638,Junín hemorrhagic fever
+Hemorrhagic fevers,NCEZID,11639,Sabia-associated hemorrhagic fever
+Hemorrhagic fevers,NCEZID,11640,Crimean-Congo hemorrhagic fever
+Hemorrhagic fevers,NCEZID,11644,Lujo virus
+RSV-associated death,NCIRD,11646,Respiratory Syncytial Virus-Associated Deaths
+Hemorrhagic fevers,NCEZID,11648,Guanarito hemorrhagic fever
+Hemorrhagic fevers,NCEZID,11649,Chapare hemorrhagic fever
+Vancomycin-intermediate Staphylococcus aureus (VISA),NCEZID,11663,Vancomycin-intermediate Staphylococcus aureus (VISA)
+Vancomycin-resistant Staphylococcus aureus (VRSA),NCEZID,11665,Vancomycin-resistant Staphylococcus aureus (VRSA)
+Streptococcal toxic shock syndrome,NCIRD,11700,Streptococcal toxic shock syndrome
+Arboviral Diseases,NCEZID,11704,Dengue-like illness
+Arboviral Diseases,NCEZID,11705,"Dengue, severe"
+Condition in EIP ABCs,NCIRD,11710,"Streptococcal disease, invasive, group A (Streptococcus pyogenes)"
+Arboviral Diseases,NCEZID,11712,Keystone virus disease
+Condition in EIP ABCs,NCIRD,11715,"Streptococcal disease, invasive, group B (Streptococcus agalactiae)"
+Arboviral Diseases,NCEZID,11718,California encephalitis virus disease
+Vaccine Preventable Diseases,NCIRD,11723,Invasive pneumococcal disease
+Arboviral Diseases,NCEZID,11724,Trivittatus virus disease
+Arboviral Diseases,NCEZID,11726,Zika virus disease 
+Arboviral Diseases,NCEZID,11734,Snowshoe hare virus disease
+Arboviral Diseases,NCEZID,11736,Zika Virus Congenital Infection
+Vaccine Preventable Diseases,NCEZID,11800,Smallpox
+Zoonotic,NCEZID,11801,Mpox
+Coccidioidomycosis,NCEZID,11900,Coccidioidomycosis
+Fungal disease,NCEZID,11910,Blastomycosis
+Fungal disease,NCEZID,11915,Histoplasmosis
+Zoonotic,CGH,12010,Babesiosis
+Parasitic Diseases,CGH,12036,Strongyloidiasis
+Toxic exposure,NCEH,32016,Carbon monoxide poisoning
+Arboviral Diseases,NCEZID,50221,"Zika virus infection, non-congenital"
+Arboviral Diseases,NCEZID,50222,"Zika virus infection, congenital"
+Arboviral Diseases,NCEZID,50223,"Zika virus disease, non-congenital"
+Arboviral Diseases,NCEZID,50224,"Zika virus disease, congenital"
+Parasitic Diseases,NCEZID,50225,Acanthamoeba disease (excluding keratitis)
+Parasitic Diseases,NCEZID,50226,Balamuthia mandrillaris disease
+Parasitic Diseases,NCEZID,50227,Naegleria fowleri causing Primary Amebic Meningoencephalitis
+Arboviral Diseases,NCEZID,50237,"Flavivirus disease, not otherwise specified"
+Carbapenem Resistant Infections,NCEZID,50244,Carbapenemase-producing carbapenem-resistant Enterobacteriaceae (CP-CRE)
+Hepatitis,NCHHSTP,50248,"Hepatitis C, perinatal infection"
+Tuberculosis,NCHHSTP,50258,Latent TB infection
+Condition in EIP ABCs,NCIRD,50261,Neonatal sepsis
+Fungal disease,NCEZID,50263,"Candida auris, clinical"
+Fungal disease,NCEZID,50264,"Candida auris, screening"
+Enteric Diseases,NCEZID,50265,Salmonellosis (excluding S. Typhi infection and S. Paratyphi infection)
+Enteric Diseases,NCEZID,50266,"Salmonella enterica serotypes Paratyphi A, B (tartrate negative) and C (S. Paratyphi) infection"
+Enteric Diseases,NCEZID,50267,Salmonella enterica Typhi (S.Typhi) infection
+Vectorborne Diseases,NCEZID,50269,Alpha-gal syndrome
+Carbapenem Resistant Infections,NCEZID,50270,"Carbapenemase-Producing Organisms (CPO), clinical"
+Carbapenem Resistant Infections,NCEZID,50271,"Carbapenemase-Producing Organisms (CPO), screening"
