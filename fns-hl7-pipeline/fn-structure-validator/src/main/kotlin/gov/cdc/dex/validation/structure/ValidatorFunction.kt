@@ -62,7 +62,7 @@ class ValidatorFunction {
         val evHubNameOk = getSafeEnvVariable("EventHubSendOkName")
         val evHubNameErrs = getSafeEnvVariable("EventHubSendErrsName")
         val evHubConnStr = getSafeEnvVariable("EventHubConnectionString")
-        val evHubNameELROk = getSafeEnvVariable("EventHubSendELROkName")
+        // val evHubNameELROk = getSafeEnvVariable("EventHubSendELROkName")
 
         val ehSender = EventHubSender(evHubConnStr)
 
@@ -104,7 +104,7 @@ class ValidatorFunction {
                 inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
 
                 //Send event
-                val ehDestination = getEhDestination(messageType, report, evHubNameOk, evHubNameELROk, evHubNameErrs)
+                val ehDestination = getEhDestination(report, evHubNameOk, evHubNameErrs)
                 //val ehDestination = if (NIST_VALID_MESSAGE == report.status) evHubNameOk else evHubNameErrs
                 val destIndicator = if (ehDestination == evHubNameErrs) {
                     "ERROR"
@@ -136,15 +136,11 @@ class ValidatorFunction {
     }
 
     private fun getEhDestination(
-        messageType: String,
         report: NistReport,
         evHubNameOk: String,
-        evHubNameELROk: String,
         evHubNameErrs: String
     ): String {
-        return if (messageType == "ELR" && NIST_VALID_MESSAGE == report.status) {
-            evHubNameELROk
-        } else if (messageType == "CASE" && NIST_VALID_MESSAGE == report.status) {
+        return if (NIST_VALID_MESSAGE == report.status) {
             evHubNameOk
         } else {
             evHubNameErrs
@@ -245,8 +241,8 @@ class ValidatorFunction {
                 return buildHttpResponse("BAD REQUEST: ELR message must specify a route" +
                         " in the HTTP header as 'x-tp-route'. " +
                         "Please correct the HTTP header and try again.",
-                HttpStatus.BAD_REQUEST,
-                request)
+                    HttpStatus.BAD_REQUEST,
+                    request)
             } else {
                 ""
             }
