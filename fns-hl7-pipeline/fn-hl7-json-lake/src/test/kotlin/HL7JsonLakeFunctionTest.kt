@@ -17,11 +17,8 @@ public class HL7JsonLakeFunctionTest {
         val function = Function()
         val inputEvent : JsonObject
 
-        if(isCase){
-            inputEvent = function.eventHubCASEProcessor(messages, eventHubMDList, getExecutionContext())
-        }else{
-            inputEvent = function.eventHubELRProcessor(messages, eventHubMDList, getExecutionContext())
-        }
+        inputEvent = function.eventHubCASEProcessor(messages, eventHubMDList, getExecutionContext())
+        // inputEvent = function.eventHubELRProcessor(messages, eventHubMDList, getExecutionContext())
 
         // Validate Metadata.processes has been added to the array of proccesses
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
