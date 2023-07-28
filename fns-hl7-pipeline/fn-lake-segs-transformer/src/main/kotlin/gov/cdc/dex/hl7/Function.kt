@@ -54,21 +54,6 @@ class Function {
 
     } // .eventHubProcessor
 
-    @FunctionName("LAKE_OF_SEGMENTS_TRANSFORMER_ELR")
-    fun eventHubELRProcessor(
-        @EventHubTrigger(
-            name = "msg",
-            eventHubName = "%EventHubReceiveNameELR%",
-            connection = "EventHubConnectionString",
-            consumerGroup = "%EventHubConsumerGroupELR%",)
-        message: List<String?>,
-        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext) : JsonObject {
-
-        return processMessages(message, eventHubMD)
-
-    } // .eventHubProcessor
-
     private fun processMessages(message: List<String?>, eventHubMD: List<EventHubMetadata>) : JsonObject {
         message.forEachIndexed {
                 messageIndex: Int, singleMessage: String? ->
