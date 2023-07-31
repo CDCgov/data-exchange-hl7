@@ -90,7 +90,6 @@ jobs:
               ref: 'main'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
-              wait-for-completion-interval: 90s
               wait-for-completion-interval: 300s
               display-workflow-run-url: true
            #  workflow-logs: print --- This nice-to-have feature is documented in readme but apparantly not implemented in current version - follow up required
@@ -249,7 +248,6 @@ jobs:
               ref: 'main'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
-              wait-for-completion-interval: 90s
               wait-for-completion-interval: 300s
               display-workflow-run-url: true
 
