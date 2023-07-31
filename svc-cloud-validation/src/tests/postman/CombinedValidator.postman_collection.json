@@ -20,6 +20,11 @@
 						"key": "x-tp-route",
 						"value": "COVID19_ELR",
 						"type": "text"
+					},
+					{
+						"key": "message_type",
+						"value": "CASE",
+						"type": "text"
 					}
 				],
 				"body": {

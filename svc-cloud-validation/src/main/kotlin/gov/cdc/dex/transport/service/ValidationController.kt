@@ -14,7 +14,9 @@ import org.slf4j.LoggerFactory
 import java.io.*
 import java.net.*
 import java.net.http.HttpClient
+import java.nio.charset.StandardCharsets.*
 import java.util.*
+
 
 /**
  *
@@ -65,13 +67,13 @@ class ValidationController() {
             .uri(URI.create(urlPath))
             .POST(java.net.http.HttpRequest.BodyPublishers.ofString(payLoad))
             .setHeader("x-tp-message_type", messageType)
-            //.setHeader("x-tp-route", "COVID19_ELR" ) //metadata?.get("x-tp-route"))
             .build()
 
         val response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString()).body()
 
         var finalValue = response.replace("{\"_1\":", "")
         finalValue = finalValue.replace(",\"_2\":[]}", "")
+        finalValue = finalValue.replace("\\\\u0026", "&")
         finalValue = finalValue.replace("\"", "")
 
         return finalValue
