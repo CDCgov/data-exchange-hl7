@@ -55,8 +55,6 @@ class ValidatorFunction {
 
         val startTime =  Date().toIsoString()
 
-        logger.info("Event Message received: $message.")
-
         val evHubNameOk = getSafeEnvVariable("EventHubSendOkName")
         val evHubNameErrs = getSafeEnvVariable("EventHubSendErrsName")
         val evHubConnStr = getSafeEnvVariable("EventHubConnectionString")
@@ -66,7 +64,7 @@ class ValidatorFunction {
 
         message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-            logger.info("singleMessage: --> $singleMessage")
+
             var report = NistReport()
             var metadata = JsonObject()
 
