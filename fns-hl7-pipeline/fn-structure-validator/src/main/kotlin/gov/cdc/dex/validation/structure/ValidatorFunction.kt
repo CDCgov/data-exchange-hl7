@@ -108,9 +108,8 @@ class ValidatorFunction {
                 }
 
                 logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
-                logger.info("INPUT EVENT OUT: --> ${gson.toJson(inputEvent)}")
-
                 ehSender.send(ehDestination, gson.toJson(inputEvent))
+                logger.info("Sent Message to ${ehDestination} for Message Id ${messageUUID}")
 
                 if(msgNumber == message.lastIndex){
                     return inputEvent
@@ -131,6 +130,7 @@ class ValidatorFunction {
 
                 inputEvent.add("summary", summary.toJsonElement())
                 ehSender.send(evHubNameErrs, gson.toJson(inputEvent))
+                logger.info("Sent Message to $evHubNameErrs for Message Id ${JsonHelper.getValueFromJson("message_uuid", inputEvent).asString}")
                 return inputEvent 
             }
         } // foreachIndexed
