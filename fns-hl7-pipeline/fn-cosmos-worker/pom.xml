@@ -1,86 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>fn-cosmos-worker</artifactId>
     <groupId>gov.cdc.dataexchange</groupId>
-    <artifactId>redactor</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Azure Java Functions</name>
-    
+
+    <name>DEX Fns-Pipeline :: hl7-cosmos-worker</name>
+
     <scm>
         <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
-        <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>   
+        <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>
         <url>https://github.com/CDCgov/data-exchange-hl7</url>
         <tag>HEAD</tag>
     </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
+        <java_version>11</java_version>
+        <kotlin.version>1.7.20</kotlin.version>
+        <functions.version>3.0.0</functions.version>
+        <functions.plugin.version>1.26.0</functions.plugin.version>
+        <maven.compiler.source>1.11</maven.compiler.source>
+        <maven.compiler.target>1.11</maven.compiler.target>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
-        <functionAppName>ocio-ede-${environment-id}-hl7-Redactor</functionAppName>
+        <functionAppName>ocio-ede-${environment-id}-hl7-cosmos-worker</functionAppName>
+        <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
 
-        <hl7pet.version>1.2.7.2</hl7pet.version>
-        <kotlin.version>1.8.0</kotlin.version>
-        <lib-dex-commons.version>1.0.12-SNAPSHOT</lib-dex-commons.version>
+        <slf4j.version>2.0.5</slf4j.version>
+        <azevhub.version>5.15.1</azevhub.version>
+        <gson.version>2.10.1</gson.version>
+
+        <junit.version>5.9.2</junit.version>
+
+        <lib-dex-commons.version>1.0.15-SNAPSHOT</lib-dex-commons.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.microsoft.azure.functions</groupId>
-            <artifactId>azure-functions-java-library</artifactId>
-            <version>${azure.functions.java.library.version}</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
         </dependency>
-
-        <!-- Test -->
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.4.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.10</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.23.4</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>gov.cdc.hl7</groupId>
-            <artifactId>hl7-pet_2.13</artifactId>
-            <version>${hl7pet.version}</version>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-messaging-eventhubs</artifactId>
+            <version>${azevhub.version}</version>
         </dependency>
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
             <version>${lib-dex-commons.version}</version>
         </dependency>
-
-
+        <!-- Azure Functions Java Library -->
+        <dependency>
+            <groupId>com.microsoft.azure.functions</groupId>
+            <artifactId>azure-functions-java-library</artifactId>
+            <version>${functions.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit5</artifactId>
+            <version>1.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>1.9.0</version>
+        </dependency>
     </dependencies>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
-
-	<!-- Plugins Dependencies Versions -->
+        <!-- Plugins Dependencies Versions -->
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -115,8 +119,8 @@
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
-                <version>${azure.functions.maven.plugin.version}</version>
-               <configuration>
+                <version>${functions.plugin.version}</version>
+                <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
@@ -163,19 +167,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--Remove obj folder generated by .NET SDK in maven clean-->
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>obj</directory>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -206,7 +197,6 @@
                     <jvmTarget>11</jvmTarget>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -240,9 +230,9 @@
                 <executions>
                     <execution>
                         <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
                         <configuration>
                             <classifier>${environment-id}</classifier>
                         </configuration>
@@ -255,8 +245,6 @@
                 <version>3.1.0</version>
                 <configuration>
                     <environmentVariables>
-                        <REDIS_CACHE_NAME>ocio-ede-dev-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
-                        <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>
                         <EventHubReceiveName>hl7-recdeb-ok</EventHubReceiveName>
@@ -328,35 +316,29 @@
                 <artifactId>buildnumber-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
-                <execution>
-                    <phase>validate</phase>
-                    <goals>
-                    <goal>create</goal>
-                    </goals>
-                </execution>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
                 </executions>
                 <configuration>
-                <doCheck>false</doCheck>
-                <doUpdate>false</doUpdate>
-                <format>{0,number}</format>
-                <items>
-                    <item>buildNumber</item>
-                </items>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <format>{0,number}</format>
+                    <items>
+                        <item>buildNumber</item>
+                    </items>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>2.8.1</version>
             </plugin>
         </plugins>
     </build>
-
     <distributionManagement>
         <repository>
             <id>ede-releases</id>
             <url>${maven-releases-url}</url>
-	</repository>
+        </repository>
         <snapshotRepository>
             <id>ede-snapshots</id>
             <url>${maven-snapshot-url}</url>
