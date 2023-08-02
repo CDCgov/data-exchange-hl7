@@ -1,5 +1,11 @@
 {
   "version": "2.0",
+  "extensions": {
+    "cosmosDB": {
+      "connectionMode": "Gateway",
+      "userAgentSuffix": "MyDesiredUserAgentStamp"
+    }
+  },
   "extensionBundle": {
       "id": "Microsoft.Azure.Functions.ExtensionBundle",
       "version": "[4.2, 4.3)"
