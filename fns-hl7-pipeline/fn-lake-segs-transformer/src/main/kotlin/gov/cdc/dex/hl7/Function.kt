@@ -48,13 +48,14 @@ class Function {
                 consumerGroup = "%EventHubConsumerGroupCASE%",)
                 message: List<String?>,
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext) : JsonObject {
+        context: ExecutionContext) : List<JsonObject> {
 
         return processMessages(message, eventHubMD)
 
     } // .eventHubProcessor
 
-    private fun processMessages(message: List<String?>, eventHubMD: List<EventHubMetadata>) : JsonObject {
+    private fun processMessages(message: List<String?>, eventHubMD: List<EventHubMetadata>) : List<JsonObject> {
+        val processedMsgs = mutableListOf<JsonObject>()
         message.forEachIndexed {
                 messageIndex: Int, singleMessage: String? ->
             // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
@@ -93,7 +94,7 @@ class Function {
                         fnConfig.evHubSender, fnConfig.eventHubSendOkName, inputEvent, null, config
                     )
 
-                    return inputEvent
+                    processedMsgs.add( inputEvent )
                 } catch (e: Exception) {
 
                     logger.error("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
@@ -104,7 +105,7 @@ class Function {
 
                     logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
 
-                    return inputEvent
+                    processedMsgs.add( inputEvent )
                 } // .catch
 
             } catch (e: Exception) {
@@ -112,11 +113,11 @@ class Function {
                 // message is bad, can't extract fields based on schema expected
                 logger.error("Unable to process Message due to exception: ${e.message}")
                 e.printStackTrace()
-                return JsonObject()
+                processedMsgs.add( JsonObject() )
             } // .catch
 
         } // .message.forEach
-        return JsonObject()
+        return processedMsgs.toList()
     }
     private fun updateMetadataAndDeliver(startTime: String, status: String, report: List<Segment>?, eventHubMD: EventHubMetadata,
                                          evHubSender: EventHubSender, evTopicName: String, inputEvent: JsonObject, exception: Exception?, config: List<String>) {
