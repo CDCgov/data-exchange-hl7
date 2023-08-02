@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>DEX HL7</title>
+
+    <script type="text/javascript" src="js/json-viewer.js"></script>
+    <script type="text/javascript" src="js/hubs.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/json-viewer.css">
+    <style>
+        body {
+            margin:20px
+        }
+        #json {
+            margin-top:20px;
+        }
+        span.type-string {
+            display:none !important;
+        }
+    </style>
+</head>
+<body>
+<h5>EVENT HUBS VIEWER</h5>
+<div id="json"></div>
+<script>
+  let jsonViewer = new JSONViewer();
+  document.getElementById("json").appendChild(jsonViewer.getContainer());
+  jsonViewer.showJSON(hubs);
+
+</script>
+</body>
+</html>
