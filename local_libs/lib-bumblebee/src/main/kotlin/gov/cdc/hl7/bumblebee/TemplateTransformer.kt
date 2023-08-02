@@ -142,7 +142,7 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
     }
 
     private fun processArray(elem: JsonArray, mapValues: MutableMap<String, Array<out Array<String>>?>, hl7Message: HL7ParseUtils, path: String) {
-        elem.forEachIndexed { idx, prop ->
+        elem.forEachIndexed { _, prop ->
             populateArrayProperties(prop, mapValues, hl7Message, path)
         }
     }

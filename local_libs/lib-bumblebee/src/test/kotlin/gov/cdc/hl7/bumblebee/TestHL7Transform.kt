@@ -304,7 +304,7 @@ class TestHL7Transform {
 private fun messageProfileIdentifier(msg: String,field: Int, defaultProfile: Profile, it: HL7SegmentField, jArray: JsonArray) {
     val value = HL7StaticParser.getValue( msg,"MSH-" + field)
     val valueFlat = value.get().flatten()
-    valueFlat.forEachIndexed { idx, itt ->
+    valueFlat.forEachIndexed { _, itt ->
         val msh21 = JsonObject()
         val compParts = itt.split("^")
         defaultProfile.getSegmentField(it.dataType)?.forEachIndexed { cidx, comp ->
