@@ -1,11 +1,11 @@
-LOCAL EVENT HUBS SIMULATER FOR FNS-HL7-PIPELINE 
+LOCAL EVENT HUBS SIMULATOR FOR FNS-HL7-PIPELINE 
 
 The code has been tested with jdk-11.0.18+10 and jdk-17.0.7+7
 
 Preconditions:
 TODO
 
-Initial Setup:
+Initial Setup:    
     1)  Open “Command Prompt”. 
            If you read this, you already have cloned the develop branch of the DEX project or checkout eph0-local-run branch.
            Navigate to data-exchange-hl7\tools\local-run folder
