@@ -299,7 +299,7 @@
     "dataType": "CX",
     "maxLength": "2646",
     "usage": "R",
-    "cardinality": "[1..1]",
+    "cardinality": "[1..*]",
     "conformance": "",
     "notes": ""
   },
@@ -522,7 +522,72 @@
     "cardinality": "[0..1]",
     "conformance": "",
     "notes": ""
-  }
+  },
+      {
+        "fieldNumber": 26,
+        "name": "Citizenship",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      }, {
+        "fieldNumber": 27,
+        "name": "Veterans Military Status",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }, {
+        "fieldNumber": 28,
+        "name": "Nationality",
+        "dataType": "CWE",
+        "usage": "X",
+        "cardinality": "[0..0]",
+        "conformance": "",
+        "notes": ""
+      }, {
+        "fieldNumber": 29,
+        "name": "Patient Death Date and Time",
+        "dataType": "DTM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }, {
+        "fieldNumber": 30,
+        "name": "Patient Death Indicator",
+        "dataType": "ID",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }, {
+        "fieldNumber": 31,
+        "name": "Identity Unknown Indicator",
+        "dataType": "ID",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }, {
+        "fieldNumber": 32,
+        "name": "Identity Reliability Code",
+        "dataType": "CWE",
+        "usage": "O",
+        "cardinality": "[0..*]",
+        "conformance": "",
+        "notes": ""
+      }, {
+        "fieldNumber": 33,
+        "name": "Last Update Date/Time",
+        "dataType": "DTM",
+        "usage": "O",
+        "cardinality": "[0..1]",
+        "conformance": "",
+        "notes": ""
+      }
 ],
     "ORC": [
       {

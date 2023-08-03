@@ -167,7 +167,7 @@ class TestHL7Transform {
     @Test
     fun testHL7Transformer() {
 //        val message = this::class.java.getResource("/COVID.txt").readText()
-        val message = this::class.java.getResource("/WI v231.txt").readText()
+        val message = this::class.java.getResource("/testFile.hl7").readText()
         val gson = GsonBuilder().serializeNulls().create()
 
 
