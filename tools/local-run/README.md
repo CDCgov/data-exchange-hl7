@@ -1,62 +1,52 @@
-LOCAL EVENT HUBS SIMULATOR FOR FNS-HL7-PIPELINE 
+### LOCAL EVENT HUBS SIMULATOR FOR FNS-HL7-PIPELINE
 
-The code has been tested with jdk-11.0.18+10 and jdk-17.0.7+7
+The code has been tested with kotlin 1.8.0, jdk-11.0.18+10 and jdk-17.0.7+7
 
-Preconditions:
+Prerequisites:  
 TODO
 
-Initial Setup:
-If you are reading this, you already have cloned the develop branch of the DEX project or 
-checkout eph0-local-run branch.
+All following instructions assume that "Command Prompt" is open and  
+the current folder is set to:  
+C:\...\data-exchange-hl7\tools\local-run
 
-Open “Command Prompt”.
-Navigate to data-exchange-hl7\tools\local-run folder 
-c:\...>hub-setup.bat
-It will setup event-hubs and storage folders 
+Initial Setup, run the following batch files in sequence:
+- hub-config  
+  creates event-hubs and storage folder
+- fns-build    
+  compiles fns-hl7-pipeline functions
+- local-build   
+  compiles local functions
+- local-run    
+  runs the local event hub simulator
 
-c:\...>fns-build.bat
-It will compile fns-hl7-pipeline functions
+After running local-run batch file you will see that there are no messages to process.
 
-c:\...>local-build.bat
-It will compile simulator local projects
-
-c:\...>local-run.bat
-It will run the pipeline
-
-After running local-run.bat you will see that there are no messages to process.
-
-The simulator consumes messages from storage/hl7ingress folder
+The simulator consumes messages from the storage/hl7ingress folder.   
 There are two ways to get messages in the hl7ingress:
+1. Use fn-storage-uploader azure function
+    - cd fn-storage-uploader
+    - Initial compile only:  
+      mvn package -DskipTests
+    - mvn azure-functions:run  
+      After that you can use Postman to upload messages
+2. Use storage-uploader project
+    - cd storage-uploader
+    - Initial compile only:  
+      mvn package -DskipTests
+    - Edit run.bat to set environment variables to point to fns-hl7-pipeline unit test folders or other folders with hl7 messages  
+      There are REM comments in the batch file that describe what is needed for CASE or ELR
+    - run  
+      It will move the files to hl7ingress and start the simulator
 
-A. Use fn-storage-uploader azure function
-c:\...>cd fn-storage-uploader
-
-Initial compile only:
-c:\...>mvn package -DskipTests
-
-c:\...>mvn azure-functions:run
-After that you can use Postman to upload messages
-
-B. Use storage-uploader project
-c:\...>cd storage-uploader
-
-Initial compile only:
-c:\...>mvn package -DskipTests
-
-Edit run.bat to set env. variables to point to fns-hl7-pipeline unit test folders or other folders with hl7 messages
-There are REM comments in the batch file that describe what is needed for CASE or ELR
-c:\...>run.bat
-It will move the files to hl7ingress and start the simulator
-
-After the simulator runs you can open view_hubs.html to see the hubs messages.
+After the simulator runs you can open view_hubs.html to see the hubs messages.  
 Message content can be examined with view_msg.html
 
-You can compile\run all or a single simulator hub.
-For example: local-run debatcher will run the debatcher hub.
+You can compile\run all or a single simulator project.  
+For example: local-run debatcher will run the debatcher simulator.  
 Type fns-build ? or local-build ? or local-run for options.
 
 To clear the hubs and storage:
-c:\...>del *.txt /s
-from the local-run folder
-
+- from local- run folder:
+    - del *.txt /s
+    - del *.properties /s  
 
