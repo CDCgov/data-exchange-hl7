@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.24] - 2023-07-26
+	- Completed Performance testing and fixed some bugs found during testing.
+	- Fixed logging of Functions to show logs in Application Insights.
+	- Completed the local-run tool to run the pipeline locally without dependency on Azure.
+	- Completed Documentation for Programs.
+	- Fixed svc-transport by adding a "ping" endpoint to make Azure happy.
 
 ### [0.0.23] - 2023-07-12
  	- Separated Unit test and Integration test for MMG Validator.
