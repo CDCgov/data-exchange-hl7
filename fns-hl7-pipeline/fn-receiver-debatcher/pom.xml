@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
     
     <name>DEX Fns-Pipeline :: receiver-debatcher</name>
-    
+
     <scm>
         <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
         <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>   
