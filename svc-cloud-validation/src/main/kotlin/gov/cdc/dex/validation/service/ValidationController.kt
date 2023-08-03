@@ -45,9 +45,11 @@ class ValidationController() {
     private fun validateMessage(request: HttpRequest<Any>, hl7Content: String): String{
         var reportData = ""
 
-        var redactedMessage = this.getContent(URL(this.redactorUrl), hl7Content, getMetadata(request))
+        var metaData = getMetadata(request)
 
-        var structureReport = this.getContent(URL(this.structureUrl), redactedMessage, getMetadata(request))
+        var redactedMessage = this.getRedactedContent(URL(this.redactorUrl), hl7Content, metaData)
+
+        var structureReport = this.getReportContent(URL(this.structureUrl), redactedMessage, metaData)
 
         var jsonData = JsonObject()
 
@@ -57,7 +59,47 @@ class ValidationController() {
         return reportData
     }
 
-    private fun getContent(url: URL, payLoad : String, metadata: Map<String, String>? = null): String {
+    private fun getHttpRequest(urlPath: String, messageType: String?, payLoad: String): java.net.http.HttpRequest {
+        val request = java.net.http.HttpRequest.newBuilder()
+        if (messageType == "ELR") {
+            request.uri(URI.create(urlPath))
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(payLoad))
+                .setHeader("x-tp-message_type", messageType)
+                .setHeader("x-tp-route", "COVID19_ELR")
+                .build()
+        } else {
+            request.uri(URI.create(urlPath))
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(payLoad))
+                .setHeader("x-tp-message_type", messageType)
+                .build()
+        }
+        return request.build()
+    }
+
+    private fun getRedactedContent(url: URL, payLoad : String, metadata: Map<String, String>? = null): String {
+        val client = HttpClient.newBuilder().build()
+
+        val urlPath = url.toString()
+        val messageType = metadata?.get("message_type")
+
+        val request = getHttpRequest(urlPath, messageType, payLoad)
+
+        var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString()).body()
+
+        val json = JsonParser().parse(response)
+        var jsonObject = json.asJsonObject
+        var jsonItem = jsonObject.get("_1")
+        response = jsonItem.asString
+        /*
+        var finalValue = response.replace("{\"_1\":", "")
+        finalValue = finalValue.replace(",\"_2\":[]}", "")
+        finalValue = finalValue.replace("\\\\u0026", "&")
+        finalValue = finalValue.replace("\"", "")
+        */
+        return response
+    }
+
+    private fun getReportContent(url: URL, payLoad : String, metadata: Map<String, String>? = null): String {
         val client = HttpClient.newBuilder().build()
 
         val urlPath = url.toString()
@@ -69,14 +111,9 @@ class ValidationController() {
             .setHeader("x-tp-message_type", messageType)
             .build()
 
-        val response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString()).body()
+        var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString()).body()
 
-        var finalValue = response.replace("{\"_1\":", "")
-        finalValue = finalValue.replace(",\"_2\":[]}", "")
-        finalValue = finalValue.replace("\\\\u0026", "&")
-        finalValue = finalValue.replace("\"", "")
-
-        return finalValue
+        return response
     }
 
     private fun getMetadata(request: HttpRequest<Any>): Map<String, String> {

@@ -20,6 +20,8 @@
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>gov.cdc.dex.validation.service.Application</exec.mainClass>
         <kotlinVersion>1.7.20</kotlinVersion>
+        <hl7pet.version>1.2.7.2</hl7pet.version>
+        <lib-dex-commons.version>1.0.12-SNAPSHOT</lib-dex-commons.version>
     </properties>
 
     <repositories>
@@ -124,6 +126,16 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>gov.cdc.hl7</groupId>
+            <artifactId>hl7-pet_2.13</artifactId>
+            <version>${hl7pet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.cdc.dex</groupId>
+            <artifactId>lib-dex-commons</artifactId>
+            <version>${lib-dex-commons.version}</version>
         </dependency>
     </dependencies>
 
