@@ -283,7 +283,7 @@
                     </environmentVariables>
                 </configuration>
             </plugin>
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
                 <version>3.1.0</version>
@@ -303,7 +303,7 @@
                     <item>buildNumber</item>
                 </items>
                 </configuration>
-            </plugin>
+            </plugin> -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
