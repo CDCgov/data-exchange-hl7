@@ -7,7 +7,7 @@ Prerequisites:
 - Azure CLI version 2.4 or later.
 - JDK, version 8 or 11 or 17.  
 The JAVA_HOME environment variable must be set to the install location of the correct version of the JDK.  
-- The PATH environment variable must be set to the bin folder of the JDK
+The PATH environment variable must be set to the bin folder of the JDK
 - Apache Maven, version 3.0 or above
 - Check [Development Configuration in Wiki](https://teams.microsoft.com/l/entity/com.microsoft.teamspace.tab.wiki/tab::afbb6cff-f3d4-461d-8425-655f656e3805?context=%7B%22subEntityId%22%3A%22%7B%5C%22pageId%5C%22%3A2%2C%5C%22origin%5C%22%3A2%7D%22%2C%22channelId%22%3A%2219%3Abfb7dc0f5da24f159ec6b5e9a17a8c12%40thread.tacv2%22%7D&tenantId=9ce70869-60db-44fd-abe8-d2767077fc8f)
 
