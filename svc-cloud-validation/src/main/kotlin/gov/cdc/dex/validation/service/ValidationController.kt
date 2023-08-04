@@ -65,7 +65,7 @@ class ValidationController() {
             request.uri(URI.create(urlPath))
                 .POST(java.net.http.HttpRequest.BodyPublishers.ofString(payLoad))
                 .setHeader("x-tp-message_type", messageType)
-                .setHeader("x-tp-route", "COVID19_ELR")
+                .setHeader("x-tp-route", routeText)
                 .build()
         return request.build()
     }
