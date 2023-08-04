@@ -50,9 +50,6 @@ class Function {
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext): DexEventPayload? {
 
-    
-        logger.info("@@@@ 8/3 auto trigger test for ci/cd")
-
         logger.info("DEX::Received BLOB_CREATED event!")
 
         var msgEvent:DexEventPayload? = null
