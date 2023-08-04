@@ -59,20 +59,13 @@ class ValidationController() {
         return reportData
     }
 
-    private fun getHttpRequest(urlPath: String, messageType: String?, payLoad: String): java.net.http.HttpRequest {
+    private fun getHttpRequest(urlPath: String, messageType: String?, routeText: String?, payLoad: String): java.net.http.HttpRequest {
         val request = java.net.http.HttpRequest.newBuilder()
-        if (messageType == "ELR") {
             request.uri(URI.create(urlPath))
                 .POST(java.net.http.HttpRequest.BodyPublishers.ofString(payLoad))
                 .setHeader("x-tp-message_type", messageType)
                 .setHeader("x-tp-route", "COVID19_ELR")
                 .build()
-        } else {
-            request.uri(URI.create(urlPath))
-                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(payLoad))
-                .setHeader("x-tp-message_type", messageType)
-                .build()
-        }
         return request.build()
     }
 
@@ -81,8 +74,9 @@ class ValidationController() {
 
         val urlPath = url.toString()
         val messageType = metadata?.get("message_type")
+        val routeText = metadata?.get("route")
 
-        val request = getHttpRequest(urlPath, messageType, payLoad)
+        val request = getHttpRequest(urlPath, messageType, routeText, payLoad)
 
         var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString()).body()
 
@@ -90,12 +84,6 @@ class ValidationController() {
         var jsonObject = json.asJsonObject
         var jsonItem = jsonObject.get("_1")
         response = jsonItem.asString
-        /*
-        var finalValue = response.replace("{\"_1\":", "")
-        finalValue = finalValue.replace(",\"_2\":[]}", "")
-        finalValue = finalValue.replace("\\\\u0026", "&")
-        finalValue = finalValue.replace("\"", "")
-        */
         return response
     }
 
