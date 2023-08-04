@@ -87,7 +87,8 @@ jobs:
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
               inputs: '{ "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
-              ref: 'main'
+              #ref: 'main'
+              ref: 'HL7-2396-POMUpdate'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
               wait-for-completion-interval: 300s
@@ -175,7 +176,7 @@ jobs:
             else
               case $commitfldrs in
               *fn-lake-segs-transformer*) workflows+=("ci-lake-segs-transformer.yml") ;;&
-              *fn-receiver-debatcher*) workflows+=("ci-receiver-debatcher.yml") ;;&
+              *fn-receiver-debatcher*) workflows+=("deploy-receiver-debatcher.yml") ;;&
               *fn-redactor*) workflows+=("ci-redactor.yml") ;;&
               *fn-structure-validator*) workflows+=("ci-structure-validator.yml") ;;&
               *fn-hl7-json-lake*) workflows+=("ci-json-lake.yml") ;;&
@@ -237,7 +238,8 @@ jobs:
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
               inputs: '{ "commitID": "${{ steps.getsha.outputs.commitID }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
-              ref: 'main'
+             # ref: 'main'
+              ref: 'HL7-2396-POMUpdate'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
               wait-for-completion-interval: 300s
