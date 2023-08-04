@@ -7,6 +7,7 @@ import com.google.gson.*
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
+import io.micronaut.http.MutableHttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
@@ -36,13 +37,13 @@ class ValidationController() {
     fun uploadContentDefault(
         @Body content: String,
         request: HttpRequest<Any>
-    ): HttpResponse<Any> {
+    ): MutableHttpResponse<MutableHttpResponse<String>?>? {
         val resultData = this.validateMessage(request, content);
 
-        return HttpResponse.ok(gson.toJson(resultData))
+        return HttpResponse.ok(resultData).contentEncoding(MediaType.APPLICATION_JSON)
     }
 
-    private fun validateMessage(request: HttpRequest<Any>, hl7Content: String): String{
+    private fun validateMessage(request: HttpRequest<Any>, hl7Content: String): MutableHttpResponse<String>? {
         var reportData = ""
 
         var metaData = getMetadata(request)
@@ -56,7 +57,7 @@ class ValidationController() {
         jsonData.add("StructureReport", JsonParser.parseString(gson.toJson(structureReport)))
         reportData = jsonData.toString()
 
-        return reportData
+        return HttpResponse.ok(reportData).contentEncoding(MediaType.APPLICATION_JSON)
     }
 
     private fun getHttpRequest(urlPath: String, messageType: String?, routeText: String?, payLoad: String): java.net.http.HttpRequest {
