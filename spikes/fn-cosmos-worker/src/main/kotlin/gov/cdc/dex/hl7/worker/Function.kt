@@ -20,8 +20,6 @@ import java.util.*
 import kotlin.streams.toList
 import com.fasterxml.jackson.databind.ObjectMapper
 
-data class Person(val id: String, val name: String, val age: Int)
-
 class CosmosDBClient<T : Any>(private val cosmosClient: CosmosClient) {
 
     private val databaseName = System.getenv("CosmosDBId")
@@ -124,15 +122,7 @@ class Function {
             authLevel = AuthorizationLevel.ANONYMOUS)
         request: HttpRequestMessage<Optional<String>>,
         context: ExecutionContext): String {
-
         val message = request.body?.get().toString()
-
-        /*     @EventHubTrigger(
-            name = "msg",
-            eventHubName = "%EventHubReceiveName%",
-            consumerGroup = "%EventHubConsumerGroup%",
-            connection = "EventHubConnectionString")
-        message: String?): String? { */
         logger.info("message: $message")
         try {
             val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
@@ -155,8 +145,7 @@ class Function {
             val cosmosDB = CosmosDBClient<Any>(cosmosClient)
             logger.info("Write Cosmos Client")
             cosmosDB.createItem(message)
-            val response2 = cosmosDB.queryItems(Any::class.java)
-            logger.info("response from Cosmos: ${response2}")
+            logger.info("Saved Message")
 
             return "Test"
         }  catch (e: Exception) {
@@ -164,5 +153,47 @@ class Function {
             return "FAILED TO parse"
         }
 
+    }
+
+    @FunctionName("cosmos-worker-eh")
+    fun worker(
+       @EventHubTrigger(
+            name = "msg",
+            eventHubName = "%EventHubReceiveName%",
+            consumerGroup = "%EventHubConsumerGroup%",
+            connection = "EventHubConnectionString")
+        message: String?): String? {
+
+        logger.info("message: $message")
+        try {
+            val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
+            logger.info("inputEvent: $inputEvent")
+
+            logger.info("Start Cosmos Client")
+            val preferredRegions = ArrayList<String>()
+            preferredRegions.add("East US")
+            // Initialize Cosmos client
+            val cosmosClient: CosmosClient = CosmosClientBuilder()
+                .endpoint(cosmosEndpoint)
+                .key(cosmosKey)
+                .consistencyLevel(ConsistencyLevel.EVENTUAL)
+                .directMode()
+                .buildClient()
+
+            //  Create sync client
+
+            logger.info("defined Cosmos Client")
+            val cosmosDB = CosmosDBClient<Any>(cosmosClient)
+            logger.info("Write Cosmos Client")
+            if (message != null) {
+                logger.info("response from Cosmos: Not Null Message")
+                cosmosDB.createItem(message)
+                logger.info("Saved Message")
+            }
+            return "Test"
+        }  catch (e: Exception) {
+            println("Error creating item: ${e.message}")
+            return "FAILED TO parse"
+        }
     }
 }
