@@ -19,6 +19,7 @@ import java.time.Duration
 import java.util.*
 import kotlin.streams.toList
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 
 class CosmosDBClient<T : Any>(private val cosmosClient: CosmosClient) {
 
@@ -125,8 +126,27 @@ class Function {
         val message = request.body?.get().toString()
         logger.info("message: $message")
         try {
-            val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
-            logger.info("inputEvent: $inputEvent")
+            //val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
+            val objectMapper = ObjectMapper()
+            val inputEvent: ObjectNode = objectMapper.readValue(message, ObjectNode::class.java)
+
+            // Add the "id" attribute
+
+            inputEvent.put("id", UUID.randomUUID().toString())
+            val jsonOutput = objectMapper.writeValueAsString(inputEvent)
+            /*
+            val jsonObjectWithId = objectMapper.createObjectNode()
+            jsonObjectWithId.put("id", UUID.randomUUID().toString())
+            inputEvent.fieldNames().forEach { fieldName ->
+                jsonObjectWithId.set(
+                    fieldName,
+                    inputEvent.get(fieldName))
+            }
+
+            // Convert the JSON object to a string
+            val jsonOutput = objectMapper.writeValueAsString(jsonObjectWithId)
+            */
+            logger.info("inputEvent: $jsonOutput")
 
             logger.info("Start Cosmos Client")
             val preferredRegions = ArrayList<String>()
@@ -144,7 +164,9 @@ class Function {
             logger.info("defined Cosmos Client")
             val cosmosDB = CosmosDBClient<Any>(cosmosClient)
             logger.info("Write Cosmos Client")
-            cosmosDB.createItem(message)
+
+            cosmosDB.createItem(jsonOutput)
+
             logger.info("Saved Message")
 
             return "Test"
@@ -156,7 +178,7 @@ class Function {
     }
 
     @FunctionName("cosmos-worker-eh")
-    fun worker(
+    fun workerEH(
        @EventHubTrigger(
             name = "msg",
             eventHubName = "%EventHubReceiveName%",
@@ -166,7 +188,11 @@ class Function {
 
         logger.info("message: $message")
         try {
-            val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
+            val objectMapper = ObjectMapper()
+            val inputEvent: ObjectNode = objectMapper.readValue(message, ObjectNode::class.java)
+            // Add the "id" attribute
+            inputEvent.put("id", UUID.randomUUID().toString())
+            val jsonOutput = objectMapper.writeValueAsString(inputEvent)
             logger.info("inputEvent: $inputEvent")
 
             logger.info("Start Cosmos Client")
@@ -187,7 +213,7 @@ class Function {
             logger.info("Write Cosmos Client")
             if (message != null) {
                 logger.info("response from Cosmos: Not Null Message")
-                cosmosDB.createItem(message)
+                cosmosDB.createItem(jsonOutput)
                 logger.info("Saved Message")
             }
             return "Test"
