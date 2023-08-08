@@ -5,14 +5,18 @@ import com.azure.storage.blob.*
 import com.azure.storage.blob.models.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import com.microsoft.azure.functions.ExecutionContext
+import com.microsoft.azure.functions.OutputBinding
 import com.microsoft.azure.functions.annotation.BindingName
+import com.microsoft.azure.functions.annotation.CosmosDBOutput
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
+import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import gov.cdc.dex.util.StringUtils.Companion.normalize
 import gov.cdc.hl7.HL7StaticParser
@@ -48,6 +52,14 @@ class Function {
                 connection = "EventHubConnectionString") 
                 messages: List<String>?,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
+        @CosmosDBOutput(
+            name = "database",
+            databaseName = "hl7-events",
+            containerName = "doesnotexist",
+            createIfNotExists = true,
+            connection = "CosmoDBConnectionString",
+            partitionKey = "/message_uuid"
+        ) outputItem : OutputBinding<List<JsonObject>>,
         context: ExecutionContext): DexEventPayload? {
 
     
@@ -56,6 +68,7 @@ class Function {
         logger.info("DEX::Received BLOB_CREATED event!")
 
         var msgEvent:DexEventPayload? = null
+        val output = mutableListOf<JsonObject>()
 
         if (messages != null) {
             for ((nbrOfMessages, message) in messages.withIndex()) {
@@ -149,10 +162,12 @@ class Function {
                             // send empty array as message content when content is invalid
                             prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
                         }
+                        output.add(gson.toJsonTree(msgEvent) as JsonObject)
                     }
                 } // .if
             }
         } // .for
+        outputItem.value = output.toList()
         return msgEvent
     } // .eventHubProcess
 
@@ -201,7 +216,7 @@ class Function {
 
     private fun prepareAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String) : DexEventPayload {
         val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
-        val msgEvent = DexEventPayload(contentBase64, messageInfo, metadata, summary)
+        val msgEvent = DexEventPayload(content = contentBase64, messageInfo = messageInfo, metadata = metadata, summary = summary)
         logger.info("DEX::Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
         val jsonMessage = gson.toJson(msgEvent)
         eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
