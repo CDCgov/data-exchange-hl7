@@ -55,7 +55,7 @@ class Function {
         @CosmosDBOutput(
             name = "database",
             databaseName = "hl7-events",
-            containerName = "doesnotexist",
+            containerName = "rec-deb-events",
             createIfNotExists = true,
             connection = "CosmoDBConnectionString",
             partitionKey = "/message_uuid"
