@@ -94,7 +94,7 @@ class ValidationTest {
                     val testMsg = this::class.java.getResource("/$folderName/${it.fileName}").readText()
                     val phinSpec = when (type) {
                         HL7MessageType.ELR -> "COVID19_ELR-v${HL7StaticParser.getFirstValue(testMsg, "MSH-12[1].1").get()}"
-                        HL7MessageType.CASE -> HL7StaticParser.getFirstValue(testMsg, "MSH-21[1].1").get()
+                        HL7MessageType.CASE -> HL7StaticParser.getFirstValue(testMsg, "MSH-21[1].1").get().uppercase()
                         else -> throw Exception("Unknown type)")
                     }
                     val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec}")
