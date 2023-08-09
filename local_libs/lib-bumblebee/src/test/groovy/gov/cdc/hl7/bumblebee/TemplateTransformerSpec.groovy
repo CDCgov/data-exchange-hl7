@@ -1,5 +1,6 @@
 package gov.cdc.hl7.bumblebee
 
+import gov.cdc.hl7.bumblebee.TemplateTransformer
 import groovy.json.JsonSlurper
 
 import spock.lang.*
@@ -38,10 +39,9 @@ class TemplateTransformerSpec extends Specification {
           print(newMessage)
         then:
             def jsonSlurper = new JsonSlurper()
-            def obj = jsonSlurper.parseText(newMessage)
+            def object = jsonSlurper.parseText(newMessage)
 
-            assert obj instanceof Map
-            def object = (Map)obj
+            assert object instanceof Map
             assert object.specimen_id == '214MP000912'
             assert object.message_profile == "PHLabReport-NoAck"
             assert object.message_controller_id == "ARLN_GC_DupASTmOBR_ELR"
