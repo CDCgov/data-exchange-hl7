@@ -1,4 +1,4 @@
-package gov.cdc.hl7.bumblebee
+package gov.cdc.dex
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
@@ -134,15 +134,16 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
     }
 
     private fun getPropertyName(parser: HL7ParseUtils, attr: String): String {
-        if (attr.startsWith("$$")) {
-            val propname =  transformVariable(parser, attr.substring(2))
-            return propname?.get(0)!!.get(0)
-        } else
-            return attr;
+        return if (attr.startsWith("$$") && attr.length > 2) {
+            val propName =  transformVariable(parser, attr.substring(2))
+            propName?.get(0)!![0]
+        } else {
+            attr
+        }
     }
 
     private fun processArray(elem: JsonArray, mapValues: MutableMap<String, Array<out Array<String>>?>, hl7Message: HL7ParseUtils, path: String) {
-        elem.forEachIndexed { idx, prop ->
+        elem.forEach { prop ->
             populateArrayProperties(prop, mapValues, hl7Message, path)
         }
     }
@@ -202,7 +203,7 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
 
     }
     private fun transformVariable(hl7Parser: HL7ParseUtils,  prim: String?): Array<out Array<String>>? {
-            val optionalValue = hl7Parser.getValue(prim, false) //Don't remove emptys
+            val optionalValue = hl7Parser.getValue(prim, false) //Don't remove empties
             if (optionalValue.isDefined)
                 return optionalValue.get()
             return null

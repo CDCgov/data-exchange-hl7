@@ -4,7 +4,7 @@ import gov.cdc.dex.hl7.Function
 import org.junit.jupiter.api.Test
 import java.util.logging.Logger
 
-public class HL7JsonLakeFunctionTest {
+public class LakeSegsFunctionTest {
 
     private fun processFile(filename:String, isCase:Boolean) {
         println("Start processing $filename ")

@@ -24,10 +24,10 @@ internal class CloudStorageProxyTest {
     }
 
     //@Test
-//    fun testListFilesInFolder() {
-//        val configs = cloudStorage.list(5, "ingress/hl7/QA/FDD/FDD_MMG_V1.0/")
-//        configs.forEach { println("file: $it")}
-//    }
+    fun testListFilesInFolder() {
+        val configs = cloudStorage.list(5, "ingress/hl7/QA/FDD/FDD_MMG_V1.0/")
+        configs.forEach { println("file: $it")}
+    }
 
     @Test
     fun testGetFile() {

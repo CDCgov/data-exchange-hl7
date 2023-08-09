@@ -167,7 +167,7 @@ class TestHL7Transform {
     @Test
     fun testHL7Transformer() {
 //        val message = this::class.java.getResource("/COVID.txt").readText()
-        val message = this::class.java.getResource("/testFile.hl7").readText()
+        val message = this::class.java.getResource("/WI v231.txt").readText()
         val gson = GsonBuilder().serializeNulls().create()
 
 
@@ -304,7 +304,7 @@ class TestHL7Transform {
 private fun messageProfileIdentifier(msg: String,field: Int, defaultProfile: Profile, it: HL7SegmentField, jArray: JsonArray) {
     val value = HL7StaticParser.getValue( msg,"MSH-" + field)
     val valueFlat = value.get().flatten()
-    valueFlat.forEachIndexed { _, itt ->
+    valueFlat.forEachIndexed { idx, itt ->
         val msh21 = JsonObject()
         val compParts = itt.split("^")
         defaultProfile.getSegmentField(it.dataType)?.forEachIndexed { cidx, comp ->

@@ -4,17 +4,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### [0.0.25] - 2023-08-09
-	- Delete all MMG related functions from the HL7 Pipeline.
-	- Delete dependencies on Redis.
-	- Added Event Code logic to Structure Validator.
-	- Added handling of unexpected metadata in the incoming message.
-	- Updated pipeline to align ELR and Case messages to a single pipeline.
-	- Created Local Run tool allowing developers to run the HL7 pipeline on their local machines (Path: tools/local-run).
-	- Created SVC Validator for API driven validation.
-	- Started CosmosDB Writer, still in progress.
-	- Enhanced unit tests across project libraries ( lib-dex-commons, lib-nist-validator, lib-bumblebee ) and HL7 functions.
-
 ### [0.0.24] - 2023-07-26
 	- Completed Performance testing and fixed some bugs found during testing.
 	- Fixed logging of Functions to show logs in Application Insights.

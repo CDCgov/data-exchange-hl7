@@ -6,17 +6,17 @@ on:
         description: '(Required) Specify CI/CD workflow associated with one HL7 function app to trigger autodeploy from CDCEnt/data-exchange-hl7-devops repo'
         required: true
         type: choice
-        default: 'deploy-receiver-debatcher.yml'
+        default: 'deploy-mmg-based-transformer.yml'
         options:
-#        - deploy-mmg-based-transformer.yml
-#        - deploy-mmg-sql-transformer.yml
+        - deploy-mmg-based-transformer.yml
+        - deploy-mmg-sql-transformer.yml
         - deploy-receiver-debatcher.yml
         - deploy-redactor.yml
         - deploy-lake-segs-transformer.yml
-#        - deploy-mmg-validator.yml
+        - deploy-mmg-validator.yml
         - deploy-json-lake.yml
         - deploy-structure-validator.yml
-#        - deploy-cache-loader.yml
+        - deploy-cache-loader.yml
         - deploy-svc-cloud-transport.yml
         - publish-nist-validator-lib.yml
         - publish-dex-commons-lib.yml
@@ -41,7 +41,7 @@ on:
       - 'main'
     paths:
     - fns-hl7-pipeline/**
-#    - fn-cache-loader/**
+    - fn-cache-loader/**
     - svc-cloud-transport/**
     - local_libs/**
   push:
@@ -50,7 +50,7 @@ on:
       - 'main'
     paths:
     - fns-hl7-pipeline/**
-#    - fn-cache-loader/**
+    - fn-cache-loader/**
     - svc-cloud-transport/**
     - local_libs/*.*
   
@@ -136,6 +136,7 @@ jobs:
           with:
               ref: ${{ github.ref }}
               fetch-depth: 0  
+
         - name: Get PR Merge Target Branch
           id: gettargetbranch
           run: |
@@ -147,6 +148,7 @@ jobs:
               echo "target_branch=${{ github.ref_name }}" >>  "$GITHUB_ENV"
               echo "target_branch=${{ github.ref_name }}" >>  "$GITHUB_OUTPUT"
             fi
+
           # Create a list (matrix) of workflow IDs to trigger based on folders impacted by file changes in current branch
           # Convert workflow shell array into a stringified JSON so it can be bound to matrix workflow_id property used in invoke job
           # Autodeploy on Push (PR merge) to develop or main branch. All other Push events targeting feature branches will be trated as 
@@ -161,10 +163,14 @@ jobs:
             then
               case $commitfldrs in
               *fn-lake-segs-transformer*) workflows+=("deploy-lake-segs-transformer.yml") ;;&
+              *fn-mmg-based-transformer*) workflows+=("deploy-mmg-based-transformer.yml") ;;&
+              *fn-mmg-sql-transformer*) workflows+=("deploy-mmg-sql-transformer.yml") ;;&
+              *fn-mmg-validator*) workflows+=("deploy-mmg-validator.yml") ;;&
               *fn-receiver-debatcher*) workflows+=("deploy-receiver-debatcher.yml") ;;&
               *fn-redactor*) workflows+=("deploy-redactor.yml") ;;&
               *fn-structure-validator*) workflows+=("deploy-structure-validator.yml") ;;&
               *fn-hl7-json-lake*) workflows+=("deploy-json-lake.yml") ;;&
+              *fn-cache-loader*) workflows+=("deploy-cache-loader.yml") ;;&
               *svc-cloud-transport*) workflows+=("deploy-svc-cloud-transport.yml") ;;&
               *lib-bumblebee*) workflows+=("publish-bumblebee-lib.yml") ;;&
               *lib-cloud-proxy*) workflows+=("publish-cloud-proxy-lib.yml") ;;&
@@ -175,10 +181,14 @@ jobs:
             else
               case $commitfldrs in
               *fn-lake-segs-transformer*) workflows+=("ci-lake-segs-transformer.yml") ;;&
+              *fn-mmg-based-transformer*) workflows+=("ci-mmg-based-transformer.yml") ;;&
+              *fn-mmg-sql-transformer*) workflows+=("ci-mmg-sql-transformer.yml") ;;&
+              *fn-mmg-validator*) workflows+=("ci-mmg-validator.yml") ;;&
               *fn-receiver-debatcher*) workflows+=("ci-receiver-debatcher.yml") ;;&
               *fn-redactor*) workflows+=("ci-redactor.yml") ;;&
               *fn-structure-validator*) workflows+=("ci-structure-validator.yml") ;;&
               *fn-hl7-json-lake*) workflows+=("ci-json-lake.yml") ;;&
+              *fn-cache-loader*) workflows+=("ci-cache-loader.yml") ;;&
               *lib-bumblebee*) workflows+=("ci-lib-bumblebee.yml") ;;&
               *lib-cloud-proxy*) workflows+=("ci-lib-cloud-proxy.yml") ;;&
               *lib-dex-commons*) workflows+=("ci-lib-dex-commons.yml") ;;&
@@ -242,7 +252,7 @@ jobs:
               wait-for-completion-timeout: 120m
               wait-for-completion-interval: 300s
               display-workflow-run-url: true
-
+              
         # workflow-logs: print     
         #   uses: actions/github-script@v6.4.1
         #   with:

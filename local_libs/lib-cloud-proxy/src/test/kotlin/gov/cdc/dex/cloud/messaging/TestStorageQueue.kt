@@ -11,14 +11,13 @@ class TestStorageQueue {
 
   //  @Test
     fun receiveMessages() {
-//        println("testing receive messages")
-//        println(messaging.getQueueUrl())
-//        do {
-//            val msgs = messaging.receiveMessage()
-//            msgs.forEach {
-//                println(it.key())
-//            }
-//        } while (msgs.isNotEmpty())
-        assert(true)
+        println("testing receive messages")
+        println(messaging.getQueueUrl())
+        do {
+            val msgs = messaging.receiveMessage()
+            msgs.forEach {
+                println(it.key())
+            }
+        } while (msgs.isNotEmpty())
     }
 }

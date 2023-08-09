@@ -8,7 +8,6 @@ import gov.cdc.dex.mmg.InvalidConditionException
 import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
-import gov.cdc.dex.util.StringUtils.Companion.normalize
 import gov.cdc.hl7.HL7StaticParser
 import org.junit.jupiter.api.Test
 import java.io.BufferedReader
@@ -39,9 +38,18 @@ class DebatcherTest {
         }
     }
 
-    @Test fun testDebatcher() {
+    @Test fun testDebatcherWithErrs() {
         println("Starting debatcher test")
-        val filePath = "genV1/Genv1-Case-TestMessage1.HL7"
+        val redisName: String = System.getenv("REDIS_CACHE_NAME")
+        val redisKey: String = System.getenv("REDIS_CACHE_KEY")
+        val redisProxy = RedisProxy(redisName, redisKey)
+        val mmgUtil = MmgUtil(redisProxy)
+//FILENAME
+        //val filePath = "other/GEN_SUMMARY_CASE_MAP_V1.0.json"  //invalid hl7
+        //val filePath = "genV1/empty.txt"  // empty file
+        //val filePath = "genV1/Genv1-Case-TestMessage2.HL7" //condition is not in redis
+        // val filePath = "genV1/Genv1-Case-TestMessage1.HL7"  //condition is in redis (should succeed)
+        val filePath = "genV1/phin-notification-message-specification-profile-v-2.0.pdf" //file too large and invalid hl7
         val startTime = Date().toIsoString()
         val testFileIS = this::class.java.getResource(filePath).openStream()
         val provenance = Provenance(
@@ -61,7 +69,6 @@ class DebatcherTest {
         val currentLinesArr = arrayListOf<String>()
         var mshCount = 0
         val eventHubMD = EventHubMetadata(1, 1, null, "20230101")
-        val metaDataMap =  mapOf<String, String>(Pair("route", ""))
         BufferedReader(reader).use { br ->
             br.forEachLine { line ->
                 val lineClean = line.trim().let { if ( it.startsWith(UTF_BOM) )  it.substring(1)  else it}
@@ -74,7 +81,7 @@ class DebatcherTest {
                         if ( mshCount > 1 ) {
                             provenance.singleOrBatch = Provenance.BATCH_FILE
                             provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
-                            val messageInfo = getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n"))
+                            val messageInfo = getMessageInfo(mmgUtil, currentLinesArr.joinToString("\n" ))
                             val (metadata, summary) = buildMetadata(Function.STATUS_SUCCESS, eventHubMD, startTime, provenance)
                             prepareAndSend(currentLinesArr, messageInfo, metadata, summary)
                             provenance.messageIndex++
@@ -88,7 +95,7 @@ class DebatcherTest {
         // Send last message
         provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
         if (mshCount > 0) {
-            val messageInfo = getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n"))
+            val messageInfo = getMessageInfo(mmgUtil, currentLinesArr.joinToString("\n" ))
             val (metadata, summary) = buildMetadata(Function.STATUS_SUCCESS, eventHubMD, startTime, provenance)
             prepareAndSend(currentLinesArr, messageInfo, metadata, summary)
         } else {
@@ -98,7 +105,29 @@ class DebatcherTest {
         }
     } // .test
 
+    private fun getMessageInfo(mmgUtil: MmgUtil, message: String): DexMessageInfo {
+        val msh21Gen = extractValue(message, Function.MSH_21_2_1_PATH)
+        println("msh21Gen: $msh21Gen")
+        val msh21Cond = extractValue(message, Function.MSH_21_3_1_PATH)
+        println("msh21Cond: $msh21Cond")
+        val eventCode = extractValue(message, Function.EVENT_CODE_PATH)
+        println("eventCode: $eventCode")
+        var jurisdictionCode = extractValue(message, Function.JURISDICTION_CODE_PATH)
+        if (jurisdictionCode.isEmpty()) {
+            jurisdictionCode = extractValue(message, Function.ALT_JURISDICTION_CODE_PATH)
+        }
+        println("jurisdictionCode: $jurisdictionCode")
+        return try {
+            val messageInfo = mmgUtil.getMMGMessageInfo(msh21Gen, msh21Cond, eventCode, jurisdictionCode)
+            println("Try succeeded")
+            messageInfo
+        } catch (e : InvalidConditionException) {
+            // TODO: SHOULD WE RECORD THIS ERROR MESSAGE?
+            println("Try failed: ${e.message}")
+            DexMessageInfo(eventCode, null, null, jurisdictionCode,HL7MessageType.CASE)
+        }
 
+    }
     private fun extractValue(msg: String, path: String): String  {
         val value = HL7StaticParser.getFirstValue(msg, path)
         return if (value.isDefined) value.get()
@@ -124,30 +153,6 @@ class DebatcherTest {
         println("Simulating Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
        // eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
         println("Processed and Sent to console Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
-    }
-    private fun getMessageInfo(metaDataMap: Map<String, String>, message: String): DexMessageInfo {
-        val eventCode = extractValue(message, Function.EVENT_CODE_PATH)
-        val localRecordID = extractValue(message, Function.LOCAL_RECORD_ID_PATH)
-        val messageType = metaDataMap["message_type"]
-
-        //READ FROM METADATA FOR ELR
-        if (messageType == HL7MessageType.ELR.name) {
-            val route = metaDataMap["route"]?.normalize()
-            val reportingJurisdiction = metaDataMap["reporting_jurisdiction"]
-            return DexMessageInfo(eventCode, route, null, reportingJurisdiction, HL7MessageType.ELR, localRecordID)
-        }
-
-        var jurisdictionCode = extractValue(message, Function.JURISDICTION_CODE_PATH)
-        if (jurisdictionCode.isEmpty()) {
-            jurisdictionCode = extractValue(message, Function.ALT_JURISDICTION_CODE_PATH)
-        }
-
-        return DexMessageInfo(eventCode = eventCode,
-            route = Function.fnConfig.eventCodes[eventCode]?.get("category"),
-            mmgKeyList = null,
-            jurisdictionCode =  jurisdictionCode,
-            type =  HL7MessageType.CASE,
-            localRecordID = localRecordID)
     }
 
 }

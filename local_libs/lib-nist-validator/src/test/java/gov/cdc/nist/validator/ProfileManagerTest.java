@@ -16,7 +16,7 @@ public class ProfileManagerTest {
     @Test
     public void testValidateStructureErrors() {
         try {
-            var nistValidator = new ProfileManager(new ResourceFileFetcher(), "/TEST_PROF");
+            ProfileManager nistValidator = new ProfileManager(new ResourceFileFetcher(), "/TEST_PROF");
 
             var nist = nistValidator.validate(getTestFile("hl7TestMessage.txt"));
             System.out.println("nist.getStatus() = " + nist.getStatus());

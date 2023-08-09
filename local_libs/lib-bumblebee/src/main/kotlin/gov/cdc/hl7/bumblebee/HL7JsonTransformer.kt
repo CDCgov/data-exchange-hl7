@@ -92,7 +92,7 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
                     var compHasValue:Boolean = false
                     components.forEach { component ->
                         val compVal = getValueFromMessage(compArray, component.fieldNumber -1 )
-                        compHasValue = compHasValue || (!compVal.isNullOrEmpty() && compVal.replace("&", "").trim() != null)
+                        compHasValue = compHasValue || (compVal != null && compVal.isNotEmpty() && compVal.replace("&", "").trim() != null)
                         //Handle subcomponents...
                         val subComponents = fieldProfile.getSegmentField(component.dataType)
                         if (!subComponents.isNullOrEmpty()) {
