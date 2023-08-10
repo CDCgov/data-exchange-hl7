@@ -3,7 +3,7 @@ package gov.cdc.dex
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.HttpRequestMessage
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.validation.structure.ValidatorFunction
+import gov.cdc.dex.hl7.validation.structure.ValidatorFunction
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.util.*

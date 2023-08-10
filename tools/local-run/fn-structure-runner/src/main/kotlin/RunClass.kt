@@ -1,4 +1,4 @@
-import gov.cdc.dex.validation.structure.*
+import gov.cdc.dex.hl7.validation.structure.*
 import gov.cdc.dex.azure.EventHubMetadata
 import java.io.File
 import java.util.*

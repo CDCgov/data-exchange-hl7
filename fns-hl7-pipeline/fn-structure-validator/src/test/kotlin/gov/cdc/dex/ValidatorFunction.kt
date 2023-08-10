@@ -1,4 +1,4 @@
-package gov.cdc.dex.validation.structure
+package gov.cdc.dex.hl7.validation.structure
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
