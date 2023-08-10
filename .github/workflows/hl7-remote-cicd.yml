@@ -87,7 +87,7 @@ jobs:
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
               inputs: '{ "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
-              ref: 'HL7-2405-update'
+              ref: 'HL7-2405-EnvSpecificBuildRemoval'
 #              ref: 'main'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
