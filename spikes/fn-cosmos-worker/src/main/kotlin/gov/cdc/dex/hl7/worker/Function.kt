@@ -30,71 +30,15 @@ class CosmosDBClient<T : Any>(private val cosmosClient: CosmosClient) {
     fun createItem(string: String ) {
         try {
             val database = cosmosClient.getDatabase(databaseName)
-            val container = database.getContainer("debatcher")
-
+            val container = database.getContainer("receiverdebatcher")
             val objectMapper = ObjectMapper()
             val itemMap: Map<*, *> = objectMapper.readValue(string, Map::class.java)
-            val item = objectMapper.readValue(string, Map::class.java)
-
-            // Generate a unique ID if "id" is not present in the JSON
-            val id = itemMap["id"] ?: UUID.randomUUID().toString()
-            itemMap.toMutableMap()["id"] = id
-            println("This is the ID: $id")
-            println("Check out this Map $itemMap")
-            println("Check out this other MAP $item")
-
             val itemResponse = container.createItem(itemMap)
             println("Created item: ${itemResponse}")
         } catch (e: Exception) {
             println("Error creating item: ${e.message}")
         }
     }
-
-    // Read Row
-    fun readItem(itemId: String, mappingClass: Class<T>): CosmosItemResponse<T>? {
-        try{
-            val database = cosmosClient.getDatabase(databaseName)
-            println("IN DB: $databaseName")
-            val container = database.getContainer(containerName)
-            println("IN DContinaer: $containerName")
-
-            val partitionKey = PartitionKey(itemId)
-            println("IN Partition Key $partitionKey")
-
-            val itemResponse: CosmosItemResponse<T> = container.readItem(
-                itemId, partitionKey, mappingClass
-            )
-
-            val requestCharge: Double = itemResponse.getRequestCharge()
-            val requestLatency: Duration = itemResponse.getDuration()
-            println("Item successfully ${itemResponse.getItem()}, $requestCharge, $requestLatency")
-            println("readItem Response(): $itemResponse")
-            return itemResponse
-        } catch (e: Exception) {
-            println("Error readItem(): ${e.message}")
-            return null
-        }
-    }
-
-    // Run Query
-    fun queryItems(mappingClass: Class<T>): List<T>? {
-        try{
-            val database = cosmosClient.getDatabase(databaseName)
-            val container = database.getContainer(containerName)
-            kotlin.io.println("I have a container and DB")
-
-            val query = "SELECT * FROM c"
-            val options = CosmosQueryRequestOptions()
-
-            val queryIterator: CosmosPagedIterable<T> =
-                container.queryItems(query, options, mappingClass)
-            kotlin.io.println("I ran a query")
-
-            return queryIterator.stream().toList()
-        }catch (e: Exception) {
-            println("Error readItem(): ${e.message}")
-            return null
-        }
 
     }
 }
@@ -125,29 +69,20 @@ class Function {
         context: ExecutionContext): String {
         val message = request.body?.get().toString()
         logger.info("message: $message")
+        /*
+          Receive Event Hub Message as a String, Convert to Object, Add id column
+          Insert into CosmosDB.
+        */
         try {
-            //val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
-            val objectMapper = ObjectMapper()
-            val inputEvent: ObjectNode = objectMapper.readValue(message, ObjectNode::class.java)
-
+            // Use Gson - Parse String Message >> Add Id >>
+            val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
+            inputEvent.addProperty("id", UUID.randomUUID().toString())
+            // val objectMapper = ObjectMapper()
+            //val inputEvent: ObjectNode = objectMapper.readValue(message, ObjectNode::class.java)
             // Add the "id" attribute
-
-            inputEvent.put("id", UUID.randomUUID().toString())
-            val jsonOutput = objectMapper.writeValueAsString(inputEvent)
-            /*
-            val jsonObjectWithId = objectMapper.createObjectNode()
-            jsonObjectWithId.put("id", UUID.randomUUID().toString())
-            inputEvent.fieldNames().forEach { fieldName ->
-                jsonObjectWithId.set(
-                    fieldName,
-                    inputEvent.get(fieldName))
-            }
-
-            // Convert the JSON object to a string
-            val jsonOutput = objectMapper.writeValueAsString(jsonObjectWithId)
-            */
-            logger.info("inputEvent: $jsonOutput")
-
+            // inputEvent.put("id", UUID.randomUUID().toString())
+            // val jsonOutput = objectMapper.writeValueAsString(inputEvent)
+            logger.info("inputEvent: $inputEvent")
             logger.info("Start Cosmos Client")
             val preferredRegions = ArrayList<String>()
             preferredRegions.add("East US")
@@ -160,23 +95,18 @@ class Function {
                 .buildClient()
 
             //  Create sync client
-
             logger.info("defined Cosmos Client")
             val cosmosDB = CosmosDBClient<Any>(cosmosClient)
             logger.info("Write Cosmos Client")
-
-            cosmosDB.createItem(jsonOutput)
-
+            cosmosDB.createItem(inputEvent.toString())
             logger.info("Saved Message")
-
             return "Test"
         }  catch (e: Exception) {
             println("Error creating item: ${e.message}")
             return "FAILED TO parse"
         }
-
     }
-
+    /*
     @FunctionName("cosmos-worker-eh")
     fun workerEH(
        @EventHubTrigger(
@@ -184,42 +114,45 @@ class Function {
             eventHubName = "%EventHubReceiveName%",
             consumerGroup = "%EventHubConsumerGroup%",
             connection = "EventHubConnectionString")
-        message: String?): String? {
+       message: List<String?>): String? {
+            message.forEachIndexed {
+                messageIndex: Int, singleMessage: String? ->
+                logger.info("message: $singleMessage")
+                try {
+                    val objectMapper = ObjectMapper()
+                    val inputEvent: ObjectNode = objectMapper.readValue(singleMessage, ObjectNode::class.java)
+                    // Add the "id" attribute
+                    inputEvent.put("id", UUID.randomUUID().toString())
+                    val jsonOutput = objectMapper.writeValueAsString(inputEvent)
+                    logger.info("inputEvent: $inputEvent")
 
-        logger.info("message: $message")
-        try {
-            val objectMapper = ObjectMapper()
-            val inputEvent: ObjectNode = objectMapper.readValue(message, ObjectNode::class.java)
-            // Add the "id" attribute
-            inputEvent.put("id", UUID.randomUUID().toString())
-            val jsonOutput = objectMapper.writeValueAsString(inputEvent)
-            logger.info("inputEvent: $inputEvent")
+                    logger.info("Start Cosmos Client")
+                    val preferredRegions = ArrayList<String>()
+                    preferredRegions.add("East US")
+                    // Initialize Cosmos client
+                    val cosmosClient: CosmosClient = CosmosClientBuilder()
+                        .endpoint(cosmosEndpoint)
+                        .key(cosmosKey)
+                        .consistencyLevel(ConsistencyLevel.EVENTUAL)
+                        .directMode()
+                        .buildClient()
 
-            logger.info("Start Cosmos Client")
-            val preferredRegions = ArrayList<String>()
-            preferredRegions.add("East US")
-            // Initialize Cosmos client
-            val cosmosClient: CosmosClient = CosmosClientBuilder()
-                .endpoint(cosmosEndpoint)
-                .key(cosmosKey)
-                .consistencyLevel(ConsistencyLevel.EVENTUAL)
-                .directMode()
-                .buildClient()
-
-            //  Create sync client
-
-            logger.info("defined Cosmos Client")
-            val cosmosDB = CosmosDBClient<Any>(cosmosClient)
-            logger.info("Write Cosmos Client")
-            if (message != null) {
-                logger.info("response from Cosmos: Not Null Message")
-                cosmosDB.createItem(jsonOutput)
-                logger.info("Saved Message")
-            }
-            return "Test"
-        }  catch (e: Exception) {
-            println("Error creating item: ${e.message}")
-            return "FAILED TO parse"
+                    //  Create sync client
+                    logger.info("defined Cosmos Client")
+                    val cosmosDB = CosmosDBClient<Any>(cosmosClient)
+                    logger.info("Write Cosmos Client")
+                    if (jsonOutput != null) {
+                        logger.info("response from Cosmos: Not Null Message")
+                        cosmosDB.createItem(jsonOutput)
+                        logger.info("Saved Message")
+                    }
+                    return "Test"
+                }  catch (e: Exception) {
+                    println("Error creating item: ${e.message}")
+                    return "FAILED TO parse"
+                }
         }
+        return ""
     }
+    */
 }
