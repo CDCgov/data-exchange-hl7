@@ -7,7 +7,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class Function {
-    fun eventHubCASEProcessor( message: List<String?>, eventHubMD:List<EventHubMetadata>,  context: ExecutionContext): JsonObject {
+    fun eventHubProcessor( message: List<String?>, eventHubMD:List<EventHubMetadata>,  context: ExecutionContext): JsonObject {
         return JsonObject()
     }
 }

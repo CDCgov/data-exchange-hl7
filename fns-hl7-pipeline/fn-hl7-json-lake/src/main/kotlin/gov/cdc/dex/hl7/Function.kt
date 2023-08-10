@@ -37,7 +37,7 @@ class Function {
 
 
     @FunctionName("HL7_JSON_LAKE_TRANSFORMER_CASE")
-    fun eventHubCASEProcessor(
+    fun eventHubProcessor(
         @EventHubTrigger(
             name = "msg",
             eventHubName = "%EventHubReceiveNameCASE%",

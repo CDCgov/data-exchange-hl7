@@ -17,7 +17,7 @@ public class HL7JsonLakeFunctionTest {
         val function = Function()
         val inputEvent : JsonObject
 
-        inputEvent = function.eventHubCASEProcessor(messages, eventHubMDList, getExecutionContext())
+        inputEvent = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
         // inputEvent = function.eventHubELRProcessor(messages, eventHubMDList, getExecutionContext())
 
         // Validate Metadata.processes has been added to the array of proccesses

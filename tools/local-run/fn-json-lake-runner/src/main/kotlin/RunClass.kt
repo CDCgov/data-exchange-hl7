@@ -21,7 +21,7 @@ object RunClass {
 
         if (messages.isNotEmpty()) {
             val func = Function()
-            func.eventHubCASEProcessor(messages, eventHubMDList, context)
+            func.eventHubProcessor(messages, eventHubMDList, context)
         }
         else {
             println(" No messages found")
