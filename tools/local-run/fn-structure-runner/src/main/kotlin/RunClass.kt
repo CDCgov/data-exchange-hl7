@@ -22,7 +22,7 @@ object RunClass {
                 File(path.absolutePathString()).readText()
             }
         if ( messages.isNotEmpty() ) {
-            with(ValidatorFunction()) { run(messages, eventHubMDList, context) }
+            with(ValidatorFunction()) { eventHubProcessor(messages, eventHubMDList, context) }
         }
         else {
             println("* No messages found for ${context.functionName}")

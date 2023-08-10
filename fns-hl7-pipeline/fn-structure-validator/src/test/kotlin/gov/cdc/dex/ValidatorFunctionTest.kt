@@ -23,7 +23,7 @@ class ValidatorFunctionTest {
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val function = ValidatorFunction()
         val executionContext: ExecutionContext = getExecutionContext()
-        val inputEvent : JsonObject = function.run(messages, eventHubMDList, executionContext)
+        val inputEvent : JsonObject = function.eventHubProcessor(messages, eventHubMDList, executionContext)
 
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
         if(metadata != null){

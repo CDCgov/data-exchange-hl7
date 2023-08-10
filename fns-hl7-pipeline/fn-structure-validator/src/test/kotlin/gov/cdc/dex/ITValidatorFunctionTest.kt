@@ -22,7 +22,7 @@ class ITValidatorFunctionTest {
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
 
         val function = ValidatorFunction()
-        function.run(messages, eventHubMDList, getExecutionContext())
+        function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
         println("Finished processing $filename ")
 
     }
