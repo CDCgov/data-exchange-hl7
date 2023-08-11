@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "1.0.15-SNAPSHOT"
+version = "1.0.18-SNAPSHOT"
 
 repositories {
     maven {
@@ -30,13 +30,12 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-tst-dex-cache.redis.cache.windows.net",
-                       "REDIS_CACHE_KEY"  to findProperty("redisTSTKey"),
+    //NOTE: ENVIRONMENT BLOCK MUST STAY IN THE SAME FORMAT AS BELOW - WILL BREAK CICD PIPELINE
+    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-dev-dex-cache.redis.cache.windows.net",
+                       "REDIS_CACHE_KEY"  to findProperty("redisDevKey"),
                         "EVENT_HUB_CONNECT_STR" to findProperty("eventHubConnStr")
     ))
-//    environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-tst-dex-cache.redis.cache.windows.net",
-//        "REDIS_CACHE_KEY"  to findProperty("redisTSTKey")
-//    ))
+
     finalizedBy(tasks.jacocoTestReport)
 }
 tasks.jacocoTestReport {
@@ -49,24 +48,24 @@ tasks.withType<KotlinCompile> {
 
 
 publishing {
+    
     publications {
         create<MavenPublication>("myLibrary") {
             from(components["java"])
         }
     }
-
     repositories {
         maven {
             val releasesRepoUrl  = "https://imagehub.cdc.gov/repository/maven-ede/"
             val snapshotsRepoUrl = "https://imagehub.cdc.gov/repository/maven-ede-snapshot/"
             url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
             name = "nexus"
-            credentials(PasswordCredentials::class)// {
-            //Add this to ~/.gradle/gradle.properties
-//                username="$nexusUsername"
-//                password="$nexusPassword"
-//            }
+            credentials(PasswordCredentials::class){           
+                username= System.getenv("IMAGEHUB_USERNAME")
+                password= System.getenv("IMAGEHUB_PASSWORD")
+           }
         }
     }
+    
 }
 

@@ -4,20 +4,21 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Test
 import javax.inject.Inject
 
-@MicronautTest
+//@MicronautTest Disabling tests for now because not using message queues
 class TestStorageQueue {
     @Inject
     lateinit var messaging: CloudMessaging
 
-    @Test
+  //  @Test
     fun receiveMessages() {
-        println("testing receive messages")
-        println(messaging.getQueueUrl())
-        do {
-            val msgs = messaging.receiveMessage()
-            msgs.forEach {
-                println(it.key())
-            }
-        } while (msgs.isNotEmpty())
+//        println("testing receive messages")
+//        println(messaging.getQueueUrl())
+//        do {
+//            val msgs = messaging.receiveMessage()
+//            msgs.forEach {
+//                println(it.key())
+//            }
+//        } while (msgs.isNotEmpty())
+        assert(true)
     }
 }

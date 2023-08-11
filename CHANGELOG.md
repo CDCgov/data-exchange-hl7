@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.25] - 2023-08-09
+	- Delete all MMG related functions from the HL7 Pipeline.
+	- Delete dependencies on Redis.
+	- Added Event Code logic to Structure Validator.
+	- Added handling of unexpected metadata in the incoming message.
+	- Updated pipeline to align ELR and Case messages to a single pipeline.
+	- Created Local Run tool allowing developers to run the HL7 pipeline on their local machines (Path: tools/local-run).
+	- Created SVC Validator for API driven validation.
+	- Started CosmosDB Writer, still in progress.
+	- Enhanced unit tests across project libraries ( lib-dex-commons, lib-nist-validator, lib-bumblebee ) and HL7 functions.
+
+### [0.0.24] - 2023-07-26
+	- Completed Performance testing and fixed some bugs found during testing.
+	- Fixed logging of Functions to show logs in Application Insights.
+	- Completed the local-run tool to run the pipeline locally without dependency on Azure.
+	- Completed Documentation for Programs.
+	- Fixed svc-transport by adding a "ping" endpoint to make Azure happy.
+
+### [0.0.23] - 2023-07-12
+ 	- Separated Unit test and Integration test for MMG Validator.
+ 	- Updated Structure Validator to use only Structure Error status for errors.
+	- Parameterized container name on Receiver/Debatcher
+	- Added Ping method to svc-cloud-transport for Azure requirements.
+
+
+### [0.0.22] - 2023-06-28
+
+	- Improved redactor to load different configuration for different message types/routes.
+	- Value set errors on Structure Validator set to warning.
+	- Updated summary metadata on all functions
+	- Adding local_record_id to message_info metadata.
+	- Fixed Original_file_name metadata 
+	- Updated the upload_messages.py script to use multiple threads
+	- Implementing CI/CD for continuous delivery to DEV/TST.
+
 ### [0.0.21] - 2023-06-14
 
 	- Added Hepatitis 2.0 MMG
