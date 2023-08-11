@@ -112,6 +112,8 @@
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
+                   <appServicePlanName>${functionServicePlan}</appServicePlanName>
+<!--                    <appServicePlanName>ASP-ocioedetstmoderatehl7rg-a1db</appServicePlanName>-->
                     <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
