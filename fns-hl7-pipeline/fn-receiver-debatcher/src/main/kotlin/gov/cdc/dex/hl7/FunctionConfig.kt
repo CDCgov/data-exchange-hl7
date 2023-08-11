@@ -1,4 +1,4 @@
-package gov.cdc.dex.hl7.receiver
+package gov.cdc.dex.hl7
 
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.util.PathUtils
@@ -12,7 +12,7 @@ import org.apache.commons.csv.CSVRecord
 
 class FunctionConfig {
 
-    val azBlobProxy:AzureBlobProxy
+    val azBlobProxy: AzureBlobProxy
     val evHubSender: EventHubSender
     var eventCodes : Map<String, Map<String, String>>
 
