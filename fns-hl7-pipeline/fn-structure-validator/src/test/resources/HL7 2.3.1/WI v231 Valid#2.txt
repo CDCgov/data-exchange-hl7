@@ -1,5 +1,0 @@
-MSH|^~\&|WSLH Manual ELR Message Generator|Rennes Health And Rehab Center - De Pere^52D0670306^CLIA|vCMR|WEDSS|20210129065526||ORU^R01|202101290655268569|T|2.3.1
-PID|1|^^^^^Rennes Health And Rehab Center - De Pere&52D0670306&CLIA|105^^^Rennes Health And Rehab Center - De Pere&52D0670306&CLIA^PI^Rennes Health And Rehab Center - De Pere&52D0670306&CLIA||^^^^^^^s||19990721000000|F|||^^DePere^WI^54115||
-ORC|CN|105|105^Rennes Health And Rehab Center - De Pere^52D0670306^CLIA|||||||||^Schinschke^Scott|Rennes Health \T\ Rehab Center||||||||Rennes Health \T\ Rehab Center|200 South 9th Street^^DePere^WI^54115||200 South 9th Street^^DePere^WI^54115
-OBR|1|105|105^Rennes Health And Rehab Center - De Pere^52D0670306^CLIA|94558-4^SARS-CoV-2 Ag Resp Ql IA.rapid^LN^BinaxNOWCOVIDAg^BinaxNOW COVID-19 Ag Card^L|||20210128000000|||||||20210128000000|Nasal|^Schinschke^Scott||||||20210128000000|||F
-OBX|1|ST|94558-4^SARS-CoV-2 Ag Resp Ql IA.rapid^LN^BinaxNOWCOVIDAg^BinaxNOW COVID-19 Ag Card^L|1|Negative|||N|||F|||20210128000000|52D0670306^Rennes Health And Rehab Center - De Pere^CLIA

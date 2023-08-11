@@ -1,6 +1,0 @@
-MSH|^~\&|STARLIMS|NDPHL^35D0691722^CLIA|UFB|DREAMS|202006261310||ORU^R01|20200626799940|P|2.3.z
-PID|1|1289369|1289369|1289369|Ortiz^Nestor^^^^^U||19961211|F||U|^^Bismarck^ND^58593^^U^^Burleigh||701-214-2012^^^^^701^2142012|||||||||U
-OBR|1|561627|A20171427001|94500-6^SARS coronavirus 2 RNA [Presence] in Respiratory specimen by NAA with probe detection^LN^2068^Thermo Fisher COVID-19 PCR^L|||20200624||||N|||20200625|258412000&Oropharyngeal|^Connell^Joan|||||||||F
-ZLR||Bismarck Event Surveillance|Bismarck^^Bismarck^ND^58503|^^^^^701^701
-OBX|1|CE|94500-6^^LN||260415000^Not Detected^SN|||N|||F|||202006261355
-NTE|1||Interpretation: The 2019 Novel Coronavirus was not detected.  The Thermo Fisher COVID-19 assay is an emergency use authorized (EUA) method.  The assay has been internally validated by the North Dakota Department of Health.  This assay is for in vitro diagnostic use under FDA Emergency Use Authorization only.
