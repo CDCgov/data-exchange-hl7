@@ -1,17 +1,8 @@
 import org.junit.jupiter.api.Test
-
 import kotlin.test.assertEquals
-// import kotlin.test.assertFailsWith
-// import kotlin.test.assertFails
-
 import org.slf4j.LoggerFactory
 import gov.cdc.dex.hl7.TransformerSegments
-
-// No longer used
-// import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-// import com.google.gson.reflect.TypeToken
-
 import gov.cdc.hl7.HL7HierarchyParser 
 import gov.cdc.hl7.model.HL7Hierarchy
 
