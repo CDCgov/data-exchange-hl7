@@ -40,29 +40,18 @@ public class LakeSegsFunctionTest {
         println("Finished processing $filename ")
     }
 
-    // @Test
-    // fun processELR_HappyPath() {
-    //     processFile("ELR_message.txt", true)
-    //     assert (true)
-    // }
-
     @Test
-    fun processELR_ExceptionPath() {
-        processFile("ELR_Exceptionmessage.txt", false)
+    fun processELR_HappyPath() {
+        processFile("ELR_message.txt", true)
         assert (true)
     }
 
-    // @Test
-    // fun processCASE_HappyPath() {
-    //     processFile("CASE_message.txt", true)
-    //     assert (true)
-    // }
+    @Test
+    fun processCASE_HappyPath() {
+        processFile("CASE_message.txt", true)
+        assert (true)
+    }
 
-    // @Test
-    // fun processCASE_ExceptionPath() {
-    //     processFile("ELR_Exceptionmessage.txt", false)
-    //     assert (true)
-    // }
 
     private fun getExecutionContext():
             ExecutionContext {
