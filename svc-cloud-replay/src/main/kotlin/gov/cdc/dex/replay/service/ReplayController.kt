@@ -18,7 +18,7 @@ import java.net.http.HttpClient
  * @Author UUX6@cdc.gov
  */
 @Controller("/replay")
-@Requires(property = "micronaut.security.enabled", value = "false")
+//@Requires(property = "micronaut.security.enabled", value = "false")
 class ReplayController {
 
     @Post("/messages")
