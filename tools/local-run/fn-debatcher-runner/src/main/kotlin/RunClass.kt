@@ -1,4 +1,4 @@
-import gov.cdc.dex.hl7.receiver.*
+import gov.cdc.dex.hl7.*
 import com.google.gson.GsonBuilder
 
 import gov.cdc.dex.azure.EventHubMetadata

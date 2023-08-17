@@ -5,7 +5,19 @@ import io.micronaut.http.HttpHeaders
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
-import java.util.Date
+
+import gov.cdc.dex.azure.EventHubMetadata
+import gov.cdc.dex.azure.EventHubSender
+import gov.cdc.dex.metadata.*
+import org.slf4j.LoggerFactory
+import java.util.*
+import java.time.Instant
+
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import io.micronaut.context.annotation.Requires
 
 /**
  *
@@ -13,11 +25,17 @@ import java.util.Date
  * @Author UUX3@cdc.gov
  */
 
+data class UniqueData(
+    val id: String,
+    val reason: String,
+    val route: String
+)
 data class CombinationData(
     val startDate: Date?,
     val endDate: Date?,
     val jurisdiction: String?,
-    val route: String?
+    val route: String,
+    val reason: String
 )
 
 data class ReplayMD(
@@ -31,72 +49,83 @@ data class ReplayMD(
 
 
 @Controller("/replay")
-//@Requires(property = "micronaut.security.enabled", value = "false")
+// @Requires(property = "micronaut.security.enabled", value = "false")
 class ReplayController {
 
-    @Post("/messages")
-    fun handleMessage(@Body messageId: String, headers: HttpHeaders): HttpResponse<String> {
-        val location = headers["location"]
-        println("Handling message: $messageId at location: $location")
-        // Build and Query DB
-        val query = returnQueryId("message_uuid", "Test", messageId)
-        // If response, attached replay md
-        val replayMD = cleanReplayMetadata(null, query)
-        // Send Event Hub Message
-        return HttpResponse.ok("Received message id: $messageId")
+    companion object {
+        val gson: Gson = GsonBuilder().serializeNulls().create()
+        val evHubConnStr: String = System.getenv("EventHubConnectionString")
+        private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
     }
 
-    @Post("/messages/combo")
+    @Post("/messages")
+    fun handleMessage(@Body messageRequest: UniqueData, headers: HttpHeaders): HttpResponse<String> {
+        val location = headers["location"]
+        println("Handling message: ${messageRequest.id} at location: $location")
+        // Build and Query DB
+        val query = returnQueryId("message_uuid", "Test", messageRequest.id)
+        // TODO - Run Query
+
+        // Create replay md
+        val replayMD = cleanReplayMetadata(null, query, messageRequest.reason, messageRequest.route)
+        // Build Message
+        // buildEventMD()
+
+        // Send Event Hub Message
+        val evResult = prepareAndSend( gson.toJson(replayMD), messageRequest.route)
+        return HttpResponse.ok("Received message id: ${messageRequest.id}")
+    }
+
+    @Post("/files")
+    fun handleFile(@Body messageRequest: UniqueData, headers: HttpHeaders): HttpResponse<String> {
+        val location = headers["location"]
+        println("Handling file: ${messageRequest.id} at location: $location")
+        // Build and Query DB
+        val query = returnQueryId("file_uuid", "Test", messageRequest.id)
+        // TODO - Run Query
+        // Create replay md
+        val replayMD = cleanReplayMetadata(null, query, messageRequest.reason, messageRequest.route)
+        // Build Message
+        // buildEventMD()
+
+        // Send Event Hub Message
+        val evResult = prepareAndSend( gson.toJson(replayMD), messageRequest.route)
+
+        return HttpResponse.ok("Received file id: ${messageRequest.id}")
+    }
+
+    @Post("/combo")
     fun handleComboMessage(@Body comboData: CombinationData, headers: HttpHeaders): HttpResponse<String> {
         val location = headers["location"]
         println("Handling combo message: $comboData at location: $location")
         // Build and Query DB
         val query = queryCombo(comboData, "Test")
-        // If response, attached replay md
+        // TODO - Run Query
+        // Create replay md
         val replayMD = cleanReplayMetadata(comboData, query)
-        // Send Event Hub Message
-        return HttpResponse.ok("Received combination data: $comboData")
-    }
-
-    @Post("/files")
-    fun handleFile(@Body fileId: String, headers: HttpHeaders): HttpResponse<String> {
-        val location = headers["location"]
-        println("Handling file: $fileId at location: $location")
-        // Build and Query DB
-        val query = returnQueryId("file_uuid", "Test", fileId)
-        // If response, attached replay md
-        val replayMD = cleanReplayMetadata(null, query)
-        // Send Event Hub Message
-        return HttpResponse.ok("Received file id: $fileId")
-    }
-
-    @Post("/files/combo")
-    fun handleComboFile(@Body comboData: CombinationData, headers: HttpHeaders): HttpResponse<String> {
-        val location = headers["location"]
-        println("Handling combo file: $comboData at location: $location")
-        // Build and Query DB
-        val query = queryCombo(comboData, "Test")
-        // If response, attached replay md
-        val replayMD = cleanReplayMetadata(comboData, query)
+        // Build Message
+        // buildEventMD()
 
         // Send Event Hub Message
+        val evResult = prepareAndSend( gson.toJson(replayMD), comboData.route)
 
         return HttpResponse.ok("Received combination data: $comboData")
     }
 
-    private fun returnQueryId(identifier : String, table : String, Id : String ): String {
-        val query = "SELECT * FROM $table WHERE $identifier = $Id"
-
+    // Supporting Fns - Query Builder
+    private fun returnQueryId(identifier : String, table : String, id : String ): String {
+        // Query based on Original Message with ID
+        val query = "SELECT * FROM $table WHERE $identifier = $id"
+        // TODO - Only original message, Replay MD should be null
         return query
     }
-
     private fun queryCombo(comboData: CombinationData?, table : String ) : String {
         var conditionals = mutableListOf<String>()
 
         // Double check columns in CosmosDB
-        comboData?.startDate?.let { conditionals.add("startdate='$it'")}
-        comboData?.endDate?.let { conditionals.add("enddate='$it'")}
-        comboData?.jurisdiction?.let { conditionals.add("jurisdiction='$it'")}
+        comboData?.startDate?.let { conditionals.add("startdate='${comboData.startDate}'")}
+        comboData?.endDate?.let { conditionals.add("enddate='${comboData.endDate}'")}
+        comboData?.jurisdiction?.let { conditionals.add("jurisdiction='${comboData.jurisdiction}'")}
 
         if (conditionals.isEmpty()){
             // No Query values, alert user to provide values
@@ -106,21 +135,22 @@ class ReplayController {
         val action = conditionals.joinToString { " AND " }
         return "SELECT * FROM $table WHERE $action"
     }
-    private fun cleanReplayMetadata(comboData: CombinationData?, queryFilter: String = "TBD") : ReplayMD {
+    // Supporting Fns - Replay Metadata
+    private fun cleanReplayMetadata(comboData: CombinationData?, queryFilter: String, reasonMsg: String = "", routeMsg: String = "" ) : ReplayMD {
 
         var replayMD = ReplayMD()
 
         if (comboData == null) {
             replayMD.apply {
                 replayTimestamp = Date()
-                reason = "blah blah"
-                startingProcess = "Route"
+                reason = reasonMsg
+                startingProcess = routeMsg // TODO - Route Default?
                 filter = queryFilter
             }
         } else {
             replayMD.apply {
                 replayTimestamp = Date()
-                reason = "blah blah"
+                reason = comboData.reason
                 startingProcess = comboData.route
                 filter = queryFilter
             }
@@ -129,10 +159,29 @@ class ReplayController {
         println("Replay Metadata: $replayMD")
         return replayMD
     }
+    private fun buildEventMD( queryResult : String, replayMD : String) : JsonObject{
+        // TODO - Take Event and append replay metadata
+        val eventObj : JsonObject = JsonParser.parseString(queryResult) as JsonObject
+        val replayObj : JsonObject = JsonParser.parseString(replayMD) as JsonObject
 
-    fun sendEventHub( topicName : String, eventText : String){
-        println("Sending Event Value $eventText")
-        println("To Event Topic: $topicName")
+        eventObj.add("replay", replayObj)
+
+        return eventObj
+    }
+    // Supporting Fns - Send to Event Hub Topic
+    private fun prepareAndSend(msg: String, eventHubName: String): String? {
+        // Receive Raw Result from Cosmos
+        // Convert to JsonObject
+        println("PrepareAndSend() - $msg to Event Hub Topic: $eventHubName")
+        val msgEvent: JsonObject = JsonParser.parseString(msg) as JsonObject
+        val jsonMessage = gson.toJson(msgEvent)
+
+        // TODO - Check if Event Hub Topic is valid?
+        val eventHubSender = EventHubSender(evHubConnStr)
+
+        eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
+        //println(msgEvent)
+        return jsonMessage
     }
 }
 

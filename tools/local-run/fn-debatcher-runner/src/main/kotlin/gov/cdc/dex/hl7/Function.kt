@@ -1,4 +1,4 @@
-package gov.cdc.dex.hl7.receiver
+package gov.cdc.dex.hl7
 
 
 import com.microsoft.azure.functions.ExecutionContext
@@ -9,6 +9,7 @@ import java.util.logging.Logger
 
 class Function {
     fun eventHubProcessor( message: List<String?>, eventHubMD:List<EventHubMetadata>,  context: ExecutionContext): DexEventPayload? {
+        println("I am in the Debatcher")
         return null
     }
 }
