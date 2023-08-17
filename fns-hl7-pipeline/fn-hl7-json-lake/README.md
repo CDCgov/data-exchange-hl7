@@ -89,7 +89,7 @@ The guiding requirements for DEX HL7-JSON Transformer were as follows:
 * Be generic in such a way that it can work for any HL7 message.
 * Be able to be customizable for different HL7 message types
 * Reduce the need to be a HL7 SME for consumers of the JSON.
-* Do not loose information - all information present on HL7 must be represented on the JSON output
+* Do not lose information - all information present on HL7 must be represented on the JSON output
 * Be performant with low memory footprint (i.e., cloud ready for million message scales)
 
 With the above requirements in mind, we enhanced a library we used on previous projects - lib-bumblebee to support this new use case.
