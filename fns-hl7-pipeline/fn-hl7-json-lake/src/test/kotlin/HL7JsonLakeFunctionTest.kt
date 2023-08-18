@@ -76,7 +76,7 @@ public class HL7JsonLakeFunctionTest {
             }
 
             override fun getFunctionName():String {
-                return "null"
+                return "HL7_JSON_LAKE_TRANSFORMER_CASE"
             }
         }
     }

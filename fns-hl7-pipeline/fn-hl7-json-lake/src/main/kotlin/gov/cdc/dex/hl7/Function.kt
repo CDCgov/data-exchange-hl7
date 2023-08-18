@@ -16,6 +16,7 @@ import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.bumblebee.HL7JsonTransformer
 import java.util.*
 import com.google.gson.JsonObject
+import org.slf4j.LoggerFactory
 
 
 /**
@@ -33,6 +34,7 @@ class Function {
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create()
 
         val fnConfig = FunctionConfig()
+        private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
     } // .companion object
 
 
@@ -51,6 +53,8 @@ class Function {
         // Process each Event Hub Message
         // ----------------------------------------------
         // message.forEach { singleMessage: String? ->
+        logger.info("DEX::${context.functionName}")
+
         return processAllMessages(messages, eventHubMD, context) // .message.forEach
 
     } // .eventHubProcessor
@@ -64,6 +68,7 @@ class Function {
                 val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = inputEvent["message_uuid"].asString
 
+                logger.info("DEX::Processing messageUUID:$messageUUID")
                 try {
                     val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
                     val bumblebee = HL7JsonTransformer.getTransformerWithResource(hl7message, FunctionConfig.PROFILE_FILE_PATH)
