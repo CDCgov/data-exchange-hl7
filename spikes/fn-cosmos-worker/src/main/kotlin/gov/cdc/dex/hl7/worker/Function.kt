@@ -69,21 +69,15 @@ class Function {
         context: ExecutionContext): String {
         val message = request.body?.get().toString()
         logger.info("message: $message")
-        /*
-          Receive Event Hub Message as a String, Convert to Object, Add id column
-          Insert into CosmosDB.
-        */
+
         try {
             // Use Gson - Parse String Message >> Add Id >>
             val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
             inputEvent.addProperty("id", UUID.randomUUID().toString())
-            // val objectMapper = ObjectMapper()
-            //val inputEvent: ObjectNode = objectMapper.readValue(message, ObjectNode::class.java)
-            // Add the "id" attribute
-            // inputEvent.put("id", UUID.randomUUID().toString())
-            // val jsonOutput = objectMapper.writeValueAsString(inputEvent)
+
             logger.info("inputEvent: $inputEvent")
             logger.info("Start Cosmos Client")
+
             val preferredRegions = ArrayList<String>()
             preferredRegions.add("East US")
             // Initialize Cosmos client
@@ -100,7 +94,7 @@ class Function {
             logger.info("Write Cosmos Client")
             cosmosDB.createItem(inputEvent.toString())
             logger.info("Saved Message")
-            return "Test"
+            return "Successfully Placed Event "
         }  catch (e: Exception) {
             println("Error creating item: ${e.message}")
             return "FAILED TO parse"
