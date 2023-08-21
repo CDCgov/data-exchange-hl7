@@ -21,7 +21,7 @@
         <java.version>11</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
-        <functionAppName>ocio-ede-${environment-id}-hl7-Redactor</functionAppName>
+        <functionAppName>ocio-ede-${environment-id}-hl7-redactor</functionAppName>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
         <kotlin.version>1.8.0</kotlin.version>
@@ -121,6 +121,7 @@
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
+                   <appServicePlanName>${functionServicePlan}</appServicePlanName>
                     <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
@@ -128,7 +129,7 @@
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
-                        <javaVersion>${java_version}</javaVersion>
+                        <javaVersion>${java.version}</javaVersion>
                     </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
