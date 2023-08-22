@@ -1,8 +1,5 @@
-package gov.cdc.dex
-
 import com.google.gson.GsonBuilder
 import gov.cdc.dex.metadata.HL7MessageType
-import gov.cdc.dex.hl7.validation.structure.ValidatorFunction
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
 import gov.cdc.nist.validator.ProfileManager

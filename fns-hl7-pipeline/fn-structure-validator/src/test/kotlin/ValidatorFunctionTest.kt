@@ -1,15 +1,8 @@
-package gov.cdc.dex
-
 import com.microsoft.azure.functions.ExecutionContext
-import com.microsoft.azure.functions.HttpRequestMessage
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.hl7.validation.structure.ValidatorFunction
+import gov.cdc.dex.hl7.ValidatorFunction
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.util.*
 import java.util.logging.Logger
-import org.mockito.Mockito.mock
-import java.io.File
 import com.google.gson.JsonObject
 import com.google.gson.JsonArray
 import org.junit.jupiter.api.Assertions

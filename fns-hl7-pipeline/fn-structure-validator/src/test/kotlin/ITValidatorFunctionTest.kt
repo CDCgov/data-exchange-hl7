@@ -1,9 +1,7 @@
-package gov.cdc.dex
-
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.HttpRequestMessage
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.hl7.validation.structure.ValidatorFunction
+import gov.cdc.dex.hl7.ValidatorFunction
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -15,8 +13,9 @@ import org.mockito.Mockito.mock
 class ITValidatorFunctionTest {
 
     private fun processFile(filename: String) {
+
         println("Start processing $filename ")
-        val text = this::class.java.getResource("/$filename").readText()
+        val text = this::class.java.getResource(filename).readText()
         val messages = listOf(text)
 
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
@@ -26,6 +25,7 @@ class ITValidatorFunctionTest {
         println("Finished processing $filename ")
 
     }
+
 
     @Test
     @Tag("IntegrationTest")

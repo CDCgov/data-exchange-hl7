@@ -1,4 +1,4 @@
-package gov.cdc.dex.hl7.validation.structure
+package gov.cdc.dex.hl7
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -7,19 +7,16 @@ import com.google.gson.JsonPrimitive
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
-import gov.cdc.dex.model.StructureValidatorProcessMetadata
+import gov.cdc.hl7.model.StructureValidatorProcessMetadata
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
-import gov.cdc.nist.validator.ProfileManager
-import gov.cdc.nist.validator.ResourceFileFetcher
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -36,6 +33,8 @@ class ValidatorFunction {
         private const val HL7_SUBDELIMITERS = "^~\\&"
         private var logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
         val gson = GsonBuilder().serializeNulls().create()!!
+
+        val fnConfig = FunctionConfig()
     }
     /**
      * This function will be invoked when an event is received from Event Hub.
@@ -55,12 +54,9 @@ class ValidatorFunction {
 
         val startTime =  Date().toIsoString()
 
-        val evHubNameOk = getSafeEnvVariable("EventHubSendOkName")
-        val evHubNameErrs = getSafeEnvVariable("EventHubSendErrsName")
-        val evHubConnStr = getSafeEnvVariable("EventHubConnectionString")
-        // val evHubNameELROk = getSafeEnvVariable("EventHubSendELROkName")
-
-        val ehSender = EventHubSender(evHubConnStr)
+        val evHubNameOk = fnConfig.eventHubSendOkName
+        val evHubNameErrs = fnConfig.eventHubSendErrsName
+        val ehSender = fnConfig.evHubSender
 
         message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
@@ -158,14 +154,6 @@ class ValidatorFunction {
         return profileName
     }
 
-    private fun getSafeEnvVariable(varName: String): String {
-        val varValue = System.getenv(varName)
-        if (varValue.isNullOrEmpty()) {
-            throw Exception("$varName Not Set")
-        }
-        return varValue
-    }
-
     private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String, messageType: HL7MessageType, route: String): NistReport {
         validateHL7Delimiters(hl7Message)
         val profileName =  try {
@@ -177,7 +165,7 @@ class ValidatorFunction {
             throw InvalidMessageException("Unable to process message: Unable to retrieve PHIN Specification from $PHIN_SPEC_PROFILE$exMessage")
         }
 
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/$profileName")
+        val nistValidator = fnConfig.nistValidators[profileName]!!
         val report = nistValidator.validate(hl7Message)
         report.status = if ("ERROR" in report.status + "") {
             NIST_INVALID_MESSAGE

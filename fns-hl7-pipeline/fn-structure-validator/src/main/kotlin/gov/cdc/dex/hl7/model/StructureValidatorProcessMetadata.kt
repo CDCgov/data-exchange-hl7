@@ -1,4 +1,4 @@
-package gov.cdc.dex.model
+package gov.cdc.hl7.model
 
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.ProcessMetadata

@@ -1,5 +1,3 @@
-package gov.cdc.dex
-
 import gov.cdc.nist.validator.InvalidFileException
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
