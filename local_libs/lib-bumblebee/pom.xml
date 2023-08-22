@@ -20,17 +20,17 @@
 
     <repositories>
         <repository>
-            <id>nexus</id>
+            <id>imagehub</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede-group/</url>
         </repository>
     </repositories>
     <distributionManagement>
         <snapshotRepository>
-            <id>nexus</id>
+            <id>ede-snapshots</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede-snapshot/</url>
         </snapshotRepository>
         <repository>
-            <id>nexus</id>
+            <id>ede-releases</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede/</url>
         </repository>
     </distributionManagement>
@@ -61,13 +61,6 @@
             <artifactId>kotlin-reflect</artifactId>
             <version>${kotlin.version}</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.9</version>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>

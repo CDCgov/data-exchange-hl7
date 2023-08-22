@@ -15,7 +15,8 @@ import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.bumblebee.HL7JsonTransformer
 import java.util.*
-
+import com.google.gson.JsonObject
+import org.slf4j.LoggerFactory
 
 
 /**
@@ -33,11 +34,12 @@ class Function {
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create()
 
         val fnConfig = FunctionConfig()
+        private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
     } // .companion object
 
 
     @FunctionName("HL7_JSON_LAKE_TRANSFORMER_CASE")
-    fun eventHubCASEProcessor(
+    fun eventHubProcessor(
         @EventHubTrigger(
             name = "msg",
             eventHubName = "%EventHubReceiveNameCASE%",
@@ -45,34 +47,19 @@ class Function {
             consumerGroup = "%EventHubConsumerGroupCASE%",)
         messages: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext) {
+        context: ExecutionContext): JsonObject {
 
         //
         // Process each Event Hub Message
         // ----------------------------------------------
         // message.forEach { singleMessage: String? ->
-        processAllMessages(messages, eventHubMD, context) // .message.forEach
+        logger.info("DEX::${context.functionName}")
 
-    } // .eventHubProcessor
-    @FunctionName("HL7_JSON_LAKE_TRANSFORMER_ELR")
-    fun eventHubELRProcessor(
-        @EventHubTrigger(
-            name = "msg",
-            eventHubName = "%EventHubReceiveNameELR%",
-            connection = "EventHubConnectionString",
-            consumerGroup = "%EventHubConsumerGroupELR%",)
-        messages: List<String?>,
-        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext) {
-        //
-        // Process each Event Hub Message
-        // ----------------------------------------------
-        // message.forEach { singleMessage: String? ->
-        processAllMessages(messages, eventHubMD, context)
+        return processAllMessages(messages, eventHubMD, context) // .message.forEach
 
     } // .eventHubProcessor
 
-    private fun processAllMessages( messages: List<String?>, eventHubMD: List<EventHubMetadata>, context: ExecutionContext) {
+    private fun processAllMessages( messages: List<String?>, eventHubMD: List<EventHubMetadata>, context: ExecutionContext):JsonObject {
         messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
             val startTime = Date().toIsoString()
             try {
@@ -81,6 +68,7 @@ class Function {
                 val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = inputEvent["message_uuid"].asString
 
+                logger.info("DEX::Processing messageUUID:$messageUUID")
                 try {
                     val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
                     val bumblebee = HL7JsonTransformer.getTransformerWithResource(hl7message, FunctionConfig.PROFILE_FILE_PATH)
@@ -89,6 +77,11 @@ class Function {
                         fnConfig.evHubSender, fnConfig.eventHubSendOkName, gsonWithNullsOn, inputEvent, null,
                         listOf(FunctionConfig.PROFILE_FILE_PATH))
                     context.logger.info("Processed OK for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendOkName}")
+                    
+                    if (messageIndex == messages.lastIndex){
+                        return inputEvent
+                    }
+
                 } catch (e: Exception) {
                     context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
@@ -97,16 +90,19 @@ class Function {
                         listOf(FunctionConfig.PROFILE_FILE_PATH))
 
                     context.logger.info("Processed ERROR for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
+                    return inputEvent
                 } // .catch
 
             } catch (e: Exception) {
                 // message is bad, can't extract fields based on schema expected
                 context.logger.severe("Unable to process Message due to exception: ${e.message}")
                 e.printStackTrace()
+                return JsonObject()
 
             } // .catch
 
         }
+        return JsonObject()
     }
 
     private fun updateMetadataAndDeliver(startTime: String, metadata: JsonObject, status: String, report: JsonObject?, eventHubMD: EventHubMetadata,

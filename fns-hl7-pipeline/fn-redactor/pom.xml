@@ -7,15 +7,21 @@
     <artifactId>redactor</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <!----><!---->
     <name>Azure Java Functions</name>
+    
+    <scm>
+        <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
+        <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>   
+        <url>https://github.com/CDCgov/data-exchange-hl7</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
-        <functionAppName>ocio-ede-${environment-id}-hl7-Redactor</functionAppName>
+        <functionAppName>ocio-ede-${environment-id}-hl7-redactor</functionAppName>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
         <kotlin.version>1.8.0</kotlin.version>
@@ -35,6 +41,12 @@
             <artifactId>junit-jupiter</artifactId>
             <version>5.4.2</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.10</version>
         </dependency>
 
         <dependency>
@@ -109,6 +121,7 @@
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
+                   <appServicePlanName>${functionServicePlan}</appServicePlanName>
                     <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
@@ -116,7 +129,7 @@
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
-                        <javaVersion>${java_version}</javaVersion>
+                        <javaVersion>${java.version}</javaVersion>
                     </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
@@ -131,6 +144,14 @@
                         <property>
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
+                        </property>
+                        <property>
+                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
+                            <value>None</value>
                         </property>
                     </appSettings>
                 </configuration>
@@ -286,6 +307,11 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.8.1</version>
             </plugin>
         </plugins>
     </build>

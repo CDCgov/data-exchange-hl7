@@ -4,13 +4,11 @@
       "id": "Microsoft.Azure.Functions.ExtensionBundle",
       "version": "[3.3.0, 4.0.0)"
   },
-  "logging": {
-    "applicationInsights": {
-      "samplingSettings": {
-        "isEnabled": true,
-        "maxTelemetryItemsPerSecond" : 20,
-        "excludedTypes": "Request;Exception"
-      }
-    }
+  "logLevel": {
+    "default": "Warning",
+    "Function": "Information",
+    "Host": "Error",
+    "Worker": "Warning",
+    "Microsoft": "None"
   }
 }

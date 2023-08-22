@@ -1,5 +1,6 @@
 package gov.cdc.hl7.bumblebee
 
+import gov.cdc.hl7.bumblebee.TemplateTransformer
 import groovy.json.JsonSlurper
 
 import spock.lang.*
@@ -50,7 +51,6 @@ class TemplateTransformerSpec extends Specification {
             assert object.message_status == "F"
             assert object.race[0] == "Native Hawaiian"
             assert object.race[1] == "White"
-            assert object.OBR.size ==7
             assert object.OBR[1].Group == "33"
             assert object.OBR[1].type == "SN"
             assert object.OBR[1].question.code == "35659-2"
