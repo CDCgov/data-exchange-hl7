@@ -41,10 +41,18 @@ class Function {
                .build()
         }
 
-        val originalFileName = request.headers["x-tp-original_filename"] ?: "$msgType-${UUID.randomUUID()}"
+        val originalFileName = request.headers["x-tp-original_file_name"] ?: "$msgType-${UUID.randomUUID()}"
+
+        // extract file name and extension
+        val extIndex = originalFileName.lastIndexOf('.')
+        val fileNameOnly = if (extIndex != -1)
+            originalFileName.substring(0, extIndex)
+        else originalFileName
+        val fullFileName = if (extIndex == -1) "$originalFileName.txt" else originalFileName
+
         val metadata = JsonObject().apply {
             addProperty("message_type", msgType)
-            addProperty("original_filename",originalFileName)
+            addProperty("original_file_name",fullFileName)
             addProperty(
                 "system_provider",
                 request.headers["x-tp-system_provider"] ?: "LOCAL"
@@ -62,14 +70,8 @@ class Function {
             add("metadata", metadata)
         }
 
-        // extract file name and extension
-        val extIndex = originalFileName.lastIndexOf('.')
-        val fileNameOnly = if (extIndex != -1)
-            originalFileName.substring(0, extIndex)
-            else originalFileName
-
         // write message and properties
-        Path("$containerPath/$containerName/$originalFileName").writeText(msg)
+        Path("$containerPath/$containerName/$fullFileName").writeText(msg)
         Path("$containerPath/$containerName/$fileNameOnly.properties").writeText(props.toString())
 
         return request.createResponseBuilder(HttpStatus.OK)
