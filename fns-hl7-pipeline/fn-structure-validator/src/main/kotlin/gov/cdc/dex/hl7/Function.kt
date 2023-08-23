@@ -56,10 +56,15 @@ class ValidatorFunction {
             connection = "EventHubConnectionString") structureOkOutput : OutputBinding<Array<String>>,
         @EventHubOutput(name="structureErr",
             eventHubName = "%EventHubSendErrsName%",
-            connection = "EventHubConnectionString") structureErrOutput: OutputBinding<Array<String>>
+            connection = "EventHubConnectionString") structureErrOutput: OutputBinding<Array<String>>,
+        @CosmosDBOutput(name="cosmosdevpublic",
+            connection = "CosmosDBConnectionString",
+            containerName = "hl7-structure", createIfNotExists = true,
+            partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>
     ): JsonObject {
         val outOkList = mutableListOf<String>()
         val outErrList = mutableListOf<String>()
+        val outEventList = mutableListOf<JsonObject>()
         message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             val startTime =  Date().toIsoString()
@@ -74,6 +79,11 @@ class ValidatorFunction {
                 val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
                 val routeJson = JsonHelper.getValueFromJson("message_info.route", inputEvent)
                 val route = if (routeJson is JsonPrimitive) routeJson.asString else ""
+
+                // set id parameter if does not exist
+                if (!inputEvent.has("id")) {
+                    inputEvent.add("id", messageUUID.toJsonElement())
+                }
 
                 logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                 //Main FN Logic
@@ -101,7 +111,7 @@ class ValidatorFunction {
                     destIndicator = "ERROR"
                     outErrList.add(gson.toJson(inputEvent))
                 }
-
+                outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
                 logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
 
 //                if(msgNumber == message.lastIndex){
@@ -123,13 +133,14 @@ class ValidatorFunction {
 
                 inputEvent.add("summary", summary.toJsonElement())
                 outErrList.add(gson.toJson(inputEvent))
+                outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
                 logger.info("Sent Message to Err Event Hub for Message Id ${JsonHelper.getValueFromJson("message_uuid", inputEvent).asString}")
             }
         } // foreachIndexed
 
         structureOkOutput.value = outOkList.toTypedArray()
         structureErrOutput.value = outErrList.toTypedArray()
-
+        cosmosOutput.value = outEventList.toList()
         return JsonObject()
     } //.eventHubProcessor
 
