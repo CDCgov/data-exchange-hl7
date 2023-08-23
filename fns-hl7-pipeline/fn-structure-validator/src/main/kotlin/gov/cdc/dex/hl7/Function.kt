@@ -1,4 +1,4 @@
-package gov.cdc.dex.hl7.validation.structure
+package gov.cdc.dex.hl7
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -6,20 +6,18 @@ import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
+import com.azure.messaging.eventhubs.*
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
-import gov.cdc.dex.model.StructureValidatorProcessMetadata
+import gov.cdc.hl7.model.StructureValidatorProcessMetadata
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
-import gov.cdc.nist.validator.ProfileManager
-import gov.cdc.nist.validator.ResourceFileFetcher
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -36,6 +34,8 @@ class ValidatorFunction {
         private const val HL7_SUBDELIMITERS = "^~\\&"
         private var logger = LoggerFactory.getLogger(ValidatorFunction::class.java.simpleName)
         val gson = GsonBuilder().serializeNulls().create()!!
+
+        val fnConfig = FunctionConfig()
     }
     /**
      * This function will be invoked when an event is received from Event Hub.
@@ -49,22 +49,25 @@ class ValidatorFunction {
             consumerGroup = "%EventHubConsumerGroup%",
             cardinality = Cardinality.MANY
         ) message: List<String?>,
-        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext
+        @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
+        context: ExecutionContext,
+        @EventHubOutput(name="structureOk",
+            eventHubName = "%EventHubSendOkName%",
+            connection = "EventHubConnectionString") structureOkOutput : OutputBinding<Array<String>>,
+        @EventHubOutput(name="structureErr",
+            eventHubName = "%EventHubSendErrsName%",
+            connection = "EventHubConnectionString") structureErrOutput: OutputBinding<Array<String>>,
+        @CosmosDBOutput(name="cosmosdevpublic",
+            connection = "CosmosDBConnectionString",
+            containerName = "hl7-structure", createIfNotExists = true,
+            partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>
     ): JsonObject {
-
-        val startTime =  Date().toIsoString()
-
-        val evHubNameOk = getSafeEnvVariable("EventHubSendOkName")
-        val evHubNameErrs = getSafeEnvVariable("EventHubSendErrsName")
-        val evHubConnStr = getSafeEnvVariable("EventHubConnectionString")
-        // val evHubNameELROk = getSafeEnvVariable("EventHubSendELROkName")
-
-        val ehSender = EventHubSender(evHubConnStr)
-
+        val outOkList = mutableListOf<String>()
+        val outErrList = mutableListOf<String>()
+        val outEventList = mutableListOf<JsonObject>()
         message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-
+            val startTime =  Date().toIsoString()
             var report = NistReport()
             var metadata = JsonObject()
 
@@ -73,11 +76,14 @@ class ValidatorFunction {
                 metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
                 val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-
                 val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
-
                 val routeJson = JsonHelper.getValueFromJson("message_info.route", inputEvent)
                 val route = if (routeJson is JsonPrimitive) routeJson.asString else ""
+
+                // set id parameter if does not exist
+                if (!inputEvent.has("id")) {
+                    inputEvent.add("id", messageUUID.toJsonElement())
+                }
 
                 logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                 //Main FN Logic
@@ -97,21 +103,20 @@ class ValidatorFunction {
                 }
                 inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
 
-                //Send event
-                val ehDestination = getEhDestination(report, evHubNameOk, evHubNameErrs)
-                val destIndicator = if (ehDestination == evHubNameErrs) {
-                    "ERROR"
+                // add event to appropriate output binding parameter
+                var destIndicator = "OK"
+                if (NIST_VALID_MESSAGE == report.status) {
+                    outOkList.add(gson.toJson(inputEvent))
                 } else {
-                    "OK"
+                    destIndicator = "ERROR"
+                    outErrList.add(gson.toJson(inputEvent))
                 }
+                outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+                logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
 
-                logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $ehDestination, report.status: ${report.status}")
-                ehSender.send(ehDestination, gson.toJson(inputEvent))
-                logger.info("Sent Message to ${ehDestination} for Message Id ${messageUUID}")
-
-                if(msgNumber == message.lastIndex){
-                    return inputEvent
-                }
+//                if(msgNumber == message.lastIndex){
+//                    return inputEvent
+//                }
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
@@ -127,25 +132,18 @@ class ValidatorFunction {
                 logger.info("inputEvent in exception:$inputEvent")
 
                 inputEvent.add("summary", summary.toJsonElement())
-                ehSender.send(evHubNameErrs, gson.toJson(inputEvent))
-                logger.info("Sent Message to $evHubNameErrs for Message Id ${JsonHelper.getValueFromJson("message_uuid", inputEvent).asString}")
-                return inputEvent 
+                outErrList.add(gson.toJson(inputEvent))
+                outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+                logger.info("Sent Message to Err Event Hub for Message Id ${JsonHelper.getValueFromJson("message_uuid", inputEvent).asString}")
             }
         } // foreachIndexed
+
+        structureOkOutput.value = outOkList.toTypedArray()
+        structureErrOutput.value = outErrList.toTypedArray()
+        cosmosOutput.value = outEventList.toList()
         return JsonObject()
     } //.eventHubProcessor
 
-    private fun getEhDestination(
-        report: NistReport,
-        evHubNameOk: String,
-        evHubNameErrs: String
-    ): String {
-        return if (NIST_VALID_MESSAGE == report.status) {
-            evHubNameOk
-        } else {
-            evHubNameErrs
-        }
-    }
 
     private fun getProfileName(hl7Content: String, messageType: HL7MessageType, route: String): String {
         val profileName:String =
@@ -156,14 +154,6 @@ class ValidatorFunction {
                 else -> throw InvalidMessageException("Invalid Message Type: $messageType. Please specify CASE or ELR")
             }
         return profileName
-    }
-
-    private fun getSafeEnvVariable(varName: String): String {
-        val varValue = System.getenv(varName)
-        if (varValue.isNullOrEmpty()) {
-            throw Exception("$varName Not Set")
-        }
-        return varValue
     }
 
     private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String, messageType: HL7MessageType, route: String): NistReport {
@@ -177,7 +167,7 @@ class ValidatorFunction {
             throw InvalidMessageException("Unable to process message: Unable to retrieve PHIN Specification from $PHIN_SPEC_PROFILE$exMessage")
         }
 
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/$profileName")
+        val nistValidator = fnConfig.nistValidators[profileName]!!
         val report = nistValidator.validate(hl7Message)
         report.status = if ("ERROR" in report.status + "") {
             NIST_INVALID_MESSAGE
