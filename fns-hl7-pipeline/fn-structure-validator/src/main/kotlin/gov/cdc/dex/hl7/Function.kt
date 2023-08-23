@@ -6,6 +6,7 @@ import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
+import com.azure.messaging.eventhubs.*
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.metadata.Problem
@@ -51,14 +52,14 @@ class ValidatorFunction {
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext,
         @EventHubOutput(name="structureOk",
-            eventHubName = "hl7-structure-ok",
-            connection = "EventHubConnectionString") structureOkOutput : OutputBinding<List<String?>>,
+            eventHubName = "%EventHubSendOkName%",
+            connection = "EventHubConnectionString") structureOkOutput : OutputBinding<Array<String>>,
         @EventHubOutput(name="structureErr",
-            eventHubName = "hl7-structure-err",
-            connection = "EventHubConnectionString") structureErrOutput: OutputBinding<List<String?>>
+            eventHubName = "%EventHubSendErrsName%",
+            connection = "EventHubConnectionString") structureErrOutput: OutputBinding<Array<String>>
     ): JsonObject {
-        val okOutputList = mutableListOf<String>()
-        val errOutputList = mutableListOf<String>()
+        val outOkList = mutableListOf<String>()
+        val outErrList = mutableListOf<String>()
         message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
             val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
             val startTime =  Date().toIsoString()
@@ -95,17 +96,17 @@ class ValidatorFunction {
                 // add event to appropriate output binding parameter
                 var destIndicator = "OK"
                 if (NIST_VALID_MESSAGE == report.status) {
-                    okOutputList.add(gson.toJson(inputEvent))
+                    outOkList.add(gson.toJson(inputEvent))
                 } else {
                     destIndicator = "ERROR"
-                    errOutputList.add(gson.toJson(inputEvent))
+                    outErrList.add(gson.toJson(inputEvent))
                 }
 
                 logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
 
-                if(msgNumber == message.lastIndex){
-                    return inputEvent
-                }
+//                if(msgNumber == message.lastIndex){
+//                    return inputEvent
+//                }
 
             } catch (e: Exception) {
                 //TODO::  - update retry counts
@@ -121,12 +122,14 @@ class ValidatorFunction {
                 logger.info("inputEvent in exception:$inputEvent")
 
                 inputEvent.add("summary", summary.toJsonElement())
-                errOutputList.add(gson.toJson(inputEvent))
+                outErrList.add(gson.toJson(inputEvent))
                 logger.info("Sent Message to Err Event Hub for Message Id ${JsonHelper.getValueFromJson("message_uuid", inputEvent).asString}")
             }
         } // foreachIndexed
-        structureOkOutput.value = okOutputList.toList()
-        structureErrOutput.value = errOutputList.toList()
+
+        structureOkOutput.value = outOkList.toTypedArray()
+        structureErrOutput.value = outErrList.toTypedArray()
+
         return JsonObject()
     } //.eventHubProcessor
 
