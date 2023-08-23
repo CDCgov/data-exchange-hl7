@@ -35,6 +35,14 @@ class Function {
         const val ALT_JURISDICTION_CODE_PATH = "OBX[@3.1='NOT116']-5.1"
         const val LOCAL_RECORD_ID_PATH = "OBR-3.1"
         val gson: Gson = GsonBuilder().serializeNulls().create()
+        val knownMetadata:Set<String> = setOf(
+            "message_type",
+            "route",
+            "reporting_jurisdiction",
+            "original_file_name",
+            "original_file_timestamp",
+            "system_provider",
+        )
 
         val fnConfig = FunctionConfig()
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
@@ -71,14 +79,14 @@ class Function {
                     //Create Map of Metadata with lower case keys
                     val metaDataMap =  blobClient.properties.metadata.mapKeys { it.key.lowercase() }
 
-                    // Add source Metadata
-                    val otherMetadata: MutableMap<String, String> = HashMap()
+                    // filter out known/required metadata and store the rest in
+                    // Provenance.sourceMetadata
+                    val dynamicMetadata: MutableMap<String, String?> = HashMap()
                     metaDataMap.forEach { (k, v) ->
-                        val knownMetadataKeys = arrayOf("message_type","route","reporting_jurisdiction","original_file_name","original_file_timestamp","system_provider")
-                        if(!knownMetadataKeys.contains(k)){
-                            otherMetadata[k] = v
+                        if(!knownMetadata.contains(k)){
+                            dynamicMetadata[k] = v
                         }
-                     }
+                    }
 
                     // Create Metadata for Provenance
                     val provenance = Provenance(
@@ -91,7 +99,7 @@ class Function {
                         originalFileName =metaDataMap["original_file_name"] ?: blobName,
                         systemProvider = metaDataMap["system_provider"],
                         originalFileTimestamp = metaDataMap["original_file_timestamp"],
-                        sourceMetadata = otherMetadata.toList()
+                        sourceMetadata = if (dynamicMetadata.isNotEmpty()) dynamicMetadata else null
                     ) // .hl7MessageMetadata
 
                     //Validate metadata
