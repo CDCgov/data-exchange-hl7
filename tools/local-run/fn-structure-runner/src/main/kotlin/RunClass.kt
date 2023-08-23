@@ -1,4 +1,4 @@
-import gov.cdc.dex.validation.structure.*
+import gov.cdc.dex.hl7.validation.structure.*
 import gov.cdc.dex.azure.EventHubMetadata
 import java.io.File
 import java.util.*
@@ -22,7 +22,7 @@ object RunClass {
                 File(path.absolutePathString()).readText()
             }
         if ( messages.isNotEmpty() ) {
-            with(ValidatorFunction()) { run(messages, eventHubMDList, context) }
+            with(ValidatorFunction()) { eventHubProcessor(messages, eventHubMDList, context) }
         }
         else {
             println("* No messages found for ${context.functionName}")

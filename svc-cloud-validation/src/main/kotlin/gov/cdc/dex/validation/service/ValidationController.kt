@@ -58,6 +58,18 @@ class ValidationController {
 
     private fun createHttpRequest(urlPath: String, metadata: Map<String, String>?, payLoad: String): java.net.http.HttpRequest {
         val request = java.net.http.HttpRequest.newBuilder()
+            request.uri(URI.create(urlPath))
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(payLoad))
+                .setHeader("x-tp-message_type", messageType)
+                .setHeader("x-tp-route", routeText)
+                .build()
+        return request.build()
+    }
+
+    private fun getRedactedContent(url: URL, payLoad : String, metadata: Map<String, String>? = null): String {
+        val client = HttpClient.newBuilder().build()
+
+        val urlPath = url.toString()
         val messageType = metadata?.get("message_type")
         val routeText = metadata?.get("route")
 

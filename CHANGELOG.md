@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.26] - 2023-08-23
+	- Created an initial Validation API to expose our validation to States.
+	- Created an initial Processing Monitor API to query status of a single message against our data lake.
+	- Worked with Microsoft on Event Hubs Missing messages.
+	- Recovered Lake of segments unit tests
+	- Introduced Azure BOM on projects.
+	- Finalize and test logback for fns-hl7-pipeline functions
+	- Enhance DEX Metadata with "Unknown" source Metadata
+	- Identify if PHINMS has extra metadata
+
 ### [0.0.25] - 2023-08-09
 	- Delete all MMG related functions from the HL7 Pipeline.
 	- Delete dependencies on Redis.

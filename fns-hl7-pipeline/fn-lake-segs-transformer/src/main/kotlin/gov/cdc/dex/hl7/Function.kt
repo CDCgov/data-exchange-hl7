@@ -40,7 +40,7 @@ class Function {
 
 
     @FunctionName("LAKE_OF_SEGMENTS_TRANSFORMER_CASE")
-    fun eventHubCASEProcessor(
+    fun eventHubProcessor(
         @EventHubTrigger(
                 name = "msg", 
                 eventHubName = "%EventHubReceiveNameCASE%",

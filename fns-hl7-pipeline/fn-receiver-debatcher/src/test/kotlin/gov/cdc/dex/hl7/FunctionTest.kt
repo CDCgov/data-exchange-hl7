@@ -1,4 +1,4 @@
-package gov.cdc.dex.hl7.receiver
+package gov.cdc.dex.hl7
 
 import com.microsoft.azure.functions.ExecutionContext
 import gov.cdc.dex.azure.EventHubMetadata

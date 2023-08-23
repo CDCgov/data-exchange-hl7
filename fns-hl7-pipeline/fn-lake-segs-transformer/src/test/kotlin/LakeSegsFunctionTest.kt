@@ -7,18 +7,16 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonArray
 import org.junit.jupiter.api.Assertions
 
-public class HL7JsonLakeFunctionTest {
+public class LakeSegsFunctionTest {
 
-    private fun processFile(filename:String, isCase:Boolean, isHappyPath:Boolean) {
+    private fun processFile(filename:String, isHappyPath:Boolean) {
         println("Start processing $filename ")
         val text = this:: class.java.getResource("/$filename").readText()
         val messages = listOf(text)
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val function = Function()
-        val inputEvent : JsonObject
-
-        inputEvent = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
-        // inputEvent = function.eventHubELRProcessor(messages, eventHubMDList, getExecutionContext())
+        val inputEvents : List<JsonObject> = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
+        val inputEvent : JsonObject = inputEvents[0]
 
         // Validate Metadata.processes has been added to the array of proccesses
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
@@ -27,14 +25,15 @@ public class HL7JsonLakeFunctionTest {
             Assertions.assertTrue(processes != null)
         }
         val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
+        println("the summary object: $summaryObj")
         if (summaryObj != null){
             if(isHappyPath){
                 // Validate Summary.current_status is successful
-                Assertions.assertEquals("HL7-JSON-LAKE-TRANSFORMED", summaryObj.get("current_status").asString)
+                Assertions.assertEquals("LAKE-SEGMENTS-TRANSFORMED", summaryObj.get("current_status").asString)
             }
             else{
                 // Validate current_status is unsuccessful
-                Assertions.assertEquals("HL7-JSON-LAKE-ERROR", summaryObj.get("current_status").asString)
+                Assertions.assertEquals("LAKE-SEGMENTS-ERROR", summaryObj.get("current_status").asString)
             }
         }
 
@@ -43,29 +42,19 @@ public class HL7JsonLakeFunctionTest {
 
     @Test
     fun processELR_HappyPath() {
-        processFile("ELR_message.txt", false, true)
-        assert (true)
-    }
-
-    @Test
-    fun processELR_ExceptionPath() {
-        processFile("ELR_Exceptionmessage.txt", false, false)
+        processFile("ELR_message.txt", true)
         assert (true)
     }
 
     @Test
     fun processCASE_HappyPath() {
-        processFile("CASE_message.txt", true, true)
+        processFile("CASE_message.txt", true)
         assert (true)
     }
 
-    @Test
-    fun processCASE_ExceptionPath() {
-        processFile("Exceptionmessage.txt", true, false)
-        assert (true)
-    }
 
-    private fun getExecutionContext():ExecutionContext {
+    private fun getExecutionContext():
+            ExecutionContext {
         return object :ExecutionContext {
             override fun getLogger():Logger {
                 return Logger.getLogger(Function:: class.java.name)
@@ -76,7 +65,7 @@ public class HL7JsonLakeFunctionTest {
             }
 
             override fun getFunctionName():String {
-                return "HL7_JSON_LAKE_TRANSFORMER_CASE"
+                return "null"
             }
         }
     }

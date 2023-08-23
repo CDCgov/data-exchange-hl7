@@ -1,4 +1,4 @@
-package gov.cdc.dex.validation.structure
+package gov.cdc.dex.hl7.validation.structure
 
 import com.microsoft.azure.functions.ExecutionContext
 import gov.cdc.dex.azure.EventHubMetadata
@@ -7,7 +7,7 @@ import java.util.logging.Logger
 import com.google.gson.JsonObject
 
 class ValidatorFunction {
-    fun run( message: List<String?>, eventHubMD:List<EventHubMetadata>,  context: ExecutionContext):JsonObject {
+    fun eventHubProcessor( message: List<String?>, eventHubMD:List<EventHubMetadata>,  context: ExecutionContext):JsonObject {
        return JsonObject()
     }
 }

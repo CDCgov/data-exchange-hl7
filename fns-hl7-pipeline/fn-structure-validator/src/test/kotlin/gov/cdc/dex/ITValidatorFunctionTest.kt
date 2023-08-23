@@ -3,7 +3,7 @@ package gov.cdc.dex
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.HttpRequestMessage
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.validation.structure.ValidatorFunction
+import gov.cdc.dex.hl7.validation.structure.ValidatorFunction
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -22,7 +22,7 @@ class ITValidatorFunctionTest {
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
 
         val function = ValidatorFunction()
-        function.run(messages, eventHubMDList, getExecutionContext())
+        function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
         println("Finished processing $filename ")
 
     }

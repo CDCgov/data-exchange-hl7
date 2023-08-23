@@ -1,4 +1,4 @@
-package gov.cdc.dex.validation.structure
+package gov.cdc.dex.hl7.validation.structure
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -41,7 +41,7 @@ class ValidatorFunction {
      * This function will be invoked when an event is received from Event Hub.
      */
     @FunctionName("NIST-VALIDATOR")
-    fun run(
+    fun eventHubProcessor(
         @EventHubTrigger(
             name = "message",
             eventHubName = "%EventHubReceiveName%",
@@ -133,7 +133,7 @@ class ValidatorFunction {
             }
         } // foreachIndexed
         return JsonObject()
-    } //.run
+    } //.eventHubProcessor
 
     private fun getEhDestination(
         report: NistReport,

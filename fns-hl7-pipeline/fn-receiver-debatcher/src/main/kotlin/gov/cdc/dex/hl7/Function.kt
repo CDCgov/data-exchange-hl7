@@ -1,4 +1,4 @@
-package gov.cdc.dex.hl7.receiver
+package gov.cdc.dex.hl7
 
 import com.azure.messaging.eventhubs.*
 import com.azure.storage.blob.*

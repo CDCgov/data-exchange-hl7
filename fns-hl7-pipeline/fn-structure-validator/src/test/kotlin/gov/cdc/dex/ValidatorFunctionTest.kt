@@ -3,7 +3,7 @@ package gov.cdc.dex
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.HttpRequestMessage
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.validation.structure.ValidatorFunction
+import gov.cdc.dex.hl7.validation.structure.ValidatorFunction
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.util.*
@@ -23,7 +23,7 @@ class ValidatorFunctionTest {
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val function = ValidatorFunction()
         val executionContext: ExecutionContext = getExecutionContext()
-        val inputEvent : JsonObject = function.run(messages, eventHubMDList, executionContext)
+        val inputEvent : JsonObject = function.eventHubProcessor(messages, eventHubMDList, executionContext)
 
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
         if(metadata != null){
