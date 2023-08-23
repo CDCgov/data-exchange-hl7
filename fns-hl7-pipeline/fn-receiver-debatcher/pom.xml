@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>receiver-debatcher</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-2023-08-23-134716-63afda2</version>
     <packaging>jar</packaging>
     
     <name>DEX Fns-Pipeline :: receiver-debatcher</name>
