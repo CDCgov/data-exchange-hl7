@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>structure-validator</artifactId>
     <version>${fn.version}</version>
@@ -18,10 +17,10 @@
         <functionAppName>ocio-ede-${environment-id}-hl7-structure-validator</functionAppName>
         <fn.version>0.0.27-SNAPSHOT</fn.version>
         <AzureBom.version>1.2.15</AzureBom.version>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
-        <kotlin.version>1.7.20</kotlin.version>
+        <kotlin.version>1.9.0</kotlin.version>
         <slf4j.version>2.0.5</slf4j.version>
         <azevhub.version>5.15.4</azevhub.version>
         <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
@@ -108,22 +107,6 @@
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/project.properties</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <excludes>
-                    <exclude>**/project.properties</exclude>
-                </excludes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -175,6 +158,10 @@
                     </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
+                        <property>
+                            <name>FN_VERSION</name>
+                            <value>${fn.version}</value>
+                        </property>
                         <property>
                             <name>WEBSITE_RUN_FROM_PACKAGE</name>
                             <value>1</value>

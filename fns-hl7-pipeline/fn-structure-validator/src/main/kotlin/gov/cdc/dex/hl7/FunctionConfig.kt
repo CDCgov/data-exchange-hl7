@@ -8,19 +8,10 @@ import java.util.*
 import kotlin.io.path.*
 
 class FunctionConfig {
-    val functionVersion = getVersionProperty()
+
     val nistValidators = loadNistValidators()
+    val functionVersion = System.getenv("FN_VERSION")?.toString() ?: "Unknown"
 
-    private fun getVersionProperty() : String {
-        val properties = Properties()
-        return try {
-            properties.load(this::class.java.getResourceAsStream("/project.properties"))
-            properties.getProperty("version")
-        } catch (e : IOException) {
-            return "Unknown"
-        }
-
-    }
     private fun loadNistValidators() : Map<String, ProfileManager> {
         val validatorMap = mutableMapOf<String, ProfileManager>()
         val dir = PathUtils().getResourcePath("profiles")
