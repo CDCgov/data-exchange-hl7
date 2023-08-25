@@ -1,8 +1,9 @@
+
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.hl7.model.StructureValidatorProcessMetadata
+import gov.cdc.dex.hl7.model.StructureValidatorProcessMetadata
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import org.junit.jupiter.api.Test

@@ -11,7 +11,7 @@ import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
-import gov.cdc.hl7.model.StructureValidatorProcessMetadata
+import gov.cdc.dex.hl7.model.StructureValidatorProcessMetadata
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
@@ -53,10 +53,10 @@ class ValidatorFunction {
         context: ExecutionContext,
         @EventHubOutput(name="structureOk",
             eventHubName = "%EventHubSendOkName%",
-            connection = "EventHubConnectionString") structureOkOutput : OutputBinding<Array<String>>,
+            connection = "EventHubConnectionString") structureOkOutput : OutputBinding<List<String>>,
         @EventHubOutput(name="structureErr",
             eventHubName = "%EventHubSendErrsName%",
-            connection = "EventHubConnectionString") structureErrOutput: OutputBinding<Array<String>>,
+            connection = "EventHubConnectionString") structureErrOutput: OutputBinding<List<String>>,
         @CosmosDBOutput(name="cosmosdevpublic",
             connection = "CosmosDBConnectionString",
             containerName = "hl7-structure", createIfNotExists = true,
@@ -114,10 +114,6 @@ class ValidatorFunction {
                 outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
                 logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
 
-//                if(msgNumber == message.lastIndex){
-//                    return inputEvent
-//                }
-
             } catch (e: Exception) {
                 //TODO::  - update retry counts
                 logger.error("Unable to process Message due to exception: ${e.message}")
@@ -138,8 +134,8 @@ class ValidatorFunction {
             }
         } // foreachIndexed
 
-        structureOkOutput.value = outOkList.toTypedArray()
-        structureErrOutput.value = outErrList.toTypedArray()
+        structureOkOutput.value = outOkList.toList()
+        structureErrOutput.value = outErrList.toList()
         cosmosOutput.value = outEventList.toList()
         return JsonObject()
     } //.eventHubProcessor
