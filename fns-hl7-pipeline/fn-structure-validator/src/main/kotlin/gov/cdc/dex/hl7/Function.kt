@@ -62,6 +62,7 @@ class ValidatorFunction {
             containerName = "hl7-structure", createIfNotExists = true,
             partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>
     ): JsonObject {
+        logger.info("Function triggered. Version: ${fnConfig.functionVersion}")
         val outOkList = mutableListOf<String>()
         val outErrList = mutableListOf<String>()
         val outEventList = mutableListOf<JsonObject>()

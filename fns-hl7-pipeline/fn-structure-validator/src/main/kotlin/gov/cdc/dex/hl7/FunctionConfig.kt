@@ -1,21 +1,26 @@
 package gov.cdc.dex.hl7
-import gov.cdc.dex.azure.EventHubSender
-import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.dex.util.PathUtils
+import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
+import java.io.IOException
 import java.nio.file.Files
+import java.util.*
 import kotlin.io.path.*
 
 class FunctionConfig {
-    companion object {
-        val evHubConnStr: String = System.getenv("EventHubConnectionString")
-    }
-
-    val eventHubSendOkName: String = System.getenv("EventHubSendOkName")
-    val eventHubSendErrsName: String = System.getenv("EventHubSendErrsName")
-    val evHubSender = EventHubSender(evHubConnStr)
+    val functionVersion = getVersionProperty()
     val nistValidators = loadNistValidators()
 
+    private fun getVersionProperty() : String {
+        val properties = Properties()
+        return try {
+            properties.load(this::class.java.getResourceAsStream("/project.properties"))
+            properties.getProperty("version")
+        } catch (e : IOException) {
+            return "Unknown"
+        }
+
+    }
     private fun loadNistValidators() : Map<String, ProfileManager> {
         val validatorMap = mutableMapOf<String, ProfileManager>()
         val dir = PathUtils().getResourcePath("profiles")
