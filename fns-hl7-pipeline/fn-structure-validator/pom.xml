@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>structure-validator</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${fn.version}</version>
     <packaging>jar</packaging>
     <name>Azure Java Functions</name>
     <scm>
@@ -15,21 +14,30 @@
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <functionAppName>ocio-ede-${environment-id}-hl7-structure-validator</functionAppName>
+        <fn.version>0.0.27-SNAPSHOT</fn.version>
         <AzureBom.version>1.2.15</AzureBom.version>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
-
-        <functionAppName>ocio-ede-${environment-id}-hl7-structure-validator</functionAppName>
-
-        <kotlin.version>1.7.20</kotlin.version>
+        <kotlin.version>1.9.0</kotlin.version>
         <slf4j.version>2.0.5</slf4j.version>
-
-        <lib-dex-commons.version>1.0.12-SNAPSHOT</lib-dex-commons.version>
+        <azevhub.version>5.15.4</azevhub.version>
+        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
         <lib-nist-validator.version>1.3.5-SNAPSHOT</lib-nist-validator.version>
         <hl7-pet.version>1.2.7.2</hl7-pet.version>
     </properties>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-sdk-bom</artifactId>
+                <version>${AzureBom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -65,8 +73,6 @@
             <groupId>com.azure</groupId>
             <artifactId>azure-messaging-eventhubs</artifactId>
         </dependency>
-
-        <!-- Test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -96,19 +102,41 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-sdk-bom</artifactId>
-            <version>${AzureBom.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
     </dependencies>
 
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/main/kotlin</source>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jvmTarget>${java.version}</jvmTarget>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
@@ -119,11 +147,10 @@
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                    <appServicePlanName>${functionServicePlan}</appServicePlanName>
-<!--                    <appServicePlanName>ASP-ocioedetstmoderatehl7rg-a1db</appServicePlanName>-->
-                    <auth>
-                        <type>service_principal</type>
-                        <serverId>azure-service-principal</serverId>
-                    </auth>
+<!--                    <auth>-->
+<!--                        <type>service_principal</type>-->
+<!--                        <serverId>azure-service-principal</serverId>-->
+<!--                    </auth>-->
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
@@ -131,6 +158,10 @@
                     </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
+                        <property>
+                            <name>FN_VERSION</name>
+                            <value>${fn.version}</value>
+                        </property>
                         <property>
                             <name>WEBSITE_RUN_FROM_PACKAGE</name>
                             <value>1</value>
@@ -164,6 +195,7 @@
             </plugin>
             <!--Remove obj folder generated by .NET SDK in maven clean-->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
@@ -174,41 +206,10 @@
                     </filesets>
                 </configuration>
             </plugin>
-
-	    <plugin>
+	        <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>3.1.1</version>
-            </plugin>
-	    
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <source>src/main/kotlin</source>
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <jvmTarget>${java.version}</jvmTarget>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -236,7 +237,6 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            <!--Jacoco Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -275,14 +275,6 @@
                         </goals>
                         <configuration>
                             <environmentVariables>
-                                <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
-                                <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
-                                <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
-                                <REDIS_POOL_MAX_TOTAL>50</REDIS_POOL_MAX_TOTAL>
-                                <REDIS_POOL_MAX_IDLE>50</REDIS_POOL_MAX_IDLE>
-                                <REDIS_POOL_MIN_IDLE>5</REDIS_POOL_MIN_IDLE>
-                                <REDIS_POOL_TEST_ON_BORROW>false</REDIS_POOL_TEST_ON_BORROW>
-                                <REDIS_POOL_TEST_WHILE_IDLE>false</REDIS_POOL_TEST_WHILE_IDLE>
                                 <EventHubConnectionString>${ehString}</EventHubConnectionString>
                                 <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
                                 <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
