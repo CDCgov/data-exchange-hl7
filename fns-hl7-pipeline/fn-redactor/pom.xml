@@ -19,13 +19,15 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
+        <fn.version>1.0.0-SNAPSHOT</fn.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <functionAppName>ocio-ede-${environment-id}-hl7-redactor</functionAppName>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
         <kotlin.version>1.8.0</kotlin.version>
-        <lib-dex-commons.version>1.0.12-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>1.0.19-SNAPSHOT</lib-dex-commons.version>
+        <AzureBom.version>1.2.15</AzureBom.version>
     </properties>
 
     <dependencies>
@@ -72,7 +74,13 @@
             <artifactId>lib-dex-commons</artifactId>
             <version>${lib-dex-commons.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-sdk-bom</artifactId>
+            <version>${AzureBom.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
 
     </dependencies>
 
@@ -133,6 +141,9 @@
                     </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
+                        <property>
+                            <name>fn.version</name>
+                        </property>
                         <property>
                             <name>WEBSITE_RUN_FROM_PACKAGE</name>
                             <value>1</value>
