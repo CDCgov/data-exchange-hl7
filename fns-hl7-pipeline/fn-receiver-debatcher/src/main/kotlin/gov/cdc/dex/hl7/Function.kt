@@ -6,9 +6,7 @@ import com.azure.storage.blob.models.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.microsoft.azure.functions.ExecutionContext
-import com.microsoft.azure.functions.OutputBinding
 import com.microsoft.azure.functions.annotation.BindingName
-import com.microsoft.azure.functions.annotation.EventHubOutput
 import com.microsoft.azure.functions.annotation.EventHubTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
 import gov.cdc.dex.azure.EventHubMetadata
@@ -160,7 +158,6 @@ class Function {
                             prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
                         }
                     }
-
                 } // .if
             }
         } // .for
