@@ -78,7 +78,7 @@
             <artifactId>azure-sdk-bom</artifactId>
             <version>${AzureBom.version}</version>
             <type>pom</type>
-            <scope>import</scope>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
@@ -142,7 +142,7 @@
                         <!-- Run Azure Function from package file by default -->
                         <property>
                             <name>fn.version</name>
-                            <value>${version}</value>
+                            <value>${project.version}</value>
                         </property>
                         <property>
                             <name>WEBSITE_RUN_FROM_PACKAGE</name>
