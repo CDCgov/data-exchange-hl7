@@ -3,21 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>receiver-debatcher</artifactId>
     <version>0.0.27-SNAPSHOT</version>
     <packaging>jar</packaging>
-    
     <name>DEX Fns-Pipeline :: receiver-debatcher</name>
-
     <scm>
         <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
         <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>   
         <url>https://github.com/CDCgov/data-exchange-hl7</url>
         <tag>HEAD</tag>
     </scm>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <functionAppName>ocio-ede-${environment-id}-hl7-receiver-debatcher</functionAppName>
@@ -28,8 +24,6 @@
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <slf4j.version>2.0.5</slf4j.version>
-        <azevhub.version>5.15.0</azevhub.version>
-        <azstblob.version>12.19.0</azstblob.version>
         <gson.version>2.10.1</gson.version>
         <hl7pet.version>1.2.7.1</hl7pet.version>
         <lib-dex-commons.version>1.0.19-SNAPSHOT</lib-dex-commons.version>
@@ -156,7 +150,7 @@
                         <!-- Run Azure Function from package file by default -->
                         <property>
                             <name>FN_VERSION</name>
-                            <value>${version}</value>
+                            <value>${project.version}</value>
                         </property>
 
                         <property>
@@ -285,7 +279,7 @@
                     <reuseForks>true</reuseForks>
                     <argLine>${surefireArgLine}</argLine>
                     <environmentVariables>
-                        <FN_VERSION>${version}</FN_VERSION>
+                        <FN_VERSION>${project.version}</FN_VERSION>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>
                         <BlobIngestContainerName>hl7ingress</BlobIngestContainerName>
