@@ -73,6 +73,11 @@ class Function {
 
                 val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
                 val routeElement = JsonHelper.getValueFromJson("message_info.route", inputEvent)
+
+                // set id parameter if does not exist
+                if (!inputEvent.has("id")) {
+                    inputEvent.add("id", messageUUID.toJsonElement())
+                }
                 val route = if (routeElement.isJsonNull) {
                     ""
                 } else {
@@ -100,13 +105,8 @@ class Function {
                     logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
                     outOkList.add(gson.toJson(inputEvent))
                     outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+                    logger.info("inputEvent: ${inputEvent} ")
                     //fnConfig.evHubSender.send(fnConfig.evHubOkName, gson.toJson(inputEvent))
-                    if (msgIndex == message.lastIndex){
-                        return inputEvent
-                    }
-                }
-                if (msgIndex == message.lastIndex){
-                    return inputEvent
                 }
             } catch (e: Exception) {
                 //TODO::  - update retry counts
@@ -120,9 +120,11 @@ class Function {
                 //fnConfig.evHubSender.send(fnConfig.evHubErrorName, gson.toJson(inputEvent))
                 return inputEvent
             }
-            redactorOkOutput.value = outOkList.toList()
-            redactorErrOutput.value = outErrList.toList()
-            cosmosOutput.value = outEventList.toList()
+
+                redactorOkOutput.value = outOkList.toList()
+                redactorErrOutput.value = outErrList.toList()
+                cosmosOutput.value = outEventList.toList()
+
         } // .eventHubProcessor
         return JsonObject()
     }

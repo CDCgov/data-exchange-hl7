@@ -5,7 +5,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>redactor</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.0.7-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Java Functions</name>
     
@@ -19,14 +19,13 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
-        <fn.version>1.0.0-SNAPSHOT</fn.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <functionAppName>ocio-ede-${environment-id}-hl7-redactor</functionAppName>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
         <kotlin.version>1.8.0</kotlin.version>
-        <lib-dex-commons.version>1.0.19-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
         <AzureBom.version>1.2.15</AzureBom.version>
     </properties>
 
@@ -143,6 +142,7 @@
                         <!-- Run Azure Function from package file by default -->
                         <property>
                             <name>fn.version</name>
+                            <value>${version}</value>
                         </property>
                         <property>
                             <name>WEBSITE_RUN_FROM_PACKAGE</name>
