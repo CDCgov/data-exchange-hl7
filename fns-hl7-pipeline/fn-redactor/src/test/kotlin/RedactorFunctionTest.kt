@@ -3,6 +3,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.HttpRequestMessage
+import com.microsoft.azure.functions.OutputBinding
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.hl7.Function
 import gov.cdc.dex.metadata.ProcessMetadata
@@ -23,8 +24,11 @@ class RedactorFunctionTest {
         val text = this:: class.java.getResource("/$filename").readText()
         val messages = listOf(text)
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
+        val cosmosOutput = getOutputBindingList<JsonObject>()
         val function = Function()
-        val inputEvent : JsonObject = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
+        val inputEvent : JsonObject = function.eventHubProcessor(messages, eventHubMDList, getOutputBindingList<String>(),
+            getOutputBindingList<String>(),
+            cosmosOutput,getExecutionContext())
 
         // Validate Metadata.processes has been added to the array of proccesses
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
@@ -84,6 +88,19 @@ class RedactorFunctionTest {
             override fun getFunctionName(): String {
                 return "null"
             }
+        }
+    }
+    private fun <T> getOutputBindingList(): OutputBinding<List<T>> {
+        return object : OutputBinding<List<T>> {
+            var innerList : List<T>? = null
+            override fun getValue(): List<T>? {
+                return innerList
+            }
+
+            override fun setValue(p0: List<T>?) {
+                innerList = p0
+            }
+
         }
     }
 }
