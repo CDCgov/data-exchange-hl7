@@ -79,42 +79,9 @@
             <version>${lib-dex-commons.version}</version>
         </dependency>
     </dependencies>
-
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
-
-	<!-- Plugins Dependencies Versions -->
-<!--        <pluginManagement>-->
-<!--            <plugins>-->
-<!--                <plugin>-->
-<!--                    <groupId>com.microsoft.azure</groupId>-->
-<!--                    <artifactId>azure-functions-maven-plugin</artifactId>-->
-<!--                    <version>${azure.functions.maven.plugin.version}</version>-->
-<!--                </plugin>-->
-<!--                <plugin>-->
-<!--                    <groupId>org.jetbrains.kotlin</groupId>-->
-<!--                    <artifactId>kotlin-maven-plugin</artifactId>-->
-<!--                    <version>${kotlin.version}</version>-->
-<!--                </plugin>-->
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-resources-plugin</artifactId>-->
-<!--                    <version>3.1.0</version>-->
-<!--                </plugin>-->
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-dependency-plugin</artifactId>-->
-<!--                    <version>3.1.1</version>-->
-<!--                </plugin>-->
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-clean-plugin</artifactId>-->
-<!--                    <version>3.1.0</version>-->
-<!--                </plugin>-->
-<!--            </plugins>-->
-<!--        </pluginManagement>-->
-
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
@@ -139,7 +106,7 @@
                         <!-- Run Azure Function from package file by default -->
                         <property>
                             <name>FN_VERSION</name>
-                            <value>${version}</value>
+                            <value>${project.version}</value>
                         </property>
                         <property>
                             <name>WEBSITE_RUN_FROM_PACKAGE</name>
@@ -248,7 +215,7 @@
                 <version>3.1.0</version>
                 <configuration>
                     <environmentVariables>
-                        <FN_VERSION>${version}</FN_VERSION>
+                        <FN_VERSION>${project.version}</FN_VERSION>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>
                         <EventHubReceiveName>hl7-recdeb-ok</EventHubReceiveName>
