@@ -18,13 +18,13 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <functionAppName>ocio-ede-${environment-id}-hl7-redactor</functionAppName>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
-        <kotlin.version>1.8.0</kotlin.version>
+        <kotlin.version>1.9.0</kotlin.version>
         <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
         <AzureBom.version>1.2.15</AzureBom.version>
     </properties>
