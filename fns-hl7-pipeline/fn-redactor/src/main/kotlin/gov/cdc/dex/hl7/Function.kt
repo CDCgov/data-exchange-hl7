@@ -37,9 +37,22 @@ class Function {
         )
         message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
+        @EventHubOutput(name="redactorOk",
+            eventHubName = "%EventHubSendOkName%",
+            connection = "EventHubConnectionString") redactorOkOutput : OutputBinding<List<String>>,
+        @EventHubOutput(name="redactorErr",
+            eventHubName = "%EventHubSendErrsName%",
+            connection = "EventHubConnectionString") redactorErrOutput: OutputBinding<List<String>>,
+        @CosmosDBOutput(name="cosmosdevpublic",
+            connection = "CosmosDBConnectionString",
+            containerName = "hl7-redactor", createIfNotExists = true,
+            partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>,
         context: ExecutionContext
     ): JsonObject {
         val helper = Helper()
+        val outOkList = mutableListOf<String>()
+        val outErrList = mutableListOf<String>()
+        val outEventList = mutableListOf<JsonObject>()
 
         message.forEachIndexed { msgIndex: Int, singleMessage: String? ->
            // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
@@ -60,6 +73,11 @@ class Function {
 
                 val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
                 val routeElement = JsonHelper.getValueFromJson("message_info.route", inputEvent)
+
+                // set id parameter if does not exist
+                if (!inputEvent.has("id")) {
+                    inputEvent.add("id", messageUUID.toJsonElement())
+                }
                 val route = if (routeElement.isJsonNull) {
                     ""
                 } else {
@@ -85,13 +103,10 @@ class Function {
                     val summary = SummaryInfo("REDACTED")
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
                     logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
-                    fnConfig.evHubSender.send(fnConfig.evHubOkName, gson.toJson(inputEvent))
-                    if (msgIndex == message.lastIndex){
-                        return inputEvent
-                    }
-                }
-                if (msgIndex == message.lastIndex){
-                    return inputEvent
+                    outOkList.add(gson.toJson(inputEvent))
+                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+                    logger.info("inputEvent: ${inputEvent} ")
+                    //fnConfig.evHubSender.send(fnConfig.evHubOkName, gson.toJson(inputEvent))
                 }
             } catch (e: Exception) {
                 //TODO::  - update retry counts
@@ -100,9 +115,16 @@ class Function {
 
                 val summary = SummaryInfo("FAILURE", problem)
                 inputEvent.add("summary", summary.toJsonElement())
-                fnConfig.evHubSender.send(fnConfig.evHubErrorName, gson.toJson(inputEvent))
+                outErrList.add(gson.toJson(inputEvent))
+                outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+                //fnConfig.evHubSender.send(fnConfig.evHubErrorName, gson.toJson(inputEvent))
                 return inputEvent
             }
+
+                redactorOkOutput.value = outOkList.toList()
+                redactorErrOutput.value = outErrList.toList()
+                cosmosOutput.value = outEventList.toList()
+
         } // .eventHubProcessor
         return JsonObject()
     }
