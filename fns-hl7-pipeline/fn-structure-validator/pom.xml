@@ -156,7 +156,7 @@
                         <!-- Run Azure Function from package file by default -->
                         <property>
                             <name>FN_VERSION</name>
-                            <value>${version}</value>
+                            <value>${project.version}</value>
                         </property>
                         <property>
                             <name>WEBSITE_RUN_FROM_PACKAGE</name>
@@ -247,7 +247,7 @@
                     <reuseForks>true</reuseForks>
                     <argLine>${surefireArgLine}</argLine>
                     <environmentVariables>
-                        <FN_VERSION>${version}</FN_VERSION>
+                        <FN_VERSION>${project.version}</FN_VERSION>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
                         <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
