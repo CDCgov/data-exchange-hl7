@@ -100,9 +100,7 @@
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-
     </dependencies>
-
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
@@ -262,7 +260,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.1.2</version>
                 <configuration>
                     <groups>IntegrationTest</groups>
                 </configuration>
@@ -336,7 +334,6 @@
             </plugin>
         </plugins>
     </build>
-      
     <distributionManagement>
         <repository>
             <id>ede-releases</id>
@@ -346,5 +343,5 @@
             <id>ede-snapshots</id>
             <url>${maven-snapshot-url}</url>
         </snapshotRepository>
-    </distributionManagement>  
+    </distributionManagement>
 </project>
