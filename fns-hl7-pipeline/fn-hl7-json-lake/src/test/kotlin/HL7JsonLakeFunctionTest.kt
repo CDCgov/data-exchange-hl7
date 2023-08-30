@@ -18,7 +18,6 @@ public class HL7JsonLakeFunctionTest {
         val inputEvent : JsonObject
 
         inputEvent = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
-        // inputEvent = function.eventHubELRProcessor(messages, eventHubMDList, getExecutionContext())
 
         // Validate Metadata.processes has been added to the array of proccesses
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
@@ -76,7 +75,7 @@ public class HL7JsonLakeFunctionTest {
             }
 
             override fun getFunctionName():String {
-                return "HL7_JSON_LAKE_TRANSFORMER_CASE"
+                return "HL7_JSON_LAKE_TRANSFORMER"
             }
         }
     }
