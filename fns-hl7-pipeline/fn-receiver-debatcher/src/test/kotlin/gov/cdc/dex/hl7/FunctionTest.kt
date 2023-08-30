@@ -1,12 +1,12 @@
 package gov.cdc.dex.hl7
 
-import com.microsoft.azure.functions.ExecutionContext
+import com.google.gson.JsonObject
+import com.microsoft.azure.functions.OutputBinding
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.DexEventPayload
 import gov.cdc.dex.metadata.HL7MessageType
 import org.junit.jupiter.api.Test
 
-import java.util.logging.Logger
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -20,12 +20,15 @@ class FunctionTest {
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
 
         val function = Function()
-        return function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
+        return function.eventHubProcessor(messages, eventHubMDList,
+            getOutputBinding<List<String>>(),
+            getOutputBinding<List<String>>(),
+            getOutputBinding<List<JsonObject>>())
     }
 
     @Test
     fun processELR_HappyPath() {
-        var dexEvtPayLoad = processFile("ELR_message.txt")
+        val dexEvtPayLoad = processFile("ELR_message.txt")
         //println(dexEvtPayLoad)
         assertNotNull(dexEvtPayLoad)
         assertEquals(HL7MessageType.ELR, dexEvtPayLoad.messageInfo.type)
@@ -35,7 +38,7 @@ class FunctionTest {
     }
     @Test
     fun processCASE_HappyPath() {
-        var dexEvtPayLoad = processFile("CASE_message.txt")
+        val dexEvtPayLoad = processFile("CASE_message.txt")
         //println(dexEvtPayLoad)
         assertNotNull(dexEvtPayLoad)
         assertEquals(HL7MessageType.CASE,dexEvtPayLoad.messageInfo.type)
@@ -50,7 +53,7 @@ class FunctionTest {
 //    }
     @Test
     fun process_NoMetadata() {
-        var dexEvtPayLoad = processFile("NoMetadataFile.txt")
+        val dexEvtPayLoad = processFile("NoMetadataFile.txt")
         assertNotNull(dexEvtPayLoad)
         assertEquals(HL7MessageType.UNKNOWN,dexEvtPayLoad.messageInfo.type)
         assertNotNull(dexEvtPayLoad.metadata.processes)
@@ -59,7 +62,7 @@ class FunctionTest {
     }
     @Test
     fun process_BatchMessage() {
-        var dexEvtPayLoad = processFile("BatchMessage.txt")
+        val dexEvtPayLoad = processFile("BatchMessage.txt")
         assertNotNull(dexEvtPayLoad)
         assertEquals(HL7MessageType.CASE,dexEvtPayLoad.messageInfo.type)
         assertEquals("BATCH", dexEvtPayLoad.metadata.provenance.singleOrBatch)
@@ -69,7 +72,7 @@ class FunctionTest {
     }
     @Test
     fun process_InvalidMessage() {
-        var dexEvtPayLoad = processFile("InvalidMessage.txt")
+        val dexEvtPayLoad = processFile("InvalidMessage.txt")
         assertNotNull(dexEvtPayLoad)
         assertEquals(HL7MessageType.CASE,dexEvtPayLoad.messageInfo.type)
         assertNotNull(dexEvtPayLoad.metadata.processes)
@@ -80,7 +83,7 @@ class FunctionTest {
 
     @Test
     fun process_ELRWithBlanks() {
-        var dexEvtPayLoad = processFile("CovidELRWithBlanks.txt")
+        val dexEvtPayLoad = processFile("CovidELRWithBlanks.txt")
         assertNotNull(dexEvtPayLoad)
         assertEquals(HL7MessageType.ELR, dexEvtPayLoad.messageInfo.type)
         assertNotNull(dexEvtPayLoad.metadata.processes)
@@ -88,20 +91,16 @@ class FunctionTest {
         assertNull(dexEvtPayLoad.summary.problem)
     }
 
-    private fun getExecutionContext(): ExecutionContext {
-        return object : ExecutionContext {
-            override fun getLogger(): Logger {
-                return Logger.getLogger(FunctionTest::class.java.name)
+    private fun <T> getOutputBinding(): OutputBinding<T> {
+        return object : OutputBinding<T> {
+            var inner : T? = null
+            override fun getValue(): T ? {
+                return inner
             }
 
-            override fun getInvocationId(): String {
-                return "null"
-            }
-
-            override fun getFunctionName(): String {
-                return "null"
+            override fun setValue(p0:T?) {
+                inner = p0
             }
         }
     }
-
 }

@@ -11,19 +11,10 @@ import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
 
 class FunctionConfig {
-
     val azBlobProxy: AzureBlobProxy
-    val evHubSender: EventHubSender
     var eventCodes : Map<String, Map<String, String>>
-
-    val evHubOkName: String = System.getenv("EventHubSendOkName")
-    val evHubErrorName: String = System.getenv("EventHubSendErrsName")
     val blobIngestContName = System.getenv("BlobIngestContainerName")
     init {
-         //Init Event Hub connections
-         val evHubConnStr = System.getenv("EventHubConnectionString")
-         evHubSender = EventHubSender(evHubConnStr)
-
          //Init Azure Storage connection
          val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
          azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
