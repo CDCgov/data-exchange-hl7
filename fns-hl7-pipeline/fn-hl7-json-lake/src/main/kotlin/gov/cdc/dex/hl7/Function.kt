@@ -38,13 +38,13 @@ class Function {
     } // .companion object
 
 
-    @FunctionName("HL7_JSON_LAKE_TRANSFORMER_CASE")
+    @FunctionName("HL7_JSON_LAKE_TRANSFORMER")
     fun eventHubProcessor(
         @EventHubTrigger(
             name = "msg",
-            eventHubName = "%EventHubReceiveNameCASE%",
+            eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
-            consumerGroup = "%EventHubConsumerGroupCASE%",)
+            consumerGroup = "%EventHubConsumerGroup%",)
         messages: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
         context: ExecutionContext): JsonObject {
