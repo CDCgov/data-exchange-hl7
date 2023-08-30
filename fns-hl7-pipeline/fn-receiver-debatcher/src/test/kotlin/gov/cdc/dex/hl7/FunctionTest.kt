@@ -1,6 +1,8 @@
 package gov.cdc.dex.hl7
 
+import com.google.gson.JsonObject
 import com.microsoft.azure.functions.ExecutionContext
+import com.microsoft.azure.functions.OutputBinding
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.DexEventPayload
 import gov.cdc.dex.metadata.HL7MessageType
@@ -18,9 +20,9 @@ class FunctionTest {
         val text = this::class.java.getResource("/$filename").readText()
         val messages = listOf(text)
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
-
+        val cosmosDBOutput = getOutputBindingList<JsonObject>()
         val function = Function()
-        return function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
+        return function.eventHubProcessor(messages, eventHubMDList, getOutputBindingList<String>(), getOutputBindingList<String>(), cosmosDBOutput, getExecutionContext())
     }
 
     @Test
@@ -103,5 +105,17 @@ class FunctionTest {
             }
         }
     }
+    private fun <T> getOutputBindingList(): OutputBinding<List<T>> {
+        return object : OutputBinding<List<T>> {
+            var innerList : List<T>? = null
+            override fun getValue(): List<T>? {
+                return innerList
+            }
 
+            override fun setValue(p0: List<T>?) {
+                innerList = p0
+            }
+
+        }
+    }
 }

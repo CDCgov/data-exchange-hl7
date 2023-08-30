@@ -118,7 +118,7 @@ class DebatcherTest {
 
     private fun prepareAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo) {
         val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
-        val msgEvent = DexEventPayload(contentBase64, messageInfo, metadata, summary)
+        val msgEvent = DexEventPayload(content = contentBase64, messageInfo= messageInfo, metadata =  metadata, summary =  summary)
         val jsonMessage = Function.gson.toJson(msgEvent)
         println(jsonMessage)
         println("Simulating Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
