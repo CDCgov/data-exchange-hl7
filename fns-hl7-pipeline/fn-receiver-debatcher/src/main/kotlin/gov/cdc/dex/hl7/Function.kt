@@ -9,7 +9,6 @@ import com.google.gson.JsonObject
 import com.microsoft.azure.functions.OutputBinding
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
@@ -61,7 +60,6 @@ class Function {
         @EventHubOutput(name="recdebErr",
             eventHubName = "%EventHubSendErrsName%",
             connection = "EventHubConnectionString") recdebErrOutput: OutputBinding<List<String>>,
-
         @CosmosDBOutput(name="cosmosdevpublic",
             connection = "CosmosDBConnectionString",
             containerName = "hl7-recdeb", createIfNotExists = true,
@@ -154,7 +152,9 @@ class Function {
                                             val messageInfo =  getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n" ))
                                             val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
                                             msgEvent = preparePayload(currentLinesArr, messageInfo, metadata, summary)
-                                            //msgEvent = prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName)
+                                                .apply {
+                                                    outOkList.add(gson.toJson(this))
+                                                }
                                             provenance.messageIndex++
                                         }
                                         currentLinesArr.clear()
@@ -173,7 +173,6 @@ class Function {
                                 .apply {
                                     outOkList.add(gson.toJson(this))
                                 }
-                            //prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName)
                         } else {
                             // no valid message -- send to error queue
                             val (metadata, summary) = buildMetadata(STATUS_ERROR, eventHubMD[nbrOfMessages], startTime, provenance, "No valid message found.")
@@ -183,7 +182,6 @@ class Function {
                                 .apply {
                                     outErrList.add(gson.toJson(this))
                                 }
-                            //prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
                         }
                     }
                     logger.info("DEX::Processed messageUUID: ${msgEvent!!.messageUUID}")
@@ -251,17 +249,6 @@ class Function {
         )
     }
 
-    private fun prepareAAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String) : DexEventPayload {
-        val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
-        val msgEvent = DexEventPayload(contentBase64, messageInfo, metadata, summary)
-        logger.info("DEX::Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
-        val jsonMessage = gson.toJson(msgEvent)
-        eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
-        logger.info("DEX::Processed and Sent to event hub $eventHubName Message: --> messageUUID: ${msgEvent.messageUUID}")
-        //println(msgEvent)
-        return msgEvent
-    }
-
     private fun validateMessageMetaData(metaDataMap: Map<String, String>):Boolean {
         var isValid = true
         //Check if required Metadata fields are present
@@ -279,8 +266,5 @@ class Function {
         logger.info("DEX::Metadata Info: --> isValid: $isValid;  messageType: ${messageType}, route: ${route}, reportingJurisdiction: $reportingJurisdiction")
         return isValid
     }
-
-
-
 } // .class  Function
 
