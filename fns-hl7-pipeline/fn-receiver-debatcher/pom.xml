@@ -22,7 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java_version>11</java_version>
         <kotlin.version>1.7.20</kotlin.version>
-        <fn.version>1.0.0-SNAPSHOT</fn.version>
+        <fn.version>0.0.27-SNAPSHOT</fn.version>
         <functions.version>3.0.0</functions.version>
         <functions.plugin.version>1.26.0</functions.plugin.version>
         <maven.compiler.source>1.11</maven.compiler.source>
