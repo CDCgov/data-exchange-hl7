@@ -17,6 +17,7 @@ import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
 import org.slf4j.LoggerFactory
+import java.lang.RuntimeException
 
 /**
  * Azure function with event hub trigger to redact messages   */
@@ -53,6 +54,7 @@ class Function {
         val outOkList = mutableListOf<String>()
         val outErrList = mutableListOf<String>()
         val outEventList = mutableListOf<JsonObject>()
+        logger.info("DEX:: messages size: ${message.size}")
 
         message.forEachIndexed { msgIndex: Int, singleMessage: String? ->
            // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
@@ -88,6 +90,8 @@ class Function {
 
                 val report = helper.getRedactedReport(hl7Content, messageType, route)
 
+
+
                 if(report != null) {
                     val rReport = RedactorReport(report._2())
                     val configFileName : List<String> = listOf(helper.getConfigFileName(messageType, route))
@@ -105,8 +109,7 @@ class Function {
                     logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
                     outOkList.add(gson.toJson(inputEvent))
                     outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
-                    logger.info("inputEvent: ${inputEvent} ")
-                    //fnConfig.evHubSender.send(fnConfig.evHubOkName, gson.toJson(inputEvent))
+                    throw RuntimeException("Failure")
                 }
             } catch (e: Exception) {
                 //TODO::  - update retry counts
@@ -117,15 +120,20 @@ class Function {
                 inputEvent.add("summary", summary.toJsonElement())
                 outErrList.add(gson.toJson(inputEvent))
                 outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
-                //fnConfig.evHubSender.send(fnConfig.evHubErrorName, gson.toJson(inputEvent))
+                logger.error("Exception.......outoklist: ${outOkList.size}---- outErrlist: ${outErrList.size}---cosmoslist: ${outEventList.size}")
                 return inputEvent
             }
-
-                redactorOkOutput.value = outOkList.toList()
-                redactorErrOutput.value = outErrList.toList()
-                cosmosOutput.value = outEventList.toList()
+            finally {
+            logger.info("outputbindigs........outoklist:${outOkList.size} ----outErrlist: ${outErrList.size}---cosmoslist: ${outEventList.size}")
+            redactorOkOutput.value = outOkList
+            redactorErrOutput.value = outErrList
+            cosmosOutput.value = outEventList
+            }
 
         } // .eventHubProcessor
+
+
+
         return JsonObject()
     }
 
