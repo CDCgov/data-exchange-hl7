@@ -20,8 +20,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java_version>11</java_version>
-        <kotlin.version>1.7.20</kotlin.version>
+        <java_version>17</java_version>
+        <kotlin.version>1.9.0</kotlin.version>
         <fn.version>0.0.27-SNAPSHOT</fn.version>
         <functions.version>3.0.0</functions.version>
         <functions.plugin.version>1.26.0</functions.plugin.version>
@@ -37,7 +37,7 @@
         <gson.version>2.10.1</gson.version>
 
         <hl7pet.version>1.2.7.1</hl7pet.version>
-        <lib-dex-commons.version>1.0.19-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
         <junitjupiter.version>5.9.2</junitjupiter.version>
 
     </properties>

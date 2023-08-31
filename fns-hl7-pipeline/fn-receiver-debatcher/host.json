@@ -2,7 +2,7 @@
   "version": "2.0",
   "extensionBundle": {
       "id": "Microsoft.Azure.Functions.ExtensionBundle",
-      "version": "[3.3.0, 4.0.0)"
+      "version": "[4.2, 4.3)"
   },
   "logLevel": {
     "default": "Warning",

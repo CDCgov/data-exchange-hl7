@@ -14,6 +14,7 @@ class FunctionConfig {
     val azBlobProxy: AzureBlobProxy
     var eventCodes : Map<String, Map<String, String>>
     val blobIngestContName = System.getenv("BlobIngestContainerName")
+
     init {
          //Init Azure Storage connection
          val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
