@@ -26,7 +26,7 @@
         <slf4j.version>2.0.5</slf4j.version>
         <gson.version>2.10.1</gson.version>
         <hl7pet.version>1.2.7.1</hl7pet.version>
-        <lib-dex-commons.version>1.0.19-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
         <junitjupiter.version>5.9.2</junitjupiter.version>
     </properties>
     <dependencyManagement>
@@ -128,7 +128,8 @@
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
-               <configuration>
+                <version>${functions.plugin.version}</version>
+                <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
@@ -152,7 +153,6 @@
                             <name>FN_VERSION</name>
                             <value>${project.version}</value>
                         </property>
-
                         <property>
                             <name>WEBSITE_RUN_FROM_PACKAGE</name>
                             <value>1</value>
