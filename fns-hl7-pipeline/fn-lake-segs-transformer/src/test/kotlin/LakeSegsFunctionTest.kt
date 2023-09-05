@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import java.util.logging.Logger
 import com.google.gson.JsonObject
 import com.google.gson.JsonArray
+import com.microsoft.azure.functions.OutputBinding
 import org.junit.jupiter.api.Assertions
 
 public class LakeSegsFunctionTest {
@@ -15,11 +16,12 @@ public class LakeSegsFunctionTest {
         val messages = listOf(text)
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val function = Function()
-        val inputEvents : List<JsonObject> = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
+        val cosmosOutput = getOutputBindingList<JsonObject>()
+        val inputEvents : List<JsonObject> = function.eventHubProcessor(messages, eventHubMDList,getOutputBindingList<String>(), getOutputBindingList<String>(), cosmosOutput, getExecutionContext())
         val inputEvent : JsonObject = inputEvents[0]
-
         // Validate Metadata.processes has been added to the array of proccesses
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
+
         if(metadata != null){
             val processes: JsonArray? = metadata.get("processes").asJsonArray
             Assertions.assertTrue(processes != null)
@@ -52,6 +54,19 @@ public class LakeSegsFunctionTest {
         assert (true)
     }
 
+    private fun <T> getOutputBindingList(): OutputBinding<List<T>> {
+        return object : OutputBinding<List<T>> {
+            var innerList : List<T>? = null
+            override fun getValue(): List<T>? {
+                return innerList
+            }
+
+            override fun setValue(p0: List<T>?) {
+                innerList = p0
+            }
+
+        }
+    }
 
     private fun getExecutionContext():
             ExecutionContext {

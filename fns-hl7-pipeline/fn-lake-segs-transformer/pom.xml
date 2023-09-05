@@ -6,24 +6,23 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>lake-segs-transfomer</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.0.27-SNAPSHOT</version>
     <packaging>jar</packaging>
-    
     <name>DEX Fns-Pipeline :: lake-segs-transfomer</name>
 
     <scm>
         <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
-        <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>   
+        <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>
         <url>https://github.com/CDCgov/data-exchange-hl7</url>
         <tag>HEAD</tag>
     </scm>
 
     <properties>
-        <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <AzureBom.version>1.2.15</AzureBom.version>
-        <kotlin.version>1.7.10</kotlin.version>
-        <functions.version>2.1.0</functions.version>
+        <java.version>17</java.version>
+        <kotlin.version>1.9.0</kotlin.version>
+        <functions.version>3.0.0</functions.version>
         <functions.plugin.version>1.26.0</functions.plugin.version>
 
         <functionAppName>ocio-ede-${environment-id}-hl7-lake-segments-transformer</functionAppName>
@@ -33,13 +32,30 @@
 
         <gson.version>2.9.1</gson.version>
         <junit.version>5.9.0</junit.version>
-        <libdexcommon.version>1.0.18-SNAPSHOT</libdexcommon.version>
+        <libdexcommon.version>1.0.20-SNAPSHOT</libdexcommon.version>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
 
     </properties>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-sdk-bom</artifactId>
+                <version>${AzureBom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-sdk-bom</artifactId>
+            <version>${AzureBom.version}</version>
+            <type>pom</type>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
@@ -104,19 +120,11 @@
             <artifactId>hl7-pet_2.13</artifactId>
             <version>${hl7pet.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-sdk-bom</artifactId>
-            <version>${AzureBom.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
     </dependencies>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-       <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 
         <plugins>
 
@@ -140,6 +148,10 @@
                     </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
+                        <property>
+                            <name>FN_VERSION</name>
+                            <value>${project.version}</value>
+                        </property>
                         <property>
                             <name>WEBSITE_RUN_FROM_PACKAGE</name>
                             <value>1</value>
@@ -273,6 +285,7 @@
                     <reuseForks>true</reuseForks>
                     <argLine>${surefireArgLine}</argLine>
                     <environmentVariables>
+                        <FN_VERSION>${project.version}</FN_VERSION>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <EventHubSendOkName>hl7-lake-segments-ok</EventHubSendOkName>
                         <EventHubSendErrsName>hl7-lake-segments-err</EventHubSendErrsName>
@@ -336,7 +349,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <distributionManagement>
         <repository>
             <id>ede-releases</id>
