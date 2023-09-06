@@ -5,7 +5,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>redactor</artifactId>
-    <version>1.0.0-2023-08-09-143721-3fd7d4d-2023-08-23-135014-63afda2</version>
+    <version>0.0.27-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Java Functions</name>
     
@@ -18,23 +18,34 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
+        <functionAppName>ocio-ede-${environment-id}-hl7-redactor</functionAppName>
+        <AzureBom.version>1.2.15</AzureBom.version>
+        <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
-        <functionAppName>ocio-ede-${environment-id}-hl7-redactor</functionAppName>
-
+        <kotlin.version>1.9.0</kotlin.version>
+        <slf4j.version>2.0.5</slf4j.version>
         <hl7pet.version>1.2.7.2</hl7pet.version>
-        <kotlin.version>1.8.0</kotlin.version>
-        <lib-dex-commons.version>1.0.12-SNAPSHOT</lib-dex-commons.version>
+        <kotlin.version>1.9.0</kotlin.version>
+        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
     </properties>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-sdk-bom</artifactId>
+                <version>${AzureBom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure.functions</groupId>
             <artifactId>azure-functions-java-library</artifactId>
             <version>${azure.functions.java.library.version}</version>
         </dependency>
-
         <!-- Test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -42,26 +53,22 @@
             <version>5.4.2</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.10</version>
         </dependency>
-
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>2.23.4</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
-
         <dependency>
             <groupId>gov.cdc.hl7</groupId>
             <artifactId>hl7-pet_2.13</artifactId>
@@ -72,51 +79,16 @@
             <artifactId>lib-dex-commons</artifactId>
             <version>${lib-dex-commons.version}</version>
         </dependency>
-
-
     </dependencies>
-
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
-
-	<!-- Plugins Dependencies Versions -->
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.microsoft.azure</groupId>
-                    <artifactId>azure-functions-maven-plugin</artifactId>
-                    <version>${functions.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-maven-plugin</artifactId>
-                    <version>${kotlin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.1.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <version>${azure.functions.maven.plugin.version}</version>
-               <configuration>
+                <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
@@ -133,6 +105,10 @@
                     </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
+                        <property>
+                            <name>FN_VERSION</name>
+                            <value>${project.version}</value>
+                        </property>
                         <property>
                             <name>WEBSITE_RUN_FROM_PACKAGE</name>
                             <value>1</value>
@@ -240,14 +216,13 @@
                 <version>3.1.0</version>
                 <configuration>
                     <environmentVariables>
-                        <REDIS_CACHE_NAME>ocio-ede-dev-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
-                        <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                        <FN_VERSION>${project.version}</FN_VERSION>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>
                         <EventHubReceiveName>hl7-recdeb-ok</EventHubReceiveName>
                         <BlobIngestContainerName>hl7ingress</BlobIngestContainerName>
                         <EventHubSendOkName>hl7-redacted-ok</EventHubSendOkName>
-                        <EventHubSendErrsName>hl7-recdeb-err</EventHubSendErrsName>
+                        <EventHubSendErrsName>hl7-redacted-err</EventHubSendErrsName>
                     </environmentVariables>
                     <argLine>
                         --illegal-access=permit

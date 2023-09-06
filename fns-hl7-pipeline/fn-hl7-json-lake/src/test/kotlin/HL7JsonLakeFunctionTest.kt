@@ -5,20 +5,23 @@ import org.junit.jupiter.api.Test
 import java.util.logging.Logger
 import com.google.gson.JsonObject
 import com.google.gson.JsonArray
+import com.microsoft.azure.functions.OutputBinding
 import org.junit.jupiter.api.Assertions
 
-public class HL7JsonLakeFunctionTest {
+class HL7JsonLakeFunctionTest {
 
     private fun processFile(filename:String, isCase:Boolean, isHappyPath:Boolean) {
         println("Start processing $filename ")
         val text = this:: class.java.getResource("/$filename").readText()
         val messages = listOf(text)
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
-        val function = Function()
-        val inputEvent : JsonObject
-
-        inputEvent = function.eventHubProcessor(messages, eventHubMDList, getExecutionContext())
-        // inputEvent = function.eventHubELRProcessor(messages, eventHubMDList, getExecutionContext())
+        val inputEvent =  Function().eventHubProcessor(
+                messages,
+                eventHubMDList,
+                getExecutionContext(),
+                getOutputBinding(),
+                getOutputBinding(),
+                getOutputBinding())
 
         // Validate Metadata.processes has been added to the array of proccesses
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
@@ -65,6 +68,19 @@ public class HL7JsonLakeFunctionTest {
         assert (true)
     }
 
+    private fun <T> getOutputBinding(): OutputBinding<T> {
+        return object : OutputBinding<T> {
+            var inner : T? = null
+            override fun getValue(): T ? {
+                return inner
+            }
+
+            override fun setValue(p0:T?) {
+                inner = p0
+            }
+        }
+    }
+
     private fun getExecutionContext():ExecutionContext {
         return object :ExecutionContext {
             override fun getLogger():Logger {
@@ -76,7 +92,7 @@ public class HL7JsonLakeFunctionTest {
             }
 
             override fun getFunctionName():String {
-                return "HL7_JSON_LAKE_TRANSFORMER_CASE"
+                return "HL7_JSON_LAKE_TRANSFORMER"
             }
         }
     }

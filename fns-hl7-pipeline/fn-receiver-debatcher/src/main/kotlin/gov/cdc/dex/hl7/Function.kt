@@ -5,12 +5,10 @@ import com.azure.storage.blob.*
 import com.azure.storage.blob.models.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.microsoft.azure.functions.ExecutionContext
-import com.microsoft.azure.functions.annotation.BindingName
-import com.microsoft.azure.functions.annotation.EventHubTrigger
-import com.microsoft.azure.functions.annotation.FunctionName
+import com.google.gson.JsonObject
+import com.microsoft.azure.functions.OutputBinding
+import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
@@ -35,6 +33,14 @@ class Function {
         const val ALT_JURISDICTION_CODE_PATH = "OBX[@3.1='NOT116']-5.1"
         const val LOCAL_RECORD_ID_PATH = "OBR-3.1"
         val gson: Gson = GsonBuilder().serializeNulls().create()
+        val knownMetadata:Set<String> = setOf(
+            "message_type",
+            "route",
+            "reporting_jurisdiction",
+            "original_file_name",
+            "original_file_timestamp",
+            "system_provider",
+        )
 
         val fnConfig = FunctionConfig()
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
@@ -42,22 +48,35 @@ class Function {
     @FunctionName("receiverdebatcher001")
     fun eventHubProcessor(
         @EventHubTrigger(
-                name = "msg", 
-                eventHubName = "%EventHubReceiveName%",
-                consumerGroup = "%EventHubConsumerGroup%",
-                connection = "EventHubConnectionString") 
-                messages: List<String>?,
+            name = "msg",
+            eventHubName = "%EventHubReceiveName%",
+            consumerGroup = "%EventHubConsumerGroup%",
+            connection = "EventHubConnectionString")
+        messages: List<String>?,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext): DexEventPayload? {
+        @EventHubOutput(name="recdebOk",
+            eventHubName = "%EventHubSendOkName%",
+            connection = "EventHubConnectionString") recdebOkOutput : OutputBinding<List<String>>,
+        @EventHubOutput(name="recdebErr",
+            eventHubName = "%EventHubSendErrsName%",
+            connection = "EventHubConnectionString") recdebErrOutput: OutputBinding<List<String>>,
+        @CosmosDBOutput(name="cosmosdevpublic",
+            connection = "CosmosDBConnectionString",
+            containerName = "hl7-recdeb", createIfNotExists = true,
+            partitionKey = "/message_uuid", databaseName = "hl7-events")
+        cosmosOutput: OutputBinding<List<JsonObject>>
+    ): DexEventPayload? {
 
-    
         logger.info("@@@@ 8/3 auto trigger test for ci/cd")
 
         logger.info("DEX::Received BLOB_CREATED event!")
 
         var msgEvent:DexEventPayload? = null
-
         if (messages != null) {
+            val outOkList = mutableListOf<String>()
+            val outErrList = mutableListOf<String>()
+            val outEventList = mutableListOf<JsonObject>()
+
             for ((nbrOfMessages, message) in messages.withIndex()) {
                 val startTime = Date().toIsoString()
                 val eventArr = gson.fromJson(message, Array<AzBlobCreateEventMessage>::class.java)
@@ -71,14 +90,14 @@ class Function {
                     //Create Map of Metadata with lower case keys
                     val metaDataMap =  blobClient.properties.metadata.mapKeys { it.key.lowercase() }
 
-                    // Add source Metadata
-                    val otherMetadata: MutableMap<String, String> = HashMap()
+                    // filter out known/required metadata and store the rest in
+                    // Provenance.sourceMetadata
+                    val dynamicMetadata: MutableMap<String, String?> = HashMap()
                     metaDataMap.forEach { (k, v) ->
-                        val knownMetadataKeys = arrayOf("message_type","route","reporting_jurisdiction","original_file_name","original_file_timestamp","system_provider")
-                        if(!knownMetadataKeys.contains(k)){
-                            otherMetadata[k] = v
+                        if(!knownMetadata.contains(k)){
+                            dynamicMetadata[k] = v
                         }
-                     }
+                    }
 
                     // Create Metadata for Provenance
                     val provenance = Provenance(
@@ -91,7 +110,7 @@ class Function {
                         originalFileName =metaDataMap["original_file_name"] ?: blobName,
                         systemProvider = metaDataMap["system_provider"],
                         originalFileTimestamp = metaDataMap["original_file_timestamp"],
-                        sourceMetadata = otherMetadata.toList()
+                        sourceMetadata = if (dynamicMetadata.isNotEmpty()) dynamicMetadata else null
                     ) // .hl7MessageMetadata
 
                     //Validate metadata
@@ -106,7 +125,12 @@ class Function {
                         val (metadata, summary) = buildMetadata(STATUS_ERROR, eventHubMD[nbrOfMessages], startTime, provenance, "Message missing required Meta Data.")
                         // send empty array as message content when content is invalid
                         //Put Unknown as message type if messageType is missing else use messageType
-                        msgEvent = prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
+                        msgEvent = preparePayload(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary)
+                            .apply {
+                                outErrList.add(gson.toJson(this))
+                            }
+
+                        //msgEvent = prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
                     } else {
                         // Read Blob File by Lines
                         // -------------------------------------
@@ -127,7 +151,10 @@ class Function {
                                             provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
                                             val messageInfo =  getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n" ))
                                             val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
-                                            msgEvent = prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName)
+                                            msgEvent = preparePayload(currentLinesArr, messageInfo, metadata, summary)
+                                                .apply {
+                                                    outOkList.add(gson.toJson(this))
+                                                }
                                             provenance.messageIndex++
                                         }
                                         currentLinesArr.clear()
@@ -142,16 +169,28 @@ class Function {
                             val (metadata, summary) = buildMetadata(STATUS_SUCCESS, eventHubMD[nbrOfMessages], startTime, provenance)
                             val messageInfo = getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n" ))
                             logger.info("message info --> ${gson.toJson(messageInfo)}")
-                            prepareAndSend(currentLinesArr, messageInfo, metadata, summary, fnConfig.evHubSender, fnConfig.evHubOkName)
+                            preparePayload(currentLinesArr, messageInfo, metadata, summary)
+                                .apply {
+                                    outOkList.add(gson.toJson(this))
+                                }
                         } else {
                             // no valid message -- send to error queue
                             val (metadata, summary) = buildMetadata(STATUS_ERROR, eventHubMD[nbrOfMessages], startTime, provenance, "No valid message found.")
                             // send empty array as message content when content is invalid
-                            prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
+                            preparePayload(arrayListOf(), DexMessageInfo(null, null, null, null,
+                                HL7MessageType.valueOf(messageType)), metadata, summary)
+                                .apply {
+                                    outErrList.add(gson.toJson(this))
+                                }
                         }
                     }
+                    logger.info("DEX::Processed messageUUID: ${msgEvent!!.messageUUID}")
+                    outEventList.add(gson.toJsonTree(msgEvent) as JsonObject)
                 } // .if
             }
+            recdebOkOutput.value = outOkList
+            recdebErrOutput.value = outErrList
+            cosmosOutput.value = outEventList
         } // .for
         return msgEvent
     } // .eventHubProcess
@@ -198,16 +237,16 @@ class Function {
         }
         return DexMetadata(provenance, listOf(processMD)) to summary
     }
+    private fun preparePayload(
+        messageContent: ArrayList<String>,
+        messageInfo: DexMessageInfo,
+        metadata: DexMetadata,
+        summary: SummaryInfo) : DexEventPayload {
 
-    private fun prepareAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo, eventHubSender: EventHubSender, eventHubName: String) : DexEventPayload {
-        val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
-        val msgEvent = DexEventPayload(contentBase64, messageInfo, metadata, summary)
-        logger.info("DEX::Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
-        val jsonMessage = gson.toJson(msgEvent)
-        eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
-        logger.info("DEX::Processed and Sent to event hub $eventHubName Message: --> messageUUID: ${msgEvent.messageUUID}")
-        //println(msgEvent)
-        return msgEvent
+        return DexEventPayload(
+            messageInfo = messageInfo, metadata = metadata, summary = summary,
+            content = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
+        )
     }
 
     private fun validateMessageMetaData(metaDataMap: Map<String, String>):Boolean {
@@ -227,8 +266,5 @@ class Function {
         logger.info("DEX::Metadata Info: --> isValid: $isValid;  messageType: ${messageType}, route: ${route}, reportingJurisdiction: $reportingJurisdiction")
         return isValid
     }
-
-
-
 } // .class  Function
 

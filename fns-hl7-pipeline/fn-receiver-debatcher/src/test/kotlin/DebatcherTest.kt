@@ -1,11 +1,8 @@
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.azure.RedisProxy
 import gov.cdc.dex.hl7.Function
 import gov.cdc.dex.hl7.Function.Companion.UTF_BOM
 import gov.cdc.dex.hl7.ReceiverProcessMetadata
 import gov.cdc.dex.metadata.*
-import gov.cdc.dex.mmg.InvalidConditionException
-import gov.cdc.dex.mmg.MmgUtil
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import gov.cdc.dex.util.StringUtils.Companion.normalize
@@ -116,15 +113,22 @@ class DebatcherTest {
         return DexMetadata(provenance, listOf(processMD)) to summary
     }
 
-    private fun prepareAndSend(messageContent: ArrayList<String>, messageInfo: DexMessageInfo, metadata: DexMetadata, summary: SummaryInfo) {
-        val contentBase64 = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
-        val msgEvent = DexEventPayload(contentBase64, messageInfo, metadata, summary)
+    private fun prepareAndSend(
+        messageContent: ArrayList<String>,
+        messageInfo: DexMessageInfo,
+        metadata: DexMetadata,
+        summary: SummaryInfo)  {
+
+        val msgEvent =  DexEventPayload(
+            messageInfo = messageInfo, metadata = metadata, summary = summary,
+            content = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
+        )
         val jsonMessage = Function.gson.toJson(msgEvent)
         println(jsonMessage)
         println("Simulating Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
-       // eventHubSender.send(evHubTopicName=eventHubName, message=jsonMessage)
         println("Processed and Sent to console Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
     }
+
     private fun getMessageInfo(metaDataMap: Map<String, String>, message: String): DexMessageInfo {
         val eventCode = extractValue(message, Function.EVENT_CODE_PATH)
         val localRecordID = extractValue(message, Function.LOCAL_RECORD_ID_PATH)

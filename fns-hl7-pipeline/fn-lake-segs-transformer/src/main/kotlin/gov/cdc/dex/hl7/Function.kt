@@ -5,27 +5,28 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.ExecutionContext
-import com.microsoft.azure.functions.annotation.BindingName
-import com.microsoft.azure.functions.annotation.EventHubTrigger
-import com.microsoft.azure.functions.annotation.FunctionName
+import com.microsoft.azure.functions.OutputBinding
+import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.azure.EventHubSender
+
 import gov.cdc.dex.hl7.model.Segment
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
+import gov.cdc.dex.util.JsonHelper.gson
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
 import org.slf4j.LoggerFactory
+import java.util.Base64.*
 
 /**
  * Azure function with event hub trigger for the Lake of Segments transformer
  * Takes an HL7 message and converts it to a lake of segments based on the HL7 dependency tree
  */
 class Function {
-    
+
     companion object {
 
         const val PROCESS_STATUS_OK = "SUCCESS"
@@ -42,32 +43,41 @@ class Function {
     @FunctionName("LAKE_OF_SEGMENTS_TRANSFORMER_CASE")
     fun eventHubProcessor(
         @EventHubTrigger(
-                name = "msg", 
-                eventHubName = "%EventHubReceiveNameCASE%",
-                connection = "EventHubConnectionString",
-                consumerGroup = "%EventHubConsumerGroupCASE%",)
-                message: List<String?>,
+            name = "msg",
+            eventHubName = "%EventHubReceiverName%",
+            connection = "EventHubConnectionString",
+            consumerGroup = "%EventHubConsumerGroup%",)
+        message: List<String?>,
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext) : List<JsonObject> {
+        @EventHubOutput(name="lakeSegsOk",
+            eventHubName = "%EventHubSendOkName%",
+            connection = "EventHubConnectionString") lakeSegsOk : OutputBinding<List<String>>,
+        @EventHubOutput(name="lakeSegsErr",
+            eventHubName = "%EventHubSendErrsName%",
+            connection = "EventHubConnectionString") lakeSegsErr: OutputBinding<List<String>>,
+        @CosmosDBOutput(name="cosmosdevpublic",
+            connection = "CosmosDBConnectionString",
+            containerName = "hl7-lakeSegs", createIfNotExists = true,
+         partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>,
+        context: ExecutionContext
+    ): List<JsonObject> {
 
-        return processMessages(message, eventHubMD)
-
-    } // .eventHubProcessor
-
-    private fun processMessages(message: List<String?>, eventHubMD: List<EventHubMetadata>) : List<JsonObject> {
         val processedMsgs = mutableListOf<JsonObject>()
+        val outOkList = mutableListOf<String>()
+        val outErrList = mutableListOf<String>()
+        val outEventList = mutableListOf<JsonObject>()
+        //process the messages
         message.forEachIndexed {
                 messageIndex: Int, singleMessage: String? ->
-            // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
+            //context.logger.info("------ singleMessage: ------>: --> $singleMessage")
             val startTime =  Date().toIsoString()
             try {
 
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
                 // context.logger.info("------ inputEvent: ------>: --> $inputEvent")
-
                 // Extract from event
                 val hl7ContentBase64 = inputEvent["content"].asString
-                val hl7ContentDecodedBytes = Base64.getDecoder().decode(hl7ContentBase64)
+                val hl7ContentDecodedBytes = getDecoder().decode(hl7ContentBase64)
                 val hl7Content = String(hl7ContentDecodedBytes)
                 val metadata = inputEvent["metadata"].asJsonObject
                 val provenance = metadata["provenance"].asJsonObject
@@ -87,11 +97,14 @@ class Function {
 
                     // Transform to Lake of Segments
                     val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
+                    outOkList.add(gson.toJson(inputEvent))
+                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
                     logger.info("DEX::Processed OK for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendOkName}")
 
                     // deliver
-                    updateMetadataAndDeliver(startTime, PROCESS_STATUS_OK, lakeSegsModel, eventHubMD[messageIndex],
-                        fnConfig.evHubSender, fnConfig.eventHubSendOkName, inputEvent, null, config
+                    outOkList.add(gson.toJson(inputEvent))
+                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+                    updateMetadataAndDeliver(startTime, PROCESS_STATUS_OK, lakeSegsModel, eventHubMD[messageIndex],inputEvent, null, config
                     )
 
                     processedMsgs.add( inputEvent )
@@ -100,8 +113,9 @@ class Function {
                     logger.error("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
 
                     //publishing the message  to the eventhubSendErrsName topic using EventHub
-                    updateMetadataAndDeliver(startTime, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex],
-                        fnConfig.evHubSender, fnConfig.eventHubSendErrsName, inputEvent, e, config)
+                    outErrList.add(gson.toJson(inputEvent))
+                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+                    updateMetadataAndDeliver(startTime, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex], inputEvent, e, config)
 
                     logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
 
@@ -117,10 +131,15 @@ class Function {
             } // .catch
 
         } // .message.forEach
+        //add payload to eventhubs and cosmosdb outbindings
+        lakeSegsOk.value = outOkList
+        lakeSegsErr.value = outErrList
+        cosmosOutput.value = outEventList.toList()
         return processedMsgs.toList()
-    }
-    private fun updateMetadataAndDeliver(startTime: String, status: String, report: List<Segment>?, eventHubMD: EventHubMetadata,
-                                         evHubSender: EventHubSender, evTopicName: String, inputEvent: JsonObject, exception: Exception?, config: List<String>) {
+
+    } // .eventHubProcessor
+
+    private fun updateMetadataAndDeliver(startTime: String, status: String, report: List<Segment>?, eventHubMD: EventHubMetadata, inputEvent: JsonObject, exception: Exception?, config: List<String>) {
 
         val processMD = LakeSegsTransProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
@@ -139,10 +158,11 @@ class Function {
         }
         // enable for model
         val inputEventOut = gsonWithNullsOn.toJson(inputEvent)
-        evHubSender.send(
-            evHubTopicName = evTopicName,
-            message = inputEventOut
-        )
+        println ("inputEventOut " + inputEventOut)
+        // evHubSender.send(
+        //     evHubTopicName = evTopicName,
+        //     message = inputEventOut
+        // )
     }
 
 
