@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+### [0.0.27] - 2023-09-06
+	- All pipeline functions syncing events to Cosmos DB
+	- All pipeline functions sending Events using annotation 
+	- All pipeline functions migrated to Java 17 (Need DevOps support)
+	- Clean up DEV and TST environments (remove Redis and deprecated functions)
+	- Updated TST terraform scripts for current resources.
+ 	- Partitioning data from PHINMS and Mercury into year/month/day for Bulk load and daily load.
+
 ### [0.0.26] - 2023-08-23
 	- Created an initial Validation API to expose our validation to States.
 	- Created an initial Processing Monitor API to query status of a single message against our data lake.
