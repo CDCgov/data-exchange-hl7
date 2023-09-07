@@ -15,7 +15,6 @@ class FunctionConfig {
     private fun loadNistValidators() : Map<String, ProfileManager> {
         val validatorMap = mutableMapOf<String, ProfileManager>()
         val dir = PathUtils().getResourcePath("profiles")
-        println("Directory: ${dir.fileName}")
         Files.walk(dir).filter { it.isDirectory() && it.fileName != dir.fileName }.forEach { d ->
             val validator = ProfileManager(ResourceFileFetcher(), "/profiles/${d.fileName}")
             validatorMap["${d.fileName}"] = validator
