@@ -158,11 +158,6 @@ class Function {
         }
         // enable for model
         val inputEventOut = gsonWithNullsOn.toJson(inputEvent)
-        println ("inputEventOut " + inputEventOut)
-        // evHubSender.send(
-        //     evHubTopicName = evTopicName,
-        //     message = inputEventOut
-        // )
     }
 
 
