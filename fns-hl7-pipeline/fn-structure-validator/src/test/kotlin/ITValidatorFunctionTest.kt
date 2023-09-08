@@ -5,6 +5,7 @@ import com.microsoft.azure.functions.HttpRequestMessage
 import com.microsoft.azure.functions.OutputBinding
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.hl7.ValidatorFunction
+import gov.cdc.dex.hl7.ValidatorFunction.Companion.gson
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -22,13 +23,14 @@ class ITValidatorFunctionTest {
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val function = ValidatorFunction()
         val cosmosOutput = getOutputBindingList<JsonObject>()
-        function.eventHubProcessor(messages, eventHubMDList,
+        val result = function.eventHubProcessor(messages, eventHubMDList,
             getExecutionContext(),
             getOutputBindingList<String>(),
             getOutputBindingList<String>(),
             cosmosOutput
         )
         println("Finished processing $filename ")
+        println(gson.toJson(result))
 
     }
 
