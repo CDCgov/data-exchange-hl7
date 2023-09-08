@@ -15,7 +15,6 @@ import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
-import gov.cdc.dex.util.JsonHelper.gson
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import java.util.*
 import org.slf4j.LoggerFactory
@@ -84,6 +83,8 @@ class Function {
                 val filePath = provenance["file_path"].asString
                 val messageUUID = inputEvent["message_uuid"].asString
 
+                // initialize processed_metadata to be be sent to eventhubs and cosmosdb
+                var processed_metadata:JsonObject? = null
                 logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
                 //
@@ -97,26 +98,26 @@ class Function {
 
                     // Transform to Lake of Segments
                     val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
-                    outOkList.add(gson.toJson(inputEvent))
-                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+
+                    // updateMetadata
+                    processed_metadata = updateMetadata(startTime, PROCESS_STATUS_OK, lakeSegsModel, eventHubMD[messageIndex],inputEvent, null, config
+                    )
+                    // add payload to eventhub outbindings for lakeSegsOk
+                    outOkList.add(gsonWithNullsOn.toJson(processed_metadata))
+                    outEventList.add(processed_metadata)
                     logger.info("DEX::Processed OK for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendOkName}")
 
-                    // deliver
-                    outOkList.add(gson.toJson(inputEvent))
-                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
-                    updateMetadataAndDeliver(startTime, PROCESS_STATUS_OK, lakeSegsModel, eventHubMD[messageIndex],inputEvent, null, config
-                    )
 
                     processedMsgs.add( inputEvent )
                 } catch (e: Exception) {
 
                     logger.error("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
 
-                    //publishing the message  to the eventhubSendErrsName topic using EventHub
-                    outErrList.add(gson.toJson(inputEvent))
-                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
-                    updateMetadataAndDeliver(startTime, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex], inputEvent, e, config)
 
+                    processed_metadata = updateMetadata(startTime, PROCESS_STATUS_EXCEPTION, null, eventHubMD[messageIndex], inputEvent, e, config)
+                    context.logger.info("PROCESSED_METADATA = "+ processed_metadata)
+                    outEventList.add(processed_metadata)
+                    outErrList.add(gsonWithNullsOn.toJson(processed_metadata))
                     logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
 
                     processedMsgs.add( inputEvent )
@@ -139,7 +140,7 @@ class Function {
 
     } // .eventHubProcessor
 
-    private fun updateMetadataAndDeliver(startTime: String, status: String, report: List<Segment>?, eventHubMD: EventHubMetadata, inputEvent: JsonObject, exception: Exception?, config: List<String>) {
+    private fun updateMetadata(startTime: String, status: String, report: List<Segment>?, eventHubMD: EventHubMetadata, inputEvent: JsonObject, exception: Exception?, config: List<String>): JsonObject {
 
         val processMD = LakeSegsTransProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
@@ -156,13 +157,7 @@ class Function {
         } else {
             inputEvent.add("summary", (SummaryInfo(SUMMARY_STATUS_OK, null).toJsonElement()))
         }
-        // enable for model
-        val inputEventOut = gsonWithNullsOn.toJson(inputEvent)
-        println ("inputEventOut " + inputEventOut)
-        // evHubSender.send(
-        //     evHubTopicName = evTopicName,
-        //     message = inputEventOut
-        // )
+        return inputEvent
     }
 
 
