@@ -69,28 +69,28 @@ class Function {
             message.forEachIndexed { messageIndex: Int, singleMessage: String? ->
                 //context.logger.info("------ singleMessage: ------>: --> $singleMessage")
                 val startTime = Date().toIsoString()
+                // initialize processed_metadata to be be sent to eventhubs and cosmosdb
+                val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+                var processed_metadata: JsonObject? = null
+                //
+                // Process Message for SQL Model
+                // ----------------------------------------------
+                val profileFilePath = "/BasicProfile.json"
+                val config = listOf(profileFilePath)
+                // context.logger.info("------ inputEvent: ------>: --> $inputEvent")
+                // Extract from event
+                val hl7ContentBase64 = inputEvent["content"].asString
+                val hl7ContentDecodedBytes = getDecoder().decode(hl7ContentBase64)
+                val hl7Content = String(hl7ContentDecodedBytes)
+                val metadata = inputEvent["metadata"].asJsonObject
+                val provenance = metadata["provenance"].asJsonObject
+                val filePath = provenance["file_path"].asString
+                val messageUUID = inputEvent["message_uuid"].asString
+
+
+                logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                 try {
 
-                    val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-                    // context.logger.info("------ inputEvent: ------>: --> $inputEvent")
-                    // Extract from event
-                    val hl7ContentBase64 = inputEvent["content"].asString
-                    val hl7ContentDecodedBytes = getDecoder().decode(hl7ContentBase64)
-                    val hl7Content = String(hl7ContentDecodedBytes)
-                    val metadata = inputEvent["metadata"].asJsonObject
-                    val provenance = metadata["provenance"].asJsonObject
-                    val filePath = provenance["file_path"].asString
-                    val messageUUID = inputEvent["message_uuid"].asString
-
-                    // initialize processed_metadata to be be sent to eventhubs and cosmosdb
-                    var processed_metadata: JsonObject? = null
-                    logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
-
-                    //
-                    // Process Message for SQL Model
-                    // ----------------------------------------------
-                    val profileFilePath = "/BasicProfile.json"
-                    val config = listOf(profileFilePath)
                     try {
                         // read the profile
                         val profile = this::class.java.getResource(profileFilePath).readText()
@@ -141,7 +141,19 @@ class Function {
 
                     // message is bad, can't extract fields based on schema expected
                     logger.error("Unable to process Message due to exception: ${e.message}")
-                    e.printStackTrace()
+                    processed_metadata = updateMetadata(
+                        startTime,
+                        PROCESS_STATUS_EXCEPTION,
+                        null,
+                        eventHubMD[messageIndex],
+                        inputEvent,
+                        e,
+                        config
+                    )
+                    outEventList.add(processed_metadata)
+                    outErrList.add(gsonWithNullsOn.toJson(processed_metadata))
+                    logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
+
                     processedMsgs.add(JsonObject())
                 } // .catch
 
