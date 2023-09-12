@@ -194,16 +194,21 @@ class ValidatorFunction {
             throw InvalidMessageException("Unable to process message: Unable to retrieve PHIN Specification from $PHIN_SPEC_PROFILE$exMessage")
         }
 
-        val nistValidator = fnConfig.nistValidators[profileName]!!
-        val report = nistValidator.validate(hl7Message)
-        report.status = if ("ERROR" in report.status + "") {
-            NIST_INVALID_MESSAGE
-        } else if (report.status.isNullOrEmpty()) {
-            "Unknown"
+        val nistValidator = fnConfig.nistValidators[profileName]
+        if (nistValidator == null) {
+            throw InvalidMessageException("Unsupported route $profileName")
         } else {
-            report.status + ""
+            val report = nistValidator.validate(hl7Message)
+            report.status = if ("ERROR" in report.status + "") {
+                NIST_INVALID_MESSAGE
+            } else if (report.status.isNullOrEmpty()) {
+                "Unknown"
+            } else {
+                report.status + ""
+            }
+
+            return report
         }
-        return report
     }
 
     private fun validateHL7Delimiters(hl7Message: String) {
