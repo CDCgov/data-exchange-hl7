@@ -117,7 +117,13 @@ class Function {
                 } catch (e: Exception) {
                     // message is bad, can't extract fields based on schema expected
                     context.logger.severe("Unable to process Message due to exception: ${e.message}")
-                    e.printStackTrace()
+                    updateMetadataAndDeliver(
+                            startTime, JsonObject(), PROCESS_STATUS_EXCEPTION,
+                            null, eventHubMD[messageIndex], gsonWithNullsOn,
+                            JsonObject(), e,
+                            listOf(FunctionConfig.PROFILE_FILE_PATH),
+                            outData
+                    )
                     return JsonObject()
                 } // .catch
             }
