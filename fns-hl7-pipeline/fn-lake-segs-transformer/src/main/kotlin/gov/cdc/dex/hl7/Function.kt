@@ -56,7 +56,7 @@ class Function {
             connection = "EventHubConnectionString") lakeSegsErr: OutputBinding<List<String>>,
         @CosmosDBOutput(name="cosmosdevpublic",
             connection = "CosmosDBConnectionString",
-            containerName = "hl7-lakeSegs", createIfNotExists = true,
+            containerName = "hl7-lake-segments", createIfNotExists = true,
          partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>,
         context: ExecutionContext
     ): List<JsonObject> {
