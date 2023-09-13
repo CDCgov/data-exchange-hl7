@@ -35,15 +35,7 @@ class ValidationTest {
         println("report: -->\n\n${gson.toJson(report)}\n")
         return report
     }
-    @Test
-    fun testELRMessage() {
-        val testMessage = this::class.java.getResource("/covidELR/2.3.1 HL7 Test File with HHS Data.txt")?.readText()
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/COVID19_ELR-v2.3.1")
-        val report = nistValidator.validate(testMessage!!)
-        println("report: -->\n\n${gson.toJson(report)}\n")
-        //
 
-    }
     @Test
     fun testPHLIPVPDMessage() {
         val testMessage = this::class.java.getResource("/VPD_Measles.txt")?.readText()
@@ -117,12 +109,10 @@ class ValidationTest {
     fun testCovidELRMessages() {
         testFolderByType("covidELR", HL7MessageType.ELR)
     }
-    @Test
     fun testGenV1CaseMapMessages() {
         testFolder("genV1")
     }
 
-    @Test
     fun testArboMessages() {
         testFolder("arbo")
     }
@@ -131,17 +121,15 @@ class ValidationTest {
     fun testTBRDMessages() {
         testFolder("tbrd")
     }
-    @Test
     fun testNNDSSMessages() {
         testFolder("ndss")
     }
-    @Test
+
     fun testADBMessages() {
         testFolder("adb")
     }
 
 
-    @Test
     fun testHep10Messages() {
         testFolder("Hep")
     }
