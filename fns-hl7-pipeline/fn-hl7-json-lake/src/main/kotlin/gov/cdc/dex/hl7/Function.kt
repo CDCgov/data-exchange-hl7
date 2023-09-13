@@ -68,66 +68,73 @@ class Function {
         if ( messages == null) {
             return JsonObject()
         }
-        //return if ( messages != null)  processAllMessages(messages, eventHubMD, context)  else  JsonObject()
         val outData = OutData()
-        messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
-            val startTime = Date().toIsoString()
-            try {
-                val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-                val metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
-                val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
-                val messageUUID = inputEvent["message_uuid"].asString
-
-                // set id messageUUID, if missing
-                if (!inputEvent.has("id")) {
-                    inputEvent.add("id", messageUUID.toJsonElement())
-                }
-
-                logger.info("DEX::Processing messageUUID:$messageUUID")
+        try {
+            messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
+                val startTime = Date().toIsoString()
                 try {
-                    val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-                    val bumblebee = HL7JsonTransformer.getTransformerWithResource(hl7message, FunctionConfig.PROFILE_FILE_PATH)
-                    val fullHL7 = bumblebee.transformMessage()
-                    updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_OK,
+                    val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+                    val metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
+                    val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
+                    val messageUUID = inputEvent["message_uuid"].asString
+
+                    // set id messageUUID, if missing
+                    if (!inputEvent.has("id")) {
+                        inputEvent.add("id", messageUUID.toJsonElement())
+                    }
+
+                    logger.info("DEX::Processing messageUUID:$messageUUID")
+                    try {
+                        val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
+                        val bumblebee =
+                            HL7JsonTransformer.getTransformerWithResource(hl7message, FunctionConfig.PROFILE_FILE_PATH)
+                        val fullHL7 = bumblebee.transformMessage()
+                        updateMetadataAndDeliver(
+                            startTime, metadata, PROCESS_STATUS_OK,
                             fullHL7, eventHubMD[messageIndex], gsonWithNullsOn,
                             inputEvent, null,
                             listOf(FunctionConfig.PROFILE_FILE_PATH),
-                            outData)
-                    context.logger.info("Processed OK for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath")
-                    if (messageIndex == messages.lastIndex){
-                        with(outData) {
-                            jsonlakeOkOutput.value = ok
-                            jsonlakeErrOutput.value = err
-                            cosmosOutput.value = cosmo
+                            outData
+                        )
+                        context.logger.info("Processed OK for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath")
+                        if (messageIndex == messages.lastIndex) {
+                            return inputEvent
                         }
-                        return inputEvent
-                    }
-                } catch (e: Exception) {
-                    context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
-                    //publishing the message  to the eventhubSendErrsName topic using EventHub
-                    updateMetadataAndDeliver(startTime, metadata, PROCESS_STATUS_EXCEPTION,
+                    } catch (e: Exception) {
+                        context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
+                        //publishing the message  to the eventhubSendErrsName topic using EventHub
+                        updateMetadataAndDeliver(
+                            startTime, metadata, PROCESS_STATUS_EXCEPTION,
                             null, eventHubMD[messageIndex], gsonWithNullsOn,
                             inputEvent, e,
                             listOf(FunctionConfig.PROFILE_FILE_PATH),
-                            outData)
-                    context.logger.info("Processed ERROR for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath")
-                    with(outData) {
-                        jsonlakeOkOutput.value = ok
-                        jsonlakeErrOutput.value = err
-                        cosmosOutput.value = cosmo
-                    }
-                    return inputEvent
+                            outData
+                        )
+                        context.logger.info("Processed ERROR for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath")
+                        return inputEvent
+                    } // .catch
+
+                } catch (e: Exception) {
+                    // message is bad, can't extract fields based on schema expected
+                    context.logger.severe("Unable to process Message due to exception: ${e.message}")
+                    updateMetadataAndDeliver(
+                            startTime, JsonObject(), PROCESS_STATUS_EXCEPTION,
+                            null, eventHubMD[messageIndex], gsonWithNullsOn,
+                            JsonObject(), e,
+                            listOf(FunctionConfig.PROFILE_FILE_PATH),
+                            outData
+                    )
+                    return JsonObject()
                 } // .catch
-
-            } catch (e: Exception) {
-                // message is bad, can't extract fields based on schema expected
-                context.logger.severe("Unable to process Message due to exception: ${e.message}")
-                e.printStackTrace()
-                return JsonObject()
-
-            } // .catch
+            }
+            return JsonObject()
+        } finally {
+            with(outData) {
+                jsonlakeOkOutput.value = ok
+                jsonlakeErrOutput.value = err
+                cosmosOutput.value = cosmo
+            }
         }
-        return JsonObject()
     }
 
     private fun updateMetadataAndDeliver(
