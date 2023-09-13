@@ -138,6 +138,7 @@
                     <appServicePlanName>ocio-ede-${environment-id}-hl7-app-service-plan</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
+                    <appServicePlanName>ocio-ede-${environment-id}-hl7-app-service-plan</appServicePlanName>
                     <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
