@@ -1,14 +1,20 @@
-import gov.cdc.dex.hl7.validation.structure.*
+import com.google.gson.JsonObject
+import gov.cdc.dex.hl7.*
 import gov.cdc.dex.azure.EventHubMetadata
 import java.io.File
 import java.util.*
-import java.util.logging.Logger
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.listDirectoryEntries
+import local.*
 
 
 object RunClass {
+    val evHubOkName: String = System.getenv("EventHubSendOkName")
+    val evHubErrorName: String = System.getenv("EventHubSendErrsName")
+    val evHubConnStr = System.getenv("EventHubConnectionString")
+    val containerPath = System.getenv("ContainerPath")
+
     @JvmStatic
     fun main(args: Array<String>) {
         var container = System.getenv("EventHubConnectionString")
@@ -22,7 +28,15 @@ object RunClass {
                 File(path.absolutePathString()).readText()
             }
         if ( messages.isNotEmpty() ) {
-            with(ValidatorFunction()) { eventHubProcessor(messages, eventHubMDList, context) }
+            val ok = OutBinding<List<String>>()
+            val err = OutBinding<List<String>>()
+            val cosmos = OutBinding<List<JsonObject>>()
+            with(ValidatorFunction()) {
+                eventHubProcessor( messages, eventHubMDList, context, ok, err, cosmos)
+            }
+            ok.value?.let { writeToHub( evHubConnStr, evHubOkName, it) }
+            err.value?.let { writeToHub( evHubConnStr, evHubErrorName, it) }
+            cosmos.value?.let {writeToContainer(containerPath, it) }
         }
         else {
             println("* No messages found for ${context.functionName}")

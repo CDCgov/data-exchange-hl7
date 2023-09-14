@@ -103,5 +103,12 @@
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>local.run.util</groupId>
+            <artifactId>local-util</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../utils/target/utils-1.0-SNAPSHOT.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

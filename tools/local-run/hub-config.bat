@@ -61,6 +61,31 @@ if not exist "storage\hl7ingress" (
   mkdir storage\hl7ingress
 )
 
+if not exist "storage\hl7-events" (
+  mkdir storage\hl7-events
+)
+
+if not exist "storage\hl7-events\hl7-recdeb" (
+  mkdir storage\hl7-events\hl7-recdeb
+)
+
+if not exist "storage\hl7-events\hl7-redacted" (
+  mkdir storage\hl7-events\hl7-redacted
+)
+
+if not exist "storage\hl7-events\hl7-structure" (
+  mkdir storage\hl7-events\hl7-structure
+)
+
+if not exist "storage\hl7-events\hl7-json-lake" (
+  mkdir storage\hl7-events\hl7-json-lake
+)
+
+if not exist "storage\hl7-events\hl7-lake-segments" (
+  mkdir storage\hl7-events\hl7-lake-segments
+)
+
+
 cd %scriptpath%
 set scriptpath=
 
