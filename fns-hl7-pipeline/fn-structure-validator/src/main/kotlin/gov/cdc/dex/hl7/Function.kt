@@ -7,7 +7,6 @@ import com.google.gson.JsonPrimitive
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import com.azure.messaging.eventhubs.*
-import com.fasterxml.jackson.databind.JsonMappingException
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.metadata.Problem
@@ -253,6 +252,8 @@ class ValidatorFunction {
                 HttpStatus.BAD_REQUEST,
                 request)
         }
+        logger.info("Received message with x-tp-message_type $messageType")
+
         val route = if (!request.headers["x-tp-route"].isNullOrEmpty()) {
             request.headers["x-tp-route"].toString()
         } else {
@@ -266,12 +267,13 @@ class ValidatorFunction {
                 ""
             }
         }
-
+        if (route.isNotEmpty()) { logger.info("Message route received: $route") }
         return try {
             val report =  validateMessage(
                     hl7Message, "N/A", "N/A",
                     messageType.let { HL7MessageType.valueOf(it) }, route
                 )
+            logger.info("Validation report created OK")
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
         } catch (e: Exception) {
             buildHttpResponse(
@@ -281,14 +283,19 @@ class ValidatorFunction {
             )
         }
     }
-}
 
-private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
-    // need to be able to send plain text exception message that is not formatted as json
-    val contentType = if (status == HttpStatus.OK) { "application/json" } else { "text/plain" }
-    return request
-        .createResponseBuilder(status)
-        .header("Content-Type", contentType)
-        .body(message)
-        .build()
+    private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+        // need to be able to send plain text exception message that is not formatted as json
+        val contentType = if (status == HttpStatus.OK) {
+            "application/json"
+        } else {
+            logger.error(message)
+            "text/plain"
+        }
+        return request
+            .createResponseBuilder(status)
+            .header("Content-Type", contentType)
+            .body(message)
+            .build()
+    }
 }
