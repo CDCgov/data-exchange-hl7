@@ -1,7 +1,6 @@
 package gov.cdc.dex.hl7
 
 import com.google.gson.*
-import com.microsoft.azure.functions.ExecutionContext
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
@@ -12,7 +11,7 @@ import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.bumblebee.HL7JsonTransformer
 import java.util.*
 import com.google.gson.JsonObject
-import com.microsoft.azure.functions.OutputBinding
+import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import org.slf4j.LoggerFactory
 
@@ -86,9 +85,7 @@ class Function {
                     logger.info("DEX::Processing messageUUID:$messageUUID")
                     try {
                         val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-                        val bumblebee =
-                            HL7JsonTransformer.getTransformerWithResource(hl7message, FunctionConfig.PROFILE_FILE_PATH)
-                        val fullHL7 = bumblebee.transformMessage()
+                        val fullHL7 = buildJson(hl7message, FunctionConfig.PROFILE_FILE_PATH)
                         updateMetadataAndDeliver(
                             startTime, metadata, PROCESS_STATUS_OK,
                             fullHL7, eventHubMD[messageIndex], gsonWithNullsOn,
@@ -162,5 +159,56 @@ class Function {
         outData.cosmo.add((gsonWithNullsOn.toJsonTree(inputEvent) as JsonObject))
     }
 
+    @FunctionName("hl7_json_lake_http_trigger")
+    fun invoke(
+        @HttpTrigger(
+            name = "req",
+            methods = [HttpMethod.POST],
+            authLevel = AuthorizationLevel.ANONYMOUS
+        )
+        request: HttpRequestMessage<Optional<String>>,
+        context:ExecutionContext
+    ): HttpResponseMessage {
+        context.logger.info("hl7_json_lake_http_trigger is processing the request")
+        val hl7Message = try {
+            request.body?.get().toString()
+        } catch (e: NoSuchElementException) {
+            context.logger.severe("Missing HL7 message in the request body. Caught exception: ${e.message}")
+            return buildHttpResponse(
+                "No body was found. Please send an HL7 v.2.x message in the body of the request.",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
+        }
+
+        return try {
+            val fullHL7 = buildJson(hl7Message, FunctionConfig.PROFILE_FILE_PATH)
+            buildHttpResponse(gsonWithNullsOn.toJson(fullHL7), HttpStatus.OK, request)
+        } catch (e: Exception) {
+            context.logger.severe("Unable to process Message due to exception: ${e.message}")
+            buildHttpResponse(
+                "${e.message}",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
+        }
+    }
+
 } // .Function
+
+private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+    // need to be able to send plain text exception message that is not formatted as json
+    val contentType = if (status == HttpStatus.OK) { "application/json" } else { "text/plain" }
+    return request
+        .createResponseBuilder(status)
+        .header("Content-Type", contentType)
+        .body(message)
+        .build()
+}
+
+private fun buildJson(message:String, profilePath : String) : JsonObject{
+    val bumblebee =
+        HL7JsonTransformer.getTransformerWithResource(message, profilePath)
+    return bumblebee.transformMessage()
+}
 
