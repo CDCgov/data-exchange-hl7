@@ -952,7 +952,7 @@
   },
   {
     "fieldNumber": 16,
-    "name": "Ordering Prrovider",
+    "name": "Ordering Provider",
     "dataType": "XCN",
     "maxLength": "3242",
     "usage": "RE",
