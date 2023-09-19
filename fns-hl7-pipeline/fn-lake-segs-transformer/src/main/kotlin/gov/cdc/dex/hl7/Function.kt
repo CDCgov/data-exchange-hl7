@@ -43,7 +43,7 @@ class Function {
     fun eventHubProcessor(
         @EventHubTrigger(
             name = "msg",
-            eventHubName = "%EventHubReceiverName%",
+            eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
             consumerGroup = "%EventHubConsumerGroup%",)
         message: List<String?>,
