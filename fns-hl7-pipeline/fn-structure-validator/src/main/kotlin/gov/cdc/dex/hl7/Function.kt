@@ -193,7 +193,7 @@ class ValidatorFunction {
             throw InvalidMessageException("Unable to process message: Unable to retrieve PHIN Specification from $PHIN_SPEC_PROFILE$exMessage")
         }
 
-        val nistValidator = fnConfig.nistValidators[profileName]
+        val nistValidator = fnConfig.getNistValidator(profileName)
         if (nistValidator == null) {
             throw InvalidMessageException("Unsupported route $profileName")
         } else {

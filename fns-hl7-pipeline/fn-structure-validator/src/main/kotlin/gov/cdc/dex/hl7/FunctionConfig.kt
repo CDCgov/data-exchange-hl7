@@ -1,25 +1,28 @@
 package gov.cdc.dex.hl7
-import gov.cdc.dex.util.PathUtils
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
-import java.io.IOException
-import java.nio.file.Files
-import java.util.*
-import kotlin.io.path.*
+import org.slf4j.LoggerFactory
 
 class FunctionConfig {
 
-    val nistValidators = loadNistValidators()
+    private val nistValidators = mutableMapOf<String, ProfileManager?>()
     val functionVersion = System.getenv("FN_VERSION")?.toString() ?: "Unknown"
+    private var logger = LoggerFactory.getLogger(FunctionConfig::class.java.simpleName)
 
-    private fun loadNistValidators() : Map<String, ProfileManager> {
-        val validatorMap = mutableMapOf<String, ProfileManager>()
-        val dir = PathUtils().getResourcePath("profiles")
-        Files.walk(dir).filter { it.isDirectory() && it.fileName != dir.fileName }.forEach { d ->
-            val validator = ProfileManager(ResourceFileFetcher(), "/profiles/${d.fileName}")
-            validatorMap["${d.fileName}"] = validator
+    fun getNistValidator(profileName: String) : ProfileManager? {
+        if (nistValidators[profileName] == null) {
+            loadNistValidator(profileName)
         }
-        return validatorMap.toMap()
+        return nistValidators[profileName]
+    }
+    private fun loadNistValidator(profileName : String)  {
+        val validator = try {
+            ProfileManager(ResourceFileFetcher(), "/profiles/$profileName")
+        } catch (e : Exception) {
+            logger.error("${e.message}")
+            null
+        }
+        nistValidators[profileName] = validator
     }
 
 }
