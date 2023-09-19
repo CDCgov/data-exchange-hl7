@@ -159,21 +159,20 @@ class Function {
         outData.cosmo.add((gsonWithNullsOn.toJsonTree(inputEvent) as JsonObject))
     }
 
-    @FunctionName("hl7_json_lake_http_trigger")
+    @FunctionName("transform")
     fun invoke(
         @HttpTrigger(
             name = "req",
             methods = [HttpMethod.POST],
             authLevel = AuthorizationLevel.ANONYMOUS
         )
-        request: HttpRequestMessage<Optional<String>>,
-        context:ExecutionContext
+        request: HttpRequestMessage<Optional<String>>
     ): HttpResponseMessage {
-        context.logger.info("hl7_json_lake_http_trigger is processing the request")
+        logger.info("Received HL7 message for transformation")
         val hl7Message = try {
             request.body?.get().toString()
         } catch (e: NoSuchElementException) {
-            context.logger.severe("Missing HL7 message in the request body. Caught exception: ${e.message}")
+            logger.error("Missing HL7 message in the request body. Caught exception: ${e.message}")
             return buildHttpResponse(
                 "No body was found. Please send an HL7 v.2.x message in the body of the request.",
                 HttpStatus.BAD_REQUEST,
@@ -183,9 +182,10 @@ class Function {
 
         return try {
             val fullHL7 = buildJson(hl7Message, FunctionConfig.PROFILE_FILE_PATH)
+            logger.info("HL7 message has been transformed to JSONObject")
             buildHttpResponse(gsonWithNullsOn.toJson(fullHL7), HttpStatus.OK, request)
         } catch (e: Exception) {
-            context.logger.severe("Unable to process Message due to exception: ${e.message}")
+            logger.error("Unable to process message due to exception: ${e.message}")
             buildHttpResponse(
                 "${e.message}",
                 HttpStatus.BAD_REQUEST,
