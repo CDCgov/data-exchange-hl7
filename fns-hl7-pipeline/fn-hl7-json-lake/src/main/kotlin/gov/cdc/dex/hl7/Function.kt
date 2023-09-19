@@ -185,7 +185,7 @@ class Function {
             logger.info("HL7 message has been transformed to JSONObject")
             buildHttpResponse(gsonWithNullsOn.toJson(fullHL7), HttpStatus.OK, request)
         } catch (e: Exception) {
-            logger.error("Unable to process Message due to exception: ${e.message}")
+            logger.error("Unable to process message due to exception: ${e.message}")
             buildHttpResponse(
                 "${e.message}",
                 HttpStatus.BAD_REQUEST,
