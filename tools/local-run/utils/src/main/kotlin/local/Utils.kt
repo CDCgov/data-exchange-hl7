@@ -24,7 +24,7 @@ fun writeToHub( evHubConnStr:String, evHubName:String, messages:List<String>) {
 
 fun writeToContainer( containerPath:String, messages:List<JsonObject>) {
     messages.forEach {
-        Path("$containerPath/${it.get("id").asString.replace("\"", "")}.json").writeText(it.toString())
+        Path("$containerPath/${it.get("id").asString.replace("\"", "")}").writeText(it.toString())
     }
 }
 

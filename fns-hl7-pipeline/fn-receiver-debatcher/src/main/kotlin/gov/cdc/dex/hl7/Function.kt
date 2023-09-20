@@ -141,6 +141,7 @@ class Function {
                             summary
                         ).apply {
                             outErrList.add(gson.toJson(this))
+                            outEventList.add(gson.toJsonTree(this) as JsonObject)
                         }
 
                         //msgEvent = prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
@@ -178,6 +179,7 @@ class Function {
                                                 currentLinesArr, messageInfo, metadata, summary
                                             ).apply {
                                                 outOkList.add(gson.toJson(this))
+                                                outEventList.add(gson.toJsonTree(this) as JsonObject)
                                             }
                                             provenance.messageIndex++
                                         }
@@ -202,6 +204,7 @@ class Function {
                                 currentLinesArr, messageInfo, metadata, summary
                             ).apply {
                                 outOkList.add(gson.toJson(this))
+                                outEventList.add(gson.toJsonTree(this) as JsonObject)
                             }
                         } else {
                             // no valid message -- send to error queue
@@ -220,11 +223,11 @@ class Function {
                                 metadata, summary
                             ).apply {
                                 outErrList.add(gson.toJson(this))
+                                outEventList.add(gson.toJsonTree(this) as JsonObject)
                             }
                         }
                     }
                     logger.info("DEX::Processed messageUUID: ${msgEvent!!.messageUUID}")
-                    outEventList.add(gson.toJsonTree(msgEvent) as JsonObject)
                 } // .if
             }
             return msgEvent
