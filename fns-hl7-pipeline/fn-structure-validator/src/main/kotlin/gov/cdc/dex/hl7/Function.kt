@@ -66,79 +66,108 @@ class ValidatorFunction {
         val outOkList = mutableListOf<String>()
         val outErrList = mutableListOf<String>()
         val outEventList = mutableListOf<JsonObject>()
-        message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
-            val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-            val startTime =  Date().toIsoString()
-            var report = NistReport()
-            var metadata = JsonObject()
+        try {
+            message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
+                val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+                val startTime = Date().toIsoString()
+                var report = NistReport()
+                var metadata = JsonObject()
 
-            try {
-                val hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-                metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
-                val filePath =JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
-                val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
-                val routeJson = JsonHelper.getValueFromJson("message_info.route", inputEvent)
-                val route = if (routeJson is JsonPrimitive) routeJson.asString else ""
+                try {
+                    val hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
+                    metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
+                    val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
+                    val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
+                    val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
+                    val routeJson = JsonHelper.getValueFromJson("message_info.route", inputEvent)
+                    val route = if (routeJson is JsonPrimitive) routeJson.asString else ""
 
-                // set id parameter if does not exist
-                if (!inputEvent.has("id")) {
-                    inputEvent.add("id", messageUUID.toJsonElement())
-                }
+                    // set id parameter if does not exist
+                    if (!inputEvent.has("id")) {
+                        inputEvent.add("id", messageUUID.toJsonElement())
+                    }
 
-                logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
-                //Main FN Logic
-                report = validateMessage(hl7Content, messageUUID, filePath, HL7MessageType.valueOf(messageType), route)
-                //preparing EventHub payload:
-                val processMD = StructureValidatorProcessMetadata(PROCESS_STATUS_OK, report, eventHubMD[msgNumber], listOf(getProfileName(hl7Content, HL7MessageType.valueOf(messageType), route )))
+                    logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
+                    //Main FN Logic
+                    report =
+                        validateMessage(hl7Content, messageUUID, filePath, HL7MessageType.valueOf(messageType), route)
+                    //preparing EventHub payload:
+                    val processMD = StructureValidatorProcessMetadata(
+                        PROCESS_STATUS_OK,
+                        report,
+                        eventHubMD[msgNumber],
+                        listOf(getProfileName(hl7Content, HL7MessageType.valueOf(messageType), route))
+                    )
 
-                processMD.startProcessTime = startTime
-                processMD.endProcessTime = Date().toIsoString()
+                    processMD.startProcessTime = startTime
+                    processMD.endProcessTime = Date().toIsoString()
 
-                metadata.addArrayElement("processes", processMD)
-                //Update Summary element.
-                val summary = SummaryInfo(report.status ?: "Unknown")
-                if (NIST_VALID_MESSAGE != report.status) {
-                    summary.problem =
-                        Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, "Message failed Structure Validation")
-                }
-                inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
+                    metadata.addArrayElement("processes", processMD)
+                    //Update Summary element.
+                    val summary = SummaryInfo(report.status ?: "Unknown")
+                    if (NIST_VALID_MESSAGE != report.status) {
+                        summary.problem =
+                            Problem(
+                                StructureValidatorProcessMetadata.VALIDATOR_PROCESS,
+                                "Message failed Structure Validation"
+                            )
+                    }
+                    inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
 
-                // add event to appropriate output binding parameter
-                var destIndicator = "OK"
-                if (NIST_VALID_MESSAGE == report.status) {
-                    outOkList.add(gson.toJson(inputEvent))
-                } else {
-                    destIndicator = "ERROR"
+                    // add event to appropriate output binding parameter
+                    var destIndicator = "OK"
+                    if (NIST_VALID_MESSAGE == report.status) {
+                        outOkList.add(gson.toJson(inputEvent))
+                    } else {
+                        destIndicator = "ERROR"
+                        outErrList.add(gson.toJson(inputEvent))
+                    }
+                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+                    logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
+
+                } catch (e: Exception) {
+                    //TODO::  - update retry counts
+                    logger.error("Unable to process Message due to exception: ${e.message}")
+                    val processMD = StructureValidatorProcessMetadata(
+                        PROCESS_STATUS_EXCEPTION,
+                        report,
+                        eventHubMD[msgNumber],
+                        listOf()
+                    )
+                    processMD.startProcessTime = startTime
+                    processMD.endProcessTime = Date().toIsoString()
+                    metadata.addArrayElement("processes", processMD)
+                    val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, e, false, 0, 0)
+                    val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
+
+                    logger.error("metadata in exception: $metadata")
+                    logger.info("inputEvent in exception:$inputEvent")
+
+                    inputEvent.add("summary", summary.toJsonElement())
                     outErrList.add(gson.toJson(inputEvent))
+                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+                    logger.info(
+                        "Sent Message to Err Event Hub for Message Id ${
+                            JsonHelper.getValueFromJson(
+                                "message_uuid",
+                                inputEvent
+                            ).asString
+                        }"
+                    )
                 }
-                outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
-                logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
-
-            } catch (e: Exception) {
-                //TODO::  - update retry counts
-                logger.error("Unable to process Message due to exception: ${e.message}")
-                val processMD = StructureValidatorProcessMetadata(PROCESS_STATUS_EXCEPTION, report, eventHubMD[msgNumber], listOf())
-                processMD.startProcessTime = startTime
-                processMD.endProcessTime = Date().toIsoString()
-                metadata.addArrayElement("processes", processMD)
-                val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, e, false, 0, 0)
-                val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
-
-                logger.error("metadata in exception: $metadata")
-                logger.info("inputEvent in exception:$inputEvent")
-
-                inputEvent.add("summary", summary.toJsonElement())
-                outErrList.add(gson.toJson(inputEvent))
-                outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
-                logger.info("Sent Message to Err Event Hub for Message Id ${JsonHelper.getValueFromJson("message_uuid", inputEvent).asString}")
-            }
-        } // foreachIndexed
-
-        structureOkOutput.value = outOkList.toList()
-        structureErrOutput.value = outErrList.toList()
-        cosmosOutput.value = outEventList.toList()
-        return JsonObject()
+            } // foreachIndexed
+        } catch (ex: Exception) {
+            logger.error("An unexpected error occurred: ${ex.message}")
+        } finally {
+            structureOkOutput.value = outOkList
+            structureErrOutput.value = outErrList
+            cosmosOutput.value = outEventList
+        }
+        return if (outEventList.isNotEmpty()) {
+            outEventList.last()
+        } else {
+            JsonObject()
+        }
     } //.eventHubProcessor
 
 
@@ -164,16 +193,21 @@ class ValidatorFunction {
             throw InvalidMessageException("Unable to process message: Unable to retrieve PHIN Specification from $PHIN_SPEC_PROFILE$exMessage")
         }
 
-        val nistValidator = fnConfig.nistValidators[profileName]!!
-        val report = nistValidator.validate(hl7Message)
-        report.status = if ("ERROR" in report.status + "") {
-            NIST_INVALID_MESSAGE
-        } else if (report.status.isNullOrEmpty()) {
-            "Unknown"
+        val nistValidator = fnConfig.getNistValidator(profileName)
+        if (nistValidator == null) {
+            throw InvalidMessageException("Unsupported route $profileName")
         } else {
-            report.status + ""
+            val report = nistValidator.validate(hl7Message)
+            report.status = if ("ERROR" in report.status + "") {
+                NIST_INVALID_MESSAGE
+            } else if (report.status.isNullOrEmpty()) {
+                "Unknown"
+            } else {
+                report.status + ""
+            }
+
+            return report
         }
-        return report
     }
 
     private fun validateHL7Delimiters(hl7Message: String) {
@@ -218,6 +252,8 @@ class ValidatorFunction {
                 HttpStatus.BAD_REQUEST,
                 request)
         }
+        logger.info("Received message with x-tp-message_type $messageType")
+
         val route = if (!request.headers["x-tp-route"].isNullOrEmpty()) {
             request.headers["x-tp-route"].toString()
         } else {
@@ -231,12 +267,13 @@ class ValidatorFunction {
                 ""
             }
         }
-
+        if (route.isNotEmpty()) { logger.info("Message route received: $route") }
         return try {
             val report =  validateMessage(
                     hl7Message, "N/A", "N/A",
                     messageType.let { HL7MessageType.valueOf(it) }, route
                 )
+            logger.info("Validation report created OK")
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
         } catch (e: Exception) {
             buildHttpResponse(
@@ -246,14 +283,19 @@ class ValidatorFunction {
             )
         }
     }
-}
 
-private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
-    // need to be able to send plain text exception message that is not formatted as json
-    val contentType = if (status == HttpStatus.OK) { "application/json" } else { "text/plain" }
-    return request
-        .createResponseBuilder(status)
-        .header("Content-Type", contentType)
-        .body(message)
-        .build()
+    private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+        // need to be able to send plain text exception message that is not formatted as json
+        val contentType = if (status == HttpStatus.OK) {
+            "application/json"
+        } else {
+            logger.error(message)
+            "text/plain"
+        }
+        return request
+            .createResponseBuilder(status)
+            .header("Content-Type", contentType)
+            .body(message)
+            .build()
+    }
 }

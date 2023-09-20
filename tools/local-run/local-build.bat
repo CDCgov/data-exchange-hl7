@@ -11,6 +11,7 @@ set scriptpath=%~dp0
 
 if "%1"=="" goto commons
 if "%1"=="commons" goto commons
+if "%1"=="utils" goto utils
 if "%1"=="debatcher" goto debatcher
 if "%1"=="redactor" goto redactor
 if "%1"=="structure" goto structure
@@ -19,7 +20,7 @@ if "%1"=="lake-segs" goto lake-segs
 if "%1"=="uploader" goto uploader
 if "%1"=="summary" goto summary
 
-echo " run as:local-build OR local-build  [commons|debatcher|redactor|structure|json-lake|lake-segs|uploader|summary]
+echo " run as:local-build OR local-build  [commons|utils|debatcher|redactor|structure|json-lake|lake-segs|uploader|summary]
 echo "
 echo " %RED%NOTHING TO BUILD%RESET%
 echo "
@@ -33,6 +34,12 @@ call mvn --quiet dependency:copy-dependencies
 cd ..
 if not "%1"=="" goto end
 
+:utils
+echo " building utils...
+cd utils
+call mvn --quiet package
+cd ..
+if not "%1"=="" goto end
 
 :debatcher
 echo " building fn-debatcher-runner...

@@ -53,79 +53,87 @@ class Function {
         val outOkList = mutableListOf<String>()
         val outErrList = mutableListOf<String>()
         val outEventList = mutableListOf<JsonObject>()
+        try {
+            message.forEachIndexed { msgIndex: Int, singleMessage: String? ->
+                // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
+                val startTime = Date().toIsoString()
+                val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+                val hl7Content: String
+                val metadata: JsonObject
+                val filePath: String
+                val messageUUID: String
 
-        message.forEachIndexed { msgIndex: Int, singleMessage: String? ->
-           // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
-            val startTime = Date().toIsoString()
-            val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-            val hl7Content : String
-            val metadata : JsonObject
-            val filePath : String
-            val messageUUID : String
+                try {
+                    // Extract from event
+                    hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
+                    metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
 
-            try {
-                // Extract from event
-                hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-                metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
+                    filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
+                    messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
 
-                filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
-                messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
+                    val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
+                    val routeElement = JsonHelper.getValueFromJson("message_info.route", inputEvent)
 
-                val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
-                val routeElement = JsonHelper.getValueFromJson("message_info.route", inputEvent)
+                    // set id parameter if does not exist
+                    if (!inputEvent.has("id")) {
+                        inputEvent.add("id", messageUUID.toJsonElement())
+                    }
+                    val route = if (routeElement.isJsonNull) {
+                        ""
+                    } else {
+                        routeElement.asString
+                    }
 
-                // set id parameter if does not exist
-                if (!inputEvent.has("id")) {
-                    inputEvent.add("id", messageUUID.toJsonElement())
-                }
-                val route = if (routeElement.isJsonNull) {
-                    ""
-                } else {
-                    routeElement.asString
-                }
+                    logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
-				logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+                    val report = helper.getRedactedReport(hl7Content, messageType, route)
 
-                val report = helper.getRedactedReport(hl7Content, messageType, route)
+                    if (report != null) {
+                        val rReport = RedactorReport(report._2())
+                        val configFileName: List<String> = listOf(helper.getConfigFileName(messageType, route))
+                        val processMD = RedactorProcessMetadata(
+                            rReport.status,
+                            report = rReport,
+                            eventHubMD[msgIndex],
+                            configFileName
+                        )
+                        processMD.startProcessTime = startTime
+                        processMD.endProcessTime = Date().toIsoString()
+                        logger.info("Process MD: ${processMD} ")
 
-                if(report != null) {
-                    val rReport = RedactorReport(report._2())
-                    val configFileName : List<String> = listOf(helper.getConfigFileName(messageType, route))
-                    val processMD = RedactorProcessMetadata(rReport.status, report = rReport, eventHubMD[msgIndex], configFileName)
-                    processMD.startProcessTime = startTime
-                    processMD.endProcessTime = Date().toIsoString()
-                    logger.info("Process MD: ${processMD} ")
 
-                    metadata.addArrayElement("processes", processMD)
-                    val newContentBase64 = Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
-                    inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))
-                    //Update Summary element.
-                    val summary = SummaryInfo("REDACTED")
-                    inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                    logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
-                    outOkList.add(gson.toJson(inputEvent))
+                        metadata.addArrayElement("processes", processMD)
+                        val newContentBase64 =
+                            Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
+                        inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))
+                        //Update Summary element.
+                        val summary = SummaryInfo("REDACTED")
+                        inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
+                        logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
+                        outOkList.add(gson.toJson(inputEvent))
+                        outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
+                    }
+                } catch (e: Exception) {
+                    //TODO::  - update retry counts
+                    logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
+                    val problem = Problem(RedactorProcessMetadata.REDACTOR_PROCESS, e, false, 0, 0)
+
+                    val summary = SummaryInfo("FAILURE", problem)
+                    inputEvent.add("summary", summary.toJsonElement())
+                    outErrList.add(gson.toJson(inputEvent))
                     outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
-                    logger.info("inputEvent: ${inputEvent} ")
-                    //fnConfig.evHubSender.send(fnConfig.evHubOkName, gson.toJson(inputEvent))
+                   //return inputEvent
                 }
-            } catch (e: Exception) {
-                //TODO::  - update retry counts
-                logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
-                val problem = Problem(RedactorProcessMetadata.REDACTOR_PROCESS, e, false, 0, 0)
 
-                val summary = SummaryInfo("FAILURE", problem)
-                inputEvent.add("summary", summary.toJsonElement())
-                outErrList.add(gson.toJson(inputEvent))
-                outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
-                //fnConfig.evHubSender.send(fnConfig.evHubErrorName, gson.toJson(inputEvent))
-                return inputEvent
-            }
+            } // .eventHubProcessor
+        } catch (ex: Exception) {
+            logger.error("DEX:error occurred: ${ex.message}")
+        } finally {
+            redactorOkOutput.value = outOkList
+            redactorErrOutput.value = outErrList
+            cosmosOutput.value = outEventList
+        }
 
-                redactorOkOutput.value = outOkList.toList()
-                redactorErrOutput.value = outErrList.toList()
-                cosmosOutput.value = outEventList.toList()
-
-        } // .eventHubProcessor
         return JsonObject()
     }
 

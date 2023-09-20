@@ -142,7 +142,7 @@
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-                   <appServicePlanName>${functionServicePlan}</appServicePlanName>
+                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan</appServicePlanName>
                     <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
