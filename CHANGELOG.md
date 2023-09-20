@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+### [0.0.28] - 2023-09-20
+	- Migrated Structure validator to Elastic Plan in TST environment.
+	- Updated Structure Validator to load profiles with lazy-load approach 
+	- Changed all Functions to post events to Event Hub via annotation (@EventHubOutput)
+	- Improved error handling on all functions to avoid losing messages
+	- Added HTTP endpoint for HL7 Json for quick transformations
+ 	- Updated local-run tool with all changes from last and this sprint (cosmosDB, etc)
+	
 ### [0.0.27] - 2023-09-06
 	- All pipeline functions syncing events to Cosmos DB
 	- All pipeline functions sending Events using annotation 
