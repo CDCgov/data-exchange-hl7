@@ -681,7 +681,7 @@
             },
             {
                 "fieldNumber": 13,
-                "name": "Effeective Date",
+                "name": "Effective Date",
                 "dataType": "TS",
                 "maxLength": "26",
                 "usage": "O",
