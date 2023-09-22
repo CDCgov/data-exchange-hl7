@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: svc-cloud-validation
+    name: svc-hl7-validation
   server:
     multipart:
       max-file-size: 10485760

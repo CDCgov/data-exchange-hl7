@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dex</groupId>
-    <artifactId>svc-cloud-validation</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <artifactId>svc-hl7-validation</artifactId>
+    <version>0.0.29-SNAPSHOT</version>
     <!----><!-- -->
     <parent>
         <groupId>io.micronaut</groupId>
@@ -13,15 +13,14 @@
 
     <properties>
         <packaging>jar</packaging>
-        <jdk.version>11</jdk.version>
         <gson.version>2.10.1</gson.version>
-        <release.version>11</release.version>
         <micronaut.version>3.8.5</micronaut.version>
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>gov.cdc.dex.validation.service.Application</exec.mainClass>
-        <kotlinVersion>1.7.20</kotlinVersion>
+        <kotlinVersion>1.9.0</kotlinVersion>
         <hl7pet.version>1.2.7.2</hl7pet.version>
-        <lib-dex-commons.version>1.0.12-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
+        <java.version>17</java.version>
     </properties>
 
     <repositories>
@@ -36,6 +35,11 @@
         <repository>
             <id>nexus-snapshot</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede-snapshot/</url>
+        </repository>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
     </repositories>
 
@@ -53,7 +57,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.76.Final</version>
+            <version>4.1.90.Final</version>
         </dependency>
         <dependency>
             <groupId>io.micronaut</groupId>
@@ -152,7 +156,7 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <version>${kotlinVersion}</version>
                 <configuration>
-                    <jvmTarget>${jdk.version}</jvmTarget>
+                    <jvmTarget>${java.version}</jvmTarget>
                     <compilerPlugins>
                         <plugin>all-open</plugin>
                     </compilerPlugins>
@@ -174,16 +178,6 @@
                                 <annotationProcessorPath>
                                     <groupId>io.micronaut</groupId>
                                     <artifactId>micronaut-inject-java</artifactId>
-                                    <version>${micronaut.version}</version>
-                                </annotationProcessorPath>
-                                <annotationProcessorPath>
-                                    <groupId>io.micronaut</groupId>
-                                    <artifactId>micronaut-graal</artifactId>
-                                    <version>${micronaut.version}</version>
-                                </annotationProcessorPath>
-                                <annotationProcessorPath>
-                                    <groupId>io.micronaut</groupId>
-                                    <artifactId>micronaut-graal</artifactId>
                                     <version>${micronaut.version}</version>
                                 </annotationProcessorPath>
                                 <annotationProcessorPath>
@@ -245,7 +239,7 @@
                         </goals>
                         <configuration>
                             <sourceDirs>
-                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                                <sourceDir>src/test/kotlin</sourceDir>
                                 <sourceDir>${project.basedir}/target/generated-sources/kapt/test</sourceDir>
                             </sourceDirs>
                         </configuration>
@@ -260,46 +254,12 @@
                 </dependencies>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <proc>none</proc>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>default-testCompile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>java-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>java-test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-webapp-maven-plugin</artifactId>
-                <version>2.2.0</version>
+                <version>2.11.0</version>
                 <configuration>
                     <schemaVersion>v2</schemaVersion>
-                    <appName>cloud-svc-validation-${environment-id}-eastus</appName>
+                    <appName>ocio-ede-${environment-id}-svc-hl7-validation</appName>
                     <appServicePlanResourceGroup>${functionResourceGroup}</appServicePlanResourceGroup>
                      <!-- function app resource group -->
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
@@ -307,10 +267,9 @@
                     <appServicePlanName>${functionServicePlan}</appServicePlanName>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                     <region>${functionRegion}</region>
-
                     <runtime>
                         <os>Linux</os>
-                        <javaVersion>Java 11</javaVersion>
+                        <javaVersion>Java 17</javaVersion>
                         <webContainer>Java SE</webContainer>
                     </runtime>
                     <deployment>
@@ -325,7 +284,82 @@
                     </deployment>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>obj</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>testCompile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <groups>UnitTest</groups>
+                    <argLine>
+                        --illegal-access=permit
+                    </argLine>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <forkCount>2</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <argLine>${surefireArgLine}</argLine>
+                </configuration>
+            </plugin>
+            <!-- Add failsafe plugin for integration testing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <groups>IntegrationTest</groups>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
        </plugins>
     </build>
-
 </project>
