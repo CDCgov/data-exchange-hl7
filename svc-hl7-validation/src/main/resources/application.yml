@@ -11,6 +11,22 @@ micronaut:
         enabled: true
         step: PT1M
         descriptions: true
+  http:
+    services:
+      redactor:
+        urls:
+          - ${REDACTOR_URL}
+        pool:
+          max-concurrent-http1-connections: 50
+          enabled: true
+          max-connections: 50
+      structure:
+        urls:
+          - ${STRUCTURE_URL}
+        pool:
+          max-concurrent-http1-connections: 50
+          enabled: true
+          max-connections: 50
 
 endpoints:
   all:
@@ -23,32 +39,4 @@ endpoints:
   health:
     enabled: true
     details-visible: ANONYMOUS
-# ---------------------------------------------------------------------------------------------
-# To keep from setting these values here (and thus making it cloud agnostic), you'll need
-# to provide equivalent OS envvars in your project to configure. For example:
 
-# Using AWS:
-#  AWS_REGION = us-east-1
-#  AWS_S3_BUCKET = my-bucket
-#  AWS_S3_HEALTH_ENABLED = true
-#
-# or Using Azure:
-#  AZURE_BLOB_CONTAINER = my-blob
-#  AZURE_BLOB_CONNECT_STR = my-azure-blob-connection-string
-#  AZURE_BLOB_HEALTH_ENABLED = true
-# ---------------------------------------------------------------------------------------------
-#aws:
-#  region: us-east-1
-#  s3:
-#    bucket: you-need-to-change-your-bucket # (required)
-#    apiCallTimeoutSeconds: 30 # (default = 60)
-#    apiCallAttemptTimeoutSeconds: 10 # (default = 20)
-#    health:
-#      enabled: true # (default = false)
-
-# azure:
-  # blob:
-    # container: hl7ingress
-    # connectStr: ${CONNECT_STR}
-    # health:
-#      enabled: true # (default = false)
