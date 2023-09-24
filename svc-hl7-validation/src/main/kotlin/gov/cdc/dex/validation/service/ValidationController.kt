@@ -10,25 +10,24 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
-import jakarta.inject.Inject
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
+import kotlin.jvm.optionals.getOrNull
 
 
-/**
- *
- * @Created - 6/23/23
- * @Author USY6@cdc.gov
- */
 @Controller("/validation")
-class ValidationController {
+class ValidationController(@Client("redactor") redactorClient: HttpClient, @Client("structure") structureClient: HttpClient ) {
+    private var redactorClient: HttpClient
+    private var structureClient: HttpClient
+
     companion object {
         private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
-        @field:Client("redactor") @Inject lateinit var redactorClient : HttpClient
-        @field:Client("structure") @Inject lateinit var structureClient : HttpClient
 
     }
-
+    init {
+        this.redactorClient = redactorClient
+        this.structureClient = structureClient
+    }
     @Post(value = "/", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
     fun validate(@Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
@@ -46,49 +45,52 @@ class ValidationController {
                         " in the HTTP header as 'x-tp-route'. " +
                         "Please correct the HTTP header and try again.")
         }
-        val resultData = this.validateMessage(content, request)
+        val resultData = this.validateMessage(content, metadata)
         log.info("message successfully redacted and validated")
         return HttpResponse.ok(resultData).contentEncoding(MediaType.APPLICATION_JSON)
     }
 
-    private fun validateMessage(hl7Content: String, request: HttpRequest<Any>): String {
-        val redactedMessage = this.getRedactedContent(hl7Content, request)
-        return getStructureReport(redactedMessage, request)
+    private fun validateMessage(hl7Content: String, metadata: Map<String, String>): String {
+        val redactedMessage = this.getRedactedContent(hl7Content, metadata)
+        return getStructureReport(redactedMessage, metadata)
     }
 
-    private fun getRedactedContent(hl7Content: String, request: HttpRequest<Any>): String {
-        log.info("redacting message....")
-
+    private fun postApiRequest(client: HttpClient, url: String, bodyContent: String, metadata: Map<String, String>) : String {
         val call =
-            redactorClient.exchange(
-                POST("/", hl7Content)
-                    .headers { request.headers },
+            client.exchange(
+                POST(url, bodyContent)
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .header("x-tp-message_type", metadata["message_type"])
+                    .header("x-tp-route", metadata["route"] ?: ""),
                 String::class.java
             )
         val response = Flux.from(call).blockFirst()
-        val message = response.getBody(String::class.java)
-        val json = JsonParser.parseString(message.toString()).asJsonObject
+        val message = response?.getBody(String::class.java)
+        return message?.getOrNull() ?: ""
+    }
+
+    private fun getRedactedContent(hl7Content: String, metadata: Map<String, String>): String {
+        log.info("redacting message....")
+        val message = postApiRequest(redactorClient, "/api/redactorReport",
+            hl7Content, metadata)
+        val json = JsonParser.parseString(message).asJsonObject
         log.info("message redacted!")
         return json.get("_1").asString
     }
 
-    private fun getStructureReport(hl7Content: String, request: HttpRequest<Any>): String {
+    private fun getStructureReport(hl7Content: String, metadata: Map<String, String>): String {
         log.info("Validating message...")
-        val structReport =
-            structureClient.exchange(
-                POST("/", hl7Content )
-                    .headers { request.headers },
-                String::class.java
-            )
+        val structReport = postApiRequest(structureClient, "/api/structure",
+            hl7Content, metadata)
         log.info("message Validated")
-        return structReport.toString()
+        return structReport
     }
 
     private fun getMetadata(request: HttpRequest<Any>): Map<String, String> {
         val headers = request.headers
         return headers
             .filter { it.key.startsWith("x-tp-") }
-            .associate { it.key.substring(5) to it.value.joinToString<String?>(";") }
+            .associate { it.key.substring(5) to (it.value.firstOrNull() ?: "") }
     }
 
 }
