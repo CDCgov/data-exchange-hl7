@@ -1302,6 +1302,120 @@
     "cardinality": "[0..1]",
     "conformance": "",
     "notes": ""
+  },
+  {
+    "fieldNumber": 13,
+    "name": "User Defined Access Checks",
+    "dataType": "ST",
+    "maxLength": "20",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 14,
+    "name": "Date/Time of the Observation",
+    "dataType": "DTM",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 15,
+    "name": "Producer's ID",
+    "dataType": "CWE",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 16,
+    "name": "Responsible Observer",
+    "dataType": "XCN",
+    "maxLength": "250",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 17,
+    "name": "Observation Method",
+    "dataType": "CWE",
+    "maxLength": "250",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 18,
+    "name": "Equipment Instance Identifier",
+    "dataType": "EI",
+    "maxLength": "22",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 19,
+    "name": "Date/Time of the Analysis",
+    "dataType": "DTM",
+    "maxLength": "26",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 20,
+    "name": "Observation Site",
+    "dataType": "CWE",
+    "maxLength": "26",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 21,
+    "name": "Observation Instance Identifier",
+    "dataType": "EI",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 22,
+    "name": "Mood Code",
+    "dataType": "CNE",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 23,
+    "name": "Performing Organization Name",
+    "dataType": "XON",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 24,
+    "name": "Performing Organization Address",
+    "dataType": "XAD",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
   }
 ],
     "SFT": [
