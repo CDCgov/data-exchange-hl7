@@ -1,6 +1,7 @@
 package gov.cdc.dex.validation.service
 
 import com.google.gson.JsonParser
+import com.google.gson.JsonSyntaxException
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpRequest.POST
 import io.micronaut.http.HttpResponse
@@ -34,7 +35,6 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         val metadata = getMetadata(request)
         if (metadata["message_type"].isNullOrEmpty()) {
             log.error("Missing Header for message_type")
-            //TODO::Convert Error results into Json
             return HttpResponse.badRequest("BAD REQUEST: Message Type ('CASE' or 'ELR') " +
                     "must be specified in the HTTP Header as 'x-tp-message_type'. " +
                     "Please correct the HTTP header and try again.")
@@ -46,13 +46,25 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
                         "Please correct the HTTP header and try again.")
         }
         val resultData = this.validateMessage(content, metadata)
-        log.info("message successfully redacted and validated")
-        return HttpResponse.ok(resultData).contentEncoding(MediaType.APPLICATION_JSON)
+        return if (!resultData.startsWith("Error")) {
+            log.info("message successfully redacted and validated")
+            HttpResponse.ok(resultData).contentEncoding(MediaType.APPLICATION_JSON)
+        } else {
+            log.error(resultData)
+            HttpResponse.badRequest(resultData).contentEncoding(MediaType.TEXT_PLAIN)
+        }
+
     }
 
     private fun validateMessage(hl7Content: String, metadata: Map<String, String>): String {
-        val redactedMessage = this.getRedactedContent(hl7Content, metadata)
-        return getStructureReport(redactedMessage, metadata)
+        val redactedMessage = getRedactedContent(hl7Content, metadata)
+        return if (redactedMessage.isEmpty()) {
+            "Error: Redacted message is empty"
+        } else if (redactedMessage.startsWith("Error")) {
+            redactedMessage
+        } else {
+            getStructureReport(redactedMessage, metadata)
+        }
     }
 
     private fun postApiRequest(client: HttpClient, url: String, bodyContent: String, metadata: Map<String, String>) : String {
@@ -64,18 +76,27 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
                     .header("x-tp-route", metadata["route"] ?: ""),
                 String::class.java
             )
-        val response = Flux.from(call).blockFirst()
-        val message = response?.getBody(String::class.java)
-        return message?.getOrNull() ?: ""
+        return try {
+            val response = Flux.from(call).blockFirst()
+            val message = response?.getBody(String::class.java)
+            message?.getOrNull() ?: "Error: No response received from $url"
+        } catch (e : Exception) {
+            "Error in request to $url : ${e.message}"
+        }
     }
 
     private fun getRedactedContent(hl7Content: String, metadata: Map<String, String>): String {
         log.info("redacting message....")
         val message = postApiRequest(redactorClient, "/api/redactorReport",
             hl7Content, metadata)
-        val json = JsonParser.parseString(message).asJsonObject
-        log.info("message redacted!")
-        return json.get("_1").asString
+        return try {
+            val json = JsonParser.parseString(message).asJsonObject
+            log.info("message redacted!")
+            json.get("_1").asString
+        } catch (e: JsonSyntaxException) {
+            message
+        }
+
     }
 
     private fun getStructureReport(hl7Content: String, metadata: Map<String, String>): String {
