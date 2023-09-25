@@ -11,7 +11,14 @@ micronaut:
         enabled: true
         step: PT1M
         descriptions: true
+  netty:
+    event-loops:
+      other:
+        num-threads: 10
+        prefer-native-transport: true
   http:
+    client:
+      event-loop-group: other
     services:
       redactor:
         urls:

@@ -8,6 +8,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
@@ -16,7 +17,7 @@ import reactor.core.publisher.Flux
 import kotlin.jvm.optionals.getOrNull
 
 
-@Controller("/validation")
+@Controller("/")
 class ValidationController(@Client("redactor") redactorClient: HttpClient, @Client("structure") structureClient: HttpClient ) {
     private var redactorClient: HttpClient
     private var structureClient: HttpClient
@@ -29,7 +30,13 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         this.redactorClient = redactorClient
         this.structureClient = structureClient
     }
-    @Post(value = "/", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
+
+    @Get(value = "/")
+    fun getRootPingResponse() : String {
+        return "hello"
+    }
+
+    @Post(value = "/validation", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
     fun validate(@Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
         val metadata = getMetadata(request)
