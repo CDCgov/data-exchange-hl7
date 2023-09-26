@@ -24,6 +24,7 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
 
     companion object {
         private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
+        private const val UTF_BOM = "\uFEFF"
 
     }
     init {
@@ -64,6 +65,12 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     }
 
     private fun validateMessage(hl7Content: String, metadata: Map<String, String>): String {
+        //TODO: Debatch multi-message content and validate each message;
+        // return summary of results
+
+        // val arrayOfMessages = debatch(hl7Content)
+        // val arrayOfResults = mutableMapOf<String>()
+        // arrayOfMessages.forEach { message ->
         val redactedMessage = getRedactedContent(hl7Content, metadata)
         return if (redactedMessage.isEmpty()) {
             "Error: Redacted message is empty"
@@ -72,6 +79,10 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         } else {
             getStructureReport(redactedMessage, metadata)
         }
+        // arrayOfResults.add(result)
+        // }
+        // val summary = prepareSummary(arrayOfResults)
+        // return summary
     }
 
     private fun postApiRequest(client: HttpClient, url: String, bodyContent: String, metadata: Map<String, String>) : String {
