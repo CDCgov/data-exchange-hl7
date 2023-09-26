@@ -53,30 +53,69 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
                         " in the HTTP header as 'x-tp-route'. " +
                         "Please correct the HTTP header and try again.")
         }
-        val resultData = this.validateMessage(content, metadata)
-        return if (!resultData.startsWith("Error")) {
-            log.info("message successfully redacted and validated")
-            HttpResponse.ok(resultData).contentEncoding(MediaType.APPLICATION_JSON)
+        val arrayOfMessages = debatchMessages(content)
+        return if (arrayOfMessages.size <= 1) {
+            val resultData = this.validateMessage(arrayOfMessages[0], metadata)
+            if (!resultData.startsWith("Error")) {
+                log.info("message successfully redacted and validated")
+                HttpResponse.ok(resultData).contentEncoding(MediaType.APPLICATION_JSON)
+            } else {
+                log.error(resultData)
+                HttpResponse.badRequest(resultData).contentEncoding(MediaType.TEXT_PLAIN)
+            }
         } else {
-            log.error(resultData)
-            HttpResponse.badRequest(resultData).contentEncoding(MediaType.TEXT_PLAIN)
+            val resultSummary = this.validateBatch(arrayOfMessages, metadata)
+            log.info("batch summary created successfully")
+            HttpResponse.ok(resultSummary).contentEncoding(MediaType.APPLICATION_JSON)
         }
 
     }
 
-    private fun validateBatch(messages: String, metadata: Map<String, String>) : String {
-        //TODO: Debatch multi-message content and validate each message;
-        // return summary of results
-
-        // val arrayOfMessages = debatch(messages)
-        // val arrayOfResults = mutableMapOf<String>()
-        // arrayOfMessages.forEach { message ->
-        //   val result = validateMessage(message, metadata)
-        //   arrayOfResults.add(result)
-        // }
-        // val summary = prepareSummary(arrayOfResults)
-        // return summary
+    private fun validateBatch(arrayOfMessages: ArrayList<String>, metadata: Map<String, String>): String {
+        val arrayOfResults = arrayListOf<String>()
+        arrayOfMessages.forEach { message ->
+            val result = validateMessage(message, metadata)
+            arrayOfResults.add(result)
+        }
+        return prepareSummary(arrayOfResults)
     }
+
+    private fun prepareSummary(arrayOfResults : ArrayList<String>) : String {
+        // each result will either start with "Error" or be a JSON report
+        val summaryMap = mutableMapOf<String, String>()
+
+    }
+
+    private fun debatchMessages(messages : String) : ArrayList<String> {
+        val messageLines = messages.lines()
+        val currentLinesArr = arrayListOf<String>()
+        val messagesArr = arrayListOf<String>()
+        var mshCount = 0
+        messageLines.forEach { line ->
+            val lineClean = line.trim().let { if (it.startsWith(UTF_BOM)) it.substring(1) else it }
+            if (lineClean.startsWith("FHS") ||
+                lineClean.startsWith("BHS") ||
+                lineClean.startsWith("BTS") ||
+                lineClean.startsWith("FTS")) {
+
+                // batch line --Nothing to do here
+            } else if (lineClean.isNotEmpty()) {
+                if (lineClean.startsWith("MSH|")) {
+                    mshCount++
+                    if (mshCount > 1) {
+                        messagesArr.add(currentLinesArr.joinToString("\n"))
+                    }
+                    currentLinesArr.clear()
+                } // .if
+                currentLinesArr.add(lineClean)
+            }
+        }
+        if (currentLinesArr.isNotEmpty()) {
+            messagesArr.add(currentLinesArr.joinToString("\n"))
+        }
+        return messagesArr
+    }
+
     private fun validateMessage(hl7Content: String, metadata: Map<String, String>): String {
         val redactedMessage = getRedactedContent(hl7Content, metadata)
         return if (redactedMessage.isEmpty()) {
