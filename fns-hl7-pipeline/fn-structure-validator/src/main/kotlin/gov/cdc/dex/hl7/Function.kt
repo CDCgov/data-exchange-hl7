@@ -190,7 +190,7 @@ class ValidatorFunction {
             logger.error("Unable to retrieve Profile Name")
             val exMessage = if (filePath != "N/A") {  " for messageUUID: $messageUUID, filePath: $filePath." }
                 else { "." } // do not add file information if processed via https request
-            throw InvalidMessageException("Unable to process message: Unable to retrieve PHIN Specification from $PHIN_SPEC_PROFILE$exMessage")
+            throw InvalidMessageException("Unable to process message: Unable to retrieve profile specifier from ${if (messageType == HL7MessageType.CASE) PHIN_SPEC_PROFILE else ELR_SPEC_PROFILE}$exMessage")
         }
 
         val nistValidator = fnConfig.getNistValidator(profileName)
