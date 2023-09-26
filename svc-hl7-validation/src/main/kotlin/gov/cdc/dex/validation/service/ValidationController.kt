@@ -64,13 +64,20 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
 
     }
 
-    private fun validateMessage(hl7Content: String, metadata: Map<String, String>): String {
+    private fun validateBatch(messages: String, metadata: Map<String, String>) : String {
         //TODO: Debatch multi-message content and validate each message;
         // return summary of results
 
-        // val arrayOfMessages = debatch(hl7Content)
+        // val arrayOfMessages = debatch(messages)
         // val arrayOfResults = mutableMapOf<String>()
         // arrayOfMessages.forEach { message ->
+        //   val result = validateMessage(message, metadata)
+        //   arrayOfResults.add(result)
+        // }
+        // val summary = prepareSummary(arrayOfResults)
+        // return summary
+    }
+    private fun validateMessage(hl7Content: String, metadata: Map<String, String>): String {
         val redactedMessage = getRedactedContent(hl7Content, metadata)
         return if (redactedMessage.isEmpty()) {
             "Error: Redacted message is empty"
@@ -79,10 +86,6 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         } else {
             getStructureReport(redactedMessage, metadata)
         }
-        // arrayOfResults.add(result)
-        // }
-        // val summary = prepareSummary(arrayOfResults)
-        // return summary
     }
 
     private fun postApiRequest(client: HttpClient, url: String, bodyContent: String, metadata: Map<String, String>) : String {
