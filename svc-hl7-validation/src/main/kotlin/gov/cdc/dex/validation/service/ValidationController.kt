@@ -2,6 +2,9 @@ package gov.cdc.dex.validation.service
 
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
+import gov.cdc.dex.util.JsonHelper
+import gov.cdc.dex.validation.service.model.ErrorCounts
+import gov.cdc.dex.validation.service.model.Summary
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpRequest.POST
 import io.micronaut.http.HttpResponse
@@ -82,7 +85,35 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
 
     private fun prepareSummary(arrayOfResults : ArrayList<String>) : String {
         // each result will either start with "Error" or be a JSON report
-        val summaryMap = mutableMapOf<String, String>()
+        val (runtimeErrors, structureReports) = arrayOfResults.partition { it.startsWith("Error") }
+        var totalErrors = runtimeErrors.size
+        val structureJsons = structureReports.map { JsonParser.parseString(it).asJsonObject }
+        val (valid, invalid) = structureJsons.partition {
+            JsonHelper.getValueFromJson("status", it).asString == "VALID_MESSAGE" }
+
+        val structureErrors = invalid.sumOf {
+            JsonHelper.getValueFromJson("error-count.structure", it).asInt }
+        val valueSetErrors = invalid.sumOf {
+            JsonHelper.getValueFromJson("error-count.value-set", it).asInt }
+        val contentErrors = invalid.sumOf {
+            JsonHelper.getValueFromJson("error-count.content", it).asInt }
+        totalErrors += structureErrors + valueSetErrors + contentErrors
+
+
+        val summary = Summary(
+            validMessages = valid.size,
+            invalidMessages = invalid.size,
+            errors = ErrorCounts(
+                totalErrors = totalErrors,
+                errorsByType = mapOf( "structure" to structureErrors,
+                    "content" to contentErrors, "value_set" to valueSetErrors ),
+                errorsByCategory = mapOf(),
+                errorsByPath = mapOf(),
+                errorsByMessage = mapOf()
+            )
+        )
+        return JsonHelper.gson.toJson(summary)
+
 
     }
 
