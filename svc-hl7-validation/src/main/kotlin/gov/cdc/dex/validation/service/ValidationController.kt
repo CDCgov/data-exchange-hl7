@@ -49,10 +49,12 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     @Operation(summary = "Action for validating HL7 Message")
     @ApiResponses(
         ApiResponse(content = [Content(mediaType = "text/plain", schema = Schema(type = "string"))]),
-        ApiResponse(responseCode = "200", description = "Success")
+        ApiResponse(responseCode = "200", description = "Success"),
+        ApiResponse(responseCode = "400", description = "Bad Request")
     )
     @Parameters(
-        Parameter(name="x-tp-message_type", `in` = ParameterIn.HEADER, description="Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].", required = true, schema= Schema(type = "string"))
+        Parameter(name="x-tp-message_type", `in` = ParameterIn.HEADER, description="Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].", required = true, schema= Schema(type = "string")),
+        Parameter(name="x-tp-route", `in` = ParameterIn.HEADER, description="Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR]", required = true, schema= Schema(type = "string"))
     )
     fun validate(@Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
