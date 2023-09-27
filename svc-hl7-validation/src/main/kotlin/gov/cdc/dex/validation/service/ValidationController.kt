@@ -5,8 +5,11 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
 import gov.cdc.dex.util.JsonHelper
+import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.validation.service.model.ErrorCounts
+import gov.cdc.dex.validation.service.model.ErrorInfo
 import gov.cdc.dex.validation.service.model.Summary
+
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpRequest.POST
 import io.micronaut.http.HttpResponse
@@ -91,8 +94,9 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         // each result will either start with "Error" or be a JSON report
         val (runtimeErrors, structureReports) = arrayOfResults.partition { it.startsWith("Error") }
         // are there any entries that are not reports? If so, need to know where they are in the list
-        val indicesOfErrors = arrayOfResults.mapIndexedNotNull { index, s ->
-            if (!s.startsWith("Error")) null else index }
+        val indexedRuntimeErrors = arrayOfResults.mapIndexedNotNull { index, s ->
+            if (!s.startsWith("Error")) null else mapOf(index to s)
+        }
         val structureJsons = structureReports.map { JsonParser.parseString(it).asJsonObject }
         val (valid, invalid) = structureJsons.partition {
             JsonHelper.getValueFromJson("status", it).asString == "VALID_MESSAGE" }
@@ -117,22 +121,34 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
             entriesByReport.add(reportEntries)
             entries.addAll(reportEntries)
         }
+        if (indexedRuntimeErrors.isNotEmpty()) {
+            // add the runtime errors
+            indexedRuntimeErrors.forEach { errMap ->
+                errMap.keys.map {
+                    val error = ErrorInfo (description = errMap[it].toString()).toJsonElement()
+                    entriesByReport.add(it, listOf(error))
+                    entries.add(error)
+                 }
+
+            }
+        }
+        val categories = entries.groupingBy { JsonHelper.getValueFromJson("category", it).asString }.eachCount()
+        val paths = entries.groupingBy { JsonHelper.getValueFromJson("path", it).asString }.eachCount()
+        val messagesCounts = entriesByReport.associate { "message-${entriesByReport.indexOf(it) + 1}" to it.size }
 
         val summary = Summary(
             validMessages = valid.size,
-            invalidMessages = invalid.size,
+            invalidMessages = invalid.size + runtimeErrors.size,
             errors = ErrorCounts(
                 totalErrors = totalErrors,
                 errorsByType = mapOf( "structure" to structureErrors,
                     "content" to contentErrors, "value_set" to valueSetErrors ),
-                errorsByCategory = mapOf(),
-                errorsByPath = mapOf(),
-                errorsByMessage = mapOf()
+                errorsByCategory = categories,
+                errorsByPath = paths,
+                errorsByMessage = messagesCounts
             )
         )
         return JsonHelper.gson.toJson(summary)
-
-
     }
 
     private fun debatchMessages(messages : String) : ArrayList<String> {
