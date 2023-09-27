@@ -12,6 +12,14 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.Parameters
+import io.swagger.v3.oas.annotations.enums.ParameterIn
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
 import kotlin.jvm.optionals.getOrNull
@@ -31,12 +39,21 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         this.structureClient = structureClient
     }
 
+
     @Get(value = "/")
     fun getRootPingResponse() : String {
         return "hello"
     }
 
     @Post(value = "/validation", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
+    @Operation(summary = "Action for validating HL7 Message")
+    @ApiResponses(
+        ApiResponse(content = [Content(mediaType = "text/plain", schema = Schema(type = "string"))]),
+        ApiResponse(responseCode = "200", description = "Success")
+    )
+    @Parameters(
+        Parameter(name="x-tp-message_type", `in` = ParameterIn.HEADER, description="Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].", required = true, schema= Schema(type = "string"))
+    )
     fun validate(@Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
         val metadata = getMetadata(request)
