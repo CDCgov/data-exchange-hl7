@@ -2,6 +2,7 @@ package gov.cdc.dex.validation.service.model
 import com.google.gson.annotations.SerializedName
 
 data class Summary(
+    @SerializedName("total_messages") val totalMessages: Int,
     @SerializedName("valid_messages") val validMessages : Int,
     @SerializedName("invalid_messages") val invalidMessages : Int,
     @SerializedName("error_counts") val errors : ErrorCounts

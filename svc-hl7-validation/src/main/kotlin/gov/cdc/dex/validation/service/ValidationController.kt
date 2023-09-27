@@ -1,5 +1,6 @@
 package gov.cdc.dex.validation.service
 
+import com.fasterxml.jackson.databind.JsonMappingException
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
@@ -115,37 +116,47 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
             val structure = JsonHelper.getValueFromJson("entries.structure", report).asJsonArray
             val content = JsonHelper.getValueFromJson("entries.content", report).asJsonArray
             val valueSet = JsonHelper.getValueFromJson("entries.value-set", report).asJsonArray
-            val reportEntries = structure.plus(content).plus(valueSet).toList().filter {
-                JsonHelper.getValueFromJson("classification", it ).asString == "Error"
-            }
+            val reportEntries = structure.plus(content).plus(valueSet).toList()
             entriesByReport.add(reportEntries)
+            log.info("entries by report size: ${entriesByReport.size}")
             entries.addAll(reportEntries)
         }
         if (indexedRuntimeErrors.isNotEmpty()) {
             // add the runtime errors
             indexedRuntimeErrors.forEach { errMap ->
                 errMap.keys.map {
-                    val error = ErrorInfo (description = errMap[it].toString()).toJsonElement()
+                    val desc = errMap[it].toString()
+                    val regex = "[A-Z]{3}-[0-9]{1,2}".toRegex()
+                    val path = regex.find(desc)?.value + ""
+                    val error = ErrorInfo (description = desc, path = path).toJsonElement()
                     entriesByReport.add(it, listOf(error))
                     entries.add(error)
                  }
 
             }
         }
-        val categories = entries.groupingBy { JsonHelper.getValueFromJson("category", it).asString }.eachCount()
-        val paths = entries.groupingBy { JsonHelper.getValueFromJson("path", it).asString }.eachCount()
-        val messagesCounts = entriesByReport.associate { "message-${entriesByReport.indexOf(it) + 1}" to it.size }
+        val errorEntries = entries.filter { JsonHelper.getValueFromJson("classification", it ).asString == "Error" }
+        val categories = errorEntries.groupingBy { JsonHelper.getValueFromJson("category", it).asString }.eachCount()
+        val paths = errorEntries.groupingBy { JsonHelper.getValueFromJson("path", it).asString }.eachCount()
+        val countsByMessage = mutableMapOf<String, Int>()
+        entriesByReport.forEachIndexed { index, jsonElements ->
+            val msgErrors = jsonElements.filter { JsonHelper.getValueFromJson("classification", it).asString == "Error" }
+            countsByMessage.putIfAbsent("message-${index + 1}", msgErrors.size)
+        }
 
         val summary = Summary(
+            totalMessages = arrayOfResults.size,
             validMessages = valid.size,
             invalidMessages = invalid.size + runtimeErrors.size,
             errors = ErrorCounts(
                 totalErrors = totalErrors,
                 errorsByType = mapOf( "structure" to structureErrors,
-                    "content" to contentErrors, "value_set" to valueSetErrors ),
+                                        "content" to contentErrors,
+                                        "value_set" to valueSetErrors,
+                                        "other" to runtimeErrors.size),
                 errorsByCategory = categories,
                 errorsByPath = paths,
-                errorsByMessage = messagesCounts
+                errorsByMessage = countsByMessage.toMap()
             )
         )
         return JsonHelper.gson.toJson(summary)
