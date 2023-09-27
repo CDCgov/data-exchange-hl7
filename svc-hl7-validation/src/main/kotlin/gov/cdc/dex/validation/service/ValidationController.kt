@@ -1,5 +1,7 @@
 package gov.cdc.dex.validation.service
 
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
 import gov.cdc.dex.util.JsonHelper
@@ -56,8 +58,10 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
                         " in the HTTP header as 'x-tp-route'. " +
                         "Please correct the HTTP header and try again.")
         }
+        // since content is a required parameter, we can be certain it has a value.
+        // otherwise, 'bad request' would have been returned by Micronaut.
         val arrayOfMessages = debatchMessages(content)
-        return if (arrayOfMessages.size <= 1) {
+        return if (arrayOfMessages.size == 1) {
             val resultData = this.validateMessage(arrayOfMessages[0], metadata)
             if (!resultData.startsWith("Error")) {
                 log.info("message successfully redacted and validated")
@@ -86,7 +90,9 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     private fun prepareSummary(arrayOfResults : ArrayList<String>) : String {
         // each result will either start with "Error" or be a JSON report
         val (runtimeErrors, structureReports) = arrayOfResults.partition { it.startsWith("Error") }
-        var totalErrors = runtimeErrors.size
+        // are there any entries that are not reports? If so, need to know where they are in the list
+        val indicesOfErrors = arrayOfResults.mapIndexedNotNull { index, s ->
+            if (!s.startsWith("Error")) null else index }
         val structureJsons = structureReports.map { JsonParser.parseString(it).asJsonObject }
         val (valid, invalid) = structureJsons.partition {
             JsonHelper.getValueFromJson("status", it).asString == "VALID_MESSAGE" }
@@ -97,8 +103,20 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
             JsonHelper.getValueFromJson("error-count.value-set", it).asInt }
         val contentErrors = invalid.sumOf {
             JsonHelper.getValueFromJson("error-count.content", it).asInt }
-        totalErrors += structureErrors + valueSetErrors + contentErrors
+        val totalErrors = runtimeErrors.size + structureErrors + valueSetErrors + contentErrors
 
+        val entries = mutableListOf<JsonElement>()
+        val entriesByReport = mutableListOf<List<JsonElement>>()
+        structureJsons.forEach { report ->
+            val structure = JsonHelper.getValueFromJson("entries.structure", report).asJsonArray
+            val content = JsonHelper.getValueFromJson("entries.content", report).asJsonArray
+            val valueSet = JsonHelper.getValueFromJson("entries.value-set", report).asJsonArray
+            val reportEntries = structure.plus(content).plus(valueSet).toList().filter {
+                JsonHelper.getValueFromJson("classification", it ).asString == "Error"
+            }
+            entriesByReport.add(reportEntries)
+            entries.addAll(reportEntries)
+        }
 
         val summary = Summary(
             validMessages = valid.size,
