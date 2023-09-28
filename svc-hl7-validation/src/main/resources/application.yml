@@ -4,7 +4,6 @@ micronaut:
   server:
     multipart:
       max-file-size: 10485760
-    port: 8081
   metrics:
     enabled: true
     export:
