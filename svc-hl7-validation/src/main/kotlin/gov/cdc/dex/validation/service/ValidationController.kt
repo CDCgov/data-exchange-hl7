@@ -121,11 +121,11 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
                     structureErrorCount += structure.size
                     contentErrorCount += content.size
                     valueSetErrorCount += valueSet.size
-                    countsByMessage.putIfAbsent(messageId, structureErrorCount + contentErrorCount + valueSetErrorCount)
+                    countsByMessage.putIfAbsent(messageId, structure.size + content.size + valueSet.size)
                     entries.addAll(structure + content + valueSet)
                 }
-            }
-        }
+            } // .if
+        } //.forEach
         val countsByCategory = entries.groupingBy { JsonHelper.getValueFromJson("category", it).asString }.eachCount()
         val countsByPath = entries.groupingBy { JsonHelper.getValueFromJson("path", it).asString }.eachCount()
 
