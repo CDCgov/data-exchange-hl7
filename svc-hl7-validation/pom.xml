@@ -162,7 +162,6 @@
             <artifactId>lib-dex-commons</artifactId>
             <version>${lib-dex-commons.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations -->
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>

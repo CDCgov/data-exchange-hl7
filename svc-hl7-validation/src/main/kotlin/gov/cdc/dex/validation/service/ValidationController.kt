@@ -2,14 +2,12 @@ package gov.cdc.dex.validation.service
 
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
+import gov.cdc.dex.metadata.HL7MessageType
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpRequest.POST
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
-import io.micronaut.http.annotation.Body
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.*
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.swagger.v3.oas.annotations.Operation
@@ -39,8 +37,7 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         this.structureClient = structureClient
     }
 
-
-    @Get(value = "/")
+    @Get(value = "/health")
     fun getRootPingResponse() : String {
         return "hello"
     }
@@ -50,11 +47,11 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     @ApiResponses(
         ApiResponse(content = [Content(mediaType = "text/plain", schema = Schema(type = "string"))]),
         ApiResponse(responseCode = "200", description = "Success"),
-        ApiResponse(responseCode = "400", description = "Bad Request")
+        ApiResponse(responseCode =  "400", description = "Bad Request")
     )
     @Parameters(
         Parameter(name="x-tp-message_type", `in` = ParameterIn.HEADER, description="Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].", required = true, schema= Schema(type = "string")),
-        Parameter(name="x-tp-route", `in` = ParameterIn.HEADER, description="Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR]", required = true, schema= Schema(type = "string"))
+        Parameter(name="x-tp-route", `in` = ParameterIn.HEADER, description="Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR,PHLIP_FLU,PHLIP_VPD  ]", required = true, schema= Schema(type = "string"))
     )
     fun validate(@Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
@@ -65,7 +62,7 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
                     "must be specified in the HTTP Header as 'x-tp-message_type'. " +
                     "Please correct the HTTP header and try again.")
         }
-        if (metadata["message_type"] == "ELR" && metadata["route"].isNullOrEmpty()) {
+        if (metadata["message_type"] == HL7MessageType.ELR.name && metadata["route"].isNullOrEmpty()) {
             log.error("Missing Header for route when Message_type == ELR")
            return HttpResponse.badRequest("BAD REQUEST: ELR message must specify a route" +
                         " in the HTTP header as 'x-tp-route'. " +
