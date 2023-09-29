@@ -23,6 +23,7 @@
         <hl7pet.version>1.2.7.2</hl7pet.version>
         <gson.version>2.10.1</gson.version>
         <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
+        <junitjupiter.version>5.9.2</junitjupiter.version>
     </properties>
 
     <repositories>
@@ -133,6 +134,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
+            <version>${kotlinVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <scope>runtime</scope>
@@ -145,11 +152,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>${junitjupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junitjupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -161,6 +170,10 @@
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
             <version>${lib-dex-commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
         </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>

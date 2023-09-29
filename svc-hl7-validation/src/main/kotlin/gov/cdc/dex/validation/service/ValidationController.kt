@@ -1,8 +1,15 @@
 package gov.cdc.dex.validation.service
 
-import com.google.gson.JsonParser
-import com.google.gson.JsonSyntaxException
+import com.google.gson.*
+import gov.cdc.dex.util.JsonHelper
+import gov.cdc.dex.util.JsonHelper.toJsonElement
+import gov.cdc.dex.validation.service.model.ErrorCounts
+import gov.cdc.dex.validation.service.model.ErrorInfo
+import gov.cdc.dex.validation.service.model.Summary
+
+
 import gov.cdc.dex.metadata.HL7MessageType
+
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpRequest.POST
 import io.micronaut.http.HttpResponse
@@ -30,6 +37,7 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
 
     companion object {
         private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
+        private const val UTF_BOM = "\uFEFF"
 
     }
     init {
@@ -68,15 +76,128 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
                         " in the HTTP header as 'x-tp-route'. " +
                         "Please correct the HTTP header and try again.")
         }
-        val resultData = this.validateMessage(content, metadata)
-        return if (!resultData.startsWith("Error")) {
-            log.info("message successfully redacted and validated")
-            HttpResponse.ok(resultData).contentEncoding(MediaType.APPLICATION_JSON)
+        // since content is a required parameter, we can be certain it has a value.
+        // otherwise, 'bad request' would have been returned by Micronaut.
+        val arrayOfMessages = debatchMessages(content)
+        return if (arrayOfMessages.size == 1) {
+            val resultData = this.validateMessage(arrayOfMessages[0], metadata)
+            if (!resultData.startsWith("Error")) {
+                log.info("message successfully redacted and validated")
+                HttpResponse.ok(resultData).contentEncoding(MediaType.APPLICATION_JSON)
+            } else {
+                log.error(resultData)
+                HttpResponse.badRequest(resultData).contentEncoding(MediaType.TEXT_PLAIN)
+            }
         } else {
-            log.error(resultData)
-            HttpResponse.badRequest(resultData).contentEncoding(MediaType.TEXT_PLAIN)
+            val resultSummary = this.validateBatch(arrayOfMessages, metadata)
+            log.info("batch summary created successfully")
+            HttpResponse.ok(resultSummary).contentEncoding(MediaType.APPLICATION_JSON)
         }
 
+    }
+
+    private fun validateBatch(arrayOfMessages: ArrayList<String>, metadata: Map<String, String>): String {
+        val mapOfResults = mutableMapOf<String, String>()
+        arrayOfMessages.forEachIndexed { index, message ->
+            val result = validateMessage(message, metadata)
+            mapOfResults.putIfAbsent("message-${index + 1}", result)
+        }
+        return prepareSummaryFromMap(mapOfResults)
+    }
+
+    private fun prepareSummaryFromMap(mapOfResults: Map<String, String>) : String {
+        var runtimeErrorCount = 0
+        var structureErrorCount = 0
+        var contentErrorCount = 0
+        var valueSetErrorCount = 0
+        val countsByMessage = mutableMapOf<String, Int>()
+        var validMessageCount = 0
+        var invalidMessageCount = 0
+        val entries = mutableListOf<JsonElement>()
+        mapOfResults.forEach { (messageId, report) ->
+            // each 'report' with be either a NIST report (JSON) or a runtime error (plain text)
+            if (report.startsWith("Error")) {
+                runtimeErrorCount++
+                invalidMessageCount++
+                // extract the path that caused the error, if it exists
+                val regex = "[A-Z]{3}-[0-9]{1,2}".toRegex()
+                val path = regex.find(report)?.value + ""
+                val error = ErrorInfo (description = report, path = path).toJsonElement()
+                countsByMessage.putIfAbsent(messageId, 1)
+                entries.add(error)
+            } else {
+                val reportJson = JsonParser.parseString(report).asJsonObject
+                if (JsonHelper.getValueFromJson("status", reportJson).asString == "VALID_MESSAGE") {
+                    // valid message has 0 errors
+                    validMessageCount++
+                    countsByMessage.putIfAbsent(messageId, 0)
+                } else {
+                    invalidMessageCount++
+                    val structure = getListOfErrors("entries.structure", reportJson)
+                    val content = getListOfErrors("entries.content", reportJson)
+                    val valueSet = getListOfErrors("entries.value-set", reportJson)
+                    structureErrorCount += structure.size
+                    contentErrorCount += content.size
+                    valueSetErrorCount += valueSet.size
+                    countsByMessage.putIfAbsent(messageId, structure.size + content.size + valueSet.size)
+                    entries.addAll(structure + content + valueSet)
+                }
+            } // .if
+        } //.forEach
+        val countsByCategory = entries.groupingBy { JsonHelper.getValueFromJson("category", it).asString }.eachCount()
+        val countsByPath = entries.groupingBy { JsonHelper.getValueFromJson("path", it).asString }.eachCount()
+
+        val summary = Summary(
+            totalMessages = mapOfResults.size,
+            validMessages = validMessageCount,
+            invalidMessages = invalidMessageCount,
+            errors = ErrorCounts(
+                totalErrors = runtimeErrorCount + structureErrorCount + contentErrorCount + valueSetErrorCount,
+                errorsByType = mapOf( "structure" to structureErrorCount,
+                    "content" to contentErrorCount,
+                    "value_set" to valueSetErrorCount,
+                    "other" to runtimeErrorCount),
+                errorsByCategory = countsByCategory,
+                errorsByPath = countsByPath,
+                errorsByMessage = countsByMessage
+            )
+        )
+        return JsonHelper.gson.toJson(summary)
+    }
+
+    private fun getListOfErrors(jsonPath : String, report: JsonObject) : List<JsonElement> {
+        return JsonHelper.getValueFromJson(jsonPath, report)
+            .asJsonArray.filter { JsonHelper.getValueFromJson("classification", it ).asString == "Error" }
+    }
+
+    private fun debatchMessages(messages : String) : ArrayList<String> {
+        val messageLines = messages.lines()
+        val currentLinesArr = arrayListOf<String>()
+        val messagesArr = arrayListOf<String>()
+        var mshCount = 0
+        messageLines.forEach { line ->
+            val lineClean = line.trim().let { if (it.startsWith(UTF_BOM)) it.substring(1) else it }
+            if (lineClean.startsWith("FHS") ||
+                lineClean.startsWith("BHS") ||
+                lineClean.startsWith("BTS") ||
+                lineClean.startsWith("FTS")) {
+
+                // batch line --Nothing to do here
+            } else if (lineClean.isNotEmpty()) {
+                if (lineClean.startsWith("MSH|")) {
+                    mshCount++
+                    if (mshCount > 1) {
+                        messagesArr.add(currentLinesArr.joinToString("\n"))
+                    }
+                    currentLinesArr.clear()
+                } // .if
+                currentLinesArr.add(lineClean)
+            }
+        }
+        if (currentLinesArr.isNotEmpty()) {
+            messagesArr.add(currentLinesArr.joinToString("\n"))
+        }
+        return messagesArr
     }
 
     private fun validateMessage(hl7Content: String, metadata: Map<String, String>): String {
