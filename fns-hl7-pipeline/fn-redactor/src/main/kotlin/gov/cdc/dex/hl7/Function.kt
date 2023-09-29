@@ -46,7 +46,7 @@ class Function {
         @CosmosDBOutput(name="cosmosdevpublic",
             connection = "CosmosDBConnectionString",
             containerName = "hl7-redactor", createIfNotExists = true,
-            partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>,
+            partitionKey = "/message_info/reporting_jurisdiction", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>,
         context: ExecutionContext
     ): JsonObject {
         val helper = Helper()

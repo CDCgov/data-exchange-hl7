@@ -45,9 +45,12 @@ class Function {
             name = "msg",
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
+            cardinality = Cardinality.ONE,
             consumerGroup = "%EventHubConsumerGroup%",)
-        message: List<String?>,
-        @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
+       // message: List<String?>,
+          message: String?,
+       // @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
+          @BindingName("SystemProperties")eventHubMD1:EventHubMetadata,
         @EventHubOutput(name="lakeSegsOk",
             eventHubName = "%EventHubSendOkName%",
             connection = "EventHubConnectionString") lakeSegsOk : OutputBinding<List<String>>,
@@ -57,20 +60,20 @@ class Function {
         @CosmosDBOutput(name="cosmosdevpublic",
             connection = "CosmosDBConnectionString",
             containerName = "hl7-lake-segments", createIfNotExists = true,
-         partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>,
+         partitionKey = "/message_info/reporting_jurisdiction", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>,
         context: ExecutionContext
-    ): List<JsonObject> {
+    ): JsonObject {
 
         val processedMsgs = mutableListOf<JsonObject>()
         val outOkList = mutableListOf<String>()
         val outErrList = mutableListOf<String>()
         val outEventList = mutableListOf<JsonObject>()
         try {
-            message.forEachIndexed { messageIndex: Int, singleMessage: String? ->
+            //message.forEachIndexed { messageIndex: Int, singleMessage: String? ->
                 //context.logger.info("------ singleMessage: ------>: --> $singleMessage")
                 val startTime = Date().toIsoString()
                 // initialize processed_metadata to be be sent to eventhubs and cosmosdb
-                val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+                val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
                 var processed_metadata: JsonObject? = null
                 //
                 // Process Message for SQL Model
@@ -103,7 +106,7 @@ class Function {
                             startTime,
                             PROCESS_STATUS_OK,
                             lakeSegsModel,
-                            eventHubMD[messageIndex],
+                            eventHubMD1,
                             inputEvent,
                             null,
                             config
@@ -124,7 +127,7 @@ class Function {
                             startTime,
                             PROCESS_STATUS_EXCEPTION,
                             null,
-                            eventHubMD[messageIndex],
+                            eventHubMD1,
                             inputEvent,
                             e,
                             config
@@ -145,7 +148,7 @@ class Function {
                         startTime,
                         PROCESS_STATUS_EXCEPTION,
                         null,
-                        eventHubMD[messageIndex],
+                        eventHubMD1,
                         inputEvent,
                         e,
                         config
@@ -157,7 +160,7 @@ class Function {
                     processedMsgs.add(JsonObject())
                 } // .catch
 
-            } // .message.forEach
+            //} // .message.forEach
 
         } catch (ex: Exception){
             logger.error("An unexpected error occurred: ${ex.message}")
@@ -165,9 +168,10 @@ class Function {
             //add payload to eventhubs and cosmosdb outbindings
             lakeSegsOk.value = outOkList
             lakeSegsErr.value = outErrList
-            cosmosOutput.value = outEventList.toList()
+            cosmosOutput.value = outEventList
         }
-        return processedMsgs.toList()
+        //return processedMsgs.toList()
+        return JsonObject()
 
     } // .eventHubProcessor
 

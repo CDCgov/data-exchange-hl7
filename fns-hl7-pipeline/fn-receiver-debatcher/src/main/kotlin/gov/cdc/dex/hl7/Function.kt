@@ -65,7 +65,7 @@ class Function {
         @CosmosDBOutput(name="cosmosdevpublic",
             connection = "CosmosDBConnectionString",
             containerName = "hl7-recdeb", createIfNotExists = true,
-            partitionKey = "/message_uuid", databaseName = "hl7-events")
+            partitionKey = "/message_info/reporting_jurisdiction", databaseName = "hl7-events")
         cosmosOutput: OutputBinding<List<JsonObject>>
     ): DexEventPayload? {
 

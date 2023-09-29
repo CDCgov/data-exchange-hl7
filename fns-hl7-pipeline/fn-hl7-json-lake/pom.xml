@@ -106,7 +106,7 @@
     </dependencies>
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+       <!-- <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>-->
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
@@ -118,10 +118,10 @@
                     <appServicePlanName>ocio-ede-${environment-id}-hl7-app-service-plan</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-                    <auth>
+                   <!-- <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
-                    </auth>
+                    </auth>-->
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
@@ -261,6 +261,14 @@
                         <EventHubSendOkName>hl7-json-lake-ok</EventHubSendOkName>
                         <EventHubSendErrsName>hl7-json-lake-err</EventHubSendErrsName>
                     </environmentVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>

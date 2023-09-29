@@ -45,9 +45,12 @@ class Function {
                     name = "msg",
                     eventHubName = "%EventHubReceiveName%",
                     consumerGroup = "%EventHubConsumerGroup%",
-                    connection = "EventHubConnectionString")
-            messages: List<String>?,
-            @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
+                    connection = "EventHubConnectionString",
+                    cardinality = Cardinality.ONE)
+           // messages: List<String>?,
+            messages: String?,
+           // @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
+            @BindingName("SystemProperties")eventHubMD:EventHubMetadata,
             context:ExecutionContext,
             @EventHubOutput(name="jsonlakeOk",
                     eventHubName = "%EventHubSendOkName%",
@@ -60,19 +63,22 @@ class Function {
             @CosmosDBOutput(name="cosmosdevpublic",
                     connection = "CosmosDBConnectionString",
                     containerName = "hl7-json-lake", createIfNotExists = true,
-                    partitionKey = "/message_uuid", databaseName = "hl7-events")
+                    partitionKey = "/message_info/reporting_jurisdiction", databaseName = "hl7-events")
             cosmosOutput: OutputBinding<List<JsonObject>> ): JsonObject {
 
         logger.info("DEX::${context.functionName}")
         if ( messages == null) {
             return JsonObject()
         }
+        logger.info("message count:${messages}")
         val outData = OutData()
+        var messageIndex = 0
         try {
-            messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
+           // messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
                 val startTime = Date().toIsoString()
+                logger.info("eventHubMD::${eventHubMD}")
                 try {
-                    val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+                    val inputEvent: JsonObject = JsonParser.parseString(messages) as JsonObject
                     val metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
                     val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                     val messageUUID = inputEvent["message_uuid"].asString
@@ -88,21 +94,21 @@ class Function {
                         val fullHL7 = buildJson(hl7message, FunctionConfig.PROFILE_FILE_PATH)
                         updateMetadataAndDeliver(
                             startTime, metadata, PROCESS_STATUS_OK,
-                            fullHL7, eventHubMD[messageIndex], gsonWithNullsOn,
+                            fullHL7, eventHubMD, gsonWithNullsOn,
                             inputEvent, null,
                             listOf(FunctionConfig.PROFILE_FILE_PATH),
                             outData
                         )
                         context.logger.info("Processed OK for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath")
-                        if (messageIndex == messages.lastIndex) {
+                      //  if (messageIndex == messages.lastIndex) {
                             return inputEvent
-                        }
+                      //  }
                     } catch (e: Exception) {
                         context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
                         //publishing the message  to the eventhubSendErrsName topic using EventHub
                         updateMetadataAndDeliver(
                             startTime, metadata, PROCESS_STATUS_EXCEPTION,
-                            null, eventHubMD[messageIndex], gsonWithNullsOn,
+                            null, eventHubMD, gsonWithNullsOn,
                             inputEvent, e,
                             listOf(FunctionConfig.PROFILE_FILE_PATH),
                             outData
@@ -116,14 +122,14 @@ class Function {
                     context.logger.severe("Unable to process Message due to exception: ${e.message}")
                     updateMetadataAndDeliver(
                             startTime, JsonObject(), PROCESS_STATUS_EXCEPTION,
-                            null, eventHubMD[messageIndex], gsonWithNullsOn,
+                            null, eventHubMD, gsonWithNullsOn,
                             JsonObject(), e,
                             listOf(FunctionConfig.PROFILE_FILE_PATH),
                             outData
                     )
                     return JsonObject()
                 } // .catch
-            }
+            //}
             return JsonObject()
         } finally {
             with(outData) {
