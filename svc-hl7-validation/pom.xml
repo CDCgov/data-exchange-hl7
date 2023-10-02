@@ -16,7 +16,7 @@
         <java.version>17</java.version>
         <jdk.version>17</jdk.version>
         <release.version>17</release.version>
-        <micronaut.version>3.8.5</micronaut.version>
+        <micronaut.version>3.9.4</micronaut.version>
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>gov.cdc.dex.validation.service.Application</exec.mainClass>
         <kotlinVersion>1.9.0</kotlinVersion>
