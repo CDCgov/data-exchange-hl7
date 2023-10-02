@@ -8,7 +8,6 @@ import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.validation.service.model.ErrorCounts
 import gov.cdc.dex.validation.service.model.ErrorInfo
 import gov.cdc.dex.validation.service.model.Summary
-import io.micronaut.core.annotation.Nullable
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpRequest.POST
 import io.micronaut.http.HttpResponse
@@ -23,6 +22,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
+import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -53,18 +53,20 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         ApiResponse(responseCode = "200", description = "Success"),
         ApiResponse(responseCode =  "400", description = "Bad Request")
     )
-    fun validate(@QueryValue message_type: String, @Nullable @QueryValue route: String, @Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
+    fun validate(@QueryValue message_type: String, @QueryValue route:Optional<String>, @Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
+        var routeValue = route.orElse("")
         var metadata: HashMap<String, String> = HashMap()
         metadata["message_type"]= message_type
-        metadata["route"]= route
+        metadata["route"]= routeValue
+
         if (message_type.isNullOrEmpty()) {
             log.error("Missing Header for message_type")
             return HttpResponse.badRequest("BAD REQUEST: Message Type ('CASE' or 'ELR') " +
                     "must be specified in the HTTP Header as 'x-tp-message_type'. " +
                     "Please correct the HTTP header and try again.")
         }
-        if (message_type == HL7MessageType.ELR.name && route.isNullOrEmpty()) {
+        if (message_type == HL7MessageType.ELR.name && routeValue.isNullOrEmpty()) {
             log.error("Missing Header for route when Message_type == ELR")
            return HttpResponse.badRequest("BAD REQUEST: ELR message must specify a route" +
                         " in the HTTP header as 'x-tp-route'. " +
