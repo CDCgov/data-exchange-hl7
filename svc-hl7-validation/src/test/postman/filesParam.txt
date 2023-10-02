@@ -1,6 +1,0 @@
-c_filename,c_filepath
-mcq1_bdb_lab_02.txt,C:/_projects/ocio/ede/structure-validator/fns-hl7-pipeline/fn-structure-validator/src/test/resources/tbrd/BDB_LAB_02.txt
-mcq1_bdb_lab_03.txt,C:/_projects/ocio/ede/structure-validator/fns-hl7-pipeline/fn-structure-validator/src/test/resources/tbrd/BDB_LAB_03.txt
-mcq1_bdb_lab_04.txt,C:/_projects/ocio/ede/structure-validator/fns-hl7-pipeline/fn-structure-validator/src/test/resources/tbrd/BDB_LAB_04.txt
-mcq1_bdb_lab_05.txt,C:/_projects/ocio/ede/structure-validator/fns-hl7-pipeline/fn-structure-validator/src/test/resources/tbrd/BDB_LAB_05.txt
-mcq1_bdb_lab_06.txt,C:/_projects/ocio/ede/structure-validator/fns-hl7-pipeline/fn-structure-validator/src/test/resources/tbrd/BDB_LAB_06.txt
