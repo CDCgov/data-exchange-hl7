@@ -46,6 +46,9 @@
             "SPM": {
               "cardinality": "[0..*]",
               "children": {
+                "OBX": {
+                  "cardinality": "[0..*]"
+                },
                 "NTE": {
                   "cardinality": "[0..*]"
                 }
