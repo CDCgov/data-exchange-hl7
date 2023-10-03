@@ -2,10 +2,10 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "${kotlinVersion}"
     id "org.jetbrains.kotlin.kapt" version "${kotlinVersion}"
     id "org.jetbrains.kotlin.plugin.allopen" version "${kotlinVersion}"
-    id "groovy"
+   // id "groovy"
     id "jacoco"
     id "maven-publish"
-   // id "com.google.osdetector" version "1.7.1"
+    id "com.google.osdetector" version "1.7.0"
 }
 
 version "$revision"
@@ -86,7 +86,7 @@ dependencies {
     testImplementation("io.micronaut.test:micronaut-test-junit5:{junitVersion}")
 //    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:{junitVersion}")
 //    testRuntimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final'
-//    runtimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final:' + osdetector.classifier
+    runtimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final:' + osdetector.classifier
     runtimeOnly 'io.grpc:grpc-netty-shaded:1.53.0'
 //    implementation 'io.projectreactor:reactor-core:3.4.19'
     implementation 'javax.inject:javax.inject:1'
