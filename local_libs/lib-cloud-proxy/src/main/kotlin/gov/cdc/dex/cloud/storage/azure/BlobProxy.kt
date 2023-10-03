@@ -1,6 +1,5 @@
 package gov.cdc.dex.cloud.storage.azure
 
-import com.azure.core.http.rest.PagedIterable
 import com.azure.core.http.rest.PagedResponse
 import com.azure.core.util.BinaryData
 import com.azure.storage.blob.BlobClient
@@ -9,7 +8,6 @@ import com.azure.storage.blob.BlobServiceClientBuilder
 import com.azure.storage.blob.models.BlobItem
 import com.azure.storage.blob.models.BlobProperties
 import com.azure.storage.blob.models.ListBlobsOptions
-import com.azure.storage.blob.models.PageBlobItem
 import gov.cdc.dex.cloud.AzureConfig
 import gov.cdc.dex.cloud.Providers
 import gov.cdc.dex.cloud.storage.CloudFile
@@ -26,7 +24,6 @@ import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.util.*
 import javax.inject.Singleton
-import kotlin.math.max
 
 
 private const val VAR_CONTAINER = "blob.container"
@@ -64,30 +61,35 @@ class BlobProxy(private val azureConfig: AzureConfig, private val meterRegistry:
                            blobListType: BlobListType = BlobListType.ANY) : List<String> {
         val max = if (maxNumber > 0) maxNumber else 5000  // 5000 is the default per page
         val blobContainerClient = blobServiceClient.getBlobContainerClient(bucket)
-        val options = ListBlobsOptions()
-            .setMaxResultsPerPage(max)
+        val options = ListBlobsOptions().setMaxResultsPerPage(max)
         options.prefix = when {
             prefix != null -> prefix
             else -> "/"
         }
-
+        // listing blobs returns all blobs, regardless of type.
+        // we have set the max results per page, but no guarantee that they are all the type we want
+        // so we must filter each page and accumulate the results until we have the desired max
+        // or there are no more results to be had.
         val pagedList : Iterable<PagedResponse<BlobItem>> =
             blobContainerClient.listBlobsByHierarchy("/", options, Duration.ofSeconds(30)).iterableByPage()
-        //  pagedList.firstOrNull()?.elements?.filter{ it.isPrefix == false }?.map { b -> b.name } ?: listOf()
-        val filesList = mutableListOf<String>()
-        while (filesList.size < max && pagedList.iterator().hasNext()) {
-            val page = pagedList.iterator().next()
-            val files = if (blobListType != BlobListType.ANY) {
-                page.elements.filter { el -> el.isPrefix == (blobListType == BlobListType.FOLDER) }
-                    .map { blobItem -> blobItem.name }
+        val results = mutableListOf<String>()
+        var iterations = 0
+        val pageIterator = pagedList.iterator()
+        while (results.size < max && iterations < max && pageIterator.hasNext()) {
+            val page = pageIterator.next()
+            val elements = if (blobListType != BlobListType.ANY) {
+                page.elements.filter { it.isPrefix == (blobListType == BlobListType.FOLDER) }.map { b -> b.name }
             } else {
-                page.elements.map { blobItem -> blobItem.name }
+                page.elements.map { b -> b.name }
             }
-            if (filesList.size < max && files.isNotEmpty()) {
-                filesList.addAll(files.take(max - filesList.size))
+            if (elements.isEmpty()) {
+                iterations = max //break out of this loop
+            } else {
+                results.addAll(elements.take(max - results.size))
+                iterations++
             }
         }
-        return filesList.toList()
+        return results
     }
 
     override fun list(maxNumber: Int, prefix: String?): List<String> =
