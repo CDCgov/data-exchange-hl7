@@ -59,7 +59,7 @@ class BlobProxy(private val azureConfig: AzureConfig, private val meterRegistry:
 
     private fun listByType(bucket: String, maxNumber: Int, prefix: String?,
                            blobListType: BlobListType = BlobListType.ANY) : List<String> {
-        val max = if (maxNumber > 0) maxNumber else 5000  // 5000 is the default per page
+        val max = if (maxNumber > 0) maxNumber else 5000  // 5000 is Azure's default per page
         val blobContainerClient = blobServiceClient.getBlobContainerClient(bucket)
         val options = ListBlobsOptions().setMaxResultsPerPage(max)
         options.prefix = when {
@@ -67,7 +67,7 @@ class BlobProxy(private val azureConfig: AzureConfig, private val meterRegistry:
             else -> "/"
         }
         // listing blobs returns all blobs, regardless of type.
-        // we have set the max results per page, but no guarantee that they are all the type we want
+        // we have set the max results per page, but no guarantee that they are all the type we want,
         // so we must filter each page and accumulate the results until we have the desired max
         // or there are no more results to be had.
         val pagedList : Iterable<PagedResponse<BlobItem>> =
@@ -93,7 +93,7 @@ class BlobProxy(private val azureConfig: AzureConfig, private val meterRegistry:
     }
 
     override fun list(maxNumber: Int, prefix: String?): List<String> =
-        azureConfig.blob.container.validateFor(VAR_CONTAINER) { listByType(it, maxNumber, prefix, BlobListType.FILE) }
+        azureConfig.blob.container.validateFor(VAR_CONTAINER) { list(it, maxNumber, prefix) }
 
     override fun listFolders(bucket: String): List<String> = meterRegistry.withMetrics("blob.listFolders") {
         listByType(bucket, 10, null, BlobListType.FOLDER)
