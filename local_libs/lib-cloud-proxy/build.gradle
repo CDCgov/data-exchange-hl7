@@ -2,20 +2,22 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "${kotlinVersion}"
     id "org.jetbrains.kotlin.kapt" version "${kotlinVersion}"
     id "org.jetbrains.kotlin.plugin.allopen" version "${kotlinVersion}"
-//    id "groovy"
+    id "groovy"
     id "jacoco"
     id "maven-publish"
-    id "com.google.osdetector" version "1.7.0"
+   // id "com.google.osdetector" version "1.7.1"
 }
 
 version "$revision"
 group "gov.cdc.dex"
 
 repositories {
+
     maven {
         url "https://imagehub.cdc.gov/repository/maven-ede-group/";
         setAllowInsecureProtocol(true);
     }
+    mavenCentral()
 }
 
 configurations {
@@ -24,7 +26,9 @@ configurations {
 }
 
 dependencies {
-    implementation group: 'com.azure', name: 'azure-sdk-bom', version: '1.2.11', ext: 'pom'
+    // https://mvnrepository.com/artifact/kr.motd.maven/os-maven-plugin
+
+    implementation group: 'com.azure', name: 'azure-sdk-bom', version: '1.2.15', ext: 'pom'
     implementation platform("software.amazon.awssdk:bom:2.20.43") {
         exclude group: 'io.netty', module: '*'
     }
@@ -43,7 +47,7 @@ dependencies {
     }
 
 //    implementation group: 'io.micronaut.azure', name: 'micronaut-azure-sdk', version: '3.3.0'
-    implementation 'com.azure:azure-storage-blob:12.20.3'
+    implementation 'com.azure:azure-storage-blob:12.22.1'
     implementation 'com.azure:azure-storage-queue:12.15.3'
 
     kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
@@ -82,7 +86,7 @@ dependencies {
     testImplementation("io.micronaut.test:micronaut-test-junit5:{junitVersion}")
 //    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:{junitVersion}")
 //    testRuntimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final'
-    runtimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final:' + osdetector.classifier
+//    runtimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final:' + osdetector.classifier
     runtimeOnly 'io.grpc:grpc-netty-shaded:1.53.0'
 //    implementation 'io.projectreactor:reactor-core:3.4.19'
     implementation 'javax.inject:javax.inject:1'
@@ -111,7 +115,7 @@ jacocoTestReport {
 }
 
 java {
-    sourceCompatibility = JavaVersion.toVersion('11')
+    sourceCompatibility = JavaVersion.toVersion('17')
 }
 
 allOpen {
@@ -119,14 +123,14 @@ allOpen {
 }
 compileKotlin {
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
         //Will retain parameter names for Java reflection
         javaParameters = true
     }
 }
 compileTestKotlin {
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
         javaParameters = true
     }
 }
@@ -146,17 +150,17 @@ kapt {
 //    mergeServiceFiles()
 //}
 
-tasks.withType(JavaExec) {
-    classpath += configurations.developmentOnly
-    jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
-    if (gradle.startParameter.continuous) {
-        systemProperties(
-                'micronaut.io.watch.restart':'true',
-                'micronaut.io.watch.enabled':'true',
-                "micronaut.io.watch.paths":"src/main"
-        )
-    }
-}
+//tasks.withType(JavaExec) {
+//    classpath += configurations.developmentOnly
+//    jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+//    if (gradle.startParameter.continuous) {
+//        systemProperties(
+//                'micronaut.io.watch.restart':'true',
+//                'micronaut.io.watch.enabled':'true',
+//                "micronaut.io.watch.paths":"src/main"
+//        )
+//    }
+//}
 
 
 apply plugin: 'maven-publish'
