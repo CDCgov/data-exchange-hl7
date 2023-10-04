@@ -74,7 +74,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-cloud-proxy</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>0.0.29-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
