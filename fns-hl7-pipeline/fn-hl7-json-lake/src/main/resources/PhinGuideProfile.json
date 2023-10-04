@@ -1082,7 +1082,7 @@
   },
   {
     "fieldNumber": 28,
-    "name": "Results Copies Tp",
+    "name": "Results Copies To",
     "dataType": "ST",
     "maxLength": "200",
     "usage": "X",
@@ -1546,7 +1546,7 @@
         "notes": ""
       },{
         "fieldNumber": 3,
-        "name": "Speciment Parent Ids",
+        "name": "Specimen Parent Ids",
         "dataType": "EIP",
         "usage": "O",
         "cardinality": "[0..*]",
@@ -1570,7 +1570,7 @@
         "notes": ""
       },{
         "fieldNumber": 6,
-        "name": "Speciment Additives",
+        "name": "Specimen Additives",
         "dataType": "CWE",
         "usage": "O",
         "cardinality": "[0..*]",
@@ -1594,7 +1594,7 @@
         "notes": ""
       },{
         "fieldNumber": 9,
-        "name": "Speciment Source Site Modifier",
+        "name": "Specimen Source Site Modifier",
         "dataType": "CWE",
         "usage": "O",
         "cardinality": "[0..*]",
@@ -1618,7 +1618,7 @@
         "notes": ""
       },{
         "fieldNumber": 12,
-        "name": "Speciment Collection Amount",
+        "name": "Specimen Collection Amount",
         "dataType": "CQ",
         "usage": "O",
         "cardinality": "[0..1]",
