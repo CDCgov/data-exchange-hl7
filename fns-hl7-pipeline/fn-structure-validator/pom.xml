@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>structure-validator</artifactId>
-    <version>0.0.27-2023-09-06-140050-3f31a52</version>
+    <version>0.0.29-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Java Functions</name>
     <scm>
@@ -24,6 +24,7 @@
         <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
         <lib-nist-validator.version>1.3.5-SNAPSHOT</lib-nist-validator.version>
         <hl7-pet.version>1.2.7.2</hl7-pet.version>
+
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -251,7 +252,6 @@
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
                         <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
-                        <EventHubSendELROkName>hl7-structure-elr-ok</EventHubSendELROkName>
                     </environmentVariables>
                 </configuration>
             </plugin>

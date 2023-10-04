@@ -681,7 +681,7 @@
             },
             {
                 "fieldNumber": 13,
-                "name": "Effeective Date",
+                "name": "Effective Date",
                 "dataType": "TS",
                 "maxLength": "26",
                 "usage": "O",
@@ -1527,6 +1527,96 @@
                 "name": "Surname From Partner/Spouse",
                 "dataType": "ST",
                 "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "CNE": [
+            {
+                "fieldNumber": 1,
+                "name": "Identifier",
+                "dataType": "ST",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Name of Coding System",
+                "dataType": "ID",
+                "maxLength": "199",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 4,
+                "name": "Alternate Identifier",
+                "dataType": "ST",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 5,
+                "name": "Alternate Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 6,
+                "name": "Name of Alternate Coding System",
+                "dataType": "ID",
+                "maxLength": "199",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 7,
+                "name": "Coding System Version ID",
+                "dataType": "ST",
+                "maxLength": "10",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 8,
+                "name": "Alternate Coding System Version ID",
+                "dataType": "ST",
+                "maxLength": "10",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 9,
+                "name": "Original Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "RE",
                 "cardinality": "[0..1]",
                 "conformance": "",
                 "notes": ""

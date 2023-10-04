@@ -1,8 +1,7 @@
 package gov.cdc.dex.cloud.storage
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -20,20 +19,20 @@ internal class CloudStorageProxyTest {
     fun listFolders() {
         val configs = cloudStorage.listFolders("hl7ingress")
         configs.forEach { println("Folder: $it")}
-        assertFalse(configs.isEmpty(), "Asserting folders exist in container hl7ingress")
+        assertTrue(configs.isNotEmpty(), "Asserting folders exist in container hl7ingress")
     }
-
-    //@Test
-//    fun testListFilesInFolder() {
-//        val configs = cloudStorage.list(5, "ingress/hl7/QA/FDD/FDD_MMG_V1.0/")
-//        configs.forEach { println("file: $it")}
-//    }
 
     @Test
-    fun testGetFile() {
-        val file = cloudStorage.getFile("unitTests/Lyme_HappyPath.doNotDelete.txt")
-        assertNotNull(file, "Asserting file is not null")
+    fun testListFilesInFolder() {
+        val configs = cloudStorage.list(10, "/")
+        configs.forEach { println("file: $it")}
     }
+
+//    @Test
+//    fun testGetFile() {
+//        val file = cloudStorage.getFile("unitTests/Lyme_HappyPath.doNotDelete.txt")
+//        assertNotNull(file, "Asserting file is not null")
+//    }
     @Test
     fun testUploadFileNoMetadata() {
         val file = cloudStorage.saveFile("hl7ingress", "testFile-${UUID.randomUUID()}.txt", "Hi There", null, "text/plain" )

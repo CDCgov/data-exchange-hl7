@@ -46,6 +46,9 @@
             "SPM": {
               "cardinality": "[0..*]",
               "children": {
+                "OBX": {
+                  "cardinality": "[0..*]"
+                },
                 "NTE": {
                   "cardinality": "[0..*]"
                 }
@@ -1079,7 +1082,7 @@
   },
   {
     "fieldNumber": 28,
-    "name": "Results Copies Tp",
+    "name": "Results Copies To",
     "dataType": "ST",
     "maxLength": "200",
     "usage": "X",
@@ -1302,6 +1305,120 @@
     "cardinality": "[0..1]",
     "conformance": "",
     "notes": ""
+  },
+  {
+    "fieldNumber": 13,
+    "name": "User Defined Access Checks",
+    "dataType": "ST",
+    "maxLength": "20",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 14,
+    "name": "Date/Time of the Observation",
+    "dataType": "DTM",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 15,
+    "name": "Producer's ID",
+    "dataType": "CWE",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 16,
+    "name": "Responsible Observer",
+    "dataType": "XCN",
+    "maxLength": "250",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 17,
+    "name": "Observation Method",
+    "dataType": "CWE",
+    "maxLength": "250",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 18,
+    "name": "Equipment Instance Identifier",
+    "dataType": "EI",
+    "maxLength": "22",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 19,
+    "name": "Date/Time of the Analysis",
+    "dataType": "DTM",
+    "maxLength": "26",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 20,
+    "name": "Observation Site",
+    "dataType": "CWE",
+    "maxLength": "26",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 21,
+    "name": "Observation Instance Identifier",
+    "dataType": "EI",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 22,
+    "name": "Mood Code",
+    "dataType": "CNE",
+    "usage": "O",
+    "cardinality": "[0..*]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 23,
+    "name": "Performing Organization Name",
+    "dataType": "XON",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
+  },
+  {
+    "fieldNumber": 24,
+    "name": "Performing Organization Address",
+    "dataType": "XAD",
+    "usage": "O",
+    "cardinality": "[0..1]",
+    "conformance": "",
+    "notes": ""
   }
 ],
     "SFT": [
@@ -1429,7 +1546,7 @@
         "notes": ""
       },{
         "fieldNumber": 3,
-        "name": "Speciment Parent Ids",
+        "name": "Specimen Parent Ids",
         "dataType": "EIP",
         "usage": "O",
         "cardinality": "[0..*]",
@@ -1453,7 +1570,7 @@
         "notes": ""
       },{
         "fieldNumber": 6,
-        "name": "Speciment Additives",
+        "name": "Specimen Additives",
         "dataType": "CWE",
         "usage": "O",
         "cardinality": "[0..*]",
@@ -1477,7 +1594,7 @@
         "notes": ""
       },{
         "fieldNumber": 9,
-        "name": "Speciment Source Site Modifier",
+        "name": "Specimen Source Site Modifier",
         "dataType": "CWE",
         "usage": "O",
         "cardinality": "[0..*]",
@@ -1501,7 +1618,7 @@
         "notes": ""
       },{
         "fieldNumber": 12,
-        "name": "Speciment Collection Amount",
+        "name": "Specimen Collection Amount",
         "dataType": "CQ",
         "usage": "O",
         "cardinality": "[0..1]",

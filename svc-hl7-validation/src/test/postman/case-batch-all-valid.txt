@@ -1,0 +1,1022 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.1111^ISO|Sending-Facility^2.16.840.1.114222.1111^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~CongenitalSyphilis_MMG_V1.1^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||CONSYPH_TC01^^^SendAppName&2.16.840.1.114222.1111&ISO||~^^^^^^S||20130801|F||2054-5^Black or African American^CDCREC~2106-3^White^CDCREC|^^^22^71301^^^^22079|||||||||||2186-5^Not Hispanic or Latino^CDCREC
+NK1|1||MTH^Mother^HL70063|^^^22^71301^USA^^^22079||||||||||S^Single^HL70002||19940113||||||||||||2186-5^Not Hispanic or Latino^CDCREC|||||||2054-5^Black or African American^CDCREC~2106-3^White^CDCREC
+OBR|1||CONSYPH_TC01^SendAppName^2.16.840.1.114222.222^ISO|68991-9^Epidemiologic Information^LN|||20130825170100|||||||||||||||20130825170100|||F||||||10316^Syphilis, congenital^NND
+OBX|1|ST|32624-9^Other Race Text^LN||Caribbean||||||F
+OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|ST|21842-0^Other Birth Place^LN||New England||||||F
+OBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|5|TS|11368-8^Date of Illness Onset^LN||20130801||||||F
+OBX|6|TS|77976-9^Illness End Date^LN||20130807||||||F
+OBX|7|SN|77977-7^Illness Duration^LN||^6|d^day [time]^UCUM|||||F
+OBX|8|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|9|TS|77975-1^Diagnosis Date^LN||20130801||||||F
+OBX|10|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|11|TS|8656-1^Admission Date^LN||20130801||||||F
+OBX|12|TS|8649-6^Discharge Date^LN||20130802||||||F
+OBX|13|SN|78033-8^Duration of Hospital Stay in Days^LN||^2||||||F
+OBX|14|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|15|ST|77993-4^State Case Identifier^LN||sdlnjh||||||F
+OBX|16|ST|77997-5^Legacy Case Identifier^LN||61528936181002006||||||F
+OBX|17|SN|77998-3^Age at Case Investigation^LN||^1|d^day [time]^UCUM|||||F
+OBX|18|CWE|77982-7^Case Disease Imported Code^LN||PHC244^Indigenous^CDCPHINVS||||||F
+OBX|19|CWE|INV153^Imported Country^PHINQUESTION||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|20|CWE|INV154^Imported State^PHINQUESTION||48^Texas^FIPS5_2||||||F
+OBX|21|CWE|INV155^Imported City^PHINQUESTION||1374175^Humble, TX, Harris^USGSGNIS||||||F
+OBX|22|CWE|INV156^Imported County^PHINQUESTION||48201^Harris, TX^FIPS6_4||||||F
+OBX|23|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|24|CWE|77985-0^State or Province of Exposure^LN|1|22^Louisiana^FIPS5_2||||||F
+OBX|25|ST|77986-8^City of Exposure^LN|1|Alexandria||||||F
+OBX|26|ST|77987-6^County of Exposure^LN|1|Rapides||||||F
+OBX|27|CWE|77984-3^Country of Exposure^LN|2|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|28|CWE|77985-0^State or Province of Exposure^LN|2|48^Texas^FIPS5_2||||||F
+OBX|29|ST|77986-8^City of Exposure^LN|2|Humble||||||F
+OBX|30|ST|77987-6^County of Exposure^LN|2|Harris||||||F
+OBX|31|CWE|77989-2^Transmission Mode^LN||417409004^Transplacental transmission^SCT||||||F
+OBX|32|CWE|77990-0^Case Class Status Code^LN||2931005^Probable diagnosis^SCT||||||F
+OBX|33|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|34|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|35|ST|77981-9^Case Outbreak Name^LN||OUTB2014-00123||||||F
+OBX|36|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|37|CWE|48766-0^Reporting Source Type Code^LN||1^Hospital^HL70406||||||F
+OBX|38|ST|52831-5^Reporting Source ZIP Code^LN||71301||||||F
+OBX|39|CWE|77988-4^Binational Reporting Criteria^LN||PHC1139^Has case contacts in or from Mexico or Canada^CDCPHINVS~PHC1140^Exposure to suspected product from Canada or Mexico^CDCPHINVS||||||F
+OBX|40|ST|74549-7^Person Reporting to CDC - Name^LN||Smith, John||||||F
+OBX|41|ST|74548-9^Person Reporting to CDC - Phone Number^LN||(734)677-7777||||||F
+OBX|42|ST|74547-1^Person Reporting to CDC - Email^LN||johnsmith@gmail.com||||||F
+OBX|43|DT|77979-3^Case Investigation Start Date^LN||20130801||||||F
+OBX|44|DT|77995-9^Date Reported^LN||20130801||||||F
+OBX|45|TS|77972-8^Earliest Date Reported to County^LN||20130802||||||F
+OBX|46|TS|77973-6^Earliest Date Reported to State^LN||20130806||||||F
+OBX|47|SN|77991-8^MMWR Week^LN||^31||||||F
+OBX|48|DT|77992-6^MMWR Year^LN||2013||||||F
+OBX|49|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20130802||||||F
+OBX|50|DT|77970-2^Date First Reported to PHD^LN||20130802||||||F
+OBX|51|CWE|77966-0^Reporting State^LN||22^Louisiana^FIPS5_2||||||F
+OBX|52|CWE|77967-8^Reporting County^LN||22079^Rapides Parish, LA^FIPS6_4||||||F
+OBX|53|CWE|77968-6^National Reporting Jurisdiction^LN||22^LA^FIPS5_2||||||F
+OBX|54|TX|77999-1^Comment^LN||Baby is sick.||||||F
+OBX|55|ST|INV2084^Mother's Local Record ID^PHINQUESTION||CONSYPH_TC01||||||F
+OBX|56|CWE|INV2085^Mother's National Reporting Jurisdiction^PHINQUESTION||22^LA^FIPS5_2||||||F
+OBX|57|NM|75201-4^Number of Pregnancies^LN||1||||||F
+OBX|58|NM|75202-2^Number of Total Live Births^LN||1||||||F
+OBX|59|DT|75203-0^Last Menstrual Period^LN||99999999||||||F
+OBX|60|DT|75200-6^Date of First Prenatal Visit^LN||20130315||||||F
+OBX|61|CWE|75204-8^Prenatal Visit Indicator^LN||Y^Yes^HL70136||||||F
+OBX|62|CWE|75163-6^Trimester of First Prenatal Visit^LN||255247007^Second trimester^SCT||||||F
+OBX|63|CWE|75179-2^Mother's HIV Status During Pregnancy^LN||165815009^HIV negative^SCT||||||F
+OBX|64|CWE|75180-0^Mother's Clinical Stage of Syphilis During Pregnancy^LN||186867005^early latent^SCT||||||F
+OBX|65|CWE|75181-8^Mother's Surveillance Stage of Syphilis During Pregnancy^LN||PHC1506^Syphilis, Early Non-Primary, Non-Secondary^CDCPHINVS||||||F
+OBX|66|DT|75182-6^Date When Mother Received Her First Dose of Benzathine Penicillin^LN||20130226||||||F
+OBX|67|CWE|75183-4^Trimester in Which Mother Received Her First Dose of Benzathine Penicillin^LN||255246003^1st trimester^SCT||||||F
+OBX|68|CWE|75184-2^Mother's Treatment^LN||PHC1278^2.4 M units benzathine penicillin^CDCPHINVS||||||F
+OBX|69|CWE|75185-9^Appropriate Serologic Response^LN||PHC1282^No, inappropriate response: evidence of treatment failure or reinfection^CDCPHINVS||||||F
+OBX|70|CWE|75164-4^Non-treponemal Test or Treponemal Test at First Prenatal Visit^LN||Y^Yes^HL70136||||||F
+OBX|71|CWE|75165-1^Non-treponemal Test or Treponemal Test at 28-32 Weeks Gestation^LN||Y^Yes^HL70136||||||F
+OBX|72|CWE|75166-9^Non-treponemal Test or Treponemal Test at Delivery^LN||Y^Yes^HL70136||||||F
+OBX|73|CWE|75193-3^Clinical Signs of Congenital Syphilis^LN|1|84387000^no signs / asymptomatic^SCT||||||F
+OBX|74|CWE|INV919^Clinical Signs Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|75|CWE|85793-9^Subject of Lab Test Performed^LN|1|72705000^Mother^SCT||||||F
+OBX|76|CWE|INV290^Test Type^PHINQUESTION|1|5292-8^Reagin Ab [Presence] in Serum by VDRL^LN||||||F
+OBX|77|CWE|INV291^Test Result^PHINQUESTION|1|11214006^Reactive^SCT||||||F
+OBX|78|CWE|STD123^Nontreponemal Serologic Syphilis Test Result^PHINQUESTION|1|STD8^1:8^CDCPHINVS||||||F
+OBX|79|DT|82772-5^Date of Lab Result^LN|1|20130204||||||F
+OBX|80|CWE|85793-9^Subject of Lab Test Performed^LN|2|72705000^Mother^SCT||||||F
+OBX|81|CWE|INV290^Test Type^PHINQUESTION|2|20507-0^Reagin Ab [Presence] in Serum by RPR^LN||||||F
+OBX|82|CWE|INV291^Test Result^PHINQUESTION|2|11214006^Reactive^SCT||||||F
+OBX|83|CWE|STD123^Nontreponemal Serologic Syphilis Test Result^PHINQUESTION|2|STD8^1:8^CDCPHINVS||||||F
+OBX|84|DT|82772-5^Date of Lab Result^LN|2|20130808||||||F
+OBX|85|CWE|85793-9^Subject of Lab Test Performed^LN|3|72705000^Mother^SCT||||||F
+OBX|86|CWE|INV290^Test Type^PHINQUESTION|3|24110-9^Treponema pallidum Ab [Presence] in Serum by Immunoassay (EIA)^LN||||||F
+OBX|87|CWE|INV291^Test Result^PHINQUESTION|3|11214006^Reactive^SCT||||||F
+OBX|88|DT|82772-5^Date of Lab Result^LN|3|20130204||||||F
+OBX|89|CWE|85793-9^Subject of Lab Test Performed^LN|4|72705000^Mother^SCT||||||F
+OBX|90|CWE|INV290^Test Type^PHINQUESTION|4|PHC1306^Other Treponemal Test Type^CDCPHINVS||||||F
+OBX|91|CWE|INV291^Test Result^PHINQUESTION|4|11214006^Reactive^SCT||||||F
+OBX|92|DT|82772-5^Date of Lab Result^LN|4|20130801||||||F
+OBX|93|CWE|85793-9^Subject of Lab Test Performed^LN|5|133931009^Infant^SCT||||||F
+OBX|94|CWE|INV290^Test Type^PHINQUESTION|5|20507-0^Reagin Ab [Presence] in Serum by RPR^LN||||||F
+OBX|95|CWE|INV291^Test Result^PHINQUESTION|5|11214006^Reactive^SCT||||||F
+OBX|96|CWE|STD123^Nontreponemal Serologic Syphilis Test Result^PHINQUESTION|5|STD1^1:1^CDCPHINVS||||||F
+OBX|97|DT|82772-5^Date of Lab Result^LN|5|20130801||||||F
+OBX|98|CWE|85793-9^Subject of Lab Test Performed^LN|6|133931009^Infant^SCT||||||F
+OBX|99|CWE|INV290^Test Type^PHINQUESTION|6|24110-9^Treponema pallidum Ab [Presence] in Serum by Immunoassay (EIA)^LN||||||F
+OBX|100|CWE|INV291^Test Result^PHINQUESTION|6|11214006^Reactive^SCT||||||F
+OBX|101|DT|82772-5^Date of Lab Result^LN|6|20130801||||||F
+OBX|102|CWE|75186-7^Vital Status^LN||438949009^Alive^SCT||||||F
+OBX|103|SN|56056-5^Birth Weight^LN||^2623|g^gram^UCUM|||||F
+OBX|104|SN|57714-8^Gestational Age^LN||^36|wk^week^UCUM|||||F
+OBX|105|CWE|75194-1^Long Bone X-rays for Infant^LN||PHC1288^Yes, no signs of CS^CDCPHINVS||||||F
+OBX|106|CWE|75192-5^Darkfield Exam, DFA, or Special Stain Test Findings^LN||373121007^Test not done^SCT||||||F
+OBX|107|CWE|LP48341-9^CSF WBC Count^LN||373121007^Test not done^SCT||||||F
+OBX|108|CWE|LP69956-8^CSF Protein Level^LN||373121007^Test not done^SCT||||||F
+OBX|109|CWE|75195-8^CSF VDRL Test Finding^LN||373121007^Test not done^SCT||||||F
+OBX|110|CWE|75197-4^Infant Treated^LN||PHC1296^Yes, with other treatment^CDCPHINVS||||||F
+OBX|111|CWE|75207-1^Stillbirth Indicator^LN||N^No^HL70136||||||F
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20160126120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~FDD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||FDD_SAL_TC01^^^SendAppName&2.16.840.1.114222.222&ISO||~^^^^^^S||19600301|F||2106-3^White^CDCREC|^^^06^30033^^^^06037|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||
+OBR|1||FDD_SAL_PC01^SendAppName^2.16.840.1.114222^ISO|68991-9^Epidemiologic Information^LN|||20170802111655|||||||||||||||20170802111655|||F||||||50265^Salmonellosis excluding Salmonella typhi^NND
+OBX|1|ST|32624-9^Other Race Text^LN||None||||||F
+OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|3|ST|21842-0^Other Birth Place^LN||No Other Birth Place||||||F
+OBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|5|TS|11368-8^Date of Illness Onset^LN||20170720||||||F
+OBX|6|TS|77976-9^Illness End Date^LN||20170801||||||F
+OBX|7|SN|77977-7^Illness Duration^LN||^13|d^day^UCUM|||||F
+OBX|8|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|9|TS|77975-1^Diagnosis Date^LN||20170725||||||F
+OBX|10|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|11|TS|8656-1^Admission Date^LN||20170723||||||F
+OBX|12|TS|8649-6^Discharge Date^LN||20170725||||||F
+OBX|13|SN|78033-8^Duration of Hospital Stay in Days^LN||^2||||||F
+OBX|14|CWE|77978-5^Subject Died^LN||UNK^Unknown^NULLFL||||||F
+OBX|15|ST|77993-4^State Case Identifier^LN||TX4321||||||F
+OBX|16|ST|77997-5^Legacy Case Identifier^LN||48432148S012015||||||F
+OBX|17|SN|77998-3^Age at Case Investigation^LN||^48|a^year^UCUM|||||F
+OBX|18|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F
+OBX|19|CWE|INV153^Imported Country^PHINQUESTION||USA^UNITED STATES^ISO3166_1||||||F
+OBX|20|CWE|INV154^Imported State^PHINQUESTION||48^Texas^FIPS5_2||||||F
+OBX|21|CWE|INV155^Imported City^PHINQUESTION||1350851^Abernathy^USGSGNIS||||||F
+OBX|22|CWE|INV156^Imported County^PHINQUESTION||48189^Hale^FIPS6_4||||||F
+OBX|23|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES^ISO3166_1||||||F
+OBX|24|CWE|77985-0^State or Province of Exposure^LN|1|48^Texas^FIPS5_2||||||F
+OBX|25|ST|77986-8^City of Exposure^LN|1|Abernathy||||||F
+OBX|26|ST|77987-6^County of Exposure^LN|1|Hale||||||F
+OBX|27|CWE|77989-2^Transmission Mode^LN||416086007^Food-borne transmission^SCT||||||F
+OBX|28|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|29|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|30|CWE|77980-1^Case Outbreak Indicator^LN||Y^Yes^HL70136||||||F
+OBX|31|ST|77981-9^Case Outbreak Name^LN||SALOUTCA1||||||F
+OBX|32|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|33|CWE|48766-0^Reporting Source Type Code^LN||PHC247^Laboratory^CDCPHINVS||||||F
+OBX|34|ST|52831-5^Reporting Source ZIP Code^LN||91101||||||F
+OBX|35|CWE|77988-4^Binational Reporting Criteria^LN||PHC1139^Has case contacts in or from Mexico or Canada^CDCPHINVS||||||F
+OBX|36|ST|74549-7^Person Reporting to CDC - Name^LN||Kirk, James||||||F
+OBX|37|ST|74548-9^Person Reporting to CDC - Phone Number^LN||555-956-7815||||||F
+OBX|38|ST|74547-1^Person Reporting to CDC - Email^LN||jkirk@txdoh.org||||||F
+OBX|39|DT|77979-3^Case Investigation Start Date^LN||20170729||||||F
+OBX|40|DT|77995-9^Date Reported^LN||20170729||||||F
+OBX|41|TS|77972-8^Earliest Date Reported to County^LN||20170730||||||F
+OBX|42|TS|77973-6^Earliest Date Reported to State^LN||20170729||||||F
+OBX|43|SN|77991-8^MMWR Week^LN||^30||||||F
+OBX|44|DT|77992-6^MMWR Year^LN||2017||||||F
+OBX|45|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20170731||||||F
+OBX|46|DT|77970-2^Date First Reported to PHD^LN||20170729||||||F
+OBX|47|CWE|77966-0^Reporting State^LN||06^California^FIPS5_2||||||F
+OBX|48|CWE|77967-8^Reporting County^LN||06037^Los Angeles^FIPS6_4||||||F
+OBX|49|CWE|77968-6^National Reporting Jurisdiction^LN||06^CA^FIPS5_2||||||F
+OBX|50|TX|77999-1^Comment^LN||Salmonellosis all fields||||||F
+OBX|51|TS|INV953^Date Case Report Form Completed^PHINQUESTION||20170729||||||F
+OBX|52|CWE|INV954^Case Information Completed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|53|CWE|FDD_Q_400^Second Hospitalization^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|54|TS|FDD_Q_401^Second Admission Date^PHINQUESTION||20170726||||||F
+OBX|55|TS|FDD_Q_402^Second Discharge Date^PHINQUESTION||20170801||||||F
+OBX|56|SN|INV955^Second Duration Of Hospital Stay In Days^PHINQUESTION||^6||||||F
+OBX|57|CWE|448551000124100^Transferred To Another Hospital^SCT||Y^Yes^HL70136||||||F
+OBX|58|CWE|309904001^Hospital ICU^SCT||Y^Yes^HL70136||||||F
+OBX|59|CWE|INV956^Immigrated Recently^PHINQUESTION||N^No^HL70136||||||F
+OBX|60|CWE|TRAVEL38^Travel Outside Usa Prior To Illness Onset Within Program Specific Timeframe^PHINQUESTION||N^No^HL70136||||||F
+OBX|61|CWE|FDD_Q_1034^Travel Outside USA, 6 Months Before Illness Began^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|62|CWE|FDD_Q_1035^Countries Visited, 6 Months Before Illness Began^PHINQUESTION||BHS^Bahamas^ISO3166_1||||||F
+OBX|63|CWE|FDD_Q_1036^Household Members Travel Outside USA, 6 Months Before Illness Began^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|64|CWE|FDD_Q_1037^Household Members Countries Visited, 6 Months Before Illness Began^PHINQUESTION||BHS^Bahamas^ISO3166_1||||||F
+OBX|65|CWE|INV664^Did The Case Travel Domestically Prior To Illness Onset?^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|66|CWE|82754-3^Travel State^LN|1|48^Texas^FIPS5_2||||||F
+OBX|67|DT|TRAVEL06^Date Of Arrival To Travel Destination^PHINQUESTION|1|20170715||||||F
+OBX|68|DT|TRAVEL07^Date Of Departure From Travel Destination^PHINQUESTION|1|20170718||||||F
+OBX|69|CWE|82764-2^International Destination(s) of Recent Travel^LN|2|BHS^Bahamas^ISO3166_1||||||F
+OBX|70|DT|TRAVEL06^Date Of Arrival To Travel Destination^PHINQUESTION|2|20170710||||||F
+OBX|71|DT|TRAVEL07^Date Of Departure From Travel Destination^PHINQUESTION|2|20170715||||||F
+OBX|72|SN|INV665^Specify Different Exposure Window^PHINQUESTION||^5||||||F
+OBX|73|CWE|FDD_Q_969^Eat Beef, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|74|CWE|FDD_Q_970^Eat Ground Beef, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|75|CWE|FDD_Q_971^Eat Beef Made Outside Of Home, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|76|CWE|FDD_Q_972^Eat Uncooked Ground Beef, Within 7 Days Before Illness^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|77|CWE|FDD_Q_973^Eat Fresh Berries, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|78|CWE|FDD_Q_974^Bird Contact, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|79|CWE|FDD_Q_975^Eat Cantaloupe, Within 7 Days Before Illness^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|80|CWE|FDD_Q_976^Cat Contact, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|81|CWE|FDD_Q_977^Eat Chicken, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|82|CWE|FDD_Q_978^Eat Fresh Chicken, Within 7 Days Before Illness^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|83|CWE|FDD_Q_979^Eat Frozen Chicken, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|84|CWE|FDD_Q_980^Eat Ground Chicken, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|85|CWE|FDD_Q_981^Eat Chicken Made Outside Of Home, Within 7 Days Before Illness^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|86|CWE|FDD_Q_982^Eat Or Drink Dairy, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|87|CWE|FDD_Q_983^Dog Contact, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|88|CWE|FDD_Q_984^Eat Eggs, Within 7 Days Before Illness^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|89|CWE|FDD_Q_985^Eat Eggs Made Outside Of Home, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|90|CWE|FDD_Q_986^Eat Uncooked Eggs, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|91|CWE|FDD_Q_987^Animal Exposure (Farm / Ranch), Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|92|CWE|FDD_Q_988^Eat Fish, Within 7 Days Before Illness^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|93|CWE|FDD_Q_989^Eat Uncooked Fish, Within 7 Days Before Illness^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|94|CWE|FDD_Q_990^Handle Raw Meat, Within 7 Days Before Illness^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|95|CWE|FDD_Q_991^Handle Raw Poultry, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|96|CWE|FDD_Q_992^Handle Raw Seafood, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|97|CWE|FDD_Q_993^Eat Fresh Herbs, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|98|CWE|FDD_Q_994^Eat Lamb, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|99|CWE|FDD_Q_995^Eat Fresh Lettuce, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|100|CWE|FDD_Q_996^Live Poultry Contact, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|101|CWE|FDD_Q_998^Eat Raw Liver, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|102|CWE|FDD_Q_999^Drink Pasteurized Milk, Within 7 Days Before Illness^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|103|CWE|FDD_Q_1000^Drink Raw Milk, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|104|CWE|FDD_Q_1002^Drink Outside Untreated Water, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|105|CWE|FDD_Q_1003^Pig Contact, Within 7 Days Before Illness^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|106|CWE|FDD_Q_1005^Eat Pork, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|107|CWE|FDD_Q_1006^Drink Raw Cider, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|108|CWE|FDD_Q_1007^Reptile Or Amphbian Contact, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|109|CWE|FDD_Q_1008^Ruminant Contact, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|110|CWE|FDD_Q_1009^Part Of Sampling Scheme For CEA^PHINQUESTION||N^No^HL70136||||||F
+OBX|111|CWE|FDD_Q_1010^Eat Seafood, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|112|CWE|FDD_Q_1011^Eat Uncooked Seafood, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|113|CWE|FDD_Q_1012^Home With Septic System, Within 7 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|114|CWE|FDD_Q_1013^Close Contact With Diarrhea, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|115|CWE|FDD_Q_1014^Sick Pet Contact, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|116|CWE|FDD_Q_1015^Eat Soft Cheese, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|117|CWE|FDD_Q_1017^Eat Fresh Spinach, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|118|CWE|FDD_Q_1018^Eat Sprouts, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|119|CWE|FDD_Q_1019^Swim In Treated Water, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|120|CWE|FDD_Q_1020^Swim In Untreated Water, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|121|CWE|FDD_Q_1021^Eat Fresh Tomatoes, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|122|CWE|FDD_Q_1022^Eat Turkey Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|123|CWE|FDD_Q_1023^Eat Ground Turkey, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|124|CWE|FDD_Q_1024^Eat Turkey Made Outside Of Home, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|125|CWE|FDD_Q_1025^Eat Fresh Watermelon, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|126|CWE|FDD_Q_1027^Eat Veal, Within 7 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|127|CWE|FDD_Q_1028^Consumed Any Form Of Antacids, Within 30 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|128|CWE|FDD_Q_1029^Consumed Medications To Block Acids, Within 30 Days Before Illness^PHINQUESTION||220508^Tums^RXNORM||||||F
+OBX|129|CWE|FDD_Q_1030^Diagnosis Or Been Treated For Cancer (Including Leukemia/Lymphoma), In 6 Months Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|130|CWE|FDD_Q_1031^Diagnosis Or Been Treated For Diabetes, In 6 Months Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|131|CWE|FDD_Q_1032^Treatment By Abdominal Surgery, In 6 Months Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|132|CWE|FDD_Q_1033^Consumed Probiotics, Within 30 Days Before Illness^PHINQUESTION||N^No^HL70136||||||F
+OBX|133|CWE|INV947^Antibiotic Used For Current Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|134|CWE|INV948^Name Of The Antibiotic Used For Current Illness^PHINQUESTION||722^Amoxicillin^RXNORM||||||F
+OBX|135|CWE|INV957^Antibiotic Used, 30 Days Before Illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|136|CWE|INV958^Name Of The Antibiotic Used, 30 Days Before Illness^PHINQUESTION||722^Amoxicillin^RXNORM||||||F
+OBX|137|TS|76425-8^Date Of Onset - Reported^LN||20170721||||||F
+OBX|138|CWE|56831-1^Problem Associated Signs And Symptoms^LN|1|62315008^Diarrhea^SCT||||||F
+OBX|139|CWE|INV919^Signs And Symptoms Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|140|CWE|56831-1^Problem Associated Signs And Symptoms^LN|2|386661006^Fever^SCT||||||F
+OBX|141|CWE|INV919^Signs And Symptoms Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|142|CWE|56831-1^Problem Associated Signs And Symptoms^LN|3|405729008^Bloody diarrhea^SCT||||||F
+OBX|143|CWE|INV919^Signs And Symptoms Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|144|CWE|56831-1^Problem Associated Signs And Symptoms^LN|4|OTH^Other^NULLFL||||||F
+OBX|145|CWE|INV919^Signs And Symptoms Indicator^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|146|CWE|FDD_Q_1038^Subject Outcome^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|147|CWE|FDD_Q_89^Case Identified By An Audit^PHINQUESTION||N^No^HL70136||||||F
+OBX|148|CWE|INV959^Case Interviewed By Public Health Staff^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|149|ST|FDD_Q_88^Foodborne Disease Outbreak Surveillance System (FDOSS) Outbreak ID Number^PHINQUESTION||FDOSS974512GA||||||F
+OBX|150|ST|FDD_Q_1129^State Outbreak Identification Number^PHINQUESTION||CA451286||||||F
+OBX|151|CWE|FDD_Q_404^Type Of Outbreak^PHINQUESTION||416086007^Food-borne transmission^SCT||||||F
+OBX|152|ST|FDD_Q_902^Salmonella Serogroup^PHINQUESTION||B||||||F
+OBX|153|ST|INV949^WGS ID Number^PHINQUESTION|1|3976543||||||F
+OBX|154|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|1|SPM457893||||||F
+OBX|155|CWE|82771-7^Performing Laboratory Type^LN|1|PHC645^Commercial laboratory^CDCPHINVS||||||F
+OBX|156|CWE|INV290^Test Type^PHINQUESTION|1|FDD_A_52^PCR^CDCPHINVS||||||F
+OBX|157|CWE|85069-3^Test Method^LN|1|FDD_A_43^Luminex^CDCPHINVS||||||F
+OBX|158|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|159|CWE|41852-5^Organism^LN|1|712764007^Salmonella species not Salmonella typhi^SCT||||||F
+OBX|160|ST|LAB629^Test Result Text^PHINQUESTION|1|Positive||||||F
+OBX|161|ST|8251-1^Test Result Comments^LN|1|No testing comments||||||F
+OBX|162|CWE|66746-9^Specimen Type^LN|1|119339001^Stool^SCT||||||F
+OBX|163|TS|68963-8^Specimen Collection Date/Time^LN|1|20170723||||||F
+OBX|164|TS|LAB595^Specimen Received Date/Time^PHINQUESTION|1|20170723||||||F
+OBX|165|TS|45375-3^Specimen Analyzed Date/Time^LN|1|20170723||||||F
+OBX|166|TS|82773-3^Date/Time Of Lab Result^LN|1|20170723||||||F
+OBX|167|CWE|LAB515^Sent To CDC^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|168|TS|85930-6^Date Specimen Sent To CDC^LN|1|20170723||||||F
+OBX|169|CWE|LAB331^Isolate sent to State Public Health Lab^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|170|ST|INV949^WGS ID Number^PHINQUESTION|2|397786||||||F
+OBX|171|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|2|SPM413749||||||F
+OBX|172|CWE|82771-7^Performing Laboratory Type^LN|2|PHC645^Commercial laboratory^CDCPHINVS||||||F
+OBX|173|CWE|INV290^Test Type^PHINQUESTION|2|FDD_A_52^PCR^CDCPHINVS||||||F
+OBX|174|CWE|85069-3^Test Method^LN|2|FDD_A_43^Luminex^CDCPHINVS||||||F
+OBX|175|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F
+OBX|176|CWE|41852-5^Organism^LN|2|116395006^Enterohemorrhagic Escherichia coli (organism)^SCT||||||F
+OBX|177|ST|LAB628^Test Result Quantitative^PHINQUESTION|2|>64||||||F
+OBX|178|CWE|LAB115^Result Units^PHINQUESTION|2|mm^millimeter^UCUM||||||F
+OBX|179|CWE|66746-9^Specimen Type^LN|2|119339001^Stool^SCT||||||F
+OBX|180|TS|68963-8^Specimen Collection Date/Time^LN|2|20170723||||||F
+OBX|181|TS|LAB595^Specimen Received Date/Time^PHINQUESTION|2|20170723||||||F
+OBX|182|TS|45375-3^Specimen Analyzed Date/Time^LN|2|20170724||||||F
+OBX|183|TS|82773-3^Date/Time Of Lab Result^LN|2|20170724||||||F
+OBX|184|CWE|LAB515^Sent To CDC^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|185|TS|85930-6^Date Specimen Sent To CDC^LN|2|20170723||||||F
+OBX|186|CWE|LAB331^Isolate sent to State Public Health Lab^PHINQUESTION|2|N^No^HL70136||||||F
+OBX|187|CWE|FDD_Q_1^Day Care Attendee^PHINQUESTION||N^No^HL70136||||||F
+OBX|188|CWE|FDD_Q_1111^Long term care facility resident^PHINQUESTION||N^No^HL70136||||||F
+OBX|189|CWE|FDD_Q_1109^Probable - Laboratory Diagnosed^PHINQUESTION||N^No^HL70136||||||F
+OBX|190|CWE|FDD_Q_1110^Probable - Epi Linked^PHINQUESTION||N^No^HL70136||||||F
+OBX|191|ST|85658-3^Current Occupation^LN|1|Medical Technologist||||||F
+OBX|192|CE|85659-1^Current Occupation Standardized^LN|1|3300^Clinical laboratory technologists and technicians^CDCOCCUPATION2010||||||F
+OBX|193|ST|85078-4^Current Industry^LN|1|Hospital lab||||||F
+OBX|194|CE|85657-5^Current  Industry Standardized^LN|1|8190^Hospitals^CDCINDUSTRY2010||||||F
+OBX|195|ST|85658-3^Current Occupation^LN|2|Acting||||||F
+OBX|196|CE|85659-1^Current Occupation Standardized^LN|2|2700^Actors^CDCOCCUPATION2010||||||F
+OBX|197|ST|85078-4^Current Industry^LN|2|Film||||||F
+OBX|198|CE|85657-5^Current  Industry Standardized^LN|2|6570^Motion pictures and video industries^CDCINDUSTRY2010||||||F
+OBX|199|CWE|LABAST6^Antimicrobial Susceptibility Test Type^PHINQUESTION|1|733^Ampicillin^RxNorm||||||F
+OBX|200|CWE|LABAST8^Antimicrobial Susceptibility Test Interpretation^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|201|CWE|LABAST6^Antimicrobial Susceptibility Test Type^PHINQUESTION|2|203729^Biaxin^RxNorm||||||F
+OBX|202|CWE|LABAST8^Antimicrobial Susceptibility Test Interpretation^PHINQUESTION|2|N^No^HL70136||||||F
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20160126120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~FDD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||FDD_VBO_TC01^^^SendAppName&2.16.840.1.114222.222&ISO||~^^^^^^S||19850301|M||2054-5^Black or African American^CDCREC|^^^26^48201^^^^26163|||||||||||2186-5^Not Hispanic or Latino^CDCREC|||||||
+OBR|1||FDD_VBO_PC01^SendAppName^2.16.840.1.114222^ISO|68991-9^Epidemiologic Information^LN|||20170802111655|||||||||||||||20170802111655|||F||||||11545^Vibriosis^NND
+OBX|1|ST|32624-9^Other Race Text^LN||No other race||||||F
+OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|3|ST|21842-0^Other Birth Place^LN||No other birth place||||||F
+OBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|5|TS|11368-8^Date of Illness Onset^LN||20170720||||||F
+OBX|6|TS|77976-9^Illness End Date^LN||20170801||||||F
+OBX|7|SN|77977-7^Illness Duration^LN||^13|d^day^UCUM|||||F
+OBX|8|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|9|TS|77975-1^Diagnosis Date^LN||20170725||||||F
+OBX|10|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|11|TS|8656-1^Admission Date^LN||20170723||||||F
+OBX|12|TS|8649-6^Discharge Date^LN||20170725||||||F
+OBX|13|SN|78033-8^Duration of Hospital Stay in Days^LN||^2||||||F
+OBX|14|CWE|77978-5^Subject Died^LN||UNK^Unknown^NULLFL||||||F
+OBX|15|ST|77993-4^State Case Identifier^LN||MI98126-2017||||||F
+OBX|16|ST|77997-5^Legacy Case Identifier^LN||45126958S012017||||||F
+OBX|17|SN|77998-3^Age at Case Investigation^LN||^33|a^year^UCUM|||||F
+OBX|18|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F
+OBX|19|CWE|INV153^Imported Country^PHINQUESTION||USA^UNITED STATES^ISO3166_1||||||F
+OBX|20|CWE|INV154^Imported State^PHINQUESTION||48^Texas^FIPS5_2||||||F
+OBX|21|CWE|INV155^Imported City^PHINQUESTION||1380948^Houston^USGSGNIS||||||F
+OBX|22|CWE|INV156^Imported County^PHINQUESTION||48201^Harris^FIPS6_4||||||F
+OBX|23|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES^ISO3166_1||||||F
+OBX|24|CWE|77985-0^State or Province of Exposure^LN|1|48^Texas^FIPS5_2||||||F
+OBX|25|ST|77986-8^City of Exposure^LN|1|Houston||||||F
+OBX|26|ST|77987-6^County of Exposure^LN|1|Harris||||||F
+OBX|27|CWE|77989-2^Transmission Mode^LN||416086007^Food-borne transmission^SCT||||||F
+OBX|28|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|29|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|30|CWE|77980-1^Case Outbreak Indicator^LN||Y^Yes^HL70136||||||F
+OBX|31|ST|77981-9^Case Outbreak Name^LN||VIBRIOOUTTX54564||||||F
+OBX|32|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|33|CWE|48766-0^Reporting Source Type Code^LN||1^Hospital^HL70406||||||F
+OBX|34|ST|52831-5^Reporting Source ZIP Code^LN||48201||||||F
+OBX|35|CWE|77988-4^Binational Reporting Criteria^LN||PHC1139^Has case contacts in or from Mexico or Canada^CDCPHINVS||||||F
+OBX|36|ST|74549-7^Person Reporting to CDC - Name^LN||Jones, Indiana||||||F
+OBX|37|ST|74548-9^Person Reporting to CDC - Phone Number^LN||555-541-8745||||||F
+OBX|38|ST|74547-1^Person Reporting to CDC - Email^LN||ijones@MIDOH.gov||||||F
+OBX|39|DT|77979-3^Case Investigation Start Date^LN||20170729||||||F
+OBX|40|DT|77995-9^Date Reported^LN||20170729||||||F
+OBX|41|TS|77972-8^Earliest Date Reported to County^LN||20170730||||||F
+OBX|42|TS|77973-6^Earliest Date Reported to State^LN||20170729||||||F
+OBX|43|SN|77991-8^MMWR Week^LN||^30||||||F
+OBX|44|DT|77992-6^MMWR Year^LN||2017||||||F
+OBX|45|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20170731||||||F
+OBX|46|DT|77970-2^Date First Reported to PHD^LN||20170729||||||F
+OBX|47|CWE|77966-0^Reporting State^LN||26^Michigan^FIPS5_2||||||F
+OBX|48|CWE|77967-8^Reporting County^LN||26163^Wayne^FIPS6_4||||||F
+OBX|49|CWE|77968-6^National Reporting Jurisdiction^LN||26^MI^FIPS5_2||||||F
+OBX|50|TX|77999-1^Comment^LN||Vibriosis all fields||||||F
+OBX|51|DT|INV953^Date Case Report Form Completed^PHINQUESTION||20170729||||||F
+OBX|52|CWE|INV954^Case Information Completed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|53|CWE|FDD_Q_400^Second Hospitalization^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|54|DT|FDD_Q_401^Second Admission Date^PHINQUESTION||20170726||||||F
+OBX|55|DT|FDD_Q_402^Second Discharge Date^PHINQUESTION||20170801||||||F
+OBX|56|SN|INV955^Second Duration Of Hospital Stay In Days^PHINQUESTION||^6||||||F
+OBX|57|CWE|448551000124100^Transferred To Another Hospital^SCT||Y^Yes^HL70136||||||F
+OBX|58|CWE|309904001^Hospital ICU^SCT||Y^Yes^HL70136||||||F
+OBX|59|CWE|INV956^Immigrated Recently^PHINQUESTION||N^No^HL70136||||||F
+OBX|60|CWE|TRAVEL38^Travel Outside Usa Prior To Illness Onset Within Program Specific Timeframe^PHINQUESTION||N^No^HL70136||||||F
+OBX|61|SN|INV663^Specify Different Travel Exposure Window^PHINQUESTION||^7||||||F
+OBX|62|CWE|INV664^Did The Case Travel Domestically Prior To Illness Onset?^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|63|CWE|82754-3^Travel State^LN|1|01^Alabama^FIPS5_2||||||F
+OBX|64|DT|TRAVEL06^Date Of Arrival To Travel Destination^PHINQUESTION|1|20170715||||||F
+OBX|65|DT|TRAVEL07^Date Of Departure From Travel Destination^PHINQUESTION|1|20170718||||||F
+OBX|66|CWE|82764-2^International Destination(s) of Recent Travel^LN|2|MEX^MEXICO^ISO3166_1||||||F
+OBX|67|DT|TRAVEL06^Date Of Arrival To Travel Destination^PHINQUESTION|2|20170710||||||F
+OBX|68|DT|TRAVEL07^Date Of Departure From Travel Destination^PHINQUESTION|2|20170715||||||F
+OBX|69|CWE|66415-1^Reason for travel related to current illness^LN|2|PHC387^visiting relatives/friends^CDCPHINVS||||||F
+OBX|70|SN|INV665^Specify Different Exposure Window^PHINQUESTION||^5||||||F
+OBX|71|TS|76425-8^Date Of Onset - Reported^LN||20170721||||||F
+OBX|72|CWE|56831-1^Problem Associated Signs And Symptoms^LN|1|62315008^Diarrhea^SCT||||||F
+OBX|73|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|74|CWE|56831-1^Problem Associated Signs And Symptoms^LN|2|386661006^Fever^SCT||||||F
+OBX|75|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|76|CWE|56831-1^Problem Associated Signs And Symptoms^LN|3|405729008^Bloody diarrhea^SCT||||||F
+OBX|77|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|78|CWE|56831-1^Problem Associated Signs And Symptoms^LN|4|OTH^other (specify)^NULLFL||||||F
+OBX|79|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|80|CWE|56831-1^Problem Associated Signs And Symptoms^LN|5|268988001^Bullae^SCT||||||F
+OBX|81|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|5|Y^Yes^HL70136||||||F
+OBX|82|CWE|56831-1^Problem Associated Signs And Symptoms^LN|6|128045006^Cellulitis^SCT||||||F
+OBX|83|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|6|Y^Yes^HL70136||||||F
+OBX|84|CWE|56831-1^Problem Associated Signs And Symptoms^LN|7|68962001^Muscle Pain^SCT||||||F
+OBX|85|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|7|Y^Yes^HL70136||||||F
+OBX|86|CWE|56831-1^Problem Associated Signs And Symptoms^LN|8|302049001^Sequelae^SCT||||||F
+OBX|87|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|8|Y^Yes^HL70136||||||F
+OBX|88|CWE|56831-1^Problem Associated Signs And Symptoms^LN|9|27942005^Septic Shock^SCT||||||F
+OBX|89|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|9|N^No^HL70136||||||F
+OBX|90|ST|INV951^Signs and Symptoms Comments^PHINQUESTION||No Additional Comments||||||F
+OBX|91|CWE|FDD_Q_1038^Subject Outcome^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|92|CWE|FDD_Q_89^Case Identified By An Audit^PHINQUESTION||N^No^HL70136||||||F
+OBX|93|CWE|INV959^Case Interviewed By Public Health Staff^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|94|ST|FDD_Q_88^Foodborne Disease Outbreak Surveillance System (FDOSS) Outbreak ID Number^PHINQUESTION||FDOSS123MI||||||F
+OBX|95|ST|FDD_Q_1129^State Outbreak Identification Number^PHINQUESTION||MI4522222||||||F
+OBX|96|CWE|FDD_Q_404^Type Of Outbreak^PHINQUESTION||416086007^Food-borne transmission^SCT||||||F
+OBX|97|ST|INV949^WGS ID Number^PHINQUESTION|1|4516778459||||||F
+OBX|98|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|1|SPM7843195||||||F
+OBX|99|CWE|82771-7^Performing Laboratory Type^LN|1|PHC645^Commercial laboratory^CDCPHINVS||||||F
+OBX|100|CWE|INV290^Test Type^PHINQUESTION|1|FDD_A_51^Antigen^CDCPHINVS||||||F
+OBX|101|CWE|85069-3^Test Method^LN|1|UNK^Unknown^NULLFL||||||F
+OBX|102|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|103|CWE|41852-5^Organism^LN|1|55905000^Vibrio VULNIFICUS^SCT||||||F
+OBX|104|ST|LAB629^Test Result Text^PHINQUESTION|1|Positive||||||F
+OBX|105|FT|8251-1^Test Result Comments^LN|1|See more comments with really long text string||||||F
+OBX|106|CWE|66746-9^Specimen Type^LN|1|119297000^Blood^SCT||||||F
+OBX|107|TS|68963-8^Specimen Collection Date/Time^LN|1|20170723||||||F
+OBX|108|TS|LAB595^Specimen Received Date/Time^PHINQUESTION|1|20170723||||||F
+OBX|109|TS|45375-3^Specimen Analyzed Date/Time^LN|1|20170723||||||F
+OBX|110|TS|82773-3^Date/Time of Lab Result^LN|1|20170723||||||F
+OBX|111|CWE|LAB515^SentCDC^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|112|TS|85930-6^Date Specimen Sent to CDC^LN|1|20170723||||||F
+OBX|113|CWE|LAB331^Isolate sent to State Public Health Lab^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|114|ST|31208-2^Specimen Source Site^LN|1|right arm||||||F
+OBX|115|CWE|FDD_Q_1118^Culture Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|116|CWE|FDD_Q_1116^Cultured species name^PHINQUESTION|1|55905000^Vibrio VULNIFICUS^SCT||||||F
+OBX|117|ST|FDD_Q_1115^CIDT Test Name^PHINQUESTION|1|Mayo clinic Vibrio test||||||F
+OBX|118|CWE|FDD_Q_1119^Result of CIDT for Vibrio^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|119|CWE|FDD_Q_1117^CIDT species name^PHINQUESTION|1|55905000^Vibrio VULNIFICUS^SCT||||||F
+OBX|120|ST|FDD_Q_1139^Other Organism(s) from Specimen^PHINQUESTION|1|Vibriosis||||||F
+OBX|121|ST|INV941^Type of Sequelae^PHINQUESTION||ataxia||||||F
+OBX|122|ST|INV942^Site of Bullae^PHINQUESTION||left arm||||||F
+OBX|123|ST|INV943^Site of Cellulitis^PHINQUESTION||right leg||||||F
+OBX|124|CWE|INV940^Medical History^PHINQUESTION|1|7200002^Alcoholism^SCT||||||F
+OBX|125|CWE|INV961^Medical History Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|126|CWE|INV940^Medical History^PHINQUESTION|2|73211009^Diabetes^SCT||||||F
+OBX|127|CWE|INV961^Medical History Indicator^PHINQUESTION|2|N^No^HL70136||||||F
+OBX|128|CWE|INV940^Medical History^PHINQUESTION|3|310151004^Gastric Surgery^SCT||||||F
+OBX|129|CWE|INV961^Medical History Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|130|CWE|INV940^Medical History^PHINQUESTION|4|363346000^Cancer^SCT||||||F
+OBX|131|CWE|INV961^Medical History Indicator^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|132|CWE|INV940^Medical History^PHINQUESTION|5|56265001^Heart Disease^SCT||||||F
+OBX|133|CWE|INV961^Medical History Indicator^PHINQUESTION|5|Y^Yes^HL70136||||||F
+OBX|134|CWE|INV940^Medical History^PHINQUESTION|6|84114007^Heart Failure^SCT||||||F
+OBX|135|CWE|INV961^Medical History Indicator^PHINQUESTION|6|N^No^HL70136||||||F
+OBX|136|CWE|INV940^Medical History^PHINQUESTION|7|234532001^Immunodeficiency condition/immunodeficiency^SCT||||||F
+OBX|137|CWE|INV961^Medical History Indicator^PHINQUESTION|7|UNK^Unknown^NULLFL||||||F
+OBX|138|CWE|INV940^Medical History^PHINQUESTION|8|707311008^Immunosuppressants therapy^SCT||||||F
+OBX|139|CWE|INV961^Medical History Indicator^PHINQUESTION|8|UNK^Unknown^NULLFL||||||F
+OBX|140|CWE|INV940^Medical History^PHINQUESTION|9|235856003^Liver disease^SCT||||||F
+OBX|141|CWE|INV961^Medical History Indicator^PHINQUESTION|9|Y^Yes^HL70136||||||F
+OBX|142|CWE|INV940^Medical History^PHINQUESTION|10|13200003^Peptic Ulcer^SCT||||||F
+OBX|143|CWE|INV961^Medical History Indicator^PHINQUESTION|10|N^No^HL70136||||||F
+OBX|144|CWE|INV940^Medical History^PHINQUESTION|11|90708001^Kidney Disease^SCT||||||F
+OBX|145|CWE|INV961^Medical History Indicator^PHINQUESTION|11|N^No^HL70136||||||F
+OBX|146|CWE|INV940^Medical History^PHINQUESTION|12|FDD_A_92^antacids or ulcer medications in the past 30 days^CDCPHINVS||||||F
+OBX|147|CWE|INV961^Medical History Indicator^PHINQUESTION|12|Y^Yes^HL70136||||||F
+OBX|148|CWE|INV940^Medical History^PHINQUESTION|13|FDD_A_121^Hematological disease^CDCPHINVS||||||F
+OBX|149|CWE|INV961^Medical History Indicator^PHINQUESTION|13|Y^Yes^HL70136||||||F
+OBX|150|CWE|INV940^Medical History^PHINQUESTION|14|OTH^Other^NULLFL||||||F
+OBX|151|CWE|INV961^Medical History Indicator^PHINQUESTION|14|Y^Yes^HL70136||||||F
+OBX|152|ST|INV950^Medical History  type, specify^PHINQUESTION||fatty liver disease||||||F
+OBX|153|CWE|FDD_Q_1029^Consumed Medications To Block Acids, Within 30 Days Before Illness^PHINQUESTION||29115^Maalox^RXNORM||||||F
+OBX|154|CWE|INV947^Antibiotic used for current illness^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|155|CWE|INV948^Name of the antibiotic taken for this illness^PHINQUESTION|1|202866^Flagyl^RXNORM||||||F
+OBX|156|DT|86948-7^Date of Start of Treatment or Therapy^LN|1|20170721||||||F
+OBX|157|DT|63939-3^Date of End of Treatment or Therapy^LN|1|20170725||||||F
+OBX|158|CWE|INV948^Name of the antibiotic taken for this illness^PHINQUESTION|2|722^Amoxicillin^RXNORM||||||F
+OBX|159|DT|86948-7^Date of Start of Treatment or Therapy^LN|2|20170725||||||F
+OBX|160|DT|63939-3^Date of End of Treatment or Therapy^LN|2|20170801||||||F
+OBX|161|CWE|FDD_Q_966^Type of Seafood Consumed 7 Days Before Illness Began^PHINQUESTION|1|B1331^clams^LANGUAL||||||F
+OBX|162|CWE|FDD_Q_275^Seafood Exposure Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|163|DT|FDD_Q_41^Last Date Consumed^PHINQUESTION|1|20170715||||||F
+OBX|164|CWE|FDD_Q_37^Eaten Raw^PHINQUESTION|1|N^No^HL70136||||||F
+OBX|165|CWE|FDD_Q_935^Consumed on Multiple Dates^PHINQUESTION|1|N^No^HL70136||||||F
+OBX|166|ST|FDD_Q_936^Further Description of Seafood^PHINQUESTION|1|littleneck clams||||||F
+OBX|167|CWE|FDD_Q_966^Type of Seafood consumed 7 days before illness began^PHINQUESTION|2|B1335^crab^LANGUAL||||||F
+OBX|168|CWE|FDD_Q_275^Seafood Exposure Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|169|DT|FDD_Q_41^Last Date Consumed^PHINQUESTION|2|20170715||||||F
+OBX|170|CWE|FDD_Q_37^Eaten Raw^PHINQUESTION|2|N^No^HL70136||||||F
+OBX|171|CWE|FDD_Q_935^Consumed on Multiple Dates^PHINQUESTION|2|N^No^HL70136||||||F
+OBX|172|ST|FDD_Q_936^Further Description of Seafood^PHINQUESTION|2|shelled crab||||||F
+OBX|173|CWE|FDD_Q_966^Type of Seafood consumed 7 days before illness began^PHINQUESTION|3|B2686^crawfish^LANGUAL||||||F
+OBX|174|CWE|FDD_Q_275^Seafood Exposure Indicator^PHINQUESTION|3|N^No^HL70136||||||F
+OBX|175|CWE|FDD_Q_966^Type of Seafood consumed 7 days before illness began^PHINQUESTION|4|B1222^fish^LANGUAL||||||F
+OBX|176|CWE|FDD_Q_275^Seafood Exposure Indicator^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|177|DT|FDD_Q_41^Last Date Consumed^PHINQUESTION|4|20170715||||||F
+OBX|178|CWE|FDD_Q_37^Eaten Raw^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|179|CWE|FDD_Q_935^Consumed on Multiple Dates^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|180|ST|FDD_Q_936^Further Description of Seafood^PHINQUESTION|4|filleted fish||||||F
+OBX|181|CWE|FDD_Q_966^Type of Seafood consumed 7 days before illness began^PHINQUESTION|5|B1505^lobster^LANGUAL||||||F
+OBX|182|CWE|FDD_Q_275^Seafood Exposure Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|183|CWE|FDD_Q_966^Type of Seafood consumed 7 days before illness began^PHINQUESTION|6|B1223^mussels^LANGUAL||||||F
+OBX|184|CWE|FDD_Q_275^Seafood Exposure Indicator^PHINQUESTION|6|Y^Yes^HL70136||||||F
+OBX|185|DT|FDD_Q_41^Last Date Consumed^PHINQUESTION|6|20170715||||||F
+OBX|186|CWE|FDD_Q_37^Eaten Raw^PHINQUESTION|6|N^No^HL70136||||||F
+OBX|187|CWE|FDD_Q_935^Consumed on Multiple Dates^PHINQUESTION|6|N^No^HL70136||||||F
+OBX|188|ST|FDD_Q_936^Further Description of Seafood^PHINQUESTION|6|steamed||||||F
+OBX|189|CWE|FDD_Q_966^Type of Seafood consumed 7 days before illness began^PHINQUESTION|7|B1489^scallops^LANGUAL||||||F
+OBX|190|CWE|FDD_Q_275^Seafood Exposure Indicator^PHINQUESTION|7|Y^Yes^HL70136||||||F
+OBX|191|CWE|FDD_Q_37^Eaten Raw^PHINQUESTION|7|N^No^HL70136||||||F
+OBX|192|CWE|FDD_Q_935^Consumed on Multiple Dates^PHINQUESTION|7|N^No^HL70136||||||F
+OBX|193|ST|FDD_Q_936^Further Description of Seafood^PHINQUESTION|7|large bay||||||F
+OBX|194|CWE|FDD_Q_966^Type of Seafood consumed 7 days before illness began^PHINQUESTION|8|PHC378^other shellfish (specify)^CDCPHINVS||||||F
+OBX|195|CWE|FDD_Q_275^Seafood Exposure Indicator^PHINQUESTION|8|N^No^HL70136||||||F
+OBX|196|CWE|FDD_Q_966^Type of Seafood consumed 7 days before illness began^PHINQUESTION|9|B1224^oysters^LANGUAL||||||F
+OBX|197|CWE|FDD_Q_275^Seafood Exposure Indicator^PHINQUESTION|9|Y^Yes^HL70136||||||F
+OBX|198|DT|FDD_Q_41^Last Date Consumed^PHINQUESTION|9|20170715||||||F
+OBX|199|CWE|FDD_Q_37^Eaten Raw^PHINQUESTION|9|Y^Yes^HL70136||||||F
+OBX|200|CWE|FDD_Q_935^Consumed on Multiple Dates^PHINQUESTION|9|N^No^HL70136||||||F
+OBX|201|ST|FDD_Q_936^Further Description of Seafood^PHINQUESTION|9|on the half shell||||||F
+OBX|202|CWE|FDD_Q_966^Type of Seafood consumed 7 days before illness began^PHINQUESTION|10|B1237^shrimp^LANGUAL||||||F
+OBX|203|CWE|FDD_Q_275^Seafood Exposure Indicator^PHINQUESTION|10|Y^Yes^HL70136||||||F
+OBX|204|DT|FDD_Q_41^Last Date Consumed^PHINQUESTION|10|20170715||||||F
+OBX|205|CWE|FDD_Q_37^Eaten Raw^PHINQUESTION|10|N^No^HL70136||||||F
+OBX|206|CWE|FDD_Q_935^Consumed on Multiple Dates^PHINQUESTION|10|N^No^HL70136||||||F
+OBX|207|ST|FDD_Q_936^Further Description of Seafood^PHINQUESTION|10|head-on shrimp||||||F
+OBX|208|CWE|FDD_Q_937^Consumed Same Seafood by Dining Partners^PHINQUESTION|10|Y^Yes^HL70136||||||F
+OBX|209|CWE|FDD_Q_938^Ill Dining Partners^PHINQUESTION|10|N^No^HL70136||||||F
+OBX|210|ST|FDD_Q_934^Seafood Investigation ID Number^PHINQUESTION|1|Clam1||||||F
+OBX|211|CWE|FDD_Q_1132^Type of Seafood Products Investigated^PHINQUESTION|1|B1331^clams^LANGUAL||||||F
+OBX|212|DT|FDD_Q_1133^Date Seafood Consumed^PHINQUESTION|1|20170715||||||F
+OBX|213|ST|FDD_Q_940^Amount of Seafood Consumed^PHINQUESTION|1|approximately 1 pound||||||F
+OBX|214|CWE|FDD_Q_939^Seafood Preparation Method^PHINQUESTION|1|PHC1511^Fully Cooked^CDCPHINVS||||||F
+OBX|215|ST|FDD_Q_953^Additional Product Preparation Information^PHINQUESTION|1|boiled in bag||||||F
+OBX|216|CWE|FDD_Q_942^Imported Seafood^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|217|CWE|FDD_Q_943^Imported Seafood Country^PHINQUESTION|1|CAN^CANADA^ISO3166_1||||||F
+OBX|218|CWE|FDD_Q_944^Seafood Harvested by Patient or Friend^PHINQUESTION|1|N^No^HL70136||||||F
+OBX|219|CWE|FDD_Q_946^Seafood Obtained^PHINQUESTION|1|FDD_A_101^Food store^CDCPHINVS||||||F
+OBX|220|ST|FDD_Q_947^Name of Establishment^PHINQUESTION|1|local food store||||||F
+OBX|221|CWE|FDD_Q_948^Shellfish Received by Retail Outlet^PHINQUESTION|1|FDD_A_103^Live Shellstock^CDCPHINVS||||||F
+OBX|222|DT|FDD_Q_949^Date Seafood Received^PHINQUESTION|1|20170713||||||F
+OBX|223|CWE|FDD_Q_950^Environmental Assessment Conducted^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|224|CWE|FDD_Q_941^Evidence of Improper Storage^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|225|CWE|FDD_Q_954^Improper Handling and Storage^PHINQUESTION|1|FDD_A_106^Holding temperature violation^CDCPHINVS||||||F
+OBX|226|CWE|FDD_Q_951^Seafood Identifier Available^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|227|FT|FDD_Q_952^Shippers and Certification Numbers Information^PHINQUESTION|1|CLAMTAG45879||||||F
+OBX|228|ST|FDD_Q_934^Seafood Investigation ID Number^PHINQUESTION|2|Crab1||||||F
+OBX|229|CWE|FDD_Q_1132^Type of Seafood Products Investigated^PHINQUESTION|2|B1335^crab^LANGUAL||||||F
+OBX|230|DT|FDD_Q_1133^Date Seafood Consumed^PHINQUESTION|2|20170715||||||F
+OBX|231|ST|FDD_Q_940^Amount of Seafood Consumed^PHINQUESTION|2|approximately 2 pounds||||||F
+OBX|232|CWE|FDD_Q_939^Seafood Preparation Method^PHINQUESTION|2|PHC1511^Fully Cooked^CDCPHINVS||||||F
+OBX|233|ST|FDD_Q_953^Additional Product Preparation Information^PHINQUESTION|2|boiled in bag||||||F
+OBX|234|CWE|FDD_Q_942^Imported Seafood^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|235|CWE|FDD_Q_943^Imported Seafood Country^PHINQUESTION|2|CAN^CANADA^ISO3166_1||||||F
+OBX|236|CWE|FDD_Q_944^Seafood Harvested by Patient or Friend^PHINQUESTION|2|N^No^HL70136||||||F
+OBX|237|CWE|FDD_Q_946^Seafood Obtained^PHINQUESTION|2|FDD_A_101^Food store^CDCPHINVS||||||F
+OBX|238|ST|FDD_Q_947^Name of Establishment^PHINQUESTION|2|local food store||||||F
+OBX|239|DT|FDD_Q_949^Date Seafood Received^PHINQUESTION|2|20170713||||||F
+OBX|240|CWE|FDD_Q_950^Environmental Assessment Conducted^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|241|CWE|FDD_Q_941^Evidence of Improper Storage^PHINQUESTION|2|N^No^HL70136||||||F
+OBX|242|CWE|FDD_Q_951^Seafood Identifier Available^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|243|FT|FDD_Q_952^Shippers and Certification Numbers Information^PHINQUESTION|2|CRABTAG784597||||||F
+OBX|244|ST|FDD_Q_934^Seafood Investigation ID Number^PHINQUESTION|3|FISH1||||||F
+OBX|245|CWE|FDD_Q_1132^Type of Seafood Products Investigated^PHINQUESTION|3|B1222^fish^LANGUAL||||||F
+OBX|246|DT|FDD_Q_1133^Date Seafood Consumed^PHINQUESTION|3|20170715||||||F
+OBX|247|ST|FDD_Q_940^Amount of Seafood Consumed^PHINQUESTION|3|approximately 1/4 pound||||||F
+OBX|248|CWE|FDD_Q_939^Seafood Preparation Method^PHINQUESTION|3|PHC1511^Fully Cooked^CDCPHINVS||||||F
+OBX|249|ST|FDD_Q_953^Additional Product Preparation Information^PHINQUESTION|3|flounder||||||F
+OBX|250|CWE|FDD_Q_942^Imported Seafood^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|251|ST|FDD_Q_943^Imported Seafood Country^PHINQUESTION|3|CAN^CANADA^ISO3166_1||||||F
+OBX|252|CWE|FDD_Q_944^Seafood Harvested by Patient or Friend^PHINQUESTION|3|N^No^HL70136||||||F
+OBX|253|CWE|FDD_Q_946^Seafood Obtained^PHINQUESTION|3|FDD_A_101^Food store^CDCPHINVS||||||F
+OBX|254|ST|FDD_Q_947^Name of Establishment^PHINQUESTION|3|local food store||||||F
+OBX|255|DT|FDD_Q_949^Date Seafood Received^PHINQUESTION|3|20170713||||||F
+OBX|256|CWE|FDD_Q_950^Environmental Assessment Conducted^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|257|CWE|FDD_Q_941^Evidence of Improper Storage^PHINQUESTION|3|N^No^HL70136||||||F
+OBX|258|CWE|FDD_Q_951^Seafood Identifier Available^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|259|FT|FDD_Q_952^Shippers and Certification Numbers Information^PHINQUESTION|3|FISHTAGS123||||||F
+OBX|260|ST|FDD_Q_934^Seafood Investigation ID Number^PHINQUESTION|4|MUSSEL1||||||F
+OBX|261|CWE|FDD_Q_1132^Type of Seafood Products Investigated^PHINQUESTION|4|B1223^mussels^LANGUAL||||||F
+OBX|262|DT|FDD_Q_1133^Date Seafood Consumed^PHINQUESTION|4|20170715||||||F
+OBX|263|ST|FDD_Q_940^Amount of Seafood Consumed^PHINQUESTION|4|approximately 1 pound||||||F
+OBX|264|CWE|FDD_Q_939^Seafood Preparation Method^PHINQUESTION|4|PHC1511^Fully Cooked^CDCPHINVS||||||F
+OBX|265|ST|FDD_Q_953^Additional Product Preparation Information^PHINQUESTION|4|blue mussel||||||F
+OBX|266|CWE|FDD_Q_942^Imported Seafood^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|267|ST|FDD_Q_943^Imported Seafood Country^PHINQUESTION|4|CAN^CANADA^ISO3166_1||||||F
+OBX|268|CWE|FDD_Q_944^Seafood Harvested by Patient or Friend^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|269|CWE|FDD_Q_946^Seafood Obtained^PHINQUESTION|4|FDD_A_101^Food store^CDCPHINVS||||||F
+OBX|270|ST|FDD_Q_947^Name of Establishment^PHINQUESTION|4|local food store||||||F
+OBX|271|DT|FDD_Q_949^Date Seafood Received^PHINQUESTION|4|20170713||||||F
+OBX|272|CWE|FDD_Q_950^Environmental Assessment Conducted^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|273|CWE|FDD_Q_941^Evidence of Improper Storage^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|274|CWE|FDD_Q_954^Improper Handling and Storage^PHINQUESTION|4|FDD_A_107^Cross-contamination^CDCPHINVS||||||F
+OBX|275|CWE|FDD_Q_951^Seafood Identifier Available^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|276|FT|FDD_Q_952^Shippers and Certification Numbers Information^PHINQUESTION|4|MUSSELTAG1789||||||F
+OBX|277|ST|FDD_Q_934^Seafood Investigation ID^PHINQUESTION|5|Oyster1||||||F
+OBX|278|CWE|FDD_Q_1132^Type of Seafood Products Investigated^PHINQUESTION|5|B1224^oysters^LANGUAL||||||F
+OBX|279|DT|FDD_Q_1133^Date Seafood Consumed^PHINQUESTION|5|20170715||||||F
+OBX|280|ST|FDD_Q_940^Amount of Seafood Consumed^PHINQUESTION|5|12 oysters||||||F
+OBX|281|CWE|FDD_Q_939^Seafood Preparation Method^PHINQUESTION|5|FDD_A_93^Raw^CDCPHINVS||||||F
+OBX|282|ST|FDD_Q_953^Additional Product Preparation Information^PHINQUESTION|5|eastern oyster||||||F
+OBX|283|CWE|FDD_Q_942^Imported Seafood^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|284|CWE|FDD_Q_944^Seafood Harvested by Patient or Friend^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|285|CWE|FDD_Q_946^Seafood Obtained^PHINQUESTION|5|FDD_A_101^Food store^CDCPHINVS||||||F
+OBX|286|ST|FDD_Q_947^Name of Establishment^PHINQUESTION|5|local food store||||||F
+OBX|287|CWE|FDD_Q_948^Shellfish Received by Retail Outlet^PHINQUESTION|5|FDD_A_103^Live Shellstock^CDCPHINVS||||||F
+OBX|288|DT|FDD_Q_949^Date Seafood Received^PHINQUESTION|5|20170713||||||F
+OBX|289|CWE|FDD_Q_950^Environmental Assessment Conducted^PHINQUESTION|5|Y^Yes^HL70136||||||F
+OBX|290|CWE|FDD_Q_941^Evidence of Improper Storage^PHINQUESTION|5|Y^Yes^HL70136||||||F
+OBX|291|CWE|FDD_Q_954^Improper Handling and Storage^PHINQUESTION|5|FDD_A_106^Holding temperature violation^CDCPHINVS||||||F
+OBX|292|CWE|FDD_Q_951^Seafood Identifier Available^PHINQUESTION|5|Y^Yes^HL70136||||||F
+OBX|293|FT|FDD_Q_952^Shippers and Certification Numbers Information^PHINQUESTION|5|OYSTERTAG784519||||||F
+OBX|294|ST|FDD_Q_934^Seafood Investigation ID^PHINQUESTION|6|SHRIMP1||||||F
+OBX|295|CWE|FDD_Q_1132^Type of Seafood Products Investigated^PHINQUESTION|6|B1237^shrimp^LANGUAL||||||F
+OBX|296|DT|FDD_Q_1133^Date Seafood Consumed^PHINQUESTION|6|20170715||||||F
+OBX|297|ST|FDD_Q_940^Amount of Seafood Consumed^PHINQUESTION|6|approximately 1/2 pounds||||||F
+OBX|298|CWE|FDD_Q_939^Seafood Preparation Method^PHINQUESTION|6|PHC1511^Fully Cooked^CDCPHINVS||||||F
+OBX|299|ST|FDD_Q_953^Additional Product Preparation Information^PHINQUESTION|6|boiled in bag||||||F
+OBX|300|CWE|FDD_Q_942^Imported Seafood^PHINQUESTION|6|Y^Yes^HL70136||||||F
+OBX|301|CWE|FDD_Q_943^Imported Seafood Country^PHINQUESTION|6|CAN^CANADA^ISO3166_1||||||F
+OBX|302|CWE|FDD_Q_944^Seafood Harvested by Patient or Friend^PHINQUESTION|6|N^No^HL70136||||||F
+OBX|303|CWE|FDD_Q_946^Seafood Obtained^PHINQUESTION|6|FDD_A_101^Food store^CDCPHINVS||||||F
+OBX|304|ST|FDD_Q_947^Name of Establishment^PHINQUESTION|6|local food store||||||F
+OBX|305|DT|FDD_Q_949^Date Seafood Received^PHINQUESTION|6|20170713||||||F
+OBX|306|CWE|FDD_Q_950^Environmental Assessment Conducted^PHINQUESTION|6|Y^Yes^HL70136||||||F
+OBX|307|CWE|FDD_Q_941^Evidence of Improper Storage^PHINQUESTION|6|Y^Yes^HL70136||||||F
+OBX|308|CWE|FDD_Q_951^Seafood Identifier Available^PHINQUESTION|6|Y^Yes^HL70136||||||F
+OBX|309|FT|FDD_Q_952^Shippers and Certification Numbers Information^PHINQUESTION|6|SHRIMPTAG745499||||||F
+OBX|310|ST|FDD_Q_1134^Seafood Investigation ID Link^PHINQUESTION|1|Oyster1||||||F
+OBX|311|CWE|FDD_Q_956^Harvest State^PHINQUESTION|1|23^Maine^FIPS5_2||||||F
+OBX|312|ST|FDD_Q_957^Area Listed on Tag^PHINQUESTION|1|Maine||||||F
+OBX|313|DT|FDD_Q_958^Harvest Date on Tag^PHINQUESTION|1|20170711||||||F
+OBX|314|CWE|FDD_Q_959^Harvest Classification Status^PHINQUESTION|1|FDD_A_115^Approved^CDCPHINVS||||||F
+OBX|315|ST|FDD_Q_960^Description of Product on Tag^PHINQUESTION|1|eastern oysters||||||F
+OBX|316|ST|FDD_Q_1134^Seafood Investigation ID Link^PHINQUESTION|2|Oyster1||||||F
+OBX|317|CWE|FDD_Q_956^Harvest State^PHINQUESTION|2|CA-NS^Nova Scotia, CA^ISO3166_2||||||F
+OBX|318|ST|FDD_Q_957^Area Listed on Tag^PHINQUESTION|2|Nova Scotia||||||F
+OBX|319|DT|FDD_Q_958^Harvest Date on Tag^PHINQUESTION|2|20170711||||||F
+OBX|320|CWE|FDD_Q_959^Harvest Classification Status^PHINQUESTION|2|FDD_A_118^Conditional approved^CDCPHINVS||||||F
+OBX|321|ST|FDD_Q_960^Description of Product on Tag^PHINQUESTION|2|belon oysters||||||F
+OBX|322|ST|FDD_Q_1134^Seafood Investigation ID Link^PHINQUESTION|3|Oyster1||||||F
+OBX|323|CWE|FDD_Q_956^Harvest State^PHINQUESTION|3|01^Alabama^FIPS5_2||||||F
+OBX|324|ST|FDD_Q_957^Area Listed on Tag^PHINQUESTION|3|Gulf coast||||||F
+OBX|325|DT|FDD_Q_958^Harvest Date on Tag^PHINQUESTION|3|20170711||||||F
+OBX|326|CWE|FDD_Q_959^Harvest Classification Status^PHINQUESTION|3|FDD_A_118^Conditional approved^CDCPHINVS||||||F
+OBX|327|ST|FDD_Q_960^Description of Product on Tag^PHINQUESTION|3|eastern oysters||||||F
+OBX|328|ST|FDD_Q_1134^Seafood Investigation ID Link^PHINQUESTION|4|Oyster1||||||F
+OBX|329|CWE|FDD_Q_956^Harvest State^PHINQUESTION|4|22^Louisiana^FIPS5_2||||||F
+OBX|330|ST|FDD_Q_957^Area Listed on Tag^PHINQUESTION|4|Gulf coast||||||F
+OBX|331|DT|FDD_Q_958^Harvest Date on Tag^PHINQUESTION|4|20170711||||||F
+OBX|332|CWE|FDD_Q_959^Harvest Classification Status^PHINQUESTION|4|FDD_A_118^Conditional approved^CDCPHINVS||||||F
+OBX|333|ST|FDD_Q_960^Description of Product on Tag^PHINQUESTION|4|oysters||||||F
+OBX|334|ST|FDD_Q_1134^Seafood Investigation ID Link^PHINQUESTION|5|Oyster1||||||F
+OBX|335|CWE|FDD_Q_956^Harvest State^PHINQUESTION|5|06^California^FIPS5_2||||||F
+OBX|336|ST|FDD_Q_957^Area Listed on Tag^PHINQUESTION|5|pacific northwest||||||F
+OBX|337|DT|FDD_Q_958^Harvest Date on Tag^PHINQUESTION|5|20170711||||||F
+OBX|338|CWE|FDD_Q_959^Harvest Classification Status^PHINQUESTION|5|FDD_A_118^Conditional approved^CDCPHINVS||||||F
+OBX|339|ST|FDD_Q_960^Description of Product on Tag^PHINQUESTION|5|oysters||||||F
+OBX|340|CWE|FDD_Q_1135^Body of Water^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|341|ST|FDD_Q_216^Name of Body of Water^PHINQUESTION||Atlantic ocean||||||F
+OBX|342|CWE|FDD_Q_221^Type of Water^PHINQUESTION||46031004^Salt water^SCT||||||F
+OBX|343|CWE|FDD_Q_1136^Drippings^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|344|CWE|FDD_Q_1137^Marine Life Exposure^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|345|DT|FDD_Q_217^Date of Recent Exposure^PHINQUESTION||20170718||||||F
+OBX|346|CWE|FDD_Q_1138^Occupational Skin Exposure^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|347|CWE|FDD_Q_224^Wound During Exposure Type Code^PHINQUESTION||PHC395^yes, sustained a wound^CDCPHINVS||||||F
+OBX|348|ST|FDD_Q_225^Wound During Exposure Details^PHINQUESTION||right elbow||||||F
+OBX|349|ST|FDD_Q_1122^Pulse Net Cluster Code^PHINQUESTION||VIBRIOSIS321||||||F
+OBX|350|CWE|FDD_Q_1109^Probable - Laboratory Diagnosed^PHINQUESTION||N^No^HL70136||||||F
+OBX|351|CWE|FDD_Q_1110^Probable - Epi Linked^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|352|ST|FDD_Q_1123^Comment Field^PHINQUESTION||No additional comments||||||F
+OBX|353|ST|85658-3^Current Occupation^LN|1|Clery||||||F
+OBX|354|CE|85659-1^Current Occupation Standardized^LN|1|2040^Clergy^CDCOCCUPATION2010||||||F
+OBX|355|ST|85078-4^Current Industry^LN|1|Religious organizations||||||F
+OBX|356|CE|85657-5^Current  Industry Standardized^LN|1|9160^Religious organizations^CDCINDUSTRY2010||||||F
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20160126120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~FDD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||FDD_CYC_TC01^^^SendAppName&2.16.840.1.114222.222&ISO||~^^^^^^S||19900301|M||2106-3^White^CDCREC|^^^26^48201^^^^26163|||||||||||2186-5^Not Hispanic or Latino^CDCREC|||||||
+OBR|1||FDD_CYC_PC01^SendAppName^2.16.840.1.114222^ISO|68991-9^Epidemiologic Information^LN|||20170802111655|||||||||||||||20170802111655|||F||||||11575^Cyclosporiasis^NND
+OBX|1|ST|32624-9^Other Race Text^LN||No other race||||||F
+OBX|2|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|3|ST|21842-0^Other Birth Place^LN||No other birth place||||||F
+OBX|4|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|5|TS|11368-8^Date of Illness Onset^LN||20170720||||||F
+OBX|6|TS|77976-9^Illness End Date^LN||20170801||||||F
+OBX|7|SN|77977-7^Illness Duration^LN||^13|d^day^UCUM|||||F
+OBX|8|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|9|TS|77975-1^Diagnosis Date^LN||20170725||||||F
+OBX|10|CWE|77974-4^Hospitalized^LN||Y^Yes^HL70136||||||F
+OBX|11|TS|8656-1^Admission Date^LN||20170723||||||F
+OBX|12|TS|8649-6^Discharge Date^LN||20170725||||||F
+OBX|13|SN|78033-8^Duration of Hospital Stay in Days^LN||^2||||||F
+OBX|14|CWE|77978-5^Subject Died^LN||UNK^Unknown^NULLFL||||||F
+OBX|15|ST|77993-4^State Case Identifier^LN||MI98126-2017||||||F
+OBX|16|ST|77997-5^Legacy Case Identifier^LN||874135458S012017||||||F
+OBX|17|SN|77998-3^Age at Case Investigation^LN||^28|a^year^UCUM|||||F
+OBX|18|CWE|77982-7^Case Disease Imported Code^LN||PHC246^Out of state^CDCPHINVS||||||F
+OBX|19|CWE|INV153^Imported Country^PHINQUESTION||USA^UNITED STATES^ISO3166_1||||||F
+OBX|20|CWE|INV154^Imported State^PHINQUESTION||48^Texas^FIPS5_2||||||F
+OBX|21|CWE|INV155^Imported City^PHINQUESTION||1380948^Houston^USGSGNIS||||||F
+OBX|22|CWE|INV156^Imported County^PHINQUESTION||48201^Harris^FIPS6_4||||||F
+OBX|23|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES^ISO3166_1||||||F
+OBX|24|CWE|77985-0^State or Province of Exposure^LN|1|48^Texas^FIPS5_2||||||F
+OBX|25|ST|77986-8^City of Exposure^LN|1|Houston||||||F
+OBX|26|ST|77987-6^County of Exposure^LN|1|Harris||||||F
+OBX|27|CWE|77989-2^Transmission Mode^LN||416086007^Food-borne transmission^SCT||||||F
+OBX|28|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|29|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|30|CWE|77980-1^Case Outbreak Indicator^LN||Y^Yes^HL70136||||||F
+OBX|31|ST|77981-9^Case Outbreak Name^LN||CYCLOOUTTX54564||||||F
+OBX|32|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|33|CWE|48766-0^Reporting Source Type Code^LN||1^Hospital^HL70406||||||F
+OBX|34|ST|52831-5^Reporting Source ZIP Code^LN||48201||||||F
+OBX|35|CWE|77988-4^Binational Reporting Criteria^LN||PHC1139^Has case contacts in or from Mexico or Canada^CDCPHINVS||||||F
+OBX|36|ST|74549-7^Person Reporting to CDC - Name^LN||Jones, Indiana||||||F
+OBX|37|ST|74548-9^Person Reporting to CDC - Phone Number^LN||555-541-8745||||||F
+OBX|38|ST|74547-1^Person Reporting to CDC - Email^LN||ijones@MIDOH.gov||||||F
+OBX|39|DT|77979-3^Case Investigation Start Date^LN||20170729||||||F
+OBX|40|DT|77995-9^Date Reported^LN||20170729||||||F
+OBX|41|TS|77972-8^Earliest Date Reported to County^LN||20170730||||||F
+OBX|42|TS|77973-6^Earliest Date Reported to State^LN||20170729||||||F
+OBX|43|SN|77991-8^MMWR Week^LN||^30||||||F
+OBX|44|DT|77992-6^MMWR Year^LN||2017||||||F
+OBX|45|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20170731||||||F
+OBX|46|DT|77970-2^Date First Reported to PHD^LN||20170729||||||F
+OBX|47|CWE|77966-0^Reporting State^LN||26^Michigan^FIPS5_2||||||F
+OBX|48|CWE|77967-8^Reporting County^LN||26163^Wayne^FIPS6_4||||||F
+OBX|49|CWE|77968-6^National Reporting Jurisdiction^LN||26^MI^FIPS5_2||||||F
+OBX|50|TX|77999-1^Comment^LN||Cyclosporiasis all fields||||||F
+OBX|51|TS|INV953^Date Case Report Form Completed^PHINQUESTION||20170729||||||F
+OBX|52|CWE|INV954^Case Information Completed^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|53|CWE|FDD_Q_400^Second Hospitalization^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|54|TS|FDD_Q_401^Second Admission Date^PHINQUESTION||20170726||||||F
+OBX|55|TS|FDD_Q_402^Second Discharge Date^PHINQUESTION||20170801||||||F
+OBX|56|SN|INV955^Second Duration Of Hospital Stay In Days^PHINQUESTION||^6||||||F
+OBX|57|CWE|448551000124100^Transferred To Another Hospital^SCT||Y^Yes^HL70136||||||F
+OBX|58|CWE|309904001^Hospital ICU^SCT||Y^Yes^HL70136||||||F
+OBX|59|CWE|INV956^Immigrated Recently^PHINQUESTION||N^No^HL70136||||||F
+OBX|60|CWE|TRAVEL38^Travel Outside Usa Prior To Illness Onset Within Program Specific Timeframe^PHINQUESTION||N^No^HL70136||||||F
+OBX|61|SN|INV663^Specify Different Travel Exposure Window^PHINQUESTION||^5||||||F
+OBX|62|CWE|INV664^Did The Case Travel Domestically Prior To Illness Onset?^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|63|CWE|82754-3^Travel State^LN|1|01^Alabama^FIPS5_2||||||F
+OBX|64|DT|TRAVEL06^Date Of Arrival To Travel Destination^LN|1|20170715||||||F
+OBX|65|DT|TRAVEL07^Date Of Departure From Travel Destination^PHINQUESTION|1|20170718||||||F
+OBX|66|CWE|82764-2^International Destination(s) of Recent Travel^LN|2|MEX^MEXICO^ISO3166_1||||||F
+OBX|67|DT|TRAVEL06^Date Of Arrival To Travel Destination^PHINQUESTION|2|20170710||||||F
+OBX|68|DT|TRAVEL07^Date Of Departure From Travel Destination^PHINQUESTION|2|20170715||||||F
+OBX|69|SN|INV665^Specify Different Exposure Window^PHINQUESTION||^5||||||F
+OBX|70|TS|76425-8^Date Of Onset - Reported^LN||20170721||||||F
+OBX|71|CWE|56831-1^Problem Associated Signs And Symptoms^LN|1|62315008^Diarrhea^SCT||||||F
+OBX|72|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|73|CWE|56831-1^Problem Associated Signs And Symptoms^LN|2|386661006^Fever^SCT||||||F
+OBX|74|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|75|CWE|56831-1^Problem Associated Signs And Symptoms^LN|3|405729008^Bloody diarrhea^SCT||||||F
+OBX|76|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|77|CWE|56831-1^Problem Associated Signs And Symptoms^LN|4|51197009^Stomach cramps^SCT||||||F
+OBX|78|CWE|INV919^Signs and Symptoms Indicator^PHINQUESTION|4|UNK^Unknown^NULLFL||||||F
+OBX|79|CWE|FDD_Q_1038^Subject Outcome^PHINQUESTION||UNK^Unknown^NULLFL||||||F
+OBX|80|CWE|FDD_Q_89^Case Identified By An Audit^PHINQUESTION||N^No^HL70136||||||F
+OBX|81|CWE|INV959^Case Interviewed By Public Health Staff^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|82|ST|FDD_Q_88^Foodborne Disease Outbreak Surveillance System (FDOSS) Outbreak ID Number^PHINQUESTION||FDOSS974512MI||||||F
+OBX|83|ST|FDD_Q_1129^State Outbreak Identification Number^PHINQUESTION||MI4512860||||||F
+OBX|84|CWE|FDD_Q_404^Type Of Outbreak^PHINQUESTION||416086007^Food borne transmission^SCT||||||F
+OBX|85|ST|INV949^WGS ID Number^PHINQUESTION|1|39765430||||||F
+OBX|86|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|1|SPM4578939||||||F
+OBX|87|CWE|82771-7^Performing Laboratory Type^LN|1|PHC412^CDC Lab^CDCPHINVS||||||F
+OBX|88|CWE|INV290^Test Type^PHINQUESTION|1|FDD_A_51^Antigen^CDCPHINVS||||||F
+OBX|89|CWE|85069-3^Test Method^LN|1|FDD_A_43^Luminex;^CDCPHINVS||||||F
+OBX|90|CWE|INV291^Test Result^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|91|CWE|41852-5^Organism^LN|1|103560006^Cyclospora^SCT||||||F
+OBX|92|ST|LAB629^Test Result Text^PHINQUESTION|1|Positive||||||F
+OBX|93|ST|8251-1^Test Result Comments^LN|1|No additonal comments||||||F
+OBX|94|CWE|66746-9^Specimen Type^LN|1|119339001^Stool^SCT||||||F
+OBX|95|TS|68963-8^Specimen Collection Date/Time^LN|1|20170723||||||F
+OBX|96|TS|LAB595^Specimen Received Date/Time^PHINQUESTION|1|20170723||||||F
+OBX|97|TS|45375-3^Specimen Analyzed Date/Time^LN|1|20170723||||||F
+OBX|98|TS|82773-3^Date/Time Of Lab Result^LN|1|20170723||||||F
+OBX|99|CWE|LAB515^Sent To CDC^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|100|TS|85930-6^Date Specimen Sent To CDC^LN|1|20170723||||||F
+OBX|101|CWE|LAB331^Isolate sent to State Public Health Lab^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|102|CWE|FDD_Q_930^Result of Specimen Sent to State Laboratory^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|103|CWE|FDD_Q_931^State Laboratory Confirmed^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|104|CWE|FDD_Q_968^Result of Specimen Sent to CDC Laboratory^PHINQUESTION|1|10828004^Positive^SCT||||||F
+OBX|105|CWE|FDD_Q_932^CDC Laboratory Confirmed^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|106|ST|FDD_Q_969^Lab Other Details^PHINQUESTION|1|For Cyclo additional lab info can be added here||||||F
+OBX|107|ST|68994-3^Performing Laboratory Name^LN|1|PHC412^CDC Lab^CDCPHINVS||||||F
+OBX|108|ST|INV949^WGS ID Number^PHINQUESTION|2|4516798621||||||F
+OBX|109|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|2|SPM7845||||||F
+OBX|110|CWE|82771-7^Performing Laboratory Type^LN|2|PHC414^State Public Health Lab^CDCPHINVS||||||F
+OBX|111|CWE|INV290^Test Type^PHINQUESTION|2|FDD_A_52^PCR^CDCPHINVS||||||F
+OBX|112|CWE|85069-3^Test Method^LN|2|FDD_A_10^Polymerase Chain Reaction (PCR)^CDCPHINVS||||||F
+OBX|113|CWE|INV291^Test Result^PHINQUESTION|2|10828004^Positive^SCT||||||F
+OBX|114|CWE|41852-5^Organism^LN|2|103560006^Cyclospora^SCT||||||F
+OBX|115|ST|LAB629^Test Result Text^PHINQUESTION|2|Positive||||||F
+OBX|116|ST|8251-1^Test Result Comments^LN|2|test was unusual||||||F
+OBX|117|CWE|66746-9^Specimen Type^LN|2|119339001^Stool^SCT||||||F
+OBX|118|TS|68963-8^Specimen Collection Date/Time^LN|2|20170723||||||F
+OBX|119|TS|LAB595^Specimen Received Date/Time^PHINQUESTION|2|20170723||||||F
+OBX|120|TS|45375-3^Specimen Analyzed Date/Time^LN|2|20170724||||||F
+OBX|121|TS|82773-3^Date/Time Of Lab Result^LN|2|20170724||||||F
+OBX|122|CWE|LAB515^Sent To CDC^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|123|TS|85930-6^Date Specimen Sent To CDC^LN|2|20170723||||||F
+OBX|124|CWE|LAB331^Isolate sent to State Public Health Lab^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|125|CWE|FDD_Q_930^Result of Specimen Sent to State Laboratory^PHINQUESTION|2|10828004^Positive^SCT||||||F
+OBX|126|CWE|FDD_Q_931^State Laboratory Confirmed^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|127|CWE|FDD_Q_968^Result of Specimen Sent to CDC Laboratory^PHINQUESTION|2|10828004^Positive^SCT||||||F
+OBX|128|CWE|FDD_Q_932^CDC Laboratory Confirmed^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|129|ST|FDD_Q_969^Lab Other Details^PHINQUESTION|2|specimen sent to CDC||||||F
+OBX|130|ST|68994-3^Performing Laboratory Name^LN|2|State Lab Name||||||F
+OBX|131|CWE|INV960^Interview Status^PHINQUESTION||PHC349^Did not attempt to interview^CDCPHINVS||||||F
+OBX|132|SN|9253-6^Maximum Number Stools per 24 Hours^LN||^6||||||F
+OBX|133|SN|75292-3^Baseline Weight    ^LN||^170|[lb_av]^pound^UCUM|||||F
+OBX|134|SN|65490-5^Amount Weight Lost^LN||^8|[lb_av]^pound^UCUM|||||F
+OBX|135|SN|81265-1^Highest Measured Temperature^LN||^102.6|[degF]^degree Fahrenheit^UCUM|||||F
+OBX|136|CWE|FDD_Q_173^Treated For Cyclosporiasis^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|137|CWE|INV948^Name of the Antibiotic Taken for this Illness^LN||10831^Trimethoprim/sulfamethoxazole^RXNORM||||||F
+OBX|138|CWE|INV939^Sulfa Allergy^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|139|CWE|INV1257^Food Purchased at Store and Prepared at Home^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|140|ST|INV1185^Store Name^PHINQUESTION|1|Store A||||||F
+OBX|141|ST|INV1277^Store Street Address^PHINQUESTION|1|123 Main Street||||||F
+OBX|142|ST|INV1186^Store City^PHINQUESTION|1|Los Angeles||||||F
+OBX|143|CWE|INV1281^Store State^PHINQUESTION|1|06^California^FIPS5_2||||||F
+OBX|144|DT|INV1278^Date Purchased^PHINQUESTION|1|20170709||||||F
+OBX|145|TX|INV1279^Food Purchased^PHINQUESTION|1|Spinach, Cabbage, Chicken, Eggs||||||F
+OBX|146|ST|INV1187^Shopper Card Number^PHINQUESTION|1|STOREA8549||||||F
+OBX|147|CWE|INV1258^Food Prepared Outside the Home^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|148|ST|INV1056^Name of Establishment Where Exposure Occurred^PHINQUESTION|1|Restaurant A||||||F
+OBX|149|ST|INV1280^Restaurant Street Address^PHINQUESTION|1|122 Main Street||||||F
+OBX|150|ST|INV1282^Restaurant or Location City Where Exposure Occurred^PHINQUESTION|1|Los Angeles||||||F
+OBX|151|CWE|INV1283^Restaurant or Location State Where Exposure Occurred^PHINQUESTION|1|06^California^FIPS5_2||||||F
+OBX|152|DT|INV1189^Date Food Eaten at Restaurant^PHINQUESTION|1|20170709||||||F
+OBX|153|TX|INV1188^Food Eaten at Restaurant^PHINQUESTION|1|Chicken Caesar Salad||||||F
+OBX|154|CWE|FDD_Q_176^Fresh Berries Exposure^PHINQUESTION|1|B1618^black raspberries^LANGUAL||||||F
+OBX|155|CWE|FDD_Q_926^Fresh Berries Exposure Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|156|CWE|FDD_Q_176^Fresh Berries Exposure^PHINQUESTION|2|B1407^blackberries^LANGUAL||||||F
+OBX|157|CWE|FDD_Q_926^Fresh Berries Exposure Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|158|CWE|FDD_Q_176^Fresh Berries Exposure^PHINQUESTION|3|B1491^blueberries^LANGUAL||||||F
+OBX|159|CWE|FDD_Q_926^Fresh Berries Exposure Indicator^PHINQUESTION|3|N^No^HL70136||||||F
+OBX|160|CWE|FDD_Q_176^Fresh Berries Exposure^PHINQUESTION|4|PHC325^golden raspberries^CDCPHINVS||||||F
+OBX|161|CWE|FDD_Q_926^Fresh Berries Exposure Indicator^PHINQUESTION|4|N^No^HL70136||||||F
+OBX|162|CWE|FDD_Q_176^Fresh Berries Exposure^PHINQUESTION|5|260413007^None^SCT||||||F
+OBX|163|CWE|FDD_Q_926^Fresh Berries Exposure Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|164|CWE|FDD_Q_176^Fresh Berries Exposure^PHINQUESTION|6|OTH^other type of fresh berries (specify)^NULLFL||||||F
+OBX|165|CWE|FDD_Q_926^Fresh Berries Exposure Indicator^PHINQUESTION|6|N^No^HL70136||||||F
+OBX|166|CWE|FDD_Q_176^Fresh Berries Exposure^PHINQUESTION|7|B1494^raspberries^LANGUAL||||||F
+OBX|167|CWE|FDD_Q_926^Fresh Berries Exposure Indicator^PHINQUESTION|7|Y^Yes^HL70136||||||F
+OBX|168|CWE|FDD_Q_176^Fresh Berries Exposure^PHINQUESTION|8|B1393^strawberries^LANGUAL||||||F
+OBX|169|CWE|FDD_Q_926^Fresh Berries Exposure Indicator^PHINQUESTION|8|Y^Yes^HL70136||||||F
+OBX|170|CWE|FDD_Q_176^Fresh Berries Exposure^PHINQUESTION|9|UNK^unknown type of berry^NULLFL||||||F
+OBX|171|CWE|FDD_Q_926^Fresh Berries Exposure Indicator^PHINQUESTION|9|N^No^HL70136||||||F
+OBX|172|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|1|B1158^sweet basil^LANGUAL||||||F
+OBX|173|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|174|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|2|B1381^cilantro^LANGUAL||||||F
+OBX|175|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|176|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|3|B1277^dill^LANGUAL||||||F
+OBX|177|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|3|N^No^HL70136||||||F
+OBX|178|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|4|B1267^mint^LANGUAL||||||F
+OBX|179|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|180|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|5|260413007^None^SCT||||||F
+OBX|181|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|182|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|6|B1542^oregano^LANGUAL||||||F
+OBX|183|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|6|N^No^HL70136||||||F
+OBX|184|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|7|OTH^other type of fresh herb (specify)^NULLFL||||||F
+OBX|185|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|7|Y^Yes^HL70136||||||F
+OBX|186|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|8|B1550^parsley^LANGUAL||||||F
+OBX|187|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|8|Y^Yes^HL70136||||||F
+OBX|188|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|9|PHC344^purple basil (i.e., purple leaves and stems)^CDCPHINVS||||||F
+OBX|189|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|9|N^No^HL70136||||||F
+OBX|190|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|10|B1495^rosemary^LANGUAL||||||F
+OBX|191|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|10|N^No^HL70136||||||F
+OBX|192|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|11|PHC345^Thai basil^CDCPHINVS||||||F
+OBX|193|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|11|Y^Yes^HL70136||||||F
+OBX|194|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|12|B1199^thyme^LANGUAL||||||F
+OBX|195|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|12|Y^Yes^HL70136||||||F
+OBX|196|CWE|FDD_Q_178^Fresh Herb Exposure^PHINQUESTION|13|UNK^unknown type of herb^NULLFL||||||F
+OBX|197|CWE|FDD_Q_927^Fresh Herbs Exposure Indicator^PHINQUESTION|13|N^No^HL70136||||||F
+OBX|198|CWE|FDD_Q_180^Fresh Lettuce Exposure^PHINQUESTION|1|C1002802^arugula^UML||||||F
+OBX|199|CWE|FDD_Q_928^Fresh Lettuce Exposure Indicator^PHINQUESTION|1|N^No^HL70136||||||F
+OBX|200|CWE|FDD_Q_180^Fresh Lettuce Exposure^PHINQUESTION|2|PHC350^mesclun (spring mix, field green, gourmet salad)^CDCPHINVS||||||F
+OBX|201|CWE|FDD_Q_928^Fresh Lettuce Exposure Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|202|CWE|FDD_Q_180^Fresh Lettuce Exposure^PHINQUESTION|3|260413007^None^SCT||||||F
+OBX|203|CWE|FDD_Q_928^Fresh Lettuce Exposure Indicator^PHINQUESTION|3|N^No^HL70136||||||F
+OBX|204|CWE|FDD_Q_180^Fresh Lettuce Exposure^PHINQUESTION|4|OTH^other type of fresh lettuce (specify)^NULLFL||||||F
+OBX|205|CWE|FDD_Q_928^Fresh Lettuce Exposure Indicator^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|206|CWE|FDD_Q_180^Fresh Lettuce Exposure^PHINQUESTION|5|UNK^unknown type of lettuce^NULLFL||||||F
+OBX|207|CWE|FDD_Q_928^Fresh Lettuce Exposure Indicator^PHINQUESTION|5|N^No^HL70136||||||F
+OBX|208|CWE|FDD_Q_182^Other Produce Exposure^PHINQUESTION|1|PHC365^fruit, other than berries (specify)^CDCPHINVS||||||F
+OBX|209|CWE|FDD_Q_929^Other Produce Exposure Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|210|CWE|FDD_Q_182^Other Produce Exposure^PHINQUESTION|2|260413007^None^SCT||||||F
+OBX|211|CWE|FDD_Q_929^Other Produce Exposure Indicator^PHINQUESTION|2|N^No^HL70136||||||F
+OBX|212|CWE|FDD_Q_182^Other Produce Exposure^PHINQUESTION|3|OTH^other types of fresh produce (specify)^NULLFL||||||F
+OBX|213|CWE|FDD_Q_929^Other Produce Exposure Indicator^PHINQUESTION|3|Y^Yes^HL70136||||||F
+OBX|214|CWE|FDD_Q_182^Other Produce Exposure^PHINQUESTION|4|B2466^snow peas^LANGUAL||||||F
+OBX|215|CWE|FDD_Q_929^Other Produce Exposure Indicator^PHINQUESTION|4|Y^Yes^HL70136||||||F
+OBX|216|CWE|FDD_Q_182^Other Produce Exposure^PHINQUESTION|5|B2467^snap peas^LANGUAL||||||F
+OBX|217|CWE|FDD_Q_929^Other Produce Exposure Indicator^PHINQUESTION|5|Y^Yes^HL70136||||||F
+OBX|218|CWE|FDD_Q_182^Other Produce Exposure^PHINQUESTION|6|UNK^unknown type of fresh produce^NULLFL||||||F
+OBX|219|CWE|FDD_Q_929^Other Produce Exposure Indicator^PHINQUESTION|6|N^No^HL70136||||||F
+OBX|220|CWE|FDD_Q_184^Attend Events 14 Days Prior to Onset^PHINQUESTION|6|Y^Yes^HL70136||||||F
+OBX|221|ST|FDD_Q_185^Event Specify^PHINQUESTION|1|wedding||||||F
+OBX|222|DT|FDD_Q_186^Event Date^PHINQUESTION|1|20170720||||||F
+OBX|223|ST|FDD_Q_185^Event Specify^PHINQUESTION|2|Conference||||||F
+OBX|224|DT|FDD_Q_186^Event Date^PHINQUESTION|2|20170718||||||F
+OBX|225|CWE|FDD_Q_77^Ill Contact^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|226|CWE|INV603^Contact Type^PHINQUESTION||PHC2129^Traveled together^CDCPHINVS||||||F
+OBX|227|CWE|INV1270^Coinfection^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|228|ST|INV1271^Coinfection type^PHINQUESTION||Salmonellosis||||||F
+OBX|229|ST|85658-3^Current Occupation^LN|1|Clery||||||F
+OBX|230|CE|85659-1^Current Occupation Standardized^LN|1|2040^Clergy^CDCOCCUPATION2010||||||F
+OBX|231|ST|85078-4^Current Industry^LN|1|Religious organizations||||||F
+OBX|232|CE|85657-5^Current  Industry Standardized^LN|1|9160^Religious organizations^CDCINDUSTRY2010||||||F
+OBX|233|ST|85658-3^Current Occupation^LN|2|Cashier||||||F
+OBX|234|CE|85659-1^Current Occupation Standardized^LN|2|4720^Cashiers^CDCOCCUPATION2010||||||F
+OBX|235|ST|85078-4^Current Industry^LN|2|Grocery store||||||F
+OBX|236|CE|85657-5^Current  Industry Standardized^LN|2|4970^Grocery stores^CDCINDUSTRY2010||||||F
+OBX|237|CWE|LABAST6^Antimicrobial Susceptibility Test Type^PHINQUESTION|1|196499^Suprax^RxNorm||||||F
+OBX|238|CWE|LABAST8^Antimicrobial Susceptibility Test Interpretation^PHINQUESTION|1|N^No^HL70136||||||F
+OBX|239|CWE|LABAST6^Antimicrobial Susceptibility Test Type^PHINQUESTION|2|202866^Flagyl^RxNorm||||||F
+OBX|240|CWE|LABAST8^Antimicrobial Susceptibility Test Interpretation^PHINQUESTION|2|Y^Yes^HL70136||||||F
+MSH|^~\&|SendAppName^2.16.840.1.114222.222^ISO|Sending-Facility^2.16.840.1.114222.222^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~CongenitalSyphilis_MMG_V1.1^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||CONSYPH_TC06^^^SendAppName&2.16.840.1.114222.222&ISO||~^^^^^^S||20130615|M||2054-5^Black or African American^CDCREC|^^^22^71292^^^^22073|||||||||||2186-5^Not Hispanic or Latino^CDCREC
+NK1|1||MTH^Mother^HL70063|^^^22^71292^USA^^^22073||||||||||S^Single^HL70002||19891212||||||||||||2186-5^Not Hispanic or Latino^CDCREC|||||||2054-5^Black or African American^CDCREC
+OBR|1||CONSYPH_TC06^SendAppName^2.16.840.1.114222.222^ISO|68991-9^Epidemiologic Information^LN|||20131031170100|||||||||||||||20131031170100|||F||||||10316^Syphilis, congenital^NND
+OBX|1|CWE|78746-5^Country of Birth^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|2|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|TS|11368-8^Date of Illness Onset^LN||20130615||||||F
+OBX|4|TS|77975-1^Diagnosis Date^LN||20130615||||||F
+OBX|5|CWE|77974-4^Hospitalized^LN||N^No^HL70136||||||F
+OBX|6|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|7|ST|77997-5^Legacy Case Identifier^LN||61528936181002006||||||F
+OBX|8|SN|77998-3^Age at Case Investigation^LN||^1|d^day [time]^UCUM|||||F
+OBX|9|CWE|77982-7^Case Disease Imported Code^LN||PHC244^Indigenous^CDCPHINVS||||||F
+OBX|10|CWE|77984-3^Country of Exposure^LN|1|USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|11|CWE|77985-0^State or Province of Exposure^LN|1|22^Louisiana^FIPS5_2||||||F
+OBX|12|ST|77986-8^City of Exposure^LN|1|West Monroe||||||F
+OBX|13|ST|77987-6^County of Exposure^LN|1|Ouachita||||||F
+OBX|14|CWE|77989-2^Transmission Mode^LN||417409004^Transplacental transmission^SCT||||||F
+OBX|15|CWE|77990-0^Case Class Status Code^LN||2931005^Probable diagnosis^SCT||||||F
+OBX|16|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|17|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|18|ST|77969-4^Jurisdiction Code^LN||S01||||||F
+OBX|19|CWE|48766-0^Reporting Source Type Code^LN||1^Hospital^HL70406||||||F
+OBX|20|ST|52831-5^Reporting Source ZIP Code^LN||71292||||||F
+OBX|21|ST|74549-7^Person Reporting to CDC - Name^LN||White, John||||||F
+OBX|22|ST|74548-9^Person Reporting to CDC - Phone Number^LN||(734)677-7777||||||F
+OBX|23|DT|77979-3^Case Investigation Start Date^LN||20130615||||||F
+OBX|24|DT|77995-9^Date Reported^LN||20130615||||||F
+OBX|25|TS|77972-8^Earliest Date Reported to County^LN||20130630||||||F
+OBX|26|TS|77973-6^Earliest Date Reported to State^LN||20130710||||||F
+OBX|27|SN|77991-8^MMWR Week^LN||^27||||||F
+OBX|28|DT|77992-6^MMWR Year^LN||2013||||||F
+OBX|29|DT|77970-2^Date First Reported to PHD^LN||20130630||||||F
+OBX|30|CWE|77966-0^Reporting State^LN||22^Louisiana^FIPS5_2||||||F
+OBX|31|CWE|77967-8^Reporting County^LN||22073^Ouachita Parish, LA^FIPS6_4||||||F
+OBX|32|CWE|77968-6^National Reporting Jurisdiction^LN||22^LA^FIPS5_2||||||F
+OBX|33|ST|INV2084^Mother's Local Record ID^PHINQUESTION||CONSYPH_TC06||||||F
+OBX|34|CWE|INV2085^Mother's National Reporting Jurisdiction^PHINQUESTION||22^LA^FIPS5_2||||||F
+OBX|35|NM|75201-4^Number of Pregnancies^LN||4||||||F
+OBX|36|NM|75202-2^Number of Total Live Births^LN||3||||||F
+OBX|37|DT|75203-0^Last Menstrual Period^LN||20121011||||||F
+OBX|38|DT|75200-6^Date of First Prenatal Visit^LN||20130518||||||F
+OBX|39|CWE|75204-8^Prenatal Visit Indicator^LN||Y^Yes^HL70136||||||F
+OBX|40|CWE|75163-6^Trimester of First Prenatal Visit^LN||255248002^Third trimester^SCT||||||F
+OBX|41|CWE|75179-2^Mother's HIV Status During Pregnancy^LN||165815009^HIV negative^SCT||||||F
+OBX|42|CWE|75180-0^Mother's Clinical Stage of Syphilis During Pregnancy^LN||PHC1275^late or late latent^CDCPHINVS||||||F
+OBX|43|CWE|75181-8^Mother's Surveillance Stage of Syphilis During Pregnancy^LN||PHC1507^Syphilis, Unknown Duration or Late^CDCPHINVS||||||F
+OBX|44|DT|75182-6^Date When Mother Received Her First Dose of Benzathine Penicillin^LN||20130522||||||F
+OBX|45|CWE|75183-4^Trimester in Which Mother Received Her First Dose of Benzathine Penicillin^LN||255248002^3rd trimester^SCT||||||F
+OBX|46|CWE|75184-2^Mother's Treatment^LN||PHC1280^7.2 M units benzathine penicillin^CDCPHINVS||||||F
+OBX|47|CWE|75185-9^Appropriate Serologic Response^LN||PHC1284^Not enough time for titer to change^CDCPHINVS||||||F
+OBX|48|CWE|75164-4^Non-treponemal Test or Treponemal Test at First Prenatal Visit^LN||Y^Yes^HL70136||||||F
+OBX|49|CWE|75165-1^Non-treponemal Test or Treponemal Test at 28-32 Weeks Gestation^LN||Y^Yes^HL70136||||||F
+OBX|50|CWE|75166-9^Non-treponemal Test or Treponemal Test at Delivery^LN||Y^Yes^HL70136||||||F
+OBX|51|CWE|75193-3^Clinical Signs of Congenital Syphilis^LN|1|397746007^snuffles^SCT||||||F
+OBX|52|CWE|INV919^Clinical Signs Indicator^PHINQUESTION|1|Y^Yes^HL70136||||||F
+OBX|53|CWE|75193-3^Clinical Signs of Congenital Syphilis^LN|2|267038008^edema^SCT||||||F
+OBX|54|CWE|INV919^Clinical Signs Indicator^PHINQUESTION|2|Y^Yes^HL70136||||||F
+OBX|55|CWE|85793-9^Subject of Lab Test Performed^LN|1|72705000^Mother^SCT||||||F
+OBX|56|CWE|INV290^Test Type^PHINQUESTION|1|20507-0^Reagin Ab [Presence] in Serum by RPR^LN||||||F
+OBX|57|CWE|INV291^Test Result^PHINQUESTION|1|11214006^Reactive^SCT||||||F
+OBX|58|CWE|STD123^Nontreponemal Serologic Syphilis Test Result^PHINQUESTION|1|STD8^1:8^CDCPHINVS||||||F
+OBX|59|DT|82772-5^Date of Lab Result^LN|1|20130518||||||F
+OBX|60|CWE|85793-9^Subject of Lab Test Performed^LN|2|72705000^Mother^SCT||||||F
+OBX|61|CWE|INV290^Test Type^PHINQUESTION|2|20507-0^Reagin Ab [Presence] in Serum by RPR^LN||||||F
+OBX|62|CWE|INV291^Test Result^PHINQUESTION|2|11214006^Reactive^SCT||||||F
+OBX|63|CWE|STD123^Nontreponemal Serologic Syphilis Test Result^PHINQUESTION|2|STD8^1:8^CDCPHINVS||||||F
+OBX|64|DT|82772-5^Date of Lab Result^LN|2|20130615||||||F
+OBX|65|CWE|85793-9^Subject of Lab Test Performed^LN|3|72705000^Mother^SCT||||||F
+OBX|66|CWE|INV290^Test Type^PHINQUESTION|3|PHC1306^Other Treponemal Test Type^CDCPHINVS||||||F
+OBX|67|CWE|INV291^Test Result^PHINQUESTION|3|11214006^Reactive^SCT||||||F
+OBX|68|DT|82772-5^Date of Lab Result^LN|3|20130518||||||F
+OBX|69|CWE|85793-9^Subject of Lab Test Performed^LN|4|133931009^Infant^SCT||||||F
+OBX|70|CWE|INV290^Test Type^PHINQUESTION|4|20507-0^Reagin Ab [Presence] in Serum by RPR^LN||||||F
+OBX|71|CWE|INV291^Test Result^PHINQUESTION|4|11214006^Reactive^SCT||||||F
+OBX|72|CWE|STD123^Nontreponemal Serologic Syphilis Test Result^PHINQUESTION|4|STD8^1:8^CDCPHINVS||||||F
+OBX|73|DT|82772-5^Date of Lab Result^LN|4|20130616||||||F
+OBX|74|CWE|85793-9^Subject of Lab Test Performed^LN|5|133931009^Infant^SCT||||||F
+OBX|75|CWE|INV290^Test Type^PHINQUESTION|5|5290-2^Reagin Ab [Presence] in Cerebral spinal fluid by VDRL^LN||||||F
+OBX|76|CWE|INV291^Test Result^PHINQUESTION|5|10828004^Positive^SCT||||||F
+OBX|77|DT|82772-5^Date of Lab Result^LN|5|20130606||||||F
+OBX|78|DT|33882-2^Specimen Collection Date^LN|5|20130612||||||F
+OBX|79|CWE|85793-9^Subject of Lab Test Performed^LN|6|133931009^Infant^SCT||||||F
+OBX|80|CWE|INV290^Test Type^PHINQUESTION|6|PHC1306^Other Treponemal Test Type^CDCPHINVS^^^^^^LP48341-9 CSF WBC Count||||||F
+OBX|81|DT|82772-5^Date of Lab Result^LN|6|20130616||||||F
+OBX|82|ST|LAB628^Test Result Quantitative^PHINQUESTION|6|25||||||F
+OBX|83|CWE|LAB115^Result Units^PHINQUESTION|6|mL^MilliLiter [SI Volume Units]^UCUM||||||F
+OBX|84|CWE|85793-9^Subject of Lab Test Performed^LN|7|133931009^Infant^SCT||||||F
+OBX|85|CWE|INV290^Test Type^PHINQUESTION|7|PHC1306^Other Treponemal Test Type^CDCPHINVS^^^^^^LP69956-8=CSF Protein Level||||||F
+OBX|86|DT|82772-5^Date of Lab Result^LN|7|20130616||||||F
+OBX|87|ST|LAB628^Test Result Quantitative^PHINQUESTION|7|150||||||F
+OBX|88|CWE|LAB115^Result Units^PHINQUESTION|7|mg/dL^MilliGrams Per Deci Liter [Mass Concentration Units]^UCUM||||||F
+OBX|89|CWE|75186-7^Vital Status^LN||438949009^Alive^SCT||||||F
+OBX|90|SN|56056-5^Birth Weight^LN||^3458|g^gram^UCUM|||||F
+OBX|91|SN|57714-8^Gestational Age^LN||^41|wk^week^UCUM|||||F
+OBX|92|CWE|75194-1^Long Bone X-rays for Infant^LN||PHC1289^No X-rays^CDCPHINVS||||||F
+OBX|93|CWE|75192-5^Darkfield Exam, DFA, or Special Stain Test Findings^LN||PHC1286^No lesions and no tissue to test^CDCPHINVS||||||F
+OBX|94|CWE|LP69956-8^CSF Protein Level^LN||373121007^Test not done^SCT||||||F
+OBX|95|CWE|75197-4^Infant Treated^LN||PHC1294^Yes, with aqueous or procaine penicillin for 10 days^CDCPHINVS||||||F
+OBX|96|CWE|75207-1^Stillbirth Indicator^LN||N^No^HL70136||||||F
