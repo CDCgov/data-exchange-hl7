@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.29] - 2023/10/04
+	
+	- HL7Transform: Added extra fields on OBX, and handling OBX children of SPM, fixed some property name typos
+	- Deployed our Validation API in DEV to fully support up to 100 msgs
+		○ Designed and implemented a summary report for multiple messages
+		○ Added Postman scripts for Happy Path tests
+		○ Created first draft of our Open API documentation
+	- Bug Fixes:
+		○ Fixed couple of issues with PHLIP-FLU profile
+	- Modified CI/CD Process to build artifact only once and deploy to TST with a single approval.
+	- Added private end points to all missing resources in Azure DEV RG
+	- Run performance tests to gauge CosmosDB and found some improvements due to high level of indexing done out-of-the-box 
+	- Wrangling the replay API to deploy a first endpoint (/message_uuid) to DEV
 
 ### [0.0.28] - 2023-09-20
 	- Migrated Structure validator to Elastic Plan in TST environment.
