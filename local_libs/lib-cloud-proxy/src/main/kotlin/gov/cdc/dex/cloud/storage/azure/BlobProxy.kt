@@ -1,9 +1,11 @@
 package gov.cdc.dex.cloud.storage.azure
 
+import com.azure.core.http.rest.PagedResponse
 import com.azure.core.util.BinaryData
 import com.azure.storage.blob.BlobClient
 import com.azure.storage.blob.BlobServiceClient
 import com.azure.storage.blob.BlobServiceClientBuilder
+import com.azure.storage.blob.models.BlobItem
 import com.azure.storage.blob.models.BlobProperties
 import com.azure.storage.blob.models.ListBlobsOptions
 import gov.cdc.dex.cloud.AzureConfig
@@ -40,7 +42,6 @@ class BlobProxy(private val azureConfig: AzureConfig, private val meterRegistry:
     private val blobServiceClient: BlobServiceClient = azureConfig.blob.connectStr.validateFor("blob.connectStr") {
         BlobServiceClientBuilder().connectionString(it).buildClient()
     }
-    private val containerClient = blobServiceClient.getBlobContainerClient(azureConfig.blob.container)
 
     /**
      * This was introduced to be able to provide a 'silent' call to the aws s3 api
@@ -51,33 +52,51 @@ class BlobProxy(private val azureConfig: AzureConfig, private val meterRegistry:
 
     override fun getDefaultBucket(): String = azureConfig.blob.container ?: "N/A"
 
-    override fun list(bucket: String, maxNumber: Int, prefix: String?): List<String> =
+    override fun list(bucket: String, maxNumber: Int, prefix: String?) : List<String> =
         meterRegistry.withMetrics("blob.list") {
-            val options = ListBlobsOptions()
-                .setMaxResultsPerPage(maxNumber)
-            options.prefix = when {
-                prefix != null -> prefix
-                else -> "/"
-            }
-//            containerClient.listBlobsByHierarchy("/",options, Duration.ofMinutes(5)).map{ it.name }
-            containerClient.listBlobs().map {b -> b.name }
+            listByType(bucket, maxNumber, prefix, BlobListType.FILE)
         }
+
+    private fun listByType(bucket: String, maxNumber: Int, prefix: String?,
+                           blobListType: BlobListType = BlobListType.ANY) : List<String> {
+        val max = if (maxNumber > 0) maxNumber else 5000  // 5000 is Azure's default per page
+        val blobContainerClient = blobServiceClient.getBlobContainerClient(bucket)
+        val options = ListBlobsOptions().setMaxResultsPerPage(max)
+        options.prefix = when {
+            prefix != null -> prefix
+            else -> "/"
+        }
+        // listing blobs returns all blobs, regardless of type.
+        // we have set the max results per page, but no guarantee that they are all the type we want,
+        // so we must filter each page and accumulate the results until we have the desired max
+        // or there are no more results to be had.
+        val pagedList : Iterable<PagedResponse<BlobItem>> =
+            blobContainerClient.listBlobsByHierarchy("/", options, Duration.ofSeconds(30)).iterableByPage()
+        val results = mutableListOf<String>()
+        var iterations = 0
+        val pageIterator = pagedList.iterator()
+        while (results.size < max && iterations < max && pageIterator.hasNext()) {
+            val page = pageIterator.next()
+            val elements = if (blobListType != BlobListType.ANY) {
+                page.elements.filter { it.isPrefix == (blobListType == BlobListType.FOLDER) }.map { b -> b.name }
+            } else {
+                page.elements.map { b -> b.name }
+            }
+            if (elements.isEmpty()) {
+                iterations = max //break out of this loop
+            } else {
+                results.addAll(elements.take(max - results.size))
+                iterations++
+            }
+        }
+        return results
+    }
 
     override fun list(maxNumber: Int, prefix: String?): List<String> =
         azureConfig.blob.container.validateFor(VAR_CONTAINER) { list(it, maxNumber, prefix) }
 
     override fun listFolders(bucket: String): List<String> = meterRegistry.withMetrics("blob.listFolders") {
-        runCatching {
-           // list(bucket, 100, "/")
-            val options = ListBlobsOptions()
-                .setMaxResultsPerPage(10)
-            with (containerClient.listBlobsByHierarchy("/", options, Duration.ofSeconds(30))) {
-                logger.debug("List: {}", this.toList())
-                filter { b -> b.isPrefix }.map { it.name }
-            }
-        }.onFailure {
-            logger.error("Failed to List Folders for container: {}. Exception: {}", bucket, it.toString())
-        }.getOrThrow()
+        listByType(bucket, 10, null, BlobListType.FOLDER)
     }
 
     override fun listFolders(): List<String> =
@@ -129,7 +148,8 @@ class BlobProxy(private val azureConfig: AzureConfig, private val meterRegistry:
     override fun saveFile(bucket: String, fileName: String, content: String, metadata: Map<String, String>?, contentType: String
     ) = meterRegistry.withMetrics("blob.saveFile") {
         val binaryData = BinaryData.fromString(content)
-        val blobClient: BlobClient = containerClient.getBlobClient(fileName)
+        val blobContainerClient = blobServiceClient.getBlobContainerClient(bucket)
+        val blobClient: BlobClient = blobContainerClient.getBlobClient(fileName)
         blobClient.upload(binaryData, true)
         if (metadata != null) {
             blobClient.setMetadata(metadata)
@@ -139,7 +159,8 @@ class BlobProxy(private val azureConfig: AzureConfig, private val meterRegistry:
     override fun saveFile(bucket: String, fileName: String, content: InputStream, size: Long, metadata: Map<String, String>?, contentType: String
     ) = meterRegistry.withMetrics("blob.saveFile.inputStream") {
         val binaryData = BinaryData.fromStream(content)
-        val blobClient: BlobClient = containerClient.getBlobClient(fileName)
+        val blobContainerClient = blobServiceClient.getBlobContainerClient(bucket)
+        val blobClient: BlobClient = blobContainerClient.getBlobClient(fileName)
         blobClient.upload(binaryData, true)
         if (metadata != null) {
             blobClient.setMetadata(metadata)

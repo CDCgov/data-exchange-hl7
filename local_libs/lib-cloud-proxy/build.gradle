@@ -2,7 +2,7 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "${kotlinVersion}"
     id "org.jetbrains.kotlin.kapt" version "${kotlinVersion}"
     id "org.jetbrains.kotlin.plugin.allopen" version "${kotlinVersion}"
-//    id "groovy"
+   // id "groovy"
     id "jacoco"
     id "maven-publish"
     id "com.google.osdetector" version "1.7.0"
@@ -12,6 +12,7 @@ version "$revision"
 group "gov.cdc.dex"
 
 repositories {
+
     maven {
         url "https://imagehub.cdc.gov/repository/maven-ede-group/";
         setAllowInsecureProtocol(true);
@@ -24,7 +25,9 @@ configurations {
 }
 
 dependencies {
-    implementation group: 'com.azure', name: 'azure-sdk-bom', version: '1.2.11', ext: 'pom'
+    // https://mvnrepository.com/artifact/kr.motd.maven/os-maven-plugin
+
+    implementation group: 'com.azure', name: 'azure-sdk-bom', version: '1.2.15', ext: 'pom'
     implementation platform("software.amazon.awssdk:bom:2.20.43") {
         exclude group: 'io.netty', module: '*'
     }
@@ -43,7 +46,7 @@ dependencies {
     }
 
 //    implementation group: 'io.micronaut.azure', name: 'micronaut-azure-sdk', version: '3.3.0'
-    implementation 'com.azure:azure-storage-blob:12.20.3'
+    implementation 'com.azure:azure-storage-blob:12.22.1'
     implementation 'com.azure:azure-storage-queue:12.15.3'
 
     kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
@@ -111,7 +114,7 @@ jacocoTestReport {
 }
 
 java {
-    sourceCompatibility = JavaVersion.toVersion('11')
+    sourceCompatibility = JavaVersion.toVersion('17')
 }
 
 allOpen {
@@ -119,14 +122,14 @@ allOpen {
 }
 compileKotlin {
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
         //Will retain parameter names for Java reflection
         javaParameters = true
     }
 }
 compileTestKotlin {
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
         javaParameters = true
     }
 }
