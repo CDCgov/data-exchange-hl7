@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>structure-validator</artifactId>
-    <version>0.0.29-SNAPSHOT</version>
+    <version>0.0.29-2023-10-04-135252-7e2a0dc</version>
     <packaging>jar</packaging>
     <name>Azure Java Functions</name>
     <scm>
