@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dex</groupId>
     <artifactId>svc-hl7-validation</artifactId>
-    <version>0.0.29-SNAPSHOT</version>
+    <version>0.0.30-SNAPSHOT</version>
     <!----><!-- -->
     <parent>
         <groupId>io.micronaut</groupId>
@@ -116,6 +116,13 @@
             <artifactId>micronaut-kotlin-runtime</artifactId>
             <scope>compile</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.micronaut/micronaut-management -->
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-management</artifactId>
+            <version>3.8.5</version>
+        </dependency>
+
         <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
