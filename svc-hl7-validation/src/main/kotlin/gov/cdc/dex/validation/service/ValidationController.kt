@@ -8,6 +8,7 @@ import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.validation.service.model.ErrorCounts
 import gov.cdc.dex.validation.service.model.ErrorInfo
 import gov.cdc.dex.validation.service.model.Summary
+
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpRequest.POST
 import io.micronaut.http.HttpResponse
@@ -20,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import jakarta.inject.Inject
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
 import java.util.*
@@ -31,6 +33,8 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     private var redactorClient: HttpClient
     private var structureClient: HttpClient
 
+    //private HttpClient client;
+
     companion object {
         private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
         private const val UTF_BOM = "\uFEFF"
@@ -41,13 +45,62 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         this.structureClient = structureClient
     }
 
-    @Get(value = "/")
+    @Get(value = "/", produces = [MediaType.APPLICATION_JSON])
+    @Operation(summary="Checks Application status")
     fun getRootPingResponse() : String {
         return "hello"
     }
 
-    @Post(value = "/validation", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
-    @Operation(summary = "Action for validating HL7 Message")
+    //@Post(value = "`$`validate", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
+    @Post(value = "validate", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
+    @Operation(summary="Action for validating HL7 Message(s)", description = "Headers: \n\n" +
+            "1. message_type - Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].\n" +
+            "2. route - Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR,PHLIP_FLU,PHLIP_VPD ]\n\n"+
+            "Response: \n\n" +
+            "Single Message Response:\n\n" +
+            " \t{\n" +
+            "\t\"entries\":{\n" +
+            "\t\t\"structure\":[],\n" +
+            "\t\t\"content\":[],\n" +
+            "\t\t\"value-set\":[]\n" +
+            "\t},\n" +
+            "\t\"error-count\":{\n" +
+            "\t\t\"structure\":[],\n" +
+            "\t\t\"content\":[],\n" +
+            "\t\t\"value-set\":[]\n" +
+            "\t},\n" +
+            "\t\"warning-count\":{\n" +
+            "\t\t\"structure\":[],\n" +
+            "\t\t\"content\":[],\n" +
+            "\t\t\"value-set\":[]\n" +
+            "\t},\n" +
+            "\t\"status\":\"VALID_MESSAGE\"\t\n" +
+            "\t}\n\n\n"+
+
+            "Multi-Message Response:\n\n"+
+            "\t{\n" +
+            "\t\"total_messages\":\"\",\n" +
+            "\t\"valid_messages\":\"\",\n" +
+            "\t\"invalid_messages\":\"\",\n" +
+            "\t\"error_counts\":{\n" +
+            "\t\t\"total\":\"\",\n" +
+            "\t\t\t\"by_type\":{\n" +
+            "\t\t\t\t\"structure\":\"\",\n" +
+            "\t\t\t\t\"content\":\"\",\n" +
+            "\t\t\t\t\"value-set\":\"\",\n" +
+            "\t\t\t\t\"other\":\"\"\n" +
+            "\t\t\t\t},\n" +
+            "\t\t\t\"by_category\":{},\n" +
+            "\t\t\t\"by_path\":{},\n" +
+            "\t\t\t\"by_message\":{\n" +
+            "\t\t\t\t\"message-1\": 0,\n" +
+            "\t\t\t\t\"message-2\": 0,\n" +
+            "\t\t\t\t\"message-3\": 0,\n" +
+            "\n" +
+            "\t\t\t\t}\n" +
+            "\t\t}\t\n" +
+            "\t}"
+    )
     @ApiResponses(
         ApiResponse(content = [Content(mediaType = "text/plain", schema = Schema(type = "string"))]),
         ApiResponse(responseCode = "200", description = "Success"),
