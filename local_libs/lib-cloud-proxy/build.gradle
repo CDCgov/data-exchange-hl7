@@ -69,20 +69,20 @@ dependencies {
 
     implementation("javax.annotation:javax.annotation-api")
     implementation("com.jayway.jsonpath:json-path:2.7.0")
-    runtimeOnly('ch.qos.logback:logback-classic:1.2.9')
+    runtimeOnly('ch.qos.logback:logback-classic:1.4.7')
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     kaptTest(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
     kaptTest("io.micronaut:micronaut-inject-java")
     testImplementation(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 //    testImplementation("io.micronaut.test:micronaut-test-spock")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     // https://mvnrepository.com/artifact/org.spockframework/spock-core
 //    testCompile group: 'org.spockframework', name: 'spock-core', version: '2.0-M4-groovy-3.0'
 //    compile "io.micronaut:micronaut-runtime-groovy"
 //    compileOnly "io.micronaut:micronaut-inject-groovy"
-    testImplementation("io.micronaut.test:micronaut-test-junit5:{junitVersion}")
+    testImplementation("io.micronaut.test:micronaut-test-junit5:$micronautVersion")
 //    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:{junitVersion}")
 //    testRuntimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final'
     runtimeOnly 'io.netty:netty-tcnative-boringssl-static:2.0.53.Final:' + osdetector.classifier
