@@ -22,6 +22,7 @@ endpoints:
     enabled: false
   health:
     enabled: true
+    sensitive: false
     details-visible: ANONYMOUS
 # ---------------------------------------------------------------------------------------------
 # To keep from setting these values here (and thus making it cloud agnostic), you'll need
