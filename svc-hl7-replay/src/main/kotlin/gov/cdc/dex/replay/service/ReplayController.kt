@@ -5,7 +5,6 @@ import io.micronaut.http.HttpHeaders
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
-
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.metadata.*
@@ -17,7 +16,20 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import io.micronaut.context.annotation.Requires
+
+import io.micronaut.http.HttpRequest
+import io.micronaut.http.MediaType
+
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.Parameters
+import io.swagger.v3.oas.annotations.enums.ParameterIn
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.parameters.RequestBody
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+
 
 /**
  *
@@ -46,8 +58,22 @@ data class ReplayMD(
 ) {
     constructor() : this(null, null, null, null)
 }
-
-
+enum class MessageQueryType(
+    start_date:Date, end_date:Date, jurisdiction: String, route: String
+)
+@Schema(description = "Request Object for Replay by messages and files")
+data class RequestReplay(
+    @Schema(description = "Reason for replay",example = "Message is error queued", required = true)
+    val reason: String,
+    @Schema(description = "User", required = true)
+    val user: String,
+    @Schema(description = "Start Date ",example = "Message is error queued")
+    val start_date: Date?,
+    @Schema(description = "End Date ",example = "Message is error queued")
+    val end_date: Date?,
+    @Schema(description = "Message query method ",example = "start_date", required = true)
+    val message_query: MessageQueryType,
+)
 @Controller("/replay")
 // @Requires(property = "micronaut.security.enabled", value = "false")
 class ReplayController {
@@ -55,10 +81,56 @@ class ReplayController {
     companion object {
         val gson: Gson = GsonBuilder().serializeNulls().create()
         val evHubConnStr: String = System.getenv("EventHubConnectionString")
-        private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
+        private var logger = LoggerFactory.getLogger(Function::class.java.name)
+    }
+    @Post("/{message_uuid}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
+    @Operation(summary = "Replays HL7 Message both validated and error queued by message UUID")
+    @Parameters(
+        Parameter(name="message_uuid", `in` = ParameterIn.PATH, description =" Replays validated or error queued HL7 messages by message uuid", required=true, schema=Schema(type = "string"), example = "123e4567-e89b-12d3-a456-426655440000")
+    )
+    @ApiResponses(
+        ApiResponse(content = [Content(mediaType = MediaType.APPLICATION_JSON, schema = Schema(type = "string"))]),
+        ApiResponse(responseCode = "200", description = "Success"),
+        ApiResponse(responseCode =  "400", description = "Bad request"),
+        ApiResponse(responseCode =  "404", description = "Resource not found"),
+        ApiResponse(responseCode =  "500", description = "Internal error")
+    )
+    fun replayMessageUUIDController(
+
+        @RequestBody(
+            description = " Request Object for replaying messages by message uuid",
+            content = [Content(schema = Schema(implementation = RequestReplay::class))]
+        )request: RequestReplay ):HttpResponse<String>{
+
+        logger.info("Starting the replay of the message by message UUID $request")
+
+        return HttpResponse.ok()
+    }
+    @Post("/{file_uuid}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
+    @Operation(summary = "Replays HL7 Message both validated and error queued by file UUID")
+    @Parameters(
+        Parameter(name="file_uuid", `in` = ParameterIn.PATH, description =" Replays validated or error queued HL7 messages by file uuid", required=true, schema=Schema(type = "string"),example = "123e4567-e89b-12d3-a456-426655440000")
+    )
+    @ApiResponses(
+        ApiResponse(content = [Content(mediaType = MediaType.APPLICATION_JSON, schema = Schema(type = "string"))]),
+        ApiResponse(responseCode = "200", description = "Success"),
+        ApiResponse(responseCode =  "400", description = "Bad request"),
+        ApiResponse(responseCode =  "404", description = "Resource not found"),
+        ApiResponse(responseCode =  "500", description = "Internal error")
+    )
+    fun replayFileUUIDController(@RequestBody(
+        description = " Request Object for replaying messages by message uuid",
+        content = [Content(schema = Schema(implementation = RequestReplay::class))]
+    )request: RequestReplay ):HttpResponse<String>{
+
+        logger.info("Starting the replay of the message by file UUID ${request.message_query}")
+
+        return HttpResponse.ok()
     }
 
-    @Post("/messages")
+
+
+
     fun handleMessage(@Body messageRequest: UniqueData, headers: HttpHeaders): HttpResponse<String> {
         val location = headers["location"]
         println("Handling message: ${messageRequest.id} at location: $location")

@@ -11,7 +11,14 @@ micronaut:
         enabled: true
         step: PT1M
         descriptions: true
-
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
 endpoints:
   all:
     enabled: false
@@ -23,6 +30,7 @@ endpoints:
   health:
     enabled: true
     details-visible: ANONYMOUS
+
 # ---------------------------------------------------------------------------------------------
 # To keep from setting these values here (and thus making it cloud agnostic), you'll need
 # to provide equivalent OS envvars in your project to configure. For example:
