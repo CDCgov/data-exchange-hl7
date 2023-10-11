@@ -31,15 +31,16 @@ class FileUploader():
             thread_local.session = requests.Session()
         return thread_local.session
 
-    def upload_all_files(self, file_list):      
+    def upload_all_files(self, file_list, value):
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-            executor.map(self.upload_file, file_list)
+            #executor.map(self.upload_file, file_list)
+            executor.map(self.upload_file,  file_list, [f"{value+1:02d}_" for _ in range(len(file_list))])
 
-    def upload_file(self, file_name):
-            
+    def upload_file(self, file_name, value):
             file_text = ""
             full_path = os.path.join(self.path_to_files, file_name)
             norm_name = self.normalize(file_name)
+            new_filename = f"upload-{self.user_id}-{value}-{norm_name}.txt"
 
             # get plain text
             with open(full_path, 'r') as f:
@@ -48,10 +49,10 @@ class FileUploader():
             with open(upload_log, '+a') as log:
                 if len(file_text) > 0:
                     # set header values
-                    header = {"x-tp-message_type": self.message_type, "x-tp-route": self.route, "x-tp-reporting_jurisdiction": self.jurisdiction, "x-tp-original_file_name": file_name, "content-type": "text/plain"}
+                    header = {"x-tp-message_type": self.message_type, "x-tp-route": self.route, "x-tp-reporting_jurisdiction": self.jurisdiction, "x-tp-original_file_name": new_filename, "content-type": "text/plain"}
 
                     # upload the file
-                    new_filename = f"upload-{self.user_id}-{norm_name}.txt"
+                    new_filename = f"upload-{self.user_id}-{value}-{norm_name}.txt"
                     full_url = f'{self.base_url}{upload_url}{new_filename}'
 
                     session = self.get_session()
@@ -103,7 +104,13 @@ if __name__ == "__main__":
                 start_time = time()                
                 uploader = FileUploader(env, path, user_id, message_type, route, jurisdiction)
                 print(f"Starting upload of files at {uploader.get_timestring(start_time)} . . .")
-                uploader.upload_all_files(file_list)
+                for value in range(7):
+                   # print(f" starting {value} .")
+                    uploader.upload_all_files(file_list,value)
+                    end_time = time()
+                    duration = end_time - start_time
+                    print(f"DONE -- Upload of round {value} {uploader.get_timestring(end_time)}.")
+
                 end_time = time()
                 duration = end_time - start_time
                 print(f"DONE -- Upload of folder completed at {uploader.get_timestring(end_time)}.")
