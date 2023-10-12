@@ -137,6 +137,11 @@
             <artifactId>lib-dex-commons</artifactId>
             <version>${lib-dex-commons.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>2.2.16</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -200,6 +205,16 @@
                                     <groupId>io.micronaut</groupId>
                                     <artifactId>micronaut-validation</artifactId>
                                     <version>${micronaut.version}</version>
+                                </annotationProcessorPath>
+                                <annotationProcessorPath>
+                                    <groupId>io.micronaut</groupId>
+                                    <artifactId>micronaut-validation</artifactId>
+                                    <version>${micronaut.version}</version>
+                                </annotationProcessorPath>
+                                <annotationProcessorPath>
+                                    <groupId>io.micronaut.openapi</groupId>
+                                    <artifactId>micronaut-openapi</artifactId>
+                                    <version>4.8.4</version>
                                 </annotationProcessorPath>
                           </annotationProcessorPaths>
                        </configuration>
@@ -318,7 +333,7 @@
                             <resource>
                                 <directory>${project.basedir}/target</directory>
                                 <includes>
-                                    <include>*.jar</include>
+                                    <include>${project.artifactId}-${project.version}.jar</include>
                                 </includes>
                             </resource>
                         </resources>
