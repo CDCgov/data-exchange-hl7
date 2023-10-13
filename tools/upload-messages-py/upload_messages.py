@@ -14,7 +14,6 @@ ENVIRONMENTS = ["dev", "tst", "stg"]
 MESSAGE_TYPES = ["CASE", "ELR"]
 ROUTES = ["COVID19-ELR", "PHLIP_FLU", "PHLIP_VPD"]
 upload_url = "hl7ingress?filename="
-upload_log = "./upload_log.txt"
 thread_local = threading.local()
 
 class FileUploader():
@@ -25,6 +24,7 @@ class FileUploader():
         self.message_type = message_type
         self.route = route
         self.jurisdiction = jurisdiction
+        self.upload_log = f"./{strftime('%Y-%m-%d', localtime())}_upload_log.txt"
 
     def get_session(self):
         if not hasattr(thread_local, "session"):
@@ -36,7 +36,6 @@ class FileUploader():
             executor.map(self.upload_file, file_list)
 
     def upload_file(self, file_name):
-            
             file_text = ""
             full_path = os.path.join(self.path_to_files, file_name)
             norm_name = self.normalize(file_name)
@@ -45,15 +44,14 @@ class FileUploader():
             with open(full_path, 'r') as f:
                 file_text = f.read()
             
-            with open(upload_log, '+a') as log:
+            with open(self.upload_log, '+a') as log:
                 if len(file_text) > 0:
                     # set header values
-                    header = {"x-tp-message_type": self.message_type, "x-tp-route": self.route, "x-tp-reporting_jurisdiction": self.jurisdiction, "x-tp-original_file_name": file_name, "content-type": "text/plain"}
+                    new_filename = f"upload-{self.user_id}-{norm_name}.txt"
+                    header = {"x-tp-message_type": self.message_type, "x-tp-route": self.route, "x-tp-reporting_jurisdiction": self.jurisdiction, "x-tp-original_file_name": new_filename, "content-type": "text/plain"}
 
                     # upload the file
-                    new_filename = f"upload-{self.user_id}-{norm_name}.txt"
                     full_url = f'{self.base_url}{upload_url}{new_filename}'
-
                     session = self.get_session()
                     with session.post(url=full_url, data=file_text, headers=header) as resp:
                         if resp.status_code == 200:
