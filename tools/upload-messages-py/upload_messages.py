@@ -24,7 +24,7 @@ class FileUploader():
         self.message_type = message_type
         self.route = route
         self.jurisdiction = jurisdiction
-        self.upload_log = f"./{strftime('%Y-%m-%d', localtime())}_upload_log.txt"
+        self.upload_log = f"./{strftime('%Y-%m-%d-%H', localtime())}_upload_log.txt"
 
     def get_session(self):
         if not hasattr(thread_local, "session"):
