@@ -1,15 +1,13 @@
 package gov.cdc.dataexchange.client
 
 import com.azure.cosmos.*
-import com.azure.cosmos.models.CosmosBatch
-import com.azure.cosmos.models.CosmosBulkOperations
-import com.azure.cosmos.models.CosmosItemOperation
-import com.azure.cosmos.models.PartitionKey
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
+import com.azure.cosmos.models.*
 import org.slf4j.LoggerFactory
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
+import reactor.util.retry.Retry
+import java.time.Duration
 
 /**
  * Class responsible for interacting with CosmosDB.
@@ -19,21 +17,30 @@ import org.slf4j.LoggerFactory
 class CosmosDBClient {
 
     companion object {
-        private val gson: Gson = GsonBuilder().serializeNulls().create()
         private val logger = LoggerFactory.getLogger(CosmosDBClient::class.java.simpleName)
+        private var recordCount = 0
+        private var retryCount = 0
+        private var runtime: Long = 0
 
         // singleton factory for connecting to cosmos
         object ConnectionFactory {
+            val directConnectionConfig: DirectConnectionConfig = DirectConnectionConfig.getDefaultConfig().apply {
+                connectTimeout = Duration.ofSeconds(5) // Setting the connection timeout
+                idleConnectionTimeout = Duration.ofSeconds(60) // Setting the idle connection timeout
+            }
+
             val client: CosmosAsyncClient by lazy {
                 CosmosClientBuilder()
                     .endpoint(System.getenv("CosmosConnectionString"))
                     .key(System.getenv("CosmosKey"))
                     .preferredRegions(listOf(System.getenv("cosmosRegion")))
-                    .consistencyLevel(ConsistencyLevel.SESSION)
+                    .consistencyLevel(ConsistencyLevel.EVENTUAL)
+//                    .directMode(directConnectionConfig)
                     .gatewayMode()
+                    .contentResponseOnWriteEnabled(false)
                     .buildAsyncClient()
             }
-            val database: CosmosAsyncDatabase by lazy {
+            private val database: CosmosAsyncDatabase by lazy {
                 client.getDatabase(System.getenv("CosmosDBId"))
             }
             val container: CosmosAsyncContainer by lazy {
@@ -49,25 +56,45 @@ class CosmosDBClient {
             }
         }
 
-        fun createAll(records: List<String>) {
-            val batch: CosmosBatch = CosmosBatch.createCosmosBatch(PartitionKey("partitionKeyValue"))
-            records.forEachIndexed { i: Int, record: String ->
-                var recordMap: Map<String, Any?> = mutableMapOf()
-                try {
-                    val itemType = object : TypeToken<Map<String, Any?>>() {}.type
-                    recordMap = gson.fromJson(record, itemType)
-                } catch (e: Exception) {
-                    logger.error("Error mapping record.")
+        fun bulkUpsert(records: Flux<Map<String, Any>>, maxRetries: Long = 3): Mono<Void> {
+            val startTime = System.currentTimeMillis()
+            return records
+                .index()
+                .flatMap { indexedRecord ->
+                    recordCount++
+                    val record = indexedRecord.t2
+                    val operation =
+                        CosmosBulkOperations.getUpsertItemOperation(record, PartitionKey(record["message_uuid"]))
+                    logger.info("[${indexedRecord.t1 + 1}] Record added to bulk operation: id=${record["id"]}")
+                    Flux.just(operation)
                 }
-                val partitionKey = recordMap["message_uuid"]
-                logger.info("[${i + 1}] record [message_uuid: $partitionKey] added to batch.")
-                val op: CosmosItemOperation = CosmosBulkOperations.getCreateItemOperation(recordMap, PartitionKey(partitionKey))
-                batch.createItemOperation(op)
-
-            }
-            logger.info("batch size = ${records.size}")
-            ConnectionFactory.container.executeCosmosBatch(batch)
-            logger.info("batch injested.")
+                .flatMap { operation ->
+                    ConnectionFactory.container.executeBulkOperations<Any>(Flux.just(operation))
+                        .onErrorResume { e ->
+                            logger.error("ERROR EXECUTING OPERATION with partition key: ${operation.partitionKeyValue}", e)
+                            Flux.empty() // Continue with other operations
+                        }
+                }
+                .retryWhen(
+                    Retry.max(maxRetries)
+                        .doBeforeRetry { retrySignal ->
+                            retryCount++
+                            logger.info("RETRYING FAILED OPERATION [Attempt: ${retrySignal.totalRetries() + 1}]: $retrySignal")
+                        }
+                )
+                .publishOn(Schedulers.boundedElastic())
+                .doOnNext { response: CosmosBulkOperationResponse<Any> ->
+                    if (response.response.statusCode != 200) {
+                        logger.error("FAILED operation: Status code: ${response.response.statusCode}, record partitionKey=${response.operation.partitionKeyValue}")
+                    }
+                }
+                .doOnComplete {
+                    runtime += System.currentTimeMillis() - startTime
+                    logger.info("COMPLETED $recordCount bulk upsert operations with $retryCount retries in ${runtime}ms .")
+                }
+                .doOnError { error -> logger.error("ERROR after maximum retries:\n${error.message}", error) }
+                .then()
         }
+
     }
 }
