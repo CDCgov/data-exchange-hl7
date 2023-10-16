@@ -62,6 +62,22 @@ enum class status{
     Completed,
     Canceled
 }
+
+object CommonResponses{
+    const val success_code = "200"
+    const val bad_request_code = "400"
+    const val unauthorized_code = "403"
+    const val not_found_code = "404"
+    const val internal_error_code= "500"
+
+    const val success_message = "Success"
+    const val bad_request_message = "Bad Request"
+    const val unauthorized_mesage = "Unauthorized"
+    const val not_found_message = "Resource Not Found"
+    const val internal_error_message= "Internal Error"
+
+
+}
 @Schema(description = "Request Object for Replay by file uuid")
 data class RequestReplay(
     @Schema(description = "Reason for replay",example = "Message is error queued", required = true)
@@ -90,10 +106,11 @@ class ReplayController {
         Parameter(name="message_uuid", `in` = ParameterIn.PATH, description =" Replays by message uuid", required=true, schema=Schema(type = "string"), example = "123e4567-e89b-12d3-a456-426655440000")
     )
     @ApiResponses(
-        ApiResponse(responseCode = "200", description = "Success"),
-        ApiResponse(responseCode =  "400", description = "Bad request"),
-        ApiResponse(responseCode =  "403", description = "Authorization Error"),
-        ApiResponse(responseCode =  "500", description = "Internal error")
+        ApiResponse(responseCode = CommonResponses.success_code, description = CommonResponses.success_message),
+        ApiResponse(responseCode =  CommonResponses.bad_request_code, description = CommonResponses.bad_request_message),
+        ApiResponse(responseCode =  CommonResponses.unauthorized_code, description = CommonResponses.unauthorized_mesage),
+        ApiResponse(responseCode =  CommonResponses.not_found_code, description = CommonResponses.not_found_message),
+        ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)
     )
     fun replayMessageUUIDController(){
 
@@ -107,10 +124,11 @@ class ReplayController {
     )
     @ApiResponses(
         ApiResponse(content = [Content(mediaType = MediaType.APPLICATION_JSON, schema = Schema(type = "string"))]),
-        ApiResponse(responseCode = "200", description = "Success"),
-        ApiResponse(responseCode =  "400", description = "Bad request"),
-        ApiResponse(responseCode =  "403", description = "Authorization Error"),
-        ApiResponse(responseCode =  "500", description = "Internal error")
+        ApiResponse(responseCode = CommonResponses.success_code, description = CommonResponses.success_message),
+        ApiResponse(responseCode =  CommonResponses.bad_request_code, description = CommonResponses.bad_request_message),
+        ApiResponse(responseCode =  CommonResponses.unauthorized_code, description = CommonResponses.unauthorized_mesage),
+        ApiResponse(responseCode =  CommonResponses.not_found_code, description = CommonResponses.not_found_message),
+        ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)
     )
     fun replayFileUUIDController(@RequestBody(
         description = " Request Object for replaying messages by message uuid",
@@ -129,10 +147,11 @@ class ReplayController {
     )
     @ApiResponses(
         ApiResponse(content = [Content(mediaType = MediaType.APPLICATION_JSON, schema = Schema(type = "string"))]),
-        ApiResponse(responseCode = "200", description = "Success"),
-        ApiResponse(responseCode =  "400", description = "Bad request"),
-        ApiResponse(responseCode =  "403", description = "Authorization Error"),
-        ApiResponse(responseCode =  "500", description = "Internal error")
+        ApiResponse(responseCode = CommonResponses.success_code, description = CommonResponses.success_message),
+        ApiResponse(responseCode =  CommonResponses.bad_request_code, description = CommonResponses.bad_request_message),
+        ApiResponse(responseCode =  CommonResponses.unauthorized_code, description = CommonResponses.unauthorized_mesage),
+        ApiResponse(responseCode =  CommonResponses.not_found_code, description = CommonResponses.not_found_message),
+        ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)
     )
     fun replayStatusController(){
         logger.info("replayStatusController by request_id")
@@ -144,10 +163,11 @@ class ReplayController {
     )
     @ApiResponses(
         ApiResponse(content = [Content(mediaType = MediaType.APPLICATION_JSON, schema = Schema(type = "string"))]),
-        ApiResponse(responseCode = "200", description = "Success"),
-        ApiResponse(responseCode =  "400", description = "Bad request"),
-        ApiResponse(responseCode =  "403", description = "Authorization Error"),
-        ApiResponse(responseCode =  "500", description = "Internal error")
+        ApiResponse(responseCode = CommonResponses.success_code, description = CommonResponses.success_message),
+        ApiResponse(responseCode =  CommonResponses.bad_request_code, description = CommonResponses.bad_request_message),
+        ApiResponse(responseCode =  CommonResponses.unauthorized_code, description = CommonResponses.unauthorized_mesage),
+        ApiResponse(responseCode =  CommonResponses.not_found_code, description = CommonResponses.not_found_message),
+        ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)
     )
     fun replayReportsController(){
         logger.info("replayReportsController by request_id")
@@ -156,10 +176,10 @@ class ReplayController {
     @Operation(summary = "Returns the report based on filtering options set by user")
     @ApiResponses(
         ApiResponse(content = [Content(mediaType = MediaType.APPLICATION_JSON, schema = Schema(type = "string"))]),
-        ApiResponse(responseCode = "200", description = "Success"),
-        ApiResponse(responseCode =  "400", description = "Bad request"),
-        ApiResponse(responseCode =  "403", description = "Authorization Error"),
-        ApiResponse(responseCode =  "500", description = "Internal error")
+        ApiResponse(responseCode = CommonResponses.success_code, description = CommonResponses.success_message),
+        ApiResponse(responseCode =  CommonResponses.bad_request_code, description = CommonResponses.bad_request_message),
+        ApiResponse(responseCode =  CommonResponses.unauthorized_code, description = CommonResponses.unauthorized_mesage),
+        ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)
     )
     fun replayController(@RequestBody(
         description = "Returns the report based on filtering options set my user",
