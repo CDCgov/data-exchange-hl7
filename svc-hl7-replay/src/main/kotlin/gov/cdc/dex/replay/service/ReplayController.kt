@@ -16,6 +16,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import io.micronaut.http.annotation.Get
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -55,18 +56,26 @@ enum class MessageQueryType{
     jurisdiction,
     route
 }
+
+enum class status{
+    InProgress,
+    Completed,
+    Canceled
+}
 @Schema(description = "Request Object for Replay by file uuid")
 data class RequestReplay(
     @Schema(description = "Reason for replay",example = "Message is error queued", required = true)
     val reason: String,
     @Schema(description = "User calling the API", required = true)
     val user: String,
-    @Schema(description = "Start Date of file to be replayed",example = "")
+    @Schema(description = "Start Date of file to be replayed",example = "2023-10-07T16:02:37.481Z")
     val start_date: Date?,
     @Schema(description = "End Date of file to be replayed",example = "2023-10-12T16:02:37.481Z")
     val end_date: Date?,
     @Schema(description = "Message query method ",example = "2023-10-14T16:02:37.481Z", required = true)
-    val message_query: MessageQueryType
+    val message_query: MessageQueryType,
+    @Schema(description = "Status of the replay",example = "Completed")
+    val status: status
 )
 @Controller("/replay")
 class ReplayController {
@@ -76,9 +85,9 @@ class ReplayController {
         private var logger = LoggerFactory.getLogger(Function::class.java.name)
     }
     @Post("/{message_uuid}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
-    @Operation(summary = "Replays HL7 Message both validated and error queued by message UUID")
+    @Operation(summary = "Replays HL7 Message by message UUID")
     @Parameters(
-        Parameter(name="message_uuid", `in` = ParameterIn.PATH, description =" Replays HL7 messages by message uuid", required=true, schema=Schema(type = "string"), example = "123e4567-e89b-12d3-a456-426655440000")
+        Parameter(name="message_uuid", `in` = ParameterIn.PATH, description =" Replays by message uuid", required=true, schema=Schema(type = "string"), example = "123e4567-e89b-12d3-a456-426655440000")
     )
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "Success"),
@@ -86,16 +95,10 @@ class ReplayController {
         ApiResponse(responseCode =  "403", description = "Authorization Error"),
         ApiResponse(responseCode =  "500", description = "Internal error")
     )
-    fun replayMessageUUIDController(
+    fun replayMessageUUIDController(){
 
-        @RequestBody(
-            description = "Request Object for replaying message by message uuid",
-            content = [Content(schema = Schema(implementation = RequestReplay::class))]
-        )request: RequestReplay ):HttpResponse<String>{
+        logger.info("Controller for replay by message_uuid")
 
-        logger.info("Starting the replay of the message by message UUID $request")
-
-        return HttpResponse.ok()
     }
     @Post("/{file_uuid}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
     @Operation(summary = "Replays HL7 Message both validated and error queued by file UUID")
@@ -114,8 +117,55 @@ class ReplayController {
         content = [Content(schema = Schema(implementation = RequestReplay::class))]
     )request: RequestReplay ):HttpResponse<String>{
 
-        logger.info("Starting the replay of the message by file UUID ${request.message_query}")
+        logger.info("Starting the replay of the message by file UUID ${request}")
 
+        return HttpResponse.ok()
+    }
+
+    @Get("/{request_id}/status", consumes=[MediaType.TEXT_PLAIN], produces =[MediaType.APPLICATION_JSON])
+    @Operation(summary = "Returns the status of replay associated with request_id")
+    @Parameters(
+        Parameter(name="request_id", `in` = ParameterIn.PATH, description =" Returns the status of the replay associated to a request_id", required=true, schema=Schema(type = "string"),example = "Success")
+    )
+    @ApiResponses(
+        ApiResponse(content = [Content(mediaType = MediaType.APPLICATION_JSON, schema = Schema(type = "string"))]),
+        ApiResponse(responseCode = "200", description = "Success"),
+        ApiResponse(responseCode =  "400", description = "Bad request"),
+        ApiResponse(responseCode =  "403", description = "Authorization Error"),
+        ApiResponse(responseCode =  "500", description = "Internal error")
+    )
+    fun replayStatusController(){
+        logger.info("replayStatusController by request_id")
+    }
+    @Get("/{request_id}", consumes=[MediaType.TEXT_PLAIN], produces =[MediaType.APPLICATION_JSON])
+    @Operation(summary = "Returns the full report for a completed request")
+    @Parameters(
+        Parameter(name="request_id", `in` = ParameterIn.PATH, description =" Returns the full report for a successfully completed request", required=true, schema=Schema(type = "string"),example = "Success")
+    )
+    @ApiResponses(
+        ApiResponse(content = [Content(mediaType = MediaType.APPLICATION_JSON, schema = Schema(type = "string"))]),
+        ApiResponse(responseCode = "200", description = "Success"),
+        ApiResponse(responseCode =  "400", description = "Bad request"),
+        ApiResponse(responseCode =  "403", description = "Authorization Error"),
+        ApiResponse(responseCode =  "500", description = "Internal error")
+    )
+    fun replayReportsController(){
+        logger.info("replayReportsController by request_id")
+    }
+    @Get("/",produces =[MediaType.APPLICATION_JSON])
+    @Operation(summary = "Returns the report based on filtering options set by user")
+    @ApiResponses(
+        ApiResponse(content = [Content(mediaType = MediaType.APPLICATION_JSON, schema = Schema(type = "string"))]),
+        ApiResponse(responseCode = "200", description = "Success"),
+        ApiResponse(responseCode =  "400", description = "Bad request"),
+        ApiResponse(responseCode =  "403", description = "Authorization Error"),
+        ApiResponse(responseCode =  "500", description = "Internal error")
+    )
+    fun replayController(@RequestBody(
+        description = "Returns the report based on filtering options set my user",
+        content = [Content(schema = Schema(implementation = RequestReplay::class))]
+    )request: RequestReplay ):HttpResponse<String>{
+        logger.info("Returns replay report with filtering options $request")
         return HttpResponse.ok()
     }
 
