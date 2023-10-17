@@ -17,6 +17,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.Put
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -105,12 +106,12 @@ class ReplayController {
     @Parameters(
         Parameter(name="message_uuid", `in` = ParameterIn.PATH, description =" Replays by message uuid", required=true, schema=Schema(type = "string"), example = "123e4567-e89b-12d3-a456-426655440000")
     )
-    @ApiResponses(
+    @ApiResponses(value =[
         ApiResponse(responseCode = CommonResponses.success_code, description = CommonResponses.success_message),
         ApiResponse(responseCode =  CommonResponses.bad_request_code, description = CommonResponses.bad_request_message),
         ApiResponse(responseCode =  CommonResponses.unauthorized_code, description = CommonResponses.unauthorized_mesage),
         ApiResponse(responseCode =  CommonResponses.not_found_code, description = CommonResponses.not_found_message),
-        ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)
+        ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)]
     )
     fun replayMessageUUIDController(){
 
@@ -139,7 +140,24 @@ class ReplayController {
 
         return HttpResponse.ok()
     }
+    @Put("/{request_id}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
+    @Operation(summary = "Cancels replay by request id")
+    @Parameters(
+        Parameter(name="request_id", `in` = ParameterIn.PATH, description ="Cancels the replay associated to request_id passed as path parameter", required=true, schema=Schema(type = "string"),example = "123e4567-e89b-12d3-a456-426655440000")
+    )
+    @ApiResponses(
+        ApiResponse(content = [Content(mediaType = MediaType.APPLICATION_JSON, schema = Schema(type = "string"))]),
+        ApiResponse(responseCode = CommonResponses.success_code, description = CommonResponses.success_message),
+        ApiResponse(responseCode =  CommonResponses.bad_request_code, description = CommonResponses.bad_request_message),
+        ApiResponse(responseCode =  CommonResponses.unauthorized_code, description = CommonResponses.unauthorized_mesage),
+        ApiResponse(responseCode =  CommonResponses.not_found_code, description = CommonResponses.not_found_message),
+        ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)
+    )
+    fun replayCancelController(){
 
+        logger.info("controller to cancel the existing replay")
+
+    }
     @Get("/{request_id}/status", consumes=[MediaType.TEXT_PLAIN], produces =[MediaType.APPLICATION_JSON])
     @Operation(summary = "Returns the status of replay associated with request_id")
     @Parameters(
