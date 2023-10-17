@@ -1,14 +1,13 @@
 package gov.cdc.dex.validation.service
 
+
 import com.google.gson.*
+import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.validation.service.model.ErrorCounts
 import gov.cdc.dex.validation.service.model.ErrorInfo
 import gov.cdc.dex.validation.service.model.Summary
-
-
-import gov.cdc.dex.metadata.HL7MessageType
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpRequest.POST
@@ -18,15 +17,14 @@ import io.micronaut.http.annotation.*
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.Parameters
-import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import jakarta.inject.Inject
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
+import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -34,6 +32,8 @@ import kotlin.jvm.optionals.getOrNull
 class ValidationController(@Client("redactor") redactorClient: HttpClient, @Client("structure") structureClient: HttpClient ) {
     private var redactorClient: HttpClient
     private var structureClient: HttpClient
+
+    //private HttpClient client;
 
     companion object {
         private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
@@ -45,32 +45,81 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         this.structureClient = structureClient
     }
 
-    @Get(value = "/heartbeat")
+<<<<<<< HEAD
+    @Get(value = "/heartbeat", produces = [MediaType.TEXT_PLAIN])
+    @Operation(summary="Used by application startup process. Returns 'hello' if all is well.")
     fun getHeartbeatPingResponse() : String {
         return "hello"
     }
 
-    @Post(value = "/validation", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
-    @Operation(summary = "Action for validating HL7 Message")
+    @Post(value = "validate", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
+    @Operation(summary="Action for validating HL7 Message(s)", description = "Headers: \n\n" +
+            "1. message_type - Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].\n" +
+            "2. route - Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR,PHLIP_FLU,PHLIP_VPD ]\n\n"+
+            "Response: \n\n" +
+            "Single Message Response:\n\n" +
+            " \t{\n" +
+            "\t\"entries\":{\n" +
+            "\t\t\"structure\":[],\n" +
+            "\t\t\"content\":[],\n" +
+            "\t\t\"value-set\":[]\n" +
+            "\t},\n" +
+            "\t\"error-count\":{\n" +
+            "\t\t\"structure\":[],\n" +
+            "\t\t\"content\":[],\n" +
+            "\t\t\"value-set\":[]\n" +
+            "\t},\n" +
+            "\t\"warning-count\":{\n" +
+            "\t\t\"structure\":[],\n" +
+            "\t\t\"content\":[],\n" +
+            "\t\t\"value-set\":[]\n" +
+            "\t},\n" +
+            "\t\"status\":\"VALID_MESSAGE\"\t\n" +
+            "\t}\n\n\n"+
+
+            "Multi-Message Response:\n\n"+
+            "\t{\n" +
+            "\t\"total_messages\":\"\",\n" +
+            "\t\"valid_messages\":\"\",\n" +
+            "\t\"invalid_messages\":\"\",\n" +
+            "\t\"error_counts\":{\n" +
+            "\t\t\"total\":\"\",\n" +
+            "\t\t\t\"by_type\":{\n" +
+            "\t\t\t\t\"structure\":\"\",\n" +
+            "\t\t\t\t\"content\":\"\",\n" +
+            "\t\t\t\t\"value-set\":\"\",\n" +
+            "\t\t\t\t\"other\":\"\"\n" +
+            "\t\t\t\t},\n" +
+            "\t\t\t\"by_category\":{},\n" +
+            "\t\t\t\"by_path\":{},\n" +
+            "\t\t\t\"by_message\":{\n" +
+            "\t\t\t\t\"message-1\": 0,\n" +
+            "\t\t\t\t\"message-2\": 0,\n" +
+            "\t\t\t\t\"message-3\": 0,\n" +
+            "\n" +
+            "\t\t\t\t}\n" +
+            "\t\t}\t\n" +
+            "\t}"
+    )
     @ApiResponses(
         ApiResponse(content = [Content(mediaType = "text/plain", schema = Schema(type = "string"))]),
         ApiResponse(responseCode = "200", description = "Success"),
         ApiResponse(responseCode =  "400", description = "Bad Request")
     )
-    @Parameters(
-        Parameter(name="x-tp-message_type", `in` = ParameterIn.HEADER, description="Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].", required = true, schema= Schema(type = "string")),
-        Parameter(name="x-tp-route", `in` = ParameterIn.HEADER, description="Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR,PHLIP_FLU,PHLIP_VPD  ]", required = true, schema= Schema(type = "string"))
-    )
-    fun validate(@Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
+    fun validate(@QueryValue message_type: String, @QueryValue route:Optional<String>, @Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
-        val metadata = getMetadata(request)
-        if (metadata["message_type"].isNullOrEmpty()) {
+        var routeValue = route.orElse("")
+        var metadata: HashMap<String, String> = HashMap()
+        metadata["message_type"]= message_type
+        metadata["route"]= routeValue
+
+        if (message_type.isNullOrEmpty()) {
             log.error("Missing Header for message_type")
             return HttpResponse.badRequest("BAD REQUEST: Message Type ('CASE' or 'ELR') " +
                     "must be specified in the HTTP Header as 'x-tp-message_type'. " +
                     "Please correct the HTTP header and try again.")
         }
-        if (metadata["message_type"] == HL7MessageType.ELR.name && metadata["route"].isNullOrEmpty()) {
+        if (message_type == HL7MessageType.ELR.name && routeValue.isNullOrEmpty()) {
             log.error("Missing Header for route when Message_type == ELR")
            return HttpResponse.badRequest("BAD REQUEST: ELR message must specify a route" +
                         " in the HTTP header as 'x-tp-route'. " +
@@ -250,12 +299,4 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         log.info("message Validated")
         return structReport
     }
-
-    private fun getMetadata(request: HttpRequest<Any>): Map<String, String> {
-        val headers = request.headers
-        return headers
-            .filter { it.key.startsWith("x-tp-") }
-            .associate { it.key.substring(5) to (it.value.firstOrNull() ?: "") }
-    }
-
 }
