@@ -7,10 +7,13 @@ Replay API is designed to introduce already processed messages (both validated a
 
 | HTTP Request  | Description  |
 |:-------------:| -----:|
-| POST /replay/{mesaage_uuid}|Replayes a single message by uuid and returns process_id|
-| POST /replay/{file_uuid} |Replays messages associated to file uuid and returns process_id |
-| GET /replay/{process_id} |Returns the status of replay|
-
+| POST /replay/{mesaage_uuid}|Replayes a single message by uuid and returns request_id|
+| POST /replay/{file_uuid} |Replays messages associated to file uuid and returns request_id |
+| GET /replay/{request_id} |Returns the status of replay|
+| PUT /replay/{request_id} |Cancels the replay associated with request id|
+| GET /replay/{request_id}/status |Returns the status of replay associated with request id|
+| GET /replay/{request_id}/status |Returns the full report for a completed replay associated with request id|
+| GET /replay |Returns the report based on filtering options set by user|
 
 
  ### Replay Request Object for POST /replay/{file_uuid}
@@ -36,11 +39,10 @@ TBD
 
 If there are any questions, please reach out to Marcelo Caldas (mcq1@cdc.gov), Sai Valluripalli (ucn2@cdc.gov)
 
-Note: This API is still under development and will be updated as needed.
 
 ## Diagram
 
 ![MicrosoftTeams-image (3)](https://github.com/CDCgov/data-exchange-hl7/assets/137535421/4c9402db-afa6-4aa9-97ce-018f0d6febd0)
 
-
+Note: This API is still under development and will be updated as needed.
 
