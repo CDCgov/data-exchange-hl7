@@ -45,9 +45,13 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         this.structureClient = structureClient
     }
 
-<<<<<<< HEAD
     @Get(value = "/heartbeat", produces = [MediaType.TEXT_PLAIN])
     @Operation(summary="Used by application startup process. Returns 'hello' if all is well.")
+    @ApiResponses(
+        ApiResponse(content = [Content(mediaType = "text/plain", schema = Schema(type = "string"))]),
+        ApiResponse(responseCode = "200", description = "Success"),
+        ApiResponse(responseCode =  "400", description = "Bad Request")
+    )
     fun getHeartbeatPingResponse() : String {
         return "hello"
     }
@@ -101,19 +105,31 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
             "\t\t}\t\n" +
             "\t}"
     )
+
     @ApiResponses(
-        ApiResponse(content = [Content(mediaType = "text/plain", schema = Schema(type = "string"))]),
-        ApiResponse(responseCode = "200", description = "Success"),
+        ApiResponse(responseCode = "200",
+            description = "Success",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = Summary::class, subTypes = [ErrorCounts::class])
+                )
+            ]
+        ),
         ApiResponse(responseCode =  "400", description = "Bad Request")
     )
-    fun validate(@QueryValue message_type: String, @QueryValue route:Optional<String>, @Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
+    fun validate(
+        @ApiParam()
+        @QueryParam() message_type: String,
+                 @QueryValue route:Optional<String>,
+                 @Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
-        var routeValue = route.orElse("")
-        var metadata: HashMap<String, String> = HashMap()
+        val routeValue = route.orElse("")
+        val metadata: HashMap<String, String> = HashMap()
         metadata["message_type"]= message_type
         metadata["route"]= routeValue
 
-        if (message_type.isNullOrEmpty()) {
+        if (message_type.isEmpty()) {
             log.error("Missing Header for message_type")
             return HttpResponse.badRequest("BAD REQUEST: Message Type ('CASE' or 'ELR') " +
                     "must be specified in the HTTP Header as 'x-tp-message_type'. " +
