@@ -18,7 +18,7 @@ A repository for the CDC data exchange building block HL7.
 [hl7-structural-validator](https://github.com/CDCgov/data-exchange-hl7/tree/master/hl7-structural-validator)
 
 
-#### Message Mapping Guide (MMG) 
+#### DEPRECATED ~Message Mapping Guide (MMG)~ 
 - Code to retrieve and update MMGs from MMGAT API into (project) local storage:
 [mmg](https://github.com/CDCgov/data-exchange-hl7/tree/master/mmg)
 
