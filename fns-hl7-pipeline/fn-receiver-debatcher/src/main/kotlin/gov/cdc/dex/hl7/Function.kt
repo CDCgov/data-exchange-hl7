@@ -61,12 +61,7 @@ class Function {
         @EventHubOutput(name="recdebErr",
             eventHubName = "%EventHubSendErrsName%",
             connection = "EventHubConnectionString")
-        recdebErrOutput: OutputBinding<List<String>>,
-        @CosmosDBOutput(name="cosmosdevpublic",
-            connection = "CosmosDBConnectionString",
-            containerName = "hl7-recdeb", createIfNotExists = true,
-            partitionKey = "/message_uuid", databaseName = "hl7-events")
-        cosmosOutput: OutputBinding<List<JsonObject>>
+        recdebErrOutput: OutputBinding<List<String>>
     ): DexEventPayload? {
 
         logger.info("DEX::Received BLOB_CREATED event!")
@@ -234,7 +229,6 @@ class Function {
         } finally {
             recdebOkOutput.value = outOkList
             recdebErrOutput.value = outErrList
-            cosmosOutput.value = outEventList
         }
     } // .eventHubProcess
 
