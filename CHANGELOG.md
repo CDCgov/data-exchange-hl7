@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.30] 2023-10-18
+
+	- Added /health and /heartbeat endpoints to validator API and transport service
+ 	- Configured batch size and prefetch on all functions for better performance
+ 	- Created and Sidecar function to save event to cosmos DB 
+ 	- Added CI/CD for Validator API and Replay API
+	- Creating Open API documentation for our APIs -Replay, Validation API
+
+
 ### [0.0.29] - 2023/10/04
 	
 	- HL7Transform: Added extra fields on OBX, and handling OBX children of SPM, fixed some property name typos
