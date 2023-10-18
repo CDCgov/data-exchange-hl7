@@ -1,5 +1,4 @@
 package gov.cdc.dex.validation.service.model
-import com.google.gson.annotations.SerializedName
 
 data class ErrorInfo (
     val line: Int = 0,

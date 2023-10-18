@@ -8,7 +8,7 @@ import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.validation.service.model.ErrorCounts
 import gov.cdc.dex.validation.service.model.ErrorInfo
 import gov.cdc.dex.validation.service.model.Summary
-
+import gov.cdc.nist.validator.NistReport
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpRequest.POST
 import io.micronaut.http.HttpResponse
@@ -17,11 +17,12 @@ import io.micronaut.http.annotation.*
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import jakarta.inject.Inject
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
 import java.util.*
@@ -57,72 +58,111 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     }
 
     @Post(value = "validate", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
-    @Operation(summary="Action for validating HL7 Message(s)", description = "Headers: \n\n" +
+    @Operation(summary="Action for validating HL7 Message(s)", description = "Query parameters: \n\n" +
             "1. message_type - Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].\n" +
-            "2. route - Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR,PHLIP_FLU,PHLIP_VPD ]\n\n"+
-            "Response: \n\n" +
-            "Single Message Response:\n\n" +
-            " \t{\n" +
-            "\t\"entries\":{\n" +
-            "\t\t\"structure\":[],\n" +
-            "\t\t\"content\":[],\n" +
-            "\t\t\"value-set\":[]\n" +
-            "\t},\n" +
-            "\t\"error-count\":{\n" +
-            "\t\t\"structure\":[],\n" +
-            "\t\t\"content\":[],\n" +
-            "\t\t\"value-set\":[]\n" +
-            "\t},\n" +
-            "\t\"warning-count\":{\n" +
-            "\t\t\"structure\":[],\n" +
-            "\t\t\"content\":[],\n" +
-            "\t\t\"value-set\":[]\n" +
-            "\t},\n" +
-            "\t\"status\":\"VALID_MESSAGE\"\t\n" +
-            "\t}\n\n\n"+
-
-            "Multi-Message Response:\n\n"+
-            "\t{\n" +
-            "\t\"total_messages\":\"\",\n" +
-            "\t\"valid_messages\":\"\",\n" +
-            "\t\"invalid_messages\":\"\",\n" +
-            "\t\"error_counts\":{\n" +
-            "\t\t\"total\":\"\",\n" +
-            "\t\t\t\"by_type\":{\n" +
-            "\t\t\t\t\"structure\":\"\",\n" +
-            "\t\t\t\t\"content\":\"\",\n" +
-            "\t\t\t\t\"value-set\":\"\",\n" +
-            "\t\t\t\t\"other\":\"\"\n" +
-            "\t\t\t\t},\n" +
-            "\t\t\t\"by_category\":{},\n" +
-            "\t\t\t\"by_path\":{},\n" +
-            "\t\t\t\"by_message\":{\n" +
-            "\t\t\t\t\"message-1\": 0,\n" +
-            "\t\t\t\t\"message-2\": 0,\n" +
-            "\t\t\t\t\"message-3\": 0,\n" +
-            "\n" +
-            "\t\t\t\t}\n" +
-            "\t\t}\t\n" +
-            "\t}"
+            "2. route - Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR,PHLIP_FLU,PHLIP_VPD ]\n\n"
     )
-
     @ApiResponses(
         ApiResponse(responseCode = "200",
             description = "Success",
             content = [
                 Content(
                     mediaType = "application/json",
-                    schema = Schema(implementation = Summary::class, subTypes = [ErrorCounts::class])
+                    schema = Schema(oneOf = [NistReport::class, Summary::class]),
+                    examples = [
+                        ExampleObject(name="Single Message Response", value = """{
+                          "entries": {
+                            "structure": [
+                              {
+                                "line": 14,
+                                "column": 56,
+                                "path": "OBX[10]-5[1].2",
+                                "description": "test is not a valid Number. The format should be: [+|-]digits[.digits]",
+                                "category": "Format",
+                                "classification": "Error",
+                                "stackTrace": null,
+                                "metaData": null
+                              }
+                            ],
+                            "content": [
+                              {
+                                "line": 3,
+                                "column": 99,
+                                "path": "OBR[1]-7[1].1",
+                                "description": "DateTimeOrAll0s - If TS.1 (Time) is valued then TS.1 (Time) shall follow the date/time pattern 'YYYYMMDDHHMMSS[.S[S[S[S]]]][+/-ZZZZ]]'.",
+                                "category": "Constraint Failure",
+                                "classification": "Error"
+                              }
+                            ],
+                            "value-set": []
+                          },
+                          "error-count": {
+                            "structure": 1,
+                            "value-set": 0,
+                            "content": 1
+                          },
+                          "warning-count": {
+                            "structure": 0,
+                            "value-set": 0,
+                            "content": 0
+                          },
+                          "status": "STRUCTURE_ERRORS"
+                        }""" ),
+                    ExampleObject(name="Batch Message Response", value = """{
+                        "total_messages": 5,
+                        "valid_messages": 2,
+                        "invalid_messages": 3,
+                        "error_counts": {
+                            "total": 4,
+                            "by_type": {
+                                "structure": 1,
+                                "content": 2,
+                                "value_set": 0,
+                                "other": 1
+                            },
+                            "by_category": {
+                                "Constraint Failure": 2,
+                                "Runtime Error": 1,
+                                "Usage": 1
+                            },
+                            "by_path": {
+                                "PID[1]-3[1]": 1,
+                                "OBR[1]-22[1].1": 1,
+                                "MSH-12": 1,
+                                "PID[1]-5[1]": 1
+                            },
+                            "by_message": {
+                                "message-1": 2,
+                                "message-2": 1,
+                                "message-3": 1,
+                                "message-4": 0,
+                                "message-5": 0
+                            }
+                        }
+                    }
+                    """)
+                    ]
+
                 )
             ]
         ),
-        ApiResponse(responseCode =  "400", description = "Bad Request")
+        ApiResponse(responseCode =  "400",
+            description = "Bad Request",
+            content = [Content(
+                mediaType = "application/json",
+                schema = Schema(implementation = ErrorInfo::class)
+            )]
+        )
     )
     fun validate(
-        @ApiParam()
-        @QueryParam() message_type: String,
-                 @QueryValue route:Optional<String>,
-                 @Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
+            @Parameter(name="message_type",
+                schema = Schema(description = "The type of data contained in the HL7 message",
+                    allowableValues = ["ELR", "CASE"], required = true, type = "string"))
+                @QueryValue message_type: String,
+            @Parameter(name="route", schema = Schema(description = "For ELR only; the profile specification name",
+                allowableValues = ["COVID19_ELR", "PHLIP_FLU", "PHLIP_VPD"], type = "string"))
+                @QueryValue route:Optional<String>,
+            @Body content: String, request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
         val routeValue = route.orElse("")
         val metadata: HashMap<String, String> = HashMap()
@@ -131,15 +171,11 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
 
         if (message_type.isEmpty()) {
             log.error("Missing Header for message_type")
-            return HttpResponse.badRequest("BAD REQUEST: Message Type ('CASE' or 'ELR') " +
-                    "must be specified in the HTTP Header as 'x-tp-message_type'. " +
-                    "Please correct the HTTP header and try again.")
+            return badRequest("BAD REQUEST: Message Type ('CASE' or 'ELR') must be specified using query parameter 'message_type'. Please try again.")
         }
         if (message_type == HL7MessageType.ELR.name && routeValue.isNullOrEmpty()) {
             log.error("Missing Header for route when Message_type == ELR")
-           return HttpResponse.badRequest("BAD REQUEST: ELR message must specify a route" +
-                        " in the HTTP header as 'x-tp-route'. " +
-                        "Please correct the HTTP header and try again.")
+            return badRequest("BAD REQUEST: ELR message must specify a route using query parameter 'route'. Please try again.")
         }
         // since content is a required parameter, we can be certain it has a value.
         // otherwise, 'bad request' would have been returned by Micronaut.
@@ -151,7 +187,7 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
                 HttpResponse.ok(resultData).contentEncoding(MediaType.APPLICATION_JSON)
             } else {
                 log.error(resultData)
-                HttpResponse.badRequest(resultData).contentEncoding(MediaType.TEXT_PLAIN)
+                badRequest(resultData)
             }
         } else {
             val resultSummary = this.validateBatch(arrayOfMessages, metadata)
@@ -159,6 +195,11 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
             HttpResponse.ok(resultSummary).contentEncoding(MediaType.APPLICATION_JSON)
         }
 
+    }
+
+    private fun badRequest(responseMessage: String) : HttpResponse<String> {
+        val error = ErrorInfo(description = responseMessage)
+        return HttpResponse.badRequest(JsonHelper.gson.toJson(error)).contentEncoding(MediaType.APPLICATION_JSON)
     }
 
     private fun validateBatch(arrayOfMessages: ArrayList<String>, metadata: Map<String, String>): String {
@@ -315,4 +356,5 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         log.info("message Validated")
         return structReport
     }
+
 }
