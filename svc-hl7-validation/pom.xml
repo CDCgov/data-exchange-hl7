@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dex</groupId>
     <artifactId>svc-hl7-validation</artifactId>
-    <version>0.0.29-SNAPSHOT</version>
+    <version>0.0.30-SNAPSHOT</version>
     <!----><!-- -->
     <parent>
         <groupId>io.micronaut</groupId>
@@ -74,7 +74,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-cloud-proxy</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>0.0.29-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
@@ -116,6 +116,13 @@
             <artifactId>micronaut-kotlin-runtime</artifactId>
             <scope>compile</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.micronaut/micronaut-management -->
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-management</artifactId>
+            <version>3.8.5</version>
+        </dependency>
+
         <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
@@ -302,6 +309,10 @@
                 <artifactId>azure-webapp-maven-plugin</artifactId>
                 <version>2.11.0</version>
                 <configuration>
+                    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
                     <schemaVersion>v2</schemaVersion>
                     <appName>ocio-ede-${environment-id}-svc-hl7-validation</appName>
                     <appServicePlanResourceGroup>${functionResourceGroup}</appServicePlanResourceGroup>
@@ -321,7 +332,7 @@
                             <resource>
                                 <directory>${project.basedir}/target</directory>
                                 <includes>
-                                    <include>*.jar</include>
+                                    <include>${project.artifactId}-${project.version}.jar</include>
                                 </includes>
                             </resource>
                         </resources>
@@ -415,4 +426,14 @@
             </plugin>
        </plugins>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>ede-releases</id>
+            <url>${maven-releases-url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ede-snapshots</id>
+            <url>${maven-snapshot-url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

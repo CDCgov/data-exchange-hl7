@@ -94,12 +94,12 @@ class TransportController(private val cloudStorage: CloudStorage) {
         val headers = request.headers
         return headers
             .filter { it.key.startsWith("x-tp-") }
-            .map { it.key.substring(5) to it.value.joinToString<String?>(";") }
-            .toMap()
+            .associate {
+                it.key.substring(5) to (it.value.firstOrNull() ?: "") }
     }
 
-    @Get(value = "/")
-    fun getRootPingResponse() : String {
+    @Get(value = "/heartbeat")
+    fun getHeartbeatPingResponse() : String {
         return "hello"
     }
 

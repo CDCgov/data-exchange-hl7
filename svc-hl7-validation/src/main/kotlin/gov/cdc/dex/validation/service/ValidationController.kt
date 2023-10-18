@@ -45,8 +45,8 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
         this.structureClient = structureClient
     }
 
-    @Get(value = "/health")
-    fun getRootPingResponse() : String {
+    @Get(value = "/heartbeat")
+    fun getHeartbeatPingResponse() : String {
         return "hello"
     }
 
