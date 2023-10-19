@@ -54,17 +54,12 @@ class Function {
         @EventHubOutput(name="lakeSegsErr",
             eventHubName = "%EventHubSendErrsName%",
             connection = "EventHubConnectionString") lakeSegsErr: OutputBinding<List<String>>,
-        @CosmosDBOutput(name="cosmosdevpublic",
-            connection = "CosmosDBConnectionString",
-            containerName = "hl7-lake-segments", createIfNotExists = true,
-         partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>,
         context: ExecutionContext
     ): List<JsonObject> {
 
         val processedMsgs = mutableListOf<JsonObject>()
         val outOkList = mutableListOf<String>()
         val outErrList = mutableListOf<String>()
-        val outEventList = mutableListOf<JsonObject>()
         try {
             message.forEachIndexed { messageIndex: Int, singleMessage: String? ->
                 //context.logger.info("------ singleMessage: ------>: --> $singleMessage")
@@ -110,7 +105,6 @@ class Function {
                         )
                         // add payload to eventhub outbindings for lakeSegsOk
                         outOkList.add(gsonWithNullsOn.toJson(processed_metadata))
-                        outEventList.add(processed_metadata)
                         logger.info("DEX::Processed OK for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendOkName}")
 
 
@@ -130,7 +124,6 @@ class Function {
                             config
                         )
                         context.logger.info("PROCESSED_METADATA = " + processed_metadata)
-                        outEventList.add(processed_metadata)
                         outErrList.add(gsonWithNullsOn.toJson(processed_metadata))
                         logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
 
@@ -150,7 +143,6 @@ class Function {
                         e,
                         config
                     )
-                    outEventList.add(processed_metadata)
                     outErrList.add(gsonWithNullsOn.toJson(processed_metadata))
                     logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
 
@@ -165,7 +157,6 @@ class Function {
             //add payload to eventhubs and cosmosdb outbindings
             lakeSegsOk.value = outOkList
             lakeSegsErr.value = outErrList
-            cosmosOutput.value = outEventList.toList()
         }
         return processedMsgs.toList()
 
