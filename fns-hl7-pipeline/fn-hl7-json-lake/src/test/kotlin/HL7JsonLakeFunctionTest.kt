@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions
 
 class HL7JsonLakeFunctionTest {
 
-    private fun processFile(filename:String, isCase:Boolean, isHappyPath:Boolean) {
+    private fun processFile(filename:String, isHappyPath:Boolean) {
         println("Start processing $filename ")
         val text = this:: class.java.getResource("/$filename").readText()
         val messages = listOf(text)
@@ -19,7 +19,6 @@ class HL7JsonLakeFunctionTest {
                 messages,
                 eventHubMDList,
                 getExecutionContext(),
-                getOutputBinding(),
                 getOutputBinding(),
                 getOutputBinding())
 
@@ -46,25 +45,25 @@ class HL7JsonLakeFunctionTest {
 
     @Test
     fun processELR_HappyPath() {
-        processFile("ELR_message.txt", false, true)
+        processFile("ELR_message.txt", true)
         assert (true)
     }
 
     @Test
     fun processELR_ExceptionPath() {
-        processFile("ELR_Exceptionmessage.txt", false, false)
+        processFile("ELR_Exceptionmessage.txt", false)
         assert (true)
     }
 
     @Test
     fun processCASE_HappyPath() {
-        processFile("CASE_message.txt", true, true)
+        processFile("CASE_message.txt", true)
         assert (true)
     }
 
     @Test
     fun processCASE_ExceptionPath() {
-        processFile("Exceptionmessage.txt", true, false)
+        processFile("Exceptionmessage.txt", false)
         assert (true)
     }
 
