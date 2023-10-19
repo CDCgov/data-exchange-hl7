@@ -50,9 +50,10 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     @Get(value = "/heartbeat", produces = [MediaType.TEXT_PLAIN])
     @Operation(summary="Used by application startup process. Returns 'hello' if all is well.")
     @ApiResponses(
-        ApiResponse(content = [Content(mediaType = "text/plain", schema = Schema(type = "string"),
-            examples = [ExampleObject(value="hello")])]),
-        ApiResponse(responseCode = "200", description = "Success"),
+        ApiResponse(responseCode = "200", description = "Success", content = [Content(
+            mediaType = "text/plain", schema = Schema(type = "string"),
+            examples = [ExampleObject(value = "hello")]
+        )]),
         ApiResponse(responseCode =  "400", description = "Bad Request")
     )
     fun getHeartbeatPingResponse() : String {
