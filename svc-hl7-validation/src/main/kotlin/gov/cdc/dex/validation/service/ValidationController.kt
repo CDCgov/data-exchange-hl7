@@ -50,7 +50,8 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     @Get(value = "/heartbeat", produces = [MediaType.TEXT_PLAIN])
     @Operation(summary="Used by application startup process. Returns 'hello' if all is well.")
     @ApiResponses(
-        ApiResponse(content = [Content(mediaType = "text/plain", schema = Schema(type = "string"))]),
+        ApiResponse(content = [Content(mediaType = "text/plain", schema = Schema(type = "string"),
+            examples = [ExampleObject(value="hello")])]),
         ApiResponse(responseCode = "200", description = "Success"),
         ApiResponse(responseCode =  "400", description = "Bad Request")
     )
@@ -59,9 +60,25 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     }
 
     @Post(value = "validate", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
-    @Operation(summary="Action for validating HL7 Message(s)", description = "Query parameters: \n\n" +
-            "1. message_type - Required. Whether the Message is a CASE message or ELR message. Current valid values: [CASE, ELR].\n" +
-            "2. route - Required for message-type == ELR. The program/area that is sending the message. Current valid values: [COVID19_ELR,PHLIP_FLU,PHLIP_VPD ]\n\n"
+    @Operation(summary="Action for validating HL7 v2 message(s)", description = """# Validate Function
+        
+This function accepts either a single HL7 v2 message or a batch of concatenated HL7 v2 messages for validation.  
+### Single Message Submission and Response        
+If a single message is submitted, then a full validation report is returned that includes counts and descriptions 
+        of all errors and warnings encountered, along with an overall status of either "VALID_MESSAGE" if no errors are found or "STRUCTURE_ERRORS" if errors are found.
+### Batch Message Submission and Response     
+If a batch of messages is submitted, then a summary report is returned that includes the total error count and a breakdown of counts by type, by category, by message location (HL7 path), and by message.
+### Message Type and Route Parameters        
+HL7 messages submitted are expected to be either CASE (following a CDC Message Mapping Guide) or ELR (lab report) messages. The type of message must be specified in the query parameter **message_type**.
+
+Messages also conform to a specific implementation profile, which this function refers to as the **route**.
+- For CASE messages, the MMG used to create the message is determined from the message content and need not be specified in the "route" parameter.
+- For ELR messages, the implementation guide used to create the message ***must*** be specified in the "route" parameter.
+        
+Batch submissions are expected to include messages that are all the same message type.
+- For CASE, messages in a batch do not all have to use the same MMG.
+- For ELR, all messages in a batch ***do*** have to conform to the same implementation profile.
+    """
     )
     @ApiResponses(
         ApiResponse(responseCode = "200",
