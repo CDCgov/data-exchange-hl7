@@ -122,3 +122,25 @@ For example, the following indicates that one error was found in the first repet
 }
 
 ```
+## How to Submit A Message for Validation
+Messages can be submitted to the Validation API using any HTTP communication tool, e.g., Postman, Fiddler, etc.
+To submit successfully, callers must supply the message type as a query parameter. Valid message types are "CASE" or "ELR".
+"CASE" messages conform to a Message Mapping Guide (MMG) and PHIN Specification, while "ELR" messages conform to a 
+specification that constrains the HL7 ELR Implementation Guide for a specific condition or set of conditions tracked by 
+the CDC. When the message type is "ELR", the condition-related guide indicator must also be supplied, using the 
+query parameter "route". Valid values for "route" include "COVID19_ELR", "PHLIP_FLU", and "PHLIP_VPD".
+
+For the message body, an HL7 message or batch can be submitted as "raw" plain text, or a file containing the message
+or message batch can be uploaded as a binary attachment.
+
+Note that ELR batch messages are expected to comprise messages that all conform to the same implementation profile or "route".
+CASE batch messages may contain messages that conform to various MMG profiles.
+
+### Example Submission URLs
+CASE message(s):  
+    
+    https://ocio-ede-tst-svc-hl7-validation.azurewebsites.net/validate?message_type=CASE
+
+ELR message(s):
+
+    https://ocio-ede-tst-svc-hl7-validation.azurewebsites.net/validate?message_type=ELR&route=COVID19_ELR
