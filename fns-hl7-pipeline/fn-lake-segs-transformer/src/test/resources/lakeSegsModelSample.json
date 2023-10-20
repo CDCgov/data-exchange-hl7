@@ -2,90 +2,102 @@
   {
     "segment": "MSH|^~\\&|SendAppName",
     "segment_number": 1,
+    "segment_id": "MSH-1",
     "parent_segments": []
   },
   {
     "segment": "PID|1||HEP_B_TC02",
     "segment_number": 2,
+    "segment_id": "PID-2",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName"
+      "MSH-1"
     ]
   },
   {
     "segment": "OBR|1|\"\"|HEP_B_TC02",
     "segment_number": 3,
+    "segment_id": "OBR-3",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName"
+      "MSH-1"
     ]
   },
   {
     "segment": "OBX|1.1|CWE|78746-5^Country of Birth",
     "segment_number": 4,
+    "segment_id": "OBX-4",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName",
-      "OBR|1|\"\"|HEP_B_TC02"
+      "OBR-3",
+      "MSH-1"
     ]
   },
   {
     "segment": "OBX|1.2|CWE|77983-5^Country of Usual Residence",
     "segment_number": 5,
+    "segment_id": "OBX-5",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName",
-      "OBR|1|\"\"|HEP_B_TC02"
+      "OBR-3",
+      "MSH-1"
     ]
   },
   {
     "segment": "OBX|1.3|TS|11368-8^Date of Illness Onset",
     "segment_number": 6,
+    "segment_id": "OBX-6",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName",
-      "OBR|1|\"\"|HEP_B_TC02"
+      "OBR-3",
+      "MSH-1"
     ]
   },
   {
     "segment": "OBX|1.4|TS|77976-9",
     "segment_number": 7,
+    "segment_id": "OBX-7",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName",
-      "OBR|1|\"\"|HEP_B_TC02"
+      "OBR-3",
+      "MSH-1"
     ]
   },
   {
     "segment": "OBR|2|HEP23456-1^EHR",
     "segment_number": 8,
+    "segment_id": "OBR-8",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName"
+      "MSH-1"
     ]
   },
   {
     "segment": "OBX|2.1|CWE|16933-4",
     "segment_number": 9,
+    "segment_id": "OBX-9",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName",
-      "OBR|2|HEP23456-1^EHR"
+      "OBR-3",
+      "MSH-1"
     ]
   },
   {
     "segment": "OBR|3|HEP23456-2^EHR",
     "segment_number": 10,
+    "segment_id": "OBR-10",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName"
+      "MSH-1"
     ]
   },
   {
     "segment": "OBX|3.1|CWE|24113-3",
     "segment_number": 11,
+    "segment_id": "OBX-11",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName",
-      "OBR|3|HEP23456-2^EHR"
+      "OBR-3",
+      "MSH-1"
     ]
   },
   {
     "segment": "SPM|3.1|HEP23456-1",
     "segment_number": 12,
+    "segment_id": "SPM-12",
     "parent_segments": [
-      "MSH|^~\\&|SendAppName",
-      "OBR|3|HEP23456-2^EHR"
+      "OBR-3",
+      "MSH-1"
     ]
   }
 ]
