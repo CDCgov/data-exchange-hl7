@@ -1,22 +1,124 @@
-# Validation API POC
+# HL7 v2 Validation API
 
-POC API for validation. It receives an HL7 message in the request body along with message *type* and message *route* in the headers.
+The HL7v2 Validation API is designed to assist public health agencies in validating messages
+against the applicable profiles and standards as they prepare to submit their data to CDC.
 
-- *x-tp-message_type*
-- *x-tp-route*
+The purpose of validating messages via the API is to "pre-test" the messages 
+to see whether they will pass the structure validation part of the DEX HL7 v2 pipeline.
+The API is capable of validating a single message or a batch of up to 100 messages and provides immediate feedback.
+Using this tool, implementers are able 
+to discover any errors or conformance issues with the way their test
+messages are constructed prior to going live with submission of HL7 v2 messages to the DEX pipeline.
 
-To run this controller, ensure that IntelliJ is running the Application.kt file. Once the API is up and running, simply send a request to the {url}/validation endpoint. 
+## Single message submission
+If a single message is submitted to the validator, the full report of structural errors and warnings
+is returned back to the caller. This detailed report includes the location and description of
+each error and warning found within the message.
 
-The resources folder contains some sample Postman work if needed. 
+## Batch submission
+If a batch of concatenated messages are submitted to the validator, a summary report of errors found is returned. 
+This summary provides only error counts -- how many total errors were found in the batch, 
+and groupings of errors by type, category, and HL7 path. It also provides the 
+total error count for each individual message in the batch by message number.
 
-In terms of configurations, the Validation API requires the **REDACTOR_URL** and **STRUCTURE_URL** to hit the HTTP Functions for each corresponding pipeline function. 
+### Summary report error counts
+#### By Type 
+This groups the errors by validation type. On the NIST conformance profiles, there will be structure, 
+content and value-set errors. The "By Type" grouping will provide a list of the errors of each of those types for all messages.
 
-## Diagram
+#### By Category
+Each error in the NIST conformance profile is associated with a category. 
+This grouping will provide a list of the errors in each category, if any, for all messages. 
+Possible values include but are not limited to "Constraint Error", "Usage", and "Length".
+If no errors were encountered for a category, that category will not be listed.
 
-```mermaid
-graph LR
-A[User] <-- Message w/ Headers --> B{Validation API}
-B <--> C[Redactor]
-B <--> D[Structure Validator]
+#### By Path
+The HL7 path to an error includes at least the segment and field where the error occurred.
+If applicable, the component, subcomponent, or repetition number may also be included in the path.
+
+For example, the following indicates that one error was found in the first repetition of the third field of the first PID segment:
+
+    "PID[1]-3[1]": 1
+
+
+### Sample Summary Report
+
+``` json
+{
+  "total_messages": 5, //Total Number of Messages received
+  "valid_messages": 2,  //Number of messages that passed validation with 0 errors. (warnings allowed)
+  "invalid_messages": 3, //Number of messages that failed validation with at least one error encountered.
+  "error_counts": { 
+    "total": 4,  //Total number of errors on all messages validated
+    "by_type": {
+       "structure": 1,
+       "content": 2,
+       "value_set": 0,
+       "other": 1
+    },
+    "by_category": {
+       "Constraint Failure": 2,
+       "Runtime Error": 1,
+       "Usage": 1
+    },
+    "by_path": {
+       "PID[1]-3[1]": 1,
+       "OBR[1]-22[1].1": 1,
+       "MSH-12": 1,
+       "PID[1]-5[1]": 1
+    },
+    "by_message": {
+       "message-1": 2,
+       "message-2": 1,
+       "message-3": 1,
+       "message-4": 0,
+       "message-5": 0
+    }
+  }
+}
+
+```
+## Sample Detailed Report
+
+```json 
+{
+    "entries": {
+        "structure": [
+            {
+                "line": 3,
+                "column": 1,
+                "path": "ORC[1]",
+                "description": "Segment ORC (Common order segment) has extra children",
+                "category": "Extra",
+                "classification": "Warning",
+                "stackTrace": null,
+                "metaData": null
+            },
+            {
+                "line": 3,
+                "column": 196,
+                "path": "ORC[1]-14[1]",
+                "description": "The primitive Field ORC-14 (Call Back Phone Number) contains at least one unescaped delimiter",
+                "category": "Unescaped Separator",
+                "classification": "Warning",
+                "stackTrace": null,
+                "metaData": null
+            }
+        ],
+        "content": [],
+        "value-set": []
+    },
+    "error-count": {
+        "structure": 0,
+        "value-set": 0,
+        "content": 0
+    },
+    "warning-count": {
+        "structure": 2,
+        "value-set": 0,
+        "content": 0
+    },
+    "status": "VALID_MESSAGE"
+}
 
 ```
