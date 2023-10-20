@@ -53,10 +53,10 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     @Operation(summary="Used by application startup process. Returns HTTP status 200 if all is well.")
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "Success", content = [Content(
-            mediaType = "text/plain", schema = Schema(type = "string"),
+            mediaType = MediaType.TEXT_PLAIN, schema = Schema(type = "string"),
             examples = [ExampleObject(value = "hello")]
         )]),
-        ApiResponse(responseCode =  "400", description = "Bad Request")
+        ApiResponse(responseCode =  "503", description = "Service Not Available")
     )
     fun getHeartbeatPingResponse() : String {
         return "hello"
@@ -88,7 +88,7 @@ Batch submissions are expected to include messages that are all the same message
             description = "Success",
             content = [
                 Content(
-                    mediaType = "application/json",
+                    mediaType = MediaType.APPLICATION_JSON,
                     schema = Schema(oneOf = [NistReport::class, Summary::class]),
                     examples = [
                         ExampleObject(name="Single Message Response", value = """{
@@ -169,7 +169,7 @@ Batch submissions are expected to include messages that are all the same message
         ),
         ApiResponse(
             responseCode = "400", description = "Bad Request", content = [Content(
-                mediaType = "application/json",
+                mediaType = MediaType.APPLICATION_JSON,
                 schema = Schema(implementation = ErrorResponse::class),
                 examples = [
                     ExampleObject(
