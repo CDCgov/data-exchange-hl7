@@ -56,16 +56,11 @@ class ValidatorFunction {
             connection = "EventHubConnectionString") structureOkOutput : OutputBinding<List<String>>,
         @EventHubOutput(name="structureErr",
             eventHubName = "%EventHubSendErrsName%",
-            connection = "EventHubConnectionString") structureErrOutput: OutputBinding<List<String>>,
-        @CosmosDBOutput(name="cosmosdevpublic",
-            connection = "CosmosDBConnectionString",
-            containerName = "hl7-structure", createIfNotExists = true,
-            partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>
+            connection = "EventHubConnectionString") structureErrOutput: OutputBinding<List<String>>
     ): JsonObject {
         logger.info("Function triggered. Version: ${fnConfig.functionVersion}")
         val outOkList = mutableListOf<String>()
         val outErrList = mutableListOf<String>()
-        val outEventList = mutableListOf<JsonObject>()
         try {
             message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
@@ -122,7 +117,6 @@ class ValidatorFunction {
                         destIndicator = "ERROR"
                         outErrList.add(gson.toJson(inputEvent))
                     }
-                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
                     logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
 
                 } catch (e: Exception) {
@@ -145,7 +139,6 @@ class ValidatorFunction {
 
                     inputEvent.add("summary", summary.toJsonElement())
                     outErrList.add(gson.toJson(inputEvent))
-                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
                     logger.info(
                         "Sent Message to Err Event Hub for Message Id ${
                             JsonHelper.getValueFromJson(
@@ -161,13 +154,10 @@ class ValidatorFunction {
         } finally {
             structureOkOutput.value = outOkList
             structureErrOutput.value = outErrList
-            cosmosOutput.value = outEventList
-        }
-        return if (outEventList.isNotEmpty()) {
-            outEventList.last()
-        } else {
-            JsonObject()
-        }
+         }
+
+         return JsonObject()
+
     } //.eventHubProcessor
 
 
