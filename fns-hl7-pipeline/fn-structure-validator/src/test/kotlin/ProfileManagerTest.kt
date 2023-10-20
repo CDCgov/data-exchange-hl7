@@ -8,7 +8,7 @@ class ProfileManagerTest {
     @Test
     fun testLoadProfiles() {
         try {
-            val nistValidator = ProfileManager(ResourceFileFetcher(), "/NND_ORU_V2.0")
+            val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/NND_ORU_V2.0")
             println(nistValidator)
         } catch (e: InvalidFileException) {
             throw RuntimeException(e)
