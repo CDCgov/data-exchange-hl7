@@ -11,10 +11,7 @@ class Function {
 
     companion object {
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
-        private var objectMapper = ObjectMapper().apply {
-            // Configure object mapper if needed, for example:
-            // this.configure(SerializationFeature.INDENT_OUTPUT, true)
-        }
+        private var objectMapper = ObjectMapper()
     }
 
     @FunctionName("branch")

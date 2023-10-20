@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>fn-sc-branch</artifactId>
-    <version>0.0.30-SNAPSHOT</version>
+    <version>0.0.31-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Kotlin Function :: fn-sc-branch</name>
 
@@ -287,10 +287,7 @@
                 <configuration>
                     <environmentVariables>
                         <FN_VERSION>${project.version}</FN_VERSION>
-<!--                        <EventHubConnectionString>${ehString}</EventHubConnectionString>-->
-<!--                        <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>-->
-<!--                        <EventHubReceiveName>hl7-recdeb-ok</EventHubReceiveName>-->
-<!--                        <BlobIngestContainerName>hl7ingress</BlobIngestContainerName>-->
+                        <EventHubConnectionString>${ehString}</EventHubConnectionString>
                     </environmentVariables>
                     <argLine>
                         --illegal-access=permit
