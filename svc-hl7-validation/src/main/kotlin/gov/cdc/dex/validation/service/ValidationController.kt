@@ -6,12 +6,14 @@ import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.validation.service.model.ErrorCounts
-import gov.cdc.dex.validation.service.model.ErrorInfo
+import gov.cdc.dex.validation.service.model.ErrorResponse
+import gov.cdc.dex.validation.service.model.StructureErrorInfo
 import gov.cdc.dex.validation.service.model.Summary
 import gov.cdc.nist.validator.NistReport
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpRequest.POST
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.HttpClient
@@ -48,13 +50,13 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     }
 
     @Get(value = "/heartbeat", produces = [MediaType.TEXT_PLAIN])
-    @Operation(summary="Used by application startup process. Returns 'hello' if all is well.")
+    @Operation(summary="Used by application startup process. Returns HTTP status 200 if all is well.")
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "Success", content = [Content(
-            mediaType = "text/plain", schema = Schema(type = "string"),
+            mediaType = MediaType.TEXT_PLAIN, schema = Schema(type = "string"),
             examples = [ExampleObject(value = "hello")]
         )]),
-        ApiResponse(responseCode =  "400", description = "Bad Request")
+        ApiResponse(responseCode =  "503", description = "Service Not Available")
     )
     fun getHeartbeatPingResponse() : String {
         return "hello"
@@ -86,7 +88,7 @@ Batch submissions are expected to include messages that are all the same message
             description = "Success",
             content = [
                 Content(
-                    mediaType = "application/json",
+                    mediaType = MediaType.APPLICATION_JSON,
                     schema = Schema(oneOf = [NistReport::class, Summary::class]),
                     examples = [
                         ExampleObject(name="Single Message Response", value = """{
@@ -165,14 +167,22 @@ Batch submissions are expected to include messages that are all the same message
                 )
             ]
         ),
-        ApiResponse(responseCode =  "400",
-            description = "Bad Request",
-            content = [Content(
-                mediaType = "application/json",
-                schema = Schema(implementation = ErrorInfo::class)
+        ApiResponse(
+            responseCode = "400", description = "Bad Request", content = [Content(
+                mediaType = MediaType.APPLICATION_JSON,
+                schema = Schema(implementation = ErrorResponse::class),
+                examples = [
+                    ExampleObject(
+                        name = "Missing Route", value = """{
+    "http_status": 400,
+    "timestamp": "2023-10-20T13:59:39.566241200Z",
+    "error_message": "BAD REQUEST: ELR message must specify a route using query parameter 'route'. Please try again."
+}"""
+                    )
+                ]
             )]
         )
-    )
+    ) // .ApiResponses
     fun validate(
             @Parameter(name="message_type",
                 schema = Schema(description = "The type of data contained in the HL7 message",
@@ -359,7 +369,7 @@ OBX|56|CWE|85702-9^Did Mother Ever Receive a Vaccine Against This Disease^LN||N^
     }
 
     private fun badRequest(responseMessage: String) : HttpResponse<String> {
-        val error = ErrorInfo(description = responseMessage)
+        val error = ErrorResponse(http_status = HttpStatus.BAD_REQUEST.code, error_message = responseMessage)
         return HttpResponse.badRequest(JsonHelper.gson.toJson(error)).contentEncoding(MediaType.APPLICATION_JSON)
     }
 
@@ -389,7 +399,7 @@ OBX|56|CWE|85702-9^Did Mother Ever Receive a Vaccine Against This Disease^LN||N^
                 // extract the path that caused the error, if it exists
                 val regex = "[A-Z]{3}-[0-9]{1,2}".toRegex()
                 val path = regex.find(report)?.value + ""
-                val error = ErrorInfo (description = report, path = path).toJsonElement()
+                val error = StructureErrorInfo (description = report, path = path).toJsonElement()
                 countsByMessage.putIfAbsent(messageId, 1)
                 entries.add(error)
             } else {
