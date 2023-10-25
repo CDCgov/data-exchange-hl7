@@ -1,17 +1,19 @@
-package gov.cdc.dataexchange.services
+package gov.cdc.dataexchange.util
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-class ServiceUtil {
+class RecordMapper {
     companion object {
 
         fun mapMessages(records: List<String>): List<Map<String, Any>> {
             return records.map { record ->
-                    convertJsonToMap(record)
+                    mapMessage(record)
                 }
         }
+
+        fun mapMessage(record: String): Map<String, Any> = convertJsonToMap(record)
 
         private fun convertJsonToMap(json: String): Map<String, Any> {
             val gson = Gson()

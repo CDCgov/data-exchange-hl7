@@ -118,6 +118,12 @@
             <version>2.1.0</version>
             <scope>test</scope>
         </dependency>
+        <!-- Azure Event Hubs SDK -->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-messaging-eventhubs</artifactId>
+            <version>5.16.0</version>
+        </dependency>
 
         <dependency>
             <groupId>gov.cdc.dex</groupId>
