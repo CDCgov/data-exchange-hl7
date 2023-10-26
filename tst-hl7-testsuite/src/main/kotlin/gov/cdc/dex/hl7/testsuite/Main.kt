@@ -8,6 +8,7 @@ import com.azure.storage.blob.BlobClient
 import com.azure.storage.blob.BlobServiceClientBuilder
 import com.azure.storage.blob.BlobContainerClient
 import com.azure.storage.blob.models.BlobStorageException
+import com.azure.storage.blob.options.BlobUploadFromFileOptions
 
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -41,13 +42,14 @@ fun dropMessagesToBlobStorage() {
     val containerClient:BlobContainerClient = blobServiceClient.getBlobContainerClient(Companion.blobContainerName)
 
     val directory = File(Companion.hl7MessagesPath)
+
     if (directory.exists()) {
         directory.listFiles()?.forEach {
             val blobClient = containerClient.getBlobClient(it.name)
-            blobClient.upload(File(it.absolutePath).inputStream(),it.length())
+            blobClient.upload(File(it.absolutePath).inputStream(),it.length(),true)
         }
     }else{
-        println ("Check Resources directory.")
+        Companion.logger.info ("Check Resources directory.")
     }
 }
 
@@ -55,7 +57,7 @@ fun dropMessagesToBlobStorage() {
 fun queryCosmosDB(message_uuid:String){
     /*
     queries cosmos db and returns the payload
-
+    */
     val cosmosClient =CosmosClientBuilder()
         .endpoint(Companion.cosmosDBConnectionString)
         .key(Companion.cosmosDBKey)
@@ -65,7 +67,7 @@ fun queryCosmosDB(message_uuid:String){
     val database = cosmosClient.getDatabase(Companion.cosmosDBName)
     val container = database.getContainer(Companion.cosmosDBContainer)
 
-    */
+
 }
 
 
