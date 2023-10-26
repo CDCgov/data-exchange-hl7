@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.7.21"
 //    application
     `java-library`
     `maven-publish`
@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "1.0.20-SNAPSHOT"
+version = "1.0.21-SNAPSHOT"
 
 repositories {
     maven {
