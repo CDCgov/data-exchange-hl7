@@ -12,9 +12,9 @@ the desired specifications.
 
 ### Configuration:
 The client's configurability is a key feature, allowing for a customized setup through the
-<code>CosmosClientConfig</code> class.  Essential parameters such as the Endpoint URL, Access Key, Database Name, and
-Container Name must be specified. However,  the client also offers several optional configurations with sensible default
-values.
+<code>CosmosClientConfig</code> class.  Essential parameters such as the Endpoint URL, Access Key, Database Name,
+Container Name, and Partition Key Path must be specified. However,  the client also offers several optional 
+configurations with sensible default values.
 
 #### Configuration Parameters:
 ```kotlin
