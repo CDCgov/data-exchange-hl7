@@ -84,7 +84,7 @@ fun myFunction(item: Map<String, Any>) {
 ```
 
 ## Implementation:
-The <code>CosmosClient class</code>, found in the gov.cdc.dex.azure.cosmos package, is your primary gateway to interact
+The <code>CosmosClient</code> class, found in the gov.cdc.dex.azure.cosmos package, is your primary gateway to interact
 with Azure Cosmos DB.
 
 ### Key Initializations:

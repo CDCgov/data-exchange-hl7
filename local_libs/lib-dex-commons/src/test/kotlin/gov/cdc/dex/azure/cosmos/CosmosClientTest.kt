@@ -233,31 +233,3 @@ class CosmosClientTest {
         }
     }
 }
-
-class myClass {
-    companion object {
-        private const val DATABASE_NAME = "myDatabase"
-        private const val CONTAINER_NAME = "myContainer"
-        private const val ENDPOINT = "https://myCosmosAccount.documents.azure.com:443/"
-        private const val KEY = "<REDACTED>"
-        private const val PARTKEY_PATH = "/event/partition_key"
-    }
-
-    private lateinit var cosmosClient: CosmosClient
-
-    init {
-        cosmosClient = CosmosClient(DATABASE_NAME, CONTAINER_NAME, ENDPOINT, KEY, PARTKEY_PATH)
-    }
-
-    private fun read(itemId: String, partitionKey: PartitionKey): Map<String, Any>
-            = cosmosClient.readWithBlocking(itemId, partitionKey, Map::class.java) as Map<String, Any>
-    private fun write(item: Map<String, Any>): Map<String, Any>? = cosmosClient.upsertWithBlocking(item)
-
-    fun myFunction(item: Map<String, Any>) {
-        try {
-            write(item)
-        } finally {
-            cosmosClient.closeCosmos()
-        }
-    }
-}
