@@ -4,6 +4,8 @@ This library holds common code to be used by all other services on the HL7 pipel
 # Intro
 Functionality as development progresses will increase. Here's a list of current functionality:
 
+## [Cosmos Client](COSMO_CLIENT_README.md)
+
 ## Redis Proxy
 This class is a proxy to interact with AZ Redis Cache. 
 RedisProxy uses a JedisPool (with defaults of 300 max connections and 30 minIdle). Clients using this class can request
