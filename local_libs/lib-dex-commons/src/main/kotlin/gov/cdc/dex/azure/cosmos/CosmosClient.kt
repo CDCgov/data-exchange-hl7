@@ -265,10 +265,14 @@ class CosmosClient(
     }
 
     /**
+     * Returns all items that match sql read query in the initialized container.
+     *
+     * **Note:** this operation is read-only
      *
      * **Note:** you must subscribe or block the resulting Flux to begin async processing and get the response.
      * @param query
      * @param itemType result item class type
+     * @return Flux<T>
      */
     @Throws(IllegalArgumentException::class, IllegalStateException::class)
     fun <T> sqlReadItems(query: String, itemType: Class<T>): Flux<T> {
@@ -288,6 +292,13 @@ class CosmosClient(
         }
     }
 
+    /**
+     * Creates or replaces an item in the initialized container.
+     *
+     * **Note:** you must subscribe or block the resulting Flux to begin async processing and get the response.
+     * @param item
+     * @return Mono
+     */
     @Throws(IllegalStateException::class)
     fun <T> upsertItem(item: T): Mono<CosmosItemResponse<T>> {
         if(cosmosContainer == null) {
@@ -301,6 +312,14 @@ class CosmosClient(
         }
     }
 
+    /**
+     * Creates or replaces an item in the initialized container, provided its partition key
+     *
+     * **Note:** you must subscribe or block the resulting Flux to begin async processing and get the response.
+     * @param item
+     * @param partitionKey
+     * @return Mono
+     */
     @Throws(IllegalStateException::class)
     fun <T> upsertItem(item: T, partitionKey: PartitionKey): Mono<CosmosItemResponse<T>> {
         if(cosmosContainer == null) {
@@ -314,6 +333,15 @@ class CosmosClient(
         }
     }
 
+    /**
+     * Updates an item in the initialized container, provided item id and partition key
+     *
+     * **Note:** you must subscribe or block the resulting Flux to begin async processing and get the response.
+     * @param item
+     * @param id
+     * @param partitionKey
+     * @return Mono
+     */
     @Throws(IllegalStateException::class)
     fun <T> updateItem(item: T, id: String, partitionKey: PartitionKey): Mono<CosmosItemResponse<T>> {
         if(cosmosContainer == null) {
@@ -327,6 +355,14 @@ class CosmosClient(
         }
     }
 
+    /**
+     * Deletes an item in the initialized container, provided item id and partition key
+     *
+     * **Note:** you must subscribe or block the resulting Flux to begin async processing and get the response.
+     * @param id
+     * @param partitionKey
+     * @return Mono
+     */
     @Throws(IllegalStateException::class)
     fun deleteItem(id: String, partitionKey: PartitionKey): Mono<CosmosItemResponse<Any>> {
         if(cosmosContainer == null) {
