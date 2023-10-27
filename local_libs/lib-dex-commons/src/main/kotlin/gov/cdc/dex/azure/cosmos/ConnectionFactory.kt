@@ -10,26 +10,21 @@ import com.azure.cosmos.CosmosClientBuilder
  * created 10/23/2023
  * Author: QEH3@cdc.gov
   */
-object ConnectionFactory {
-
-    private var cosmosClientConfig: CosmosClientConfig? = null
-
-    fun init(cosmosClientConfig: CosmosClientConfig) {
-        ConnectionFactory.cosmosClientConfig = cosmosClientConfig
-    }
+class ConnectionFactory(private var cosmosClientConfig: CosmosClientConfig? = null) {
 
     val asyncCosmosClient: CosmosAsyncClient by lazy {
         if (cosmosClientConfig?.endpoint == null || cosmosClientConfig?.key == null) {
-            throw IllegalStateException("CosmosConnFactory not initialized.  No endpoint or key.")
+            throw IllegalStateException("ConnectionFactory not initialized.  No endpoint or key.")
         }
-        if (cosmosClientConfig?.directConnectionConfig == null) {
+        if (cosmosClientConfig!!.directConnectionConfig == null && cosmosClientConfig!!.gatewayConnectionConfig != null) {
             CosmosClientBuilder()
                 .endpoint(cosmosClientConfig!!.endpoint)
                 .key(cosmosClientConfig!!.key)
                 .preferredRegions(cosmosClientConfig!!.preferredRegions)
                 .consistencyLevel(cosmosClientConfig!!.consistencyLevel)
-                .gatewayMode()
+                .gatewayMode(cosmosClientConfig!!.gatewayConnectionConfig)
                 .contentResponseOnWriteEnabled(cosmosClientConfig!!.isResponseOnWriteEnabled)
+                .throttlingRetryOptions(cosmosClientConfig!!.throttlingRetryOptions)
                 .buildAsyncClient()
         } else {
             CosmosClientBuilder()
@@ -37,8 +32,9 @@ object ConnectionFactory {
                 .key(cosmosClientConfig!!.key)
                 .preferredRegions(cosmosClientConfig!!.preferredRegions)
                 .consistencyLevel(cosmosClientConfig!!.consistencyLevel)
-                .directMode(cosmosClientConfig!!.directConnectionConfig)
+                .directMode(cosmosClientConfig!!.directConnectionConfig, cosmosClientConfig!!.gatewayConnectionConfig)
                 .contentResponseOnWriteEnabled(cosmosClientConfig!!.isResponseOnWriteEnabled)
+                .throttlingRetryOptions(cosmosClientConfig!!.throttlingRetryOptions)
                 .buildAsyncClient()
         }
 
@@ -46,7 +42,7 @@ object ConnectionFactory {
 
     private val asyncDatabase: CosmosAsyncDatabase by lazy {
         if (cosmosClientConfig?.databaseName == null) {
-            throw IllegalStateException("CosmosConnFactory not initialized.  No database name.")
+            throw IllegalStateException("ConnectionFactory not initialized.  No database name.")
         }
         try {
             asyncCosmosClient.createDatabase(cosmosClientConfig!!.databaseName).block()
@@ -57,8 +53,8 @@ object ConnectionFactory {
     }
 
     val asyncContainer: CosmosAsyncContainer by lazy {
-        if (cosmosClientConfig?.containerName == null) {
-            throw IllegalStateException("CosmosConnFactory not initialized. No container name.")
+        if (cosmosClientConfig?.containerName == null || cosmosClientConfig?.partitionKeyPath == null) {
+            throw IllegalStateException("ConnectionFactory not initialized. No container name.")
         }
         try {
             asyncDatabase.createContainer(cosmosClientConfig!!.containerName, cosmosClientConfig!!.partitionKeyPath).block()

@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 import reactor.util.retry.Retry
+import java.time.Duration
 
 /**
  * Cosmos client - using ConnectionFactory initialized with CosmosClientConfig provides CRUD, upsert,
@@ -21,6 +22,7 @@ import reactor.util.retry.Retry
  * @param consistencyLevel default EVENTUAL
  * @param isResponseOnWriteEnabled default false, expect performance loss if set to true
  * @param directConnectionConfig default null, if provided, client will connect using directMode
+ * @param gatewayConnectionConfig default null
  * @since 10/26/2023
  * @author QEH3@cdc.gov
  */
@@ -31,9 +33,15 @@ class CosmosClient(
     private val key: String?,
     private val partitionKeyPath: String?,
     private val preferredRegions: List<String> = mutableListOf("East US", "West US"),
-    private val consistencyLevel: ConsistencyLevel = ConsistencyLevel.EVENTUAL,
+    private val consistencyLevel: ConsistencyLevel = ConsistencyLevel.SESSION,
     private val isResponseOnWriteEnabled: Boolean = false,
-    private val directConnectionConfig: DirectConnectionConfig? = null
+    private val directConnectionConfig: DirectConnectionConfig? = null,
+    private val gatewayConnectionConfig: GatewayConnectionConfig? = GatewayConnectionConfig()
+        .setMaxConnectionPoolSize(1000) // default
+        .setIdleConnectionTimeout(Duration.ofSeconds(60)), // default
+    private val throttlingRetryOptions: ThrottlingRetryOptions = ThrottlingRetryOptions()
+        .setMaxRetryWaitTime(Duration.ofSeconds(30)) // default
+        .setMaxRetryAttemptsOnThrottledRequests(9) // default
 ) {
 
     companion object {
@@ -48,11 +56,12 @@ class CosmosClient(
             throw IllegalStateException("Unable to build Cosmos Client.  Check config.")
         }
         val cosmosClientConfig = CosmosClientConfig(databaseName, containerName, endpoint, key, partitionKeyPath,
-            preferredRegions, consistencyLevel, isResponseOnWriteEnabled, directConnectionConfig)
-        ConnectionFactory.init(cosmosClientConfig)
+            preferredRegions, consistencyLevel, isResponseOnWriteEnabled, directConnectionConfig,
+            gatewayConnectionConfig, throttlingRetryOptions)
+        val connFactory = ConnectionFactory(cosmosClientConfig)
         try {
             // singleton async cosmos client
-            cosmosAsyncClient = ConnectionFactory.asyncCosmosClient
+            cosmosAsyncClient = connFactory.asyncCosmosClient
         } catch (e: IllegalStateException) {
             logger.error("Unable to build Cosmos Client.  " +
                     "ConnectionFactory must be initialized with a cosmosClientConfig." +
@@ -61,7 +70,7 @@ class CosmosClient(
         }
         try {
             // singleton async cosmos container object
-            cosmosContainer = ConnectionFactory.asyncContainer
+            cosmosContainer = connFactory.asyncContainer
         } catch (e: IllegalStateException) {
             logger.error("Unable to connect with container.  " +
                     "ConnectionFactory must be initialized with a valid database and container." +
@@ -104,8 +113,9 @@ class CosmosClient(
         upsertItem(item, partitionKey).block()?.item
 
     @Throws(IllegalStateException::class)
-    fun deleteWithBlocking(itemId: String, partitionKey: PartitionKey): Any? =
-        deleteItem(itemId, partitionKey).block()?.item
+    fun deleteWithBlocking(itemId: String, partitionKey: PartitionKey) {
+        deleteItem(itemId, partitionKey).block()
+    }
 
     /**
      * Private helper function to execute bulk operations found in Flux of CosmosItemOperation.
@@ -134,7 +144,7 @@ class CosmosClient(
                 )
                 .publishOn(Schedulers.boundedElastic())
                 .doOnNext { response: CosmosBulkOperationResponse<Any> ->
-                    if (response.response.statusCode !in 200..299) {
+                    if (response.response?.statusCode !in 200..299) {
                         logger.error("FAILED operation: Status code: ${response.response.statusCode}, record partitionKey=${response.operation.partitionKeyValue}")
                     }
                 }

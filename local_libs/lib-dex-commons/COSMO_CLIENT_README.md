@@ -4,30 +4,48 @@ SDK. It leverages the <code>ConnectionFactory</code> class to establish a connec
 the asynchronous Cosmos Client. This setup ensures a consistent connection to your specified database and container,
 enabling the execution of CRUD (Create, Read, Update, Delete) operations.
 
-### Dynamic Creation:
+---
+
+### Dynamic Creation
 In scenarios where the specified database or container doesn't exist, the Cosmos Client is equipped with logic to
 automatically create them. This feature ensures that your operations aren't halted due to the absence of the intended
 database or container. The creation process respects configurations provided, ensuring any newly created entities match
 the desired specifications.
 
-### Configuration:
-The client's configurability is a key feature, allowing for a customized setup through the
-<code>CosmosClientConfig</code> class.  Essential parameters such as the Endpoint URL, Access Key, Database Name,
-Container Name, and Partition Key Path must be specified. However,  the client also offers several optional 
-configurations with sensible default values.
+### Configuration
 
-#### Configuration Parameters:
+The client's configurability is a key feature, allowing for a customized setup through the [`CosmosClientConfig`](#cosmosclientconfig-class) class. Essential parameters such as the Endpoint URL, Access Key, Database Name, Container Name, and Partition Key Path must be specified. However, the client also offers several optional configurations with sensible default values.
+
+#### Configuration Parameters
+
+- **databaseName**: Name of the database (Required)
+- **containerName**: Name of the container (Required)
+- **endpoint**: URL endpoint of your Cosmos DB instance (Required)
+- **key**: Access key of the Cosmos DB instance (Required)
+- **partitionKeyPath**: Path of the partition key (Required)
+- **preferredRegions**: List of preferred regions, defaulting to ["East US", "West US"]
+- **consistencyLevel**: Desired consistency level, affects performance (default = `ConsistencyLevel.SESSION`)
+- **isResponseOnWriteEnabled**: Flag indicating whether to enable response on write; be mindful that enabling can impact performance (Default is false)
+- **[directConnectionConfig](https://azuresdkdocs.blob.core.windows.net/$web/java/azure-cosmos/4.51.0/com/azure/cosmos/DirectConnectionConfig.html)**: Configuration of direct connection mode; if provided, the client will use Direct Mode over Gateway Mode (Optional)
+- **[gatewayConnectionConfig](https://azuresdkdocs.blob.core.windows.net/$web/java/azure-cosmos/4.51.0/com/azure/cosmos/GatewayConnectionConfig.html)**: Configuration for connecting through the gateway mode (Optional)
+- **[throttlingRetryOptions](https://azuresdkdocs.blob.core.windows.net/$web/java/azure-cosmos/4.51.0/com/azure/cosmos/ThrottlingRetryOptions.html)**: Configuration options for handling request throttling (Optional)
+
+#### Example directConnectionConfig
+
 ```kotlin
-databaseName: Name of the database (Required)
-containerName: Name of the container (Required)
-endpoint: URL endpoint of your Cosmos DB instance (Required)
-key: Access key of the Cosmos DB instance (Required)
-partitionKeyPath: Path of the partition key (Required)
-preferredRegions: List of preferred regions, defaulting to ["East US", "West US"]
-consistencyLevel: Desired consistency level, effects performance (default = ConsistencyLevel.EVENTUAL)
-isResponseOnWriteEnabled: Flag indicating whether to enable response on write; be mindful that enabling can impact performance (Default is false)
-directConnectionConfig: Configuration of direct connection mode; the client will use Direct Mode over Gateway Mode (Optional)
+private val directConnectionConfig = DirectConnectionConfig()
+        .setConnectTimeout(Duration.ofSeconds(5)) // default
+        .setIdleConnectionTimeout(Duration.ZERO) // default - means indefinate
+        .setIdleEndpointTimeout(Duration.ofSeconds(70)) // default
+        .setMaxConnectionsPerEndpoint(30) // default
+        .setMaxRequestsPerConnection(10) // default
 ```
+
+#### CosmosClientConfig Class
+
+Located in the `gov.cdc.dex.azure.cosmos` package, the `CosmosClientConfig` class acts as a data model for configuring the Cosmos client connection.  It encapsulates both required and optional configurations to allow a flexible setup of the Cosmos client. Each parameter's purpose is documented in the [Configuration Parameters](#configuration-parameters) section above.
+
+---
 
 ### Example Usage with hardcode
 Utilizing the asynchronous Cosmos Client requires integration with the Reactor library. Each method call
@@ -47,15 +65,16 @@ class myClass {
 		private const val PARTKEY_PATH = "/event/partition_key"
     }
 	
-    private lateinit var cosmosClient: CosmosClient
+    private lateinit var cosmosClient: CosmosClient // creates singleton instance
     
     init {
         cosmosClient = CosmosClient(DATABASE_NAME, CONTAINER_NAME, ENDPOINT, KEY, PARTKEY_PATH)
     }
-
-	private fun read(itemId: String, partitionKey: PartitionKey): Map<String, Any>
-			= cosmosClient.readItem(itemId, partitionKey, Map::class.java).block()!!.item as Map<String, Any>
-	private fun write(item: Map<String, Any>) = cosmosClient.upsertItem(item)
+    
+    private fun read(itemId: String, partitionKey: PartitionKey): Map<String, Any> 
+        = cosmosClient.readItem(itemId, partitionKey, Map::class.java).block()!!.item as Map<String, Any>
+    
+    private fun write(item: Map<String, Any>) = cosmosClient.upsertItem(item)
 		.map {response -> response.item }
 		.subscribe()
 	
@@ -72,6 +91,7 @@ Here I am using the read and write blocking functions, which blocks the thread u
 ```kotlin
 private fun read(itemId: String, partitionKey: PartitionKey): Map<String, Any>
 	= cosmosClient.readWithBlocking(itemId, partitionKey, Map::class.java) as Map<String, Any>
+
 private fun write(item: Map<String, Any>): Map<String, Any>? = cosmosClient.upsertWithBlocking(item)
 
 fun myFunction(item: Map<String, Any>) {
