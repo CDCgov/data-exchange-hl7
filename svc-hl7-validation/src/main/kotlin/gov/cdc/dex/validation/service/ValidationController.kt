@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
 import java.util.*
@@ -50,6 +51,7 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     }
 
     @Get(value = "/heartbeat", produces = [MediaType.TEXT_PLAIN])
+    @Tag(name="Reserved")
     @Operation(summary="Used by application startup process. Returns HTTP status 200 if all is well.")
     @ApiResponses(
         ApiResponse(responseCode = "200", description = "Success", content = [Content(
@@ -63,15 +65,16 @@ class ValidationController(@Client("redactor") redactorClient: HttpClient, @Clie
     }
 
     @Post(value = "validate", consumes = [MediaType.TEXT_PLAIN], produces = [MediaType.APPLICATION_JSON])
+    @Tag(name="Validation")
     @Operation(summary="Action for validating HL7 v2 message(s)", description = """# Validate Function
         
 This function accepts either a single HL7 v2 message or a batch of concatenated HL7 v2 messages for validation.  
-### Single Message Submission and Response        
+## Single Message Submission and Response        
 If a single message is submitted, then a full validation report is returned that includes counts and descriptions 
         of all errors and warnings encountered, along with an overall status of either "VALID_MESSAGE" if no errors are found or "STRUCTURE_ERRORS" if errors are found.
-### Batch Message Submission and Response     
+## Batch Message Submission and Response     
 If a batch of messages is submitted, then a summary report is returned that includes the total error count and a breakdown of counts by type, by category, by message location (HL7 path), and by message.
-### Message Type and Route Parameters        
+## Message Type and Route Parameters        
 HL7 messages submitted are expected to be either CASE (following a CDC Message Mapping Guide) or ELR (lab report) messages. The type of message must be specified in the query parameter **message_type**.
 
 Messages also conform to a specific implementation profile, which this function refers to as the **route**.
@@ -185,11 +188,11 @@ Batch submissions are expected to include messages that are all the same message
     ) // .ApiResponses
     fun validate(
             @Parameter(name="message_type",
-                schema = Schema(description = "The type of data contained in the HL7 message",
-                    allowableValues = ["ELR", "CASE"], required = true, type = "string"))
+                schema = Schema(allowableValues = ["ELR", "CASE"], required = true, type = "string"),
+                description = "The type of data represented in the HL7 message.")
                 @QueryValue message_type: String,
-            @Parameter(name="route", schema = Schema(description = "For ELR only; the profile specification name",
-                allowableValues = ["COVID19_ELR", "PHLIP_FLU", "PHLIP_VPD"], type = "string"))
+            @Parameter(name="route", schema = Schema(allowableValues = ["COVID19_ELR", "PHLIP_FLU", "PHLIP_VPD"], type = "string"),
+                description = "Required for ELR only: the profile/specification name.")
                 @QueryValue route:Optional<String>,
             @RequestBody(content = [Content(mediaType = "text/plain", schema = Schema(type = "string") , examples = [
                 ExampleObject(name = "Single CASE message", value = """MSH|^~\&|^2.16.840.1.114222.4.1.144.2^ISO|^2.16.840.1.114222.4.1.144^ISO|^^ISO|^2.16.840.1.114222^ISO|20091130133708||ORU^R01^ORU_R01|182012_20091130133708|P|2.5|||||||||NND_ORU_v2.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Gen_Case_Map_v1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO

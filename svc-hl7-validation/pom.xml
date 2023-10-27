@@ -12,6 +12,7 @@
     </parent>
 
     <properties>
+        <app.version>${project.version}</app.version>
         <packaging>jar</packaging>
         <java.version>17</java.version>
         <jdk.version>17</jdk.version>
@@ -198,6 +199,22 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>write-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.outputDirectory}/project.properties</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>io.micronaut.build</groupId>
                 <artifactId>micronaut-maven-plugin</artifactId>
                 <version>3.5.2</version>
@@ -227,6 +244,10 @@
                                 <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
                             </sourceDirs>
                             <annotationProcessorPaths combine.self="override">
+                                <path>
+                                    <groupId>io.micronaut</groupId>
+                                    <artifactId>micronaut-management</artifactId>
+                                </path>
                                 <annotationProcessorPath>
                                     <groupId>io.micronaut</groupId>
                                     <artifactId>micronaut-inject-java</artifactId>
