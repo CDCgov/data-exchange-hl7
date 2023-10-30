@@ -1,7 +1,6 @@
 package gov.cdc.dex.azure.cosmos
 
 import com.azure.cosmos.models.PartitionKey
-import gov.cdc.dex.util.PartKeyModifier
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeAll
@@ -24,9 +23,8 @@ class CosmosClientTest {
 
         private const val DATABASE_NAME = "hl7-tests"
         private const val CONTAINER_NAME = "unit-test"
-        private const val ENDPOINT = "https://ocio-ede-dev-hl7-db-cosmos-account.documents.azure.com:443/"
-        private const val KEY =
-            "<REDACTED>"
+        private val ENDPOINT = System.getenv("cosmosTestEndpoint")
+        private val KEY = System.getenv("cosmosTestKey")
         private const val PARTKEY_PATH = "/event/partition_key"
     }
 
@@ -34,7 +32,7 @@ class CosmosClientTest {
     private lateinit var cosmosClient: CosmosClient
 
     @BeforeAll
-    fun setUp() { // initialize
+    fun setUp() {
         cosmosClient = CosmosClient(DATABASE_NAME, CONTAINER_NAME, ENDPOINT, KEY, PARTKEY_PATH)
     }
 

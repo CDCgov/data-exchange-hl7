@@ -1,4 +1,4 @@
-package gov.cdc.dex.util
+package gov.cdc.dex.azure.cosmos
 
 import com.azure.cosmos.models.PartitionKey
 

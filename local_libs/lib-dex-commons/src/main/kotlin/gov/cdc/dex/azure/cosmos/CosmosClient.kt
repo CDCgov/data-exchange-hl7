@@ -2,7 +2,6 @@ package gov.cdc.dex.azure.cosmos
 
 import com.azure.cosmos.*
 import com.azure.cosmos.models.*
-import gov.cdc.dex.util.PartKeyModifier
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
