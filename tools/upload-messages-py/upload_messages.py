@@ -12,7 +12,7 @@ x-tp-orginal_file_name: will be filled in by script
 '''
 ENVIRONMENTS = ["dev", "tst", "stg"]
 MESSAGE_TYPES = ["CASE", "ELR"]
-ROUTES = ["COVID19-ELR", "PHLIP_FLU", "PHLIP_VPD"]
+ROUTES = ["COVID19_ELR", "PHLIP_FLU", "PHLIP_VPD"]
 upload_url = "hl7ingress?filename="
 thread_local = threading.local()
 
@@ -24,8 +24,12 @@ class FileUploader():
         self.message_type = message_type
         self.route = route
         self.jurisdiction = jurisdiction
-        self.upload_log = f"./{strftime('%Y-%m-%d-%H', localtime())}_upload_log.txt"
-
+        self.folder_name = self.normalize(str(os.path.basename(path)))
+        self.upload_log = f"./{strftime('%Y-%m-%d-%H', localtime())}_{self.folder_name}_upload_log.txt"
+        self.monthday = f"{self.get_monthday()}"
+        with open(self.upload_log, '+a') as log:
+             log.write(f"{self.get_timestring()} - Upload started\n")
+                       
     def get_session(self):
         if not hasattr(thread_local, "session"):
             thread_local.session = requests.Session()
@@ -47,7 +51,7 @@ class FileUploader():
             with open(self.upload_log, '+a') as log:
                 if len(file_text) > 0:
                     # set header values
-                    new_filename = f"upload-{self.user_id}-{norm_name}.txt"
+                    new_filename = f"{self.folder_name}-{self.monthday}-{norm_name}.txt"
                     header = {"x-tp-message_type": self.message_type, "x-tp-route": self.route, "x-tp-reporting_jurisdiction": self.jurisdiction, "x-tp-original_file_name": new_filename, "content-type": "text/plain"}
 
                     # upload the file
@@ -55,15 +59,20 @@ class FileUploader():
                     session = self.get_session()
                     with session.post(url=full_url, data=file_text, headers=header) as resp:
                         if resp.status_code == 200:
-                            log.write(f"{self.get_timestring()} - Success: file {file_name} --> {resp.text}\n")
+                          #  log.write(f"{self.get_timestring()} - Success: file {file_name} --> {resp.text}\n")
+                          # just write any errors
+                          pass
                         else:
-                            log.write(f"{self.get_timestring()} - Problem uploading file {file_name}. Status code {resp.status_code}, message {resp.text}\n")
+                            log.write(f"{self.get_timestring()} - Problem uploading file {file_name} as {new_filename}. Status code: {resp.status_code}, message: {resp.text}\n")
                 else:
                     log.write(f"{self.get_timestring()} - Unable to upload {file_name} - no content found\n")
 
     def normalize(self, name): 
         return name.replace(".", "_").replace(" ", "_").replace("-", "_").replace("(", "").replace(")", "").replace("&", "and").lower()        
-            
+    
+    def get_monthday(self):
+        return strftime('%m-%d')
+    
     def get_timestring(self, epoch = None):
         if epoch:
             return strftime('%Y-%m-%d %H:%M:%S', localtime(epoch))
@@ -82,7 +91,7 @@ if __name__ == "__main__":
         jurisdiction = ""
 
         if message_type == "ELR":
-            route = input("Please enter the route (one of COVID19-ELR, PHLIP_FLU, or PHLIP_VPD): ").upper().strip()
+            route = input("Please enter the route (one of COVID19_ELR, PHLIP_FLU, or PHLIP_VPD): ").upper().strip()
             jurisdiction = input("Please enter the jurisdiction code (2-digit integer): ").strip()
 
         if env not in ENVIRONMENTS:
@@ -94,6 +103,7 @@ if __name__ == "__main__":
         elif message_type == "ELR" and (not jurisdiction.isdigit() or len(jurisdiction) != 2):
             print(f"Error: jurisdiction code must be a 2-digit integer")
         elif os.path.exists(path):
+            
             file_list = [s for s in os.listdir(path) if s.lower().endswith(".hl7") or s.lower().endswith(".txt")]
             if len(file_list) == 0:
                 print(f"No HL7 files found in {path}.")
@@ -104,6 +114,8 @@ if __name__ == "__main__":
                 uploader.upload_all_files(file_list)
                 end_time = time()
                 duration = end_time - start_time
+                with open(uploader.upload_log, '+a') as log:
+                    log.write(f"{uploader.get_timestring(end_time)} - DONE. Processed {len(file_list)} files in {duration} seconds.\n")
                 print(f"DONE -- Upload of folder completed at {uploader.get_timestring(end_time)}.")
                 print(f"Uploaded {len(file_list)} files in {duration} seconds")
                 
