@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.9.0"
 //    application
     `java-library`
     `maven-publish`
@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "1.0.20-SNAPSHOT"
+version = "1.0.21-SNAPSHOT"
 
 repositories {
     maven {
@@ -23,6 +23,8 @@ dependencies {
     //Azure:
     implementation("com.azure:azure-messaging-eventhubs:5.15.4")
     implementation("redis.clients:jedis:4.3.1")
+    implementation("com.azure:azure-cosmos:4.51.0")
+    testImplementation("org.mockito:mockito-core:5.6.0")
 
     testImplementation("org.apache.logging.log4j:log4j-slf4j18-impl:2.18.0")
 
@@ -43,7 +45,7 @@ tasks.jacocoTestReport {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "17"
 }
 
 
