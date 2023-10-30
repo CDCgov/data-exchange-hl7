@@ -35,7 +35,9 @@ tasks.test {
     //NOTE: ENVIRONMENT BLOCK MUST STAY IN THE SAME FORMAT AS BELOW - WILL BREAK CICD PIPELINE
     environment (mapOf("REDIS_CACHE_NAME" to "ocio-ede-dev-dex-cache.redis.cache.windows.net",
                        "REDIS_CACHE_KEY"  to findProperty("redisDevKey"),
-                        "EVENT_HUB_CONNECT_STR" to findProperty("eventHubConnStr")
+                        "EVENT_HUB_CONNECT_STR" to findProperty("eventHubConnStr"),
+                        "COSMOS_TEST_ENDPOINT" to findProperty("cosmosTestEndpoint"),
+                        "COSMOS_TEST_KEY" to findProperty("cosmosTestKey")
     ))
 
     finalizedBy(tasks.jacocoTestReport)

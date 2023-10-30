@@ -23,8 +23,8 @@ class CosmosClientTest {
 
         private const val DATABASE_NAME = "hl7-tests"
         private const val CONTAINER_NAME = "unit-test"
-        private val ENDPOINT = System.getenv("cosmosTestEndpoint")
-        private val KEY = System.getenv("cosmosTestKey")
+        private val ENDPOINT = System.getenv("COSMOS_TEST_ENDPOINT")
+        private val KEY = System.getenv("COSMOS_TEST_KEY")
         private const val PARTKEY_PATH = "/event/partition_key"
     }
 
