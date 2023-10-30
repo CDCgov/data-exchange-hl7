@@ -6,7 +6,7 @@ import sys, os
 '''
 Possible header keys:
 x-tp-message_type:  (CASE or ELR)
-x-tp-route:         (COVID19-ELR, PHLIP_FLU, PHLIP_VPD, only for ELR)
+x-tp-route:         (COVID19_ELR, PHLIP_FLU, PHLIP_VPD, only for ELR)
 x-tp-reporting_jurisdiction: (state FIPS number, only for ELR)
 x-tp-orginal_file_name: will be filled in by script
 '''
