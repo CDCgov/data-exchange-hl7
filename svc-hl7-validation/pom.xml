@@ -4,7 +4,7 @@
     <groupId>gov.cdc.dex</groupId>
     <artifactId>svc-hl7-validation</artifactId>
     <version>0.0.31-SNAPSHOT</version>
-    <!----><!-- -->
+    <!-- -->
     <parent>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-parent</artifactId>
@@ -336,14 +336,14 @@
                 <artifactId>azure-webapp-maven-plugin</artifactId>
                 <version>2.11.0</version>
                 <configuration>
-                    <auth>
-                        <type>service_principal</type>
-                        <serverId>azure-service-principal</serverId>
-                    </auth>
+                    <!--                    <auth>-->
+                    <!--                        <type>service_principal</type>-->
+                    <!--                        <serverId>azure-service-principal</serverId>-->
+                    <!--                    </auth>-->
                     <schemaVersion>v2</schemaVersion>
                     <appName>ocio-ede-${environment-id}-svc-hl7-validation</appName>
                     <appServicePlanResourceGroup>${functionResourceGroup}</appServicePlanResourceGroup>
-                     <!-- function app resource group -->
+                    <!-- function app resource group -->
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <!-- function app service plan name -->
                     <appServicePlanName>${functionServicePlan}</appServicePlanName>
@@ -364,6 +364,7 @@
                             </resource>
                         </resources>
                     </deployment>
+                    <pricingTier>P2v2</pricingTier>
                 </configuration>
             </plugin>
             <plugin>
