@@ -61,12 +61,7 @@ class Function {
         @EventHubOutput(name="recdebErr",
             eventHubName = "%EventHubSendErrsName%",
             connection = "EventHubConnectionString")
-        recdebErrOutput: OutputBinding<List<String>>,
-        @CosmosDBOutput(name="cosmosdevpublic",
-            connection = "CosmosDBConnectionString",
-            containerName = "hl7-recdeb", createIfNotExists = true,
-            partitionKey = "/message_uuid", databaseName = "hl7-events")
-        cosmosOutput: OutputBinding<List<JsonObject>>
+        recdebErrOutput: OutputBinding<List<String>>
     ): DexEventPayload? {
 
         logger.info("DEX::Received BLOB_CREATED event!")
@@ -77,7 +72,6 @@ class Function {
 
         val outOkList = mutableListOf<String>()
         val outErrList = mutableListOf<String>()
-        val outEventList = mutableListOf<JsonObject>()
         try {
             var msgEvent: DexEventPayload? = null
             for ((nbrOfMessages, message) in messages.withIndex()) {
@@ -141,7 +135,6 @@ class Function {
                             summary
                         ).apply {
                             outErrList.add(gson.toJson(this))
-                            outEventList.add(gson.toJsonTree(this) as JsonObject)
                         }
 
                         //msgEvent = prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
@@ -179,7 +172,6 @@ class Function {
                                                 currentLinesArr, messageInfo, metadata, summary
                                             ).apply {
                                                 outOkList.add(gson.toJson(this))
-                                                outEventList.add(gson.toJsonTree(this) as JsonObject)
                                             }
                                             provenance.messageIndex++
                                         }
@@ -204,7 +196,6 @@ class Function {
                                 currentLinesArr, messageInfo, metadata, summary
                             ).apply {
                                 outOkList.add(gson.toJson(this))
-                                outEventList.add(gson.toJsonTree(this) as JsonObject)
                             }
                         } else {
                             // no valid message -- send to error queue
@@ -223,7 +214,6 @@ class Function {
                                 metadata, summary
                             ).apply {
                                 outErrList.add(gson.toJson(this))
-                                outEventList.add(gson.toJsonTree(this) as JsonObject)
                             }
                         }
                     }
@@ -234,7 +224,6 @@ class Function {
         } finally {
             recdebOkOutput.value = outOkList
             recdebErrOutput.value = outErrList
-            cosmosOutput.value = outEventList
         }
     } // .eventHubProcess
 

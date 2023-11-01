@@ -22,8 +22,7 @@ class FunctionTest {
         val function = Function()
         return function.eventHubProcessor(messages, eventHubMDList,
             getOutputBinding<List<String>>(),
-            getOutputBinding<List<String>>(),
-            getOutputBinding<List<JsonObject>>())
+            getOutputBinding<List<String>>())
     }
 
     @Test

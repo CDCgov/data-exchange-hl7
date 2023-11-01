@@ -21,7 +21,7 @@ class ValidationTest {
         val testMessage = this::class.java.getResource(fileName).readText()
         val phinSpec = HL7StaticParser.getFirstValue(testMessage, "MSH-21[1].1").get().uppercase()
      //   val phinSpec =testMessage.split("\r")[0].split("|")[20].split("^")[0]
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/$phinSpec")
+        val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/$phinSpec")
 
         println()
         val report = nistValidator.validate(testMessage)
@@ -40,7 +40,7 @@ class ValidationTest {
     fun testPHLIPVPDMessage() {
         val testMessage = this::class.java.getResource("/VPD_Measles.txt")?.readText()
 
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/PHLIP_VPD-v2.5.1")
+        val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/PHLIP_VPD-v2.5.1")
 
         val report = nistValidator.validate(testMessage!!)
         println("report: -->\n\n${gson.toJson(report)}\n")

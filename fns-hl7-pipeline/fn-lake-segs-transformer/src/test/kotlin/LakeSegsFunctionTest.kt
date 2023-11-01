@@ -16,8 +16,7 @@ public class LakeSegsFunctionTest {
         val messages = listOf(text)
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val function = Function()
-        val cosmosOutput = getOutputBindingList<JsonObject>()
-        val inputEvents : List<JsonObject> = function.eventHubProcessor(messages, eventHubMDList,getOutputBindingList<String>(), getOutputBindingList<String>(), cosmosOutput, getExecutionContext())
+        val inputEvents : List<JsonObject> = function.eventHubProcessor(messages, eventHubMDList,getOutputBindingList<String>(), getOutputBindingList<String>(), getExecutionContext())
         val inputEvent : JsonObject = inputEvents[0]
         // Validate Metadata.processes has been added to the array of proccesses
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject

@@ -1,7 +1,6 @@
 package gov.cdc.dex.validation.service.model
-import com.google.gson.annotations.SerializedName
 
-data class ErrorInfo (
+data class StructureErrorInfo (
     val line: Int = 0,
     val column: Int = 0,
     val path : String = "",
