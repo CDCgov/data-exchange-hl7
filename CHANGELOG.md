@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.31] 2023-11-01
+	- Cleaned out CosmosDBOut annotations on all Functions.
+	- Improved Open API documentation for Validation API
+	- Added segment_id to Lake of segments and listing parentage using segment_id from parent to Grandparent order.
+	- Add Error Response JSON to Validation API
+	- Updated Validator API Postman collections
+	- Created sidecar function to handle branching of good/bad messages
+	- Created a CosmoDB Proxy on Lib-dex-commons for standardization on using cosmos db
+	- PHLIP_FLU bug fixes:
+		- MSH-21[1] missing.
+	- Performance Testing:
+		- Moved all Functions to Elastic Plans
+		- Changed Batch sizes (64, 32) for processing Event Hub messages.
+
 ### [0.0.30] 2023-10-18
 
 	- Added /health and /heartbeat endpoints to validator API and transport service
