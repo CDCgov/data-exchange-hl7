@@ -2,8 +2,6 @@ package gov.cdc.dex.azure.cosmos
 
 import com.azure.cosmos.ConsistencyLevel
 import com.azure.cosmos.DirectConnectionConfig
-import com.azure.cosmos.GatewayConnectionConfig
-import com.azure.cosmos.ThrottlingRetryOptions
 
 /**
  * Cosmos Client Config Model
@@ -18,7 +16,5 @@ data class CosmosClientConfig(
     var preferredRegions: List<String>? = null,
     var consistencyLevel: ConsistencyLevel? = null,
     var isResponseOnWriteEnabled: Boolean = false,
-    var directConnectionConfig: DirectConnectionConfig? = null,
-    var gatewayConnectionConfig: GatewayConnectionConfig? = null,
-    var throttlingRetryOptions: ThrottlingRetryOptions? = null
+    var directConnectionConfig: DirectConnectionConfig? = null
 )
