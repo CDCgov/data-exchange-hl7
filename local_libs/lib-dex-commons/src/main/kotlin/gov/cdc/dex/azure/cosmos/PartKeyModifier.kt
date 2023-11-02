@@ -8,6 +8,7 @@ import com.azure.cosmos.models.PartitionKey
  * @author QEH3@cdc.gov
  * @param partitionKeyPath
  */
+@Suppress("UNCHECKED_CAST")
 class PartKeyModifier(private val partitionKeyPath: String) {
 
     /**
