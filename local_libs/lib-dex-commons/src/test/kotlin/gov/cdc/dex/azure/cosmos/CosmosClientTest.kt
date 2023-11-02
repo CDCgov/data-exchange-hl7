@@ -3,7 +3,6 @@ package gov.cdc.dex.azure.cosmos
 import com.azure.cosmos.models.PartitionKey
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.fail
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
@@ -26,15 +25,12 @@ class CosmosClientTest {
         private const val CONTAINER_NAME = "unit-test"
         private val ENDPOINT = System.getenv("COSMOS_TEST_ENDPOINT")
         private val KEY = System.getenv("COSMOS_TEST_KEY")
-        private const val PARTKEY_PATH = "/event/partition_key"
+        private const val PARTITION_KEY_PATH = "/event/partition_key"
     }
 
     // using lateinit because it is singleton and only needs to be initialized once
-    private lateinit var cosmosClient: CosmosClient
-
-    @BeforeAll
-    fun setUp() {
-        cosmosClient = CosmosClient(DATABASE_NAME, CONTAINER_NAME, ENDPOINT, KEY, PARTKEY_PATH)
+    private val cosmosClient by lazy {
+        CosmosClient(DATABASE_NAME, CONTAINER_NAME, ENDPOINT, KEY, PARTITION_KEY_PATH)
     }
 
     /**
