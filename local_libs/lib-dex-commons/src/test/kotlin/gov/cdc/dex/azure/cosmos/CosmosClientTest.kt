@@ -16,6 +16,7 @@ import java.util.*
  * @author QEH3@cdc.gov
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Suppress("UNCHECKED_CAST")
 class CosmosClientTest {
 
     companion object {
