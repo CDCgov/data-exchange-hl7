@@ -46,14 +46,20 @@ class CosmosClient(
                 || partitionKeyPath.isNullOrBlank() || endpoint.substring(0,8) != ("https://") || key.takeLast(2) != "==") {
             throw IllegalArgumentException("Unable to build Cosmos Client.  Check arguments.")
         }
-        val cosmosClientConfig = CosmosClientConfig(databaseName, containerName, endpoint, key, partitionKeyPath,
-            preferredRegions, consistencyLevel, isResponseOnWriteEnabled, directConnectionConfig)
-        val connFactory = ConnectionFactory(cosmosClientConfig)
-        // singleton async cosmos client
-        cosmosAsyncClient = connFactory.asyncCosmosClient
-        // singleton async cosmos container object
-        cosmosContainer = connFactory.asyncContainer
-        logger.info("DEX::CosmosClient available")
+        try {
+            val cosmosClientConfig = CosmosClientConfig(
+                databaseName, containerName, endpoint, key, partitionKeyPath,
+                preferredRegions, consistencyLevel, isResponseOnWriteEnabled, directConnectionConfig
+            )
+            val connFactory = ConnectionFactory(cosmosClientConfig)
+            // singleton async cosmos client
+            cosmosAsyncClient = connFactory.asyncCosmosClient
+            // singleton async cosmos container object
+            cosmosContainer = connFactory.asyncContainer
+            logger.info("DEX::CosmosClient available")
+        } catch (e: Exception) {
+            logger.error("DEX::Unable to connect to CosmosClient: ${e.message}")
+        }
     }
 
     fun getEndpoint() = endpoint
