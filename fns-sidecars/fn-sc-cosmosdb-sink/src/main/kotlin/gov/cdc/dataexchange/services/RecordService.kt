@@ -15,7 +15,13 @@ class RecordService {
                 }
         }
 
-        private fun convertJsonToMap(json: String): Map<String, Any> {
+        fun mapRecords(records: List<String>): List<Map<String, Any>> {
+            return records.map { record ->
+                convertJsonToMap(record)
+            }
+        }
+
+        fun convertJsonToMap(json: String): Map<String, Any> {
             val gson = Gson()
             val mapType: Type = object : TypeToken<Map<String, Any>>() {}.type
             return gson.fromJson(json, mapType)
