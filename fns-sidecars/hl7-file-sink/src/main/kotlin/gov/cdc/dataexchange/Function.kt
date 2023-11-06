@@ -1,19 +1,20 @@
 package gov.cdc.dataexchange
 
 import com.azure.core.util.BinaryData
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.annotation.*
-import org.slf4j.LoggerFactory
 import gov.cdc.dex.util.JsonHelper
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import gov.cdc.dex.util.JsonHelper.toJsonElement
+import org.slf4j.LoggerFactory
 
 class Function {
 
     companion object {
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
         val fnConfig = FunctionConfig()
+        val gson = GsonBuilder().serializeNulls().create()!!
     }
 
     @FunctionName("storage-sink")
@@ -23,27 +24,28 @@ class Function {
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
             consumerGroup = "%EventHubConsumerGroup%"
-        ) messages: List<String>?
+        ) messages: List<String?>
     ) {
         logger.info("DEX::Received event!")
 
-        if (messages.isNullOrEmpty()) {
-            logger.error("DEX::Unable to sink messages. No messages found.")
-            return
-        }
-        val today = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now())
-        messages.forEach { message: String ->
+        messages.forEach { message: String? ->
             try {
                 // extract metadata
                 val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
+                val routeObject = JsonHelper.getValueFromJson("message_info.route", inputEvent)
+                logger.info("DEX::Processing message $messageUUID")
+
+                // add metadata
+                inputEvent.add("meta_destination_id", "dex-hl7".toJsonElement())
+                inputEvent.add("meta_ext_event", routeObject)
 
                 // save to storage container
-                this.saveBlobToContainer("$today/$messageUUID.txt", message)
-
+                this.saveBlobToContainer("$messageUUID.txt", gson.toJson(inputEvent))
+                logger.info("DEX::Saved message $messageUUID.txt to sink ${fnConfig.blobStorageContainerName}")
             } catch (e: Exception) {
                 // TODO send to quarantine?
-                logger.error("Error processing message", e)
+                logger.error("DEX::Error processing message", e)
             }
         }
 

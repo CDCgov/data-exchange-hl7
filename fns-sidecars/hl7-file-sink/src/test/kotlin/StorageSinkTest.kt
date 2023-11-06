@@ -1,10 +1,12 @@
 package gov.cdc.dataexchange
 
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class TestStorageSink {
+@Tag("UnitTest")
+class StorageSinkTest {
 
     @Test
     fun testSaveBlob() {
