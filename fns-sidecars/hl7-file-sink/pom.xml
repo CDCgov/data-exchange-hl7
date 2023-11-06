@@ -16,7 +16,7 @@
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <functionAppName>hl7-file-sink-${EventHubReceiveName}-${environment-id}</functionAppName>
+        <functionAppName>hl7-file-sink-${receiveFn}-${environment-id}</functionAppName>
         <AzureBom.version>1.2.15</AzureBom.version>
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
@@ -183,6 +183,30 @@
                         <property>
                             <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
                             <value>None</value>
+                        </property>
+                        <property>
+                            <name>AzureWebJobsStorage</name>
+                            <value>${AzureWebJobsStorage}</value>
+                        </property>
+                        <property>
+                            <name>EventHubConnectionString</name>
+                            <value>${EventHubConnectionString}</value>
+                        </property>
+                        <property>
+                            <name>EventHubReceiveName</name>
+                            <value>${EventHubReceiveName}</value>
+                        </property>
+                        <property>
+                            <name>EventHubConsumerGroup</name>
+                            <value>${EventHubConsumerGroup}</value>
+                        </property>
+                        <property>
+                            <name>BlobStorageContainerName</name>
+                            <value>${BlobStorageContainerName}</value>
+                        </property>
+                        <property>
+                            <name>BlobStorageConnectionString</name>
+                            <value>${BlobStorageConnectionString}</value>
                         </property>
                     </appSettings>
                 </configuration>
