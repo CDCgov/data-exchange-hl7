@@ -15,13 +15,9 @@ class AzureBlobProxy(connectionStr: String, container: String) {
         blobContainerClient.createIfNotExists()
     }
 
-    private fun getBlobClient(blobName: String): BlobClient {
+    fun getBlobClient(blobName: String): BlobClient {
         return blobContainerClient.getBlobClient(blobName)
     }
 
-    fun saveBlobToContainer(blobName: String, message: String) {
-        val data = BinaryData.fromString(message)
-        val client = this.getBlobClient(blobName)
-        client.upload(data, true)
-    }
+
 }

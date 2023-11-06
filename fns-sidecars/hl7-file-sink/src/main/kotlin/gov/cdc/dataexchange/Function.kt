@@ -1,5 +1,6 @@
 package gov.cdc.dataexchange
 
+import com.azure.core.util.BinaryData
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.annotation.*
@@ -7,7 +8,6 @@ import org.slf4j.LoggerFactory
 import gov.cdc.dex.util.JsonHelper
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Date
 
 class Function {
 
@@ -39,7 +39,7 @@ class Function {
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
 
                 // save to storage container
-                fnConfig.azureBlobProxy.saveBlobToContainer("$today/$messageUUID.txt", message)
+                this.saveBlobToContainer("$today/$messageUUID.txt", message)
 
             } catch (e: Exception) {
                 // TODO send to quarantine?
@@ -47,5 +47,11 @@ class Function {
             }
         }
 
+    }
+
+    fun saveBlobToContainer(blobName: String, blobContent: String) {
+        val data = BinaryData.fromString(blobContent)
+        val client = fnConfig.azureBlobProxy.getBlobClient(blobName)
+        client.upload(data, true)
     }
 }
