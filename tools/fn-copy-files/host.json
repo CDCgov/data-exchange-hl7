@@ -9,6 +9,6 @@
     "Function": "Information",
     "Host": "Error",
     "Worker": "Warning",
-    "Microsoft": "None",
+    "Microsoft": "None"
   }
 }
