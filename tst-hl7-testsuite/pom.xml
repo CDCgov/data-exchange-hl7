@@ -4,16 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dex</groupId>
-    <artifactId>tst-hl7-integration</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
-
+    <artifactId>tst-hl7-testsuite</artifactId>
+    <version>1.0.22-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <properties>
+        <version>0.0.27-SNAPSHOT</version>
         <kotlin.version>1.9.0</kotlin.version>
         <jdk.version>17</jdk.version>
-        <azure-cosmos.version>4.51.0</azure-cosmos.version>
-        <azure-blob.version>12.18.0</azure-blob.version>
+        <azure-blob.version>12.23.0</azure-blob.version>
         <slf4j.version>2.0.5</slf4j.version>
         <junit-jupiter.version>5.8.0</junit-jupiter.version>
+        <lib-dex-commons.version>1.0.22-SNAPSHOT</lib-dex-commons.version>
     </properties>
 
     <dependencies>
@@ -27,11 +28,6 @@
             <artifactId>kotlin-test</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-messaging-eventhubs</artifactId>
-            <version>5.15.0</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -50,11 +46,6 @@
         </dependency>
         <dependency>
             <groupId>com.azure</groupId>
-            <artifactId>azure-cosmos</artifactId>
-            <version>${azure-cosmos.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob</artifactId>
             <version>${azure-blob.version}</version>
         </dependency>
@@ -63,6 +54,33 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit-jupiter.version}</version>
         </dependency>
+        <dependency>
+            <groupId>gov.cdc.dex</groupId>
+            <artifactId>lib-dex-commons</artifactId>
+            <version>${lib-dex-commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <version>2.15.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.15.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-cosmos</artifactId>
+            <version>4.52.0</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -90,7 +108,15 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jvmTarget>1.8</jvmTarget>
+                    <jvmTarget>17</jvmTarget>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>
