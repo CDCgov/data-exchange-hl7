@@ -1,17 +1,39 @@
-# COSMOS DB SINK SIDECAR FUNCTION
+# Azure Function: Cosmos DB Container Copy
 
-## Overview
-This Function upserts the incoming records from the Event Hub.  This function connects to Cosmos DB SDK through lib-dex-commons CosmosClent class.
+This Azure Function provides an HTTP-triggered endpoint for copying all documents from one Cosmos DB container to another, potentially across different databases or even different Cosmos DB accounts.
 
-## Configuration
+## Features
 
-Set the following environment variables for your Azure Function:
+- HTTP-triggered function with dynamic routing
+- Supports different source and destination endpoints and keys
+- Optional custom partition key support
+- Validates the presence of necessary headers before proceeding with the copy operation
 
-- `CosmosEndpoint`: The endpoint URI of the Cosmos DB account.
-- `CosmosKey`: The access key for your Cosmos DB account.
-- `CosmosDBId`: The ID of your Cosmos DB database.
-- `CosmosContainerId`: The name of your Cosmos DB container.
-- `partitionKeyPath`: The partition key path for your Cosmos DB container.
-- `EventHubReceiveName`: The name of the Event Hub.
-- `EventHubConnectionString`: The connection string for the Event Hub.
-- `EventHubConsumerGroup`: The name of the consumer group within the Event Hub.
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- An Azure subscription
+- Two Cosmos DB accounts (if copying across accounts) with the source and destination containers created
+- Appropriate permissions to read from the source and write to the destination containers
+
+## Usage
+
+The function is triggered via HTTP request to the endpoint with the following route pattern:
+
+`/copy/{fromDb}/{fromContainer}/{toDb}/{toContainer}`
+
+
+### Headers
+
+- `source-endpoint` (required): The Cosmos DB URI endpoint for the source container.
+- `source-key` (required): The primary or secondary key for the source Cosmos DB account.
+- `destination-endpoint` (optional): The Cosmos DB URI endpoint for the destination container. If not provided, `source-endpoint` will be used.
+- `destination-key` (optional): The primary or secondary key for the destination Cosmos DB account. If not provided, `source-key` will be used.
+- `partition-key` (required): The partition key path used in both the source and destination containers. If not provided, defaults to the partition key path configured in the function.
+
+### Responses
+
+- `200 OK`: The operation was successful, and all documents were copied.
+- `400 Bad Request`: Necessary information was missing or incorrect in the request headers.
+- `500 Internal Server Error`: An error occurred during the copy operation. Details are provided in the response body.
