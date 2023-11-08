@@ -6,7 +6,6 @@ import gov.cdc.hl7.HL7HierarchyParser
 import gov.cdc.hl7.model.HL7Hierarchy 
 
 import gov.cdc.dex.hl7.model.Segment
-import kotlin.collections.isNotEmpty 
 
 
 class TransformerSegments()  {
@@ -17,9 +16,9 @@ class TransformerSegments()  {
     } // .companion object
 
     // global for class
-    var lakeFlatSegs: Array<Array<Pair<Int,String>>> = arrayOf()
-    var flatSegs: Array<Pair<Int,String>> = arrayOf()
-    var treeIndex: Int = 0
+    private var lakeFlatSegs: Array<Array<Pair<Int,String>>> = arrayOf()
+    private var flatSegs: Array<Pair<Int,String>> = arrayOf()
+    private var treeIndex: Int = 0
 
 
     fun hl7ToSegments(hl7Message: String, profile: String) : List<Segment> {
@@ -30,7 +29,9 @@ class TransformerSegments()  {
 
             val parentsPairs = segs.copyOfRange(0, segs.lastIndex)
             
-            val parents = parentsPairs.map{ seg -> seg.second }.filter{ s -> s != "root"} // remove root parent, not needed
+            val parents = parentsPairs.map{ seg -> buildSegId(seg) }
+                .filter{ s -> s != "root"} // remove root parent, not needed
+                .reversed() // reverse order to put parent first, grandparent second, etc.
 
             Segment(segs.last().second, segs.last().first, parents)
         } // .segments
@@ -80,6 +81,10 @@ class TransformerSegments()  {
         } // .else 
 
     } // .travTreeToArr
+
+    private fun buildSegId(seg: Pair<Int,String>): String {
+        return if(seg.second != "root") "${seg.second.substring(0, 3)}-${seg.first}" else "root"
+    }
 
 
 } // .TransformerSql

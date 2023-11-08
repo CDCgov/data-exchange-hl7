@@ -58,4 +58,6 @@ endpoints:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS
+    version:
+      enabled: true
 

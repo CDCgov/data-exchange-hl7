@@ -26,8 +26,8 @@ class ITValidatorFunctionTest {
         val result = function.eventHubProcessor(messages, eventHubMDList,
             getExecutionContext(),
             getOutputBindingList<String>(),
-            getOutputBindingList<String>(),
-            cosmosOutput
+            getOutputBindingList<String>()
+
         )
         println("Finished processing $filename ")
         println(gson.toJson(result))

@@ -1,9 +1,6 @@
 package test.gov.cdc.dex
 
-import com.google.gson.JsonElement
-import com.google.gson.JsonNull
 import com.google.gson.JsonObject
-import com.google.gson.JsonPrimitive
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
@@ -77,7 +74,7 @@ class MetadataTest {
 
 
         val metadata = DexMetadata(provenance, listOf(processMD))
-        val event = DexEventPayload("MSH|...", DexMessageInfo(null,null,null,null, HL7MessageType.CASE), metadata, summary)
+        val event = DexEventPayload(messageInfo = DexMessageInfo(null,null,null,null, HL7MessageType.CASE), metadata = metadata, summary = summary, content = "")
 
         println(event)
     }

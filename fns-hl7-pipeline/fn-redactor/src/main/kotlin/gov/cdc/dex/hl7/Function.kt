@@ -43,21 +43,19 @@ class Function {
         @EventHubOutput(name="redactorErr",
             eventHubName = "%EventHubSendErrsName%",
             connection = "EventHubConnectionString") redactorErrOutput: OutputBinding<List<String>>,
-        @CosmosDBOutput(name="cosmosdevpublic",
-            connection = "CosmosDBConnectionString",
-            containerName = "hl7-redactor", createIfNotExists = true,
-            partitionKey = "/message_uuid", databaseName = "hl7-events") cosmosOutput: OutputBinding<List<JsonObject>>,
+
         context: ExecutionContext
     ): JsonObject {
         val helper = Helper()
         val outOkList = mutableListOf<String>()
         val outErrList = mutableListOf<String>()
-        val outEventList = mutableListOf<JsonObject>()
+        var inputEvent = JsonObject()
+
         try {
             message.forEachIndexed { msgIndex: Int, singleMessage: String? ->
                 // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
                 val startTime = Date().toIsoString()
-                val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
+                inputEvent = JsonParser.parseString(singleMessage) as JsonObject
                 val hl7Content: String
                 val metadata: JsonObject
                 val filePath: String
@@ -111,7 +109,6 @@ class Function {
                         inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
                         logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
                         outOkList.add(gson.toJson(inputEvent))
-                        outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
                     }
                 } catch (e: Exception) {
                     //TODO::  - update retry counts
@@ -121,8 +118,7 @@ class Function {
                     val summary = SummaryInfo("FAILURE", problem)
                     inputEvent.add("summary", summary.toJsonElement())
                     outErrList.add(gson.toJson(inputEvent))
-                    outEventList.add(gson.toJsonTree(inputEvent) as JsonObject)
-                   //return inputEvent
+                    return inputEvent
                 }
 
             } // .eventHubProcessor
@@ -131,10 +127,8 @@ class Function {
         } finally {
             redactorOkOutput.value = outOkList
             redactorErrOutput.value = outErrList
-            cosmosOutput.value = outEventList
         }
-
-        return JsonObject()
+        return inputEvent
     }
 
     @FunctionName("redactorReport")
