@@ -137,10 +137,10 @@
                     <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details#supported-regions for all valid values -->
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-                    <auth>
-                        <type>service_principal</type>
-                        <serverId>azure-service-principal</serverId>
-                    </auth>
+<!--                    <auth>-->
+<!--                        <type>service_principal</type>-->
+<!--                        <serverId>azure-service-principal</serverId>-->
+<!--                    </auth>-->
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
@@ -171,6 +171,10 @@
                         <property>
                             <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
                             <value>None</value>
+                        </property>
+                        <property>
+                            <name>EventHubSendName</name>
+                            <value>${EventHubSendName}</value>
                         </property>
                     </appSettings>
                 </configuration>
