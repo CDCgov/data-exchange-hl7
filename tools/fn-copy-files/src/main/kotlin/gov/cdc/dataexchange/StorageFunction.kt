@@ -15,9 +15,6 @@ import java.util.*
 class StorageFunction {
 
     companion object {
-        private const val SUCCESS = "SUCCESS"
-        private const val NOT_FOUND = "NOT_FOUND"
-        private const val FAILED_OPERATION = "FAILED_OPERATION"
         private val logger = LoggerFactory.getLogger(StorageFunction::class.java.simpleName)
     }
 
@@ -83,17 +80,17 @@ class StorageFunction {
 
         // resolve response
         return when (copyResult) {
-            SUCCESS ->
+            BlobService.SUCCESS ->
                 request.createResponseBuilder(HttpStatus.OK)
                     .body("File copied successfully from location $srcContainer/$srcPath/$filename to $destContainer/$destPath")
                     .build()
 
-            NOT_FOUND ->
+            BlobService.NOT_FOUND ->
                 request.createResponseBuilder(HttpStatus.NOT_FOUND)
                     .body("file not found at location $srcContainer/$srcPath/$filename")
                     .build()
 
-            FAILED_OPERATION ->
+            BlobService.FAILED_OPERATION ->
                 request.createResponseBuilder(HttpStatus.EXPECTATION_FAILED).body("Copy operation failed for blob").build()
 
             else ->

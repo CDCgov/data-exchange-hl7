@@ -13,9 +13,9 @@ import java.time.format.DateTimeFormatter
 class BlobService {
 
     companion object {
-        private const val SUCCESS = "SUCCESS"
-        private const val NOT_FOUND = "NOT_FOUND"
-        private const val FAILED_OPERATION = "FAILED_OPERATION"
+        const val SUCCESS = "SUCCESS"
+        const val NOT_FOUND = "NOT_FOUND"
+        const val FAILED_OPERATION = "FAILED_OPERATION"
         private val logger = LoggerFactory.getLogger(BlobService::class.java.simpleName)
 
         fun copyFile(
