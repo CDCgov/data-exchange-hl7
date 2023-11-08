@@ -12,7 +12,7 @@ The `StorageFunction` class provides a Kotlin-based Azure Function designed for 
 ## Usage
 Invoke the function with an HTTP GET request specifying the source container, the path within the container (using dots to navigate subdirectories), and the filename. Additionally, include headers to define the destination container, folder path, and the necessary connection strings for authorization.
 
-`/api/file-copy/{srcContainer}/{dotPath}/{filename}`
+`/tool/file-copy/{srcContainer}/{dotPath}/{filename}`
 
 Provide the source path in the GET request URL in dot path format.  Ex. `folder1.folder2` or provide `ROOT` if it is not going into a folder.
 
@@ -28,7 +28,7 @@ Provide the source path in the GET request URL in dot path format.  Ex. `folder1
 ### Example Request
 
 ```http
-GET /api/file-copy/{srcContainer}/{dotPath}/{filename}
+GET /tool/file-copy/{srcContainer}/{dotPath}/{filename}
 Headers:
     destination-container: myContainer
     destination-folder-path: myFolder1/myFolder2
