@@ -82,7 +82,7 @@ class StorageFunction {
         return when (copyResult) {
             BlobService.SUCCESS ->
                 request.createResponseBuilder(HttpStatus.OK)
-                    .body("File copied successfully from location $srcContainer/$srcPath/$filename to $destContainer/$destPath")
+                    .body("File(s) copied successfully from location $srcContainer/$srcPath/$filename to $destContainer/$destPath")
                     .build()
 
             BlobService.NOT_FOUND ->
