@@ -1,18 +1,29 @@
-package gov.cdc.dataexchange
-
-import com.microsoft.azure.functions.annotation.*
-import com.microsoft.azure.functions.*
+import com.microsoft.azure.functions.HttpMethod
+import com.microsoft.azure.functions.HttpRequestMessage
+import com.microsoft.azure.functions.HttpResponseMessage
+import com.microsoft.azure.functions.HttpStatus
+import com.microsoft.azure.functions.annotation.AuthorizationLevel
+import com.microsoft.azure.functions.annotation.BindingName
+import com.microsoft.azure.functions.annotation.FunctionName
+import com.microsoft.azure.functions.annotation.HttpTrigger
+import gov.cdc.dex.azure.cosmos.CosmosClient
+import gov.cdc.dex.azure.cosmos.PartKeyModifier
+import org.slf4j.LoggerFactory
+import reactor.core.publisher.Mono
 import java.util.*
 
 /**
- * Azure Functions with HTTP Trigger to copy items from one Cosmos DB container to another.
+ * Azure Functions with HTTP Trigger
+ * Copy items from one Cosmos DB container to another.
+ * Created: 11/07/2023
+ * @author QEH3@cdc.gov
  */
-class Function {
+class CosmosFunction {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(Function::class.java.simpleName)
+        private val logger = LoggerFactory.getLogger(CosmosFunction::class.java.simpleName)
     }
-    @FunctionName("copyItems")
+    @FunctionName("cosmos-copy")
     fun run(
         @HttpTrigger(
             name = "req",
@@ -26,23 +37,23 @@ class Function {
         @BindingName("toContainer") toContainer: String,
     ): HttpResponseMessage {
 
-        logger.info("Kotlin HTTP trigger processed a request to copy items from $fromDb/$fromContainer to $toDb/$toContainer")
+        logger.info("CCOPY::HTTP trigger processed a request to copy items from $fromDb/$fromContainer to $toDb/$toContainer")
 
-        // Retrieve source and destination endpoints and keys from headers
+        // retrieve headers
         val sourceEndpoint = request.headers["source-endpoint"]
         val sourceKey = request.headers["source-key"]
         val destinationEndpoint = request.headers["destination-endpoint"] ?: sourceEndpoint
         val destinationKey = request.headers["destination-key"] ?: sourceKey
         val partitionKeyPath = request.headers["partition-key"] // This should be the path, like "/myPartitionKey"
 
-        // Validate source headers and partition key
+        // validate
         if (sourceEndpoint.isNullOrEmpty() || sourceKey.isNullOrEmpty() || partitionKeyPath.isNullOrEmpty()) {
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
                 .body("Missing or incorrect source Cosmos DB connection information or partition key in headers.")
                 .build()
         }
 
-        // Initialize Cosmos clients for both source and destination containers
+        // initialize clients
         val sourceClient = CosmosClient(
             databaseName = fromDb,
             containerName = fromContainer,
@@ -62,24 +73,29 @@ class Function {
         )
 
         try {
-            // Read all items from the source container
-            val items = sourceClient.sqlReadItems("SELECT * FROM c", Map::class.java).collectList().block()
-
-            // Copy each item to the destination container
-            items?.forEach { item ->
-                destClient.createWithBlocking(item, PartitionKey(item[partitionKeyPath.substring(1)])) // Assume the partition key path starts with '/'
+            val itemsFlux = sourceClient.sqlReadItems("SELECT * FROM c", Map::class.java)
+            itemsFlux.flatMap { item ->
+                val partitionKeyValue = PartKeyModifier(partitionKeyPath).read(item as Map<String, Any>)
+                if (partitionKeyValue == null) {
+                    Mono.error<Throwable>(IllegalStateException("Partition Key not found for item: $item"))
+                } else {
+                    destClient.createItem(item, partitionKeyValue).thenReturn(item)
+                }
             }
-
-            // Close the clients
+                .collectList()
+                .block()
             sourceClient.closeClient()
             destClient.closeClient()
-
             return request.createResponseBuilder(HttpStatus.OK)
                 .body("Successfully copied items from $fromDb/$fromContainer to $toDb/$toContainer")
                 .build()
-
+        } catch (e: IllegalStateException) {
+            logger.error("IllegalStateException thrown: ${e.message}")
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                .body("Error occurred while processing items: ${e.message}")
+                .build()
         } catch (e: Exception) {
-            logger.severe("Exception thrown: ${e.message}")
+            logger.error("Exception thrown: ${e.message}")
             return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Error occurred while copying items: ${e.message}")
                 .build()

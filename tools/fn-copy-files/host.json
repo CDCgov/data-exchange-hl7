@@ -1,5 +1,10 @@
 {
   "version": "2.0",
+  "extensions": {
+    "http": {
+      "routePrefix": "tool"
+    }
+  },
   "extensionBundle": {
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
     "version": "[4.*, 5.0.0)"
