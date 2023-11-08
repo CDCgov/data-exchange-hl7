@@ -1,8 +1,7 @@
-package gov.cdc.dex.hl7.testsuite
+package gov.cdc.dex.hl7.pipeline
 
 import com.azure.storage.blob.BlobServiceClientBuilder
 import com.azure.storage.blob.BlobContainerClient
-import com.fasterxml.jackson.databind.JsonNode
 
 import gov.cdc.dex.azure.cosmos.CosmosClient
 import org.slf4j.Logger
@@ -28,7 +27,7 @@ object Companion{
     private const val ROUTE: String= "route"
     private const val REPORTING_JURISDICTION= "reporting_jurisdiction"
     private const val ORIGINAL_FILE_NAME:String = "original_file_name"
-    const val headerContentType = "text/plain"
+    const val HEADER_CONTENT_TYPE = "text/plain"
 
     val uploadedBlobs: MutableSet<String> = mutableSetOf()
 
@@ -41,8 +40,6 @@ object Companion{
         "Valid-PHLIP-ORU-DataType-NM.txt" to mutableMapOf<String,String>(MESSAGE_TYPE to "CASE", REPORTING_JURISDICTION to "48", ORIGINAL_FILE_NAME to "messages/case.txt"),
         "Valid-PHLIP-ORU-DataType-SN.txt" to mutableMapOf<String,String>(MESSAGE_TYPE to "CASE", REPORTING_JURISDICTION to "48", ORIGINAL_FILE_NAME to "messages/case.txt")
         )
-
-
 }
 fun getCurrentDateTimeWithSeconds(): String {
     val currentDateTime = LocalDateTime.now()
@@ -104,7 +101,6 @@ fun main() {
     println("main")
     dropMessagesToABlobStorage()
     //queryCosmosDB()
-
 
 
 
