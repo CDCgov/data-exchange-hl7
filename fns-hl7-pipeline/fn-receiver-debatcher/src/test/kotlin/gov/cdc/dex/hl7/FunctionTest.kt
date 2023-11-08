@@ -20,9 +20,7 @@ class FunctionTest {
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
 
         val function = Function()
-        return function.eventHubProcessor(messages, eventHubMDList,
-            getOutputBinding<List<String>>(),
-            getOutputBinding<List<String>>())
+        return function.eventHubProcessor(messages, eventHubMDList)
     }
 
     @Test
