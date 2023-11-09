@@ -26,8 +26,7 @@ class RedactorFunctionTest {
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val cosmosOutput = getOutputBindingList<JsonObject>()
         val function = Function()
-        val inputEvent : JsonObject = function.eventHubProcessor(messages, eventHubMDList, getOutputBindingList<String>(),
-            getOutputBindingList<String>(),getExecutionContext())
+        val inputEvent : JsonObject = function.eventHubProcessor(messages, eventHubMDList)
 
         // Validate Metadata.processes has been added to the array of proccesses
 

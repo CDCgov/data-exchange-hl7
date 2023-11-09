@@ -5,7 +5,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>redactor</artifactId>
-    <version>0.0.27-SNAPSHOT</version>
+    <version>0.0.33-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Java Functions</name>
     
@@ -50,18 +50,18 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.4.2</version>
+            <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.10</version>
+            <version>1.4.7</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>2.23.4</version>
+            <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -128,6 +128,10 @@
                         <property>
                             <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
                             <value>None</value>
+                        </property>
+                        <property>
+                            <name>EventHubSendName</name>
+                            <value>${EventHubSendName}</value>
                         </property>
                     </appSettings>
                 </configuration>
@@ -218,11 +222,8 @@
                     <environmentVariables>
                         <FN_VERSION>${project.version}</FN_VERSION>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
-                        <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>
                         <EventHubReceiveName>hl7-recdeb-ok</EventHubReceiveName>
-                        <BlobIngestContainerName>hl7ingress</BlobIngestContainerName>
-                        <EventHubSendOkName>hl7-redacted-ok</EventHubSendOkName>
-                        <EventHubSendErrsName>hl7-redacted-err</EventHubSendErrsName>
+                        <EventHubSendName>hl7-redacted-out</EventHubSendName>
                     </environmentVariables>
                     <argLine>
                         --illegal-access=permit
