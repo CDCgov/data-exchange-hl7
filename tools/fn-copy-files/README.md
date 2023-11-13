@@ -14,6 +14,7 @@
 Invoke the function using the following route format:
 `[HOST]/tool/copy/{srcContainer}/{srcDotPath}/to/{destContainer}/{destDotPath}`
 
+- Use `ROOT` for the dotPaths if you want to copy from root of container.
 - Include a `connection-string` in the request header for authentication.
 - The source and destination paths within containers are specified using dot notation.
 
@@ -40,6 +41,7 @@ The function and `BlobService` provide responses for various scenarios:
 Invoke the function using this route format:
 `[HOST]/tool/file-copy/{srcContainer}/{dotPath}/{filename}`
 
+- Use `ROOT` for the dotPaths if you want to copy from root of container.
 - Include the following headers in the request:
     - `destination-container`: The name of the destination storage container.
     - `destination-folder-path` (optional): The path within the destination container.
