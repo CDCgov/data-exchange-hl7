@@ -22,13 +22,8 @@ class ITValidatorFunctionTest {
         val messages = listOf(text)
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val function = ValidatorFunction()
-        val cosmosOutput = getOutputBindingList<JsonObject>()
-        val result = function.eventHubProcessor(messages, eventHubMDList,
-            getExecutionContext(),
-            getOutputBindingList<String>(),
-            getOutputBindingList<String>()
+        val result = function.eventHubProcessor(messages, eventHubMDList)
 
-        )
         println("Finished processing $filename ")
         println(gson.toJson(result))
 
@@ -64,34 +59,4 @@ class ITValidatorFunctionTest {
         assertThrows<NullPointerException> { function.invoke(req) }
     }
 
-
-    private fun getExecutionContext(): ExecutionContext {
-        return object : ExecutionContext {
-            override fun getLogger(): Logger {
-                return Logger.getLogger(ValidatorFunction::class.java.name)
-            }
-
-            override fun getInvocationId(): String {
-                return "null"
-            }
-
-            override fun getFunctionName(): String {
-                return "null"
-            }
-        }
-    }
-
-    private fun <T> getOutputBindingList(): OutputBinding<List<T>> {
-        return object : OutputBinding<List<T>> {
-            var innerList : List<T>? = null
-            override fun getValue(): List<T>? {
-                return innerList
-            }
-
-            override fun setValue(p0: List<T>?) {
-                innerList = p0
-            }
-
-        }
-    }
 }
