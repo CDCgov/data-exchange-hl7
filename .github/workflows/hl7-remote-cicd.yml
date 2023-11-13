@@ -241,7 +241,7 @@ jobs:
               workflow: ${{ matrix.workflow_id }}
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
-              inputs: '{ "targetEnv": "${{ github.event.inputs.targetEnv }}", "commitID": "${{ steps.getsha.outputs.commitID }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
+              inputs: '{ "targetEnv": "dev", "commitID": "${{ steps.getsha.outputs.commitID }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
               ref: 'main'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
