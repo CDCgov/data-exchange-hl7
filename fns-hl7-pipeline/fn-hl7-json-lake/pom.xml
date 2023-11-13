@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>hl7-json-lake-fn</artifactId>
-    <version>0.0.31-SNAPSHOT</version>
+    <version>0.0.33-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <name>DEX Fns-Pipeline :: hl7-json-lake-fn</name>
@@ -33,7 +33,7 @@
         <lib-bumblebee.version>1.2.0-SNAPSHOT</lib-bumblebee.version>
         <gson.version>2.10.1</gson.version>
         <junit.version>5.9.2</junit.version>
-        <logback.version>1.2.10</logback.version>
+        <logback.version>1.4.7</logback.version>
         <hl7pet.version>1.2.7.3</hl7pet.version>
     </properties>
     <dependencyManagement>
@@ -153,6 +153,10 @@
                             <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
                             <value>None</value>
                         </property>
+                        <property>
+                            <name>EventHubSendName</name>
+                            <value>${EventHubSendName}</value>
+                        </property>
                     </appSettings>
                 </configuration>
                 <executions>
@@ -258,8 +262,7 @@
                     <environmentVariables>
                         <FN_VERSION>${project.version}</FN_VERSION>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
-                        <EventHubSendOkName>hl7-json-lake-ok</EventHubSendOkName>
-                        <EventHubSendErrsName>hl7-json-lake-err</EventHubSendErrsName>
+                        <EventHubSendName>hl7-json-lake-out</EventHubSendName>
                     </environmentVariables>
                 </configuration>
             </plugin>
