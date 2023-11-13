@@ -3,6 +3,7 @@ package gov.cdc.dataexchange
 import com.microsoft.azure.functions.annotation.*
 import com.microsoft.azure.functions.*
 import gov.cdc.dataexchange.util.BlobService
+import gov.cdc.dataexchange.util.PathHelper
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
 import java.util.*
@@ -32,8 +33,8 @@ class StorageCopyFunction {
         @BindingName("destContainer") destContainer: String,
         @BindingName("destDotPath") destDotPath: String
     ): HttpResponseMessage {
-        val srcPath = pathStr(srcDotPath)
-        val destPath = pathStr(destDotPath)
+        val srcPath = PathHelper(srcDotPath).transform()
+        val destPath = PathHelper(destDotPath).transform()
         logger.info("HTTP trigger processed a copy request on $srcContainer/$srcPath to $destContainer/$destPath")
         val connectionString = request.headers["connection-string"] // extract header
 
@@ -72,11 +73,5 @@ class StorageCopyFunction {
                     .body("FAIL:\n$copyResponse")
                     .build()
         }
-    }
-
-    private fun pathStr(dotPath: String): String {
-        return if (dotPath != "ROOT") {
-            dotPath.replace('.', '/')
-        } else ""
     }
 }

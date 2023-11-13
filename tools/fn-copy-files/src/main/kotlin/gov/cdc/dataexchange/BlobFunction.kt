@@ -3,6 +3,7 @@ package gov.cdc.dataexchange
 import com.microsoft.azure.functions.annotation.*
 import com.microsoft.azure.functions.*
 import gov.cdc.dataexchange.util.BlobService
+import gov.cdc.dataexchange.util.PathHelper
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -30,7 +31,7 @@ class BlobFunction {
         @BindingName("dotPath") dotPath: String,
         @BindingName("filename") filename: String
     ): HttpResponseMessage {
-        val srcPath = pathStr(dotPath)
+        val srcPath = PathHelper(dotPath).transform()
         logger.info("HTTP trigger processed a copy request on $srcContainer/$srcPath/$filename.")
 
         // Extract headers
@@ -91,11 +92,5 @@ class BlobFunction {
             else ->
                 request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR).body("Copy operation failed for blob\n$copyResult").build()
         }
-    }
-
-    private fun pathStr(dotPath: String): String {
-        return if (dotPath != "ROOT") {
-            dotPath.replace('.', '/')
-        } else ""
     }
 }

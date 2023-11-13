@@ -43,6 +43,12 @@ class BlobService {
 
                 var count = 0
                 val itr = srcBlobs.iterator()
+                //validate
+                if (!itr.hasNext()) {
+                    logger.error("No blobs found at source.")
+                    return NOT_FOUND
+                }
+                // iterate
                 while (itr.hasNext()) {
                     count++
                     val srcBlobItem = itr.next()

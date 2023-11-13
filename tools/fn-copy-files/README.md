@@ -1,40 +1,71 @@
-# gov.cdc.dataexchange.StorageFunction
+# gov.cdc.dataexchange.StorageCopyFunction
 
 ## Overview
-The `StorageFunction` class provides a Kotlin-based Azure Function designed for copying files within Azure Storage Containers. This utility is part of the CDC's suite for data management and is created to facilitate secure and efficient data handling between different storage locations.
+`StorageCopyFunction` is a Kotlin Azure Function designed to copy files within Azure Storage Containers efficiently. It leverages the `BlobService` class to interact with Azure Blob Storage, providing robust functionality for data transfer between containers.
 
 ## Features
-- HTTP-triggered Azure Function for copying files across Azure Blob Storage.
-- Supports dynamic routing for source and destination containers as well as the file path and name.
-- Utilizes Azure's Blob Storage Service clients for operations.
-- Capable of handling multiple copy operations through a specified count in the request headers.
+- **HTTP Triggered**: Activated via HTTP GET requests.
+- **Dynamic Paths**: Users can specify source and destination containers and paths.
+- **Connection String Authentication**: Ensures secure access using a connection string.
+- **Error Handling**: Detailed responses for scenarios like missing connection strings, not found errors, and operation failures.
+- **Performance Tracking**: Logs the duration of copy operations for performance monitoring.
 
 ## Usage
-Invoke the function with an HTTP GET request specifying the source container, the path within the container (using dots to navigate subdirectories), and the filename. Additionally, include headers to define the destination container, folder path, and the necessary connection strings for authorization.
+Invoke the function using the following route format:
+`[HOST]/tool/copy/{srcContainer}/{srcDotPath}/to/{destContainer}/{destDotPath}`
 
-`/tool/file-copy/{srcContainer}/{dotPath}/{filename}`
+- Include a `connection-string` in the request header for authentication.
+- The source and destination paths within containers are specified using dot notation.
 
-Provide the source path in the GET request URL in dot path format.  Ex. `folder1.folder2` or provide `ROOT` if it is not going into a folder.
+## Responses
+The function and `BlobService` provide responses for various scenarios:
+- **Success**: `200 OK` with a message indicating successful copying.
+- **Bad Request**: `400 Bad Request` when the connection string is missing.
+- **Not Found**: `404 Not Found` for non-existent source containers or directories.
+- **Failed Operation**: `417 Expectation Failed` for any copy operation failures.
+- **Internal Server Error**: `500 Internal Server Error` for other errors with detailed messages.
 
-### Headers
+## BlobFunction - File Copying Azure Function
 
-- `destination-container`: The container where the file will be copied to.
-- `destination-folder-path` (Optional): The folder path where the file will be copied to.  Default is `ROOT` of container
-- `connection-string`: A single connection string used for both source and destination, if they are the same.
-- `src-connection-string`: The connection string for the source storage account, if different from the destination.
-- `dest-connection-string`: The connection string for the destination storage account, if different from the source.
-- `n`: (Optional) The number of times the file should be copied.  Default is `n = 1`
+### Overview
+`BlobFunction` is another crucial Kotlin Azure Function in the `gov.cdc.dataexchange` package. It is specifically tailored for copying individual files within Azure Storage Containers. This function allows for more granular control over file copying, especially useful for situations where selective file transfer is required.
 
-### Example Request
+### Features
+- **File Specific Operation**: Optimized for copying individual files.
+- **Flexible Path Specification**: Allows specification of both source and destination paths using dot notation and HTTP headers.
+- **Multiple Connection String Support**: Accepts either a common connection string or separate source and destination connection strings.
+- **Copy Repetition Control**: The `n` header can specify the number of times the file should be copied, with each copy having a unique timestamp.
 
-```http
-GET /tool/file-copy/{srcContainer}/{dotPath}/{filename}
-Headers:
-    destination-container: myContainer
-    destination-folder-path: myFolder1/myFolder2
-    connection-string: <storage-connection-string>
-    n: 2
-```
+### Usage
+Invoke the function using this route format:
+`[HOST]/tool/file-copy/{srcContainer}/{dotPath}/{filename}`
+
+- Include the following headers in the request:
+    - `destination-container`: The name of the destination storage container.
+    - `destination-folder-path` (optional): The path within the destination container.
+    - `connection-string` (or `src-connection-string` and `dest-connection-string`): For authentication.
+    - `n` (optional): The number of times to copy the file.
+
+### Responses
+- **Success**: `200 OK` with a message of successful file copying.
+- **Bad Request**: `400 Bad Request` for missing or improperly used connection strings.
+- **Not Found**: `404 Not Found` if the source file is not found.
+- **Internal Server Error**: `500 Internal Server Error` for other errors, with a detailed message.
+
+## BlobService Class
+The `BlobService` class contains methods `copyStorage` and `copyFile` for handling blob storage operations:
+- **copyStorage**: Handles bulk copying of blobs within a container. It lists all blobs in the source path and copies them to the destination path, logging each operation's duration.
+- **copyFile**: Designed for copying individual files. It supports repeated copying (specified by the `n` parameter) and appends timestamps to filenames to avoid overwrites.
+
+
+### Logging
+Maintains detailed logs for each file copy operation, including source and destination paths and the outcome of the operation.
 
 ## Response Handling
 Upon successful execution, the function returns an HTTP 200 OK status with a confirmation message. In cases of failure, such as invalid input, file not found, or server errors, it responds with the corresponding HTTP status code and an error message.
+
+## Contributing
+For contributions or queries, please reach out to the project maintainers at QEH3@cdc.gov. Adhere to coding standards and include tests for new features.
+
+## License
+The license details should be specified here. If proprietary, state that all rights are reserved by the CDC.
