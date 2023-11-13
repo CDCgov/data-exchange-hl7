@@ -29,7 +29,7 @@ class CosmosFunction {
             name = "req",
             methods = [HttpMethod.GET, HttpMethod.POST],
             authLevel = AuthorizationLevel.FUNCTION,
-            route = "copy/{fromDb}/{fromContainer}/{toDb}/{toContainer}"
+            route = "cosmos-copy/{fromDb}/{fromContainer}/{toDb}/{toContainer}"
         ) request: HttpRequestMessage<Optional<String>>,
         @BindingName("fromDb") fromDb: String,
         @BindingName("fromContainer") fromContainer: String,

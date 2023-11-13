@@ -5,10 +5,12 @@ import com.azure.core.util.polling.SyncPoller
 import com.azure.storage.blob.BlobServiceClientBuilder
 import com.azure.storage.blob.models.BlobCopyInfo
 import com.azure.storage.blob.models.BlobStorageException
+import com.azure.storage.blob.options.BlobBeginCopyOptions
 import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
+import com.azure.storage.blob.models.ListBlobsOptions
 
 class BlobService {
 
@@ -18,10 +20,57 @@ class BlobService {
         const val FAILED_OPERATION = "FAILED_OPERATION"
         private val logger = LoggerFactory.getLogger(BlobService::class.java.simpleName)
 
+        fun copyStorage(
+            srcContainerName: String,
+            srcPath: String,
+            destContainerName: String,
+            destPath: String,
+            connectionString: String
+        ): String {
+            var duration: Long = 0
+            var totalDuration: Long = 0
+            try {
+                val blobServiceClient = BlobServiceClientBuilder()
+                    .connectionString(connectionString)
+                    .buildClient()
+
+                val srcContainerClient = blobServiceClient.getBlobContainerClient(srcContainerName)
+                val destContainerClient = blobServiceClient.getBlobContainerClient(destContainerName)
+
+                // list all blobs in the source virtual folder
+                val srcBlobs =
+                    srcContainerClient.listBlobs(ListBlobsOptions().setPrefix(srcPath), Duration.ofSeconds(30))
+
+                var count = 0
+                val itr = srcBlobs.iterator()
+                while (itr.hasNext()) {
+                    count++
+                    val srcBlobItem = itr.next()
+                    val startTime = System.currentTimeMillis()
+                    val srcBlob = srcContainerClient.getBlobClient(srcBlobItem.name)
+                    val destBlob = destContainerClient.getBlobClient(destPath + srcBlobItem.name.substringAfter(srcPath))
+                    destBlob.beginCopy(BlobBeginCopyOptions(srcBlob.blobUrl).setMetadata(srcBlob.properties.metadata))
+                    duration += System.currentTimeMillis() - startTime
+                    totalDuration += duration
+                    logger.info("[$count] ${blobServiceClient.accountUrl}/$srcContainerName/${srcBlobItem.name} copied to $destContainerName/$destPath" +
+                            "\nDuration ${duration}ms")
+                }
+                logger.info("$count blobs copied in ${totalDuration}ms")
+                return SUCCESS
+            } catch (e: BlobStorageException) {
+                logger.error("Azure Storage Exception: ${e.message}")
+                return e.serviceMessage
+            } catch (e: Exception) {
+                val message = "Exception occurred while copying blob: ${e.message}"
+                logger.error(message)
+                return message
+            }
+        }
+
         fun copyFile(
             srcContainerName: String,
-            destContainerName: String,
             srcFolderPath: String,
+            destContainerName: String,
             destFolderPath: String,
             filename: String,
             srcConnectionString: String,

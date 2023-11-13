@@ -12,10 +12,10 @@ import java.util.*
  * Created: 11/07/2023
  * @author QEH3@cdc.gov
  */
-class StorageFunction {
+class BlobFunction {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(StorageFunction::class.java.simpleName)
+        private val logger = LoggerFactory.getLogger(BlobFunction::class.java.simpleName)
     }
 
     @FunctionName("file-copy")
@@ -30,11 +30,8 @@ class StorageFunction {
         @BindingName("dotPath") dotPath: String,
         @BindingName("filename") filename: String
     ): HttpResponseMessage {
-        var srcPath = if (dotPath != "ROOT") dotPath else ""
-        if (srcPath.isNotBlank()) {
-            srcPath = srcPath.replace('.', '/')
-        }
-        logger.info("FCOPY::HTTP trigger processed a copy request on $srcContainer/$srcPath/$filename.")
+        val srcPath = pathStr(dotPath)
+        logger.info("HTTP trigger processed a copy request on $srcContainer/$srcPath/$filename.")
 
         // Extract headers
         val destContainer = request.headers["destination-container"]
@@ -68,10 +65,8 @@ class StorageFunction {
 
         // copy
         val copyResult = BlobService.copyFile(
-            srcContainer,
-            destContainer!!,
-            srcPath,
-            destPath,
+            srcContainer, srcPath,
+            destContainer!!, destPath,
             filename,
             connectionString ?: srcConnectionString!!,
             connectionString ?: destConnectionString!!,
@@ -96,5 +91,11 @@ class StorageFunction {
             else ->
                 request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR).body("Copy operation failed for blob\n$copyResult").build()
         }
+    }
+
+    private fun pathStr(dotPath: String): String {
+        return if (dotPath != "ROOT") {
+            dotPath.replace('.', '/')
+        } else ""
     }
 }
