@@ -27,7 +27,7 @@ class Function {
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
         val fnConfig = FunctionConfig()
     }
-    @FunctionName("Redactor")
+    @FunctionName("redactor")
     fun eventHubProcessor(
         @EventHubTrigger(
             name = "msg",
@@ -37,18 +37,9 @@ class Function {
         )
         message: List<String?>,
         @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-        @EventHubOutput(name="redactorOk",
-            eventHubName = "%EventHubSendOkName%",
-            connection = "EventHubConnectionString") redactorOkOutput : OutputBinding<List<String>>,
-        @EventHubOutput(name="redactorErr",
-            eventHubName = "%EventHubSendErrsName%",
-            connection = "EventHubConnectionString") redactorErrOutput: OutputBinding<List<String>>,
-
-        context: ExecutionContext
     ): JsonObject {
         val helper = Helper()
-        val outOkList = mutableListOf<String>()
-        val outErrList = mutableListOf<String>()
+        val outList = mutableListOf<String>()
         var inputEvent = JsonObject()
 
         try {
@@ -72,10 +63,6 @@ class Function {
                     val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
                     val routeElement = JsonHelper.getValueFromJson("message_info.route", inputEvent)
 
-                    // set id parameter if does not exist
-                    if (!inputEvent.has("id")) {
-                        inputEvent.add("id", messageUUID.toJsonElement())
-                    }
                     val route = if (routeElement.isJsonNull) {
                         ""
                     } else {
@@ -108,7 +95,7 @@ class Function {
                         val summary = SummaryInfo("REDACTED")
                         inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
                         logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
-                        outOkList.add(gson.toJson(inputEvent))
+                        outList.add(gson.toJson(inputEvent))
                     }
                 } catch (e: Exception) {
                     //TODO::  - update retry counts
@@ -117,17 +104,19 @@ class Function {
 
                     val summary = SummaryInfo("FAILURE", problem)
                     inputEvent.add("summary", summary.toJsonElement())
-                    outErrList.add(gson.toJson(inputEvent))
-                    return inputEvent
+                    outList.add(gson.toJson(inputEvent))
                 }
 
             } // .eventHubProcessor
         } catch (ex: Exception) {
             logger.error("DEX:error occurred: ${ex.message}")
-        } finally {
-            redactorOkOutput.value = outOkList
-            redactorErrOutput.value = outErrList
         }
+        try {
+            fnConfig.evHubSender.send(fnConfig.evHubSendName, outList)
+        } catch (e : Exception) {
+            logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
+        }
+
         return inputEvent
     }
 
