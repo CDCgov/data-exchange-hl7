@@ -16,9 +16,9 @@ public class LakeSegsFunctionTest {
         val messages = listOf(text)
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val function = Function()
-        val inputEvents : List<JsonObject> = function.eventHubProcessor(messages, eventHubMDList,getOutputBindingList<String>(), getOutputBindingList<String>(), getExecutionContext())
+        val inputEvents : List<JsonObject> = function.eventHubProcessor(messages, eventHubMDList)
         val inputEvent : JsonObject = inputEvents[0]
-        // Validate Metadata.processes has been added to the array of proccesses
+        // Validate Metadata.processes has been added to the array of processes
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
 
         if(metadata != null){

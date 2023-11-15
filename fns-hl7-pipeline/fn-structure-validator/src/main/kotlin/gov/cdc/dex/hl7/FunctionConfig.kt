@@ -1,4 +1,5 @@
 package gov.cdc.dex.hl7
+import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
 import org.slf4j.LoggerFactory
@@ -8,7 +9,14 @@ class FunctionConfig {
     private val nistValidators = mutableMapOf<String, ProfileManager?>()
     val functionVersion = System.getenv("FN_VERSION")?.toString() ?: "Unknown"
     private var logger = LoggerFactory.getLogger(FunctionConfig::class.java.simpleName)
+    val evHubSendName: String = System.getenv("EventHubSendName")
+    val evHubSender : EventHubSender
 
+    init {
+        //Init Event Hub connections
+        val evHubConnStr = System.getenv("EventHubConnectionString")
+        evHubSender = EventHubSender(evHubConnStr)
+    }
     fun getNistValidator(profileName: String) : ProfileManager? {
         if (nistValidators[profileName] == null) {
             loadNistValidator(profileName)

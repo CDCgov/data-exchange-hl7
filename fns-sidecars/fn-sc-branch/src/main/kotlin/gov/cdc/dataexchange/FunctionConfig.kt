@@ -1,12 +1,10 @@
-package gov.cdc.dex.hl7
+package gov.cdc.dataexchange
 
 import gov.cdc.dex.azure.EventHubSender
 
 class FunctionConfig {
-    companion object {
-        const val PROFILE_FILE_PATH = "PhinGuideProfile.json"
-    }
-    val evHubSendName: String = System.getenv("EventHubSendName")
+    val evHubSendOkName: String = System.getenv("EventHubSendOkName")
+    val evHubSendErrsName: String = System.getenv("EventHubSendErrsName")
     val evHubSender : EventHubSender
 
     init {

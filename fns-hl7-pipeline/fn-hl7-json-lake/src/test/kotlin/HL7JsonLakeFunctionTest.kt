@@ -18,9 +18,7 @@ class HL7JsonLakeFunctionTest {
         val inputEvent =  Function().eventHubProcessor(
                 messages,
                 eventHubMDList,
-                getExecutionContext(),
-                getOutputBinding(),
-                getOutputBinding())
+                getExecutionContext())
 
         // Validate Metadata.processes has been added to the array of proccesses
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
@@ -65,19 +63,6 @@ class HL7JsonLakeFunctionTest {
     fun processCASE_ExceptionPath() {
         processFile("Exceptionmessage.txt", false)
         assert (true)
-    }
-
-    private fun <T> getOutputBinding(): OutputBinding<T> {
-        return object : OutputBinding<T> {
-            var inner : T? = null
-            override fun getValue(): T ? {
-                return inner
-            }
-
-            override fun setValue(p0:T?) {
-                inner = p0
-            }
-        }
     }
 
     private fun getExecutionContext():ExecutionContext {

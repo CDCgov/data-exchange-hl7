@@ -6,9 +6,9 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>lake-segs-transfomer</artifactId>
-    <version>0.0.27-SNAPSHOT</version>
+    <version>0.0.33-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>DEX Fns-Pipeline :: lake-segs-transfomer</name>
+    <name>DEX Fns-Pipeline :: lake-segs-transformer</name>
 
     <scm>
         <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
@@ -28,10 +28,10 @@
         <functionAppName>ocio-ede-${environment-id}-hl7-lake-segments-transformer</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
 
-        <slf4j.version>2.0.3</slf4j.version>
+        <slf4j.version>2.0.5</slf4j.version>
 
-        <gson.version>2.9.1</gson.version>
-        <junit.version>5.9.0</junit.version>
+        <gson.version>2.10.1</gson.version>
+        <junit.version>5.9.2</junit.version>
         <libdexcommon.version>1.0.20-SNAPSHOT</libdexcommon.version>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.10</version>
+            <version>1.4.7</version>
         </dependency>
 
         <!-- Kotlin -->
@@ -173,6 +173,10 @@
                             <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
                             <value>None</value>
                         </property>
+                        <property>
+                            <name>EventHubSendName</name>
+                            <value>${EventHubSendName}</value>
+                        </property>
                     </appSettings>
                 </configuration>
                 <executions>
@@ -184,34 +188,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <overwrite>true</overwrite>
-                            <outputDirectory>${stagingDirectory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}</directory>
-                                    <includes>
-                                        <include>host.json</include>
-                                        <include>local.settings.json</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
+             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>3.1.1</version>
@@ -288,10 +265,7 @@
                     <environmentVariables>
                         <FN_VERSION>${project.version}</FN_VERSION>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
-                        <EventHubSendOkName>hl7-lake-segments-ok</EventHubSendOkName>
-                        <EventHubSendErrsName>hl7-lake-segments-err</EventHubSendErrsName>
-                        <REDIS_CACHE_NAME>ocio-ede-${environment-id}-dex-cache.redis.cache.windows.net</REDIS_CACHE_NAME>
-                        <REDIS_CACHE_KEY>${redisDevKey}</REDIS_CACHE_KEY>
+                        <EventHubSendName>${EventHubSendName}</EventHubSendName>
                     </environmentVariables>
                 </configuration>
             </plugin>
