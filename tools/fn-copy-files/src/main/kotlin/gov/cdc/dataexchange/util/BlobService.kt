@@ -25,10 +25,11 @@ class BlobService {
             srcPath: String,
             destContainerName: String,
             destPath: String,
-            connectionString: String
+            connectionString: String,
+            doCount: Boolean
         ): String {
-            var duration: Long = 0
-            var totalDuration: Long = 0
+            var totalRuntime: Long = 0
+            logger.info("Initializing Clients...")
             try {
                 val blobServiceClient = BlobServiceClientBuilder()
                     .connectionString(connectionString)
@@ -37,37 +38,87 @@ class BlobService {
                 val srcContainerClient = blobServiceClient.getBlobContainerClient(srcContainerName)
                 val destContainerClient = blobServiceClient.getBlobContainerClient(destContainerName)
 
-                // list all blobs in the source virtual folder
                 val srcBlobs =
                     srcContainerClient.listBlobs(ListBlobsOptions().setPrefix(srcPath), Duration.ofSeconds(30))
 
+                // counting
                 var count = 0
-                val itr = srcBlobs.iterator()
+                var srcBlobCount: Int? = null
+                if (doCount) {
+                    logger.info("Counting...")
+                    srcBlobCount = srcBlobs.count { srcBlobItem ->
+                        !(srcContainerClient.getBlobClient(srcBlobItem.name)
+                            .properties.metadata.containsKey("hdi_isfolder")
+                                && srcContainerClient.getBlobClient(srcBlobItem.name)
+                            .properties.metadata.getValue("hdi_isfolder") == "true")
+                    }
+                }
+
                 //validate
-                if (!itr.hasNext()) {
+                if (srcBlobCount == 0) {
                     logger.error("No blobs found at source.")
                     return NOT_FOUND
+                } else if (srcBlobCount != null) {
+                    logger.info("$srcBlobCount blobs found at ${srcContainerClient.blobContainerName}/$srcPath")
                 }
-                // iterate
-                while (itr.hasNext()) {
-                    count++
-                    val srcBlobItem = itr.next()
+
+                // copy each blob
+                srcBlobs.forEach { srcBlobItem ->
+                    // filter out folder blobs
+                    if (srcContainerClient.getBlobClient(srcBlobItem.name)
+                            .properties.metadata.containsKey("hdi_isfolder")
+                                && srcContainerClient.getBlobClient(srcBlobItem.name)
+                            .properties.metadata.getValue("hdi_isfolder") == "true") {
+                        return@forEach
+                    }
                     val startTime = System.currentTimeMillis()
+                    var duration: Long = 0
+
+                    // get source and destination clients
                     val srcBlob = srcContainerClient.getBlobClient(srcBlobItem.name)
-                    val destBlob = destContainerClient.getBlobClient(destPath + srcBlobItem.name.substringAfter(srcPath))
-                    destBlob.beginCopy(BlobBeginCopyOptions(srcBlob.blobUrl).setMetadata(srcBlob.properties.metadata))
+                    val destBlobName = if (destPath.isNotBlank()) "$destPath/${srcBlobItem.name.substringAfter(srcPath)}"
+                        else srcBlobItem.name.substringAfter(srcPath)
+                    val destBlob = destContainerClient.getBlobClient(destBlobName)
+
+                    // copy
+                    val copyOpts = BlobBeginCopyOptions(srcBlob.blobUrl)
+                    copyOpts.setMetadata(srcBlob.properties.metadata)
+                    destBlob.beginCopy(copyOpts)
+
+                    // performance insight
                     duration += System.currentTimeMillis() - startTime
-                    totalDuration += duration
-                    logger.info("[$count] ${blobServiceClient.accountUrl}/$srcContainerName/${srcBlobItem.name} copied to $destContainerName/$destPath" +
-                            "\nDuration ${duration}ms")
+                    totalRuntime += duration
+                    count++
+                    var percentage: Int? = null
+                    if (doCount && srcBlobCount != null) {
+                        percentage = (((count).toDouble() / srcBlobCount.toDouble()) * 100).toInt()
+                    }
+                    val countDisplay = if (doCount) "${count}/$srcBlobCount" else "${count}"
+                    logger.info("**** Copy blob ($countDisplay) ****")
+                    logger.info("${blobServiceClient.accountUrl}/$srcContainerName/${srcBlobItem.name} " +
+                                "is copying to $destContainerName/$destPath")
+                    if (logger.isDebugEnabled) {
+                        logger.debug("Metadata: {}", srcBlob.properties.metadata)
+                    }
+                    logger.info("Duration: ${duration.getRuntimeString()}, total runtime: ${totalRuntime.getRuntimeString()}")
+                    if (doCount && percentage != null) {
+                        logger.info("${percentage}% of blobs are copying successfully.")
+                    }
                 }
-                logger.info("$count blobs copied in ${totalDuration}ms")
+                // check load balance
+                if (doCount && srcBlobCount != null && count != srcBlobCount) {
+                    val missingCount = srcBlobCount.minus(count)
+                    logger.error("ERROR - Unbalanced Count.  $missingCount missing blobs")
+                }
+
+                // log success
+                logger.info("**** SUCCESS::$count blobs copied in ${totalRuntime.getRuntimeString()} ****")
                 return SUCCESS
             } catch (e: BlobStorageException) {
-                logger.error("Azure Storage Exception: ${e.message}")
+                logger.error("ERROR: Azure Storage Exception: ${e.message}")
                 return e.serviceMessage
             } catch (e: Exception) {
-                val message = "Exception occurred while copying blob: ${e.message}"
+                val message = "ERROR: Exception occurred while copying blob: ${e.message}"
                 logger.error(message)
                 return message
             }
@@ -85,8 +136,10 @@ class BlobService {
         ): String {
             try {
                 // initialize clients
-                val srcBlobServiceClient = BlobServiceClientBuilder().connectionString(srcConnectionString).buildClient()
-                val destBlobServiceClient = BlobServiceClientBuilder().connectionString(destConnectionString).buildClient()
+                val srcBlobServiceClient =
+                    BlobServiceClientBuilder().connectionString(srcConnectionString).buildClient()
+                val destBlobServiceClient =
+                    BlobServiceClientBuilder().connectionString(destConnectionString).buildClient()
                 val srcContainerClient = srcBlobServiceClient.getBlobContainerClient(srcContainerName)
                 val destContainerClient = destBlobServiceClient.getBlobContainerClient(destContainerName)
 
@@ -110,7 +163,11 @@ class BlobService {
                     val filenameExtension = filename.substringAfterLast(".", "")
                     val destBlobName = "$destPath$filenameWithoutExtension" +
                             if (timesToCopy > 1) {
-                                "-${DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(OffsetDateTime.now().plusSeconds(i.toLong()))}" +
+                                "-${
+                                    DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
+                                        OffsetDateTime.now().plusSeconds(i.toLong())
+                                    )
+                                }" +
                                         (if (filenameExtension.isNotBlank()) ".$filenameExtension" else "")
                             } else {
                                 if (filenameExtension.isNotBlank()) ".$filenameExtension" else ""
@@ -119,7 +176,8 @@ class BlobService {
                     val destBlobClient = destContainerClient.getBlobClient(destBlobName)
 
                     // copy blob
-                    val poller: SyncPoller<BlobCopyInfo, Void> = destBlobClient.beginCopy(srcBlobClient.blobUrl, Duration.ofSeconds(1))
+                    val poller: SyncPoller<BlobCopyInfo, Void> =
+                        destBlobClient.beginCopy(srcBlobClient.blobUrl, Duration.ofSeconds(1))
                     val pollResponse = poller.poll()
                     logger.info("BLOB-SERVICE::[$i] copy id: ${pollResponse.value.copyId}")
                     val copyResult = poller.waitForCompletion() // wait for the copy operation to complete
@@ -142,6 +200,28 @@ class BlobService {
                 logger.error("BLOB-SERVICE::$message")
                 return message
             }
+        }
+
+        private fun Long.getRuntimeString(): String {
+            if (this < 1000) {
+                return "$this ms"
+            }
+            val seconds = this / 1000
+            val remainingMs = this % 1000
+            if (seconds < 60) {
+                if(seconds < 10) {
+                    return "$seconds.$remainingMs seconds"
+                }
+                return "$seconds seconds"
+            }
+            val minutes = seconds / 60
+            val remainingSeconds = seconds % 60
+            if (minutes < 60) {
+                return "$minutes min $remainingSeconds sec"
+            }
+            val hours = minutes / 60
+            val remainingMinutes = minutes % 60
+            return "$hours hours $remainingMinutes min $remainingSeconds sec"
         }
     }
 }

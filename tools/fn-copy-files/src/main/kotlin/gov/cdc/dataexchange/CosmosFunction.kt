@@ -23,13 +23,14 @@ class CosmosFunction {
     companion object {
         private val logger = LoggerFactory.getLogger(CosmosFunction::class.java.simpleName)
     }
-    @FunctionName("cosmos-copy")
+    // not exposed - testing incomplete
+//    @FunctionName("cosmos-copy")
     fun run(
         @HttpTrigger(
             name = "req",
-            methods = [HttpMethod.GET, HttpMethod.POST],
-            authLevel = AuthorizationLevel.FUNCTION,
-            route = "cosmos-copy/{fromDb}/{fromContainer}/{toDb}/{toContainer}"
+            methods = [HttpMethod.GET],
+            authLevel = AuthorizationLevel.ANONYMOUS,
+            route = "cosmos/copy/{fromDb}/{fromContainer}/{toDb}/{toContainer}"
         ) request: HttpRequestMessage<Optional<String>>,
         @BindingName("fromDb") fromDb: String,
         @BindingName("fromContainer") fromContainer: String,
