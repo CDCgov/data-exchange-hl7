@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+### [0.0.32] - 2023-11-15
+	- Implemented a CosmosDB client on lib-dex-commons used by cosmos-sink sidecar
+	- Configured Elastic functions to scale beyond 20 instances
+	- Created File sink side car to save events to storage account
+	- Created function to move files between containers (for performance testing)
+	- Deployed Branching sidecar fn and reconfigure pipeline functions to output events to a single eventhub.
+	- Added Constants.kt to lib-dex-commons
+
 ### [0.0.31] 2023-11-01
 	- Cleaned out CosmosDBOut annotations on all Functions.
 	- Improved Open API documentation for Validation API
