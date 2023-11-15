@@ -4,8 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.microsoft.azure.functions.ExecutionContext
-import com.microsoft.azure.functions.OutputBinding
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
 
@@ -46,118 +44,81 @@ class Function {
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
             consumerGroup = "%EventHubConsumerGroup%",)
-        message: List<String?>,
+        messages: List<String?>,
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
-        @EventHubOutput(name="lakeSegsOk",
-            eventHubName = "%EventHubSendOkName%",
-            connection = "EventHubConnectionString") lakeSegsOk : OutputBinding<List<String>>,
-        @EventHubOutput(name="lakeSegsErr",
-            eventHubName = "%EventHubSendErrsName%",
-            connection = "EventHubConnectionString") lakeSegsErr: OutputBinding<List<String>>,
-        context: ExecutionContext
     ): List<JsonObject> {
+        val processedMsgs = mutableListOf<JsonObject>() // only needed for integration testing
+        val outList = mutableListOf<String>()
+        val profileFilePath = "/BasicProfile.json"
+        val config = listOf(profileFilePath)
 
-        val processedMsgs = mutableListOf<JsonObject>()
-        val outOkList = mutableListOf<String>()
-        val outErrList = mutableListOf<String>()
-        try {
-            message.forEachIndexed { messageIndex: Int, singleMessage: String? ->
-                //context.logger.info("------ singleMessage: ------>: --> $singleMessage")
+        messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
+            if (!singleMessage.isNullOrEmpty()) {
                 val startTime = Date().toIsoString()
-                // initialize processed_metadata to be be sent to eventhubs and cosmosdb
-                val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-                var processed_metadata: JsonObject? = null
-                //
-                // Process Message for SQL Model
-                // ----------------------------------------------
-                val profileFilePath = "/BasicProfile.json"
-                val config = listOf(profileFilePath)
-                // context.logger.info("------ inputEvent: ------>: --> $inputEvent")
-                // Extract from event
-                val hl7ContentBase64 = inputEvent["content"].asString
-                val hl7ContentDecodedBytes = getDecoder().decode(hl7ContentBase64)
-                val hl7Content = String(hl7ContentDecodedBytes)
-                val metadata = inputEvent["metadata"].asJsonObject
-                val provenance = metadata["provenance"].asJsonObject
-                val filePath = provenance["file_path"].asString
-                val messageUUID = inputEvent["message_uuid"].asString
-
-
-                logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+                val inputEvent = JsonParser.parseString(singleMessage) as JsonObject
+                val hl7Content: String
+                val metadata: JsonObject
+                val filePath: String
+                val messageUUID: String
                 try {
+                    val hl7ContentBase64 = inputEvent["content"].asString
+                    val hl7ContentDecodedBytes = getDecoder().decode(hl7ContentBase64)
+                    hl7Content = String(hl7ContentDecodedBytes)
+                    metadata = inputEvent["metadata"].asJsonObject
+                    val provenance = metadata["provenance"].asJsonObject
+                    filePath = provenance["file_path"].asString
+                    messageUUID = inputEvent["message_uuid"].asString
 
+                    var status: String
+                    var lakeSegsModel: List<Segment>?
+                    var exception: Exception?
+
+                    logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                     try {
                         // read the profile
                         val profile = this::class.java.getResource(profileFilePath).readText()
-
                         // Transform to Lake of Segments
-                        val lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
-
-                        // updateMetadata
-                        processed_metadata = updateMetadata(
-                            startTime,
-                            PROCESS_STATUS_OK,
-                            lakeSegsModel,
-                            eventHubMD[messageIndex],
-                            inputEvent,
-                            null,
-                            config
-                        )
-                        // add payload to eventhub outbindings for lakeSegsOk
-                        outOkList.add(gsonWithNullsOn.toJson(processed_metadata))
-                        logger.info("DEX::Processed OK for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendOkName}")
-
-
-                        processedMsgs.add(inputEvent)
+                        lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
+                        status = PROCESS_STATUS_OK
+                        exception = null
+                        logger.info("DEX::Processed OK for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.evHubSendName}")
                     } catch (e: Exception) {
-
+                        status = PROCESS_STATUS_EXCEPTION
                         logger.error("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
-
-
-                        processed_metadata = updateMetadata(
-                            startTime,
-                            PROCESS_STATUS_EXCEPTION,
-                            null,
-                            eventHubMD[messageIndex],
-                            inputEvent,
-                            e,
-                            config
-                        )
-                        context.logger.info("PROCESSED_METADATA = " + processed_metadata)
-                        outErrList.add(gsonWithNullsOn.toJson(processed_metadata))
-                        logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
-
-                        processedMsgs.add(inputEvent)
+                        lakeSegsModel = null
+                        exception = e
                     } // .catch
-
-                } catch (e: Exception) {
-
-                    // message is bad, can't extract fields based on schema expected
-                    logger.error("Unable to process Message due to exception: ${e.message}")
-                    processed_metadata = updateMetadata(
+                    // update Metadata
+                    val transformedMessage = updateMetadata(
                         startTime,
-                        PROCESS_STATUS_EXCEPTION,
-                        null,
+                        status,
+                        lakeSegsModel,
                         eventHubMD[messageIndex],
                         inputEvent,
-                        e,
+                        exception,
                         config
                     )
-                    outErrList.add(gsonWithNullsOn.toJson(processed_metadata))
-                    logger.info("Processed ERROR for Lake of Segments Model messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.eventHubSendErrsName}")
+                    // add to out event hub list
+                    outList.add(gsonWithNullsOn.toJson(transformedMessage))
+                    processedMsgs.add(inputEvent)
+                } catch (e: Exception) {
+                    //TODO::  - update retry counts
+                    logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
+                    val problem = Problem(LakeSegsTransProcessMetadata.PROCESS_NAME, e, false, 0, 0)
+                    val summary = SummaryInfo("FAILURE", problem)
+                    inputEvent.add("summary", summary.toJsonElement())
+                    outList.add(gsonWithNullsOn.toJson(inputEvent))
+                } // .try
+            } // .if
+        }// .foreach
 
-                    processedMsgs.add(JsonObject())
-                } // .catch
-
-            } // .message.forEach
-
-        } catch (ex: Exception){
-            logger.error("An unexpected error occurred: ${ex.message}")
-        } finally {
-            //add payload to eventhubs and cosmosdb outbindings
-            lakeSegsOk.value = outOkList
-            lakeSegsErr.value = outErrList
+        // send everything to out event hub
+        try {
+            fnConfig.evHubSender.send(fnConfig.evHubSendName, outList)
+        } catch (e : Exception) {
+            logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
+
         return processedMsgs.toList()
 
     } // .eventHubProcessor
