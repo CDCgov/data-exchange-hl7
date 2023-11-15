@@ -7,9 +7,7 @@ import gov.cdc.dex.mmg.MmgUtil
 class FunctionConfig {
 
     val evHubSender: EventHubSender
-
-    val eventHubSendOkName = System.getenv("EventHubSendOkName")
-    val eventHubSendErrsName = System.getenv("EventHubSendErrsName")
+    val evHubSendName: String = System.getenv("EventHubSendName")
 
     init {
          //Init Event Hub connections
