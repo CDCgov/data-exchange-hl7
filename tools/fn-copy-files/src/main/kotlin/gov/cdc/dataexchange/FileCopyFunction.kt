@@ -13,10 +13,10 @@ import java.util.*
  * Created: 11/07/2023
  * @author QEH3@cdc.gov
  */
-class BlobFunction {
+class FileCopyFunction {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(BlobFunction::class.java.simpleName)
+        private val logger = LoggerFactory.getLogger(FileCopyFunction::class.java.simpleName)
     }
 
     @FunctionName("file-copy")
@@ -24,8 +24,8 @@ class BlobFunction {
         @HttpTrigger(
             name = "req",
             methods = [HttpMethod.GET],
-            authLevel = AuthorizationLevel.FUNCTION,
-            route = "file-copy/{srcContainer}/{dotPath}/{filename}"
+            authLevel = AuthorizationLevel.ANONYMOUS,
+            route = "file/copy/{srcContainer}/{dotPath}/{filename}"
         ) request: HttpRequestMessage<Optional<String>>,
         @BindingName("srcContainer") srcContainer: String,
         @BindingName("dotPath") dotPath: String,

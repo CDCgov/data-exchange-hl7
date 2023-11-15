@@ -9,13 +9,15 @@
 - **Connection String Authentication**: Ensures secure access using a connection string.
 - **Error Handling**: Detailed responses for scenarios like missing connection strings, not found errors, and operation failures.
 - **Performance Tracking**: Logs the duration of copy operations for performance monitoring.
+- **Counting**: Count option to provide increased performance insight logging. 
 
 ## Usage
 Invoke the function using the following route format:
-`[HOST]/tool/copy/{srcContainer}/{srcDotPath}/to/{destContainer}/{destDotPath}`
+`[HOST]/tool/storage/copy/{srcContainer}/{srcDotPath}/to/{destContainer}/{destDotPath}`
 
+- Include header `do-count` with any value to enable a blob count which will be included in the logs, along with a percentage complete.
 - Use `ROOT` for the dotPaths if you want to copy from root of container.
-- Include a `connection-string` in the request header for authentication.
+- Include `BlobConnectionString` in the azure function configuration.
 - The source and destination paths within containers are specified using dot notation.
 
 ## Responses
@@ -39,7 +41,7 @@ The function and `BlobService` provide responses for various scenarios:
 
 ### Usage
 Invoke the function using this route format:
-`[HOST]/tool/file-copy/{srcContainer}/{dotPath}/{filename}`
+`[HOST]/tool/file/copy/{srcContainer}/{dotPath}/{filename}`
 
 - Use `ROOT` for the dotPaths if you want to copy from root of container.
 - Include the following headers in the request:

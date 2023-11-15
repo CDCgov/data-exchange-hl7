@@ -25,19 +25,20 @@ class StorageCopyFunction {
         @HttpTrigger(
             name = "req",
             methods = [HttpMethod.GET],
-            authLevel = AuthorizationLevel.FUNCTION,
-            route = "copy/{srcContainer}/{srcDotPath}/to/{destContainer}/{destDotPath}"
+            authLevel = AuthorizationLevel.ANONYMOUS,
+            route = "storage/copy/{srcContainer}/{srcDotPath}/to/{destContainer}/{destDotPath}"
         ) request: HttpRequestMessage<Optional<String>>,
         @BindingName("srcContainer") srcContainer: String,
         @BindingName("srcDotPath") srcDotPath: String,
         @BindingName("destContainer") destContainer: String,
         @BindingName("destDotPath") destDotPath: String
     ): HttpResponseMessage {
+        val doCount: Boolean = !request.headers["do-count"].isNullOrBlank()
         val srcPath = PathHelper(srcDotPath).transform()
         val destPath = PathHelper(destDotPath).transform()
         logger.info("HTTP trigger processed a copy request on $srcContainer/$srcPath to $destContainer/$destPath")
-        val connectionString = request.headers["connection-string"] // extract header
 
+        val connectionString = System.getenv("BlobConnectionString")
         // validate
         if (connectionString.isNullOrEmpty()) {
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
@@ -49,7 +50,8 @@ class StorageCopyFunction {
         val copyResponse = BlobService.copyStorage(
             srcContainer, srcPath,
             destContainer, destPath,
-            connectionString
+            connectionString,
+            doCount
         )
 
         return when (copyResponse) {
@@ -61,11 +63,6 @@ class StorageCopyFunction {
             BlobService.NOT_FOUND ->
                 request.createResponseBuilder(HttpStatus.NOT_FOUND)
                     .body("Container or directory not found at location $srcContainer/$srcPath")
-                    .build()
-
-            BlobService.FAILED_OPERATION ->
-                request.createResponseBuilder(HttpStatus.EXPECTATION_FAILED)
-                    .body("Copy operation failed for blob")
                     .build()
 
             else ->
