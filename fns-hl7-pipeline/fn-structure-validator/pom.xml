@@ -143,7 +143,7 @@
                     <appName>${functionAppName}</appName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan2</appServicePlanName>
+                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan</appServicePlanName>
                     <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
@@ -277,8 +277,7 @@
                         <configuration>
                             <environmentVariables>
                                 <EventHubConnectionString>${ehString}</EventHubConnectionString>
-                                <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
-                                <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
+                                <EventHubSendName>hl7-structure-out</EventHubSendName>
                             </environmentVariables>
                         </configuration>
                     </execution>
