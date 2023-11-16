@@ -16,13 +16,12 @@
     }
   },
   "logging": {
-    "fileLoggingMode": "always",
-    "logLevel": {
-      "default": "Warning",
-      "Function": "Information",
-      "Host": "Error",
-      "Worker": "Warning",
-      "Microsoft": "None"
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "maxTelemetryItemsPerSecond" : 20,
+        "excludedTypes": "Request;Exception"
+      }
     }
   }
 }
