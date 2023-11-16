@@ -83,7 +83,10 @@ class TransformerSegments()  {
     } // .travTreeToArr
 
     private fun buildSegId(seg: Pair<Int,String>): String {
-        return if(seg.second != "root") "${seg.second.substring(0, 3)}-${seg.first}" else "root"
+        val segArr = seg.second.split('|')
+        return if (segArr[0] != "root") {
+            if (segArr[0] == "MSH") "MSH[1]" else "${segArr[0]}[${segArr[1]}]"
+        } else "root"
     }
 
 

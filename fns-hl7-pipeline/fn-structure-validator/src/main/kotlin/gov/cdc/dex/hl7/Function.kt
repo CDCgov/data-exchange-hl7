@@ -49,18 +49,10 @@ class ValidatorFunction {
             consumerGroup = "%EventHubConsumerGroup%",
             cardinality = Cardinality.MANY
         ) message: List<String?>,
-        @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
-        context: ExecutionContext,
-        @EventHubOutput(name="structureOk",
-            eventHubName = "%EventHubSendOkName%",
-            connection = "EventHubConnectionString") structureOkOutput : OutputBinding<List<String>>,
-        @EventHubOutput(name="structureErr",
-            eventHubName = "%EventHubSendErrsName%",
-            connection = "EventHubConnectionString") structureErrOutput: OutputBinding<List<String>>
+        @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>
     ): JsonObject {
         logger.info("Function triggered. Version: ${fnConfig.functionVersion}")
-        val outOkList = mutableListOf<String>()
-        val outErrList = mutableListOf<String>()
+        val outList = mutableListOf<String>()
         try {
             message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
@@ -76,11 +68,6 @@ class ValidatorFunction {
                     val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
                     val routeJson = JsonHelper.getValueFromJson("message_info.route", inputEvent)
                     val route = if (routeJson is JsonPrimitive) routeJson.asString else ""
-
-                    // set id parameter if does not exist
-                    if (!inputEvent.has("id")) {
-                        inputEvent.add("id", messageUUID.toJsonElement())
-                    }
 
                     logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                     //Main FN Logic
@@ -109,15 +96,8 @@ class ValidatorFunction {
                     }
                     inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
 
-                    // add event to appropriate output binding parameter
-                    var destIndicator = "OK"
-                    if (NIST_VALID_MESSAGE == report.status) {
-                        outOkList.add(gson.toJson(inputEvent))
-                    } else {
-                        destIndicator = "ERROR"
-                        outErrList.add(gson.toJson(inputEvent))
-                    }
-                    logger.info("Processed $destIndicator structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
+                    outList.add(gson.toJson(inputEvent))
+                    logger.info("Processed structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
 
                 } catch (e: Exception) {
                     //TODO::  - update retry counts
@@ -138,7 +118,7 @@ class ValidatorFunction {
                     logger.info("inputEvent in exception:$inputEvent")
 
                     inputEvent.add("summary", summary.toJsonElement())
-                    outErrList.add(gson.toJson(inputEvent))
+                    outList.add(gson.toJson(inputEvent))
                     logger.info(
                         "Sent Message to Err Event Hub for Message Id ${
                             JsonHelper.getValueFromJson(
@@ -151,11 +131,12 @@ class ValidatorFunction {
             } // foreachIndexed
         } catch (ex: Exception) {
             logger.error("An unexpected error occurred: ${ex.message}")
-        } finally {
-            structureOkOutput.value = outOkList
-            structureErrOutput.value = outErrList
-         }
-
+        }
+        try {
+            fnConfig.evHubSender.send(fnConfig.evHubSendName, outList)
+        } catch (e : Exception) {
+            logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
+        }
          return JsonObject()
 
     } //.eventHubProcessor

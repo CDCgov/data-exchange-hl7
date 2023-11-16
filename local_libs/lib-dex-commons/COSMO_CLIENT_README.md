@@ -1,16 +1,12 @@
 # Cosmos Client
-The Cosmos Client acts as a gateway, offering users seamless connectivity to a Cosmos DB container via the Cosmos DB
-SDK. It leverages the <code>ConnectionFactory</code> class to establish a connection, providing a singleton instance of
-the asynchronous Cosmos Client. This setup ensures a consistent connection to your specified database and container,
-enabling the execution of CRUD (Create, Read, Update, Delete) operations.
+The Cosmos Client acts as a gateway, offering users seamless connectivity to a Cosmos DB container via the Cosmos DB SDK. It leverages the `ConnectionFactory` class to establish a connection, providing a singleton instance of the asynchronous Cosmos Client. This setup ensures a consistent connection to your specified database and container, enabling the execution of CRUD (Create, Read, Update, Delete) operations.
 
 ---
 
 ### Dynamic Creation
-In scenarios where the specified database or container doesn't exist, the Cosmos Client is equipped with logic to
-automatically create them. This feature ensures that your operations aren't halted due to the absence of the intended
-database or container. The creation process respects configurations provided, ensuring any newly created entities match
-the desired specifications.
+In scenarios where the specified database or container doesn't exist, the Cosmos Client is equipped with logic to automatically create them. This feature ensures that your operations aren't halted due to the absence of the intended database or container. The creation process respects configurations provided, ensuring any newly created entities match the desired specifications.
+
+---
 
 ### Configuration
 
@@ -25,10 +21,8 @@ The client's configurability is a key feature, allowing for a customized setup t
 - **partitionKeyPath**: Path of the partition key (Required)
 - **preferredRegions**: List of preferred regions, defaulting to ["East US", "West US"]
 - **consistencyLevel**: Desired consistency level, affects performance (default = `ConsistencyLevel.SESSION`)
-- **isResponseOnWriteEnabled**: Flag indicating whether to enable response on write; be mindful that enabling can impact performance (Default is false)
+- **isResponseOnWriteEnabled**: Flag indicating whether to enable response on write; be mindful that disabling this can improve performance (Default is true)
 - **[directConnectionConfig](https://azuresdkdocs.blob.core.windows.net/$web/java/azure-cosmos/4.51.0/com/azure/cosmos/DirectConnectionConfig.html)**: Configuration of direct connection mode; if provided, the client will use Direct Mode over Gateway Mode (Optional)
-- **[gatewayConnectionConfig](https://azuresdkdocs.blob.core.windows.net/$web/java/azure-cosmos/4.51.0/com/azure/cosmos/GatewayConnectionConfig.html)**: Configuration for connecting through the gateway mode (Optional)
-- **[throttlingRetryOptions](https://azuresdkdocs.blob.core.windows.net/$web/java/azure-cosmos/4.51.0/com/azure/cosmos/ThrottlingRetryOptions.html)**: Configuration options for handling request throttling (Optional)
 
 #### Example directConnectionConfig
 
@@ -41,90 +35,77 @@ private val directConnectionConfig = DirectConnectionConfig()
         .setMaxRequestsPerConnection(10) // default
 ```
 
-#### CosmosClientConfig Class
-
-Located in the `gov.cdc.dex.azure.cosmos` package, the `CosmosClientConfig` class acts as a data model for configuring the Cosmos client connection.  It encapsulates both required and optional configurations to allow a flexible setup of the Cosmos client. Each parameter's purpose is documented in the [Configuration Parameters](#configuration-parameters) section above.
-
 ---
 
-### Example Usage with hardcode
-Utilizing the asynchronous Cosmos Client requires integration with the Reactor library. Each method call
-typically returns a ```Mono<T>```, where ```T``` often corresponds to ```CosmosItemResponse<T>```. In our use case,
-```T``` maps to the type ```Map<String, Any>```, which is used to map JSON records. To evaluate or execute the
-operations contained within a Mono, one must invoke either ```.subscribe()``` or ```.block()```. This is evident in the
-read and write functions demonstrated below:
+## Implementation
+The `CosmosClient` class, found in the gov.cdc.dex.azure.cosmos package, is the primary gateway to interact with Azure Cosmos DB.
 
-* note: if ```isResponseOnWriteEnabled = true```, the ```CosmosItemResponse<T>.item``` would return the item in the response.
+### Example Usage with hardcode
+Utilizing the asynchronous Cosmos Client requires integration with the Reactor library. Each method call typically returns a `Mono<T>` or `Flux<T>`, where `T` often corresponds to `CosmosItemResponse<T>` (`T` being the type written or the type provided in a read operation) In this example, `T` is the type `Map<String, Any>`, which is used to map JSON records. To evaluate or execute the operations contained within a Reactor type, one must invoke either `.subscribe()` or `.block()`. This is evident in the read and write functions demonstrated below:
+
 ```kotlin
 class myClass {
     companion object {
-		private const val DATABASE_NAME = "myDatabase"
-		private const val CONTAINER_NAME = "myContainer"
-		private const val ENDPOINT = "https://myCosmosAccount.documents.azure.com:443/"
-		private const val KEY = "<REDACTED>"
-		private const val PARTKEY_PATH = "/event/partition_key"
+        private const val DATABASE_NAME = "myDatabase"
+        private const val CONTAINER_NAME = "myContainer"
+        private const val ENDPOINT = "https://myCosmosAccount.documents.azure.com:443/"
+        private const val KEY = "<REDACTED>"
+        private const val PARTITION_KEY_PATH = "/event/partition_key"
     }
-	
-    private lateinit var cosmosClient: CosmosClient // creates singleton instance
-    
-    init {
-        cosmosClient = CosmosClient(DATABASE_NAME, CONTAINER_NAME, ENDPOINT, KEY, PARTKEY_PATH)
+
+    private val cosmosClient by lazy {
+        CosmosClient(DATABASE_NAME, CONTAINER_NAME, ENDPOINT, KEY, PARTITION_KEY_PATH)
     }
-    
-    private fun read(itemId: String, partitionKey: PartitionKey): Map<String, Any> 
-        = cosmosClient.readItem(itemId, partitionKey, Map::class.java).block()!!.item as Map<String, Any>
-    
-    private fun write(item: Map<String, Any>) = cosmosClient.upsertItem(item)
-		.map {response -> response.item }
-		.subscribe()
-	
-	fun myFunction(item: Map<String, Any>) {
-        try {
-            write(item)
-		} finally {
-		    cosmosClient.closeCosmos()
-		}
+
+    fun read(itemId: String, partitionKey: PartitionKey): Map<String, Any>
+            = cosmosClient.readItem(itemId, partitionKey, Map::class.java).block()?.item as Map<String, Any>
+
+    fun write(item: Map<String, Any>) = cosmosClient.upsertItem(item).subscribe()
+
+    fun myFunction(id: String, partKey: PartitionKey) {
+        val item: Map<String, Any> = read(id, partKey)
+        // perform transformations to item...
+        write(item)
     }
 }
 ```
-Here I am using the read and write blocking functions, which blocks the thread until the operation is complete
+Here is an example using the read and write blocking functions, which blocks the thread until the operation is complete, effectively making it synchronous.
 ```kotlin
 private fun read(itemId: String, partitionKey: PartitionKey): Map<String, Any>
 	= cosmosClient.readWithBlocking(itemId, partitionKey, Map::class.java) as Map<String, Any>
 
 private fun write(item: Map<String, Any>): Map<String, Any>? = cosmosClient.upsertWithBlocking(item)
 
-fun myFunction(item: Map<String, Any>) {
-	try {
-		write(item)
-	} finally {
-		cosmosClient.closeCosmos()
-	}
+fun myFunction(id: String, partKey: PartitionKey) {
+    val item: Map<String, Any> = read(id, partKey)
+    // perform transformations to item...
+    write(item)
 }
 ```
 
-## Implementation:
-The <code>CosmosClient</code> class, found in the gov.cdc.dex.azure.cosmos package, is your primary gateway to interact
-with Azure Cosmos DB.
+---
 
-### Key Initializations:
-During its instantiation, <code>CosmosClient</code> leverages the supplied <code>CosmosClientConfig</code> to initialize
-the ConnectionFactory. It then retrieves singleton instances of both the asynchronous Cosmos Client and Cosmos Container.
+### Supported Operations
+- `Item Creation` Adds a new record to the designated container.
+- `Item Reading` Fetches an item using its unique ID and associated partition key.
+- `Item Upsert` Introduces a fresh item or substitutes an existing one within the container.
+- `Item Update` Replaces a current item inside the container.
+- `Item Deletion` Excises an item from the container.
+- `SQL Query Execution` Performs SQL queries for data retrieval. Note: This function is strictly read-only.
+- `Bulk Execute` Executes asynchronous bulk operations
+- `Bulk Create` Enables asynchronous create of multiple records utilizing Reactor Flux.
+- `Bulk Upsert` Enables asynchronous upsert of multiple records utilizing Reactor Flux.
 
-### Supported Operations:
-<code>CosmosClient</code> aids in performing a range of crucial operations on a Cosmos DB instance:
+---
 
-- <code>Bulk Create:</code> Enables asynchronous create of multiple records utilizing Reactor Flux.
-- <code>Bulk Upsert:</code> Enables asynchronous upsert of multiple records utilizing Reactor Flux.
-- <code>Item Creation:</code> Adds a new record to the designated container.
-- <code>Item Reading:</code> Fetches an item using its unique ID and associated partition key.
-- <code>Item Upsert:</code> Introduces a fresh item or substitutes an existing one within the container.
-- <code>Item Update:</code> Replaces a current item inside the container.
-- <code>Item Deletion:</code> Excises an item from the container.
-- <code>SQL Query Execution:</code> Performs SQL queries for data retrieval. Note: This function is strictly read-only.
+### Error Management
 
-### Error Management:
-Every operation comes with protective measures to handle cases where the <code>CosmosClient</code> hasn't been initialized. In such instances, an IllegalStateException is raised. This precaution guarantees that all interactions with the database are executed within a securely initialized environment.
+The `CosmosClient` ensures robust operations by throwing an `IllegalArgumentException` for initialization errors, such as missing or incorrect parameters. If database operations are attempted before the client is properly initialized, an `IllegalStateException` is raised to prevent execution in an unstable state.
 
-### Cleanup:
-Post the execution of singular transactions or queries, the client concludes the connection to liberate system resources.
+During bulk operations, the client handles errors gracefully, logging issues and continuing with subsequent operations. It employs a retry mechanism, with logs for each retry, and logs a final error if all retries fail, ensuring persistent operation despite individual failures.
+
+---
+
+### Cleanup
+
+The `CosmosClient` class is designed to maintain open connections for repeated use, which is beneficial for performance due to reduced overhead in establishing connections. However, for scenarios where the resources need to be explicitly released or during application shutdown, the class provides a `closeClient()` function. Invoking this method will close the client and its associated resources, ensuring that all connections are properly terminated and system resources are freed. This can be particularly useful in resource-constrained environments or to adhere to best practices in resource management.

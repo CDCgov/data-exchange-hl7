@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>receiver-debatcher</artifactId>
-    <version>0.0.28-2023-10-04-144410-a031ba3-2023-11-01-202955-59d3ef2</version>
+    <version>0.0.33-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DEX Fns-Pipeline :: receiver-debatcher</name>
     <scm>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.10</version>
+            <version>1.4.7</version>
         </dependency>
         <!-- Azure Functions Java Library -->
         <!--  -->
@@ -118,7 +118,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
-            <version>1.9.0</version>
+            <version>1.10.0</version>
         </dependency>
     </dependencies>
     <build>
@@ -171,6 +171,10 @@
                         <property>
                             <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
                             <value>None</value>
+                        </property>
+                        <property>
+                            <name>EventHubSendName</name>
+                            <value>${EventHubSendName}</value>
                         </property>
                     </appSettings>
                 </configuration>
@@ -282,8 +286,7 @@
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
                         <BlobIngestConnectionString>${blobIngestConnectionString}</BlobIngestConnectionString>
                         <BlobIngestContainerName>hl7ingress</BlobIngestContainerName>
-                        <EventHubSendOkName>hl7-recdeb-ok</EventHubSendOkName>
-                        <EventHubSendErrsName>hl7-recdeb-err</EventHubSendErrsName>
+                        <EventHubSendName>hl7-recdeb-out</EventHubSendName>
                     </environmentVariables>
                 </configuration>
             </plugin>

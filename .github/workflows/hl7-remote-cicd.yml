@@ -31,6 +31,11 @@ on:
         required: false
         type: string
         default: 'develop'
+      targetEnv:
+        description: 'Environment to deploy'
+        required: true
+        type: string
+        default: 'dev'
         
   pull_request:
     types:
@@ -86,7 +91,7 @@ jobs:
               workflow: '${{ github.event.inputs.data-exchange-hl7-workflow }}'
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
-              inputs: '{ "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
+              inputs: '{ "targetEnv": "${{ github.event.inputs.targetEnv }}", "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
               ref: 'main'
               wait-for-completion: true
               wait-for-completion-timeout: 120m
@@ -236,7 +241,7 @@ jobs:
               workflow: ${{ matrix.workflow_id }}
               repo: cdcent/data-exchange-hl7-devops
               token: ${{ env.access_token }}
-              inputs: '{ "commitID": "${{ steps.getsha.outputs.commitID }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
+              inputs: '{ "targetEnv": "dev", "commitID": "${{ steps.getsha.outputs.commitID }}", "data-exchange-hl7-branch": "${{ needs.prepare-remote-cicd.outputs.merge_branch }}" }'
               ref: 'main'
               wait-for-completion: true
               wait-for-completion-timeout: 120m

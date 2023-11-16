@@ -1,17 +1,16 @@
 package gov.cdc.dataexchange
 
-import com.azure.messaging.eventhubs.EventData
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.microsoft.azure.functions.annotation.*
-import com.azure.messaging.eventhubs.EventHubClientBuilder
-import gov.cdc.dataexchange.util.RecordMapper
+import com.google.gson.JsonNull
+import com.google.gson.JsonParser
+import gov.cdc.dex.util.JsonHelper
 import org.slf4j.LoggerFactory
 
 class Function {
 
     companion object {
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
-        private var objectMapper = ObjectMapper()
+        private var fnConfig = FunctionConfig()
     }
 
     @FunctionName("branch")
@@ -21,111 +20,52 @@ class Function {
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
             consumerGroup = "%EventHubConsumerGroup%"
-        ) messages: List<String>?
+        ) messages: List<String?>
     ) {
         logger.info("DEX::Received event!")
 
-        if (messages.isNullOrEmpty()) {
+        if (messages.isEmpty()) {
             logger.error("DEX::Unable to map messages. No messages found.")
             return
         }
 
-        val okProducer = EventHubClientBuilder()
-            .connectionString(System.getenv("EventHubConnectionString"), System.getenv("EventHubSendOkName"))
-            .buildProducerClient()
+        val outOkList = mutableListOf<String>()
+        val outErrList = mutableListOf<String>()
 
-        val errProducer = EventHubClientBuilder()
-            .connectionString(System.getenv("EventHubConnectionString"), System.getenv("EventHubSendErrsName"))
-            .buildProducerClient()
-
-        val outOkList = mutableListOf<EventData>()
-        val outErrList = mutableListOf<EventData>()
-
-        try {
-            messages.forEachIndexed { i: Int, message: String ->
+        messages.forEachIndexed { i: Int, message: String? ->
+            if (!message.isNullOrEmpty()) {
                 try {
-                    val mappedMessage = RecordMapper.mapMessage(message)
-                    val messageUuid = mappedMessage["message_uuid"] as String
-                    val lastProcess = ((mappedMessage["metadata"] as Map<String, Any>)["processes"] as List<Map<String, Any>>).last()
-                    val processName = lastProcess["process_name"] as String
-                    val processStatus = lastProcess["status"] as String
+                    val mappedMessage = JsonParser.parseString(message).asJsonObject
+                    val processes = JsonHelper.getValueFromJson("metadata.processes", mappedMessage).asJsonArray
+                    val lastProcess = processes.last().asJsonObject
+                    val processName = JsonHelper.getValueFromJson("process_name", lastProcess).asString
+                    val messageUuid = mappedMessage["message_uuid"].asString
+                    val summaryInfo = mappedMessage["summary"].asJsonObject
+                    val currentStatus = summaryInfo["current_status"].asString
 
-                    if (processStatus == "SUCCESS") {
-                        logger.info("DEX::To OK eventhub [${i + 1}] message_uuid: $messageUuid, processName=$processName, status=$processStatus")
-                        outOkList.add(EventData(objectMapper.writeValueAsBytes(mappedMessage)))
+                    if (summaryInfo["problem"] is JsonNull) {
+                        logger.info("DEX::To OK eventhub [${i + 1}] message_uuid: $messageUuid, processName=$processName, status=$currentStatus")
+                        outOkList.add(message)
                     } else {
-                        logger.info("DEX::To ERR eventhub [${i + 1}] message_uuid: $messageUuid, processName=$processName, status=$processStatus")
-                        outErrList.add(EventData(objectMapper.writeValueAsBytes(mappedMessage)))
+                        logger.info("DEX::To ERR eventhub [${i + 1}] message_uuid: $messageUuid, processName=$processName, status=$currentStatus")
+                        outErrList.add(message)
                     }
                 } catch (e: Exception) {
                     // TODO send to quarantine?
                     logger.error("Error processing message", e)
                 }
             }
-            okProducer.send(outOkList)
-            errProducer.send(outErrList)
-
-        } finally {
-            okProducer.close()
-            errProducer.close()
         }
+        try {
+            if (outOkList.isNotEmpty()) {
+                fnConfig.evHubSender.send(fnConfig.evHubSendOkName, outOkList)
+            }
+            if (outErrList.isNotEmpty()) {
+                fnConfig.evHubSender.send(fnConfig.evHubSendErrsName, outErrList)
+            }
+        } catch (e : Exception) {
+            logger.error("Error sending to event hubs", e)
+        }
+
     }
-
-
-//    @FunctionName("branch2")
-//    fun branch2(
-//        @EventHubTrigger(
-//            name = "msg",
-//            eventHubName = "%EventHubReceiveName%",
-//            connection = "EventHubConnectionString",
-//            consumerGroup = "%EventHubConsumerGroup%"
-//        ) messages: List<String>?,
-//        @EventHubOutput(name="recdebOk",
-//            eventHubName = "%EventHubSendOkName%",
-//            connection = "EventHubConnectionString")
-//        branchOkOutput : OutputBinding<List<String>>,
-//        @EventHubOutput(name="recdebErr",
-//            eventHubName = "%EventHubSendErrsName%",
-//            connection = "EventHubConnectionString")
-//        branchErrOutput: OutputBinding<List<String>>
-//    ) {
-//        logger.info("DEX::Received event!")
-//
-//        if (messages.isNullOrEmpty()) {
-//            logger.error("DEX::Unable to map messages. No messages found.")
-//            return
-//        }
-//
-//        logger.info("DEX::Mapping ${messages.size} messages.")
-//        val mappedMessages: List<Map<String, Any>> = ServiceUtil.mapMessages(messages)
-//
-//        val outOkList = mutableListOf<String>()
-//        val outErrList = mutableListOf<String>()
-//
-//        try {
-//            mappedMessages.forEachIndexed { i: Int, mappedMessage: Map<String, Any> ->
-//                try {
-//                    val messageUuid = mappedMessage["message_uuid"] as String
-//
-//                    val lastProcess: Map<String, Any> = ((mappedMessage["metadata"] as Map<String, Any>)["processes"] as List<Map<String, Any>>).last()
-//                    val processName: String = lastProcess["process_name"] as String
-//                    val processStatus: String = lastProcess["status"] as String
-//
-//                    if (processStatus == "SUCCESS") {
-//                        logger.info("DEX::To OK eventhub [${i + 1}] message_uuid: $messageUuid, processName=$processName, status=$processStatus")
-//                        outOkList.add(objectMapper.writeValueAsString(mappedMessage))
-//                    } else {
-//                        logger.info("DEX::To ERR eventhub [${i + 1}] message_uuid: $messageUuid, processName=$processName, status=$processStatus")
-//                        outErrList.add(objectMapper.writeValueAsString(mappedMessage))
-//                    }
-//                } catch (e: Exception) {
-//                    // TODO send to quarantine?
-//                    logger.error("Error processing message", e)
-//                }
-//            }
-//        } finally {
-//            branchOkOutput.value = outOkList
-//            branchErrOutput.value = outErrList
-//        }
-//    }
 }

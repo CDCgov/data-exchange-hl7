@@ -119,6 +119,28 @@ class LakeSegsTransTest {
         assertEquals(100, lakeSegsModelJson.substring(0, 100).length)
     } // .testTransformerSegmentsToJson
 
+    @Test
+    fun testTransformerSegmentsSegmentId() {
+
+        logger.info("testTransformerSegmentsSegmentId...")
+
+        val filePath = "/Hepatitis_V1_0_1_TM_TC02_HEP_B_ACUTE_MOD.hl7"
+        val testMsg = this::class.java.getResource(filePath).readText()
+
+        // read the profile
+        val profileFilePath = "/BasicProfile.json"
+        val profile = this::class.java.getResource(profileFilePath).readText()
+
+        val lakeSegsModel = TransformerSegments().hl7ToSegments(testMsg, profile)
+
+        lakeSegsModel.forEach { seg ->
+            val expectedSegId = if (seg.segment.split('|')[0] != "root") {
+                if (seg.segment.split('|')[0] == "MSH") "MSH[1]"
+                else "${seg.segment.split('|')[0]}[${seg.segment.split('|')[1]}]"
+            } else "root"
+            assertEquals(expectedSegId, seg.segmentId)
+        }
+    } // .testTransformerSegmentsSegmentId
 
 } // .MmgSLakeSegsTransTestqlTest
 

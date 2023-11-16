@@ -29,6 +29,7 @@ class Function {
         const val SUMMARY_STATUS_ERROR = "HL7-JSON-LAKE-ERROR"
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create()
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
+        val fnConfig = FunctionConfig()
     } // .companion object
 
     @FunctionName("HL7_JSON_LAKE_TRANSFORMER")
@@ -40,22 +41,13 @@ class Function {
                     connection = "EventHubConnectionString")
             messages: List<String>?,
             @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-            context:ExecutionContext,
-            @EventHubOutput(name="jsonlakeOk",
-                    eventHubName = "%EventHubSendOkName%",
-                    connection = "EventHubConnectionString")
-            jsonlakeOkOutput : OutputBinding<List<String>>,
-            @EventHubOutput(name="jsonlakeErr",
-                    eventHubName = "%EventHubSendErrsName%",
-                    connection = "EventHubConnectionString")
-            jsonlakeErrOutput: OutputBinding<List<String>>): JsonObject {
+            context:ExecutionContext): JsonObject {
 
         logger.info("DEX::${context.functionName}")
         if ( messages == null) {
             return JsonObject()
         }
-        val outOkList = mutableListOf<String>()
-        val outErrList = mutableListOf<String>()
+        val outList = mutableListOf<String>()
         var returnValue = JsonObject()
         try {
             messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
@@ -75,7 +67,7 @@ class Function {
                             fullHL7, eventHubMD[messageIndex], gsonWithNullsOn,
                             inputEvent, null,
                             listOf(FunctionConfig.PROFILE_FILE_PATH),
-                            outOkList
+                            outList
                         )
                         context.logger.info("Processed OK for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath")
                     } catch (e: Exception) {
@@ -86,7 +78,7 @@ class Function {
                             null, eventHubMD[messageIndex], gsonWithNullsOn,
                             inputEvent, e,
                             listOf(FunctionConfig.PROFILE_FILE_PATH),
-                            outErrList
+                            outList
                         )
                         context.logger.info("Processed ERROR for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath")
                     } // .catch
@@ -99,14 +91,19 @@ class Function {
                             null, eventHubMD[messageIndex], gsonWithNullsOn,
                             JsonObject(), e,
                             listOf(FunctionConfig.PROFILE_FILE_PATH),
-                            outErrList
+                            outList
                     )
                 } // .catch
-            }
-        } finally {
-            jsonlakeOkOutput.value = outOkList
-            jsonlakeErrOutput.value = outErrList
+            } // .for
 
+        } catch (e: Exception) {
+            logger.error("An unexpected error occurred: ${e.message}")
+        }
+
+        try {
+            fnConfig.evHubSender.send(fnConfig.evHubSendName, outList)
+        } catch (e : Exception) {
+            logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
         return returnValue
     }

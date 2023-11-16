@@ -7,7 +7,6 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 import reactor.util.retry.Retry
-import java.time.Duration
 
 /**
  * Cosmos client - using ConnectionFactory initialized with CosmosClientConfig provides CRUD, upsert,
@@ -16,12 +15,11 @@ import java.time.Duration
  * @param containerName required
  * @param endpoint required
  * @param key required
- * @param partitionKeyPath default "/message_uuid"
+ * @param partitionKeyPath required
  * @param preferredRegions default "East US", "West US"
  * @param consistencyLevel default EVENTUAL
  * @param isResponseOnWriteEnabled default false, expect performance loss if set to true
  * @param directConnectionConfig default null, if provided, client will connect using directMode
- * @param gatewayConnectionConfig default null
  * @since 10/26/2023
  * @author QEH3@cdc.gov
  */
@@ -33,14 +31,8 @@ class CosmosClient(
     private val partitionKeyPath: String?,
     private val preferredRegions: List<String> = mutableListOf("East US", "West US"),
     private val consistencyLevel: ConsistencyLevel = ConsistencyLevel.SESSION,
-    private val isResponseOnWriteEnabled: Boolean = false,
-    private val directConnectionConfig: DirectConnectionConfig? = null,
-    private val gatewayConnectionConfig: GatewayConnectionConfig? = GatewayConnectionConfig()
-        .setMaxConnectionPoolSize(1000) // default
-        .setIdleConnectionTimeout(Duration.ofSeconds(60)), // default
-    private val throttlingRetryOptions: ThrottlingRetryOptions = ThrottlingRetryOptions()
-        .setMaxRetryWaitTime(Duration.ofSeconds(30)) // default
-        .setMaxRetryAttemptsOnThrottledRequests(9) // default
+    private val isResponseOnWriteEnabled: Boolean = true,
+    private val directConnectionConfig: DirectConnectionConfig? = null
 ) {
 
     companion object {
@@ -51,38 +43,30 @@ class CosmosClient(
 
     init {
         if (containerName.isNullOrBlank() || databaseName.isNullOrBlank() || endpoint.isNullOrBlank() || key.isNullOrBlank()
-            || partitionKeyPath.isNullOrBlank() || endpoint.substring(0,8) != ("https://") || key.takeLast(2) != "==") {
-            throw IllegalStateException("Unable to build Cosmos Client.  Check config.")
+                || partitionKeyPath.isNullOrBlank() || endpoint.substring(0,8) != ("https://") || key.takeLast(2) != "==") {
+            throw IllegalArgumentException("Unable to build Cosmos Client.  Check arguments.")
         }
-        val cosmosClientConfig = CosmosClientConfig(databaseName, containerName, endpoint, key, partitionKeyPath,
-            preferredRegions, consistencyLevel, isResponseOnWriteEnabled, directConnectionConfig,
-            gatewayConnectionConfig, throttlingRetryOptions)
-        val connFactory = ConnectionFactory(cosmosClientConfig)
         try {
+            val cosmosClientConfig = CosmosClientConfig(
+                databaseName, containerName, endpoint, key, partitionKeyPath,
+                preferredRegions, consistencyLevel, isResponseOnWriteEnabled, directConnectionConfig
+            )
+            val connFactory = ConnectionFactory(cosmosClientConfig)
             // singleton async cosmos client
             cosmosAsyncClient = connFactory.asyncCosmosClient
-        } catch (e: IllegalStateException) {
-            logger.error("Unable to build Cosmos Client.  " +
-                    "ConnectionFactory must be initialized with a cosmosClientConfig." +
-                    "\nFAIL: ${e.message}")
-            throw e
-        }
-        try {
             // singleton async cosmos container object
             cosmosContainer = connFactory.asyncContainer
-        } catch (e: IllegalStateException) {
-            logger.error("Unable to connect with container.  " +
-                    "ConnectionFactory must be initialized with a valid database and container." +
-                    "\nFAIL: ${e.message}")
-            throw e
+            logger.info("DEX::CosmosClient available")
+        } catch (e: Exception) {
+            logger.error("DEX::Unable to connect to CosmosClient: ${e.message}")
         }
     }
 
     fun getEndpoint() = endpoint
     fun getDatabaseName() = databaseName
     fun getContainerName() = containerName
-    fun getPartitionKeyPath() = partitionKeyPath!!
-    fun closeCosmos() = cosmosAsyncClient?.close()
+    fun getPartitionKeyPath() = partitionKeyPath
+    fun closeClient() = cosmosAsyncClient?.close()
 
     /**
      * Generic blocking CRUD functions
@@ -117,20 +101,20 @@ class CosmosClient(
     }
 
     /**
-     * Private helper function to execute bulk operations found in Flux of CosmosItemOperation.
+     * Execute bulk operations found in Flux of CosmosItemOperation.
      *
      * **Note:** you must subscribe or block the resulting Flux to begin async processing.
      * @param operations required
      * @param maxRetries default = 3
      * @return Flux<CosmosBulkOperationResponse<Any>>
      */
-    private fun bulkExecute(operations: Flux<CosmosItemOperation>, maxRetries: Long = 3)
+    fun bulkExecute(operations: Flux<CosmosItemOperation>, maxRetries: Long = 3)
             : Flux<CosmosBulkOperationResponse<Any>> {
         return try {
             operations.flatMap { operation ->
                 cosmosContainer!!.executeBulkOperations<Any>(Flux.just(operation))
                     .onErrorResume { e ->
-                        logger.error("ERROR EXECUTING OPERATION with partition key: ${operation.partitionKeyValue}" +
+                        logger.error("DEX::ERROR EXECUTING OPERATION with partition key: ${operation.partitionKeyValue}" +
                                 "\nerror message: ${e.message}")
                         Flux.empty() // Continue with other operations
                     }
@@ -138,22 +122,20 @@ class CosmosClient(
                 .retryWhen(
                     Retry.max(maxRetries)
                         .doBeforeRetry { retrySignal ->
-                            logger.info("RETRYING FAILED OPERATION [Attempt: ${retrySignal.totalRetries() + 1}]: $retrySignal")
+                            logger.info("DEX::RETRYING FAILED OPERATION [Attempt: ${retrySignal.totalRetries() + 1}]: $retrySignal")
                         }
                 )
                 .publishOn(Schedulers.boundedElastic())
                 .doOnNext { response: CosmosBulkOperationResponse<Any> ->
                     if (response.response?.statusCode !in 200..299) {
-                        logger.error("FAILED operation: Status code: ${response.response.statusCode}, record partitionKey=${response.operation.partitionKeyValue}")
+                        logger.error("DEX::FAILED operation: Status code: ${response.response?.statusCode}, record with Partition Key \"$partitionKeyPath\"=${response.operation.partitionKeyValue}")
                     }
                 }
                 .doOnComplete { }
-                .doOnError { error -> logger.error("ERROR after maximum retries:\n${error.message}") }
+                .doOnError { error -> logger.error("DEX::ERROR after maximum retries:\n${error.message}") }
         } catch (e: Exception) {
-            logger.error("Error on bulk execute: ${e.message}")
+            logger.error("DEX::ERROR on bulk execute: ${e.message}")
             Flux.empty()
-        } finally {
-            closeCosmos() // close cosmos client each time it completes a bulk operation
         }
     }
 
@@ -167,10 +149,10 @@ class CosmosClient(
      * @return Mono<Void>
      */
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
-    fun bulkCreate(items: List<Map<String, Any>>): Mono<Void> {
+    fun bulkCreate(items: List<Map<String, Any>>): Flux<CosmosBulkOperationResponse<Any>> {
         if(items.isEmpty()) throw IllegalArgumentException("Missing items.")
         if(cosmosAsyncClient == null || cosmosContainer == null || partitionKeyPath == null) {
-            throw IllegalStateException("Unable to bulk upsert items.  CosmosClient not initialized")
+            throw IllegalStateException("DEX::Unable to bulk upsert items.  CosmosClient not initialized")
         }
 
         val operationFlux: Flux<CosmosItemOperation> = Flux.fromIterable(items)
@@ -179,10 +161,10 @@ class CosmosClient(
                 val item: Map<String, Any> = indexedItem.t2
                 val partitionKey = PartKeyModifier(partitionKeyPath).read(item)
                 val operation = CosmosBulkOperations.getCreateItemOperation(item, partitionKey)
-                logger.info("[${indexedItem.t1 + 1}] Record added to bulk operation: message_uuid=${item["message_uuid"]}")
+                logger.info("DEX::[${indexedItem.t1 + 1}] new create operation added to bulk with Partition key \"$partitionKeyPath\"=$partitionKey")
                 Flux.just(operation)
             }
-        return bulkExecute(operationFlux).then()
+        return bulkExecute(operationFlux)
     }
 
     /**
@@ -195,10 +177,10 @@ class CosmosClient(
      * @return Mono<Void>
      */
     @Throws(IllegalArgumentException::class, IllegalStateException::class)
-    fun bulkUpsert(items: List<Map<String, Any>>): Mono<Void> {
+    fun bulkUpsert(items: List<Map<String, Any>>): Flux<CosmosBulkOperationResponse<Any>> {
         if(items.isEmpty()) throw IllegalArgumentException("Missing items.")
         if(cosmosAsyncClient == null || cosmosContainer == null || partitionKeyPath == null) {
-            throw IllegalStateException("Unable to bulk upsert items.  CosmosClient not initialized")
+            throw IllegalStateException("DEX::Unable to bulk upsert items.  CosmosClient not initialized")
         }
 
         val operationFlux: Flux<CosmosItemOperation> = Flux.fromIterable(items)
@@ -207,10 +189,10 @@ class CosmosClient(
                 val item: Map<String, Any> = indexedItem.t2
                 val partitionKey = PartKeyModifier(partitionKeyPath).read(item)
                 val operation = CosmosBulkOperations.getUpsertItemOperation(item, partitionKey)
-                logger.info("[${indexedItem.t1 + 1}] Record added to bulk operation: message_uuid=${item["message_uuid"]}")
+                logger.info("DEX::[${indexedItem.t1 + 1}] new upsert operation added to bulk with Partition Key \"$partitionKeyPath\"=$partitionKey")
                 Flux.just(operation)
             }
-        return bulkExecute(operationFlux).then()
+        return bulkExecute(operationFlux)
     }
 
     /**
@@ -225,13 +207,9 @@ class CosmosClient(
     @Throws(IllegalStateException::class, Exception::class)
     fun <T> createItem(item: T, partitionKey: PartitionKey): Mono<CosmosItemResponse<T>> {
         if(cosmosContainer == null) {
-            throw IllegalStateException("Unable to create item.  CosmosClient not initialized")
+            throw IllegalStateException("DEX::Unable to create item.  CosmosClient not initialized")
         }
-        return try {
-            cosmosContainer!!.createItem(item, partitionKey, null)
-        } finally {
-            closeCosmos()
-        }
+        return cosmosContainer!!.createItem(item, partitionKey, null)
     }
 
     /**
@@ -244,12 +222,8 @@ class CosmosClient(
     @Throws(IllegalStateException::class, Exception::class)
     fun <T> createItem(item: T): Mono<CosmosItemResponse<T>> {
         if(cosmosContainer == null) throw IllegalStateException("Unable to create item.  CosmosClient not initialized")
-
-        return try {
-            cosmosContainer!!.createItem(item)
-        } finally {
-            closeCosmos()
-        }
+        logger.info("DEX::creating item: $item")
+        return cosmosContainer!!.createItem(item)
     }
 
     /**
@@ -265,12 +239,8 @@ class CosmosClient(
     fun <T> readItem(id: String, partitionKey: PartitionKey, itemType: Class<T>): Mono<CosmosItemResponse<T>> {
         if(cosmosContainer == null) throw IllegalStateException("Unable to read item.  CosmosClient not initialized")
 
-        logger.info("READING item: id=$id, partitionKey=$partitionKey")
-        return try {
-            cosmosContainer!!.readItem(id, partitionKey, itemType)
-        } finally {
-            closeCosmos()
-        }
+        logger.info("DEX::READING item: id=$id, partitionKey=\"$partitionKeyPath\": $partitionKey")
+        return cosmosContainer!!.readItem(id, partitionKey, itemType)
     }
 
     /**
@@ -288,17 +258,13 @@ class CosmosClient(
         if (query.isBlank()) throw IllegalArgumentException("Check usage.  Provide a query string. ")
         if (cosmosContainer == null) throw IllegalStateException("Unable to execute bulk read. CosmosClient not initialized")
 
-        logger.info("EXECUTING BULK READ SQL query: $query")
+        logger.info("DEX::EXECUTING BULK READ SQL query: $query")
         val querySpec = SqlQuerySpec(query)
-        return try {
-            cosmosContainer!!.queryItems(querySpec, CosmosQueryRequestOptions(), itemType)
-                .onErrorMap { error ->
-                    logger.error("Error while executing bulk read SQL query: $query. ${error.message}")
-                    error
-                }
-        } finally {
-            closeCosmos()
-        }
+        return cosmosContainer!!.queryItems(querySpec, CosmosQueryRequestOptions(), itemType)
+            .onErrorMap { error ->
+                logger.error("DEX::ERROR while executing bulk read SQL query: $query. ${error.message}")
+                error
+            }
     }
 
     /**
@@ -313,12 +279,8 @@ class CosmosClient(
         if(cosmosContainer == null) {
             throw IllegalStateException("Unable to create item.  CosmosClient not initialized")
         }
-        logger.info("UPSERTING item: $item")
-        return try {
-            cosmosContainer!!.upsertItem(item)
-        } finally {
-            closeCosmos()
-        }
+        logger.info("DEX::UPSERTING item: $item")
+        return cosmosContainer!!.upsertItem(item)
     }
 
     /**
@@ -334,12 +296,8 @@ class CosmosClient(
         if(cosmosContainer == null) {
             throw IllegalStateException("Unable to upsert item.  CosmosClient not initialized")
         }
-        logger.info("UPSERTING item: partitionKey=$partitionKey")
-        return try {
-            cosmosContainer!!.upsertItem(item, partitionKey, CosmosItemRequestOptions())
-        } finally {
-            closeCosmos()
-        }
+        logger.info("DEX::UPSERTING item with Partition Key \"$partitionKeyPath\": $partitionKey")
+        return cosmosContainer!!.upsertItem(item, partitionKey, CosmosItemRequestOptions())
     }
 
     /**
@@ -356,12 +314,8 @@ class CosmosClient(
         if(cosmosContainer == null) {
             throw IllegalStateException("Unable to update item.  CosmosClient not initialized")
         }
-        logger.info("UPDATING item: id=$id, partitionKey=$partitionKey")
-        return try {
-            cosmosContainer!!.replaceItem(item, id, partitionKey)
-        } finally {
-            closeCosmos()
-        }
+        logger.info("DEX::UPDATING item: id=$id, with Partition Key \"$partitionKeyPath\": $partitionKey")
+        return cosmosContainer!!.replaceItem(item, id, partitionKey)
     }
 
     /**
@@ -377,12 +331,7 @@ class CosmosClient(
         if(cosmosContainer == null) {
             throw IllegalStateException("Unable to delete item.  CosmosClient not initialized")
         }
-        logger.info("DELETING item: id=$id, partiotionKey=$partitionKey")
-        return try {
-            cosmosContainer!!.deleteItem(id, partitionKey)
-        } finally {
-            closeCosmos()
-        }
+        logger.info("DEX::DELETING item: id=$id, with Partition Key \"$partitionKeyPath\": $partitionKey")
+        return cosmosContainer!!.deleteItem(id, partitionKey)
     }
-
 }

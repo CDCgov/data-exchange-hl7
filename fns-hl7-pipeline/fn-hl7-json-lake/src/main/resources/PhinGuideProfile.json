@@ -302,7 +302,7 @@
     "dataType": "CX",
     "maxLength": "2646",
     "usage": "R",
-    "cardinality": "[1..1]",
+    "cardinality": "[1..*]",
     "conformance": "",
     "notes": ""
   },
