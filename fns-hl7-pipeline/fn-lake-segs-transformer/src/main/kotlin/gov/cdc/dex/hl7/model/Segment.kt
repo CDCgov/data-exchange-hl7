@@ -10,5 +10,9 @@ data class Segment (
 
 ) { // .Profile
   @SerializedName("segment_id")
-  var segmentId: String = if (segment != "root") "${segment.substring(0, 3)}-$segmentNumber" else "root"
+  var segmentId: String =
+    if (segment.split('|')[0] != "root") {
+      if (segment.split('|')[0] == "MSH") "MSH[1]"
+      else "${segment.split('|')[0]}[${segment.split('|')[1]}]"
+    } else "root"
 }
