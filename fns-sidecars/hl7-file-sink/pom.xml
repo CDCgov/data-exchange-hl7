@@ -142,7 +142,7 @@
                 <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
-                    <appServicePlanName>ocio-ede-${environment-id}-hl7-app-service-plan</appServicePlanName>
+                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan3</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                     <auth>
