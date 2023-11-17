@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "1.0.22-SNAPSHOT"
+version = "1.0.23-SNAPSHOT"
 
 repositories {
     maven {
