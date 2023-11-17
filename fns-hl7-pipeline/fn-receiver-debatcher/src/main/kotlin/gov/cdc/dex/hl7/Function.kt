@@ -240,7 +240,7 @@ class Function {
         }
 
         return DexMessageInfo(eventCode = eventCode,
-            route = fnConfig.eventCodes[eventCode]?.get("category"),
+            route = fnConfig.eventCodes[eventCode]?.get("category")?:"",
             mmgKeyList = null,
             jurisdictionCode =  jurisdictionCode,
             type =  HL7MessageType.CASE,
