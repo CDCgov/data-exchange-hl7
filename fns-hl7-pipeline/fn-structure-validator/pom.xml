@@ -148,6 +148,7 @@
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
                     </auth>
+
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
