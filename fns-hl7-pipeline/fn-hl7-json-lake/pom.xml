@@ -155,7 +155,7 @@
                         </property>
                         <property>
                             <name>EventHubSendName</name>
-                            <value>${EventHubSendName}</value>
+                            <value>hl7-json-lake-out</value>
                         </property>
                     </appSettings>
                 </configuration>
