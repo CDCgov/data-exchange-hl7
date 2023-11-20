@@ -174,7 +174,7 @@
                         </property>
                         <property>
                             <name>EventHubSendName</name>
-                            <value>${EventHubSendName}</value>
+                            <value>hl7-recdeb-out</value>
                         </property>
                     </appSettings>
                 </configuration>
