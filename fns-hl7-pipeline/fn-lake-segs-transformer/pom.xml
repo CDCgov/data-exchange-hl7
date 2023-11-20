@@ -175,7 +175,7 @@
                         </property>
                         <property>
                             <name>EventHubSendName</name>
-                            <value>${EventHubSendName}</value>
+                            <value>hl7-lake-segments-out</value>
                         </property>
                     </appSettings>
                 </configuration>
