@@ -22,7 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <functionAppName>ocio-ede-${environment-id}-hl7-json-lake-transformer</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
-        <AzureBom.version>1.2.15</AzureBom.version>
+        <AzureBom.version>1.2.18</AzureBom.version>
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
