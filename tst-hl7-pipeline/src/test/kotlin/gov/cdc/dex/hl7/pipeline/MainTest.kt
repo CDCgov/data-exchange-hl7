@@ -88,6 +88,86 @@ class MainTest{
     fun testForInvalidBatchCountInBTSSegment(){
         //should fail
     }
+    @Test
+    fun testPhlipFluWithDataTypeNM(){
+
+    }
+    @Test
+    fun testPhlipFluWithDataTypeSN(){
+
+    }
+    @Test
+    fun testPhlipFluWithDataTypeTS(){
+
+    }
+    @Test
+    fun testPhlipFluWithDataTypeTM(){
+
+    }
+    @Test
+    fun testPhlipFluWithDataTypeDT(){
+
+    }
+    @Test
+    fun testPhlipFluWithDataTypeCWE(){
+
+    }
+    @Test
+    fun testPhlipFluWithDataTypeFT(){
+
+    }
+    @Test
+    fun testPhlipFluWithDataTypeTX(){
+
+    }
+    @Test
+    fun testPhlipFluWithDataTypeED(){
+
+    }
+    @Test
+    fun testPhlipFluWithDataTypeRP(){
+
+    }
+    @Test
+    fun testVPDWithDataTypeNM(){
+
+    }
+    @Test
+    fun testVPDWithDataTypeSN(){
+
+    }
+    @Test
+    fun testVPDWithDataTypeTS(){
+
+    }
+    @Test
+    fun testVPDWithDataTypeTM(){
+
+    }
+    @Test
+    fun testVPDWithDataTypeDT(){
+
+    }
+    @Test
+    fun testVPDWithDataTypeCWE(){
+
+    }
+    @Test
+    fun testVPDWithDataTypeFT(){
+
+    }
+    @Test
+    fun testVPDWithDataTypeTX(){
+
+    }
+    @Test
+    fun testVPDWithDataTypeED(){
+
+    }
+    @Test
+    fun testVPDWithDataTypeRP(){
+
+    }
 
     @Test
     fun testRequiredFieldsPIDCase(){
@@ -110,6 +190,10 @@ class MainTest{
     @Test
     fun testOBX1ValueShouldBeSequential(){
 
+    }
+    @Test
+    fun testSendingAndReceivingApplications(){
+        //should be redacted
     }
     @Test
     fun testPIDSocialSecurityCase(){
