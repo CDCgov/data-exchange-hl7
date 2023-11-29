@@ -33,7 +33,7 @@
         <lib-bumblebee.version>1.2.0-SNAPSHOT</lib-bumblebee.version>
         <gson.version>2.10.1</gson.version>
         <junit.version>5.9.2</junit.version>
-        <logback.version>1.4.7</logback.version>
+        <logback.version>1.4.12</logback.version>
         <hl7pet.version>1.2.7.3</hl7pet.version>
     </properties>
     <dependencyManagement>
