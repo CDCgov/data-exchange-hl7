@@ -17,6 +17,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <functionAppName>fn-sc-processapi-report-${environment-id}</functionAppName>
+        <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <AzureBom.version>1.2.15</AzureBom.version>
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
@@ -147,13 +148,13 @@
                 <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
-                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan3</appServicePlanName>
+                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan6</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-                    <auth>
-                        <type>service_principal</type>
-                        <serverId>azure-service-principal</serverId>
-                    </auth>
+<!--                    <auth>-->
+<!--                        <type>service_principal</type>-->
+<!--                        <serverId>azure-service-principal</serverId>-->
+<!--                    </auth>-->
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
@@ -189,30 +190,6 @@
                             <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
                             <value>None</value>
                         </property>
-                        <property>
-                            <name>AzureWebJobsStorage</name>
-                            <value>${AzureWebJobsStorage}</value>
-                        </property>
-                        <property>
-                            <name>EventHubConnectionString</name>
-                            <value>${EventHubConnectionString}</value>
-                        </property>
-                        <property>
-                            <name>EventHubReceiveName</name>
-                            <value>${EventHubReceiveName}</value>
-                        </property>
-                        <property>
-                            <name>EventHubConsumerGroup</name>
-                            <value>${EventHubConsumerGroup}</value>
-                        </property>
-                        <property>
-                            <name>BlobStorageContainerName</name>
-                            <value>${BlobStorageContainerName}</value>
-                        </property>
-                        <property>
-                            <name>BlobStorageConnectionString</name>
-                            <value>${BlobStorageConnectionString}</value>
-                        </property>
                     </appSettings>
                 </configuration>
                 <executions>
@@ -241,6 +218,56 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>3.1.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <overwrite>true</overwrite>
+                            <outputDirectory>${stagingDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>host.json</include>
+                                        <include>local.settings.json</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${stagingDirectory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <includeScope>runtime</includeScope>
+                            <excludeArtifactIds>azure-functions-java-library</excludeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

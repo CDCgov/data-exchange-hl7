@@ -1,11 +1,10 @@
 package gov.cdc.dataexchange
 
-import gov.cdc.dex.azure.cosmos.CosmosClient
-import com.azure.cosmos.models.CosmosBulkOperationResponse
+import com.azure.core.amqp.AmqpTransportType
+import com.azure.messaging.servicebus.ServiceBusClientBuilder
+import com.azure.messaging.servicebus.ServiceBusMessage
 import com.microsoft.azure.functions.annotation.*
-import gov.cdc.dataexchange.services.RecordService
 import org.slf4j.LoggerFactory
-import reactor.util.function.Tuple2
 import java.lang.System
 
 /**
@@ -18,40 +17,39 @@ class ReportFunction {
     companion object {
         private val logger = LoggerFactory.getLogger(ReportFunction::class.java.simpleName)
 
-        private const val CONN_STR = System.getenv("ServiceBusConnectionString")
-        private const val QUEUE = System.getenv("ServiceBusQueue")
+        private val CONN_STR = System.getenv("ServiceBusConnectionString")
+        private val QUEUE = System.getenv("ServiceBusQueue")
 
-        private val client by lazy {
+        private val serviceBusClient by lazy {
             ServiceBusClientBuilder()
                 .connectionString(CONN_STR)
-                .buildSenderClient(QUEUE)
+                .transportType(AmqpTransportType.AMQP_WEB_SOCKETS)
+                .sender()
+                .queueName(QUEUE)
+                .buildAsyncClient()
         }
     }
 
     /**
-     * Synchronize the incoming messages from EventHub by upserting to CosmosDB.
-     * @param records records found in eventhub
+     * @param records
      */
     @FunctionName("processapi-report")
-    fun `processapi report`(
+    fun processingStatusReport(
         @EventHubTrigger(
             name = "msg",
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
             consumerGroup = "%EventHubConsumerGroup%"
-        )
-        records: List<String>
+        ) records: List<String>
     ) {
         val inputRecordCount = records.size
         logger.info("REPORT::Receiving $inputRecordCount records.")
         try {
             for(record in records) {
-                client.sendMessage(ServiceBusMessage(records))
+                serviceBusClient.sendMessage(ServiceBusMessage(record)).subscribe()
             }
         } catch (e: Exception) {
-            logger.error(e)
-        } finally {
-            client.close()
+            logger.error("REPORT::ERROR: ${e.message}")
         }
     }
 }
