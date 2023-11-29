@@ -3,6 +3,8 @@ package gov.cdc.dataexchange
 import com.azure.core.amqp.AmqpTransportType
 import com.azure.messaging.servicebus.ServiceBusClientBuilder
 import com.azure.messaging.servicebus.ServiceBusMessage
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.microsoft.azure.functions.annotation.*
 import org.slf4j.LoggerFactory
 import java.lang.System
@@ -46,10 +48,20 @@ class ReportFunction {
         logger.info("REPORT::Receiving $inputRecordCount records.")
         try {
             for(record in records) {
-                serviceBusClient.sendMessage(ServiceBusMessage(record)).subscribe()
+                serviceBusClient.sendMessage(
+                    ServiceBusMessage(
+                        removeKeyValuePairFromJson(record, "content"))
+                ).subscribe()
             }
         } catch (e: Exception) {
             logger.error("REPORT::ERROR: ${e.message}")
         }
+    }
+
+    fun removeKeyValuePairFromJson(jsonString: String, keyToRemove: String): String {
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonString, JsonObject::class.java)
+        jsonObject.remove(keyToRemove)
+        return gson.toJson(jsonObject)
     }
 }
