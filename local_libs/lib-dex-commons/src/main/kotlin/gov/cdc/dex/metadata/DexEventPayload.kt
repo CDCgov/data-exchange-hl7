@@ -12,7 +12,7 @@ data class DexEventPayload (
     @SerializedName("message_info") val messageInfo: DexMessageInfo,
     val metadata: DexMetadata,
     @SerializedName("summary") val summary: SummaryInfo,
-    @SerializedName("schema_version") val metadataVersion: String = "0.0.1",
+    @SerializedName("schema_version") val schemaVersion: String = "0.0.1",
     @SerializedName("schema_name") val schemaName: String = "DEX HL7v2",
     val content: String
 )
