@@ -120,6 +120,9 @@ class DebatcherTest {
         summary: SummaryInfo)  {
 
         val msgEvent =  DexEventPayload(
+            uploadID = "testuploadid",
+            destinationID = "",
+            destinationEvent = null,
             messageInfo = messageInfo, metadata = metadata, summary = summary,
             content = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
         )
