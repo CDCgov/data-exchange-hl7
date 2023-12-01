@@ -66,8 +66,12 @@ class ValidatorFunction {
                     val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
                     val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
                     val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
-                    val routeJson = JsonHelper.getValueFromJson("message_info.route", inputEvent)
-                    val route = if (routeJson is JsonPrimitive) routeJson.asString else ""
+                    val route = if (messageType.uppercase() == HL7MessageType.CASE.toString()) {
+                        ""
+                    } else {
+                        val routeJson = JsonHelper.getValueFromJson("message_info.route", inputEvent)
+                        if (routeJson is JsonPrimitive) routeJson.asString.uppercase() else ""
+                    }
 
                     logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                     //Main FN Logic
@@ -142,15 +146,25 @@ class ValidatorFunction {
     } //.eventHubProcessor
 
 
-    private fun getProfileName(hl7Content: String, messageType: HL7MessageType, route: String): String {
-        val profileName:String =
-            when (messageType) {
-                HL7MessageType.CASE -> HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
-                    .uppercase(Locale.getDefault())
-                HL7MessageType.ELR -> "${route.uppercase()}-v${HL7StaticParser.getFirstValue(hl7Content, ELR_SPEC_PROFILE).get().uppercase()}"
-                else -> throw InvalidMessageException("Invalid Message Type: $messageType. Please specify CASE or ELR")
-            }
-        return profileName
+    private fun getProfileName(hl7Content: String, route: String): String {
+        val profileList = fnConfig.profileConfig.profileIdentifiers.filter { it.route == route.trim() }
+        if (profileList.isNotEmpty()) {
+            val profileIdPaths = profileList[0].identifierPaths
+            val profileName = "$route-" + profileIdPaths.map { path ->
+                HL7StaticParser.getFirstValue(hl7Content, path).get()
+            }.reduce { acc, map -> acc + "_" + map }
+            return profileName
+        } else {
+            throw InvalidMessageException("Invalid Route: $route. Could not determine validation profile")
+        }
+//        val profileName:String =
+//            when (messageType) {
+//                HL7MessageType.CASE -> HL7StaticParser.getFirstValue(hl7Content, PHIN_SPEC_PROFILE).get()
+//                    .uppercase(Locale.getDefault())
+//                HL7MessageType.ELR -> "${route.uppercase()}-v${HL7StaticParser.getFirstValue(hl7Content, ELR_SPEC_PROFILE).get().uppercase()}"
+//                else -> throw InvalidMessageException("Invalid Message Type: $messageType. Please specify CASE or ELR")
+//            }
+//        return profileName
     }
 
     private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String, messageType: HL7MessageType, route: String): NistReport {
