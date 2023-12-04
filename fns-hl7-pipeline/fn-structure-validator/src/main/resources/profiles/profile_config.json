@@ -1,7 +1,7 @@
 {
 	"profile_identifiers": [
 		{
-			"route": "COVID19_ELR"
+			"route": "COVID19_ELR",
 			"identifier_paths": [ "MSH-12" ]
 		},
 		{
@@ -19,6 +19,6 @@
 		{
 			"route": "DAART",
 			"identifier_paths": [ "MSH-21[1].1", "MSH-6.1" ]
-		},
+		}
 	]
 }

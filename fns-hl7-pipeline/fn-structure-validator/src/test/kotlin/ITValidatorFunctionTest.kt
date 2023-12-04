@@ -1,8 +1,5 @@
 
-import com.google.gson.JsonObject
-import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.HttpRequestMessage
-import com.microsoft.azure.functions.OutputBinding
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.hl7.ValidatorFunction
 import gov.cdc.dex.hl7.ValidatorFunction.Companion.gson
@@ -11,7 +8,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import java.util.*
-import java.util.logging.Logger
 
 class ITValidatorFunctionTest {
 

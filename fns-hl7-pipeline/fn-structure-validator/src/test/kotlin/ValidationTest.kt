@@ -1,5 +1,6 @@
 
 import com.google.gson.GsonBuilder
+import gov.cdc.dex.hl7.ValidatorFunction
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
@@ -40,7 +41,7 @@ class ValidationTest {
     fun testPHLIPVPDMessage() {
         val testMessage = this::class.java.getResource("/VPD_Measles.txt")?.readText()
 
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/PHLIP_VPD-v2.5.1")
+        val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/PHLIP_VPD-2.5.1")
 
         val report = nistValidator.validate(testMessage!!)
         println("report: -->\n\n${gson.toJson(report)}\n")
@@ -56,15 +57,16 @@ class ValidationTest {
 
     @Test
     fun testExtractPhinSpec() {
-        val msh = "MSH|^~\\\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO"
-        val profile = HL7StaticParser.getFirstValue(msh, "MSH-21[1].1").get().uppercase()
+        val msh = "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO"
+        val profile = ValidatorFunction().getProfileName(msh, "")
         println(profile)
     }
 
     @Test
     fun testExtractELRSpec() {
-        val msh = "MSH|^~\\\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO"
-        val profile = HL7StaticParser.getFirstValue(msh, "MSH-12").get()
+        val fn = ValidatorFunction()
+        val msh = "MSH|^~\\&|LIMS.MN.STAGING^2.16.840.1.114222.4.3.4.23.1.2^ISO|MN Public Health Lab^2.16.840.1.114222.4.1.10080^ISO|AIMS.INTEGRATION.STG^2.16.840.1.114222.4.3.15.2^ISO|CDC.ARLN.CRECol^2.16.840.1.114222.4.1.219333^ISO|20200201104547.082-0600||ORU^R01^ORU_R01|178106199999|D|2.5.1|||||||||PHLabReport-NoAck^phLabResultsELRv251^2.16.840.1.113883.9.11^ISO"
+        val profile = fn.getProfileName(msh, "DAART")
         println(profile)
     }
     private fun testFolder(folderName: String) {
@@ -81,11 +83,11 @@ class ValidationTest {
                 try {
                     val testMsg = this::class.java.getResource("/$folderName/${it.fileName}").readText()
                     val phinSpec = when (type) {
-                        HL7MessageType.ELR -> "COVID19_ELR-v${HL7StaticParser.getFirstValue(testMsg, "MSH-12[1].1").get()}"
+                        HL7MessageType.ELR -> "COVID19_ELR-${HL7StaticParser.getFirstValue(testMsg, "MSH-12[1].1").get()}"
                         HL7MessageType.CASE -> HL7StaticParser.getFirstValue(testMsg, "MSH-21[1].1").get().uppercase()
                         else -> throw Exception("Unknown type)")
                     }
-                    val nistValidator = ProfileManager(ResourceFileFetcher(), "/${phinSpec}")
+                    val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/${phinSpec}")
                     val report = nistValidator.validate(testMsg)
                     report.status = if ("ERROR" in report.status + "") {
                         "STRUCTURE_ERRORS"
