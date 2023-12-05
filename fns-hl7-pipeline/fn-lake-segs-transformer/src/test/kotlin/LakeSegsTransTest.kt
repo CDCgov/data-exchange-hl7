@@ -1,10 +1,12 @@
-import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
-import org.slf4j.LoggerFactory
-import gov.cdc.dex.hl7.TransformerSegments
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import gov.cdc.hl7.HL7HierarchyParser 
+import gov.cdc.dex.hl7.TransformerSegments
+import gov.cdc.dex.hl7.util.SegIdBuilder
+import gov.cdc.hl7.HL7HierarchyParser
 import gov.cdc.hl7.model.HL7Hierarchy
+import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
+import kotlin.test.assertEquals
 
 
 class LakeSegsTransTest {
@@ -133,11 +135,13 @@ class LakeSegsTransTest {
 
         val lakeSegsModel = TransformerSegments().hl7ToSegments(testMsg, profile)
 
+        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+        val prettyJson = gsonPretty.toJson(lakeSegsModel)
+        println(prettyJson)
+
+        val segClient = SegIdBuilder()
         lakeSegsModel.forEach { seg ->
-            val expectedSegId = if (seg.segment.split('|')[0] != "root") {
-                if (seg.segment.split('|')[0] == "MSH") "MSH[1]"
-                else "${seg.segment.split('|')[0]}[${seg.segment.split('|')[1]}]"
-            } else "root"
+            val expectedSegId = segClient.buildSegId(seg.segment)
             assertEquals(expectedSegId, seg.segmentId)
         }
     } // .testTransformerSegmentsSegmentId
