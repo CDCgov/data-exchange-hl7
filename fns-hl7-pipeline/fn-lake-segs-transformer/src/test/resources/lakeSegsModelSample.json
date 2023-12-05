@@ -24,36 +24,36 @@
   {
     "segment": "OBX|1.1|CWE|78746-5^Country of Birth",
     "segment_number": 4,
-    "segment_id": "OBX[1.1]",
+    "segment_id": "OBX[1]",
     "parent_segments": [
-      "OBR[3]",
+      "OBR[1]",
       "MSH[1]"
     ]
   },
   {
     "segment": "OBX|1.2|CWE|77983-5^Country of Usual Residence",
     "segment_number": 5,
-    "segment_id": "OBX[1.2]",
+    "segment_id": "OBX[2]",
     "parent_segments": [
-      "OBR[3]",
+      "OBR[1]",
       "MSH[1]"
     ]
   },
   {
     "segment": "OBX|1.3|TS|11368-8^Date of Illness Onset",
     "segment_number": 6,
-    "segment_id": "OBX[1.3]",
+    "segment_id": "OBX[3]",
     "parent_segments": [
-      "OBR[3]",
+      "OBR[1]",
       "MSH[1]"
     ]
   },
   {
     "segment": "OBX|1.4|TS|77976-9",
     "segment_number": 7,
-    "segment_id": "OBX[1.4]",
+    "segment_id": "OBX[4]",
     "parent_segments": [
-      "OBR[3]",
+      "OBR[1]",
       "MSH[1]"
     ]
   },
@@ -68,16 +68,16 @@
   {
     "segment": "OBX|2.1|CWE|16933-4",
     "segment_number": 9,
-    "segment_id": "OBX[2.1]",
+    "segment_id": "OBX[5]",
     "parent_segments": [
-      "OBR[3]",
+      "OBR[1]",
       "MSH[1]"
     ]
   },
   {
     "segment": "OBR|3|HEP23456-2^EHR",
     "segment_number": 10,
-    "segment_id": "OBR[3]",
+    "segment_id": "OBR[1]",
     "parent_segments": [
       "MSH[1]"
     ]
@@ -85,18 +85,18 @@
   {
     "segment": "OBX|3.1|CWE|24113-3",
     "segment_number": 11,
-    "segment_id": "OBX[3.1]",
+    "segment_id": "OBX[6]",
     "parent_segments": [
-      "OBR[3]",
+      "OBR[1]",
       "MSH[1]"
     ]
   },
   {
     "segment": "SPM|3.1|HEP23456-1",
     "segment_number": 12,
-    "segment_id": "SPM[3.1]",
+    "segment_id": "SPM[1]",
     "parent_segments": [
-      "OBR[3]",
+      "OBR[1]",
       "MSH[1]"
     ]
   }
