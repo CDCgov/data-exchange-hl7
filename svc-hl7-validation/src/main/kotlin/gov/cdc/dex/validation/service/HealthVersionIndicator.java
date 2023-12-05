@@ -41,9 +41,13 @@ public class HealthVersionIndicator<Map> extends AbstractHealthIndicator<Map> {
     }
 
     private String getVersion() throws IOException {
-        java.io.InputStream input = this.getClass().getClassLoader().getResourceAsStream("project.properties");
-        java.util.Properties props = new Properties();
-        props.load(input);
-        return props.getProperty("app.version");
+        if (this.getClass().getClassLoader() != null) {
+            try (java.io.InputStream input = this.getClass().getClassLoader().getResourceAsStream("project.properties")) {
+                Properties props = new Properties();
+                props.load(input);
+                return props.getProperty("app.version");
+            }
+        }
+        throw new IOException("Unable to get ClassLoader");
     }
 }

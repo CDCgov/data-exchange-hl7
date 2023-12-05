@@ -56,8 +56,8 @@ endpoints:
     enabled: false
   health:
     enabled: true
-    sensitive: false
-    details-visible: ANONYMOUS
+    sensitive: true
+    details-visible: AUTHENTICATED
     version:
       enabled: true
 
