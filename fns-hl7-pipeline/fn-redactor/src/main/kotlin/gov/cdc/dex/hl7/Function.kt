@@ -15,8 +15,9 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-import java.util.*
+import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
+import java.util.*
 
 /**
  * Azure function with event hub trigger to redact messages   */
@@ -27,6 +28,7 @@ class Function {
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
         val fnConfig = FunctionConfig()
     }
+
     @FunctionName("redactor")
     fun eventHubProcessor(
         @EventHubTrigger(
@@ -34,101 +36,101 @@ class Function {
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
             consumerGroup = "%EventHubConsumerGroup%",
-        )
-        message: List<String?>,
-        @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-    ): JsonObject {
+        ) messages: List<String?>,
+        @BindingName("SystemPropertiesArray") eventHubMD: List<EventHubMetadata>
+    )  {
+        doProcessing(messages, eventHubMD)
+        logger.info("Coroutine completed.")
+    }
+
+    private fun doProcessing(messages: List<String?>, eventHubMDList: List<EventHubMetadata>) = runBlocking {
+        messages.forEachIndexed { msgIndex: Int, singleMessage: String? ->
+            if (!singleMessage.isNullOrEmpty())
+                launch { processMessage(singleMessage, eventHubMDList[msgIndex]) }
+        }
+    }
+    private suspend fun processMessage(singleMessage: String, eventHubMD: EventHubMetadata) {
+        val startTime = Date().toIsoString()
+        val inputEvent = JsonParser.parseString(singleMessage) as JsonObject
+        val hl7Content: String
+        val metadata: JsonObject
+        val filePath: String
+        val messageUUID: String
         val helper = Helper()
-        val outList = mutableListOf<String>()
-        var inputEvent = JsonObject()
-
+        var output = ""
         try {
-            message.forEachIndexed { msgIndex: Int, singleMessage: String? ->
-                // context.logger.info("------ singleMessage: ------>: --> $singleMessage")
-                val startTime = Date().toIsoString()
-                inputEvent = JsonParser.parseString(singleMessage) as JsonObject
-                val hl7Content: String
-                val metadata: JsonObject
-                val filePath: String
-                val messageUUID: String
+            // Extract from event
+            hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
+            metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
 
-                try {
-                    // Extract from event
-                    hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-                    metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
+            filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
+            messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
 
-                    filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
-                    messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
+            val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
+            val routeElement = JsonHelper.getValueFromJson("message_info.route", inputEvent)
 
-                    val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
-                    val routeElement = JsonHelper.getValueFromJson("message_info.route", inputEvent)
+            val route = if (routeElement.isJsonNull) {
+                ""
+            } else {
+                routeElement.asString
+            }
 
-                    val route = if (routeElement.isJsonNull) {
-                        ""
-                    } else {
-                        routeElement.asString
-                    }
+            logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
-                    logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+            val report = helper.getRedactedReport(hl7Content, messageType, route)
 
-                    val report = helper.getRedactedReport(hl7Content, messageType, route)
-
-                    if (report != null) {
-                        val rReport = RedactorReport(report._2())
-                        val configFileName: List<String> = listOf(helper.getConfigFileName(messageType, route))
-                        val processMD = RedactorProcessMetadata(
-                            rReport.status,
-                            report = rReport,
-                            eventHubMD[msgIndex],
-                            configFileName
-                        )
-                        processMD.startProcessTime = startTime
-                        processMD.endProcessTime = Date().toIsoString()
-                        logger.info("Process MD: ${processMD} ")
+            if (report != null) {
+                val rReport = RedactorReport(report._2())
+                val configFileName: List<String> = listOf(helper.getConfigFileName(messageType, route))
+                val processMD = RedactorProcessMetadata(
+                    rReport.status,
+                    report = rReport,
+                    eventHubMD,
+                    configFileName
+                )
+                processMD.startProcessTime = startTime
+                processMD.endProcessTime = Date().toIsoString()
+                logger.info("Process MD: $processMD ")
 
 
-                        metadata.addArrayElement("processes", processMD)
-                        val newContentBase64 =
-                            Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
-                        inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))
-                        //Update Summary element.
-                        val summary = SummaryInfo("REDACTED")
-                        inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                        logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
-                        outList.add(gson.toJson(inputEvent))
-                    }
-                } catch (e: Exception) {
-                    //TODO::  - update retry counts
-                    logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
-                    val problem = Problem(RedactorProcessMetadata.REDACTOR_PROCESS, e, false, 0, 0)
+                metadata.addArrayElement("processes", processMD)
+                val newContentBase64 =
+                    Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
+                inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))
+                //Update Summary element.
+                val summary = SummaryInfo("REDACTED")
+                inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
+                logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
+                output = gson.toJson(inputEvent)
+            }
+        } catch (e: Exception) {
+            //TODO::  - update retry counts
+            logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
+            val problem = Problem(RedactorProcessMetadata.REDACTOR_PROCESS, e, false, 0, 0)
 
-                    val summary = SummaryInfo("FAILURE", problem)
-                    inputEvent.add("summary", summary.toJsonElement())
-                    outList.add(gson.toJson(inputEvent))
-                }
-
-            } // .eventHubProcessor
-        } catch (ex: Exception) {
-            logger.error("DEX:error occurred: ${ex.message}")
+            val summary = SummaryInfo("FAILURE", problem)
+            inputEvent.add("summary", summary.toJsonElement())
+            output = gson.toJson(inputEvent)
         }
         try {
-            fnConfig.evHubSender.send(fnConfig.evHubSendName, outList)
-        } catch (e : Exception) {
+            fnConfig.evHubSender.send(fnConfig.evHubSendName, output)
+        } catch (e: Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
-
-        return inputEvent
     }
+
 
     @FunctionName("redactorReport")
     fun invoke(
-        @HttpTrigger(name = "req",
+        @HttpTrigger(
+            name = "req",
             methods = [HttpMethod.POST],
-            authLevel = AuthorizationLevel.ANONYMOUS)
+            authLevel = AuthorizationLevel.ANONYMOUS
+        )
         request: HttpRequestMessage<Optional<String>>,
-        context: ExecutionContext): HttpResponseMessage {
+    ): HttpResponseMessage {
 
-        val hl7Message : String?
+        val hl7Message: String?
         val helper = Helper()
         try {
             hl7Message = request.body?.get().toString()
@@ -163,24 +165,28 @@ class Function {
         }
     }
 
-}
 
-private fun noBodyResponse(request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
-    return buildHttpResponse(
-        "No body was found. Please send an HL7 v.2.x message in the body of the request.",
-        HttpStatus.BAD_REQUEST,
-        request
-    )
-}
-
-private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
-    var contentType = "application/json"
-    if (status != HttpStatus.OK) {
-        contentType = "text/plain"
+    private fun noBodyResponse(request: HttpRequestMessage<Optional<String>>): HttpResponseMessage {
+        return buildHttpResponse(
+            "No body was found. Please send an HL7 v.2.x message in the body of the request.",
+            HttpStatus.BAD_REQUEST,
+            request
+        )
     }
-    return request
-        .createResponseBuilder(status)
-        .header("Content-Type", contentType)
-        .body(message)
-        .build()
+
+    private fun buildHttpResponse(
+        message: String,
+        status: HttpStatus,
+        request: HttpRequestMessage<Optional<String>>
+    ): HttpResponseMessage {
+        var contentType = "application/json"
+        if (status != HttpStatus.OK) {
+            contentType = "text/plain"
+        }
+        return request
+            .createResponseBuilder(status)
+            .header("Content-Type", contentType)
+            .body(message)
+            .build()
+    }
 }
