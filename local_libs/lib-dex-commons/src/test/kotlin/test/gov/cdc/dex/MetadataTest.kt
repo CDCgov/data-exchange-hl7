@@ -74,7 +74,8 @@ class MetadataTest {
 
 
         val metadata = DexMetadata(provenance, listOf(processMD))
-        val event = DexEventPayload(messageInfo = DexMessageInfo(null,null,null,null, HL7MessageType.CASE), metadata = metadata, summary = summary, content = "")
+        val event = DexEventPayload(
+            uploadID=null, destinationEvent=null, destinationID=null, messageInfo = DexMessageInfo(null,null,null,null, HL7MessageType.CASE), metadata = metadata, summary = summary, content = "")
 
         println(event)
     }
