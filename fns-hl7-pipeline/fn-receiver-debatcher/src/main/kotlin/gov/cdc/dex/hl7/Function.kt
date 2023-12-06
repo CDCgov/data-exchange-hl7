@@ -39,6 +39,10 @@ class Function {
             "original_file_name",
             "original_file_timestamp",
             "system_provider",
+            "meta_destination_id",
+            "meta_ext_event",
+            "tus_tguid",
+            "meta_ext_uploadid",
         )
 
         val fnConfig = FunctionConfig()
@@ -118,7 +122,8 @@ class Function {
                                 arrayListOf(),
                                 DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)),
                                 metadata,
-                                summary
+                                summary,
+                                metaDataMap
                             ).apply {
                                 outList.add(gson.toJson(this))
                             }
@@ -157,7 +162,7 @@ class Function {
                                                     provenance
                                                 )
                                                 msgEvent = preparePayload(
-                                                    currentLinesArr, messageInfo, metadata, summary
+                                                    currentLinesArr, messageInfo, metadata, summary, metaDataMap
                                                 ).apply {
                                                     outList.add(gson.toJson(this))
                                                 }
@@ -181,7 +186,7 @@ class Function {
                                 val messageInfo = getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n"))
                                 logger.info("message info --> ${gson.toJson(messageInfo)}")
                                 preparePayload(
-                                    currentLinesArr, messageInfo, metadata, summary
+                                    currentLinesArr, messageInfo, metadata, summary, metaDataMap
                                 ).apply {
                                     outList.add(gson.toJson(this))
                                 }
@@ -200,7 +205,7 @@ class Function {
                                         null, null, null, null,
                                         HL7MessageType.valueOf(messageType)
                                     ),
-                                    metadata, summary
+                                    metadata, summary, metaDataMap
                                 ).apply {
                                     outList.add(gson.toJson(this))
                                 }
@@ -268,10 +273,22 @@ class Function {
         messageContent: ArrayList<String>,
         messageInfo: DexMessageInfo,
         metadata: DexMetadata,
-        summary: SummaryInfo) : DexEventPayload {
+        summary: SummaryInfo,
+        metaDataMap: Map<String, String>) : DexEventPayload {
+
+        val uploadID = if (!metaDataMap["meta_ext_uploadid"].isNullOrEmpty()) {
+            metaDataMap["meta_ext_uploadid"]
+        } else if (!metaDataMap["tus_tguid"].isNullOrEmpty()) {
+            metaDataMap["tus_tguid"]
+        } else null
 
         return DexEventPayload(
-            messageInfo = messageInfo, metadata = metadata, summary = summary,
+            uploadID = uploadID,
+            destinationID = metaDataMap["meta_destination_id"],
+            destinationEvent = metaDataMap["meta_ext_event"],
+            messageInfo = messageInfo,
+            metadata = metadata,
+            summary = summary,
             content = getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
         )
     }
