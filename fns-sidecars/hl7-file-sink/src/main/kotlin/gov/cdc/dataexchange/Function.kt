@@ -33,16 +33,17 @@ class Function {
                 // extract metadata
                 val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                val routeObject = JsonHelper.getValueFromJson("message_info.route", inputEvent)
                 logger.info("DEX::Processing message $messageUUID")
 
                 // add metadata
                 inputEvent.add("meta_destination_id", "dex-hl7".toJsonElement())
-                inputEvent.add("meta_ext_event", routeObject)
+
+                // change event to match destination folder name
+                inputEvent.addProperty("meta_ext_event", fnConfig.blobStorageFolderName)
 
                 // save to storage container
-                this.saveBlobToContainer("$messageUUID.txt", gson.toJson(inputEvent))
-                logger.info("DEX::Saved message $messageUUID.txt to sink ${fnConfig.blobStorageContainerName}")
+                this.saveBlobToContainer("${fnConfig.blobStorageFolderName}/$messageUUID.txt", gson.toJson(inputEvent))
+                logger.info("DEX::Saved message $messageUUID.txt to sink ${fnConfig.blobStorageContainerName}/${fnConfig.blobStorageFolderName}")
             } catch (e: Exception) {
                 // TODO send to quarantine?
                 logger.error("DEX::Error processing message", e)

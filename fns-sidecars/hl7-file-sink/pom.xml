@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>hl7-file-sink</artifactId>
-    <version>0.0.33-SNAPSHOT</version>
+    <version>0.0.34-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Kotlin Function :: hl7-file-sink</name>
     <scm>
@@ -142,7 +142,7 @@
                 <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
-                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan3</appServicePlanName>
+                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan2</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                     <auth>
@@ -207,6 +207,10 @@
                         <property>
                             <name>BlobStorageConnectionString</name>
                             <value>${BlobStorageConnectionString}</value>
+                        </property>
+                        <property>
+                            <name>BlobStorageFolderName</name>
+                            <value>${BlobStorageFolderName}</value>
                         </property>
                     </appSettings>
                 </configuration>
