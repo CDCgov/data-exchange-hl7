@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>hl7-json-lake-fn</artifactId>
-    <version>0.0.33-2023-12-04-133650-c17b464-2023-12-07-190847-edf9be8-2023-12-07-193632-63ceebb-2023-12-07-203332-d47ea9a</version>
+    <version>0.0.33-2023-12-04-133650-c17b464-2023-12-07-190847-edf9be8-2023-12-07-193632-63ceebb-2023-12-07-203332-d47ea9a-2023-12-07-211626-c14cc30</version>
     <packaging>jar</packaging>
     
     <name>DEX Fns-Pipeline :: hl7-json-lake-fn</name>
