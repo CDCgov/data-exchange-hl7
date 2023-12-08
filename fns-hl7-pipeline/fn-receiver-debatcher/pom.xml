@@ -137,10 +137,10 @@
                     <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details#supported-regions for all valid values -->
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-<!--                    <auth>-->
-<!--                        <type>service_principal</type>-->
-<!--                        <serverId>azure-service-principal</serverId>-->
-<!--                    </auth>-->
+                    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
@@ -151,30 +151,6 @@
                         <property>
                             <name>FN_VERSION</name>
                             <value>${project.version}</value>
-                        </property>
-                        <property>
-                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
-                            <value>1</value>
-                        </property>
-                        <property>
-                            <name>FUNCTIONS_EXTENSION_VERSION</name>
-                            <value>~4</value>
-                        </property>
-                        <property>
-                            <name>FUNCTIONS_WORKER_RUNTIME</name>
-                            <value>java</value>
-                        </property>
-                        <property>
-                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
-                            <value>true</value>
-                        </property>
-                        <property>
-                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
-                            <value>None</value>
-                        </property>
-                        <property>
-                            <name>EventHubSendName</name>
-                            <value>hl7-recdeb-out</value>
                         </property>
                     </appSettings>
                 </configuration>
