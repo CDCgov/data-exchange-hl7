@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>hl7-file-sink</artifactId>
-    <version>0.0.33-SNAPSHOT</version>
+    <version>0.0.34-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Kotlin Function :: hl7-file-sink</name>
     <scm>
@@ -159,54 +159,6 @@
                         <property>
                             <name>FN_VERSION</name>
                             <value>${project.version}</value>
-                        </property>
-                        <property>
-                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
-                            <value>1</value>
-                        </property>
-                        <property>
-                            <name>FUNCTIONS_EXTENSION_VERSION</name>
-                            <value>~4</value>
-                        </property>
-                        <property>
-                            <name>FUNCTIONS_WORKER_RUNTIME</name>
-                            <value>java</value>
-                        </property>
-                        <property>
-                            <name>ApplicationInsightsAgent_EXTENSION_VERSION</name>
-                            <value>~3</value>
-                        </property>
-                        <property>
-                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
-                            <value>true</value>
-                        </property>
-                        <property>
-                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
-                            <value>None</value>
-                        </property>
-                        <property>
-                            <name>AzureWebJobsStorage</name>
-                            <value>${AzureWebJobsStorage}</value>
-                        </property>
-                        <property>
-                            <name>EventHubConnectionString</name>
-                            <value>${EventHubConnectionString}</value>
-                        </property>
-                        <property>
-                            <name>EventHubReceiveName</name>
-                            <value>${EventHubReceiveName}</value>
-                        </property>
-                        <property>
-                            <name>EventHubConsumerGroup</name>
-                            <value>${EventHubConsumerGroup}</value>
-                        </property>
-                        <property>
-                            <name>BlobStorageContainerName</name>
-                            <value>${BlobStorageContainerName}</value>
-                        </property>
-                        <property>
-                            <name>BlobStorageConnectionString</name>
-                            <value>${BlobStorageConnectionString}</value>
                         </property>
                     </appSettings>
                 </configuration>
