@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
-    <artifactId>structure-validator</artifactId>
+    <artifactId>fn-sc-processapi-report</artifactId>
     <version>0.0.33-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Azure Java Functions</name>
+    <name>Azure Kotlin Function :: hl7-file-sink</name>
     <scm>
         <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
-        <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>   
+        <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>
         <url>https://github.com/CDCgov/data-exchange-hl7</url>
         <tag>HEAD</tag>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <functionAppName>ocio-ede-${environment-id}-hl7-structure-validator</functionAppName>
-        <AzureBom.version>1.2.18</AzureBom.version>
+        <functionAppName>fn-sc-processapi-report-${environment-id}</functionAppName>
+        <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
+        <AzureBom.version>1.2.15</AzureBom.version>
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
+        <functions.version>3.0.0</functions.version>
         <kotlin.version>1.9.0</kotlin.version>
-        <slf4j.version>2.0.5</slf4j.version>
-        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
-        <lib-nist-validator.version>1.3.5-SNAPSHOT</lib-nist-validator.version>
-        <hl7-pet.version>1.2.7.2</hl7-pet.version>
-
+        <hl7pet.version>1.2.7.2</hl7pet.version>
+        <lib-dex-commons.version>1.0.22-SNAPSHOT</lib-dex-commons.version>
+        <gson.version>2.10.1</gson.version>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -37,52 +40,67 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>maven.snapshots</id>
+            <name>Maven Central Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven.snapshots</id>
+            <name>Maven Central Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <dependencies>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.10.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.4.7</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.cdc.dex</groupId>
-            <artifactId>lib-dex-commons</artifactId>
-            <version>${lib-dex-commons.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.cdc.dex</groupId>
-            <artifactId>lib-nist-validator</artifactId>
-            <version>${lib-nist-validator.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.cdc.hl7</groupId>
-            <artifactId>hl7-pet_2.13</artifactId>
-            <version>${hl7-pet.version}</version>
-        </dependency>
+        <!-- Azure Functions Java Library -->
         <dependency>
             <groupId>com.microsoft.azure.functions</groupId>
             <artifactId>azure-functions-java-library</artifactId>
-            <version>${azure.functions.java.library.version}</version>
+            <version>${functions.version}</version>
         </dependency>
         <dependency>
             <groupId>com.azure</groupId>
-            <artifactId>azure-messaging-eventhubs</artifactId>
+            <artifactId>azure-messaging-servicebus</artifactId>
+            <version>7.14.6</version>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.9.2</version>
-            <scope>test</scope>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
         </dependency>
+        <!-- Kotlin -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-compiler</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Test -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test</artifactId>
@@ -90,50 +108,39 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>5.2.0</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
+        <!-- Azure Event Hubs SDK -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-messaging-eventhubs</artifactId>
+            <version>5.16.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>gov.cdc.dex</groupId>
+            <artifactId>lib-dex-commons</artifactId>
+            <version>${lib-dex-commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-blob</artifactId>
+            <version>12.23.0</version>
         </dependency>
     </dependencies>
+
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <source>src/main/kotlin</source>
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <jvmTarget>${java.version}</jvmTarget>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
@@ -141,14 +148,13 @@
                 <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
+                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan6</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan</appServicePlanName>
                     <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
                     </auth>
-
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
@@ -173,16 +179,16 @@
                             <value>java</value>
                         </property>
                         <property>
+                            <name>ApplicationInsightsAgent_EXTENSION_VERSION</name>
+                            <value>~3</value>
+                        </property>
+                        <property>
                             <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
                             <value>true</value>
                         </property>
                         <property>
                             <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
                             <value>None</value>
-                        </property>
-                        <property>
-                            <name>EventHubSendName</name>
-                            <value>hl7-structure-out</value>
                         </property>
                     </appSettings>
                 </configuration>
@@ -197,9 +203,8 @@
             </plugin>
             <!--Remove obj folder generated by .NET SDK in maven clean-->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -208,11 +213,88 @@
                     </filesets>
                 </configuration>
             </plugin>
-	        <plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>3.1.1</version>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <overwrite>true</overwrite>
+                            <outputDirectory>${stagingDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>host.json</include>
+                                        <include>local.settings.json</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${stagingDirectory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <includeScope>runtime</includeScope>
+                            <excludeArtifactIds>azure-functions-java-library</excludeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jvmTarget>${java.version}</jvmTarget>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -244,7 +326,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <groups>UnitTest</groups>
+                    <environmentVariables>
+                        <FN_VERSION>${project.version}</FN_VERSION>
+                        <EventHubConnectionString>${ehString}</EventHubConnectionString>
+                    </environmentVariables>
                     <argLine>
                         --illegal-access=permit
                     </argLine>
@@ -252,38 +337,9 @@
                     <forkCount>2</forkCount>
                     <reuseForks>true</reuseForks>
                     <argLine>${surefireArgLine}</argLine>
-                    <environmentVariables>
-                        <FN_VERSION>${project.version}</FN_VERSION>
-                        <EventHubConnectionString>${ehString}</EventHubConnectionString>
-                        <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
-                        <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
-                    </environmentVariables>
                 </configuration>
             </plugin>
-            <!-- Add failsafe plugin for integration testing -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.1.2</version>
-                <configuration>
-                    <groups>IntegrationTest</groups>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>integration-tests</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <environmentVariables>
-                                <EventHubConnectionString>${ehString}</EventHubConnectionString>
-                                <EventHubSendName>hl7-structure-out</EventHubSendName>
-                            </environmentVariables>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--Jacoco Plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -308,9 +364,7 @@
                         <configuration>
                             <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
                             <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
-                            <excludes>
-                                <exclude>gov/cdc/dex/model/StructureValidatorProcessMetadata*</exclude>
-                            </excludes>
+
                         </configuration>
                     </execution>
                     <execution>
@@ -335,16 +389,12 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.8.1</version>
+            </plugin>
         </plugins>
     </build>
-    <distributionManagement>
-        <repository>
-            <id>ede-releases</id>
-            <url>${maven-releases-url}</url>
-        </repository>
-        <snapshotRepository>
-            <id>ede-snapshots</id>
-            <url>${maven-snapshot-url}</url>
-        </snapshotRepository>
-    </distributionManagement>
+
 </project>
