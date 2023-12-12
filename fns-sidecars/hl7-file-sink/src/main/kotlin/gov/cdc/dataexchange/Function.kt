@@ -33,12 +33,12 @@ class Function {
                 // extract metadata
                 val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
+                val originalDestId = JsonHelper.getValueFromJson("destination_id", inputEvent).asString
                 logger.info("DEX::Processing message $messageUUID")
 
                 // add metadata
                 val newMetadata = mutableMapOf<String, String>()
-                inputEvent.add("meta_destination_id", "dex-hl7".toJsonElement())
-                newMetadata["meta_destination_id"] = "dex-hl7"
+                newMetadata["meta_destination_id"] = originalDestId
 
                 // change event to match destination folder name
                 inputEvent.addProperty("meta_ext_event", fnConfig.blobStorageFolderName)
