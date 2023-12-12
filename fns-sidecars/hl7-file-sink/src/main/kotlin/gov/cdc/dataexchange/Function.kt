@@ -36,13 +36,16 @@ class Function {
                 logger.info("DEX::Processing message $messageUUID")
 
                 // add metadata
+                val newMetadata = mutableMapOf<String, String>()
                 inputEvent.add("meta_destination_id", "dex-hl7".toJsonElement())
+                newMetadata["meta_destination_id"] = "dex-hl7"
 
                 // change event to match destination folder name
                 inputEvent.addProperty("meta_ext_event", fnConfig.blobStorageFolderName)
+                newMetadata["meta_ext_event"] = fnConfig.blobStorageFolderName
 
                 // save to storage container
-                this.saveBlobToContainer("${fnConfig.blobStorageFolderName}/$messageUUID.txt", gson.toJson(inputEvent))
+                this.saveBlobToContainer("${fnConfig.blobStorageFolderName}/$messageUUID.txt", gson.toJson(inputEvent), newMetadata)
                 logger.info("DEX::Saved message $messageUUID.txt to sink ${fnConfig.blobStorageContainerName}/${fnConfig.blobStorageFolderName}")
             } catch (e: Exception) {
                 // TODO send to quarantine?
@@ -52,9 +55,10 @@ class Function {
 
     }
 
-    fun saveBlobToContainer(blobName: String, blobContent: String) {
+    fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>) {
         val data = BinaryData.fromString(blobContent)
         val client = fnConfig.azureBlobProxy.getBlobClient(blobName)
         client.upload(data, true)
+        client.setMetadata(newMetadata)
     }
 }
