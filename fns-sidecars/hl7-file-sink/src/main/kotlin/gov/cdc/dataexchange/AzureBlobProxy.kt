@@ -11,10 +11,6 @@ class AzureBlobProxy(connectionStr: String, container: String) {
         .buildClient()
         .getBlobContainerClient(container)
 
-    init {
-        blobContainerClient.createIfNotExists()
-    }
-
     fun getBlobClient(blobName: String): BlobClient {
         return blobContainerClient.getBlobClient(blobName)
     }
