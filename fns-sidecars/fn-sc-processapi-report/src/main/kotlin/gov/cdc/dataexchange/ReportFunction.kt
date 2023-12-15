@@ -6,6 +6,7 @@ import com.azure.messaging.servicebus.ServiceBusMessage
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.microsoft.azure.functions.annotation.*
+import gov.cdc.dataexchange.model.ProcessingStatusSchema
 import org.slf4j.LoggerFactory
 import java.lang.System
 
@@ -18,6 +19,8 @@ class ReportFunction {
 
     companion object {
         private val logger = LoggerFactory.getLogger(ReportFunction::class.java.simpleName)
+
+        private val gson by lazy { Gson() }
 
         private val CONN_STR = System.getenv("ServiceBusConnectionString")
         private val QUEUE = System.getenv("ServiceBusQueue")
@@ -33,6 +36,7 @@ class ReportFunction {
     }
 
     /**
+     * Function to send service report to Processing Status API service bus
      * @param records
      */
     @FunctionName("processapi-report")
@@ -48,20 +52,19 @@ class ReportFunction {
         logger.info("REPORT::Receiving $inputRecordCount records.")
         try {
             for(record in records) {
-                serviceBusClient.sendMessage(
-                    ServiceBusMessage(
-                        removeKeyValuePairFromJson(record, "content"))
-                ).subscribe()
+                val jsonObject = gson.fromJson(record, JsonObject::class.java)
+                // form message for Processing Status API
+                jsonObject.remove("content")
+                val processingStatusSchema = ProcessingStatusSchema(content = jsonObject)
+                val processingStatusJson = gson.toJson(processingStatusSchema)
+                val messageUuid = jsonObject.get("message_uuid").asString
+                logger.info("REPORT::upload_id: ${processingStatusSchema.uploadId}, message_uuid: $messageUuid, queue: $QUEUE" +
+                        "\n$processingStatusJson")
+                // send message to Processing Status API Service Bus
+                serviceBusClient.sendMessage(ServiceBusMessage(processingStatusJson)).subscribe()
             }
         } catch (e: Exception) {
             logger.error("REPORT::ERROR: ${e.message}")
         }
-    }
-
-    fun removeKeyValuePairFromJson(jsonString: String, keyToRemove: String): String {
-        val gson = Gson()
-        val jsonObject = gson.fromJson(jsonString, JsonObject::class.java)
-        jsonObject.remove(keyToRemove)
-        return gson.toJson(jsonObject)
     }
 }

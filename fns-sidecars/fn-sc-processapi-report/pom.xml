@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>fn-sc-processapi-report</artifactId>
-    <version>0.0.33-SNAPSHOT</version>
+    <version>0.0.35-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Azure Kotlin Function :: hl7-file-sink</name>
+    <name>Azure Kotlin Function :: fn-sc-processapi-report</name>
     <scm>
         <connection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</connection>
         <developerConnection>scm:git:git@github.com:CDCgov/data-exchange-hl7.git</developerConnection>
