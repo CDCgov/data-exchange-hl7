@@ -15,13 +15,11 @@
       }
     }
   },
-  "logging": {
-    "applicationInsights": {
-      "samplingSettings": {
-        "isEnabled": true,
-        "maxTelemetryItemsPerSecond" : 20,
-        "excludedTypes": "Request;Exception"
-      }
-    }
+  "logLevel": {
+    "default": "Warning",
+    "Function": "Information",
+    "Host": "Error",
+    "Worker": "Warning",
+    "Microsoft": "None"
   }
 }
