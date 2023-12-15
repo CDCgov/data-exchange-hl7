@@ -28,8 +28,6 @@
         <functionAppName>ocio-ede-${environment-id}-hl7-lake-segments-transformer</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
 
-        <slf4j.version>2.0.5</slf4j.version>
-
         <gson.version>2.10.1</gson.version>
         <junit.version>5.9.2</junit.version>
         <libdexcommon.version>1.0.20-SNAPSHOT</libdexcommon.version>
@@ -100,12 +98,6 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
         </dependency>
 
         <dependency>
@@ -265,7 +257,7 @@
                     <environmentVariables>
                         <FN_VERSION>${project.version}</FN_VERSION>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
-                        <EventHubSendName>${EventHubSendName}</EventHubSendName>
+                        <EventHubSendName>hl7-lake-segments-out</EventHubSendName>
                     </environmentVariables>
                 </configuration>
             </plugin>
