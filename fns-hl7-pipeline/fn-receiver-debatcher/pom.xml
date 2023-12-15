@@ -23,7 +23,6 @@
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
-        <slf4j.version>2.0.5</slf4j.version>
         <gson.version>2.10.1</gson.version>
         <hl7pet.version>1.2.7.1</hl7pet.version>
         <lib-dex-commons.version>1.0.24-SNAPSHOT</lib-dex-commons.version>
@@ -96,13 +95,6 @@
             <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
