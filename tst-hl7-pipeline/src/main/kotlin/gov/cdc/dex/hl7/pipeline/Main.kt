@@ -23,51 +23,156 @@ class PipelineTest {
         val blobContainerName: String = System.getenv("BLOB_CONTAINER_NAME")
 
         const val PATH_TO_MESSAGES = "src/main/resources/messages"
-        private const val MESSAGE_TYPE: String = "message_type"
-        private const val ROUTE: String = "route"
+        private const val MESSAGE_TYPE = "message_type"
+        private const val ROUTE = "route"
         private const val REPORTING_JURISDICTION = "reporting_jurisdiction"
-        private const val ORIGINAL_FILE_NAME: String = "original_file_name"
-        const val HEADER_CONTENT_TYPE = "text/plain"
+        private const val ORIGINAL_FILE_NAME = "original_file_name"
 
         val uploadedBlobs: MutableSet<String> = mutableSetOf()
 
         val messagesMetadata = mapOf(
-            "case.txt" to mutableMapOf<String, String>(MESSAGE_TYPE to "CASE", ORIGINAL_FILE_NAME to "case.txt"),
-            "test.hl7" to mutableMapOf<String, String>(
+            "COVID19_Missing_MSH3.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID19_Missing_MSH3.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+                ),
+            "COVID19_Missing_MSH4.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID19_Missing_MSH4.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "COVID19_Missing_MSH9.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID19_Missing_MSH9.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "COVID19_Missing_MSH12.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID19_Missing_MSH12.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "COVID19_PID_Segment_With_Patient_Name_And_Address.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "lab.hl7"
+                ROUTE to "COVID19_ELR",
+                ORIGINAL_FILE_NAME to "COVID19_PID_Segment_With_Patient_Name_And_Address.txt"
             ),
-            "Valid-PHLIP-ORU-DataType-DT.txt" to mutableMapOf<String, String>(
+            "COVID-19_OBX1_Uniqueness_Test.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID-19_OBX1_Uniqueness_Test.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "COVID-19_OBX2_CWE_OBX5_NM.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID-19_OBX2_CWE_OBX5_NM.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "COVID-19_OBX2CWE_OBX5_CWE.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID-19_OBX2CWE_OBX5_CWE.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "COVID-19_OBX_Sequentional_Test.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID-19_OBX_Sequentional_Test.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "COVID-19_PID_DateOfBirth.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID-19_PID_DateOfBirth.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "COVID-19_PID_Required_Fields.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID-19_PID_Required_Fields.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "COVID-19_With_SSN_PID19.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID-19_With_SSN_PID19.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "COVID-19_With_SSN_PID19.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "COVID-19_With_SSN_PID19.txt",
+                ROUTE to "COVID19_ELR",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "FDD_LIST_PID_Name_Address_CASE.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "CASE",
+                ORIGINAL_FILE_NAME to "FDD_LIST_PID_Name_Address_CASE.txt",
+                ROUTE to "",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_DataType_DT_CASE.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "CASE",
+                ORIGINAL_FILE_NAME to "PHLIP_DataType_DT_CASE.txt",
+                ROUTE to "",
+                REPORTING_JURISDICTION to "48"
+            ),
+
+            "PHLIP_FLU_DataType_CWE.txt" to mutableMapOf<String, String>(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "messages/case.txt"
+                ORIGINAL_FILE_NAME to "PHLIP_FLU_DataType_CWE.txt"
             ),
-            "Valid-PHLIP-ORU-DataType-DTM.txt" to mutableMapOf<String, String>(
+            "PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt" to mutableMapOf<String, String>(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "messages/case.txt"
+                ORIGINAL_FILE_NAME to "PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt"
             ),
-            "Valid-PHLIP-ORU-DataType-FT.txt" to mutableMapOf<String, String>(
+            "PHLIP_FLU_PID_7_DateTimeOfBirth.txt" to mutableMapOf<String, String>(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "messages/case.txt"
+                ORIGINAL_FILE_NAME to "PHLIP_FLU_PID_7_DateTimeOfBirth.txt"
             ),
-            "Valid-PHLIP-ORU-DataType-TX.txt" to mutableMapOf<String, String>(
+            "PHLIP_FLU_PID_19.txt" to mutableMapOf<String, String>(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "messages/case.txt"
+                ORIGINAL_FILE_NAME to "PHLIP_FLU_PID_19.txt"
             ),
-            "Valid-PHLIP-ORU-DataType-NM.txt" to mutableMapOf<String, String>(
+            "PHLIP_FLU_Receiving_Sending_Applications.txt" to mutableMapOf<String, String>(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "messages/case.txt"
+                ORIGINAL_FILE_NAME to "PHLIP_FLU_Receiving_Sending_Applications.txt"
             ),
-            "Valid-PHLIP-ORU-DataType-SN.txt" to mutableMapOf<String, String>(
+            "PHLIP_OBX2_CWE_OBX5_ST.txt" to mutableMapOf<String, String>(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "messages/case.txt"
+                ORIGINAL_FILE_NAME to "PHLIP_OBX2_CWE_OBX5_ST.txt"
+            ),
+            "PHLIP_Salm_PID_Required_Fields_Case.txt" to mutableMapOf<String, String>(
+                MESSAGE_TYPE to "CASE",
+                REPORTING_JURISDICTION to "48",
+                ORIGINAL_FILE_NAME to "PHLIP_Salm_PID_Required_Fields_Case.txt"
+            ),
+            "PHLIP_VPD_DataType_ED.txt" to mutableMapOf<String, String>(
+                MESSAGE_TYPE to "CASE",
+                REPORTING_JURISDICTION to "48",
+                ORIGINAL_FILE_NAME to "PHLIP_VPD_DataType_ED.txt"
+            ),
+            "PHLIP_VPD_VALID.txt" to mutableMapOf<String, String>(
+                MESSAGE_TYPE to "CASE",
+                REPORTING_JURISDICTION to "48",
+                ORIGINAL_FILE_NAME to "PHLIP_VPD_VALID.txt"
+            ),
+            "PHLIP_VPD_VALID_DataType_FT.txt" to mutableMapOf<String, String>(
+                MESSAGE_TYPE to "CASE",
+                REPORTING_JURISDICTION to "48",
+                ORIGINAL_FILE_NAME to "PHLIP_VPD_VALID_DataType_FT.txt"
             )
+
         )
     }
 

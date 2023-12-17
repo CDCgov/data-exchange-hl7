@@ -1,0 +1,61 @@
+MSH|^~\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.1^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~COVID19_MMG_V1.2^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||COVID_003^^^SendAppName&2.16.840.1.114222.nnnn&ISO||~^^^^^^S||19430127|M||UNK^unknown^NULLFL|^^^34^08100^^^^20209|||||||||||2135-2^Hispanic or Latino^CDCREC|||||||
+OBR|1||103_COVID^SendAppName^2.16.840.1.114222.nnnn^ISO|68991-9^Epidemiologic Information^LN|||20200501000000|||||||||||||||20200501000000|||F||||||11065^Coronavirus Disease 2019 (COVID-19)^NND
+OBX|1|CWE|78746-5^Country of Birth^LN||MEX^MEXICO^ISO3166_1||||||F
+OBX|2|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES OF AMERICA^ISO3166_1||||||F
+OBX|3|TS|11368-8^Date of Illness Onset^LN||20200202||||||F
+OBX|4|TS|77976-9^Illness End Date^LN||20200328||||||F
+OBX|5|SN|77977-7^Illness Duration^LN||^49|d^day [time]^UCUM|||||F
+OBX|6|CWE|77996-7^Pregnancy Status^LN||N^No^HL70136||||||F
+OBX|7|TS|77975-1^Diagnosis Date^LN||20200214||||||F
+OBX|8|CWE|77974-4^Hospitalized^LN||N^No^HL70136||||||F
+OBX|9|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|10|ST|77993-4^State Case Identifier^LN||COVID_TC03||||||F
+OBX|11|SN|77998-3^Age at Case Investigation^LN||^43|a^year [time]^UCUM|||||F
+OBX|12|CWE|77982-7^Case Disease Imported Code^LN||C1512888^International^UML||||||F
+OBX|13|CWE|INV153^Imported Country^PHINQUESTION||MEX^MEXICO^ISO3166_1||||||F
+OBX|14|CWE|77984-3^Country of Exposure^LN|1|MEX^MEXICO^ISO3166_1||||||F
+OBX|15|CWE|77985-0^State or Province of Exposure^LN|1|MX-COA^Coahuila, MX^ISO3166_2||||||F
+OBX|16|ST|77986-8^City of Exposure^LN|1|Saltillo||||||F
+OBX|17|CWE|77989-2^Transmission Mode^LN||420014008^Blood borne transmission^SCT||||||F
+OBX|18|CWE|77990-0^Case Class Status Code^LN||2931005^Probable diagnosis^SCT||||||F
+OBX|19|CWE|77965-2^Immediate National Notifiable Condition^LN||N^No^HL70136||||||F
+OBX|20|CWE|77980-1^Case Outbreak Indicator^LN||N^No^HL70136||||||F
+OBX|21|ST|77969-4^Jurisdiction Code^LN||909||||||F
+OBX|22|CWE|48766-0^Reporting Source Type Code^LN||PHC247^Laboratory^CDCPHINVS||||||F
+OBX|23|ST|52831-5^Reporting Source ZIP Code^LN||08100||||||F
+OBX|24|CWE|77988-4^Binational Reporting Criteria^LN||PHC1139^Has case contacts in or from Mexico or Canada^CDCPHINVS~PHC1215^Potentially exposed by a resident of Mexico or Canada^CDCPHINVS||||||F
+OBX|25|ST|74549-7^Person Reporting to CDC - Name^LN||Jo Brown||||||F
+OBX|26|ST|74548-9^Person Reporting to CDC - Phone Number^LN||(555) 909-0000||||||F
+OBX|27|ST|74547-1^Person Reporting to CDC - Email^LN||jbrown@hospital.com||||||F
+OBX|28|DT|77979-3^Case Investigation Start Date^LN||20200219||||||F
+OBX|29|DT|77995-9^Date Reported^LN||20200223||||||F
+OBX|30|TS|77972-8^Earliest Date Reported to County^LN||20200223||||||F
+OBX|31|SN|77991-8^MMWR Week^LN||^5||||||F
+OBX|32|DT|77992-6^MMWR Year^LN||2020||||||F
+OBX|33|DT|77994-2^Date CDC Was First Verbally Notified of This Case^LN||20200223||||||F
+OBX|34|DT|77970-2^Date First Reported to PHD^LN||20200215||||||F
+OBX|35|CWE|77966-0^Reporting State^LN||34^New Jersey^FIPS5_2||||||F
+OBX|36|CWE|77968-6^National Reporting Jurisdiction^LN||34^NJ^FIPS5_2||||||F
+OBX|37|DT|95366-1^First Positive Specimen Date^LN||20200213||||||F
+OBX|38|ST|INV1405^Lineage^PHINQUESTION||Omicron B.1.1.529||||||F
+OBX|39|CWE|VAC126^Did the Subject Ever Receive a Vaccine Against This Disease^PHINQUESTION||N^No^HL70136||||||F
+OBX|40|CWE|VAC148^Vaccinated per ACIP Recommendations^PHINQUESTION||Y^Yes^HL70136||||||F
+OBX|41|CWE|30956-7^Vaccine Type^LN|1|208^SARS-COV-2 (COVID-19) vaccine, mRNA, spike protein, LNP, preservative free, 30 mcg/0.3mL dose^CVX||||||F
+OBX|42|DT|30952-6^Vaccine Administered Date^LN|1|20201215||||||F
+OBX|43|SN|30973-2^Vaccine Dose Number^LN|1|^1||||||F
+OBX|44|CWE|30957-5^Vaccine Manufacturer^LN|1|PFR^Pfizer, Inc^MVX||||||F
+OBX|45|ST|30959-1^Vaccine Lot Number^LN|1|AA0001AAA||||||F
+OBX|46|DT|VAC109^Vaccine Expiration Date^PHINQUESTION|1|20211231||||||F
+OBX|47|ST|VAC153^National Drug Code (NDC)^PHINQUESTION|1|59267-1000-1||||||F
+OBX|48|ST|VAC102^Vaccination Record Identifier^PHINQUESTION|1|COVIDVAC11889||||||F
+OBX|49|CWE|VAC147^Vaccine Event Information Source^PHINQUESTION|1|184225006^Medical record^SCT||||||F
+OBX|50|CWE|30956-7^Vaccine Type^LN|2|208^SARS-COV-2 (COVID-19) vaccine, mRNA, spike protein, LNP, preservative free, 30 mcg/0.3mL dose^CVX||||||F
+OBX|51|DT|30952-6^Vaccine Administered Date^LN|2|20210105||||||F
+OBX|52|SN|30973-2^Vaccine Dose Number^LN|2|^2||||||F
+OBX|53|CWE|30957-5^Vaccine Manufacturer^LN|2|PFR^Pfizer, Inc^MVX||||||F
+OBX|54|ST|30959-1^Vaccine Lot Number^LN|2|AA0002AAA||||||F
+OBX|55|DT|VAC109^Vaccine Expiration Date^PHINQUESTION|2|20211231||||||F
+OBX|56|ST|VAC153^National Drug Code (NDC)^PHINQUESTION|2|59267-1000-01||||||F
+OBX|57|ST|VAC102^Vaccination Record Identifier^PHINQUESTION|2|COVIDVAC12889||||||F
+OBX|58|CWE|VAC147^Vaccine Event Information Source^PHINQUESTION|2|184225006^Medical record^SCT||||||F
