@@ -122,52 +122,52 @@ class PipelineTest {
                 REPORTING_JURISDICTION to "48"
             ),
 
-            "PHLIP_FLU_DataType_CWE.txt" to mutableMapOf<String, String>(
+            "PHLIP_FLU_DataType_CWE.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
                 ORIGINAL_FILE_NAME to "PHLIP_FLU_DataType_CWE.txt"
             ),
-            "PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt" to mutableMapOf<String, String>(
+            "PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
                 ORIGINAL_FILE_NAME to "PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt"
             ),
-            "PHLIP_FLU_PID_7_DateTimeOfBirth.txt" to mutableMapOf<String, String>(
+            "PHLIP_FLU_PID_7_DateTimeOfBirth.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
                 ORIGINAL_FILE_NAME to "PHLIP_FLU_PID_7_DateTimeOfBirth.txt"
             ),
-            "PHLIP_FLU_PID_19.txt" to mutableMapOf<String, String>(
+            "PHLIP_FLU_PID_19.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
                 ORIGINAL_FILE_NAME to "PHLIP_FLU_PID_19.txt"
             ),
-            "PHLIP_FLU_Receiving_Sending_Applications.txt" to mutableMapOf<String, String>(
+            "PHLIP_FLU_Receiving_Sending_Applications.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
                 ORIGINAL_FILE_NAME to "PHLIP_FLU_Receiving_Sending_Applications.txt"
             ),
-            "PHLIP_OBX2_CWE_OBX5_ST.txt" to mutableMapOf<String, String>(
+            "PHLIP_OBX2_CWE_OBX5_ST.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
                 ORIGINAL_FILE_NAME to "PHLIP_OBX2_CWE_OBX5_ST.txt"
             ),
-            "PHLIP_Salm_PID_Required_Fields_Case.txt" to mutableMapOf<String, String>(
+            "PHLIP_Salm_PID_Required_Fields_Case.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
                 ORIGINAL_FILE_NAME to "PHLIP_Salm_PID_Required_Fields_Case.txt"
             ),
-            "PHLIP_VPD_DataType_ED.txt" to mutableMapOf<String, String>(
+            "PHLIP_VPD_DataType_ED.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
                 ORIGINAL_FILE_NAME to "PHLIP_VPD_DataType_ED.txt"
             ),
-            "PHLIP_VPD_VALID.txt" to mutableMapOf<String, String>(
+            "PHLIP_VPD_VALID.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
                 ORIGINAL_FILE_NAME to "PHLIP_VPD_VALID.txt"
             ),
-            "PHLIP_VPD_VALID_DataType_FT.txt" to mutableMapOf<String, String>(
+            "PHLIP_VPD_VALID_DataType_FT.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
                 ORIGINAL_FILE_NAME to "PHLIP_VPD_VALID_DataType_FT.txt"
@@ -176,7 +176,7 @@ class PipelineTest {
         )
     }
 
-    fun getCurrentDateTimeWithSeconds(): String {
+    private fun getCurrentDateTimeWithSeconds(): String {
         return try {
             val currentDateTime = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -255,8 +255,6 @@ class PipelineTest {
 
         }
     }
-
-
 }
 fun main() {
     println("main")
