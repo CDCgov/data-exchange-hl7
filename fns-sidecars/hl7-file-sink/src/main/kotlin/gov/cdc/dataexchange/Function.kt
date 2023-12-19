@@ -33,7 +33,11 @@ class Function {
                 // extract metadata
                 val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                val originalDestId = JsonHelper.getValueFromJson("destination_id", inputEvent).asString
+                val originalDestId = try {
+                    JsonHelper.getValueFromJson("destination_id", inputEvent).asString
+                } catch (e : Exception) {
+                    "unknown"
+                }
                 logger.info("DEX::Processing message $messageUUID")
 
                 // add metadata
