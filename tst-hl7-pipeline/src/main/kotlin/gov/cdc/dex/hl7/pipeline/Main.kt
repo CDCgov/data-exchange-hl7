@@ -79,9 +79,9 @@ class PipelineTest {
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
-            "COVID-19_OBX_Sequentional_Test.txt" to mutableMapOf<String, String?>(
+            "COVID-19_OBX_Sequential_Test.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID-19_OBX_Sequentional_Test.txt",
+                ORIGINAL_FILE_NAME to "COVID-19_OBX_Sequential_Test.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
@@ -187,12 +187,11 @@ class PipelineTest {
         }
 
     }
-
-    fun addPayloadToTestResources(payloadAsJson: String, originalFileName: String) {
+    private fun addPayloadToTestResources(payloadAsJson: Map<*, *>?, originalFileName: String) {
         val testResourcesDirectory = "src/test/resources"
         try {
             val jsonFileWithPayload = File("$testResourcesDirectory/$originalFileName.json")
-            jsonFileWithPayload.writeText(payloadAsJson)
+            jsonFileWithPayload.writeText(payloadAsJson.toString())
 
         }catch (e:Exception) {
             logger.error("Error occurred while copying payload to $testResourcesDirectory")
@@ -200,7 +199,6 @@ class PipelineTest {
 
 
     }
-
     fun dropMessagesToABlobStorage() {
         try {
             val blobServiceClient = BlobServiceClientBuilder()
@@ -213,7 +211,7 @@ class PipelineTest {
 
             if (directoryWithMessages.exists()) {
                 directoryWithMessages.listFiles()?.forEach {
-                    val blobNameWithTimeAppended = it.name + getCurrentDateTimeWithSeconds()
+                    val blobNameWithTimeAppended = getCurrentDateTimeWithSeconds().replace("\\s".toRegex(),"") + it.name
                     val blobClient = containerClient.getBlobClient(blobNameWithTimeAppended)
 
                     blobClient.upload(File(it.absolutePath).inputStream(), it.length(), true)
@@ -228,8 +226,6 @@ class PipelineTest {
             logger.error("Error occurred while uploading message to a blob storage: ${e.message}")
         }
     }
-
-
     fun queryCosmosDB() {
         try {
             val cosmosDBClient by lazy {
@@ -241,13 +237,12 @@ class PipelineTest {
                     cosmosDBPartitionKey
                 )
             }
-
             for (blob in uploadedBlobs) {
-                val queryCosmosDBToRetrievePayload =
-                    "SELECT * FROM c WHERE c.metadata.provenance.ext_original_file_name=$blob"
+                val queryCosmosDBToRetrievePayload = "SELECT * FROM c WHERE c.metadata.provenance.ext_original_file_name=\"$blob\""
+
                 val queryItem = cosmosDBClient.sqlReadItems(queryCosmosDBToRetrievePayload, Map::class.java).blockLast()
-                //TO DO - extract payload and call addPayloadToTestResources()  to copy   to test/resources
-                println (queryItem)
+                addPayloadToTestResources(queryItem,blob)
+                Thread.sleep(5_000)
 
             }
         }catch (e: Exception) {
@@ -257,11 +252,8 @@ class PipelineTest {
     }
 }
 fun main() {
-    println("main")
     val pipeline = PipelineTest()
     pipeline.dropMessagesToABlobStorage()
-    //queryCosmosDB()
-
-
-
+    Thread.sleep(30_000)
+    pipeline.queryCosmosDB()
 }
