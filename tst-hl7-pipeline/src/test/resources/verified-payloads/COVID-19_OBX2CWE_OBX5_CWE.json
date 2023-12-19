@@ -1,0 +1,2083 @@
+{
+  "id": "fecd3141-a45d-4ec7-9a1e-882e11efa96d",
+  "message_uuid": "fecd3141-a45d-4ec7-9a1e-882e11efa96d",
+  "upload_id": null,
+  "destination_id": null,
+  "destination_event": null,
+  "message_info": {
+    "event_code": "11065",
+    "route": "coronavirus",
+    "mmgs": null,
+    "reporting_jurisdiction": "34",
+    "type": "CASE",
+    "local_record_id": "103_COVID"
+  },
+  "metadata": {
+    "provenance": {
+      "event_id": "452ad394-701e-0074-209b-3298cd06282a",
+      "event_timestamp": "2023-12-19T16:51:39.2784025Z",
+      "file_uuid": "8a9d8967-c249-45b2-ab71-1ac41d981456",
+      "file_path": "https://tfedemessagestoragedev.blob.core.windows.net/hl7ingress/-12-19-covid_19_obx2cwe_obx5_cwe_txt.txt",
+      "file_timestamp": "2023-12-19T16:51:39+00:00",
+      "file_size": 5166,
+      "single_or_batch": "SINGLE",
+      "message_hash": "93c45fc5496b402a12b48952b0496256",
+      "ext_system_provider": null,
+      "ext_original_file_name": "-12-19-covid_19_obx2cwe_obx5_cwe_txt.txt",
+      "message_index": 1,
+      "ext_original_file_timestamp": null,
+      "source_metadata": null
+    },
+    "processes": [
+      {
+        "status": "SUCCESS",
+        "process_name": "RECEIVER",
+        "process_version": "1.0.0",
+        "eventhub_queued_time": "2023-12-19T16:51:39.912",
+        "eventhub_offset": 1181116009176,
+        "eventhub_sequence_number": 90844,
+        "configs": [],
+        "start_processing_time": "2023-12-19T16:51:40.065+00:00",
+        "end_processing_time": "2023-12-19T16:51:40.108+00:00"
+      },
+      {
+        "status": "SUCCESS",
+        "report": {
+          "entries": [],
+          "status": "SUCCESS"
+        },
+        "process_name": "REDACTOR",
+        "process_version": "1.0.0",
+        "eventhub_queued_time": "2023-12-19T16:51:40.662",
+        "eventhub_offset": 1219770771232,
+        "eventhub_sequence_number": 90636,
+        "configs": [
+          "case_config.txt"
+        ],
+        "start_processing_time": "2023-12-19T16:51:40.798+00:00",
+        "end_processing_time": "2023-12-19T16:51:40.83+00:00"
+      },
+      {
+        "status": "SUCCESS",
+        "report": {
+          "entries": {
+            "structure": [],
+            "content": [],
+            "value-set": []
+          },
+          "error-count": {
+            "structure": 0,
+            "value-set": 0,
+            "content": 0
+          },
+          "warning-count": {
+            "structure": 0,
+            "value-set": 0,
+            "content": 0
+          },
+          "status": "VALID_MESSAGE"
+        },
+        "process_name": "STRUCTURE-VALIDATOR",
+        "process_version": "1.0.0",
+        "eventhub_queued_time": "2023-12-19T16:51:41.569",
+        "eventhub_offset": 1116691535952,
+        "eventhub_sequence_number": 99820,
+        "configs": [
+          "NOTF_ORU_V3.1"
+        ],
+        "start_processing_time": "2023-12-19T16:51:41.882+00:00",
+        "end_processing_time": "2023-12-19T16:51:41.92+00:00"
+      },
+      {
+        "status": "SUCCESS",
+        "report": {
+          "MSH": {
+            "file_separator": "|",
+            "encoding_characters": "^~\\&",
+            "sending_application": {
+              "namespace_id": "SendAppName",
+              "universal_id": "2.16.840.1.114222.TBD",
+              "universal_id_type": "ISO"
+            },
+            "sending_facility": {
+              "namespace_id": "Sending-Facility",
+              "universal_id": "2.16.840.1.114222.TBD",
+              "universal_id_type": "ISO"
+            },
+            "receiving_application": {
+              "namespace_id": "PHINCDS",
+              "universal_id": "2.16.840.1.114222.4.3.2.10",
+              "universal_id_type": "ISO"
+            },
+            "receiving_facility": {
+              "namespace_id": "PHIN",
+              "universal_id": "2.16.840.1.114222",
+              "universal_id_type": "ISO"
+            },
+            "date_time_of_message": "20140630120030.1234-0500",
+            "security": null,
+            "message_type": {
+              "message_code": "ORU",
+              "trigger_event": "R01",
+              "universal_id_type": "ORU_R01"
+            },
+            "message_control_id": "MESSAGE CONTROL ID",
+            "processing_id": {
+              "processing_id": "D",
+              "processing_mode": null
+            },
+            "version_id": {
+              "version_id": "2.5.1",
+              "internationalization_code": null,
+              "international_version_id": null
+            },
+            "sequence_number": null,
+            "continuation_pointer": null,
+            "accept_acknowledgement_type": null,
+            "application_acknowledgement_type": null,
+            "country_code": null,
+            "character_set": null,
+            "principal_language_of_message": null,
+            "alternate_character_set_handling_scheme": null,
+            "message_profile_identifier": [
+              {
+                "entity_identifier": "NOTF_ORU_v3.1",
+                "namespace_id": "PHINProfileID",
+                "universal_id": "2.16.840.1.114222.4.10.3",
+                "universal_id_type": "ISO"
+              },
+              {
+                "entity_identifier": "Generic_MMG_V2.0",
+                "namespace_id": "PHINMsgMapID",
+                "universal_id": "2.16.840.1.114222.4.10.4",
+                "universal_id_type": "ISO"
+              },
+              {
+                "entity_identifier": "COVID19_MMG_V1.2",
+                "namespace_id": "PHINMsgMapID",
+                "universal_id": "2.16.840.1.114222.4.10.4",
+                "universal_id_type": "ISO"
+              }
+            ],
+            "children": [
+              {
+                "PID": {
+                  "set_id": "1",
+                  "patient_id": null,
+                  "patient_identifier_list": {
+                    "id_number": "COVID_003",
+                    "check_digit": null,
+                    "check_digit_scheme": null,
+                    "assigning_authority": {
+                      "namespace_id": "SendAppName",
+                      "universal_id": "2.16.840.1.114222.nnnn",
+                      "universal_id_type": "ISO"
+                    },
+                    "identifier_type_code": null,
+                    "assigning_facility": null,
+                    "effective_date": null,
+                    "expiration_date": null,
+                    "assigning_jurisdiction": null,
+                    "assigning_agency_or_department": null
+                  },
+                  "alternate_patient_id": null,
+                  "patient_name": null,
+                  "mothers_maiden_name": null,
+                  "date_time_of_birth": "19430127",
+                  "administrative_sex": "M",
+                  "patient_alias": null,
+                  "race": [
+                    {
+                      "identifier": "UNK",
+                      "text": "unknown",
+                      "name_of_coding_system": "NULLFL",
+                      "alternate_identifier": null,
+                      "alternate_text": null,
+                      "name_of_alternate_coding_system": null
+                    }
+                  ],
+                  "patient_address": [
+                    {
+                      "street_address": null,
+                      "other_designation": null,
+                      "city": null,
+                      "state_or_province": "34",
+                      "postal_code": "08100",
+                      "country": null,
+                      "address_type": null,
+                      "other_geographic_designation": null,
+                      "county_parish_code": "20209",
+                      "census_tract": null,
+                      "address_representation_code": null,
+                      "address_validity_range": null,
+                      "effective_date": null,
+                      "expiration_date": null
+                    }
+                  ],
+                  "county_code": null,
+                  "phone_number_home": null,
+                  "phone_number_business": null,
+                  "primary_language": null,
+                  "marital_status": null,
+                  "religion": null,
+                  "patient_account_number": null,
+                  "ssn_number_patient": null,
+                  "drivers_license_number_patient": null,
+                  "mothers_identifier": null,
+                  "ethnic_group": [
+                    {
+                      "identifier": "2135-2",
+                      "text": "Hispanic or Latino",
+                      "name_of_coding_system": "CDCREC",
+                      "alternate_identifier": null,
+                      "alternate_text": null,
+                      "name_of_alternate_coding_system": null
+                    }
+                  ],
+                  "birth_place": null,
+                  "multiple_birth_indicator": null,
+                  "birth_order": null
+                }
+              },
+              {
+                "OBR": {
+                  "set_id": "1",
+                  "place_order_number": null,
+                  "filler_order_number": {
+                    "entity_identifier": "103_COVID",
+                    "namespace_id": "SendAppName",
+                    "universal_id": "2.16.840.1.114222.nnnn",
+                    "universal_id_type": "ISO"
+                  },
+                  "universal_service_identifier": {
+                    "identifier": "68991-9",
+                    "text": "Epidemiologic Information",
+                    "name_of_coding_system": "LN",
+                    "alternate_identifier": null,
+                    "alternate_text": null,
+                    "name_of_alternate_coding_system": null
+                  },
+                  "priority": null,
+                  "requested_date_time": null,
+                  "observation_date_time": "20200501000000",
+                  "observation_end_date_time": null,
+                  "collection_volume": null,
+                  "collector_identifier": null,
+                  "specimen_action_code": null,
+                  "danger_code": null,
+                  "relevant_clinical_information": null,
+                  "specimen_received_date_time": null,
+                  "specimen_source": null,
+                  "ordering_prrovider": null,
+                  "order_callback_phone_number": null,
+                  "placer_field_1": null,
+                  "placer_field_2": null,
+                  "filler_field_1": null,
+                  "filler_field_2": null,
+                  "results_report_status_change_date_time": "20200501000000",
+                  "charge_to_practice": null,
+                  "diagnostic_serv_sect_id": null,
+                  "result_status": "F",
+                  "parent_result": null,
+                  "quantity_timing": null,
+                  "results_copies_tp": null,
+                  "parent": null,
+                  "transportation_mode": null,
+                  "reason_for_study": [
+                    {
+                      "identifier": "11065",
+                      "text": "Coronavirus Disease 2019 (COVID-19)",
+                      "name_of_coding_system": "NND",
+                      "alternate_identifier": null,
+                      "alternate_text": null,
+                      "name_of_alternate_coding_system": null
+                    }
+                  ],
+                  "principal_result_interpreter": null,
+                  "assistant_result_interpreter": null,
+                  "technician": null,
+                  "transcriptionist": null,
+                  "scheduled_date_time": null,
+                  "children": [
+                    {
+                      "OBX": {
+                        "set_id": "1",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "78746-5",
+                          "text": "Country of Birth",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "MEX",
+                            "text": "MEXICO",
+                            "name_of_coding_system": "ISO3166_1",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "2",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77983-5",
+                          "text": "Country of Usual Residence",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "USA",
+                            "text": "UNITED STATES OF AMERICA",
+                            "name_of_coding_system": "ISO3166_1",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "3",
+                        "value_type": "TS",
+                        "observation_identifier": {
+                          "identifier": "11368-8",
+                          "text": "Date of Illness Onset",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "20200202"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "4",
+                        "value_type": "TS",
+                        "observation_identifier": {
+                          "identifier": "77976-9",
+                          "text": "Illness End Date",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "20200328"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "5",
+                        "value_type": "SN",
+                        "observation_identifier": {
+                          "identifier": "77977-7",
+                          "text": "Illness Duration",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "comparator": null,
+                            "number1": "49",
+                            "separator": null,
+                            "number2": null
+                          }
+                        ],
+                        "units": {
+                          "identifier": "d",
+                          "text": "day [time]",
+                          "name_of_coding_system": "UCUM",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "6",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77996-7",
+                          "text": "Pregnancy Status",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "N",
+                            "text": "No",
+                            "name_of_coding_system": "HL70136",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "7",
+                        "value_type": "TS",
+                        "observation_identifier": {
+                          "identifier": "77975-1",
+                          "text": "Diagnosis Date",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "20200214"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "8",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77974-4",
+                          "text": "Hospitalized",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "N",
+                            "text": "No",
+                            "name_of_coding_system": "HL70136",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "9",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77978-5",
+                          "text": "Subject Died",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "N",
+                            "text": "No",
+                            "name_of_coding_system": "HL70136",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "10",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "77993-4",
+                          "text": "State Case Identifier",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "COVID_TC03"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "11",
+                        "value_type": "SN",
+                        "observation_identifier": {
+                          "identifier": "77998-3",
+                          "text": "Age at Case Investigation",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "comparator": null,
+                            "number1": "43",
+                            "separator": null,
+                            "number2": null
+                          }
+                        ],
+                        "units": {
+                          "identifier": "a",
+                          "text": "year [time]",
+                          "name_of_coding_system": "UCUM",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "12",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77982-7",
+                          "text": "Case Disease Imported Code",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "C1512888",
+                            "text": "International",
+                            "name_of_coding_system": "UML",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "13",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "INV153",
+                          "text": "Imported Country",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "MEX",
+                            "text": "MEXICO",
+                            "name_of_coding_system": "ISO3166_1",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "14",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77984-3",
+                          "text": "Country of Exposure",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          {
+                            "identifier": "MEX",
+                            "text": "MEXICO",
+                            "name_of_coding_system": "ISO3166_1",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "15",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77985-0",
+                          "text": "State or Province of Exposure",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          {
+                            "identifier": "MX-COA",
+                            "text": "Coahuila, MX",
+                            "name_of_coding_system": "ISO3166_2",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "16",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "77986-8",
+                          "text": "City of Exposure",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          "Saltillo"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "17",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77989-2",
+                          "text": "Transmission Mode",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "420014008",
+                            "text": "Blood borne transmission",
+                            "name_of_coding_system": "SCT",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "18",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77990-0",
+                          "text": "Case Class Status Code",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "2931005",
+                            "text": "Probable diagnosis",
+                            "name_of_coding_system": "SCT",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "19",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77965-2",
+                          "text": "Immediate National Notifiable Condition",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "N",
+                            "text": "No",
+                            "name_of_coding_system": "HL70136",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "20",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77980-1",
+                          "text": "Case Outbreak Indicator",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "N",
+                            "text": "No",
+                            "name_of_coding_system": "HL70136",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "21",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "77969-4",
+                          "text": "Jurisdiction Code",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "909"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "22",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "48766-0",
+                          "text": "Reporting Source Type Code",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "PHC247",
+                            "text": "Laboratory",
+                            "name_of_coding_system": "CDCPHINVS",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "23",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "52831-5",
+                          "text": "Reporting Source ZIP Code",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "08100"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "24",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77988-4",
+                          "text": "Binational Reporting Criteria",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "PHC1139",
+                            "text": "Has case contacts in or from Mexico or Canada",
+                            "name_of_coding_system": "CDCPHINVS",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          },
+                          {
+                            "identifier": "PHC1215",
+                            "text": "Potentially exposed by a resident of Mexico or Canada",
+                            "name_of_coding_system": "CDCPHINVS",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "25",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "74549-7",
+                          "text": "Person Reporting to CDC - Name",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "Jo Brown"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "26",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "74548-9",
+                          "text": "Person Reporting to CDC - Phone Number",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "(555) 909-0000"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "27",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "74547-1",
+                          "text": "Person Reporting to CDC - Email",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "jbrown@hospital.com"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "28",
+                        "value_type": "DT",
+                        "observation_identifier": {
+                          "identifier": "77979-3",
+                          "text": "Case Investigation Start Date",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "20200219"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "29",
+                        "value_type": "DT",
+                        "observation_identifier": {
+                          "identifier": "77995-9",
+                          "text": "Date Reported",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "20200223"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "30",
+                        "value_type": "TS",
+                        "observation_identifier": {
+                          "identifier": "77972-8",
+                          "text": "Earliest Date Reported to County",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "20200223"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "31",
+                        "value_type": "SN",
+                        "observation_identifier": {
+                          "identifier": "77991-8",
+                          "text": "MMWR Week",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "comparator": null,
+                            "number1": "5",
+                            "separator": null,
+                            "number2": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "32",
+                        "value_type": "DT",
+                        "observation_identifier": {
+                          "identifier": "77992-6",
+                          "text": "MMWR Year",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "2020"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "33",
+                        "value_type": "DT",
+                        "observation_identifier": {
+                          "identifier": "77994-2",
+                          "text": "Date CDC Was First Verbally Notified of This Case",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "20200223"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "34",
+                        "value_type": "DT",
+                        "observation_identifier": {
+                          "identifier": "77970-2",
+                          "text": "Date First Reported to PHD",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "20200215"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "35",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77966-0",
+                          "text": "Reporting State",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "34",
+                            "text": "New Jersey",
+                            "name_of_coding_system": "FIPS5_2",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "36",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "77968-6",
+                          "text": "National Reporting Jurisdiction",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "34",
+                            "text": "NJ",
+                            "name_of_coding_system": "FIPS5_2",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "37",
+                        "value_type": "DT",
+                        "observation_identifier": {
+                          "identifier": "95366-1",
+                          "text": "First Positive Specimen Date",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "20200213"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "38",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "INV1405",
+                          "text": "Lineage",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          "Omicron B.1.1.529"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "39",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "VAC126",
+                          "text": "Did the Subject Ever Receive a Vaccine Against This Disease",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "N",
+                            "text": "No",
+                            "name_of_coding_system": "HL70136",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "40",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "VAC148",
+                          "text": "Vaccinated per ACIP Recommendations",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": null,
+                        "observation_value": [
+                          {
+                            "identifier": "Y",
+                            "text": "Yes",
+                            "name_of_coding_system": "HL70136",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "41",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "30956-7",
+                          "text": "Vaccine Type",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          {
+                            "identifier": "208",
+                            "text": "SARS-COV-2 (COVID-19) vaccine, mRNA, spike protein, LNP, preservative free, 30 mcg/0.3mL dose",
+                            "name_of_coding_system": "CVX",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "42",
+                        "value_type": "DT",
+                        "observation_identifier": {
+                          "identifier": "30952-6",
+                          "text": "Vaccine Administered Date",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          "20201215"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "43",
+                        "value_type": "SN",
+                        "observation_identifier": {
+                          "identifier": "30973-2",
+                          "text": "Vaccine Dose Number",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          {
+                            "comparator": null,
+                            "number1": "1",
+                            "separator": null,
+                            "number2": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "44",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "30957-5",
+                          "text": "Vaccine Manufacturer",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          {
+                            "identifier": "PFR",
+                            "text": "Pfizer, Inc",
+                            "name_of_coding_system": "MVX",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "45",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "30959-1",
+                          "text": "Vaccine Lot Number",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          "AA0001AAA"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "46",
+                        "value_type": "DT",
+                        "observation_identifier": {
+                          "identifier": "VAC109",
+                          "text": "Vaccine Expiration Date",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          "20211231"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "47",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "VAC153",
+                          "text": "National Drug Code (NDC)",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          "59267-1000-1"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "48",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "VAC102",
+                          "text": "Vaccination Record Identifier",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          "COVIDVAC11889"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "49",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "VAC147",
+                          "text": "Vaccine Event Information Source",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "1",
+                        "observation_value": [
+                          {
+                            "identifier": "184225006",
+                            "text": "Medical record",
+                            "name_of_coding_system": "SCT",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "50",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "30956-7",
+                          "text": "Vaccine Type",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "2",
+                        "observation_value": [
+                          {
+                            "identifier": "208",
+                            "text": "SARS-COV-2 (COVID-19) vaccine, mRNA, spike protein, LNP, preservative free, 30 mcg/0.3mL dose",
+                            "name_of_coding_system": "CVX",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "51",
+                        "value_type": "DT",
+                        "observation_identifier": {
+                          "identifier": "30952-6",
+                          "text": "Vaccine Administered Date",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "2",
+                        "observation_value": [
+                          "20210105"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "52",
+                        "value_type": "SN",
+                        "observation_identifier": {
+                          "identifier": "30973-2",
+                          "text": "Vaccine Dose Number",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "2",
+                        "observation_value": [
+                          {
+                            "comparator": null,
+                            "number1": "2",
+                            "separator": null,
+                            "number2": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "53",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "30957-5",
+                          "text": "Vaccine Manufacturer",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "2",
+                        "observation_value": [
+                          {
+                            "identifier": "PFR",
+                            "text": "Pfizer, Inc",
+                            "name_of_coding_system": "MVX",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "54",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "30959-1",
+                          "text": "Vaccine Lot Number",
+                          "name_of_coding_system": "LN",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "2",
+                        "observation_value": [
+                          "AA0002AAA"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "55",
+                        "value_type": "DT",
+                        "observation_identifier": {
+                          "identifier": "VAC109",
+                          "text": "Vaccine Expiration Date",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "2",
+                        "observation_value": [
+                          "20211231"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "56",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "VAC153",
+                          "text": "National Drug Code (NDC)",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "2",
+                        "observation_value": [
+                          "59267-1000-01"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "57",
+                        "value_type": "ST",
+                        "observation_identifier": {
+                          "identifier": "VAC102",
+                          "text": "Vaccination Record Identifier",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "2",
+                        "observation_value": [
+                          "COVIDVAC12889"
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    },
+                    {
+                      "OBX": {
+                        "set_id": "58",
+                        "value_type": "CWE",
+                        "observation_identifier": {
+                          "identifier": "VAC147",
+                          "text": "Vaccine Event Information Source",
+                          "name_of_coding_system": "PHINQUESTION",
+                          "alternate_identifier": null,
+                          "alternate_text": null,
+                          "name_of_alternate_coding_system": null
+                        },
+                        "observation_sub_id": "2",
+                        "observation_value": [
+                          {
+                            "identifier": "184225006",
+                            "text": "Medical record",
+                            "name_of_coding_system": "SCT",
+                            "alternate_identifier": null,
+                            "alternate_text": null,
+                            "name_of_alternate_coding_system": null,
+                            "coding_system_version_id": null,
+                            "alternate_coding_system_version_id": null,
+                            "original_text": null
+                          }
+                        ],
+                        "units": null,
+                        "reference_range": null,
+                        "abnormal_flags": [],
+                        "probability": null,
+                        "nature_of_abnormal_test": [],
+                        "observation_result_status": "F",
+                        "effective_date_of_reference_range": null
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "process_name": "HL7-JSON-LAKE-TRANSFORMER",
+        "process_version": "1.0.0",
+        "eventhub_queued_time": "2023-12-19T16:51:43.167",
+        "eventhub_offset": 1258440950256,
+        "eventhub_sequence_number": 132191,
+        "configs": [
+          "PhinGuideProfile.json"
+        ],
+        "start_processing_time": "2023-12-19T16:51:43.203+00:00",
+        "end_processing_time": "2023-12-19T16:51:43.241+00:00"
+      }
+    ]
+  },
+  "summary": {
+    "current_status": "HL7-JSON-LAKE-TRANSFORMED",
+    "problem": null
+  },
+  "schema_version": "0.0.1",
+  "schema_name": "DEX HL7v2",
+  "content": "TVNIfF5+XCZ8U2VuZEFwcE5hbWVeMi4xNi44NDAuMS4xMTQyMjIuVEJEXklTT3xTZW5kaW5nLUZhY2lsaXR5XjIuMTYuODQwLjEuMTE0MjIyLlRCRF5JU098UEhJTkNEU14yLjE2Ljg0MC4xLjExNDIyMi40LjMuMi4xMF5JU098UEhJTl4yLjE2Ljg0MC4xLjExNDIyMl5JU098MjAxNDA2MzAxMjAwMzAuMTIzNC0wNTAwfHxPUlVeUjAxXk9SVV9SMDF8TUVTU0FHRSBDT05UUk9MIElEfER8Mi41LjF8fHx8fHx8fHxOT1RGX09SVV92My4xXlBISU5Qcm9maWxlSUReMi4xNi44NDAuMS4xMTQyMjIuNC4xMC4zXklTT35HZW5lcmljX01NR19WMi4wXlBISU5Nc2dNYXBJRF4yLjE2Ljg0MC4xLjExNDIyMi40LjEwLjReSVNPfkNPVklEMTlfTU1HX1YxLjJeUEhJTk1zZ01hcElEXjIuMTYuODQwLjEuMTE0MjIyLjQuMTAuNF5JU08KUElEfDF8fENPVklEXzAwM15eXlNlbmRBcHBOYW1lJjIuMTYuODQwLjEuMTE0MjIyLm5ubm4mSVNPfHx+Xl5eXl5eU3x8MTk0MzAxMjd8TXx8VU5LXnVua25vd25eTlVMTEZMfF5eXjM0XjA4MTAwXl5eXjIwMjA5fHx8fHx8fHx8fHwyMTM1LTJeSGlzcGFuaWMgb3IgTGF0aW5vXkNEQ1JFQ3x8fHx8fHwKT0JSfDF8fDEwM19DT1ZJRF5TZW5kQXBwTmFtZV4yLjE2Ljg0MC4xLjExNDIyMi5ubm5uXklTT3w2ODk5MS05XkVwaWRlbWlvbG9naWMgSW5mb3JtYXRpb25eTE58fHwyMDIwMDUwMTAwMDAwMHx8fHx8fHx8fHx8fHx8fDIwMjAwNTAxMDAwMDAwfHx8Rnx8fHx8fDExMDY1XkNvcm9uYXZpcnVzIERpc2Vhc2UgMjAxOSAoQ09WSUQtMTkpXk5ORApPQlh8MXxDV0V8Nzg3NDYtNV5Db3VudHJ5IG9mIEJpcnRoXkxOfHxNRVheTUVYSUNPXklTTzMxNjZfMXx8fHx8fEYKT0JYfDJ8Q1dFfDc3OTgzLTVeQ291bnRyeSBvZiBVc3VhbCBSZXNpZGVuY2VeTE58fFVTQV5VTklURUQgU1RBVEVTIE9GIEFNRVJJQ0FeSVNPMzE2Nl8xfHx8fHx8RgpPQlh8M3xUU3wxMTM2OC04XkRhdGUgb2YgSWxsbmVzcyBPbnNldF5MTnx8MjAyMDAyMDJ8fHx8fHxGCk9CWHw0fFRTfDc3OTc2LTleSWxsbmVzcyBFbmQgRGF0ZV5MTnx8MjAyMDAzMjh8fHx8fHxGCk9CWHw1fFNOfDc3OTc3LTdeSWxsbmVzcyBEdXJhdGlvbl5MTnx8XjQ5fGReZGF5IFt0aW1lXV5VQ1VNfHx8fHxGCk9CWHw2fENXRXw3Nzk5Ni03XlByZWduYW5jeSBTdGF0dXNeTE58fE5eTm9eSEw3MDEzNnx8fHx8fEYKT0JYfDd8VFN8Nzc5NzUtMV5EaWFnbm9zaXMgRGF0ZV5MTnx8MjAyMDAyMTR8fHx8fHxGCk9CWHw4fENXRXw3Nzk3NC00Xkhvc3BpdGFsaXplZF5MTnx8Tl5Ob15ITDcwMTM2fHx8fHx8RgpPQlh8OXxDV0V8Nzc5NzgtNV5TdWJqZWN0IERpZWReTE58fE5eTm9eSEw3MDEzNnx8fHx8fEYKT0JYfDEwfFNUfDc3OTkzLTReU3RhdGUgQ2FzZSBJZGVudGlmaWVyXkxOfHxDT1ZJRF9UQzAzfHx8fHx8RgpPQlh8MTF8U058Nzc5OTgtM15BZ2UgYXQgQ2FzZSBJbnZlc3RpZ2F0aW9uXkxOfHxeNDN8YV55ZWFyIFt0aW1lXV5VQ1VNfHx8fHxGCk9CWHwxMnxDV0V8Nzc5ODItN15DYXNlIERpc2Vhc2UgSW1wb3J0ZWQgQ29kZV5MTnx8QzE1MTI4ODheSW50ZXJuYXRpb25hbF5VTUx8fHx8fHxGCk9CWHwxM3xDV0V8SU5WMTUzXkltcG9ydGVkIENvdW50cnleUEhJTlFVRVNUSU9OfHxNRVheTUVYSUNPXklTTzMxNjZfMXx8fHx8fEYKT0JYfDE0fENXRXw3Nzk4NC0zXkNvdW50cnkgb2YgRXhwb3N1cmVeTE58MXxNRVheTUVYSUNPXklTTzMxNjZfMXx8fHx8fEYKT0JYfDE1fENXRXw3Nzk4NS0wXlN0YXRlIG9yIFByb3ZpbmNlIG9mIEV4cG9zdXJlXkxOfDF8TVgtQ09BXkNvYWh1aWxhLCBNWF5JU08zMTY2XzJ8fHx8fHxGCk9CWHwxNnxTVHw3Nzk4Ni04XkNpdHkgb2YgRXhwb3N1cmVeTE58MXxTYWx0aWxsb3x8fHx8fEYKT0JYfDE3fENXRXw3Nzk4OS0yXlRyYW5zbWlzc2lvbiBNb2RlXkxOfHw0MjAwMTQwMDheQmxvb2QgYm9ybmUgdHJhbnNtaXNzaW9uXlNDVHx8fHx8fEYKT0JYfDE4fENXRXw3Nzk5MC0wXkNhc2UgQ2xhc3MgU3RhdHVzIENvZGVeTE58fDI5MzEwMDVeUHJvYmFibGUgZGlhZ25vc2lzXlNDVHx8fHx8fEYKT0JYfDE5fENXRXw3Nzk2NS0yXkltbWVkaWF0ZSBOYXRpb25hbCBOb3RpZmlhYmxlIENvbmRpdGlvbl5MTnx8Tl5Ob15ITDcwMTM2fHx8fHx8RgpPQlh8MjB8Q1dFfDc3OTgwLTFeQ2FzZSBPdXRicmVhayBJbmRpY2F0b3JeTE58fE5eTm9eSEw3MDEzNnx8fHx8fEYKT0JYfDIxfFNUfDc3OTY5LTReSnVyaXNkaWN0aW9uIENvZGVeTE58fDkwOXx8fHx8fEYKT0JYfDIyfENXRXw0ODc2Ni0wXlJlcG9ydGluZyBTb3VyY2UgVHlwZSBDb2RlXkxOfHxQSEMyNDdeTGFib3JhdG9yeV5DRENQSElOVlN8fHx8fHxGCk9CWHwyM3xTVHw1MjgzMS01XlJlcG9ydGluZyBTb3VyY2UgWklQIENvZGVeTE58fDA4MTAwfHx8fHx8RgpPQlh8MjR8Q1dFfDc3OTg4LTReQmluYXRpb25hbCBSZXBvcnRpbmcgQ3JpdGVyaWFeTE58fFBIQzExMzleSGFzIGNhc2UgY29udGFjdHMgaW4gb3IgZnJvbSBNZXhpY28gb3IgQ2FuYWRhXkNEQ1BISU5WU35QSEMxMjE1XlBvdGVudGlhbGx5IGV4cG9zZWQgYnkgYSByZXNpZGVudCBvZiBNZXhpY28gb3IgQ2FuYWRhXkNEQ1BISU5WU3x8fHx8fEYKT0JYfDI1fFNUfDc0NTQ5LTdeUGVyc29uIFJlcG9ydGluZyB0byBDREMgLSBOYW1lXkxOfHxKbyBCcm93bnx8fHx8fEYKT0JYfDI2fFNUfDc0NTQ4LTleUGVyc29uIFJlcG9ydGluZyB0byBDREMgLSBQaG9uZSBOdW1iZXJeTE58fCg1NTUpIDkwOS0wMDAwfHx8fHx8RgpPQlh8Mjd8U1R8NzQ1NDctMV5QZXJzb24gUmVwb3J0aW5nIHRvIENEQyAtIEVtYWlsXkxOfHxqYnJvd25AaG9zcGl0YWwuY29tfHx8fHx8RgpPQlh8Mjh8RFR8Nzc5NzktM15DYXNlIEludmVzdGlnYXRpb24gU3RhcnQgRGF0ZV5MTnx8MjAyMDAyMTl8fHx8fHxGCk9CWHwyOXxEVHw3Nzk5NS05XkRhdGUgUmVwb3J0ZWReTE58fDIwMjAwMjIzfHx8fHx8RgpPQlh8MzB8VFN8Nzc5NzItOF5FYXJsaWVzdCBEYXRlIFJlcG9ydGVkIHRvIENvdW50eV5MTnx8MjAyMDAyMjN8fHx8fHxGCk9CWHwzMXxTTnw3Nzk5MS04Xk1NV1IgV2Vla15MTnx8XjV8fHx8fHxGCk9CWHwzMnxEVHw3Nzk5Mi02Xk1NV1IgWWVhcl5MTnx8MjAyMHx8fHx8fEYKT0JYfDMzfERUfDc3OTk0LTJeRGF0ZSBDREMgV2FzIEZpcnN0IFZlcmJhbGx5IE5vdGlmaWVkIG9mIFRoaXMgQ2FzZV5MTnx8MjAyMDAyMjN8fHx8fHxGCk9CWHwzNHxEVHw3Nzk3MC0yXkRhdGUgRmlyc3QgUmVwb3J0ZWQgdG8gUEhEXkxOfHwyMDIwMDIxNXx8fHx8fEYKT0JYfDM1fENXRXw3Nzk2Ni0wXlJlcG9ydGluZyBTdGF0ZV5MTnx8MzReTmV3IEplcnNleV5GSVBTNV8yfHx8fHx8RgpPQlh8MzZ8Q1dFfDc3OTY4LTZeTmF0aW9uYWwgUmVwb3J0aW5nIEp1cmlzZGljdGlvbl5MTnx8MzReTkpeRklQUzVfMnx8fHx8fEYKT0JYfDM3fERUfDk1MzY2LTFeRmlyc3QgUG9zaXRpdmUgU3BlY2ltZW4gRGF0ZV5MTnx8MjAyMDAyMTN8fHx8fHxGCk9CWHwzOHxTVHxJTlYxNDA1XkxpbmVhZ2VeUEhJTlFVRVNUSU9OfHxPbWljcm9uIEIuMS4xLjUyOXx8fHx8fEYKT0JYfDM5fENXRXxWQUMxMjZeRGlkIHRoZSBTdWJqZWN0IEV2ZXIgUmVjZWl2ZSBhIFZhY2NpbmUgQWdhaW5zdCBUaGlzIERpc2Vhc2VeUEhJTlFVRVNUSU9OfHxOXk5vXkhMNzAxMzZ8fHx8fHxGCk9CWHw0MHxDV0V8VkFDMTQ4XlZhY2NpbmF0ZWQgcGVyIEFDSVAgUmVjb21tZW5kYXRpb25zXlBISU5RVUVTVElPTnx8WV5ZZXNeSEw3MDEzNnx8fHx8fEYKT0JYfDQxfENXRXwzMDk1Ni03XlZhY2NpbmUgVHlwZV5MTnwxfDIwOF5TQVJTLUNPVi0yIChDT1ZJRC0xOSkgdmFjY2luZSwgbVJOQSwgc3Bpa2UgcHJvdGVpbiwgTE5QLCBwcmVzZXJ2YXRpdmUgZnJlZSwgMzAgbWNnLzAuM21MIGRvc2VeQ1ZYfHx8fHx8RgpPQlh8NDJ8RFR8MzA5NTItNl5WYWNjaW5lIEFkbWluaXN0ZXJlZCBEYXRlXkxOfDF8MjAyMDEyMTV8fHx8fHxGCk9CWHw0M3xTTnwzMDk3My0yXlZhY2NpbmUgRG9zZSBOdW1iZXJeTE58MXxeMXx8fHx8fEYKT0JYfDQ0fENXRXwzMDk1Ny01XlZhY2NpbmUgTWFudWZhY3R1cmVyXkxOfDF8UEZSXlBmaXplciwgSW5jXk1WWHx8fHx8fEYKT0JYfDQ1fFNUfDMwOTU5LTFeVmFjY2luZSBMb3QgTnVtYmVyXkxOfDF8QUEwMDAxQUFBfHx8fHx8RgpPQlh8NDZ8RFR8VkFDMTA5XlZhY2NpbmUgRXhwaXJhdGlvbiBEYXRlXlBISU5RVUVTVElPTnwxfDIwMjExMjMxfHx8fHx8RgpPQlh8NDd8U1R8VkFDMTUzXk5hdGlvbmFsIERydWcgQ29kZSAoTkRDKV5QSElOUVVFU1RJT058MXw1OTI2Ny0xMDAwLTF8fHx8fHxGCk9CWHw0OHxTVHxWQUMxMDJeVmFjY2luYXRpb24gUmVjb3JkIElkZW50aWZpZXJeUEhJTlFVRVNUSU9OfDF8Q09WSURWQUMxMTg4OXx8fHx8fEYKT0JYfDQ5fENXRXxWQUMxNDdeVmFjY2luZSBFdmVudCBJbmZvcm1hdGlvbiBTb3VyY2VeUEhJTlFVRVNUSU9OfDF8MTg0MjI1MDA2Xk1lZGljYWwgcmVjb3JkXlNDVHx8fHx8fEYKT0JYfDUwfENXRXwzMDk1Ni03XlZhY2NpbmUgVHlwZV5MTnwyfDIwOF5TQVJTLUNPVi0yIChDT1ZJRC0xOSkgdmFjY2luZSwgbVJOQSwgc3Bpa2UgcHJvdGVpbiwgTE5QLCBwcmVzZXJ2YXRpdmUgZnJlZSwgMzAgbWNnLzAuM21MIGRvc2VeQ1ZYfHx8fHx8RgpPQlh8NTF8RFR8MzA5NTItNl5WYWNjaW5lIEFkbWluaXN0ZXJlZCBEYXRlXkxOfDJ8MjAyMTAxMDV8fHx8fHxGCk9CWHw1MnxTTnwzMDk3My0yXlZhY2NpbmUgRG9zZSBOdW1iZXJeTE58MnxeMnx8fHx8fEYKT0JYfDUzfENXRXwzMDk1Ny01XlZhY2NpbmUgTWFudWZhY3R1cmVyXkxOfDJ8UEZSXlBmaXplciwgSW5jXk1WWHx8fHx8fEYKT0JYfDU0fFNUfDMwOTU5LTFeVmFjY2luZSBMb3QgTnVtYmVyXkxOfDJ8QUEwMDAyQUFBfHx8fHx8RgpPQlh8NTV8RFR8VkFDMTA5XlZhY2NpbmUgRXhwaXJhdGlvbiBEYXRlXlBISU5RVUVTVElPTnwyfDIwMjExMjMxfHx8fHx8RgpPQlh8NTZ8U1R8VkFDMTUzXk5hdGlvbmFsIERydWcgQ29kZSAoTkRDKV5QSElOUVVFU1RJT058Mnw1OTI2Ny0xMDAwLTAxfHx8fHx8RgpPQlh8NTd8U1R8VkFDMTAyXlZhY2NpbmF0aW9uIFJlY29yZCBJZGVudGlmaWVyXlBISU5RVUVTVElPTnwyfENPVklEVkFDMTI4ODl8fHx8fHxGCk9CWHw1OHxDV0V8VkFDMTQ3XlZhY2NpbmUgRXZlbnQgSW5mb3JtYXRpb24gU291cmNlXlBISU5RVUVTVElPTnwyfDE4NDIyNTAwNl5NZWRpY2FsIHJlY29yZF5TQ1R8fHx8fHxGCg==",
+  "_rid": "nZwHAMZ9Z78VWgIAAAAAAA==",
+  "_self": "dbs/nZwHAA==/colls/nZwHAMZ9Z78=/docs/nZwHAMZ9Z78VWgIAAAAAAA==/",
+  "_etag": "\"73001e38-0000-0100-0000-6581ca1f0000\"",
+  "_attachments": "attachments/",
+  "_ts": 1703004703
+}
