@@ -52,7 +52,7 @@ def get_version(xmldoc):
     msg = xmldoc.find("./Messages/Message[@Name]")
     if msg:
         name = msg.get("Name")
-        if "3." in name:
+        if "3." in name and "PHIN SPEC" in name.upper():
             return 3
     return 2
 
