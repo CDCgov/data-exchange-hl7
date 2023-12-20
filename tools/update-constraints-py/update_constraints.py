@@ -130,7 +130,8 @@ if __name__ == "__main__":
                                 fix_descriptions(os.path.join(subpath, x))
                             elif x.upper() == "PROFILE.XML":
                                 fix_mappings(os.path.join(subpath, x))
-                            os.rename(os.path.join(subpath, x), os.path.join(subpath, x.upper()))
-                            print(f"File {os.path.join(subpath, x)} Done.")
+                            newname = f"{os.path.splitext(x)[0].upper()}.xml"
+                            os.rename(os.path.join(subpath, x), os.path.join(subpath, newname))
+                            print(f"File {os.path.join(subpath, newname)} Done.")
         else:
             print(f"Path {path} does not exist.")
