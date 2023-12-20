@@ -1,10 +1,7 @@
 package gov.cdc.dataexchange.model
 
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import gov.cdc.dex.metadata.DexEventPayload
-import java.util.*
 
 /**
  * Defines JSON Schema for Processing Status Api Service Bus
