@@ -4,6 +4,14 @@
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
     "version": "[4.*, 5.0.0)"
   },
+  "extensions": {
+    "eventHubs": {
+      "eventProcessorOptions": {
+        "maxBatchSize": 64,
+        "prefetchCount": 128
+      }
+    }
+  },
   "logLevel": {
     "default": "Warning",
     "Function": "Information",
