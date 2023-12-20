@@ -3,12 +3,12 @@ package gov.cdc.dataexchange
 import com.azure.core.amqp.AmqpTransportType
 import com.azure.messaging.servicebus.ServiceBusClientBuilder
 import com.azure.messaging.servicebus.ServiceBusMessage
-import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dataexchange.model.ProcessingStatusSchema
 import org.slf4j.LoggerFactory
 import java.lang.System
+import java.util.*
 
 /**
  * Azure Function implementations.
@@ -19,7 +19,6 @@ class ReportFunction {
 
     companion object {
         private val logger = LoggerFactory.getLogger(ReportFunction::class.java.simpleName)
-
         private val gson by lazy { Gson() }
 
         private val CONN_STR = System.getenv("ServiceBusConnectionString")
@@ -50,21 +49,65 @@ class ReportFunction {
     ) {
         val inputRecordCount = records.size
         logger.info("REPORT::Receiving $inputRecordCount records.")
-        try {
-            for(record in records) {
-                val jsonObject = gson.fromJson(record, JsonObject::class.java)
-                // form message for Processing Status API
-                jsonObject.remove("content")
-                val processingStatusSchema = ProcessingStatusSchema(content = jsonObject)
+        records.forEachIndexed { i, record ->
+            try {
+                val processingStatusSchema = createProcessingStatusSchema(record)
                 val processingStatusJson = gson.toJson(processingStatusSchema)
-                val messageUuid = jsonObject.get("message_uuid").asString
-                logger.info("REPORT::upload_id: ${processingStatusSchema.uploadId}, message_uuid: $messageUuid, queue: $QUEUE" +
-                        "\n$processingStatusJson")
-                // send message to Processing Status API Service Bus
-                serviceBusClient.sendMessage(ServiceBusMessage(processingStatusJson)).subscribe()
+                logger.info(
+                    "REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} sent to queue: $QUEUE" +
+                            "\n$processingStatusJson"
+                )
+                // send message to Processing Status API Service Bus asynchronously
+                serviceBusClient.sendMessage(ServiceBusMessage(processingStatusJson)).subscribe(
+                    {}, { e -> logger.error("Error sending message to Service Bus: ${e.message}\n" +
+                            "upload_id: ${processingStatusSchema.uploadId}") }
+                )
+            } catch (e: JsonSyntaxException) {
+                logger.error("REPORT::JSON Syntax Error: ${e.message}")
+            } catch (e: IllegalStateException) {
+                logger.error("REPORT::Illegal State Error: ${e.message}")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                logger.error("REPORT::General Error: ${e.message}")
             }
-        } catch (e: Exception) {
-            logger.error("REPORT::ERROR: ${e.message}")
         }
+    }
+
+    private fun createProcessingStatusSchema(record: String): ProcessingStatusSchema {
+        val content = gson.fromJson(record, JsonObject::class.java)
+        content.remove("content")
+
+        val uploadIdJson = extractValueFromPath(content, "upload_id")
+        val uploadId = if (uploadIdJson == null || uploadIdJson.isJsonNull) {
+            UUID.randomUUID().toString()
+        } else { uploadIdJson.asString }
+
+        val destinationIdJson = extractValueFromPath(content, "destination_id")
+        val destinationId = if (destinationIdJson == null || destinationIdJson.isJsonNull) {
+            "UNKNOWN"
+        } else { destinationIdJson.asString }
+
+        val eventTypeJson = extractValueFromPath(content, "destination_event")
+        val eventType = if (eventTypeJson == null || eventTypeJson.isJsonNull) {
+            "UNKNOWN"
+        } else { eventTypeJson.asString }
+
+        // Extract the last process from the processes array
+        val lastProcess = extractValueFromPath(content, "metadata.processes")?.asJsonArray?.lastOrNull()
+        val stageName = lastProcess?.asJsonObject?.get("process_name")?.asString ?: "Unknown Stage"
+
+        return ProcessingStatusSchema(
+            uploadId, destinationId, eventType, stageName, content = content)
+    }
+
+    private fun extractValueFromPath(jsonObject: JsonObject, path: String): JsonElement? {
+        return try {
+            val pathSegments: List<String> = path.split(".")
+            var currentElement: JsonElement = jsonObject
+            for (segment in pathSegments) {
+                currentElement = currentElement.asJsonObject[segment] ?: return null
+            }
+            currentElement
+        } catch (e: Exception) { null }
     }
 }
