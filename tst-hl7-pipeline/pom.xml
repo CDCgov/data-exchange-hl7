@@ -11,7 +11,7 @@
         <version>0.0.27-SNAPSHOT</version>
         <kotlin.version>1.9.0</kotlin.version>
         <jdk.version>17</jdk.version>
-        <azure-blob.version>12.23.0</azure-blob.version>
+        <azure-blob.version>12.25.1</azure-blob.version>
         <slf4j.version>2.0.5</slf4j.version>
         <junit-jupiter.version>5.8.0</junit-jupiter.version>
         <lib-dex-commons.version>1.0.22-SNAPSHOT</lib-dex-commons.version>

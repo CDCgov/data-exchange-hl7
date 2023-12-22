@@ -2,11 +2,11 @@ package gov.cdc.dex.hl7.pipeline
 
 import com.azure.storage.blob.BlobServiceClientBuilder
 import com.azure.storage.blob.BlobContainerClient
-
 import gov.cdc.dex.azure.cosmos.CosmosClient
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileNotFoundException
+
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -30,94 +30,97 @@ class PipelineTest {
 
         val uploadedBlobs: MutableSet<String> = mutableSetOf()
 
-        val messagesMetadata = mapOf(
+    }
+
+    private fun buildMetadata(uniqueTimeStamp: String): Map<String, MutableMap<String, out String?>> {
+        return mapOf(
             "COVID19_Missing_MSH3.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID19_Missing_MSH3.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_Missing_MSH3.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
-                ),
+            ),
             "COVID19_Missing_MSH4.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID19_Missing_MSH4.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_Missing_MSH4.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
             "COVID19_Missing_MSH9.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID19_Missing_MSH9.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_Missing_MSH9.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
             "COVID19_Missing_MSH12.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID19_Missing_MSH12.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_Missing_MSH12.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
-            "COVID19_PID_Segment_With_Patient_Name_And_Address.txt" to mutableMapOf<String, String?>(
+            "COVID19_PID_Segment_With_Patient_Name_And_Address.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
                 REPORTING_JURISDICTION to "48",
                 ROUTE to "COVID19_ELR",
-                ORIGINAL_FILE_NAME to "COVID19_PID_Segment_With_Patient_Name_And_Address.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_PID_Segment_With_Patient_Name_And_Address.txt"
             ),
-            "COVID-19_OBX1_Uniqueness_Test.txt" to mutableMapOf<String, String?>(
+            "COVID-19_OBX1_Uniqueness_Test.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID-19_OBX1_Uniqueness_Test.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_OBX1_Uniqueness_Test.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
-            "COVID-19_OBX2_CWE_OBX5_NM.txt" to mutableMapOf<String, String?>(
+            "COVID-19_OBX2_CWE_OBX5_NM.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID-19_OBX2_CWE_OBX5_NM.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_OBX2_CWE_OBX5_NM.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
-            "COVID-19_OBX2CWE_OBX5_CWE.txt" to mutableMapOf<String, String?>(
+            "COVID-19_OBX2CWE_OBX5_CWE.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID-19_OBX2CWE_OBX5_CWE.txt",
+                ORIGINAL_FILE_NAME to uniqueTimeStamp,
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
-            "COVID-19_OBX_Sequential_Test.txt" to mutableMapOf<String, String?>(
+            "COVID-19_OBX_Sequential_Test.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID-19_OBX_Sequential_Test.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_OBX2CWE_OBX5_CWE.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
-            "COVID-19_PID_DateOfBirth.txt" to mutableMapOf<String, String?>(
+            "COVID-19_PID_DateOfBirth.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID-19_PID_DateOfBirth.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_PID_DateOfBirth.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
-            "COVID-19_PID_Required_Fields.txt" to mutableMapOf<String, String?>(
+            "COVID-19_PID_Required_Fields.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID-19_PID_Required_Fields.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_PID_Required_Fields.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
-            "COVID-19_With_SSN_PID19.txt" to mutableMapOf<String, String?>(
+            "COVID-19_With_SSN_PID19.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID-19_With_SSN_PID19.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_With_SSN_PID19.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
-            "COVID-19_With_SSN_PID19.txt" to mutableMapOf<String, String?>(
+            "COVID-19_With_SSN_PID19.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "COVID-19_With_SSN_PID19.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_With_SSN_PID19.txt",
                 ROUTE to "COVID19_ELR",
                 REPORTING_JURISDICTION to "48"
             ),
-            "FDD_LIST_PID_Name_Address_CASE.txt" to mutableMapOf<String, String?>(
+            "FDD_LIST_PID_Name_Address_CASE.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
-                ORIGINAL_FILE_NAME to "FDD_LIST_PID_Name_Address_CASE.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-FDD_LIST_PID_Name_Address_CASE.txt",
                 ROUTE to "",
                 REPORTING_JURISDICTION to "48"
             ),
-            "PHLIP_DataType_DT_CASE.txt" to mutableMapOf<String, String?>(
+            "PHLIP_DataType_DT_CASE.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
-                ORIGINAL_FILE_NAME to "PHLIP_DataType_DT_CASE.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_DataType_DT_CASE.txt",
                 ROUTE to "",
                 REPORTING_JURISDICTION to "48"
             ),
@@ -125,52 +128,52 @@ class PipelineTest {
             "PHLIP_FLU_DataType_CWE.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "PHLIP_FLU_DataType_CWE.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_DataType_CWE.txt"
             ),
             "PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt"
             ),
             "PHLIP_FLU_PID_7_DateTimeOfBirth.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "PHLIP_FLU_PID_7_DateTimeOfBirth.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_PID_7_DateTimeOfBirth.txt"
             ),
             "PHLIP_FLU_PID_19.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "PHLIP_FLU_PID_19.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_PID_19.txt"
             ),
             "PHLIP_FLU_Receiving_Sending_Applications.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "PHLIP_FLU_Receiving_Sending_Applications.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_Receiving_Sending_Applications.txt"
             ),
             "PHLIP_OBX2_CWE_OBX5_ST.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "PHLIP_OBX2_CWE_OBX5_ST.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_OBX2_CWE_OBX5_ST.txt"
             ),
             "PHLIP_Salm_PID_Required_Fields_Case.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "PHLIP_Salm_PID_Required_Fields_Case.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_Salm_PID_Required_Fields_Case.txt"
             ),
             "PHLIP_VPD_DataType_ED.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "PHLIP_VPD_DataType_ED.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_VPD_DataType_ED.txt"
             ),
             "PHLIP_VPD_VALID.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "PHLIP_VPD_VALID.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_VPD_VALID.txt"
             ),
             "PHLIP_VPD_VALID_DataType_FT.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "PHLIP_VPD_VALID_DataType_FT.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_VPD_VALID_DataType_FT.txt"
             )
 
         )
@@ -183,7 +186,7 @@ class PipelineTest {
             currentDateTime.format(formatter)
         } catch (e: DateTimeParseException) {
             println("${e.message}")
-            "Error: Unable to retrieve date and time"
+            "DEX::tst-hl7-pipeline Unable to retrieve date and time"
         }
 
     }
@@ -194,12 +197,13 @@ class PipelineTest {
             jsonFileWithPayload.writeText(payloadAsJson.toString())
 
         }catch (e:Exception) {
-            logger.error("Error occurred while copying payload to $testResourcesDirectory")
+            logger.error("DEX::tst-hl7-pipeline Error occurred while copying payload to $testResourcesDirectory")
         }
-
-
     }
+
     fun dropMessagesToABlobStorage() {
+        val uniqueTimeStamp:String = getCurrentDateTimeWithSeconds().replace("\\s".toRegex(),"")
+        val messagesMetadata = buildMetadata(uniqueTimeStamp)
         try {
             val blobServiceClient = BlobServiceClientBuilder()
                 .connectionString(blobConnectionString)
@@ -211,22 +215,25 @@ class PipelineTest {
 
             if (directoryWithMessages.exists()) {
                 directoryWithMessages.listFiles()?.forEach {
-                    val blobNameWithTimeAppended = getCurrentDateTimeWithSeconds().replace("\\s".toRegex(),"") + it.name
+                    val blobNameWithTimeAppended = uniqueTimeStamp + it.name
                     val blobClient = containerClient.getBlobClient(blobNameWithTimeAppended)
 
                     blobClient.upload(File(it.absolutePath).inputStream(), it.length(), true)
 
                     blobClient.setMetadata(messagesMetadata[it.name])
-                    uploadedBlobs.add(blobNameWithTimeAppended)
+                    uploadedBlobs.add("$uniqueTimeStamp-${it.name}")
                 }
             } else {
-                throw FileNotFoundException("HL7 messages not found under $PATH_TO_MESSAGES")
+                throw FileNotFoundException("DEX::tst-hl7-pipeline HL7 messages not found under $PATH_TO_MESSAGES")
             }
         } catch (e:Exception) {
-            logger.error("Error occurred while uploading message to a blob storage: ${e.message}")
+            logger.error("DEX::tst-hl7-pipeline Error occurred while uploading message to a blob storage: ${e.message}")
+        }finally {
+            Thread.sleep(30_000)
+            queryCosmosDB()
         }
     }
-    fun queryCosmosDB() {
+    private fun queryCosmosDB() {
         try {
             val cosmosDBClient by lazy {
                 CosmosClient(
@@ -246,14 +253,12 @@ class PipelineTest {
 
             }
         }catch (e: Exception) {
-            logger.error("Error occurred while querying Cosmos DB: ${e.message}")
+            logger.error("DEX::tst-hl7-pipeline Error occurred while querying Cosmos DB: ${e.message}")
 
         }
     }
 }
 fun main() {
-    val pipeline = PipelineTest()
-    pipeline.dropMessagesToABlobStorage()
-    Thread.sleep(30_000)
-    pipeline.queryCosmosDB()
+    //val pipeline = PipelineTest()
+    //pipeline.dropMessagesToABlobStorage()
 }
