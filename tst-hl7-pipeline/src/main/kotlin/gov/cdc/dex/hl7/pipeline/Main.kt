@@ -21,12 +21,18 @@ class PipelineTest {
         val cosmosDBPartitionKey: String = System.getenv("COSMOS_DB_PARTITION_KEY")
         val blobConnectionString: String = System.getenv("BLOB_INGEST_CONNECTION_STRING")
         val blobContainerName: String = System.getenv("BLOB_CONTAINER_NAME")
+        //val receiverDebatcherContainerName: String = System.getenv("RECEIVER_DEBATCHER")
+        val redactorContainerName: String = System.getenv("REDACTOR")
+        val structureValidatorContainerName: String = System.getenv("STRUCTURE_VALIDATOR")
+        val jsonLakeContainerName: String = System.getenv("JSON_LAKE")
+        //val lakeOfSegmentsContainerName: String = System.getenv("LAKE_OF_SEGMENTS")
 
         const val PATH_TO_MESSAGES = "src/main/resources/messages"
         private const val MESSAGE_TYPE = "message_type"
         private const val ROUTE = "route"
-        private const val REPORTING_JURISDICTION = "reporting_jurisdiction"
-        private const val ORIGINAL_FILE_NAME = "original_file_name"
+        private const val REPORTING_JURISDICTION:String = "reporting_jurisdiction"
+        private const val ORIGINAL_FILE_NAME:String = "original_file_name"
+        private const val CONTAINER_NAME: String = "cosmosDB_container"
 
         val uploadedBlobs: MutableSet<String> = mutableSetOf()
 
@@ -38,142 +44,168 @@ class PipelineTest {
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_Missing_MSH3.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to structureValidatorContainerName
             ),
             "COVID19_Missing_MSH4.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_Missing_MSH4.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to structureValidatorContainerName
             ),
             "COVID19_Missing_MSH9.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_Missing_MSH9.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to structureValidatorContainerName
             ),
             "COVID19_Missing_MSH12.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_Missing_MSH12.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to structureValidatorContainerName
             ),
             "COVID19_PID_Segment_With_Patient_Name_And_Address.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
                 REPORTING_JURISDICTION to "48",
                 ROUTE to "COVID19_ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_PID_Segment_With_Patient_Name_And_Address.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID19_PID_Segment_With_Patient_Name_And_Address.txt",
+                CONTAINER_NAME to redactorContainerName
             ),
             "COVID-19_OBX1_Uniqueness_Test.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_OBX1_Uniqueness_Test.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to structureValidatorContainerName
             ),
             "COVID-19_OBX2_CWE_OBX5_NM.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_OBX2_CWE_OBX5_NM.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to structureValidatorContainerName
             ),
             "COVID-19_OBX2CWE_OBX5_CWE.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to uniqueTimeStamp,
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to structureValidatorContainerName
             ),
             "COVID-19_OBX_Sequential_Test.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_OBX2CWE_OBX5_CWE.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to structureValidatorContainerName
             ),
             "COVID-19_PID_DateOfBirth.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_PID_DateOfBirth.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "COVID-19_PID_Required_Fields.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_PID_Required_Fields.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "COVID-19_With_SSN_PID19.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_With_SSN_PID19.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "COVID-19_With_SSN_PID19.txt" to mutableMapOf(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-COVID-19_With_SSN_PID19.txt",
                 ROUTE to "COVID19_ELR",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "FDD_LIST_PID_Name_Address_CASE.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-FDD_LIST_PID_Name_Address_CASE.txt",
                 ROUTE to "",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "PHLIP_DataType_DT_CASE.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_DataType_DT_CASE.txt",
                 ROUTE to "",
-                REPORTING_JURISDICTION to "48"
+                REPORTING_JURISDICTION to "48",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
 
             "PHLIP_FLU_DataType_CWE.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_DataType_CWE.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_DataType_CWE.txt",
+                CONTAINER_NAME to jsonLakeContainerName
+
             ),
             "PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "PHLIP_FLU_PID_7_DateTimeOfBirth.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_PID_7_DateTimeOfBirth.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_PID_7_DateTimeOfBirth.txt",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "PHLIP_FLU_PID_19.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_PID_19.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_PID_19.txt",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "PHLIP_FLU_Receiving_Sending_Applications.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_Receiving_Sending_Applications.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_Receiving_Sending_Applications.txt",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "PHLIP_OBX2_CWE_OBX5_ST.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_OBX2_CWE_OBX5_ST.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_OBX2_CWE_OBX5_ST.txt",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "PHLIP_Salm_PID_Required_Fields_Case.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_Salm_PID_Required_Fields_Case.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_Salm_PID_Required_Fields_Case.txt",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "PHLIP_VPD_DataType_ED.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_VPD_DataType_ED.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_VPD_DataType_ED.txt",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "PHLIP_VPD_VALID.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_VPD_VALID.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_VPD_VALID.txt",
+                CONTAINER_NAME to jsonLakeContainerName
             ),
             "PHLIP_VPD_VALID_DataType_FT.txt" to mutableMapOf(
                 MESSAGE_TYPE to "CASE",
                 REPORTING_JURISDICTION to "48",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_VPD_VALID_DataType_FT.txt"
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_VPD_VALID_DataType_FT.txt",
+                CONTAINER_NAME to jsonLakeContainerName
             )
 
         )
@@ -217,9 +249,7 @@ class PipelineTest {
                 directoryWithMessages.listFiles()?.forEach {
                     val blobNameWithTimeAppended = uniqueTimeStamp + it.name
                     val blobClient = containerClient.getBlobClient(blobNameWithTimeAppended)
-
                     blobClient.upload(File(it.absolutePath).inputStream(), it.length(), true)
-
                     blobClient.setMetadata(messagesMetadata[it.name])
                     uploadedBlobs.add("$uniqueTimeStamp-${it.name}")
                 }
@@ -230,7 +260,6 @@ class PipelineTest {
             logger.error("DEX::tst-hl7-pipeline Error occurred while uploading message to a blob storage: ${e.message}")
         }finally {
             Thread.sleep(30_000)
-            queryCosmosDB()
         }
     }
     private fun queryCosmosDB() {
@@ -245,6 +274,7 @@ class PipelineTest {
                 )
             }
             for (blob in uploadedBlobs) {
+                //decide based on the filename which cosmos db container to query
                 val queryCosmosDBToRetrievePayload = "SELECT * FROM c WHERE c.metadata.provenance.ext_original_file_name=\"$blob\""
 
                 val queryItem = cosmosDBClient.sqlReadItems(queryCosmosDBToRetrievePayload, Map::class.java).blockLast()
@@ -259,6 +289,6 @@ class PipelineTest {
     }
 }
 fun main() {
-    //val pipeline = PipelineTest()
-    //pipeline.dropMessagesToABlobStorage()
+    val pipeline = PipelineTest()
+    pipeline.dropMessagesToABlobStorage()
 }
