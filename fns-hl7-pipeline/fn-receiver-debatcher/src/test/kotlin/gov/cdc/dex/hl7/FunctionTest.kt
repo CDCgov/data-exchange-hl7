@@ -88,6 +88,16 @@ class FunctionTest {
         assertNull(dexEvtPayLoad.summary.problem)
     }
 
+    @Test
+    fun process_embeddedData() {
+        val dexEvtPayLoad = processFile("daartELR.txt")
+        assertNotNull(dexEvtPayLoad)
+        assertEquals(HL7MessageType.ELR,dexEvtPayLoad.messageInfo.type)
+        assertNotNull(dexEvtPayLoad.metadata.processes)
+        assertEquals("RECEIVED", dexEvtPayLoad.summary.currentStatus)
+        assertNull(dexEvtPayLoad.summary.problem)
+    }
+
     private fun <T> getOutputBinding(): OutputBinding<T> {
         return object : OutputBinding<T> {
             var inner : T? = null

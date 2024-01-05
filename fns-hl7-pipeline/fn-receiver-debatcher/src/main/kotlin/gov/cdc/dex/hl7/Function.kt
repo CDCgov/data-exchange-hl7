@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory
 import java.io.*
 import java.util.*
 import java.util.Base64.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -282,6 +283,10 @@ class Function {
             metaDataMap["tus_tguid"]
         } else null
 
+        // remove binary transformer
+        val dirPath = metadata.provenance.fileUUID // todo: get correct requirement
+        val hl7Transformer = HL7Transformer(messageContent, dirPath, fnConfig)
+
         return DexEventPayload(
             uploadID = uploadID,
             destinationID = metaDataMap["meta_destination_id"],
@@ -289,7 +294,7 @@ class Function {
             messageInfo = messageInfo,
             metadata = metadata,
             summary = summary,
-            content = getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
+            content = hl7Transformer.removeBinaryToBase64()
         )
     }
 
