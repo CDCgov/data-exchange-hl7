@@ -8,6 +8,8 @@ import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import org.slf4j.LoggerFactory
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class Function {
 
@@ -47,13 +49,15 @@ class Function {
                 // change event to match destination folder name
                 inputEvent.addProperty("meta_ext_event", fnConfig.blobStorageFolderName)
                 newMetadata["meta_ext_event"] = fnConfig.blobStorageFolderName
+                val folderStructure = LocalDate.now().format(DateTimeFormatter.ofPattern("YYYY/MM/dd"))
 
                 // save to storage container
-                this.saveBlobToContainer("${fnConfig.blobStorageFolderName}/$messageUUID.txt", gson.toJson(inputEvent), newMetadata)
+                this.saveBlobToContainer("${fnConfig.blobStorageFolderName}/$folderStructure/$messageUUID.txt", gson.toJson(inputEvent), newMetadata)
                 logger.info("DEX::Saved message $messageUUID.txt to sink ${fnConfig.blobStorageContainerName}/${fnConfig.blobStorageFolderName}")
             } catch (e: Exception) {
                 // TODO send to quarantine?
                 logger.error("DEX::Error processing message", e)
+                throw Exception("Failure in file sink ::${e.message}")
             }
         }
 
@@ -64,5 +68,6 @@ class Function {
         val client = fnConfig.azureBlobProxy.getBlobClient(blobName)
         client.upload(data, true)
         client.setMetadata(newMetadata)
+
     }
 }
