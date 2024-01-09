@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+### [0.0.36] - 2024-01-10
+	- Improved Lake of Segments schema to have a segment_id based on HL7 Path, and parent_segments to reference segment_id ordered from parent to grand-parent all the way to root.
+ 	- Upgraded Azure bom to 1.2.18
+   	- Creating sidecar function to send appropriate Reports to Processing Status API
+    	- Fixed metadata to remove duplicate config/configs and remove serialized eventHubMetadata 
+     	- Including DEX-Upload metadata on HL7 metadata (upload_id, destination_id, event)
+      	- Deployed DAART profiles to Structure Validator
+       	- Updated File-sink sidecar function to support sending data to Routing, using config to know folder name and default to partition files by yy/mm/dd subfolders.
+	- Modified Redaction Config of PID-5 to not reject messages that send data on PID-5[1] instead of PID-5[2]
+ 	- Performed bug fixes on PHLIP FLU Profiles
+  	
+
 ### [0.0.32] - 2023-11-15
 	- Implemented a CosmosDB client on lib-dex-commons used by cosmos-sink sidecar
 	- Configured Elastic functions to scale beyond 20 instances
