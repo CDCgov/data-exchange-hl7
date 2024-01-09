@@ -100,13 +100,14 @@ class Function {
                             sourceMetadata = dynamicMetadata.ifEmpty { null }
                         ) // .hl7MessageMetadata
 
-                        // Create initial Report object
+                        // Create initial Report object for this file
                         val eventReport = ReceiverEventReport(
                             fileName = blobName,
                             fileID = provenance.fileUUID
                         )
                         //Validate metadata
                         val isValidMessage = validateMessageMetaData(metaDataMap)
+                        //Put Unknown as message type if messageType is missing else use messageType
                         var messageType = metaDataMap["message_type"]
                         if (messageType.isNullOrEmpty()) {
                             messageType = HL7MessageType.UNKNOWN.name
@@ -124,7 +125,6 @@ class Function {
                             )
 
                             // send empty array as message content when content is invalid
-                            //Put Unknown as message type if messageType is missing else use messageType
                             msgEvent = preparePayload(
                                 arrayListOf(),
                                 DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)),
@@ -135,8 +135,6 @@ class Function {
                                 outList.add(gson.toJson(this))
                             }
                             addErrorToReport(eventReport, errorMessage, msgEvent.messageUUID)
-                            eventReportList.add(gson.toJson(eventReport))
-                            //msgEvent = prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
                         } else {
                             // Read Blob File by Lines
                             // -------------------------------------
@@ -225,9 +223,10 @@ class Function {
                         logger.info("DEX::Processed messageUUID: ${msgEvent!!.messageUUID}")
                         eventReport.messageBatch = provenance.singleOrBatch
                         eventReport.totalMessageCount = provenance.messageIndex
+                        eventReport.errorMessageCount = eventReport.errorMessages.size
                         eventReport.validMessageCount = (eventReport.totalMessageCount - eventReport.errorMessageCount)
                         eventReportList.add(gson.toJson(eventReport))
-                        println(gson.toJson(eventReport))
+                        logger.info("file event report --> ${gson.toJson(eventReport)}")
                     } // .if
                 } // . if
             } // .for
@@ -251,7 +250,6 @@ class Function {
 
     private fun addErrorToReport(eventReport: ReceiverEventReport, errorMessage: String, messageUUID: String? = null, messageIndex: Int = 1) {
         eventReport.errorMessages.add(ReceiverEventError(messageIndex, messageUUID, errorMessage))
-        eventReport.errorMessageCount++
     }
 
     private fun getMessageInfo(metaDataMap: Map<String, String>, message: String): DexMessageInfo {
