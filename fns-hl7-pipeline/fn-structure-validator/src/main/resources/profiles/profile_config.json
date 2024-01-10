@@ -1,0 +1,24 @@
+{
+	"profile_identifiers": [
+		{
+			"route": "COVID19_ELR",
+			"identifier_paths": [ "MSH-12" ]
+		},
+		{
+			"route": "PHLIP_FLU",
+			"identifier_paths": [ "MSH-12" ]
+		},
+		{
+			"route": "PHLIP_VPD",
+			"identifier_paths": [ "MSH-12" ]
+		},
+		{
+			"route": "",
+			"identifier_paths": [ "MSH-21[1].1" ]
+		},
+		{
+			"route": "DAART",
+			"identifier_paths": [ "MSH-21[1].1", "MSH-6.1" ]
+		}
+	]
+}

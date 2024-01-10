@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>receiver-debatcher</artifactId>
-    <version>0.0.33-2023-12-08-175926-d95506b-2023-12-08-182806-aa5285e-2023-12-08-213940-9090385-2023-12-08-214419-290f66b-2023-12-20-192118-d34fd03-2023-12-20-204521-5b61075-2023-12-21-144911-1be36c1</version>
+    <version>0.0.36-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DEX Fns-Pipeline :: receiver-debatcher</name>
     <scm>
@@ -17,16 +17,15 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <functionAppName>ocio-ede-${environment-id}-hl7-receiver-debatcher</functionAppName>
-        <AzureBom.version>1.2.15</AzureBom.version>
+        <AzureBom.version>1.2.18</AzureBom.version>
         <java.version>17</java.version>
         <kotlin.version>1.9.0</kotlin.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
-        <slf4j.version>2.0.5</slf4j.version>
         <gson.version>2.10.1</gson.version>
         <hl7pet.version>1.2.7.1</hl7pet.version>
-        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>1.0.24-SNAPSHOT</lib-dex-commons.version>
         <junitjupiter.version>5.9.2</junitjupiter.version>
     </properties>
     <dependencyManagement>
@@ -54,7 +53,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.7</version>
+            <version>1.4.12</version>
         </dependency>
         <!-- Azure Functions Java Library -->
         <!--  -->
@@ -96,13 +95,6 @@
             <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -137,7 +129,7 @@
                     <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details#supported-regions for all valid values -->
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-                    <auth>
+                   <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
                     </auth>
@@ -151,30 +143,6 @@
                         <property>
                             <name>FN_VERSION</name>
                             <value>${project.version}</value>
-                        </property>
-                        <property>
-                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
-                            <value>1</value>
-                        </property>
-                        <property>
-                            <name>FUNCTIONS_EXTENSION_VERSION</name>
-                            <value>~4</value>
-                        </property>
-                        <property>
-                            <name>FUNCTIONS_WORKER_RUNTIME</name>
-                            <value>java</value>
-                        </property>
-                        <property>
-                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
-                            <value>true</value>
-                        </property>
-                        <property>
-                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
-                            <value>None</value>
-                        </property>
-                        <property>
-                            <name>EventHubSendName</name>
-                            <value>${EventHubSendName}</value>
                         </property>
                     </appSettings>
                 </configuration>

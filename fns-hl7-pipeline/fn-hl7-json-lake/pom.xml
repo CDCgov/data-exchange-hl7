@@ -22,7 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <functionAppName>ocio-ede-${environment-id}-hl7-json-lake-transformer</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
-        <AzureBom.version>1.2.15</AzureBom.version>
+        <AzureBom.version>1.2.18</AzureBom.version>
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
@@ -33,7 +33,7 @@
         <lib-bumblebee.version>1.2.0-SNAPSHOT</lib-bumblebee.version>
         <gson.version>2.10.1</gson.version>
         <junit.version>5.9.2</junit.version>
-        <logback.version>1.4.7</logback.version>
+        <logback.version>1.4.12</logback.version>
         <hl7pet.version>1.2.7.3</hl7pet.version>
     </properties>
     <dependencyManagement>
@@ -155,7 +155,7 @@
                         </property>
                         <property>
                             <name>EventHubSendName</name>
-                            <value>${EventHubSendName}</value>
+                            <value>hl7-json-lake-out</value>
                         </property>
                     </appSettings>
                 </configuration>
@@ -274,6 +274,27 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+            </plugin>
+            <!-- Jacoco plugin for test coverage report -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>      

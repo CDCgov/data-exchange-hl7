@@ -8,6 +8,8 @@ import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import org.slf4j.LoggerFactory
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class Function {
 
@@ -33,27 +35,39 @@ class Function {
                 // extract metadata
                 val inputEvent: JsonObject = JsonParser.parseString(message) as JsonObject
                 val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                val routeObject = JsonHelper.getValueFromJson("message_info.route", inputEvent)
+                val originalDestId = try {
+                    JsonHelper.getValueFromJson("destination_id", inputEvent).asString
+                } catch (e : Exception) {
+                    "unknown"
+                }
                 logger.info("DEX::Processing message $messageUUID")
 
                 // add metadata
-                inputEvent.add("meta_destination_id", "dex-hl7".toJsonElement())
-                inputEvent.add("meta_ext_event", routeObject)
+                val newMetadata = mutableMapOf<String, String>()
+                newMetadata["meta_destination_id"] = originalDestId
+
+                // change event to match destination folder name
+                inputEvent.addProperty("meta_ext_event", fnConfig.blobStorageFolderName)
+                newMetadata["meta_ext_event"] = fnConfig.blobStorageFolderName
+                val folderStructure = LocalDate.now().format(DateTimeFormatter.ofPattern("YYYY/MM/dd"))
 
                 // save to storage container
-                this.saveBlobToContainer("$messageUUID.txt", gson.toJson(inputEvent))
-                logger.info("DEX::Saved message $messageUUID.txt to sink ${fnConfig.blobStorageContainerName}")
+                this.saveBlobToContainer("${fnConfig.blobStorageFolderName}/$folderStructure/$messageUUID.txt", gson.toJson(inputEvent), newMetadata)
+                logger.info("DEX::Saved message $messageUUID.txt to sink ${fnConfig.blobStorageContainerName}/${fnConfig.blobStorageFolderName}")
             } catch (e: Exception) {
                 // TODO send to quarantine?
                 logger.error("DEX::Error processing message", e)
+                throw Exception("Failure in file sink ::${e.message}")
             }
         }
 
     }
 
-    fun saveBlobToContainer(blobName: String, blobContent: String) {
+    fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>) {
         val data = BinaryData.fromString(blobContent)
         val client = fnConfig.azureBlobProxy.getBlobClient(blobName)
         client.upload(data, true)
+        client.setMetadata(newMetadata)
+
     }
 }

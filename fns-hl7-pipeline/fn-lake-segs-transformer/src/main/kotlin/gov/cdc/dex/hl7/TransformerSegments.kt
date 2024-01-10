@@ -1,39 +1,46 @@
 package gov.cdc.dex.hl7
 
-import org.slf4j.LoggerFactory
-
 import gov.cdc.hl7.HL7HierarchyParser
-import gov.cdc.hl7.model.HL7Hierarchy 
+import gov.cdc.hl7.model.HL7Hierarchy
 
 import gov.cdc.dex.hl7.model.Segment
+import gov.cdc.dex.hl7.util.SegIdBuilder
 
 
 class TransformerSegments()  {
-
-    companion object {
-        val logger = LoggerFactory.getLogger(TransformerSegments::class.java.simpleName)
-
-    } // .companion object
 
     // global for class
     private var lakeFlatSegs: Array<Array<Pair<Int,String>>> = arrayOf()
     private var flatSegs: Array<Pair<Int,String>> = arrayOf()
     private var treeIndex: Int = 0
+    private var segIds: MutableMap<Int, String> = mutableMapOf() // maps segment_number to segment_id
 
 
     fun hl7ToSegments(hl7Message: String, profile: String) : List<Segment> {
 
         val segmentPairs: Array<Array<Pair<Int,String>>> = hl7ToSegmentPairs(hl7Message, profile)
 
-        val segments = segmentPairs.map { segs -> 
+        // build segIds
+        val segClient = SegIdBuilder()
+        segmentPairs
+            .map { seg -> seg.last() }
+            .forEach { pair ->
+                if (!segIds.containsKey(pair.first)) {
+                    val segId = segClient.buildSegId(pair.second)
+                    segIds[pair.first] = segId
+                }
+            }
 
+        val segments = segmentPairs.map { segs ->
             val parentsPairs = segs.copyOfRange(0, segs.lastIndex)
-            
-            val parents = parentsPairs.map{ seg -> buildSegId(seg) }
-                .filter{ s -> s != "root"} // remove root parent, not needed
+            val parents = parentsPairs
+                .filter{ pair -> pair.second != "root"} // remove root parent, not needed
+                .map { pair ->
+                    segIds[pair.first]!!
+                }
                 .reversed() // reverse order to put parent first, grandparent second, etc.
 
-            Segment(segs.last().second, segs.last().first, parents)
+            Segment(segs.last().second, segs.last().first, segIds[segs.last().first]!!, parents)
         } // .segments
         
         return ArrayList(segments).apply { removeAt(0) } // remove empty non HL7 root
@@ -82,13 +89,4 @@ class TransformerSegments()  {
 
     } // .travTreeToArr
 
-    private fun buildSegId(seg: Pair<Int,String>): String {
-        val segArr = seg.second.split('|')
-        return if (segArr[0] != "root") {
-            if (segArr[0] == "MSH") "MSH[1]" else "${segArr[0]}[${segArr[1]}]"
-        } else "root"
-    }
-
-
 } // .TransformerSql
-

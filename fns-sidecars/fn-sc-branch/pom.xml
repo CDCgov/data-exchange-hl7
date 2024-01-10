@@ -133,7 +133,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.7</version>
+            <version>1.4.12</version>
         </dependency>
         <dependency>
             <groupId>io.projectreactor</groupId>
@@ -162,7 +162,7 @@
                 <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
-                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan2</appServicePlanName>
+                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan4</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
                     <auth>
@@ -203,26 +203,6 @@
                         <property>
                             <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
                             <value>None</value>
-                        </property>
-                        <property>
-                            <name>EventHubReceiveName</name>
-                            <value>${EventHubReceiveName}</value>
-                        </property>
-                        <property>
-                            <name>EventHubSendOkName</name>
-                            <value>${EventHubSendOkName}</value>
-                        </property>
-                        <property>
-                            <name>EventHubSendErrsName</name>
-                            <value>${EventHubSendErrsName}</value>
-                        </property>
-                        <property>
-                            <name>EventHubConsumerGroup</name>
-                            <value>${EventHubConsumerGroup}</value>
-                        </property>
-                        <property>
-                            <name>EventHubConnectionString</name>
-                            <value>${EventHubConnectionString}</value>
                         </property>
                     </appSettings>
                 </configuration>

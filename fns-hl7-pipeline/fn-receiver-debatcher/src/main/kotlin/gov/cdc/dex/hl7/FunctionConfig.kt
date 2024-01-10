@@ -15,7 +15,8 @@ class FunctionConfig {
     val evHubSender: EventHubSender
     var eventCodes : Map<String, Map<String, String>>
     val blobIngestContName: String = System.getenv("BlobIngestContainerName")
-    val evHubName: String = System.getenv("EventHubSendName")
+    val evHubSendName: String = System.getenv("EventHubSendName")
+    val evReportsHubName: String = System.getenv("EventReportsHubName")
 
     init {
          //Init Azure Storage connection
