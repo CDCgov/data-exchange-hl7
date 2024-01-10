@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
        	- Updated File-sink sidecar function to support sending data to Routing, using config to know folder name and default to partition files by yy/mm/dd subfolders.
 	- Modified Redaction Config of PID-5 to not reject messages that send data on PID-5[1] instead of PID-5[2]
  	- Performed bug fixes on PHLIP FLU Profiles
+  	- Generating a Report for Receiver Debatcher indicating number of messages received per file.
   	
 
 ### [0.0.32] - 2023-11-15
