@@ -62,14 +62,14 @@ class Function {
         logger.info("DEX::Received BLOB_CREATED event!")
         var msgEvent: DexEventPayload? = null
         val outList = mutableListOf<String>()
+        val eventReportList = mutableListOf<String>()
         try {
             for ((nbrOfMessages, message) in messages.withIndex()) {
                 if (!message.isNullOrEmpty()) {
-                    val startTime = Date().toIsoString()
                     val eventArr = gson.fromJson(message, Array<AzBlobCreateEventMessage>::class.java)
                     val event = eventArr[0]
                     if (event.eventType == BLOB_CREATED) {
-
+                        val startTime = Date().toIsoString()
                         // Pick up blob metadata
                         val blobName = event.evHubData.url.substringAfter("/${fnConfig.blobIngestContName}/")
                         logger.info("DEX::Reading blob: $blobName")
@@ -100,8 +100,14 @@ class Function {
                             sourceMetadata = dynamicMetadata.ifEmpty { null }
                         ) // .hl7MessageMetadata
 
+                        // Create initial Report object for this file
+                        val eventReport = ReceiverEventReport(
+                            fileName = blobName,
+                            fileID = provenance.fileUUID
+                        )
                         //Validate metadata
                         val isValidMessage = validateMessageMetaData(metaDataMap)
+                        //Put Unknown as message type if messageType is missing else use messageType
                         var messageType = metaDataMap["message_type"]
                         if (messageType.isNullOrEmpty()) {
                             messageType = HL7MessageType.UNKNOWN.name
@@ -109,15 +115,16 @@ class Function {
 
                         if (!isValidMessage) {
                             // required Metadata is missing -- send to error queue
+                            val errorMessage = "Message missing required metadata."
                             val (metadata, summary) = buildMetadata(
                                 STATUS_ERROR,
                                 eventHubMD[nbrOfMessages],
                                 startTime,
                                 provenance,
-                                "Message missing required metadata."
+                                errorMessage
                             )
+
                             // send empty array as message content when content is invalid
-                            //Put Unknown as message type if messageType is missing else use messageType
                             msgEvent = preparePayload(
                                 arrayListOf(),
                                 DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)),
@@ -127,8 +134,7 @@ class Function {
                             ).apply {
                                 outList.add(gson.toJson(this))
                             }
-
-                            //msgEvent = prepareAndSend(arrayListOf(), DexMessageInfo(null, null, null, null, HL7MessageType.valueOf(messageType)), metadata, summary, fnConfig.evHubSender, fnConfig.evHubErrorName)
+                            addErrorToReport(eventReport, errorMessage, msgEvent.messageUUID)
                         } else {
                             // Read Blob File by Lines
                             // -------------------------------------
@@ -176,6 +182,7 @@ class Function {
                             } // .BufferedReader
                             // Send last message
                             provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
+
                             msgEvent = if (mshCount > 0) {
                                 val (metadata, summary) = buildMetadata(
                                     STATUS_SUCCESS,
@@ -192,12 +199,13 @@ class Function {
                                 }
                             } else {
                                 // no valid message -- send to error queue
+                                val errorMessage = "No valid message found."
                                 val (metadata, summary) = buildMetadata(
                                     STATUS_ERROR,
                                     eventHubMD[nbrOfMessages],
                                     startTime,
                                     provenance,
-                                    "No valid message found."
+                                    errorMessage
                                 )
                                 // send empty array as message content when content is invalid
                                 preparePayload(
@@ -208,10 +216,17 @@ class Function {
                                     metadata, summary, metaDataMap
                                 ).apply {
                                     outList.add(gson.toJson(this))
+                                    addErrorToReport(eventReport, errorMessage, this.messageUUID, provenance.messageIndex)
                                 }
                             }
                         }
                         logger.info("DEX::Processed messageUUID: ${msgEvent!!.messageUUID}")
+                        eventReport.messageBatch = provenance.singleOrBatch
+                        eventReport.totalMessageCount = provenance.messageIndex
+                        eventReport.errorMessageCount = eventReport.errorMessages.size
+                        eventReport.validMessageCount = (eventReport.totalMessageCount - eventReport.errorMessageCount)
+                        eventReportList.add(gson.toJson(eventReport))
+                        logger.info("file event report --> ${gson.toJson(eventReport)}")
                     } // .if
                 } // . if
             } // .for
@@ -224,8 +239,18 @@ class Function {
         } catch (e : Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
+
+        try {
+            fnConfig.evHubSender.send(fnConfig.evReportsHubName, eventReportList)
+        } catch (e : Exception) {
+            logger.error("Unable to send to event hub ${fnConfig.evReportsHubName}: ${e.message}")
+        }
         return msgEvent
     } // .eventHubProcess
+
+    private fun addErrorToReport(eventReport: ReceiverEventReport, errorMessage: String, messageUUID: String? = null, messageIndex: Int = 1) {
+        eventReport.errorMessages.add(ReceiverEventError(messageIndex, messageUUID, errorMessage))
+    }
 
     private fun getMessageInfo(metaDataMap: Map<String, String>, message: String): DexMessageInfo {
         val eventCode = extractValue(message, EVENT_CODE_PATH)
