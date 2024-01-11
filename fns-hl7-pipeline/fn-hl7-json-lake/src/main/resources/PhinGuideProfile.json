@@ -292,7 +292,7 @@
     "dataType": "ST",
     "maxLength": "199",
     "usage": "X",
-    "cardinality": "[1..1]",
+    "cardinality": "[0..*]",
     "conformance": "",
     "notes": ""
   },
@@ -302,7 +302,7 @@
     "dataType": "CX",
     "maxLength": "2646",
     "usage": "R",
-    "cardinality": "[1..*]",
+    "cardinality": "[0..*]",
     "conformance": "",
     "notes": ""
   },
