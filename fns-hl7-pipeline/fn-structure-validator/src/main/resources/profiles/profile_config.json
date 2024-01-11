@@ -19,6 +19,10 @@
 		{
 			"route": "DAART",
 			"identifier_paths": [ "MSH-21[1].1", "MSH-6.1" ]
+		},
+		{
+			"route": "NRSS",
+			"identifier_paths": [ "MSH-12" ]
 		}
 	]
 }
