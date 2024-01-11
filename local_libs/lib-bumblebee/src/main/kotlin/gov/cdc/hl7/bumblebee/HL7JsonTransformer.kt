@@ -83,7 +83,9 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
                     fieldJsonNode.asJsonObject.addProperty(segField.name.normalize(), fieldRepeat?.get(0))
                 } else
                     if (fieldRepeat != null && fieldRepeat[0].isNotEmpty()) {
-                        fieldJsonNode.asJsonArray.add(fieldRepeat[0])
+                        fieldRepeat.forEach { element ->
+                            fieldJsonNode.asJsonArray.add(element)
+                        }
                     }
             } else {
                 fieldRepeat?.forEach { fieldRepeatItem ->
