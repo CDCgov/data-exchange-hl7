@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>svc-cloud-transport</artifactId>
-    <version>0.0.30-SNAPSHOT</version>
+    <version>0.0.37-SNAPSHOT</version>
     <parent>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-parent</artifactId>
@@ -20,7 +20,6 @@
         <kotlinVersion>1.9.0</kotlinVersion>
         <lib-cloud-proxy.version>0.0.30-SNAPSHOT</lib-cloud-proxy.version>
     </properties>
-
     <repositories>
         <repository>
             <id>central</id>
@@ -35,7 +34,6 @@
             <url>https://imagehub.cdc.gov/repository/maven-ede-snapshot/</url>
         </repository>
     </repositories>
-
     <dependencies>
         <dependency>
             <groupId>gov.cdc.dex</groupId>
@@ -120,7 +118,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -274,7 +271,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-webapp-maven-plugin</artifactId>
@@ -321,46 +317,6 @@
                         </fileset>
                     </filesets>
                 </configuration>
-            </plugin>
-
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-deploy-plugin</artifactId>-->
-            <!--                <version>3.1.1</version>-->
-            <!--            </plugin>-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <proc>none</proc>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>default-testCompile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>java-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>java-test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
