@@ -289,7 +289,7 @@
     "dataType": "ST",
     "maxLength": "199",
     "usage": "X",
-    "cardinality": "[1..1]",
+    "cardinality": "[1..*]",
     "conformance": "",
     "notes": ""
   },
