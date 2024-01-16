@@ -191,7 +191,7 @@ Batch submissions are expected to include messages that are all the same message
                 schema = Schema(allowableValues = ["ELR", "CASE"], required = true, type = "string"),
                 description = "The type of data represented in the HL7 message.")
                 @QueryValue message_type: String,
-            @Parameter(name="route", schema = Schema(allowableValues = ["COVID19_ELR", "PHLIP_FLU", "PHLIP_VPD"], type = "string"),
+            @Parameter(name="route", schema = Schema(allowableValues = ["COVID19_ELR", "PHLIP_FLU", "PHLIP_VPD", "DAART"], type = "string"),
                 description = "Required for ELR only: the profile/specification name.")
                 @QueryValue route:Optional<String>,
             @RequestBody(content = [Content(mediaType = "text/plain", schema = Schema(type = "string") , examples = [

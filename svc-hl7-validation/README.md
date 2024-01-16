@@ -128,7 +128,7 @@ To submit successfully, callers must supply the message type as a query paramete
 "CASE" messages conform to a Message Mapping Guide (MMG) and PHIN Specification, while "ELR" messages conform to a 
 specification that constrains the HL7 ELR Implementation Guide for a specific condition or set of conditions tracked by 
 the CDC. When the message type is "ELR", the condition-related guide indicator must also be supplied, using the 
-query parameter "route". Valid values for "route" include "COVID19_ELR", "PHLIP_FLU", and "PHLIP_VPD".
+query parameter "route". Valid values for "route" include "COVID19_ELR", "PHLIP_FLU", "PHLIP_VPD", and "DAART".
 
 For the message body, an HL7 message or batch can be submitted as "raw" plain text, or a file containing the message
 or message batch can be uploaded as a binary attachment.
