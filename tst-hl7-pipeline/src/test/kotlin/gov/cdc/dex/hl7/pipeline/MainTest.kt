@@ -6,6 +6,7 @@ import kotlin.test.assertEquals
 
 import org.junit.jupiter.api.Test
 import java.io.File
+import kotlin.test.assertNotEquals
 
 class MainTest {
 
@@ -14,6 +15,10 @@ class MainTest {
         return directoryWithPayloads.listFiles { payload ->
             payload.isFile && payload.name.endsWith(fileEnding)
         }?.find { it.isFile }?.absolutePath
+    }
+    fun mapJsonToNode(jsonString: File): JsonNode {
+        val jsonMapper = jacksonObjectMapper()
+        return jsonMapper.readTree(jsonString)
     }
 
     @Test
@@ -40,29 +45,71 @@ class MainTest {
         */
         val newPayload = getThePayload("PHLIP_FLU_2.5.1_PID5_ERROR.json")?.let { File(it) }
 
-        val pathToVerifiedPayloadForFile = "src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_PID5_ERROR.json"
-        val verifiedPayload = File(pathToVerifiedPayloadForFile)
+        val pathToVerifiedPayload = "src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_PID5_ERROR.json"
+        val verifiedPayload = File(pathToVerifiedPayload)
 
         if (newPayload != null) {
             if (newPayload.exists() && verifiedPayload.exists()) {
-                val jsonMapper = jacksonObjectMapper()
-                val jsonNewPayload: JsonNode = jsonMapper.readTree(newPayload)
-                val jsonVerifiedPayload: JsonNode = jsonMapper.readTree(verifiedPayload)
+                val jsonNewPayload: JsonNode = mapJsonToNode(newPayload)
+                val jsonVerifiedPayload: JsonNode = mapJsonToNode(verifiedPayload)
 
                 val redactorReportInNewPayload = jsonNewPayload["metadata"]["processes"][1]["report"]
                 val redactorReportInVerifiedPayload = jsonVerifiedPayload["metadata"]["processes"][1]["report"]
 
                 val structureValidatorReportInNewPayload = jsonNewPayload["metadata"]["processes"][2]["report"]
-                val structureValidatorReportInVerifiedPayload = jsonVerifiedPayload["metadata"]["processes"][2]["report"]
+                val structureValidatorReportInVerifiedPayload =
+                    jsonVerifiedPayload["metadata"]["processes"][2]["report"]
 
-                assertEquals(redactorReportInNewPayload,redactorReportInVerifiedPayload,"The Redactor Reports Match")
-                assertEquals(structureValidatorReportInNewPayload,structureValidatorReportInVerifiedPayload,"The Structure Validator Reports Match")
+                assertEquals(redactorReportInNewPayload, redactorReportInVerifiedPayload, "The Redactor Reports Match")
+                assertEquals(
+                    structureValidatorReportInNewPayload,
+                    structureValidatorReportInVerifiedPayload,
+                    "The Structure Validator Reports DO NOT Match"
+                )
 
             }
         }
+    }
         @Test
         fun phlipFluMissingMSH3() {
-            //use COVID19_Missing_MSH3.txt
+            val newPayload = getThePayload("PHLIP_FLU_2.5.1_NO_MSH3.json")?.let { File(it) }
+
+            val pathToVerifiedPayload = "src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH3.json"
+            val verifiedPayload = File(pathToVerifiedPayload)
+
+            if (newPayload != null) {
+                if (newPayload.exists() && verifiedPayload.exists()) {
+                    var errorInNewPayload = ""
+                    var errorInVerifiedPayload = ""
+
+                    val jsonNewPayload: JsonNode = mapJsonToNode(newPayload)
+                    val jsonVerifiedPayload: JsonNode = mapJsonToNode(verifiedPayload)
+
+                    val structureValidatorReportInNewPayload =
+                        jsonNewPayload["metadata"]["processes"][2]["report"]["entries"]["structure"]
+                    for (structureError in structureValidatorReportInNewPayload) {
+                        if (structureError["path"].toString()=="\"MSH[1]-3[1]\""){
+                            errorInNewPayload = structureError["description"].toString()
+                        }
+                    }
+                    val structureValidatorReportInVerifiedPayload =
+                        jsonVerifiedPayload["metadata"]["processes"][2]["report"]["entries"]["structure"]
+                    for (structureError in structureValidatorReportInVerifiedPayload) {
+                        if (structureError["path"].toString()=="\"MSH[1]-3[1]\""){
+                            errorInVerifiedPayload = structureError["description"].toString()
+                        }
+                    }
+
+                    if (errorInNewPayload!="" && errorInVerifiedPayload!="") {
+                        assertEquals(
+                            errorInNewPayload,
+                            errorInVerifiedPayload,
+                            "Incorrect error message for missing MSH-3."
+                        )
+                    }else{
+                        throw AssertionError("errorInNewPayload and errorInVerifiedPayload should not be empty.")
+                    }
+                }
         }
 
         @Test

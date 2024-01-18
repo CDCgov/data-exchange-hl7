@@ -53,9 +53,9 @@ class PipelineTest {
                 ROUTE to "PHLIP_FLU",
                 REPORTING_JURISDICTION to "48"
             ),
-            "PHLIP_FLU_2.5.1_WITHChanges_.txt" to mutableMapOf<String, String?>(
+            "PHLIP_FLU_2.5.1_NO_MSH3.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_WITHChanges_.txt",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH3.txt",
                 ROUTE to "PHLIP_FLU",
                 REPORTING_JURISDICTION to "48"
             )
@@ -115,7 +115,7 @@ class PipelineTest {
         } catch (e:Exception) {
             logger.error("DEX::tst-hl7-pipeline Error occurred while uploading message to a blob storage: ${e.message}")
         }finally {
-            :q
+            println (uploadedBlobs)
             Thread.sleep(30_000)
             identifyCosmosDBContainerToQueryForEachBlob()
 
@@ -123,7 +123,7 @@ class PipelineTest {
     }
     private fun identifyCosmosDBContainerToQueryForEachBlob() {
         for (uploadedBlob in uploadedBlobs) {
-            if (uploadedBlob.endsWith("PID5_ERROR.txt")){
+            if (uploadedBlob.endsWith("PID5_ERROR.txt") || uploadedBlob.endsWith("NO_MSH3.txt")){
                 queryCosmosDB(structureValidatorContainerName, uploadedBlob)
             }
 
