@@ -20,7 +20,7 @@
         <AzureBom.version>1.2.18</AzureBom.version>
         <java.version>17</java.version>
         <kotlin.version>1.9.0</kotlin.version>
-        <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
+        <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <gson.version>2.10.1</gson.version>
