@@ -45,6 +45,7 @@ class Function {
                 // add metadata
                 val newMetadata = mutableMapOf<String, String>()
                 newMetadata["meta_destination_id"] = originalDestId
+                newMetadata["meta_ext_uploadid"] = JsonHelper.getValueFromJson("upload_id", inputEvent).asString
 
                 // change event to match destination folder name
                 inputEvent.addProperty("meta_ext_event", fnConfig.blobStorageFolderName)
