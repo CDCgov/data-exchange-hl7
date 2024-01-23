@@ -63,6 +63,7 @@ class Function {
                 // add metadata
                 val newMetadata = mutableMapOf<String, String>()
                 newMetadata["meta_destination_id"] = originalDestId
+
                 newMetadata["meta_ext_uploadid"] = uploadID
                 newMetadata["trace_id"] = traceID
                 newMetadata["parent_span_id"] = parentSpanID
