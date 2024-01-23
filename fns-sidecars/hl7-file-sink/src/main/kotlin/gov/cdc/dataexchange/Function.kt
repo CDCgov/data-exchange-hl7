@@ -30,17 +30,19 @@ class Function {
         for ((index, message) in messages.withIndex()) {
 
             // extract metadata
-            val inputEvent: JsonObject = try {
+            val inputEvent = try {
                 JsonParser.parseString(message) as JsonObject
             } catch (e: Exception) {
                 logger.error("ERROR: Unable to parse event message #$index as JSON. Aborting save.")
-                JsonObject()
-                continue
-            }
+                null
+            } ?: continue
+
             val messageUUID = try {
+                // this is where the value will be in hl7 message json
                 JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
             } catch (e: Exception) {
                 try {
+                    // this is where the value will be in recdeb-reports json
                     JsonHelper.getValueFromJson("file_uuid", inputEvent).asString
                 } catch (e: Exception) {
                     logger.error(
@@ -51,17 +53,19 @@ class Function {
                 }
             } ?: continue
 
-            val originalDestId = try {
-                JsonHelper.getValueFromJson("routing_metadata.destination_id", inputEvent).asString
-            } catch (e: Exception) {
-                "UNKNOWN"
-            }
+            val originalDestId = getValueOrUnknown("routing_metadata.destination_id", inputEvent)
+            val uploadID = getValueOrUnknown("routing_metadata.upload_id", inputEvent)
+            val traceID = getValueOrUnknown("routing_metadata.trace_id", inputEvent)
+            val parentSpanID = getValueOrUnknown("routing_metadata.parent_span_id", inputEvent)
+
             logger.info("DEX::Processing message $messageUUID")
             try {
                 // add metadata
                 val newMetadata = mutableMapOf<String, String>()
                 newMetadata["meta_destination_id"] = originalDestId
-
+                newMetadata["meta_ext_uploadid"] = uploadID
+                newMetadata["trace_id"] = traceID
+                newMetadata["parent_span_id"] = parentSpanID
                 // change event to match destination folder name
                 inputEvent.addProperty("meta_ext_event", fnConfig.blobStorageFolderName)
                 newMetadata["meta_ext_event"] = fnConfig.blobStorageFolderName
@@ -81,6 +85,14 @@ class Function {
             }
         }
 
+    }
+
+    private fun getValueOrUnknown(jsonPath: String, inputEvent: JsonObject): String {
+        return try {
+            JsonHelper.getValueFromJson(jsonPath, inputEvent).asString
+        } catch (e: Exception) {
+            "UNKNOWN"
+        }
     }
 
     fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>) {
