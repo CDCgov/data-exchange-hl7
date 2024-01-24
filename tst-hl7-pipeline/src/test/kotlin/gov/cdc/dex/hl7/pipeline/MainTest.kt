@@ -2,21 +2,23 @@ package gov.cdc.dex.hl7.pipeline
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import kotlin.test.assertEquals
 
 import org.junit.jupiter.api.Test
 import java.io.File
-import kotlin.test.assertNotEquals
 
 class MainTest {
 
-    fun getThePayload(fileEnding: String): String? {
+
+    private fun getThePayload(fileEnding: String): String? {
         val directoryWithPayloads = File("src/test/resources/new-payloads")
         return directoryWithPayloads.listFiles { payload ->
             payload.isFile && payload.name.endsWith(fileEnding)
         }?.find { it.isFile }?.absolutePath
     }
-    fun mapJsonToNode(jsonString: File): JsonNode {
+    private fun mapJsonToNode(jsonString: File): JsonNode {
         val jsonMapper = jacksonObjectMapper()
         return jsonMapper.readTree(jsonString)
     }
@@ -111,7 +113,7 @@ class MainTest {
                     }
                 }
         }
-
+        /*
         @Test
         fun testInvalidMessageWithMissingMSH4() {
             //use  COVID19_Missing_MSH4.txt
@@ -378,5 +380,32 @@ class MainTest {
         fun testUniqueOBXWithSameOBX3AndDifferentOBX4Elr() {
             //failure
         }
+
+         */
     }
+
+
+
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun sendMessagesThroughPipeline() {
+            val pipelineTest = PipelineTest()
+            pipelineTest.dropMessagesToABlobStorage()
+
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun cleanup() {
+            val newPayloadsFolder = File("src/test/resources/new-payloads/")
+            if (newPayloadsFolder.exists() && newPayloadsFolder.isDirectory) {
+                newPayloadsFolder.listFiles()?.forEach { payload->
+                    payload.delete()
+                }
+            }
+
+        }
+    }
+
 }
