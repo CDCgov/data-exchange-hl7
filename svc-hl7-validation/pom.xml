@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dex</groupId>
     <artifactId>svc-hl7-validation</artifactId>
-    <version>0.0.31-SNAPSHOT</version>
+    <version>0.0.37-SNAPSHOT</version>
     <!-- -->
     <parent>
         <groupId>io.micronaut</groupId>
@@ -23,7 +23,7 @@
         <kotlinVersion>1.9.0</kotlinVersion>
         <hl7pet.version>1.2.7.2</hl7pet.version>
         <gson.version>2.10.1</gson.version>
-        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>1.0.24-SNAPSHOT</lib-dex-commons.version>
         <junitjupiter.version>5.9.2</junitjupiter.version>
     </properties>
 
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-cloud-proxy</artifactId>
-            <version>0.0.29-SNAPSHOT</version>
+            <version>0.0.30-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
@@ -121,7 +121,7 @@
         <dependency>
             <groupId>io.micronaut</groupId>
             <artifactId>micronaut-management</artifactId>
-            <version>3.8.5</version>
+            <version>3.8.7</version>
         </dependency>
 
         <dependency>

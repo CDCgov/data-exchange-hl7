@@ -8,6 +8,13 @@
         "type": "CASE",
         "local_record_id": "CAS13728088AL01"
     },
+    "routing_metadata": {
+        "upload_id": "",
+        "trace_id": "",
+        "parent_span_id": "",
+        "destination_id": "",
+        "destination_event": ""
+    },
     "metadata": {
         "provenance": {
             "event_id": "6a4c3df4-401e-0050-10e2-f26e6d06b323",

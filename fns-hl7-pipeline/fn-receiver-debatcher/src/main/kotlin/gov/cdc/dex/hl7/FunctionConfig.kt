@@ -1,5 +1,6 @@
 package gov.cdc.dex.hl7
 
+import com.azure.storage.internal.avro.implementation.schema.primitive.AvroNullSchema.Null
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.util.PathUtils
 import gov.cdc.dex.util.StringUtils.Companion.normalize
@@ -9,20 +10,48 @@ import kotlin.io.path.isRegularFile
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
+import org.slf4j.LoggerFactory
+import java.lang.NullPointerException
 
 class FunctionConfig {
     val azBlobProxy: AzureBlobProxy
     val evHubSender: EventHubSender
     var eventCodes : Map<String, Map<String, String>>
-    val blobIngestContName: String = System.getenv("BlobIngestContainerName")
-    val evHubSendName: String = System.getenv("EventHubSendName")
-    val evReportsHubName: String = System.getenv("EventReportsHubName")
+    val logger = LoggerFactory.getLogger(this.javaClass.simpleName)
+    val blobIngestContName: String = try {
+        System.getenv("BlobIngestContainerName")
+    } catch (e: NullPointerException) {
+        logger.error("FATAL: Missing environment variable BlobIngestContainerName")
+        throw e
+    }
+    val evHubSendName: String = try {
+        System.getenv("EventHubSendName")
+    } catch(e: NullPointerException) {
+        logger.error("FATAL: Missing environment variable EventHubSendName")
+        throw e
+    }
+    val evReportsHubName: String = try {
+        System.getenv("EventReportsHubName")
+    } catch (e: NullPointerException) {
+        logger.error ("FATAL: Missing environment variable EventReportsHubName")
+        throw e
+    }
 
     init {
          //Init Azure Storage connection
-        val ingestBlobConnStr = System.getenv("BlobIngestConnectionString")
+        val ingestBlobConnStr = try {
+            System.getenv("BlobIngestConnectionString")
+        } catch (e: NullPointerException) {
+            logger.error("FATAL: Missing environment variable BlobIngestConnectionString")
+            throw e
+        }
         azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
-        val evHubConnStr = System.getenv("EventHubConnectionString")
+        val evHubConnStr = try {
+            System.getenv("EventHubConnectionString")
+        } catch (e: NullPointerException) {
+            logger.error("FATAL: Missing environment variable EventHubConnectionString")
+            throw e
+        }
         evHubSender = EventHubSender(evHubConnStr)
 
         //Load Event Codes

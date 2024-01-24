@@ -54,8 +54,9 @@ class ReportFunction {
                 val processingStatusSchema = createProcessingStatusSchema(record)
                 val processingStatusJson = gson.toJson(processingStatusSchema)
                 logger.info(
-                    "REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} sent to queue: $QUEUE" +
-                            "\n$processingStatusJson"
+                    "REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} sent to queue: $QUEUE"
+                            //+
+                            //"\n$processingStatusJson"
                 )
                 // send message to Processing Status API Service Bus asynchronously
                 serviceBusClient.sendMessage(ServiceBusMessage(processingStatusJson)).subscribe(

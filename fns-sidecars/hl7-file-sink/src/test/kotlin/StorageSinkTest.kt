@@ -17,7 +17,6 @@ class StorageSinkTest {
         newMetadata["meta_destination_id"] = "dex-hl7"
 
         newMetadata["meta_ext_event"] = Function.fnConfig.blobStorageFolderName
-        val today = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now())
         function.saveBlobToContainer("test.txt", message, newMetadata)
     }
 

@@ -85,9 +85,15 @@ class TransportController(private val cloudStorage: CloudStorage) {
         request: HttpRequest<Any>
     ): HttpResponse<Any> {
         val guid = filename ?: UUID.randomUUID().toString()
-        cloudStorage.saveFile(bucket, guid, content, getMetadata(request), fileContentType ?: "text/plain")
-        log.info("Accepted message $guid")
-        return HttpResponse.ok(guid)
+        val metadataMap = getMetadata(request)
+        val metadataCheckResult = validateMetadata(metadataMap)
+        return if (metadataCheckResult == "OK") {
+            cloudStorage.saveFile(bucket, guid, content, metadataMap, fileContentType ?: "text/plain")
+            log.info("Accepted message $guid")
+            HttpResponse.ok(guid)
+        } else {
+            HttpResponse.badRequest(metadataCheckResult)
+        }
     }
 
     private fun getMetadata(request: HttpRequest<Any>): Map<String, String> {
@@ -96,6 +102,22 @@ class TransportController(private val cloudStorage: CloudStorage) {
             .filter { it.key.startsWith("x-tp-") }
             .associate {
                 it.key.substring(5) to (it.value.firstOrNull() ?: "") }
+    }
+
+    private fun validateMetadata(metadataMap: Map<String, String>) : String {
+        return if (metadataMap.containsKey("message_type")) {
+            if (metadataMap["message_type"] == "ELR") {
+                if (metadataMap.containsKey("route") && metadataMap["route"]?.isEmpty() == false) {
+                    "OK"
+                } else {
+                    "ERROR: missing parameter x-tp-route, required for ELR message type"
+                }
+            } else {
+                "OK"
+            }
+        } else {
+            "ERROR: missing parameter x-tp-message_type ('CASE' or 'ELR')"
+        }
     }
 
     @Get(value = "/heartbeat")
