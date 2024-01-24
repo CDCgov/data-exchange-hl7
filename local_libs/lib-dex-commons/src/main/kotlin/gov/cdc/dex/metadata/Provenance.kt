@@ -23,5 +23,4 @@ data class Provenance(
         const val BATCH_FILE = "BATCH"
     }
 
-   // @SerializedName("file_uuid") val fileUUID:String  = UUID.randomUUID().toString()
 }
