@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 	- Updated Validation API documentation to include support for DAART
 	- Added validation profiles for NRSS
-	- Bug fixes on PFHLIP FLU profiles
+	- Bug fixes on PHLIP FLU profiles
 	- Fixed a bug on lib-bumblebee for primitive types and cardinaltiy > 1
 	- Included meta_ext_uploadid as part of metadata
 	- Updated the Debatching report for Receiver-Debatcher Function with appropriate metadata and deployed file-sink sidecar function to provision the report to programs.
