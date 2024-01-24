@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+### [0.0.37] - 2025-01-24
+
+	- Updated Validation API documentation to include support for DAART
+	- Added validation profiles for NRSS
+	- Bug fixes on PFHLIP FLU profiles
+	- Fixed a bug on lib-bumblebee for primitive types and cardinaltiy > 1
+	- Included meta_ext_uploadid as part of metadata
+	- Updated the Debatching report for Receiver-Debatcher Function with appropriate metadata and deployed file-sink sidecar function to provision the report to programs.
+	- Deployed Processing Status Reports sidecar to submit report to PS API
+
+
 ### [0.0.36] - 2024-01-10
 	- Improved Lake of Segments schema to have a segment_id based on HL7 Path, and parent_segments to reference segment_id ordered from parent to grand-parent all the way to root.
  	- Upgraded Azure bom to 1.2.18
