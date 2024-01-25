@@ -17,7 +17,7 @@
         <functionAppName>ocio-ede-${environment-id}-hl7-structure-validator</functionAppName>
         <AzureBom.version>1.2.18</AzureBom.version>
         <java.version>17</java.version>
-        <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
+        <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <kotlin.version>1.9.0</kotlin.version>
         <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
@@ -110,11 +110,6 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <source>src/main/kotlin</source>
-                            </sourceDirs>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>test-compile</id>
@@ -124,9 +119,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <jvmTarget>${java.version}</jvmTarget>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
