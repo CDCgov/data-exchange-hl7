@@ -7,7 +7,7 @@ class FunctionConfig {
     val blobStorageContainerName: String
     val azureBlobProxy: AzureBlobProxy
     val blobStorageFolderName: String
-    private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
+    private var logger = LoggerFactory.getLogger(FunctionConfig::class.java.simpleName)
 
     init {
         //Init Azure Storage connection
