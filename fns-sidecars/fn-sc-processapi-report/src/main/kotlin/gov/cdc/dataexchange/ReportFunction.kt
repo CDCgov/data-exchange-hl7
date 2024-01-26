@@ -78,17 +78,17 @@ class ReportFunction {
         val content = gson.fromJson(record, JsonObject::class.java)
         content.remove("content")
 
-        val uploadIdJson = extractValueFromPath(content, "upload_id")
+        val uploadIdJson = extractValueFromPath(content, "routing_metadata.upload_id")
         val uploadId = if (uploadIdJson == null || uploadIdJson.isJsonNull) {
             UUID.randomUUID().toString()
         } else { uploadIdJson.asString }
 
-        val destinationIdJson = extractValueFromPath(content, "destination_id")
+        val destinationIdJson = extractValueFromPath(content, "routing_metadata.destination_id")
         val destinationId = if (destinationIdJson == null || destinationIdJson.isJsonNull) {
             "UNKNOWN"
         } else { destinationIdJson.asString }
 
-        val eventTypeJson = extractValueFromPath(content, "destination_event")
+        val eventTypeJson = extractValueFromPath(content, "routing_metadata.destination_event")
         val eventType = if (eventTypeJson == null || eventTypeJson.isJsonNull) {
             "UNKNOWN"
         } else { eventTypeJson.asString }
