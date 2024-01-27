@@ -41,25 +41,78 @@ class PipelineTest {
 
     private fun buildMetadata(uniqueTimeStamp: String): Map<String, MutableMap<String, out String?>> {
         return mapOf(
-            "PHLIP_FLU_2.5.1_PID5_ERROR.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_PID5_ERROR.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
-            ),
-            "PHLIP_FLU_2.5.1_VALID.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_VALID.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
-            ),
             "PHLIP_FLU_2.5.1_NO_MSH3.txt" to mutableMapOf<String, String?>(
                 MESSAGE_TYPE to "ELR",
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH3.txt",
                 ROUTE to "PHLIP_FLU",
                 REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_NO_MSH4.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH4.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_NO_MSH5.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH5.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_NO_MSH6.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH6.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_NO_MSH7.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH7.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_NO_MSH9.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH9.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_NO_MSH10.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH10.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_NO_MSH11.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH11.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_NO_MSH12.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH12.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_NO_MSH21.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH21.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_NO_PROFILE_IDENTIFIER.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_PROFILE_IDENTIFIER.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
+            ),
+            "PHLIP_FLU_2.5.1_VALID_MESSAGE.txt" to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to "ELR",
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_VALID_MESSAGE.txt",
+                ROUTE to "PHLIP_FLU",
+                REPORTING_JURISDICTION to "48"
             )
-
         )
     }
 
@@ -123,7 +176,12 @@ class PipelineTest {
     }
     private fun identifyCosmosDBContainerToQueryForEachBlob() {
         for (uploadedBlob in uploadedBlobs) {
-            if (uploadedBlob.endsWith("PID5_ERROR.txt") || uploadedBlob.endsWith("NO_MSH3.txt")){
+            if (uploadedBlob.endsWith("PID5_ERROR.txt") || uploadedBlob.endsWith("NO_MSH3.txt") ||
+                uploadedBlob.endsWith("NO_MSH4.txt") || uploadedBlob.endsWith("NO_MSH5.txt") ||
+                uploadedBlob.endsWith("NO_MSH6.txt") || uploadedBlob.endsWith("NO_MSH7.txt") ||
+                uploadedBlob.endsWith("NO_MSH9.txt") ||uploadedBlob.endsWith("NO_MSH10.txt") ||
+                uploadedBlob.endsWith("NO_MSH11.txt") ||uploadedBlob.endsWith("NO_MSH12.txt") ||
+                uploadedBlob.endsWith("NO_MSH21.txt")|| uploadedBlob.endsWith("NO_PROFILE_IDENTIFIER")){
                 queryCosmosDB(structureValidatorContainerName, uploadedBlob)
             }
 

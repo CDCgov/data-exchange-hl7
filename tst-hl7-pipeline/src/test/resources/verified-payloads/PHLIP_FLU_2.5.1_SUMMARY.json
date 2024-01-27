@@ -1,0 +1,13 @@
+{"summary": {
+  "current_status": "STRUCTURE_ERRORS",
+  "problem": {
+    "process_name": "STRUCTURE-VALIDATOR",
+    "exception_class": null,
+    "stacktrace": null,
+    "error_message": "Message failed Structure Validation",
+    "should_retry": false,
+    "retry_count": 0,
+    "max_retries": 0
+  }
+}
+}
