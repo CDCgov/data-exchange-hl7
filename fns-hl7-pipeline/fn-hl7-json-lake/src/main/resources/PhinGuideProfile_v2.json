@@ -66,7 +66,7 @@
     "MSH":  [
       {
         "fieldNumber": 1,
-        "name": "File Separator",
+        "name": "Field Separator",
         "dataType": "ST",
         "maxLength": "1",
         "usage": "R",
