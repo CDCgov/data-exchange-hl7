@@ -20,6 +20,17 @@ class Constants {
         const val COUNTRY_CODE = "country_code"
         const val MESSAGE_PROFILE_IDENTIFIER = "message_profile_identifier"
 
+        //MSH Fields
+        const val MSH3 = "MSH[1]-3[1]"
+        const val MSH4 = "MSH[1]-4[1].2"
+        const val MSH5 = "MSH[1]-5[1].2"
+        const val MSH6 = "MSH[1]-6[1]"
+        const val MSH7 = "MSH[1]-7[1]"
+        const val MSH9 = "MSH[1]-9[1]"
+        const val MSH10 = "MSH[1]-10[1]"
+        const val MSH11 = "MSH[1]-11[1]"
+        const val MSH21 = "MSH[1]-21[1]"
+
         // SFT required fields
         const val SOFTWARE_VENDOR_ORGANIZATION = "software_vendor_organization"
         const val SOFTWARE_CERTIFIED_VERSION_OR_RELEASE_NUMBER = "software_certified_version_or_release_number"
@@ -141,6 +152,9 @@ class Constants {
         const val PHLIP_FLU_VALID_MESSAGE = "PHLIP_FLU_2.5.1_VALID_MESSAGE.txt"
         const val PHLIP_FLU_NO_PROFILE_IDENTIFIER = "PHLIP_FLU_2.5.1_NO_PROFILE_IDENTIFIER.txt"
         const val PHLIP_FLU_VALID_MESSAGE_WITH_PV1= "PHLIP_FLU_2.5.1_VALID_MESSAGE_WITH_PV1_Added.txt"
+
+        const val NEW_PAYLOADS_DIRECTORY = "src/test/resources/new-payloads"
+        const val VERIFIED_PAYLOADS_DIRECTORY = "src/test/resources/verified-payloads"
 
 
     }

@@ -13,7 +13,7 @@ import java.io.FileNotFoundException
 
 class MainTest {
     private fun getTheNewPayload(fileEnding: String): String? {
-        val directoryWithPayloads = File("src/test/resources/new-payloads")
+        val directoryWithPayloads = File(Constants.NEW_PAYLOADS_DIRECTORY)
         return directoryWithPayloads.listFiles { payload ->
             payload.isFile && payload.name.endsWith(fileEnding)
         }?.find { it.isFile }?.absolutePath
@@ -91,11 +91,11 @@ class MainTest {
     }
         @Test
         fun phlipFluMissingMSH3() {
-            val errorDescriptionInNewPayload = getFieldDescriptionForPath("MSH[1]-3[1]","PHLIP_FLU_2.5.1_NO_MSH3.json")
+            val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH3,Constants.PHLIP_FLU_NO_MSH3)
 
-            val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH3.json")
+            val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH3}")
             val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
-            val errorDescriptionInVerifiedPayload = jsonVerifiedPayload["description"].toString()
+            val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
             assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "Incorrect error message for missing MSH-3.")
         }
@@ -104,93 +104,93 @@ class MainTest {
 
        @Test
        fun phlipFluMissingMSH4() {
-           val errorDescriptionInNewPayload = getFieldDescriptionForPath("MSH[1]-4[1].2","PHLIP_FLU_2.5.1_NO_MSH4.json")
+           val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH4, Constants.PHLIP_FLU_NO_MSH4)
 
-           val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH4.json")
+           val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH4}")
            val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
-           val errorDescriptionInVerifiedPayload = jsonVerifiedPayload["description"].toString()
+           val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
            assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "Incorrect error message for missing MSH-3.")
        }
     @Test
     fun phlipFluMissingMSH5() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath("MSH[1]-5[1].2","PHLIP_FLU_2.5.1_NO_MSH5.json")
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH5,Constants.PHLIP_FLU_NO_MSH5)
 
-        val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH5.json")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH5}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
-        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload["description"].toString()
+        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Component MSH-5.2 (Universal ID) is missing")
     }
     @Test
     fun phlipFluMissingMSH6() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath("MSH[1]-6[1]","PHLIP_FLU_2.5.1_NO_MSH6.json")
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH6,Constants.PHLIP_FLU_NO_MSH6)
 
-        val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH6.json")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH6}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
-        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload["description"].toString()
+        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-6 (Receiving Facility) is missing")
     }
     @Test
     fun phlipFluMissingMSH7() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath("MSH[1]-7[1]","PHLIP_FLU_2.5.1_NO_MSH7.json")
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH7,Constants.PHLIP_FLU_NO_MSH7)
 
-        val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH7.json")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH7}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
-        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload["description"].toString()
+        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
-        assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "\"The required Field MSH-7 (Date/Time Of Message) is missing\".")
+        assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-7 (Date/Time Of Message) is missing.")
     }
 
     @Test
     fun phlipFluMissingMSH9() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath("MSH[1]-9[1]","PHLIP_FLU_2.5.1_NO_MSH9.json")
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH9,Constants.PHLIP_FLU_NO_MSH9)
 
-        val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH9.json")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH9}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
-        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload["description"].toString()
+        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-9 (Message Type) is missing")
     }
     @Test
     fun phlipFluMissingMSH10() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath("MSH[1]-10[1]","PHLIP_FLU_2.5.1_NO_MSH10.json")
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH10,Constants.PHLIP_FLU_NO_MSH10)
 
-        val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH10.json")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH10}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
-        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload["description"].toString()
+        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-10 (Message Control ID) is missing.")
     }
     @Test
     fun phlipFluMissingMSH11() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath("MSH[1]-11[1]","PHLIP_FLU_2.5.1_NO_MSH11.json")
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH11,Constants.PHLIP_FLU_NO_MSH11)
 
-        val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH11.json")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH10}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
-        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload["description"].toString()
+        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-11 (Processing ID) is missing")
     }
     @Disabled
     @Test
     fun phlipFluMissingMSH12() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath("","PHLIP_FLU_2.5.1_NO_MSH12.json")
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath("",Constants.PHLIP_FLU_NO_MSH12)
 
-        val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH12.json")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH12}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
-        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload["description"].toString()
+        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "HL7-2801")
     }
     @Test
     fun phlipFluMissingMSH21() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath("MSH[1]-21[1]","PHLIP_FLU_2.5.1_NO_MSH21.json")
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH21,Constants.PHLIP_FLU_NO_MSH21)
 
-        val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_NO_MSH21.json")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH21}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
-        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload["description"].toString()
+        val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-21 (Message Profile Identifier) is missing")
     }
@@ -209,10 +209,10 @@ class MainTest {
         /*
         This test will check all required fields in all required segments and compare against verified payload
          */
-        val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_VALID_MESSAGE.json")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_VALID_MESSAGE}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
 
-        val newPayload = getTheNewPayload("PHLIP_FLU_2.5.1_VALID_MESSAGE.json")?.let { File(it) }
+        val newPayload = getTheNewPayload(Constants.PHLIP_FLU_VALID_MESSAGE)?.let { File(it) }
 
 
         if (newPayload != null && newPayload.exists()) {
