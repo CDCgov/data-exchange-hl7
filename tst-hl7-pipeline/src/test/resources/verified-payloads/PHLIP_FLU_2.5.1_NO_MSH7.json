@@ -1,0 +1,10 @@
+{
+  "line": 1,
+  "column": 1,
+  "path": "MSH[1]-7[1]",
+  "description": "The required Field MSH-7 (Date/Time Of Message) is missing",
+  "category": "Usage",
+  "classification": "Error",
+  "stackTrace": null,
+  "metaData": null
+}

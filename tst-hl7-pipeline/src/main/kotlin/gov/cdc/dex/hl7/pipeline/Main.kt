@@ -25,7 +25,7 @@ class PipelineTest {
         //val receiverDebatcherContainerName: String = System.getenv("RECEIVER_DEBATCHER")
        // val redactorContainerName: String = System.getenv("REDACTOR")
         val structureValidatorContainerName: String = System.getenv("STRUCTURE_VALIDATOR")
-        //val jsonLakeContainerName: String = System.getenv("JSON_LAKE")
+        val jsonLakeContainerName: String = System.getenv("JSON_LAKE")
         //val lakeOfSegmentsContainerName: String = System.getenv("LAKE_OF_SEGMENTS")
 
         const val PATH_TO_MESSAGES = "src/main/resources/messages"
@@ -41,77 +41,83 @@ class PipelineTest {
 
     private fun buildMetadata(uniqueTimeStamp: String): Map<String, MutableMap<String, out String?>> {
         return mapOf(
-            "PHLIP_FLU_2.5.1_NO_MSH3.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH3.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_MSH3 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to  Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH3}",
+                ROUTE to Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_NO_MSH4.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH4.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_MSH4 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH4}",
+                ROUTE to Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_NO_MSH5.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH5.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_MSH5 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH5}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_NO_MSH6.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH6.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_MSH6 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH6}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_NO_MSH7.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH7.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_MSH7 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH7}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_NO_MSH9.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH9.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_MSH9 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH9}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_NO_MSH10.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH10.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_MSH10 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH10}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_NO_MSH11.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH11.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_MSH11 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH11}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_NO_MSH12.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH12.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_MSH12 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH12}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_NO_MSH21.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_MSH21.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_MSH21 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH21}",
+                ROUTE to Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_NO_PROFILE_IDENTIFIER.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_NO_PROFILE_IDENTIFIER.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_NO_PROFILE_IDENTIFIER to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_PROFILE_IDENTIFIER}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             ),
-            "PHLIP_FLU_2.5.1_VALID_MESSAGE.txt" to mutableMapOf<String, String?>(
-                MESSAGE_TYPE to "ELR",
-                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-PHLIP_FLU_2.5.1_VALID_MESSAGE.txt",
-                ROUTE to "PHLIP_FLU",
-                REPORTING_JURISDICTION to "48"
+            Constants.PHLIP_FLU_VALID_MESSAGE to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_VALID_MESSAGE}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
+            ),
+            Constants.PHLIP_FLU_VALID_MESSAGE_WITH_PV1 to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_VALID_MESSAGE_WITH_PV1}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             )
         )
     }
@@ -134,7 +140,6 @@ class PipelineTest {
             val jsonFileWithPayload = File(testResourcesDirectory)
 
             if (!jsonFileWithPayload.exists()) {
-                println (payloadAsJson)
                 jsonFileWithPayload.writeText(payloadAsJson)
 
             }
@@ -176,13 +181,15 @@ class PipelineTest {
     }
     private fun identifyCosmosDBContainerToQueryForEachBlob() {
         for (uploadedBlob in uploadedBlobs) {
-            if (uploadedBlob.endsWith("PID5_ERROR.txt") || uploadedBlob.endsWith("NO_MSH3.txt") ||
-                uploadedBlob.endsWith("NO_MSH4.txt") || uploadedBlob.endsWith("NO_MSH5.txt") ||
-                uploadedBlob.endsWith("NO_MSH6.txt") || uploadedBlob.endsWith("NO_MSH7.txt") ||
-                uploadedBlob.endsWith("NO_MSH9.txt") ||uploadedBlob.endsWith("NO_MSH10.txt") ||
-                uploadedBlob.endsWith("NO_MSH11.txt") ||uploadedBlob.endsWith("NO_MSH12.txt") ||
-                uploadedBlob.endsWith("NO_MSH21.txt")|| uploadedBlob.endsWith("NO_PROFILE_IDENTIFIER")){
+            if (uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH3) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH4) ||
+                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH5) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH6) ||
+                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH7) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH9) ||
+                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH10) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH11) ||
+                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH12) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH21)||
+                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_PROFILE_IDENTIFIER)){
                 queryCosmosDB(structureValidatorContainerName, uploadedBlob)
+            }else if (uploadedBlob.endsWith(Constants.PHLIP_FLU_VALID_MESSAGE) || uploadedBlob.endsWith(Constants.PHLIP_FLU_VALID_MESSAGE_WITH_PV1)){
+                queryCosmosDB(jsonLakeContainerName, uploadedBlob)
             }
 
             }

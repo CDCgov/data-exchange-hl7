@@ -1,0 +1,10 @@
+{
+  "line": 1,
+  "column": 1,
+  "path": "MSH[1]-6[1]",
+  "description": "The required Field MSH-6 (Receiving Facility) is missing",
+  "category": "Usage",
+  "classification": "Error",
+  "stackTrace": null,
+  "metaData": null
+}

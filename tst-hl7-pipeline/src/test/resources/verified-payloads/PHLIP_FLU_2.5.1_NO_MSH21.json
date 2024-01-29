@@ -1,0 +1,10 @@
+{
+  "line": 1,
+  "column": 1,
+  "path": "MSH[1]-21[1]",
+  "description": "The required Field MSH-21 (Message Profile Identifier) is missing",
+  "category": "Usage",
+  "classification": "Error",
+  "stackTrace": null,
+  "metaData": null
+}
