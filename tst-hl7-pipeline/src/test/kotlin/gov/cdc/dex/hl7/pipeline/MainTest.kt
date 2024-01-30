@@ -2,7 +2,6 @@ package gov.cdc.dex.hl7.pipeline
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import kotlin.test.assertEquals
@@ -13,7 +12,7 @@ import java.io.FileNotFoundException
 
 class MainTest {
     private fun getTheNewPayload(fileEnding: String): String? {
-        val directoryWithPayloads = File(Constants.NEW_PAYLOADS_DIRECTORY)
+        val directoryWithPayloads = File(Constants.NEW_PAYLOADS_PATH)
         return directoryWithPayloads.listFiles { payload ->
             payload.isFile && payload.name.endsWith(fileEnding)
         }?.find { it.isFile }?.absolutePath
@@ -25,7 +24,6 @@ class MainTest {
     private fun getFieldDescriptionForPath(path: String, payloadName: String): String {
         try {
             val newPayload = getTheNewPayload(payloadName)?.let { File(it) }
-
             if (newPayload != null && newPayload.exists()) {
                 val jsonNewPayload: JsonNode = mapJsonToJsonNode(newPayload)
                 val structureValidatorReportInNewPayload =
@@ -61,21 +59,21 @@ class MainTest {
         /*
        Compares redactor and structure validator reports
         */
-        val newPayload = getTheNewPayload("PHLIP_FLU_2.5.1_PID5_ERROR.json")?.let { File(it) }
+        val newPayload = getTheNewPayload(Constants.PHLIP_FLU_PID5_ERROR.replace("txt","json"))?.let { File(it) }
 
-        val verifiedPayload = File("src/test/resources/verified-payloads/PHLIP_FLU_2.5.1_PID5_ERROR.json")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_PID5_ERROR.replace("txt","json")}")
 
         if (newPayload != null) {
             if (newPayload.exists() && verifiedPayload.exists()) {
                 val jsonNewPayload: JsonNode = mapJsonToJsonNode(newPayload)
                 val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
 
-                val redactorReportInNewPayload = jsonNewPayload["metadata"]["processes"][1]["report"]
-                val redactorReportInVerifiedPayload = jsonVerifiedPayload["metadata"]["processes"][1]["report"]
+                val redactorReportInNewPayload = jsonNewPayload[Constants.METADATA][Constants.PROCESSES][1][Constants.REPORT]
+                val redactorReportInVerifiedPayload = jsonVerifiedPayload[Constants.METADATA][Constants.PROCESSES][1][Constants.REPORT]
 
-                val structureValidatorReportInNewPayload = jsonNewPayload["metadata"]["processes"][2]["report"]
+                val structureValidatorReportInNewPayload = jsonNewPayload[Constants.METADATA][Constants.PROCESSES][2][Constants.REPORT]
                 val structureValidatorReportInVerifiedPayload =
-                    jsonVerifiedPayload["metadata"]["processes"][2]["report"]
+                    jsonVerifiedPayload[Constants.METADATA][Constants.PROCESSES][2][Constants.REPORT]
 
                 assertEquals(
                     redactorReportInNewPayload,
@@ -91,9 +89,9 @@ class MainTest {
     }
         @Test
         fun phlipFluMissingMSH3() {
-            val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH3,Constants.PHLIP_FLU_NO_MSH3)
+            val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH3,Constants.PHLIP_FLU_NO_MSH3.replace("txt","json"))
 
-            val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH3}")
+            val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH3.replace("txt","json")}")
             val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
             val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
@@ -104,9 +102,8 @@ class MainTest {
 
        @Test
        fun phlipFluMissingMSH4() {
-           val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH4, Constants.PHLIP_FLU_NO_MSH4)
-
-           val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH4}")
+           val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH4, Constants.PHLIP_FLU_NO_MSH4.replace("txt","json"))
+           val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH4.replace("txt","json")}")
            val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
            val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
@@ -114,9 +111,9 @@ class MainTest {
        }
     @Test
     fun phlipFluMissingMSH5() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH5,Constants.PHLIP_FLU_NO_MSH5)
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH5,Constants.PHLIP_FLU_NO_MSH5.replace("txt","json"))
 
-        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH5}")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH5.replace("txt","json")}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
@@ -124,9 +121,9 @@ class MainTest {
     }
     @Test
     fun phlipFluMissingMSH6() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH6,Constants.PHLIP_FLU_NO_MSH6)
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH6,Constants.PHLIP_FLU_NO_MSH6.replace("txt","json"))
 
-        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH6}")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH6.replace("txt","json")}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
@@ -134,9 +131,9 @@ class MainTest {
     }
     @Test
     fun phlipFluMissingMSH7() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH7,Constants.PHLIP_FLU_NO_MSH7)
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH7,Constants.PHLIP_FLU_NO_MSH7.replace("txt","json"))
 
-        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH7}")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH7.replace("txt","json")}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
@@ -145,9 +142,9 @@ class MainTest {
 
     @Test
     fun phlipFluMissingMSH9() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH9,Constants.PHLIP_FLU_NO_MSH9)
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH9,Constants.PHLIP_FLU_NO_MSH9.replace("txt","json"))
 
-        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH9}")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH9.replace("txt","json")}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
@@ -155,9 +152,9 @@ class MainTest {
     }
     @Test
     fun phlipFluMissingMSH10() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH10,Constants.PHLIP_FLU_NO_MSH10)
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH10,Constants.PHLIP_FLU_NO_MSH10.replace("txt","json"))
 
-        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH10}")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH10.replace("txt","json")}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
@@ -165,20 +162,18 @@ class MainTest {
     }
     @Test
     fun phlipFluMissingMSH11() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH11,Constants.PHLIP_FLU_NO_MSH11)
-
-        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH10}")
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH11,Constants.PHLIP_FLU_NO_MSH11.replace("txt","json"))
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH11.replace("txt","json")}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
-
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-11 (Processing ID) is missing")
     }
     @Disabled
     @Test
     fun phlipFluMissingMSH12() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath("",Constants.PHLIP_FLU_NO_MSH12)
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath("",Constants.PHLIP_FLU_NO_MSH12.replace("txt","json"))
 
-        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH12}")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH12.replace("txt","json")}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
@@ -186,9 +181,9 @@ class MainTest {
     }
     @Test
     fun phlipFluMissingMSH21() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH21,Constants.PHLIP_FLU_NO_MSH21)
+        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH21,Constants.PHLIP_FLU_NO_MSH21.replace("txt","json"))
 
-        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_NO_MSH21}")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH21.replace("txt","json")}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
@@ -209,10 +204,10 @@ class MainTest {
         /*
         This test will check all required fields in all required segments and compare against verified payload
          */
-        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_DIRECTORY}/${Constants.PHLIP_FLU_VALID_MESSAGE}")
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_VALID_MESSAGE.replace("txt","json")}")
         val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
 
-        val newPayload = getTheNewPayload(Constants.PHLIP_FLU_VALID_MESSAGE)?.let { File(it) }
+        val newPayload = getTheNewPayload(Constants.PHLIP_FLU_VALID_MESSAGE.replace("txt","json"))?.let { File(it) }
 
 
         if (newPayload != null && newPayload.exists()) {
@@ -237,6 +232,7 @@ class MainTest {
                 Constants.SOFTWARE_PRODUCT_NAME, Constants.SOFTWARE_BINARY_ID, Constants.SOFTWARE_INSTALL_DATE)
 
             for (field in SFTfieldsToCompare) {
+
                 val fieldFromNewPayload = jsonNewPayload[Constants.METADATA][Constants.PROCESSES][3][Constants.REPORT][Constants.MSH][Constants.CHILDREN][0][Constants.SFT][field]
                 val fieldFromVerifiedPayload = jsonVerifiedPayload[Constants.REPORT][Constants.MSH][Constants.CHILDREN][0][Constants.SFT][field]
                 assertEquals(
@@ -279,6 +275,10 @@ class MainTest {
 
 
     }
+    @Test
+    fun phlipFluDifferentDataTypesInOBX2() {
+       // use PHLIP_FLU_2.5.1_VALID_DT_NM_CE_CX_SN_ST_TS_TX.txt
+    }
 
     @Disabled
     @Test
@@ -313,130 +313,7 @@ class MainTest {
        }
 
        @Test
-       fun testPhlipFluWithDataTypeNM() {
-           //PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeTS() {
-           //PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeTM() {
-           //PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeDT() {
-           //PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeCWE() {
-           //use PHLIP_FLU_DataType_CWE.txt
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeFT() {
-           //PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeTX() {
-           //PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeSN() {
-           //PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeCX() {
-           //PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeCE() {
-           //PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeED() {
-           //PHLIP_FLU_OBX2_SN_CX_CE_NM_ED_TX_TS_TM_DT_FT.txt
-
-       }
-
-       @Test
-       fun testPhlipFluWithDataTypeRP() {
-           // need to find out
-       }
-
-       @Test
-       fun testVPDWithDataTypeNM() {
-           // use PHLIP_VPD_VALID.txt OBX3
-
-       }
-
-       @Test
-       fun testVPDWithDataTypeSN() {
-           //useuse PHLIP_VPD_VALID OBX56, 57,58
-
-       }
-
-       @Test
-       fun testVPDWithDataTypeTS() {
-           //use PHLIP_VPD_VALID OBX35
-       }
-
-       @Test
-       fun testVPDWithDataTypeTM() {
-           //use PHLIP_VPD_VALID  add TM
-       }
-
-       @Test
-       fun testVPDWithDataTypeDT() {
-           //use PHLIP_VPD_VALID OBX 37, 38, 39
-       }
-
-       @Test
-       fun testVPDWithDataTypeCWE() {
-           //use PHLIP_VPD_VALID OBX 40, 41, 42
-       }
-
-       @Test
-       fun testVPDWithDataTypeFT() {
-           //PHLIP_VPD_VALID_DataType_FT.txt OBX175
-       }
-
-       @Test
-       fun testVPDWithDataTypeTX() {
-           //use PHLIP_VPD_VALID OBX 102
-       }
-
-       @Test
-       fun testVPDWithDataTypeED() {
-           //PHLIP_VPD_DataType_ED.txt
-       }
-
-       @Test
-       fun testVPDWithDataTypeRP() {
-           // need to find out
-       }
-
-       @Test
-       fun testRequiredFieldsPIDCase() {
-           //PHLIP_Salm_PID_Required_Fields_Case.txt
-       }
-
-       @Test
-       fun testOBX2HasRightDatatypeInOBX5Case() {
-           // use PHLIP_DataType_DT_CASE.txt
-       }
-
-       @Test
-       fun testOBX2HasIncorrectDatatypeInOBX5Case() {
+       fun phlipFluOBX2HasIncorrectDatatypeInOBX5() {
            // PHLIP_OBX2_CWE_OBX5_ST.txt OBR1 OBX1
        }
 
@@ -446,31 +323,15 @@ class MainTest {
 
        }
 
-       @Test
-       fun testOBX1ValueShouldBeSequentialCELR() {
-           //use COVID-19_OBX_Sequentional_Test.txt
 
-       }
 
        @Test
-       fun testSendingAndReceivingApplicationsCASE() {
-           //use PHLIP_FLU_Receiving_Sending_Applications.txt
-       }
-
-       @Test
-       fun testPIDSocialSecurityCase() {
+       fun phlipFluPIDSsn() {
            //PHLIP_FLU_PID_19.txt
        }
 
-       @Test
-       fun testPIDDateOfBirthCase() {
-           // use PHLIP_FLU_PID_7_DateTimeOfBirth.txt
-       }
 
-       @Test
-       fun testPIDNameAndAddressCase() {
-           //use FDD_LIST_PID_Name_Address_CASE.txt
-       }
+
 
        @Test
        fun testUniqueOBXWithSameOBX3AndNullOBX4Case() {
@@ -480,42 +341,6 @@ class MainTest {
        @Test
        fun testUniqueOBXWithSameOBX3AndDifferentOBX4Case() {
            //failure
-       }
-
-       @Test
-       fun testWithMissingMessageProfileIdentifierValueCase() {
-           //failure
-       }
-
-       @Test
-       fun testRequiredFieldsPIDElr() {
-           //use COVID-19_PID_Required_Fields.txt
-       }
-
-       @Test
-       fun testOBX2HasRightDatatypeInOBX5Elr() {
-           //use COVID-19_OBX2CWE_OBX5_CWE.txt #OBX|6
-       }
-
-       @Test
-       fun testOBX2HasIncorrectDatatypeInOBX5Elr() {
-           //COVID-19_OBX2_CWE_OBX5_NM.txt
-       }
-
-       @Test
-       fun testPIDSocialSecurityElr() {
-           //use COVID-19_With_SSN_PID19.txt
-       }
-
-       @Test
-       fun testPIDDateOfBirthElr() {
-           //use COVID-19_PID_DateOfBirth.txt
-
-       }
-
-       @Test
-       fun testPIDNameAndAddressCElR() {
-           //COVID19_PID_Segment_With_Patient_Name_And_Address.txt
        }
 
        @Test
@@ -538,7 +363,7 @@ class MainTest {
             pipelineTest.dropMessagesToABlobStorage()
         }
 
-
+        /*
         @JvmStatic
         @AfterAll
         fun cleanup() {
@@ -548,8 +373,8 @@ class MainTest {
                     payload.delete()
                 }
             }
+         }*/
 
-        }
 
 
 

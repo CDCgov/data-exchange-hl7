@@ -118,7 +118,14 @@ class PipelineTest {
                 ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_VALID_MESSAGE_WITH_PV1}",
                 ROUTE to  Constants.PHLIP_FLU,
                 REPORTING_JURISDICTION to Constants.JURISDICTION
+            ),
+            Constants.PHLIP_FLU_PID5_ERROR to mutableMapOf<String, String?>(
+                MESSAGE_TYPE to Constants.MESSAGE_TYPE_ELR,
+                ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_PID5_ERROR}",
+                ROUTE to  Constants.PHLIP_FLU,
+                REPORTING_JURISDICTION to Constants.JURISDICTION
             )
+
         )
     }
 

@@ -4,7 +4,7 @@ class Constants {
 
     companion object {
         // MSH required fields
-        const val FIELD_SEPARATOR = "file_separator"
+        const val FIELD_SEPARATOR = "field_separator"
         const val ENCODING_CHARACTERS = "encoding_characters"
         const val SENDING_APPLICATION = "sending_application"
         const val SENDING_FACILITY = "sending_facility"
@@ -152,9 +152,10 @@ class Constants {
         const val PHLIP_FLU_VALID_MESSAGE = "PHLIP_FLU_2.5.1_VALID_MESSAGE.txt"
         const val PHLIP_FLU_NO_PROFILE_IDENTIFIER = "PHLIP_FLU_2.5.1_NO_PROFILE_IDENTIFIER.txt"
         const val PHLIP_FLU_VALID_MESSAGE_WITH_PV1= "PHLIP_FLU_2.5.1_VALID_MESSAGE_WITH_PV1_Added.txt"
+        const val PHLIP_FLU_PID5_ERROR = "PHLIP_FLU_2.5.1_PID5_ERROR.txt"
 
-        const val NEW_PAYLOADS_DIRECTORY = "src/test/resources/new-payloads"
-        const val VERIFIED_PAYLOADS_DIRECTORY = "src/test/resources/verified-payloads"
+        const val NEW_PAYLOADS_PATH = "src/test/resources/new-payloads"
+        const val VERIFIED_PAYLOADS_PATH = "src/test/resources/verified-payloads"
 
 
     }
