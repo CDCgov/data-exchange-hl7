@@ -5,6 +5,10 @@ import com.azure.storage.blob.*
 import com.azure.storage.blob.models.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.microsoft.azure.functions.HttpMethod
+import com.microsoft.azure.functions.HttpRequestMessage
+import com.microsoft.azure.functions.HttpResponseMessage
+import com.microsoft.azure.functions.HttpStatus
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.*
@@ -406,5 +410,21 @@ class Function {
         }
         logger.info("DEX::Metadata Info: --> isValid: $isValid;  messageType: ${messageType}, route: ${route}, reportingJurisdiction: $reportingJurisdiction")
         return Pair(isValid, messageType)
+    }
+
+    @FunctionName("health")
+    fun invoke(
+            @HttpTrigger(
+                    name = "req",
+                    methods = [HttpMethod.GET],
+                    authLevel = AuthorizationLevel.ANONYMOUS
+            )
+            request: HttpRequestMessage<Optional<String>>
+    ): HttpResponseMessage {
+        return request
+                .createResponseBuilder(HttpStatus.OK)
+                .header("Content-Type", "application/json")
+                .body("UP")
+                .build();
     }
 } // .class  Function
