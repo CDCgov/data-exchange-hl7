@@ -118,6 +118,10 @@ class Constants {
         const val ORC = "ORC"
         const val OBR = "OBR"
         const val REPORT = "report"
+        const val CATEGORY = "category"
+        const val CONTENT = "content"
+        const val CLASSIFICATION = "classification"
+        const val STACKTRACE = "stackTrace"
         const val PROCESSES = "processes"
         const val METADATA = "metadata"
         const val CHILDREN = "children"
@@ -157,6 +161,7 @@ class Constants {
         const val PHLIP_FLU_NO_PROFILE_IDENTIFIER = "PHLIP_FLU_2.5.1_NO_PROFILE_IDENTIFIER.txt"
         const val PHLIP_FLU_VALID_MESSAGE_WITH_PV1= "PHLIP_FLU_2.5.1_VALID_MESSAGE_WITH_PV1_Added.txt"
         const val PHLIP_FLU_PID5_ERROR = "PHLIP_FLU_2.5.1_PID5_ERROR.txt"
+        const val PHLIP_FLU_WITH_PID22 = "PHLIP_FLU_2.5.1_WITH_PID22.1_NO_PID22.3.txt"
 
         const val NEW_PAYLOADS_PATH = "src/test/resources/new-payloads"
         const val VERIFIED_PAYLOADS_PATH = "src/test/resources/verified-payloads"

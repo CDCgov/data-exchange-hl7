@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException
 class Utility {
     fun buildMetadata(uniqueTimeStamp: String): Map<String, MutableMap<String, out String?>> {
         return mapOf(
-            Constants.PHLIP_FLU_NO_MSH3 + Constants to mutableMapOf<String, String?>(
+            Constants.PHLIP_FLU_NO_MSH3 to mutableMapOf<String, String?>(
                 Constants.MESSAGE_TYPE_STR to Constants.MESSAGE_TYPE_ELR,
                 Constants.ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_NO_MSH3}",
                 Constants.ROUTE to Constants.PHLIP_FLU,
@@ -90,6 +90,12 @@ class Utility {
             Constants.PHLIP_FLU_PID5_ERROR to mutableMapOf<String, String?>(
                 Constants.MESSAGE_TYPE_STR to Constants.MESSAGE_TYPE_ELR,
                 Constants.ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_PID5_ERROR}",
+                Constants.ROUTE to Constants.PHLIP_FLU,
+                Constants.REPORTING_JURISDICTION to Constants.JURISDICTION
+            ),
+            Constants.PHLIP_FLU_WITH_PID22 to mutableMapOf<String, String?>(
+                Constants.MESSAGE_TYPE_STR to Constants.MESSAGE_TYPE_ELR,
+                Constants.ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_WITH_PID22}",
                 Constants.ROUTE to Constants.PHLIP_FLU,
                 Constants.REPORTING_JURISDICTION to Constants.JURISDICTION
             )

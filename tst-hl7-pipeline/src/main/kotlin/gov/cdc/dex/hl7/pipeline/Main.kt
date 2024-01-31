@@ -71,7 +71,7 @@ class PipelineTest {
                 uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH7) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH9) ||
                 uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH10) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH11) ||
                 uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH12) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH21)||
-                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_PROFILE_IDENTIFIER)){
+                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_PROFILE_IDENTIFIER) || uploadedBlob.endsWith(Constants.PHLIP_FLU_WITH_PID22)){
                 queryCosmosDB(structureValidatorContainerName, uploadedBlob)
             }else if (uploadedBlob.endsWith(Constants.PHLIP_FLU_VALID_MESSAGE) || uploadedBlob.endsWith(Constants.PHLIP_FLU_VALID_MESSAGE_WITH_PV1)){
                 queryCosmosDB(jsonLakeContainerName, uploadedBlob)

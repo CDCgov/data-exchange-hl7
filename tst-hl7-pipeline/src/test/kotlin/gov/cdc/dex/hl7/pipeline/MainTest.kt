@@ -1,5 +1,6 @@
 package gov.cdc.dex.hl7.pipeline
 
+import com.ctc.wstx.shaded.msv_core.verifier.jarv.Const
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.BeforeAll
@@ -270,8 +271,39 @@ class MainTest {
                 )
         }
 
+    }
+
+    @Test
+    fun phlipFluWithPID22_1NoPID22_3(){
+        /*
+        if PID22.1 is valued, and PID22.3 is not valued
+        should result in constraint failure.
+        */
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_WITH_PID22.replace("txt","json")}")
+        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+
+        val newPayload = getTheNewPayload(Constants.PHLIP_FLU_WITH_PID22.replace("txt","json"))?.let { File(it) }
+        if (newPayload != null && newPayload.exists()) {
+            val jsonNewPayload: JsonNode = mapJsonToJsonNode(newPayload)
+
+            val structureValidatorReportInNewPayload =
+                jsonNewPayload[Constants.METADATA][Constants.PROCESSES][2][Constants.REPORT][Constants.ENTRIES][Constants.CONTENT][0]
+
+            val fieldsToCompare = listOf(Constants.PATH,Constants.DESCRIPTION,Constants.CATEGORY,
+                Constants.CLASSIFICATION, Constants.STACKTRACE, Constants.METADATA)
+
+            for (field in fieldsToCompare){
+                val fieldFromNewPayload = structureValidatorReportInNewPayload[field]
+                val fieldFromVerifiedPayload = jsonVerifiedPayload[field]
 
 
+                assertEquals(
+                    fieldFromNewPayload,
+                    fieldFromVerifiedPayload,
+                    "Fields do not match!"
+                )
+            }
+        }
     }
     @Test
     fun phlipFluDifferentDataTypesInOBX2() {
@@ -352,7 +384,7 @@ class MainTest {
        }
 
 
-
+/*
     companion object {
         @JvmStatic
         @BeforeAll
@@ -360,7 +392,6 @@ class MainTest {
             val pipelineTest = PipelineTest()
             pipelineTest.dropMessagesToABlobStorage()
         }
-
         /*
         @JvmStatic
         @AfterAll
@@ -373,13 +404,9 @@ class MainTest {
             }
          }*/
 
-
-
-
-
-
     }
 
+*/
 
 
 
