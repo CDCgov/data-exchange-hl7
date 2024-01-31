@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dex</groupId>
     <artifactId>svc-hl7-validation</artifactId>
-    <version>0.0.37-SNAPSHOT</version>
+    <version>0.0.38-SNAPSHOT</version>
     <!-- -->
     <parent>
         <groupId>io.micronaut</groupId>
@@ -21,17 +21,11 @@
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>gov.cdc.dex.validation.service.Application</exec.mainClass>
         <kotlinVersion>1.9.0</kotlinVersion>
-        <hl7pet.version>1.2.7.2</hl7pet.version>
         <gson.version>2.10.1</gson.version>
-        <lib-dex-commons.version>1.0.24-SNAPSHOT</lib-dex-commons.version>
-        <junitjupiter.version>5.9.2</junitjupiter.version>
+        <lib-dex-commons.version>0.0.37-SNAPSHOT</lib-dex-commons.version>
     </properties>
 
     <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://repo1.maven.org/maven2/</url>
-        </repository>
         <repository>
             <id>nexus</id>
             <url>https://imagehub.cdc.gov/repository/maven-ede/</url>
@@ -59,81 +53,63 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-core</artifactId>
+            <groupId>gov.cdc.dex</groupId>
+            <artifactId>lib-nist-validator</artifactId>
+            <version>1.3.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-test</artifactId>
-            <scope>test</scope>
+            <artifactId>reactor-core</artifactId>
+            <version>3.5.4</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
         </dependency>
-        <dependency>
-            <groupId>gov.cdc.dex</groupId>
-            <artifactId>lib-cloud-proxy</artifactId>
-            <version>0.0.30-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.90.Final</version>
-        </dependency>
+
         <dependency>
             <groupId>io.micronaut</groupId>
-            <artifactId>micronaut-inject</artifactId>
+            <artifactId>micronaut-core</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.micronaut</groupId>
-            <artifactId>micronaut-validation</artifactId>
+            <artifactId>micronaut-http</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-kotlin</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+
         <dependency>
             <groupId>io.micronaut</groupId>
-            <artifactId>micronaut-http-client</artifactId>
+            <artifactId>micronaut-context</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.micronaut</groupId>
-            <artifactId>micronaut-http-server-netty</artifactId>
+            <artifactId>micronaut-aop</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.micronaut</groupId>
-            <artifactId>micronaut-jackson-databind</artifactId>
+            <artifactId>micronaut-runtime</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>io.micronaut.kotlin</groupId>
-            <artifactId>micronaut-kotlin-runtime</artifactId>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-http-client-core</artifactId>
             <scope>compile</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.micronaut/micronaut-management -->
         <dependency>
             <groupId>io.micronaut</groupId>
             <artifactId>micronaut-management</artifactId>
-            <version>3.8.7</version>
+            <version>${micronaut.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-reflect</artifactId>
-            <version>${kotlinVersion}</version>
-            <scope>compile</scope>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -142,58 +118,40 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test-junit</artifactId>
-            <version>${kotlinVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.micronaut.test</groupId>
-            <artifactId>micronaut-test-junit5</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junitjupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junitjupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>gov.cdc.hl7</groupId>
-            <artifactId>hl7-pet_2.13</artifactId>
-            <version>${hl7pet.version}</version>
         </dependency>
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
             <version>${lib-dex-commons.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>2.2.16</version>
         </dependency>
         <dependency>
-            <groupId>gov.cdc.dex</groupId>
-            <artifactId>lib-nist-validator</artifactId>
-            <version>1.3.5-SNAPSHOT</version>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.90.Final</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-http-server-netty</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-inject-java</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-http-client</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -336,10 +294,10 @@
                 <artifactId>azure-webapp-maven-plugin</artifactId>
                 <version>2.11.0</version>
                 <configuration>
-                    <!--                    <auth>-->
-                    <!--                        <type>service_principal</type>-->
-                    <!--                        <serverId>azure-service-principal</serverId>-->
-                    <!--                    </auth>-->
+                    <auth>
+                        <type>service_principal</type>
+                        <serverId>azure-service-principal</serverId>
+                    </auth>
                     <schemaVersion>v2</schemaVersion>
                     <appName>ocio-ede-${environment-id}-svc-hl7-validation</appName>
                     <appServicePlanResourceGroup>${functionResourceGroup}</appServicePlanResourceGroup>
@@ -351,7 +309,7 @@
                     <region>${functionRegion}</region>
                     <runtime>
                         <os>Linux</os>
-                        <javaVersion>Java 17</javaVersion>
+                        <javaVersion>Java ${java.version}</javaVersion>
                         <webContainer>Java SE</webContainer>
                     </runtime>
                     <deployment>
