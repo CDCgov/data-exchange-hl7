@@ -123,8 +123,12 @@ class Constants {
         const val CHILDREN = "children"
         const val ENTRIES = "entries"
         const val PATH = "path"
+        const val ROUTE = "route"
         const val DESCRIPTION = "description"
         const val JURISDICTION = "48"
+        const val REPORTING_JURISDICTION = "reporting_jurisdiction"
+        const val ORIGINAL_FILE_NAME = "original_file_name"
+        const val DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss"
 
         //message types
         const val MESSAGE_TYPE_STR = "message_type"
@@ -156,7 +160,7 @@ class Constants {
 
         const val NEW_PAYLOADS_PATH = "src/test/resources/new-payloads"
         const val VERIFIED_PAYLOADS_PATH = "src/test/resources/verified-payloads"
-
+        const val PATH_TO_MESSAGES = "src/main/resources/messages"
 
     }
 }

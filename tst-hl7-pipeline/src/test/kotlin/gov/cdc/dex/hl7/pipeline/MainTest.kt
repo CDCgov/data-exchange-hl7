@@ -98,8 +98,6 @@ class MainTest {
             assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "Incorrect error message for missing MSH-3.")
         }
 
-
-
        @Test
        fun phlipFluMissingMSH4() {
            val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH4, Constants.PHLIP_FLU_NO_MSH4.replace("txt","json"))
