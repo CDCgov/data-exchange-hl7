@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory
 class Function {
 
     companion object {
-        val gson: Gson = GsonBuilder().serializeNulls().create()
+        val gson: Gson = GsonBuilder().disableHtmlEscaping().serializeNulls().create()
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
         val fnConfig = FunctionConfig()
     }
