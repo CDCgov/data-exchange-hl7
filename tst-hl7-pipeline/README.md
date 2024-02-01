@@ -1,9 +1,16 @@
 # HL7V2 Pipeline Test Harness
 
-## Introduction
+## Overview
 
-The HL7v2 Pipeline Test Harness is designed to facilitate end-to-end testing of HL7v2 messages by automating key processes from uploading messages to a blob storage, attaching necessary metadata to validation and verification of the payloads retrieved from Cosmos DB. This test harness aims to streamline the testing workflow, ensuring the reliability and accuracy of HL7v2 message processing.
-Currently, support is limited to PHLIP_FLU-2.5.1 messages, but there are plans in progress to extend this support to include additional message types..
+The HL7V2 Pipeline Test Harness exists to:
+
+- **Facilitate End-to-End Testing:** Streamline the process of testing HL7v2 pipeline from message ingestion to payload verification, ensuring comprehensive coverage.
+
+- **Automate Key Processes:** Automate critical tasks such as dropping messages to Blob Storage, running them through the pipeline, and validating the payloads in Cosmos DB.
+
+- **Ensure Reliability and Accuracy:** By providing a structured testing workflow, the test harness aims to enhance the reliability and accuracy of HL7v2 message processing.
+
+- **Support Multiple Message Types:** While currently supporting PHLIP_FLU-2.5.1 messages, the tool is designed with extensibility in mind, with plans to support additional message types in the future.
 
 
 ### How It Works
@@ -24,10 +31,13 @@ Currently, support is limited to PHLIP_FLU-2.5.1 messages, but there are plans i
     - receiver-debatcher function in the HL7v2 is triggered and the messages are traversed through the pipeline.
 
 - **Cosmos DB Querying:**
-    - Utilize  [Cosmos Client](COSMO_CLIENT_README.md) library to query the specified container for each message, fetch the payload and then store it in the 'test/resources/new-payloads' folder.
+    - Utilizing [Cosmos Client](local_libs/lib-dex-commons/COSMO_CLIENT_README.md) library to query the specified container for each message, fetch the payload and then store it in the 'test/resources/new-payloads' folder.
 
 - **Payload Verification:**
-    - Create Tests with Junit and compare results against pre-verified payloads for accuracy.
+    - Create Tests with Junit and compare results against pre-verified payloads.
+
+![DEX_HL7V2_TEST_HARNESS_DIAGRAM](https://github.com/CDCgov/data-exchange-hl7/assets/137535421/600c2b6f-4673-43c2-988d-d5439fc5539d)
+
 
 ## Required Configuration Parameters
 - **BLOB_CONTAINER_NAME**: Name of the blob container where messages will be dropped.
@@ -43,9 +53,5 @@ Currently, support is limited to PHLIP_FLU-2.5.1 messages, but there are plans i
 
 
 ## Usage
-
 TBD
 
-## Contributing
-
-TBD
