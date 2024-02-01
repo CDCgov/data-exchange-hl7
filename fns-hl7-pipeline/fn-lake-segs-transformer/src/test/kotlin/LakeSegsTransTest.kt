@@ -104,7 +104,7 @@ class LakeSegsTransTest {
 
         logger.info("testTransformerSegments...")
         
-        val filePath = "/Hepatitis_V1_0_1_TM_TC02_HEP_B_ACUTE_MOD.hl7"
+        val filePath = "/Mumps_VPD.txt"
         val testMsg = this::class.java.getResource(filePath).readText()
 
         // read the profile

@@ -25,7 +25,7 @@
         <functions.version>3.0.0</functions.version>
         <functions.plugin.version>1.26.0</functions.plugin.version>
 
-        <functionAppName>ocio-ede-${environment-id}-hl7-lake-segments-transformer</functionAppName>
+	<functionAppName>hl7-lake-segments-transformer-${environment-id}</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
 
         <gson.version>2.10.1</gson.version>
