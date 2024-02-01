@@ -31,7 +31,7 @@ The HL7V2 Pipeline Test Harness exists to:
     - receiver-debatcher function in the HL7v2 is triggered and the messages are traversed through the pipeline.
 
 - **Cosmos DB Querying:**
-    - Utilizing [Cosmos Client](local_libs/lib-dex-commons/COSMO_CLIENT_README.md) library to query the specified container for each message, fetch the payload and then store it in the 'test/resources/new-payloads' folder.
+    - Utilizing Cosmos Client library from lib-dex-commons to query the specified container for each message, fetch the payload and  store it in the 'test/resources/new-payloads' folder.
 
 - **Payload Verification:**
     - Create Tests with Junit and compare results against pre-verified payloads.
