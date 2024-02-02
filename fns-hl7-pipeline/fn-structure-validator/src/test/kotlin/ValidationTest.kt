@@ -1,5 +1,6 @@
 
 import com.google.gson.GsonBuilder
+import gov.cdc.dex.hl7.InvalidMessageException
 import gov.cdc.dex.hl7.ValidatorFunction
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.hl7.HL7StaticParser
@@ -8,6 +9,7 @@ import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -78,6 +80,15 @@ class ValidationTest {
         println(profile)
     }
 
+    @Test
+    fun testExtractELRMissingMSH12() {
+        val fn = ValidatorFunction()
+        val msh = "MSH|^~\\&#|ELIS.SC.STAG^2.16.840.1.114222.4.3.4.40.1.2^ISO|SC.Columbia.SPHL^2.16.840.1.114222.4.1.171355^ISO|US WHO Collab LabSys^2.16.840.1.114222.4.3.3.7^ISO|CDC-EPI Surv Branch^2.16.840.1.114222.4.1.10416^ISO|20221130082944.929-0500||ORU^R01^ORU_R01|OE4530T20221130082944|T||||NE|NE|USA||||PHLabReport-NoAck^ELR251R1_Rcvr_Prof^2.16.840.1.113883.9.11^ISO~PHLIP_ELSM_251^PHLIP_Profile_Flu^2.16.840.1.113883.9.179^ISO"
+        assertThrows<InvalidMessageException> {
+            val profile = fn.getProfileNameAndPaths(msh, "PHLIP_FLU").first
+        }
+
+    }
 
     private fun testFolder(folderName: String) {
         testFolderByType(folderName, HL7MessageType.CASE)

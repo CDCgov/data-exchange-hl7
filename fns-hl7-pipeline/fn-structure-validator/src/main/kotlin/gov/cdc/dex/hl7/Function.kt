@@ -113,7 +113,7 @@ class ValidatorFunction {
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
                     metadata.addArrayElement("processes", processMD)
-                    val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, "${e.message}")
+                    val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, "Error: ${e.message}")
                     val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
 
                     logger.error("metadata in exception: $metadata")
@@ -146,9 +146,15 @@ class ValidatorFunction {
         } else listOf(DEFAULT_SPEC_PROFILE)
 
         val prefix = if (routeName.isNotEmpty()) "$routeName-" else ""
-        val profileName = prefix + profileIdPaths.map { path ->
-            HL7StaticParser.getFirstValue(hl7Content, path).get().uppercase()
-        }.reduce { acc, map -> "$acc-$map" }
+        val profileName = try {
+            prefix + profileIdPaths.map { path ->
+                HL7StaticParser.getFirstValue(hl7Content, path).get().uppercase()
+            }.reduce { acc, map -> "$acc-$map" }
+        } catch (e: NoSuchElementException) {
+            throw InvalidMessageException("Unable to load validation profile: " +
+                    "One or more values in the profile path(s)" +
+                    " ${profileIdPaths.joinToString()} are missing.")
+        }
         return Pair(profileName, profileIdPaths)
 
     }
