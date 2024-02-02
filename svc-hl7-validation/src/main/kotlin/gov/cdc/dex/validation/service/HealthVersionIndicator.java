@@ -5,6 +5,7 @@ import io.micronaut.health.HealthStatus;
 import io.micronaut.management.endpoint.health.HealthEndpoint;
 import io.micronaut.management.health.indicator.AbstractHealthIndicator;
 import io.micronaut.management.health.indicator.HealthResult;
+import io.micronaut.management.health.indicator.annotation.Liveness;
 import jakarta.inject.Singleton;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.Properties;
 // and HealthEndpoint bean to expose /health endpoint is available.
 @Requires(property = HealthEndpoint.PREFIX + ".version.enabled", value = "true")
 @Requires(beans = HealthEndpoint.class)
+@Liveness
 public class HealthVersionIndicator<Map> extends AbstractHealthIndicator<Map> {
     public static final String NAME = "application";
     @Override

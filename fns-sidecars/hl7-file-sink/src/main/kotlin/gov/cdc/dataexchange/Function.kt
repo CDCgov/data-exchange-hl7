@@ -36,6 +36,8 @@ class Function {
                 logger.error("ERROR: Unable to parse event message #$index as JSON. Aborting save.")
                 null
             } ?: continue
+            //remove content
+            inputEvent.remove("content")
 
             val messageUUID = try {
                 // this is where the value will be in hl7 message json
@@ -70,7 +72,7 @@ class Function {
                 // change event to match destination folder name
                 inputEvent.addProperty("meta_ext_event", fnConfig.blobStorageFolderName)
                 newMetadata["meta_ext_event"] = fnConfig.blobStorageFolderName
-                val folderStructure = SimpleDateFormat("YYYY/MM/DD").format(Date())
+                val folderStructure = SimpleDateFormat("YYYY/MM/dd").format(Date())
 
                 // save to storage container
                 this.saveBlobToContainer(

@@ -48,6 +48,17 @@ class FunctionTest {
 
     }
     @Test
+    fun testRedactorCOVID19(){
+        val msg = this::class.java.getResource("/covid25.txt")?.readText()
+        val helper = Helper()
+        val report = msg?.let { helper.getRedactedReport(it,"ELR", "covid19_elr") }
+        if (report != null) {
+            println("report msg :${report._1}")
+            println("report List: ${report._2()?.toList()}")
+        }
+
+    }
+    @Test
     fun extractValue(){
         val helper = Helper()
         val msg = this::class.java.getResource("/BDB_LAB_02_redact.txt").readText()

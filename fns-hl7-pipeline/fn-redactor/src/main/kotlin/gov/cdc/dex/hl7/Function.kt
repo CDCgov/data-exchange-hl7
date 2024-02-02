@@ -23,10 +23,11 @@ import org.slf4j.LoggerFactory
 class Function {
 
     companion object {
-        val gson: Gson = GsonBuilder().serializeNulls().create()
+        val gson: Gson = GsonBuilder().disableHtmlEscaping().serializeNulls().create()
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
         val fnConfig = FunctionConfig()
     }
+
     @FunctionName("redactor")
     fun eventHubProcessor(
         @EventHubTrigger(
@@ -163,6 +164,20 @@ class Function {
         }
     }
 
+    @FunctionName("health")
+    fun invoke(
+            @HttpTrigger(
+                    name = "req",
+                    methods = [HttpMethod.GET],
+                    authLevel = AuthorizationLevel.ANONYMOUS
+            )
+            request: HttpRequestMessage<Optional<String>>
+    ): HttpResponseMessage {
+        return buildHttpResponse(
+                "UP",
+                HttpStatus.OK,
+                request);
+    }
 }
 
 private fun noBodyResponse(request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {

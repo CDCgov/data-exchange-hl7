@@ -37,7 +37,7 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
         }
         //Fix MSH-1 and 2:
         val msh =fullHL7.get("MSH").asJsonObject
-        msh.addProperty("file_separator", "|")
+        msh.addProperty("field_separator", "|")
         msh.addProperty("encoding_characters", "^~\\&")
         return fullHL7
 

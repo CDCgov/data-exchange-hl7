@@ -1,5 +1,6 @@
 
 import com.google.gson.GsonBuilder
+import gov.cdc.dex.hl7.InvalidMessageException
 import gov.cdc.dex.hl7.ValidatorFunction
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.hl7.HL7StaticParser
@@ -8,6 +9,7 @@ import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -58,7 +60,7 @@ class ValidationTest {
     @Test
     fun testExtractPhinSpec() {
         val msh = "MSH|^~\\&|SendAppName^2.16.840.1.114222.TBD^ISO|Sending-Facility^2.16.840.1.114222.TBD^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~Lyme_TBRD_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO"
-        val profile = ValidatorFunction().getProfileName(msh, "")
+        val profile = ValidatorFunction().getProfileNameAndPaths(msh, "").first
         println(profile)
     }
 
@@ -66,9 +68,28 @@ class ValidationTest {
     fun testExtractELRSpec() {
         val fn = ValidatorFunction()
         val msh = "MSH|^~\\&|LIMS.MN.STAGING^2.16.840.1.114222.4.3.4.23.1.2^ISO|MN Public Health Lab^2.16.840.1.114222.4.1.10080^ISO|AIMS.INTEGRATION.STG^2.16.840.1.114222.4.3.15.2^ISO|CDC.ARLN.CRECol^2.16.840.1.114222.4.1.219333^ISO|20200201104547.082-0600||ORU^R01^ORU_R01|178106199999|D|2.5.1|||||||||PHLabReport-NoAck^phLabResultsELRv251^2.16.840.1.113883.9.11^ISO"
-        val profile = fn.getProfileName(msh, "DAART")
+        val profile = fn.getProfileNameAndPaths(msh, "DAART").first
         println(profile)
     }
+
+    @Test
+    fun testExtractELRDefault() {
+        val fn = ValidatorFunction()
+        val msh = "MSH|^~\\&#|ELIS.SC.STAG^2.16.840.1.114222.4.3.4.40.1.2^ISO|SC.Columbia.SPHL^2.16.840.1.114222.4.1.171355^ISO|US WHO Collab LabSys^2.16.840.1.114222.4.3.3.7^ISO|CDC-EPI Surv Branch^2.16.840.1.114222.4.1.10416^ISO|20221130082944.929-0500||ORU^R01^ORU_R01|OE4530T20221130082944|T|2.5.1|||NE|NE|USA||||PHLabReport-NoAck^ELR251R1_Rcvr_Prof^2.16.840.1.113883.9.11^ISO~PHLIP_ELSM_251^PHLIP_Profile_Flu^2.16.840.1.113883.9.179^ISO"
+        val profile = fn.getProfileNameAndPaths(msh, "PHLIP_FLU").first
+        println(profile)
+    }
+
+    @Test
+    fun testExtractELRMissingMSH12() {
+        val fn = ValidatorFunction()
+        val msh = "MSH|^~\\&#|ELIS.SC.STAG^2.16.840.1.114222.4.3.4.40.1.2^ISO|SC.Columbia.SPHL^2.16.840.1.114222.4.1.171355^ISO|US WHO Collab LabSys^2.16.840.1.114222.4.3.3.7^ISO|CDC-EPI Surv Branch^2.16.840.1.114222.4.1.10416^ISO|20221130082944.929-0500||ORU^R01^ORU_R01|OE4530T20221130082944|T||||NE|NE|USA||||PHLabReport-NoAck^ELR251R1_Rcvr_Prof^2.16.840.1.113883.9.11^ISO~PHLIP_ELSM_251^PHLIP_Profile_Flu^2.16.840.1.113883.9.179^ISO"
+        assertThrows<InvalidMessageException> {
+            val profile = fn.getProfileNameAndPaths(msh, "PHLIP_FLU").first
+        }
+
+    }
+
     private fun testFolder(folderName: String) {
         testFolderByType(folderName, HL7MessageType.CASE)
     }
