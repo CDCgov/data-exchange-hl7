@@ -20,7 +20,6 @@ import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
 import org.slf4j.LoggerFactory
 import java.util.*
-import kotlin.NoSuchElementException
 
 
 class ValidatorFunction {
