@@ -20,6 +20,7 @@ import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
 import org.slf4j.LoggerFactory
 import java.util.*
+import kotlin.NoSuchElementException
 
 
 class ValidatorFunction {
@@ -146,9 +147,14 @@ class ValidatorFunction {
         } else listOf(DEFAULT_SPEC_PROFILE)
 
         val prefix = if (routeName.isNotEmpty()) "$routeName-" else ""
-        val profileName = prefix + profileIdPaths.map { path ->
-            HL7StaticParser.getFirstValue(hl7Content, path).get().uppercase()
-        }.reduce { acc, map -> "$acc-$map" }
+        val profileName = try {
+            prefix + profileIdPaths.map { path ->
+                HL7StaticParser.getFirstValue(hl7Content, path).get().uppercase()
+            }.reduce { acc, map -> "$acc-$map" }
+        } catch (e: NoSuchElementException) {
+            throw InvalidMessageException("One or more values in the profile path(s)" +
+                    " ${profileIdPaths.joinToString()} are missing.")
+        }
         return Pair(profileName, profileIdPaths)
 
     }
