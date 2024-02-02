@@ -162,7 +162,8 @@ class Constants {
         const val PHLIP_FLU_VALID_MESSAGE_WITH_PV1= "PHLIP_FLU_2.5.1_VALID_MESSAGE_WITH_PV1_Added.txt"
         const val PHLIP_FLU_PID5_ERROR = "PHLIP_FLU_2.5.1_PID5_ERROR.txt"
         const val PHLIP_FLU_WITH_PID22 = "PHLIP_FLU_2.5.1_WITH_PID22.1_NO_PID22.3.txt"
-
+        const val PHLIP_FLU_DUPLICATE_OBX1 = "PHLIP_FLU_2.5.1_DUPLICATE_OBX1.txt"
+        const val PHLIP_FLU_OBX2CWE_OBX5ST = "PHLIP_FLU_2.5.1_OBX2CWE_OBX5ST.txt"
         const val NEW_PAYLOADS_PATH = "src/test/resources/new-payloads"
         const val VERIFIED_PAYLOADS_PATH = "src/test/resources/verified-payloads"
         const val PATH_TO_MESSAGES = "src/main/resources/messages"

@@ -16,7 +16,7 @@ The HL7V2 Pipeline Test Harness exists to:
 ### How It Works
 
 - **Payload Analysis:**
-    - This is a manual step where payloads are analyzed against the spec and profiles that are created by IGAMT tool.
+    - This is a manual step where payloads are analyzed against the Specifications file and profiles created by the IGAMT tool.
 
 - **Resource Storage For Test HL7V2 Messages:**
     - The messages are stored in main/resources/messages folder.

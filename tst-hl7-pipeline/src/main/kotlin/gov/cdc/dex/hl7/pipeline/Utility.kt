@@ -1,5 +1,7 @@
 package gov.cdc.dex.hl7.pipeline
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URLEncoder
@@ -98,6 +100,18 @@ class Utility {
                 Constants.ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_WITH_PID22}",
                 Constants.ROUTE to Constants.PHLIP_FLU,
                 Constants.REPORTING_JURISDICTION to Constants.JURISDICTION
+            ),
+            Constants.PHLIP_FLU_DUPLICATE_OBX1 to mutableMapOf<String, String?>(
+                Constants.MESSAGE_TYPE_STR to Constants.MESSAGE_TYPE_ELR,
+                Constants.ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_DUPLICATE_OBX1}",
+                Constants.ROUTE to Constants.PHLIP_FLU,
+                Constants.REPORTING_JURISDICTION to Constants.JURISDICTION
+            ),
+            Constants.PHLIP_FLU_OBX2CWE_OBX5ST to mutableMapOf<String, String?>(
+                Constants.MESSAGE_TYPE_STR to Constants.MESSAGE_TYPE_ELR,
+                Constants.ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_OBX2CWE_OBX5ST}",
+                Constants.ROUTE to Constants.PHLIP_FLU,
+                Constants.REPORTING_JURISDICTION to Constants.JURISDICTION
             )
 
         )
@@ -129,5 +143,37 @@ class Utility {
         } catch (e: FileNotFoundException) {
             PipelineTest.logger.error("DEX::tst-hl7-pipeline Error occurred while copying payload to $testResourcesDirectory - exception details ${e.printStackTrace()}")
         }
+    }
+
+    fun getTheNewPayload(fileEnding: String): String? {
+        val directoryWithPayloads = File(Constants.NEW_PAYLOADS_PATH)
+        return directoryWithPayloads.listFiles { payload ->
+            payload.isFile && payload.name.endsWith(fileEnding)
+        }?.find { it.isFile }?.absolutePath
+    }
+
+    fun mapJsonToJsonNode(jsonString: File): JsonNode {
+        val jsonMapper = jacksonObjectMapper()
+        return jsonMapper.readTree(jsonString)
+    }
+    fun getFieldDescriptionForPath(path: String, payloadName: String): String {
+        try {
+            val newPayload = getTheNewPayload(payloadName)?.let { File(it) }
+            if (newPayload != null && newPayload.exists()) {
+                val jsonNewPayload: JsonNode = mapJsonToJsonNode(newPayload)
+                val structureValidatorReportInNewPayload =
+                    jsonNewPayload[Constants.METADATA][Constants.PROCESSES][2][Constants.REPORT][Constants.ENTRIES][Constants.STRUCTURE_VALIDATOR]
+                for (structureError in structureValidatorReportInNewPayload) {
+
+                    if (structureError[Constants.PATH].toString() == "\"$path\"") {
+                        return structureError[Constants.DESCRIPTION].toString()
+                    }
+                }
+            }
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        }
+
+        return "$path not found in the payload: $payloadName"
     }
 }

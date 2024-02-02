@@ -1,55 +1,23 @@
 package gov.cdc.dex.hl7.pipeline
 
-import com.ctc.wstx.shaded.msv_core.verifier.jarv.Const
+
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import kotlin.test.assertEquals
 
 import org.junit.jupiter.api.Test
 import java.io.File
-import java.io.FileNotFoundException
+
 
 class MainTest {
-    private fun getTheNewPayload(fileEnding: String): String? {
-        val directoryWithPayloads = File(Constants.NEW_PAYLOADS_PATH)
-        return directoryWithPayloads.listFiles { payload ->
-            payload.isFile && payload.name.endsWith(fileEnding)
-        }?.find { it.isFile }?.absolutePath
-    }
-    private fun mapJsonToJsonNode(jsonString: File): JsonNode {
-        val jsonMapper = jacksonObjectMapper()
-        return jsonMapper.readTree(jsonString)
-    }
-    private fun getFieldDescriptionForPath(path: String, payloadName: String): String {
-        try {
-            val newPayload = getTheNewPayload(payloadName)?.let { File(it) }
-            if (newPayload != null && newPayload.exists()) {
-                val jsonNewPayload: JsonNode = mapJsonToJsonNode(newPayload)
-                val structureValidatorReportInNewPayload =
-                    jsonNewPayload[Constants.METADATA][Constants.PROCESSES][2][Constants.REPORT][Constants.ENTRIES][Constants.STRUCTURE_VALIDATOR]
-                for (structureError in structureValidatorReportInNewPayload) {
-
-                    if (structureError[Constants.PATH].toString() == "\"$path\"") {
-                        return structureError[Constants.DESCRIPTION].toString()
-                    }
-                }
-            }
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-
-        return "$path not found in the payload: $payloadName"
-    }
-
-
     @Test
     fun testMessageInfo() {
         //choose  any payload
 
     }
-
     @Test
     fun testSummaryWithProblemAttribute() {
         //read any error payload
@@ -60,14 +28,14 @@ class MainTest {
         /*
        Compares redactor and structure validator reports
         */
-        val newPayload = getTheNewPayload(Constants.PHLIP_FLU_PID5_ERROR.replace("txt","json"))?.let { File(it) }
+        val newPayload = utility.getTheNewPayload(Constants.PHLIP_FLU_PID5_ERROR.replace("txt","json"))?.let { File(it) }
 
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_PID5_ERROR.replace("txt","json")}")
 
         if (newPayload != null) {
             if (newPayload.exists() && verifiedPayload.exists()) {
-                val jsonNewPayload: JsonNode = mapJsonToJsonNode(newPayload)
-                val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+                val jsonNewPayload: JsonNode = utility.mapJsonToJsonNode(newPayload)
+                val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
 
                 val redactorReportInNewPayload = jsonNewPayload[Constants.METADATA][Constants.PROCESSES][1][Constants.REPORT]
                 val redactorReportInVerifiedPayload = jsonVerifiedPayload[Constants.METADATA][Constants.PROCESSES][1][Constants.REPORT]
@@ -90,10 +58,10 @@ class MainTest {
     }
         @Test
         fun phlipFluMissingMSH3() {
-            val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH3,Constants.PHLIP_FLU_NO_MSH3.replace("txt","json"))
+            val errorDescriptionInNewPayload = utility.getFieldDescriptionForPath(Constants.MSH3,Constants.PHLIP_FLU_NO_MSH3.replace("txt","json"))
 
             val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH3.replace("txt","json")}")
-            val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+            val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
             val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
             assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "Incorrect error message for missing MSH-3.")
@@ -101,39 +69,39 @@ class MainTest {
 
        @Test
        fun phlipFluMissingMSH4() {
-           val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH4, Constants.PHLIP_FLU_NO_MSH4.replace("txt","json"))
+           val errorDescriptionInNewPayload = utility.getFieldDescriptionForPath(Constants.MSH4, Constants.PHLIP_FLU_NO_MSH4.replace("txt","json"))
            val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH4.replace("txt","json")}")
-           val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+           val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
            val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
            assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "Incorrect error message for missing MSH-3.")
        }
     @Test
     fun phlipFluMissingMSH5() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH5,Constants.PHLIP_FLU_NO_MSH5.replace("txt","json"))
+        val errorDescriptionInNewPayload = utility.getFieldDescriptionForPath(Constants.MSH5,Constants.PHLIP_FLU_NO_MSH5.replace("txt","json"))
 
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH5.replace("txt","json")}")
-        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+        val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Component MSH-5.2 (Universal ID) is missing")
     }
     @Test
     fun phlipFluMissingMSH6() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH6,Constants.PHLIP_FLU_NO_MSH6.replace("txt","json"))
+        val errorDescriptionInNewPayload = utility.getFieldDescriptionForPath(Constants.MSH6,Constants.PHLIP_FLU_NO_MSH6.replace("txt","json"))
 
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH6.replace("txt","json")}")
-        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+        val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-6 (Receiving Facility) is missing")
     }
     @Test
     fun phlipFluMissingMSH7() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH7,Constants.PHLIP_FLU_NO_MSH7.replace("txt","json"))
+        val errorDescriptionInNewPayload = utility.getFieldDescriptionForPath(Constants.MSH7,Constants.PHLIP_FLU_NO_MSH7.replace("txt","json"))
 
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH7.replace("txt","json")}")
-        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+        val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-7 (Date/Time Of Message) is missing.")
@@ -141,49 +109,49 @@ class MainTest {
 
     @Test
     fun phlipFluMissingMSH9() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH9,Constants.PHLIP_FLU_NO_MSH9.replace("txt","json"))
+        val errorDescriptionInNewPayload = utility.getFieldDescriptionForPath(Constants.MSH9,Constants.PHLIP_FLU_NO_MSH9.replace("txt","json"))
 
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH9.replace("txt","json")}")
-        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+        val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-9 (Message Type) is missing")
     }
     @Test
     fun phlipFluMissingMSH10() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH10,Constants.PHLIP_FLU_NO_MSH10.replace("txt","json"))
+        val errorDescriptionInNewPayload = utility.getFieldDescriptionForPath(Constants.MSH10,Constants.PHLIP_FLU_NO_MSH10.replace("txt","json"))
 
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH10.replace("txt","json")}")
-        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+        val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-10 (Message Control ID) is missing.")
     }
     @Test
     fun phlipFluMissingMSH11() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH11,Constants.PHLIP_FLU_NO_MSH11.replace("txt","json"))
+        val errorDescriptionInNewPayload = utility.getFieldDescriptionForPath(Constants.MSH11,Constants.PHLIP_FLU_NO_MSH11.replace("txt","json"))
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH11.replace("txt","json")}")
-        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+        val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-11 (Processing ID) is missing")
     }
     @Disabled
     @Test
     fun phlipFluMissingMSH12() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath("",Constants.PHLIP_FLU_NO_MSH12.replace("txt","json"))
+        val errorDescriptionInNewPayload = utility.getFieldDescriptionForPath("",Constants.PHLIP_FLU_NO_MSH12.replace("txt","json"))
 
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH12.replace("txt","json")}")
-        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+        val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "HL7-2801")
     }
     @Test
     fun phlipFluMissingMSH21() {
-        val errorDescriptionInNewPayload = getFieldDescriptionForPath(Constants.MSH21,Constants.PHLIP_FLU_NO_MSH21.replace("txt","json"))
+        val errorDescriptionInNewPayload = utility.getFieldDescriptionForPath(Constants.MSH21,Constants.PHLIP_FLU_NO_MSH21.replace("txt","json"))
 
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_NO_MSH21.replace("txt","json")}")
-        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+        val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
         val errorDescriptionInVerifiedPayload = jsonVerifiedPayload[Constants.DESCRIPTION].toString()
 
         assertEquals(errorDescriptionInNewPayload, errorDescriptionInVerifiedPayload, "The required Field MSH-21 (Message Profile Identifier) is missing")
@@ -204,13 +172,13 @@ class MainTest {
         This test will check all required fields in all required segments and compare against verified payload
          */
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_VALID_MESSAGE.replace("txt","json")}")
-        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+        val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
 
-        val newPayload = getTheNewPayload(Constants.PHLIP_FLU_VALID_MESSAGE.replace("txt","json"))?.let { File(it) }
+        val newPayload = utility.getTheNewPayload(Constants.PHLIP_FLU_VALID_MESSAGE.replace("txt","json"))?.let { File(it) }
 
 
         if (newPayload != null && newPayload.exists()) {
-            val jsonNewPayload: JsonNode = mapJsonToJsonNode(newPayload)
+            val jsonNewPayload: JsonNode = utility.mapJsonToJsonNode(newPayload)
             
             val MSHfieldsToCompare = setOf(Constants.FIELD_SEPARATOR,Constants.ENCODING_CHARACTERS, Constants.SENDING_APPLICATION,
                 Constants.SENDING_FACILITY,Constants.RECEIVING_APPLICATION,Constants.RECEIVING_FACILITY,Constants.DATE_TIME_OF_MESSAGE,
@@ -280,11 +248,11 @@ class MainTest {
         should result in constraint failure.
         */
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_WITH_PID22.replace("txt","json")}")
-        val jsonVerifiedPayload: JsonNode = mapJsonToJsonNode(verifiedPayload)
+        val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
 
-        val newPayload = getTheNewPayload(Constants.PHLIP_FLU_WITH_PID22.replace("txt","json"))?.let { File(it) }
+        val newPayload = utility.getTheNewPayload(Constants.PHLIP_FLU_WITH_PID22.replace("txt","json"))?.let { File(it) }
         if (newPayload != null && newPayload.exists()) {
-            val jsonNewPayload: JsonNode = mapJsonToJsonNode(newPayload)
+            val jsonNewPayload: JsonNode = utility.mapJsonToJsonNode(newPayload)
 
             val structureValidatorReportInNewPayload =
                 jsonNewPayload[Constants.METADATA][Constants.PROCESSES][2][Constants.REPORT][Constants.ENTRIES][Constants.CONTENT][0]
@@ -354,15 +322,6 @@ class MainTest {
        }
 
 
-
-       @Test
-       fun phlipFluPIDSsn() {
-           //PHLIP_FLU_PID_19.txt
-       }
-
-
-
-
        @Test
        fun testUniqueOBXWithSameOBX3AndNullOBX4Case() {
            //failure message
@@ -384,13 +343,18 @@ class MainTest {
        }
 
 
-/*
+
     companion object {
+
+        val utility = Utility()
+
         @JvmStatic
         @BeforeAll
         fun sendMessagesThroughPipeline() {
             val pipelineTest = PipelineTest()
             pipelineTest.dropMessagesToABlobStorage()
+
+
         }
         /*
         @JvmStatic
@@ -402,12 +366,10 @@ class MainTest {
                     payload.delete()
                 }
             }
-         }*/
+         }
+
+         */
 
     }
-
-*/
-
-
 
 }
