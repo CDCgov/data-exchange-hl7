@@ -112,9 +112,25 @@ class Utility {
                 Constants.ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_OBX2CWE_OBX5ST}",
                 Constants.ROUTE to Constants.PHLIP_FLU,
                 Constants.REPORTING_JURISDICTION to Constants.JURISDICTION
-            )
-
-        )
+            ),
+            Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_DIFF_OBX4 to mutableMapOf<String, String?>(
+                Constants.MESSAGE_TYPE_STR to Constants.MESSAGE_TYPE_ELR,
+                Constants.ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_DIFF_OBX4}",
+                Constants.ROUTE to Constants.PHLIP_FLU,
+                Constants.REPORTING_JURISDICTION to Constants.JURISDICTION
+            ),
+            Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_NULL_OBX4 to mutableMapOf<String, String?>(
+                Constants.MESSAGE_TYPE_STR to Constants.MESSAGE_TYPE_ELR,
+                Constants.ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_NULL_OBX4}",
+                Constants.ROUTE to Constants.PHLIP_FLU,
+                Constants.REPORTING_JURISDICTION to Constants.JURISDICTION
+            ),
+            Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_AND_OBX4 to mutableMapOf<String, String?>(
+                Constants.MESSAGE_TYPE_STR to Constants.MESSAGE_TYPE_ELR,
+                Constants.ORIGINAL_FILE_NAME to "$uniqueTimeStamp-${Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_AND_OBX4}",
+                Constants.ROUTE to Constants.PHLIP_FLU,
+                Constants.REPORTING_JURISDICTION to Constants.JURISDICTION
+            ))
     }
 
     fun getCurrentDateTimeWithSeconds(): String {

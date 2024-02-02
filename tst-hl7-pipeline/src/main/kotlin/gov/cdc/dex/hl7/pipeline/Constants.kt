@@ -133,6 +133,8 @@ class Constants {
         const val REPORTING_JURISDICTION = "reporting_jurisdiction"
         const val ORIGINAL_FILE_NAME = "original_file_name"
         const val DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss"
+        const val STATUS = "status"
+
 
         //message types
         const val MESSAGE_TYPE_STR = "message_type"
@@ -164,6 +166,9 @@ class Constants {
         const val PHLIP_FLU_WITH_PID22 = "PHLIP_FLU_2.5.1_WITH_PID22.1_NO_PID22.3.txt"
         const val PHLIP_FLU_DUPLICATE_OBX1 = "PHLIP_FLU_2.5.1_DUPLICATE_OBX1.txt"
         const val PHLIP_FLU_OBX2CWE_OBX5ST = "PHLIP_FLU_2.5.1_OBX2CWE_OBX5ST.txt"
+        const val PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_DIFF_OBX4 ="PHLIP_FLU_2.5.1_TWO_OBX_WITH_SAME_OBX3_DIFF_OBX4.txt"
+        const val PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_NULL_OBX4 ="PHLIP_FLU_2.5.1_TWO_OBX_WITH_SAME_OBX3_NULL_OBX4.txt"
+        const val PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_AND_OBX4 = "PHLIP_FLU_2.5.1_TWO_OBX_WITH_SAME_OBX3_AND_OBX4.txt"
         const val NEW_PAYLOADS_PATH = "src/test/resources/new-payloads"
         const val VERIFIED_PAYLOADS_PATH = "src/test/resources/verified-payloads"
         const val PATH_TO_MESSAGES = "src/main/resources/messages"

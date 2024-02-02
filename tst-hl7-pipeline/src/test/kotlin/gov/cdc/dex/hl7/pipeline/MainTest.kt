@@ -13,14 +13,17 @@ import java.io.File
 
 
 class MainTest {
+
+    @Disabled
     @Test
     fun testMessageInfo() {
-        //choose  any payload
+        //Waiting for metadata v2 related changes
 
     }
+    @Disabled
     @Test
     fun testSummaryWithProblemAttribute() {
-        //read any error payload
+        //waiting for metadata v2 related changes
     }
 
     @Test
@@ -208,7 +211,7 @@ class MainTest {
                     "Required fields for SFT $field do not match!"
                 )
             }
-            
+            // some of the required fields for the segments below are not included in the config file. revisit
             val PIDfieldsToCompare = setOf(Constants.SET_ID, Constants.PATIENT_IDENTIFIER_LIST, Constants.PATIENT_NAME,
                 Constants.PATIENT_MOTHER_MAIDEN_NAME, Constants.PATIENT_BIRTH_DATE_TIME, Constants.PATIENT_SEX,
                 Constants.PATIENT_SEX, Constants.PATIENT_RACE, Constants.PATIENT_ADDRESS, Constants.PATIENT_PHONE_NUMBER,
@@ -280,96 +283,102 @@ class MainTest {
 
     @Disabled
     @Test
-       fun phlipFluCardinalityForMSH2() {
-           // HL7-2802 -- revisit once resolved
-       }
-
-       @Test
-       fun testBatchMessageCountAgainstActualMessagesInBatch() {
-           //should fail if counts do not match
-       }
-
-       @Test
-       fun testForEmptyBatches() {
-       }
-
-       @Test
-       fun testForInvalidBatchDueToMissingFHSSegment() {
-       }
-
-       @Test
-       fun testForInvalidBatchDueToMissingBHSSegment() {
-       }
-
-       @Test
-       fun testForInvalidBatchDueToMissingBTSSegment() {
-       }
-
-       @Test
-       fun testForInvalidBatchCountInBTSSegment() {
-           //should fail
-       }
-
-       @Test
-       fun phlipFluOBX2HasIncorrectDatatypeInOBX5() {
-           // PHLIP_OBX2_CWE_OBX5_ST.txt OBR1 OBX1
-       }
-
-       @Test
-       fun testOBX1ValueShouldBeUniqueCELR() {
-           // use COVID-19_OBX1_Uniqueness_Test.txt
-
-       }
+    fun phlipFluCardinalityForMSH2() {
+        // HL7-2802 -- revisit once resolved
+    }
 
 
-       @Test
-       fun testUniqueOBXWithSameOBX3AndNullOBX4Case() {
-           //failure message
-       }
-
-       @Test
-       fun testUniqueOBXWithSameOBX3AndDifferentOBX4Case() {
-           //failure
-       }
-
-       @Test
-       fun testUniqueOBXWithSameOBX3AndNullOBX4Elr() {
-           //failure message
-       }
-
-       @Test
-       fun testUniqueOBXWithSameOBX3AndDifferentOBX4Elr() {
-           //failure
-       }
+    @Test
+    fun testBatchMessageCountAgainstActualMessagesInBatch() {
+        //should fail if counts do not match
+    }
 
 
+    @Test
+    fun testForEmptyBatches() {
+    }
 
-    companion object {
 
-        val utility = Utility()
+    @Test
+    fun testForInvalidBatchDueToMissingFHSSegment() {
+    }
 
-        @JvmStatic
-        @BeforeAll
-        fun sendMessagesThroughPipeline() {
-            val pipelineTest = PipelineTest()
-            pipelineTest.dropMessagesToABlobStorage()
+    @Test
+    fun testForInvalidBatchDueToMissingBHSSegment() {
+    }
+
+    @Test
+    fun testForInvalidBatchDueToMissingBTSSegment() {
+    }
+
+    @Test
+    fun testForInvalidBatchCountInBTSSegment() {
+        //should fail
+    }
+
+    @Test
+    fun phlipFluOBX2HasIncorrectDatatypeInOBX5() {
+        // PHLIP_OBX2_CWE_OBX5_ST.txt OBR1 OBX1
+    }
+
+    @Test
+    fun phlipFluOBX1ValueShouldBeUnique() {
+        // use COVID-19_OBX1_Uniqueness_Test.txt
+    }
+
+
+    @Test
+    fun phlipFluOBXWithSameOBX3AndOBX4() {
+        val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_AND_OBX4.replace("txt","json")}")
+        val verifiedLakeOfSegmentsReport: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
+
+        val newPayload = utility.getTheNewPayload(Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_AND_OBX4.replace("txt","json"))?.let { File(it) }
+        if (newPayload != null && newPayload.exists()) {
+            val jsonNewPayload: JsonNode = utility.mapJsonToJsonNode(newPayload)
+            val fieldsToCompare = listOf(Constants.STATUS, Constants.REPORT)
+            for (field in fieldsToCompare) {
+                val fieldFromVerifiedPayload = verifiedLakeOfSegmentsReport[field]
+                val fieldFromNewPayload = jsonNewPayload[Constants.METADATA][Constants.PROCESSES][3][field]
+                assertEquals(fieldFromNewPayload,fieldFromVerifiedPayload, "Lake of segments reports do not match.")
+            }
 
 
         }
-        /*
-        @JvmStatic
-        @AfterAll
-        fun cleanup() {
-            val newPayloadsFolder = File("src/test/resources/new-payloads/")
-            if (newPayloadsFolder.exists() && newPayloadsFolder.isDirectory) {
-                newPayloadsFolder.listFiles()?.forEach { payload->
-                    payload.delete()
-                }
-            }
-         }
-
-         */
-
     }
+    @Disabled
+    @Test
+    fun phlipFluOBXWithSameOBX3AndNullOBX4() {
+        //HL7-2819
+    }
+    @Disabled
+    @Test
+    fun phlipFluOBXWithSameOBX3AndDifferentOBX4() {
+        //HL7-2818
+    }
+
+
+    companion object {
+        val utility = Utility()
+
+      @JvmStatic
+      @BeforeAll
+      fun sendMessagesThroughPipeline() {
+          val pipelineTest = PipelineTest()
+          pipelineTest.dropMessagesToABlobStorage()
+      }
+
+   @JvmStatic
+      @AfterAll
+      fun cleanup() {
+          val newPayloadsFolder = File("src/test/resources/new-payloads/")
+          if (newPayloadsFolder.exists() && newPayloadsFolder.isDirectory) {
+              newPayloadsFolder.listFiles()?.forEach { payload->
+                  payload.delete()
+              }
+          }
+       }
+
+
+   }
 
 }

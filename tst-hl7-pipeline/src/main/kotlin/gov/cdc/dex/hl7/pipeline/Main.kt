@@ -26,7 +26,7 @@ class PipelineTest {
        // val redactorContainerName: String = System.getenv("REDACTOR")
         val structureValidatorContainerName: String = System.getenv("STRUCTURE_VALIDATOR")
         val jsonLakeContainerName: String = System.getenv("JSON_LAKE")
-        //val lakeOfSegmentsContainerName: String = System.getenv("LAKE_OF_SEGMENTS")
+        val lakeOfSegmentsContainerName: String = System.getenv("LAKE_OF_SEGMENTS")
 
         val uploadedBlobs: MutableSet<String> = mutableSetOf()
         val utility = Utility()
@@ -72,10 +72,13 @@ class PipelineTest {
                 uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH10) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH11) ||
                 uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH12) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH21) ||
                 uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_PROFILE_IDENTIFIER) || uploadedBlob.endsWith(Constants.PHLIP_FLU_WITH_PID22) ||
-                uploadedBlob.endsWith(Constants.PHLIP_FLU_DUPLICATE_OBX1) || uploadedBlob.endsWith(Constants.PHLIP_FLU_OBX2CWE_OBX5ST)){
+                uploadedBlob.endsWith(Constants.PHLIP_FLU_DUPLICATE_OBX1) || uploadedBlob.endsWith(Constants.PHLIP_FLU_OBX2CWE_OBX5ST) ||
+                uploadedBlob.endsWith(Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_DIFF_OBX4) || uploadedBlob.endsWith(Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_NULL_OBX4)){
                 queryCosmosDB(structureValidatorContainerName, uploadedBlob)
             }else if (uploadedBlob.endsWith(Constants.PHLIP_FLU_VALID_MESSAGE) || uploadedBlob.endsWith(Constants.PHLIP_FLU_VALID_MESSAGE_WITH_PV1)){
                 queryCosmosDB(jsonLakeContainerName, uploadedBlob)
+            }else if (uploadedBlob.endsWith(Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_AND_OBX4)){
+                queryCosmosDB(lakeOfSegmentsContainerName,uploadedBlob)
             }
 
             }
@@ -92,7 +95,6 @@ class PipelineTest {
                     )
                 }
 
-                //decide based on the filename which cosmos db container to query
                 val queryCosmosDBToRetrievePayload =
                     "SELECT * FROM c WHERE c.metadata.provenance.ext_original_file_name=\"$blobName\""
 
