@@ -23,7 +23,7 @@
         <java.version>17</java.version>
         <kotlin.version>1.9.0</kotlin.version>
         <functions.version>3.0.0</functions.version>
-        <functions.plugin.version>1.26.0</functions.plugin.version>
+        <functions.plugin.version>1.30.0</functions.plugin.version>
 
         <functionAppName>ocio-ede-${environment-id}-hl7-lake-segments-transformer</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
