@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>fn-sc-branch</artifactId>
-    <version>0.0.33-SNAPSHOT</version>
+    <version>0.0.38-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Kotlin Function :: fn-sc-branch</name>
 
@@ -20,10 +20,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <functionAppName>hl7-branch-${receiveFn}-${environment-id}</functionAppName>
-        <AzureBom.version>1.2.15</AzureBom.version>
+        <AzureBom.version>1.2.20</AzureBom.version>
         <java.version>17</java.version>
-        <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
-        <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
+        <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
+        <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
         <functions.version>3.0.0</functions.version>
         <kotlin.version>1.9.0</kotlin.version>
         <hl7pet.version>1.2.7.2</hl7pet.version>
