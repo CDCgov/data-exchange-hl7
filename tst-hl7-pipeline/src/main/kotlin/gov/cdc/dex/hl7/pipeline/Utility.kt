@@ -157,7 +157,7 @@ class Utility {
 
             }
         } catch (e: FileNotFoundException) {
-            PipelineTest.logger.error("DEX::tst-hl7-pipeline Error occurred while copying payload to $testResourcesDirectory - exception details ${e.printStackTrace()}")
+            e.printStackTrace()
         }
     }
 

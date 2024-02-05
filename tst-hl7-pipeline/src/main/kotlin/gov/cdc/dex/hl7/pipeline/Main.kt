@@ -15,7 +15,7 @@ import java.io.FileNotFoundException
 
 class PipelineTest {
     companion object {
-        var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
+        private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
         val cosmosDBName: String = System.getenv("COSMOS_DB_NAME")
         val cosmosDBKey: String = System.getenv("COSMOS_DB_KEY")
         val cosmosDBEndpoint: String = System.getenv("COSMOS_DB_ENDPOINT")

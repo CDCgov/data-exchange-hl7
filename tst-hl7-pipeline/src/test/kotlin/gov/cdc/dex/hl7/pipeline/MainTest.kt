@@ -276,9 +276,10 @@ class MainTest {
             }
         }
     }
+    @Disabled
     @Test
     fun phlipFluDifferentDataTypesInOBX2() {
-       // use PHLIP_FLU_2.5.1_VALID_DT_NM_CE_CX_SN_ST_TS_TX.txt
+       // TO DO
     }
 
     @Disabled
@@ -287,43 +288,10 @@ class MainTest {
         // HL7-2802 -- revisit once resolved
     }
 
-
-    @Test
-    fun testBatchMessageCountAgainstActualMessagesInBatch() {
-        //should fail if counts do not match
-    }
-
-
-    @Test
-    fun testForEmptyBatches() {
-    }
-
-
-    @Test
-    fun testForInvalidBatchDueToMissingFHSSegment() {
-    }
-
-    @Test
-    fun testForInvalidBatchDueToMissingBHSSegment() {
-    }
-
-    @Test
-    fun testForInvalidBatchDueToMissingBTSSegment() {
-    }
-
-    @Test
-    fun testForInvalidBatchCountInBTSSegment() {
-        //should fail
-    }
-
+    @Disabled
     @Test
     fun phlipFluOBX2HasIncorrectDatatypeInOBX5() {
-        // PHLIP_OBX2_CWE_OBX5_ST.txt OBR1 OBX1
-    }
-
-    @Test
-    fun phlipFluOBX1ValueShouldBeUnique() {
-        // use COVID-19_OBX1_Uniqueness_Test.txt
+        // TO DO - PHLIP_OBX2_CWE_OBX5_ST.txt OBR1 OBX1
     }
 
 
@@ -370,14 +338,13 @@ class MainTest {
    @JvmStatic
       @AfterAll
       fun cleanup() {
-          val newPayloadsFolder = File("src/test/resources/new-payloads/")
+          val newPayloadsFolder = File(Constants.NEW_PAYLOADS_PATH)
           if (newPayloadsFolder.exists() && newPayloadsFolder.isDirectory) {
               newPayloadsFolder.listFiles()?.forEach { payload->
                   payload.delete()
               }
           }
        }
-
 
    }
 
