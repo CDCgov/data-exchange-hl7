@@ -29,7 +29,7 @@
         <maven.plugins.version>3.1.0</maven.plugins.version>
         <kotlin.version>1.9.0</kotlin.version>
         <slf4j.version>2.0.5</slf4j.version>
-        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.38-SNAPSHOT</lib-dex-commons.version>
         <lib-bumblebee.version>1.2.2-SNAPSHOT</lib-bumblebee.version>
         <gson.version>2.10.1</gson.version>
         <junit.version>5.9.2</junit.version>
@@ -133,11 +133,7 @@
                             <name>FN_VERSION</name>
                             <value>${project.version}</value>
                         </property>
-                        <property>
-                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
-                            <value>1</value>
-                        </property>
-                        <property>
+                         <property>
                             <name>FUNCTIONS_EXTENSION_VERSION</name>
                             <value>~4</value>
                         </property>
@@ -145,19 +141,7 @@
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
                         </property>
-                        <property>
-                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
-                            <value>true</value>
-                        </property>
-                        <property>
-                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
-                            <value>None</value>
-                        </property>
-                        <property>
-                            <name>EventHubSendName</name>
-                            <value>hl7-json-lake-out</value>
-                        </property>
-                    </appSettings>
+                      </appSettings>
                 </configuration>
                 <executions>
                     <execution>
