@@ -58,10 +58,10 @@ class Function {
         }
         try {
             if (outOkList.isNotEmpty()) {
-                fnConfig.evHubSender.send(fnConfig.evHubSendOkName, outOkList)
+                fnConfig.evHubSenderOk.send(outOkList)
             }
             if (outErrList.isNotEmpty()) {
-                fnConfig.evHubSender.send(fnConfig.evHubSendErrsName, outErrList)
+                fnConfig.evHubSenderErr.send(outErrList)
             }
         } catch (e : Exception) {
             logger.error("Error sending to event hubs", e)
