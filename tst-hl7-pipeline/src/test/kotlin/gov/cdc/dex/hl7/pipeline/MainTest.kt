@@ -35,8 +35,7 @@ class MainTest {
 
         val verifiedPayload = File("${Constants.VERIFIED_PAYLOADS_PATH}/${Constants.PHLIP_FLU_PID5_ERROR.replace("txt","json")}")
 
-        if (newPayload != null) {
-            if (newPayload.exists() && verifiedPayload.exists()) {
+        if (newPayload != null && newPayload.exists() && verifiedPayload.exists()) {
                 val jsonNewPayload: JsonNode = utility.mapJsonToJsonNode(newPayload)
                 val jsonVerifiedPayload: JsonNode = utility.mapJsonToJsonNode(verifiedPayload)
 
@@ -56,7 +55,7 @@ class MainTest {
                     structureValidatorReportInVerifiedPayload,
                     "The Structure Validator Reports DO NOT Match")
 
-            }
+
         }
     }
         @Test
@@ -183,12 +182,12 @@ class MainTest {
         if (newPayload != null && newPayload.exists()) {
             val jsonNewPayload: JsonNode = utility.mapJsonToJsonNode(newPayload)
             
-            val MSHfieldsToCompare = setOf(Constants.FIELD_SEPARATOR,Constants.ENCODING_CHARACTERS, Constants.SENDING_APPLICATION,
+            val phlipFluMSHfieldsToCompare = setOf(Constants.FIELD_SEPARATOR,Constants.ENCODING_CHARACTERS, Constants.SENDING_APPLICATION,
                 Constants.SENDING_FACILITY,Constants.RECEIVING_APPLICATION,Constants.RECEIVING_FACILITY,Constants.DATE_TIME_OF_MESSAGE,
                 Constants.MESSAGE_TYPE,Constants.MESSAGE_CONTROL_ID,Constants.PROCESSING_ID,Constants.VERSION_ID, Constants.ACCEPT_ACKNOWLEDGEMENT_TYPE,
                 Constants.APPLICATION_ACKNOWLEDGEMENT_TYPE,Constants.COUNTRY_CODE,Constants.MESSAGE_PROFILE_IDENTIFIER)
 
-            for (field in MSHfieldsToCompare) {
+            for (field in phlipFluMSHfieldsToCompare) {
                 val fieldFromNewPayload = jsonNewPayload[Constants.METADATA][Constants.PROCESSES][3][Constants.REPORT][Constants.MSH][field]
                 val fieldFromVerifiedPayload = jsonVerifiedPayload[Constants.REPORT][Constants.MSH][field]
                 assertEquals(
@@ -198,10 +197,10 @@ class MainTest {
                 )
             }
             
-            val SFTfieldsToCompare = setOf(Constants.SOFTWARE_VENDOR_ORGANIZATION,Constants.SOFTWARE_CERTIFIED_VERSION_OR_RELEASE_NUMBER,
+            val phlipFluSFTfieldsToCompare = setOf(Constants.SOFTWARE_VENDOR_ORGANIZATION,Constants.SOFTWARE_CERTIFIED_VERSION_OR_RELEASE_NUMBER,
                 Constants.SOFTWARE_PRODUCT_NAME, Constants.SOFTWARE_BINARY_ID, Constants.SOFTWARE_INSTALL_DATE)
 
-            for (field in SFTfieldsToCompare) {
+            for (field in phlipFluSFTfieldsToCompare) {
 
                 val fieldFromNewPayload = jsonNewPayload[Constants.METADATA][Constants.PROCESSES][3][Constants.REPORT][Constants.MSH][Constants.CHILDREN][0][Constants.SFT][field]
                 val fieldFromVerifiedPayload = jsonVerifiedPayload[Constants.REPORT][Constants.MSH][Constants.CHILDREN][0][Constants.SFT][field]
@@ -212,7 +211,7 @@ class MainTest {
                 )
             }
             // some of the required fields for the segments below are not included in the config file. revisit
-            val PIDfieldsToCompare = setOf(Constants.SET_ID, Constants.PATIENT_IDENTIFIER_LIST, Constants.PATIENT_NAME,
+            val phlipFluPIDfieldsToCompare = setOf(Constants.SET_ID, Constants.PATIENT_IDENTIFIER_LIST, Constants.PATIENT_NAME,
                 Constants.PATIENT_MOTHER_MAIDEN_NAME, Constants.PATIENT_BIRTH_DATE_TIME, Constants.PATIENT_SEX,
                 Constants.PATIENT_SEX, Constants.PATIENT_RACE, Constants.PATIENT_ADDRESS, Constants.PATIENT_PHONE_NUMBER,
                 Constants.PATIENT_BUSINESS_PHONE_NUMBER, Constants.PATIENT_ETHNIC_GROUP, Constants.PATIENT_DEATH_DATE_TIME,
@@ -220,21 +219,21 @@ class MainTest {
                 Constants.PATIENT_LAST_UPDATE_FACILITY, Constants.PATIENT_SPECIES_CODE, Constants.PATIENT_CLASS,
                 Constants.PATIENT_ADMISSION_TYPE, Constants.PATIENT_ADMISSION_DATE_TIME, Constants.PATIENT_DISCHARGE_DATE_TIME)
 
-            val ORCfieldsToCompare = setOf(Constants.ORDER_CONTROL, Constants.PLACER_ORDER_NUMBER, Constants.FILLER_ORDER_NUMBER,
+            val phlipFluORCfieldsToCompare = setOf(Constants.ORDER_CONTROL, Constants.PLACER_ORDER_NUMBER, Constants.FILLER_ORDER_NUMBER,
                 Constants.ORDERING_PROVIDER, Constants.ORDERING_FACILITY_NAME, Constants.ORDERING_FACILITY_ADDRESS,
                 Constants.ORDERING_FACILITY_PHONE_NUMBER, Constants.ORDERING_PROVIDER_ADDRESS, Constants.ORDERING_PROVIDER_ADDRESS,
                 )
-            val OBRfieldsToCompare = setOf(Constants.SET_ID, Constants.PLACER_ORDER_NUMBER, Constants.FILLER_ORDER_NUMBER,
+            val phlipFluOBRfieldsToCompare = setOf(Constants.SET_ID, Constants.PLACER_ORDER_NUMBER, Constants.FILLER_ORDER_NUMBER,
                 Constants.UNIVERSAL_SERVICE_IDENTIFIER, Constants.OBSERVATION_DATE_TIME, Constants.OBSERVATION_DATE_TIME_END,
                 Constants.RELEVANT_CLINICAL_INFORMATION, Constants.ORDERING_PROVIDER, Constants.RESULT_REPORT_DATE_TIME,
                 Constants.RESULT_STATUS, Constants.PARENT_RESULT, Constants.PARENT_ID, Constants.REASON_FOR_STUDY,Constants.PRINCIPAL_RESULT_INTERPRETER,
                 )
-            val OBXfieldsToCompare = setOf(Constants.SET_ID, Constants.VALUE_DATA_TYPE, Constants.OBSERVATION_IDENTIFIER,
+            val phlipFluOBXfieldsToCompare = setOf(Constants.SET_ID, Constants.VALUE_DATA_TYPE, Constants.OBSERVATION_IDENTIFIER,
                 Constants.OBSERVATION_SUB_ID, Constants.OBSERVATION_VALUE,Constants.UNITS_OF_MEASURE_FOR_DATA_TYPE_SN,
                 Constants.REFERENCE_RANGE, Constants.ABNORMAL_FLAGS, Constants.OBSERVATION_RESULT_STATUS, Constants.OBSERVATION_METHOD,
                 Constants.DATE_TIME_ANALYSIS, Constants.PERFORMING_ORGANIZATION_NAME, Constants.PERFORMING_ORGANIZATION_ADDRESS, Constants.PERFORMING_ORGANIZATION_MEDICAL_DIRECTOR,
                 )
-            val SPMfieldsToCompare = setOf(Constants.SET_ID, Constants.SPECIMEN_ID,Constants.SPECIMEN_TYPE,
+            val phlipFluSPMfieldsToCompare = setOf(Constants.SET_ID, Constants.SPECIMEN_ID,Constants.SPECIMEN_TYPE,
                 Constants.SPECIMEN_TYPE_MODIFIER, Constants.SPECIMEN_ADDITIVES, Constants.SPECIMEN_COLLECTION_METHOD,
                 Constants.SPECIMEN_SOURCE_SITE, Constants.SPECIMEN_SOURCE_SITE_MODIFIER, Constants.SPECIMEN_ROLE,
                 Constants.SPECIMEN_COLLECTION_AMOUNT, Constants.SPECIMEN_COLLECTION_DATE_TIME,
@@ -245,7 +244,7 @@ class MainTest {
     }
 
     @Test
-    fun phlipFluWithPID22_1NoPID22_3(){
+    fun phlipFluPID22_MISSING_NAME_OF_CODING_SYSTEM(){
         /*
         if PID22.1 is valued, and PID22.3 is not valued
         should result in constraint failure.

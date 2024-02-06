@@ -22,8 +22,6 @@ class PipelineTest {
         val cosmosDBPartitionKey: String = System.getenv("COSMOS_DB_PARTITION_KEY")
         val blobConnectionString: String = System.getenv("BLOB_INGEST_CONNECTION_STRING")
         val blobContainerName: String = System.getenv("BLOB_CONTAINER_NAME")
-        //val receiverDebatcherContainerName: String = System.getenv("RECEIVER_DEBATCHER")
-       // val redactorContainerName: String = System.getenv("REDACTOR")
         val structureValidatorContainerName: String = System.getenv("STRUCTURE_VALIDATOR")
         val jsonLakeContainerName: String = System.getenv("JSON_LAKE")
         val lakeOfSegmentsContainerName: String = System.getenv("LAKE_OF_SEGMENTS")
@@ -66,22 +64,27 @@ class PipelineTest {
     }
     private fun identifyCosmosDBContainerToQueryForEachBlob() {
         for (uploadedBlob in uploadedBlobs) {
-            if (uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH3) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH4) ||
-                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH5) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH6) ||
-                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH7) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH9) ||
-                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH10) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH11) ||
-                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH12) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH21) ||
-                uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_PROFILE_IDENTIFIER) || uploadedBlob.endsWith(Constants.PHLIP_FLU_WITH_PID22) ||
-                uploadedBlob.endsWith(Constants.PHLIP_FLU_DUPLICATE_OBX1) || uploadedBlob.endsWith(Constants.PHLIP_FLU_OBX2CWE_OBX5ST) ||
-                uploadedBlob.endsWith(Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_DIFF_OBX4) || uploadedBlob.endsWith(Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_NULL_OBX4)){
-                queryCosmosDB(structureValidatorContainerName, uploadedBlob)
-            }else if (uploadedBlob.endsWith(Constants.PHLIP_FLU_VALID_MESSAGE) || uploadedBlob.endsWith(Constants.PHLIP_FLU_VALID_MESSAGE_WITH_PV1)){
-                queryCosmosDB(jsonLakeContainerName, uploadedBlob)
-            }else if (uploadedBlob.endsWith(Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_AND_OBX4)){
-                queryCosmosDB(lakeOfSegmentsContainerName,uploadedBlob)
+            when {
+                    uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH3) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH4) ||
+                    uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH5) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH6) ||
+                    uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH7) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH9) ||
+                    uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH10) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH11) ||
+                    uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH12) || uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_MSH21) ||
+                    uploadedBlob.endsWith(Constants.PHLIP_FLU_NO_PROFILE_IDENTIFIER) || uploadedBlob.endsWith(Constants.PHLIP_FLU_WITH_PID22) ||
+                    uploadedBlob.endsWith(Constants.PHLIP_FLU_DUPLICATE_OBX1) || uploadedBlob.endsWith(Constants.PHLIP_FLU_OBX2CWE_OBX5ST) ||
+                    uploadedBlob.endsWith(Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_DIFF_OBX4) || uploadedBlob.endsWith(Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_NULL_OBX4) -> {
+                    queryCosmosDB(structureValidatorContainerName, uploadedBlob)
+                }
+                uploadedBlob.endsWith(Constants.PHLIP_FLU_VALID_MESSAGE) || uploadedBlob.endsWith(Constants.PHLIP_FLU_VALID_MESSAGE_WITH_PV1) -> {
+                    queryCosmosDB(jsonLakeContainerName, uploadedBlob)
+                }
+                uploadedBlob.endsWith(Constants.PHLIP_FLU_TWO_OBX_WITH_SAME_OBX3_AND_OBX4) -> {
+                    queryCosmosDB(lakeOfSegmentsContainerName, uploadedBlob)
+                }
             }
 
-            }
+
+        }
     }
     private fun queryCosmosDB(cosmosDBContainer:String, blobName:String) {
         try {
