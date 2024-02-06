@@ -244,7 +244,7 @@ class MainTest {
     }
 
     @Test
-    fun phlipFluPID22_MISSING_NAME_OF_CODING_SYSTEM(){
+    fun phlipFluEthnicGroupWithMissingNameForCodingSystem(){
         /*
         if PID22.1 is valued, and PID22.3 is not valued
         should result in constraint failure.
