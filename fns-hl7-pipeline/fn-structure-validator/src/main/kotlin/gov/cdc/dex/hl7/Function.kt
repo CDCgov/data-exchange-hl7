@@ -278,4 +278,16 @@ class ValidatorFunction {
             .body(message)
             .build()
     }
+
+    @FunctionName("health")
+    fun invoke(
+            @HttpTrigger(
+                    name = "req",
+                    methods = [HttpMethod.GET],
+                    authLevel = AuthorizationLevel.ANONYMOUS
+            )
+            request: HttpRequestMessage<String>
+    ): HttpResponseMessage.Builder? {
+        return request.createResponseBuilder(HttpStatus.OK).body("UP")
+    }
 }
