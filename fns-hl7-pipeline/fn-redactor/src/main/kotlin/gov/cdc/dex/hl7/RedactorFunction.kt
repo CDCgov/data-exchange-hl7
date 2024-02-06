@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
 
 /**
  * Azure function with event hub trigger to redact messages   */
-class Function {
+class RedactorFunction {
 
     companion object {
         val gson: Gson = GsonBuilder().disableHtmlEscaping().serializeNulls().create()
