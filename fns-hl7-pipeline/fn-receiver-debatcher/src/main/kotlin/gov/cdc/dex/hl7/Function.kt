@@ -270,7 +270,7 @@ class Function {
 
         // send recdeb event reports to separate event hub
         try {
-            fnConfig.evHubSender.send(fnConfig.evReportsHubName, eventReportList)
+            fnConfig.evHubSenderReports.send(eventReportList)
         } catch (e: Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evReportsHubName}: ${e.message}")
         }
@@ -280,7 +280,7 @@ class Function {
     private fun sendMessageAndUpdateEventReport(payload: DexEventPayload, eventReport: ReceiverEventReport) {
         try {
             logger.info("DEX::Processed messageUUID: ${payload.messageUUID}")
-            fnConfig.evHubSender.send(fnConfig.evHubSendName, gson.toJson(payload))
+            fnConfig.evHubSenderOut.send(gson.toJson(payload))
         } catch (e: Exception) {
             addErrorToReport(
                 eventReport = eventReport,
