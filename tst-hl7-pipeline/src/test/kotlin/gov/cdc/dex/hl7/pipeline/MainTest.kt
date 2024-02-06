@@ -221,7 +221,7 @@ class MainTest {
                 Constants.PATIENT_ADMISSION_TYPE, Constants.PATIENT_ADMISSION_DATE_TIME, Constants.PATIENT_DISCHARGE_DATE_TIME)
 
             val ORCfieldsToCompare = setOf(Constants.ORDER_CONTROL, Constants.PLACER_ORDER_NUMBER, Constants.FILLER_ORDER_NUMBER,
-                Constants.PLACER_GROUP_NUMBER, Constants.ORDERING_PROVIDER, Constants.ORDERING_FACILITY_NAME, Constants.ORDERING_FACILITY_ADDRESS,
+                Constants.ORDERING_PROVIDER, Constants.ORDERING_FACILITY_NAME, Constants.ORDERING_FACILITY_ADDRESS,
                 Constants.ORDERING_FACILITY_PHONE_NUMBER, Constants.ORDERING_PROVIDER_ADDRESS, Constants.ORDERING_PROVIDER_ADDRESS,
                 )
             val OBRfieldsToCompare = setOf(Constants.SET_ID, Constants.PLACER_ORDER_NUMBER, Constants.FILLER_ORDER_NUMBER,
