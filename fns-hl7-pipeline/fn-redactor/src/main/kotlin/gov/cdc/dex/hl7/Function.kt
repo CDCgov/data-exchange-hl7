@@ -113,7 +113,7 @@ class Function {
             logger.error("DEX:error occurred: ${ex.message}")
         }
         try {
-            fnConfig.evHubSender.send(fnConfig.evHubSendName, outList)
+            fnConfig.evHubSender.send(outList)
         } catch (e : Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
