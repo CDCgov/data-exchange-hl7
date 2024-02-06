@@ -43,7 +43,7 @@ on:
        - opened
     branches:
       - 'develop'
-      - 'main'
+      # - 'main'
     paths:
     - fns-hl7-pipeline/**
 #    - fn-cache-loader/**
@@ -52,7 +52,7 @@ on:
   push:
     branches:
       - 'develop'
-      - 'main'
+      # - 'main'
     paths:
     - fns-hl7-pipeline/**
 #    - fn-cache-loader/**
