@@ -1,0 +1,373 @@
+{
+  "report": {
+    "MSH": {
+      "file_separator": "|",
+      "encoding_characters": "^~\\&",
+      "sending_application": {
+        "namespace_id": "USVI.PHL.Horizon.PRO",
+        "universal_id": "2.16.840.1.113883.3.8589.4.2.78.1",
+        "universal_id_type": "ISO"
+      },
+      "sending_facility": {
+        "namespace_id": "USVI.PHL",
+        "universal_id": "2.16.840.1.113883.3.8589.4.1.125",
+        "universal_id_type": "ISO"
+      },
+      "receiving_application": {
+        "namespace_id": "US WHO Collab LabSys",
+        "universal_id": "2.16.840.1.114222.4.3.3.7",
+        "universal_id_type": "ISO"
+      },
+      "receiving_facility": {
+        "namespace_id": "CDC-EPI Surv Branch",
+        "universal_id": "2.16.840.1.114222.4.1.10416",
+        "universal_id_type": "ISO"
+      },
+      "date_time_of_message": "20221205134200.000-0500",
+      "message_type": {
+        "message_code": "ORU",
+        "trigger_event": "R01",
+        "universal_id_type": "ORU_R01"
+      },
+      "message_control_id": "6479",
+      "processing_id": {
+        "processing_id": "P"
+      },
+      "version_id": {
+        "version_id": "2.5.1"
+      },
+      "accept_acknowledgement_type": "NE",
+      "application_acknowledgement_type": "NE",
+      "country_code": "USA",
+      "message_profile_identifier": [
+        {
+          "entity_identifier": "PHLabReport-NoAck",
+          "namespace_id": "ELR251R1_Rcvr_Prof",
+          "universal_id": "2.16.840.1.113883.9.11",
+          "universal_id_type": "ISO"
+        },
+        {
+          "entity_identifier": "PHLIP_ELSM_251",
+          "namespace_id": "PHLIP_Profile_Flu",
+          "universal_id": "2.16.840.1.113883.9.179",
+          "universal_id_type": "ISO"
+        }
+      ],
+      "children": [
+        {
+          "SFT": {
+            "software_vendor_organization": {
+              "organization_name": "HorizonLIMS"
+            },
+            "software_certified_version_or_release_number": "13.2.0",
+            "software_product_name": "HORIZON",
+            "software_binary_id": "N/A",
+            "software_install_date": "20221127172748"
+          }
+        },
+        {
+          "PID": {
+            "set_id": "1",
+            "patient_id": [],
+            "patient_identifier_list": [
+              {
+                "id_number": "19348",
+                "assigning_authority": {
+                  "namespace_id": "USVI.PHL.Horizon.PRO",
+                  "universal_id": "2.16.840.1.113883.3.8589.4.2.78.1",
+                  "universal_id_type": "ISO"
+                },
+                "identifier_type_code": "PI"
+              }
+            ],
+            "date_time_of_birth": "20070209",
+            "administrative_sex": "M",
+            "race": [
+              {
+                "identifier": "2106-3",
+                "text": "White",
+                "name_of_coding_system": "HL70005"
+              }
+            ],
+            "patient_address": [
+              {
+                "state_or_province": "VI"
+              }
+            ],
+            "ethnic_group": [
+              {
+                "identifier": "N",
+                "text": "Not Hispanic or Latino",
+                "name_of_coding_system": "HL70189",
+                "alternate_identifier": "NH",
+                "alternate_text": "Not Hispanic",
+                "name_of_alternate_coding_system": "L"
+              }
+            ]
+          }
+        },
+        {
+          "ORC": {
+            "order_control": "RE",
+            "filler_order_number": {
+              "entity_identifier": "17981001",
+              "namespace_id": "USVI.PHL.Horizon.PRO",
+              "universal_id": "2.16.840.1.113883.3.8589.4.2.78.1",
+              "universal_id_type": "ISO"
+            },
+            "quantity_timing": [],
+            "date_time_of_transaction": "202212051342",
+            "ordering_facility_name": [
+              {
+                "organization_name": "ChemWare Test Client",
+                "organization_name_type_code": "D"
+              }
+            ],
+            "ordering_facility_address": [
+              {
+                "street_address": "1324 Hospital Way",
+                "state_or_province": "VI",
+                "country": "USA"
+              }
+            ],
+            "ordering_facility_phone_number": [
+              {
+                "telecommunication_use_code": "WPN",
+                "telecommunication_equipment_type": "PH",
+                "area_city_code": "123",
+                "local_number": "4567891"
+              }
+            ],
+            "ordering_provider_address": [],
+            "alternate_placer_order_number": [],
+            "order_workflow_profile": []
+          }
+        },
+        {
+          "OBR": {
+            "set_id": "1",
+            "filler_order_number": {
+              "entity_identifier": "17981001",
+              "namespace_id": "USVI.PHL.Horizon.PRO",
+              "universal_id": "2.16.840.1.113883.3.8589.4.2.78.1",
+              "universal_id_type": "ISO"
+            },
+            "universal_service_identifier": {
+              "identifier": "95422-2",
+              "text": "FluAB + SARS-CoV-2 Pnl Resp NAA+prb",
+              "name_of_coding_system": "LN",
+              "alternate_identifier": "MULTIPLEX",
+              "alternate_text": "Multiplex Influenza SARS-CoV-2",
+              "name_of_alternate_coding_system": "L"
+            },
+            "observation_date_time": "20221116010000.000-0500",
+            "results_report_status_change_date_time": "20221205134200.000-0500",
+            "result_status": "F",
+            "reason_for_study": [],
+            "children": [
+              {
+                "OBX": {
+                  "set_id": "1",
+                  "value_type": "CWE",
+                  "observation_identifier": {
+                    "identifier": "94533-7",
+                    "text": "SARS-CoV-2 N gene Resp Ql NAA+probe",
+                    "name_of_coding_system": "LN",
+                    "alternate_identifier": "SC2",
+                    "alternate_text": "SARS-CoV-2",
+                    "name_of_alternate_coding_system": "L"
+                  },
+                  "observation_value": [
+                    {
+                      "identifier": "260415000",
+                      "text": "Not detected",
+                      "name_of_coding_system": "SCT",
+                      "alternate_identifier": "260415000",
+                      "alternate_text": "Not Detected",
+                      "name_of_alternate_coding_system": "L"
+                    }
+                  ],
+                  "abnormal_flags": [],
+                  "nature_of_abnormal_test": [],
+                  "observation_result_status": "F",
+                  "date_time_of_the_observation": "20221116010000.000-0500",
+                  "observation_method": [
+                    {
+                      "identifier": "Influenza SARS-CoV-2 (Flu SC2)",
+                      "name_of_coding_system": "99ELR",
+                      "alternate_identifier": "00",
+                      "alternate_text": "PCR",
+                      "name_of_alternate_coding_system": "L"
+                    }
+                  ],
+                  "date_time_of_the_analysis": "20221117113900.000-0500",
+                  "performing_organization_name": {
+                    "organization_name": "US Virgin Islands Department of Health",
+                    "organization_name_type_code": "D",
+                    "assigning_authority": {
+                      "namespace_id": "CLIA",
+                      "universal_id": "2.16.840.1.113883.19.4.6",
+                      "universal_id_type": "ISO"
+                    },
+                    "identifier_type_code": "XX",
+                    "assigning_facility": {},
+                    "organization_identifier": "48D2179122"
+                  },
+                  "performing_organization_address": {
+                    "street_address": "3500 Richmond Estate",
+                    "city": "Christiansted",
+                    "state_or_province": "VI",
+                    "postal_code": "00820-4370"
+                  }
+                }
+              },
+              {
+                "OBX": {
+                  "set_id": "2",
+                  "value_type": "CWE",
+                  "observation_identifier": {
+                    "identifier": "92142-9",
+                    "text": "FLUAV RNA Resp Ql NAA+probe",
+                    "name_of_coding_system": "LN",
+                    "alternate_identifier": "FLUA",
+                    "alternate_text": "Influenza A",
+                    "name_of_alternate_coding_system": "L"
+                  },
+                  "observation_value": [
+                    {
+                      "identifier": "260415000",
+                      "text": "Not detected",
+                      "name_of_coding_system": "SCT",
+                      "alternate_identifier": "260415000",
+                      "alternate_text": "Not Detected",
+                      "name_of_alternate_coding_system": "L"
+                    }
+                  ],
+                  "abnormal_flags": [],
+                  "nature_of_abnormal_test": [],
+                  "observation_result_status": "F",
+                  "date_time_of_the_observation": "20221116010000.000-0500",
+                  "observation_method": [
+                    {
+                      "identifier": "Influenza SARS-CoV-2 (Flu SC2)",
+                      "name_of_coding_system": "99ELR",
+                      "alternate_identifier": "00",
+                      "alternate_text": "PCR",
+                      "name_of_alternate_coding_system": "L"
+                    }
+                  ],
+                  "date_time_of_the_analysis": "20221117113900.000-0500",
+                  "performing_organization_name": {
+                    "organization_name": "US Virgin Islands Department of Health",
+                    "organization_name_type_code": "D",
+                    "assigning_authority": {
+                      "namespace_id": "CLIA",
+                      "universal_id": "2.16.840.1.113883.19.4.6",
+                      "universal_id_type": "ISO"
+                    },
+                    "identifier_type_code": "XX",
+                    "assigning_facility": {},
+                    "organization_identifier": "48D2179122"
+                  },
+                  "performing_organization_address": {
+                    "street_address": "3500 Richmond Estate",
+                    "city": "Christiansted",
+                    "state_or_province": "VI",
+                    "postal_code": "00820-4370"
+                  }
+                }
+              },
+              {
+                "OBX": {
+                  "set_id": "3",
+                  "value_type": "CWE",
+                  "observation_identifier": {
+                    "identifier": "92141-1",
+                    "text": "FLUBV RNA Resp Ql NAA+probe",
+                    "name_of_coding_system": "LN",
+                    "alternate_identifier": "FLUB",
+                    "alternate_text": "Influenza B",
+                    "name_of_alternate_coding_system": "L"
+                  },
+                  "observation_value": [
+                    {
+                      "identifier": "260373001",
+                      "text": "Detected",
+                      "name_of_coding_system": "SCT",
+                      "alternate_identifier": "260373001",
+                      "alternate_text": "Detected",
+                      "name_of_alternate_coding_system": "L"
+                    }
+                  ],
+                  "abnormal_flags": [],
+                  "nature_of_abnormal_test": [],
+                  "observation_result_status": "F",
+                  "date_time_of_the_observation": "20221116010000.000-0500",
+                  "observation_method": [
+                    {
+                      "identifier": "Influenza SARS-CoV-2 (Flu SC2)",
+                      "name_of_coding_system": "99ELR",
+                      "alternate_identifier": "00",
+                      "alternate_text": "PCR",
+                      "name_of_alternate_coding_system": "L"
+                    }
+                  ],
+                  "date_time_of_the_analysis": "20221117113900.000-0500",
+                  "performing_organization_name": {
+                    "organization_name": "US Virgin Islands Department of Health",
+                    "organization_name_type_code": "D",
+                    "assigning_authority": {
+                      "namespace_id": "CLIA",
+                      "universal_id": "2.16.840.1.113883.19.4.6",
+                      "universal_id_type": "ISO"
+                    },
+                    "identifier_type_code": "XX",
+                    "assigning_facility": {},
+                    "organization_identifier": "48D2179122"
+                  },
+                  "performing_organization_address": {
+                    "street_address": "3500 Richmond Estate",
+                    "city": "Christiansted",
+                    "state_or_province": "VI",
+                    "postal_code": "00820-4370"
+                  }
+                }
+              },
+              {
+                "SPM": {
+                  "set_id": "1",
+                  "specimen_id": {
+                    "placer_assigned_identifier": {},
+                    "filler_assigned_identifier": {
+                      "entity_identifier": "17981001",
+                      "namespace_id": "USVI.PHL.Horizon.PRO",
+                      "universal_id": "2.16.840.1.113883.3.8589.4.2.78.1",
+                      "universal_id_type": "ISO"
+                    }
+                  },
+                  "specimen_type": {
+                    "identifier": "258500001",
+                    "text": "Nasopharyngeal swab",
+                    "name_of_coding_system": "SCT",
+                    "alternate_identifier": "SN",
+                    "alternate_text": "Swab - NP",
+                    "name_of_alternate_coding_system": "L"
+                  },
+                  "specimen_description": [],
+                  "specimen_collection_date_time": {
+                    "range_start_date_time": "20221116010000.000-0500"
+                  },
+                  "specimen_received_date_time": "20221117113500.000-0500",
+                  "specimen_reject_reason": [],
+                  "specimen_condition": [],
+                  "accession_id": [],
+                  "other_specimen_id": []
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
