@@ -5,7 +5,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-### [0.0.37] - 2025-01-24
+### [0.0.38] - 2024-02-07
+	- Upgrade azure-functions maven plugin due to strange bug
+	- Upgraded azure Bom to 1.2.20 due to NPE bug
+	- Fixed logging on file-sink functions
+	- Added extra metadata to Debatcher report
+	- Updated HL7 Json profile for
+		○  multiple patient ids
+		○ Changed file_separator to field_separator for MSH-1
+	- Created a Covid19 specific config for redaction
+	- Added /health endpoint to Debatcher Fn
+	- Created ability to Redact based on a expression for Covid requirements
+	- PHLIP-VPD fixes
+	- Improved Structure validator error messages when missing MD
+	- File-sink bug fix on date folders.
+		○ Removed content from payload.
+	- Using Static Event hub clients for better connection management.
+
+
+### [0.0.37] - 2024-01-24
 
 	- Updated Validation API documentation to include support for DAART
 	- Added validation profiles for NRSS
