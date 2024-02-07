@@ -1,6 +1,7 @@
 package gov.cdc.dex.hl7
 
 import com.azure.storage.internal.avro.implementation.schema.primitive.AvroNullSchema.Null
+import gov.cdc.dex.azure.DedicatedEventHubSender
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.util.PathUtils
 import gov.cdc.dex.util.StringUtils.Companion.normalize
@@ -15,7 +16,8 @@ import java.lang.NullPointerException
 
 class FunctionConfig {
     val azBlobProxy: AzureBlobProxy
-    val evHubSender: EventHubSender
+    val evHubSenderOut: DedicatedEventHubSender
+    val evHubSenderReports: DedicatedEventHubSender
     var eventCodes : Map<String, Map<String, String>>
     val logger = LoggerFactory.getLogger(this.javaClass.simpleName)
     val blobIngestContName: String = try {
@@ -52,7 +54,8 @@ class FunctionConfig {
             logger.error("FATAL: Missing environment variable EventHubConnectionString")
             throw e
         }
-        evHubSender = EventHubSender(evHubConnStr)
+        evHubSenderOut = DedicatedEventHubSender(evHubConnStr, evHubSendName)
+        evHubSenderReports = DedicatedEventHubSender(evHubConnStr, evReportsHubName)
 
         //Load Event Codes
         eventCodes = loadEventCodes()

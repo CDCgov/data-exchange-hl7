@@ -1,0 +1,10 @@
+{
+  "line": 1,
+  "column": 68,
+  "path": "MSH[1]-4[1].2",
+  "description": "The required Component MSH-4.2 (Universal ID) is missing",
+  "category": "Usage",
+  "classification": "Error",
+  "stackTrace": null,
+  "metaData": null
+}

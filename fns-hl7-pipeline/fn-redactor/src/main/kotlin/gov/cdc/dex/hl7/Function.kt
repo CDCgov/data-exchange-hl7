@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
 
 /**
  * Azure function with event hub trigger to redact messages   */
-class RedactorFunction {
+class Function {
 
     companion object {
         val gson: Gson = GsonBuilder().disableHtmlEscaping().serializeNulls().create()
@@ -113,7 +113,7 @@ class RedactorFunction {
             logger.error("DEX:error occurred: ${ex.message}")
         }
         try {
-            fnConfig.evHubSender.send(fnConfig.evHubSendName, outList)
+            fnConfig.evHubSender.send(outList)
         } catch (e : Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
@@ -163,21 +163,6 @@ class RedactorFunction {
             noBodyResponse(request)
         }
     }
-
-    @FunctionName("health")
-    fun invoke(
-            @HttpTrigger(
-                    name = "req",
-                    methods = [HttpMethod.GET],
-                    authLevel = AuthorizationLevel.ANONYMOUS
-            )
-            request: HttpRequestMessage<Optional<String>>
-    ): HttpResponseMessage {
-        return buildHttpResponse(
-                "UP",
-                HttpStatus.OK,
-                request);
-    }
 }
 
 private fun noBodyResponse(request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
@@ -189,6 +174,7 @@ private fun noBodyResponse(request: HttpRequestMessage<Optional<String>>) : Http
 }
 
 private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+
     var contentType = "application/json"
     if (status != HttpStatus.OK) {
         contentType = "text/plain"

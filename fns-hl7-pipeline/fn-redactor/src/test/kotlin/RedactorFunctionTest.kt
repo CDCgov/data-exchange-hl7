@@ -5,7 +5,7 @@ import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.HttpRequestMessage
 import com.microsoft.azure.functions.OutputBinding
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.hl7.RedactorFunction
+import gov.cdc.dex.hl7.Function
 import gov.cdc.dex.metadata.ProcessMetadata
 import gov.cdc.dex.metadata.SummaryInfo
 import org.junit.jupiter.api.Test
@@ -25,7 +25,7 @@ class RedactorFunctionTest {
         val messages = listOf(text)
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val cosmosOutput = getOutputBindingList<JsonObject>()
-        val function = RedactorFunction()
+        val function = Function()
         val inputEvent : JsonObject = function.eventHubProcessor(messages, eventHubMDList)
 
         // Validate Metadata.processes has been added to the array of proccesses

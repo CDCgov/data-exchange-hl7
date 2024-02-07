@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "provenance": {
+      "event_id": "3005bf7e-501e-0014-0533-51c849069325",
+      "event_timestamp": "2024-01-27T15:17:23.8035501Z",
+      "file_uuid": "2d348434-81a0-40c4-88ad-27423593aeab",
+      "file_path": "https://ocioedemessagesatst.blob.core.windows.net/hl7ingress/test-pipeline/PHLIP_FLU_2.5.1_NO_PROFILE_IDENTIFIER.txt",
+      "file_timestamp": "2024-01-27T15:17:23+00:00",
+      "file_size": 16100,
+      "single_or_batch": "SINGLE",
+      "message_hash": "7231a01ac54a1f93ba77d3ae81941446",
+      "ext_system_provider": null,
+      "ext_original_file_name": "2024-01-2710:17:19-PHLIP_FLU_2.5.1_NO_PROFILE_IDENTIFIER.txt",
+      "message_index": 1,
+      "ext_original_file_timestamp": null,
+      "source_metadata": null
+    }
+  }
+}
