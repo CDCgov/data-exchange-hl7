@@ -163,21 +163,6 @@ class Function {
             noBodyResponse(request)
         }
     }
-
-    @FunctionName("redactorHealth")
-    fun invoke(
-            @HttpTrigger(
-                    name = "req",
-                    methods = [HttpMethod.GET],
-                    authLevel = AuthorizationLevel.ANONYMOUS
-            )
-            request: HttpRequestMessage<Optional<String>>
-    ): HttpResponseMessage {
-        return buildHttpResponse(
-                "UP",
-                HttpStatus.OK,
-                request);
-    }
 }
 
 private fun noBodyResponse(request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
