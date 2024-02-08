@@ -95,7 +95,7 @@ class Function {
                         //Update Summary element.
                         val summary = SummaryInfo("REDACTED")
                         inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                        logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
+                        logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.evHubSendName}")
                         outList.add(gson.toJson(inputEvent))
                     }
                 } catch (e: Exception) {
