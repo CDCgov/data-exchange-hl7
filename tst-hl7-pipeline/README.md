@@ -36,9 +36,7 @@ The HL7V2 Pipeline Test Harness exists to:
 - **Payload Verification:**
     - Create Tests with Junit and compare results against pre-verified payloads.
 
-![Test Harness Diagram](https://github.com/CDCgov/data-exchange-hl7/assets/137535421/8a31010d-3390-4d7f-9c0e-af228b4589ba)
-
-
+![Test Harness Diagram (1)](https://github.com/CDCgov/data-exchange-hl7/assets/137535421/04fd1a0a-5ed6-4788-b661-e460f6d399a9)
 
 ## Required Configuration Parameters
 - **BLOB_CONTAINER_NAME**: Name of the blob container where messages will be dropped.
