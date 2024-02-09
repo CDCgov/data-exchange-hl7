@@ -1,13 +1,11 @@
 package gov.cdc.dataexchange
 
-import com.azure.core.amqp.AmqpTransportType
-import com.azure.messaging.servicebus.ServiceBusClientBuilder
 import com.azure.messaging.servicebus.ServiceBusMessage
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dataexchange.model.ProcessingStatusSchema
+import gov.cdc.dex.util.JsonHelper
 import org.slf4j.LoggerFactory
-import java.lang.System
 import java.util.*
 
 /**
@@ -19,19 +17,8 @@ class ReportFunction {
 
     companion object {
         private val logger = LoggerFactory.getLogger(ReportFunction::class.java.simpleName)
-        private val gson by lazy { Gson() }
+        val fnConfig = FunctionConfig()
 
-        private val CONN_STR = System.getenv("ServiceBusConnectionString")
-        private val QUEUE = System.getenv("ServiceBusQueue")
-
-        private val serviceBusClient by lazy {
-            ServiceBusClientBuilder()
-                .connectionString(CONN_STR)
-                .transportType(AmqpTransportType.AMQP_WEB_SOCKETS)
-                .sender()
-                .queueName(QUEUE)
-                .buildAsyncClient()
-        }
     }
 
     /**
@@ -49,20 +36,34 @@ class ReportFunction {
     ) {
         val inputRecordCount = records.size
         logger.info("REPORT::Receiving $inputRecordCount records.")
-        records.forEachIndexed { i, record ->
+        var batch = fnConfig.serviceBusSender.createMessageBatch()
+
+        for ((i, record) in records.withIndex()) {
             try {
                 val processingStatusSchema = createProcessingStatusSchema(record)
-                val processingStatusJson = gson.toJson(processingStatusSchema)
-                logger.info(
-                    "REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} sent to queue: $QUEUE"
-                            //+
-                            //"\n$processingStatusJson"
-                )
-                // send message to Processing Status API Service Bus asynchronously
-                serviceBusClient.sendMessage(ServiceBusMessage(processingStatusJson)).subscribe(
-                    {}, { e -> logger.error("Error sending message to Service Bus: ${e.message}\n" +
-                            "upload_id: ${processingStatusSchema.uploadId}") }
-                )
+                val processingStatusJson = JsonHelper.gson.toJson(processingStatusSchema)
+                val sbMessage = ServiceBusMessage(processingStatusJson)
+                // add message to batch
+                if (batch.tryAddMessage(sbMessage)) {
+                    logger.info(
+                        "REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} added to batch"
+                    )
+                    continue
+                }
+                // batch is full. send and create new
+                try {
+                    fnConfig.serviceBusSender.sendMessages(batch)
+                } catch (e: Exception) {
+                    logger.error("REPORT::ERROR sending batch to Service Bus queue ${fnConfig.sbQueue}: ${e.message}")
+                    //TODO: Unsure what else to do at this point? Send to Storage Account?
+                }
+                batch = fnConfig.serviceBusSender.createMessageBatch()
+
+                // add the message we could not add before
+                if (!batch.tryAddMessage(sbMessage)) {
+                    logger.error("REPORT::[${i + 1}] MESSAGE TOO LARGE ERROR: upload_id: ${processingStatusSchema.uploadId}")
+                }
+
             } catch (e: JsonSyntaxException) {
                 logger.error("REPORT::JSON Syntax Error: ${e.message}")
             } catch (e: IllegalStateException) {
@@ -71,11 +72,19 @@ class ReportFunction {
                 e.printStackTrace()
                 logger.error("REPORT::General Error: ${e.message}")
             }
+        } //.for
+        if (batch.count > 0) {
+            try {
+                fnConfig.serviceBusSender.sendMessages(batch)
+            } catch (e: Exception) {
+                logger.error("REPORT::ERROR sending batch to Service Bus queue ${fnConfig.sbQueue}: ${e.message}")
+                //TODO: Unsure what else to do at this point? Send to Storage Account?
+            }
         }
     }
 
     private fun createProcessingStatusSchema(record: String): ProcessingStatusSchema {
-        val content = gson.fromJson(record, JsonObject::class.java)
+        val content = JsonHelper.gson.fromJson(record, JsonObject::class.java)
         content.remove("content")
 
         val uploadIdJson = extractValueFromPath(content, "routing_metadata.upload_id")
