@@ -36,7 +36,8 @@ The HL7V2 Pipeline Test Harness exists to:
 - **Payload Verification:**
     - Create Tests with Junit and compare results against pre-verified payloads.
 
-![DEX_HL7V2_TEST_HARNESS_DIAGRAM](https://github.com/CDCgov/data-exchange-hl7/assets/137535421/600c2b6f-4673-43c2-988d-d5439fc5539d)
+![Test Harness Diagram](https://github.com/CDCgov/data-exchange-hl7/assets/137535421/8a31010d-3390-4d7f-9c0e-af228b4589ba)
+
 
 
 ## Required Configuration Parameters
