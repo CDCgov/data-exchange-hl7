@@ -1,6 +1,7 @@
 package gov.cdc.dataexchange
 
 import com.azure.messaging.servicebus.ServiceBusMessage
+import com.azure.messaging.servicebus.models.CreateMessageBatchOptions
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dataexchange.model.ProcessingStatusSchema
@@ -18,7 +19,8 @@ class ReportFunction {
     companion object {
         private val logger = LoggerFactory.getLogger(ReportFunction::class.java.simpleName)
         val fnConfig = FunctionConfig()
-
+        val batchOptions = CreateMessageBatchOptions()
+        val MAX_MESSAGE_SIZE = 262144
     }
 
     /**
@@ -31,12 +33,15 @@ class ReportFunction {
             name = "msg",
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
-            consumerGroup = "%EventHubConsumerGroup%"
+            consumerGroup = "%EventHubConsumerGroup%",
+            cardinality = Cardinality.MANY
         ) records: List<String>
     ) {
         val inputRecordCount = records.size
         logger.info("REPORT::Receiving $inputRecordCount records.")
-        var batch = fnConfig.serviceBusSender.createMessageBatch()
+        var batch = fnConfig.serviceBusSender.createMessageBatch(
+            batchOptions.setMaximumSizeInBytes(MAX_MESSAGE_SIZE)
+        )
 
         for ((i, record) in records.withIndex()) {
             try {
@@ -44,26 +49,22 @@ class ReportFunction {
                 val processingStatusJson = JsonHelper.gson.toJson(processingStatusSchema)
                 val sbMessage = ServiceBusMessage(processingStatusJson)
                 // add message to batch
-                if (batch.tryAddMessage(sbMessage)) {
-                    logger.info(
-                        "REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} added to batch"
-                    )
-                    continue
-                }
-                // batch is full. send and create new
-                try {
-                    fnConfig.serviceBusSender.sendMessages(batch)
-                } catch (e: Exception) {
-                    logger.error("REPORT::ERROR sending batch to Service Bus queue ${fnConfig.sbQueue}: ${e.message}")
-                    //TODO: Unsure what else to do at this point? Send to Storage Account?
-                }
-                batch = fnConfig.serviceBusSender.createMessageBatch()
-
-                // add the message we could not add before
                 if (!batch.tryAddMessage(sbMessage)) {
-                    logger.error("REPORT::[${i + 1}] MESSAGE TOO LARGE ERROR: upload_id: ${processingStatusSchema.uploadId}")
-                }
-
+                    fnConfig.serviceBusSender.sendMessages(batch)
+                    logger.info("REPORT::Sending batch of ${batch.count} messages")
+                    batch = fnConfig.serviceBusSender.createMessageBatch(
+                        batchOptions.setMaximumSizeInBytes(MAX_MESSAGE_SIZE)
+                    )
+                    logger.info("REPORT::Batch send completed")
+                    // add the message we could not add before
+                    if (!batch.tryAddMessage(sbMessage)) {
+                        logger.error("REPORT::[${i + 1}] MESSAGE TOO LARGE ERROR: upload_id: ${processingStatusSchema.uploadId}")
+                    } else {
+                        logger.info("REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} added to batch")
+                    }
+                }  else {
+                    logger.info("REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} added to batch")
+                }//.if
             } catch (e: JsonSyntaxException) {
                 logger.error("REPORT::JSON Syntax Error: ${e.message}")
             } catch (e: IllegalStateException) {
@@ -75,7 +76,9 @@ class ReportFunction {
         } //.for
         if (batch.count > 0) {
             try {
+                logger.info("REPORT::Sending batch of ${batch.count} messages")
                 fnConfig.serviceBusSender.sendMessages(batch)
+                logger.info("REPORT::Batch send completed")
             } catch (e: Exception) {
                 logger.error("REPORT::ERROR sending batch to Service Bus queue ${fnConfig.sbQueue}: ${e.message}")
                 //TODO: Unsure what else to do at this point? Send to Storage Account?
@@ -86,6 +89,7 @@ class ReportFunction {
     private fun createProcessingStatusSchema(record: String): ProcessingStatusSchema {
         val content = JsonHelper.gson.fromJson(record, JsonObject::class.java)
         content.remove("content")
+        content.remove("output")
 
         val uploadIdJson = extractValueFromPath(content, "routing_metadata.upload_id")
         val uploadId = if (uploadIdJson == null || uploadIdJson.isJsonNull) {

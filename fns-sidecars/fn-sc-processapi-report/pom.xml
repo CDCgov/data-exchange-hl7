@@ -17,12 +17,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <functionAppName>hl7-processingstatus-${receiveFn}-${environment-id}</functionAppName>
-       <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
+        <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <AzureBom.version>1.2.20</AzureBom.version>
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
-        <functions.version>3.1.0</functions.version>
         <kotlin.version>1.9.0</kotlin.version>
         <hl7pet.version>1.2.7.2</hl7pet.version>
         <lib-dex-commons.version>0.0.38-SNAPSHOT</lib-dex-commons.version>
@@ -74,7 +73,7 @@
         <dependency>
             <groupId>com.microsoft.azure.functions</groupId>
             <artifactId>azure-functions-java-library</artifactId>
-            <version>${functions.version}</version>
+            <version>${azure.functions.java.library.version}</version>
         </dependency>
         <dependency>
             <groupId>com.azure</groupId>
@@ -136,7 +135,7 @@
 
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
-       <!-- <testSourceDirectory>src/test/kotlin</testSourceDirectory>-->
+        <!-- <testSourceDirectory>src/test/kotlin</testSourceDirectory>-->
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
@@ -183,11 +182,7 @@
                             <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
                             <value>true</value>
                         </property>
-                        <property>
-                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
-                            <value>None</value>
-                        </property>
-                    </appSettings>
+                     </appSettings>
                 </configuration>
                 <executions>
                     <execution>
