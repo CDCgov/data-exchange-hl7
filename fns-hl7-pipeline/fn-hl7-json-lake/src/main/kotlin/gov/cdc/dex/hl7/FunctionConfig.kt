@@ -1,7 +1,6 @@
 package gov.cdc.dex.hl7
 
 import gov.cdc.dex.azure.DedicatedEventHubSender
-import gov.cdc.dex.azure.EventHubSender
 
 class FunctionConfig {
     companion object {
