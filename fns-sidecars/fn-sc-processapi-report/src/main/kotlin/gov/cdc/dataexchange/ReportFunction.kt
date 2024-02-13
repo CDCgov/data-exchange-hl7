@@ -89,7 +89,6 @@ class ReportFunction {
     private fun createProcessingStatusSchema(record: String): ProcessingStatusSchema {
         val content = JsonHelper.gson.fromJson(record, JsonObject::class.java)
         content.remove("content")
-        content.remove("output")
 
         val uploadIdJson = extractValueFromPath(content, "routing_metadata.upload_id")
         val uploadId = if (uploadIdJson == null || uploadIdJson.isJsonNull) {
@@ -107,8 +106,19 @@ class ReportFunction {
         } else { eventTypeJson.asString }
 
         // Extract the last process from the processes array
-        val lastProcess = extractValueFromPath(content, "metadata.processes")?.asJsonArray?.lastOrNull()
-        val stageName = lastProcess?.asJsonObject?.get("process_name")?.asString ?: "Unknown Stage"
+        val processes = extractValueFromPath(content, "metadata.processes")
+
+       val stageName = if (!(processes == null || processes.isJsonNull)) {
+            if (processes.asJsonArray.size() > 0) {
+                val lastProcess = processes.asJsonArray.last().asJsonObject
+                lastProcess.remove("output")
+                lastProcess.get("process_name").asString
+            } else {
+                "Unknown Stage"
+            }
+        } else {
+            "Unknown Stage"
+        }
 
         return ProcessingStatusSchema(
             uploadId, destinationId, eventType, stageName, content = content)
