@@ -117,7 +117,7 @@ class Function {
         outData: MutableList<String>
     ): JsonObject {
 
-        val processMD = HL7JSONLakeProcessMetadata(status = status, report = report, eventHubMD = eventHubMD, config)
+        val processMD = HL7JSONLakeProcessMetadata(status = status, output = report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
         metadata.addArrayElement("processes", processMD)

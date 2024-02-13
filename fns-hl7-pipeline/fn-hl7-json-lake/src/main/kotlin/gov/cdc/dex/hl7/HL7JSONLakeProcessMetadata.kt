@@ -4,7 +4,7 @@ import com.google.gson.JsonObject
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.ProcessMetadata
 
-data class HL7JSONLakeProcessMetadata(override val status: String, val report: JsonObject?, @Transient val eventHubMD: EventHubMetadata, @Transient val config: List<String>) //
+data class HL7JSONLakeProcessMetadata(override val status: String, val output: JsonObject?, @Transient val eventHubMD: EventHubMetadata, @Transient val config: List<String>) //
     : ProcessMetadata(PROCESS_NAME, PROCESS_VERSION,status,eventHubMD,config) {
 
     companion object  {
