@@ -110,7 +110,7 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
                             subComponents.forEach { subComp ->
                                 val subCompVal = getValueFromMessage(subCompArray, subComp.fieldNumber - 1)
                                 subCompJsonObj.addValueOrNull(subCompVal, subComp.name)
-                                subHasValue = subHasValue || subCompVal != null
+                                subHasValue = subHasValue || !subCompVal.isNullOrEmpty()
                             }
                             if (subHasValue)
                                 compJsonObj.add(component.name.normalize(), subCompJsonObj)
