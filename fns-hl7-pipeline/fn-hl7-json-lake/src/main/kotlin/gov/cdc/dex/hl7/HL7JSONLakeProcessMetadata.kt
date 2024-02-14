@@ -12,4 +12,4 @@ data class HL7JSONLakeProcessMetadata(override val status: String, val output: J
         const val PROCESS_VERSION = "1.0.0"
     } // .companion object
 
-} // .LakeSegsTransProcessMetadata
+}

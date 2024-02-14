@@ -26,6 +26,7 @@ class Function {
         const val SUMMARY_STATUS_OK = "HL7-JSON-LAKE-TRANSFORMED"
         const val SUMMARY_STATUS_ERROR = "HL7-JSON-LAKE-ERROR"
         val gsonWithNullsOn: Gson = GsonBuilder().serializeNulls().create()
+        val gsonNoNulls: Gson = GsonBuilder().create()
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
         val fnConfig = FunctionConfig()
     } // .companion object
@@ -61,7 +62,10 @@ class Function {
                     logger.info("DEX::Processing messageUUID:$messageUUID")
                     try {
                         val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-                        val fullHL7 = buildJson(hl7message)
+                        val fullHL7WithNulls = buildJson(hl7message)
+                        // remove nulls
+                        val fullHL7 = gsonNoNulls.toJsonTree(fullHL7WithNulls).asJsonObject
+
                         returnValue = updateMetadataAndDeliver(
                             startTime, metadata, PROCESS_STATUS_OK,
                             fullHL7, eventHubMD[messageIndex], gsonWithNullsOn,
@@ -130,6 +134,8 @@ class Function {
         } else {
             inputEvent.add("summary", (SummaryInfo(SUMMARY_STATUS_OK, null).toJsonElement()))
         }
+        // remove hl7 content node
+        inputEvent.remove("content")
         outData.add(gsonWithNullsOn.toJson(inputEvent))
         return inputEvent
     }
@@ -158,7 +164,7 @@ class Function {
         return try {
             val fullHL7 = buildJson(hl7Message)
             logger.info("HL7 message has been transformed to JSONObject")
-            buildHttpResponse(gsonWithNullsOn.toJson(fullHL7), HttpStatus.OK, request)
+            buildHttpResponse(gsonNoNulls.toJson(fullHL7), HttpStatus.OK, request)
         } catch (e: Exception) {
             logger.error("Unable to process message due to exception: ${e.message}")
             buildHttpResponse(
