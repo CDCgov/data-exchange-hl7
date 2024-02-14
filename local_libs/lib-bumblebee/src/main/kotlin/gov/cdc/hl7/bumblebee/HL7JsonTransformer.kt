@@ -91,7 +91,10 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
 
                 }
             } else {
-                fieldRepeat?.forEach { fieldRepeatItem ->
+                if (fieldRepeat == null || fieldRepeat[0].isEmpty()) {
+                    segJson.add(segField.name.normalize(), JsonNull.INSTANCE)
+                }
+                else fieldRepeat.forEach { fieldRepeatItem ->
                     val compJsonObj = JsonObject()
                     val compArray = fieldRepeatItem.split("^")
                     var compHasValue:Boolean = false
