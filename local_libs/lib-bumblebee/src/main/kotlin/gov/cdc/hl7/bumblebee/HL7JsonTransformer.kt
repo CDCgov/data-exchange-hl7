@@ -9,7 +9,6 @@ import gov.cdc.hl7.model.HL7Hierarchy
 class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl7Parser: HL7ParseUtils) {
     companion object {
         val gson = GsonBuilder().serializeNulls().create()
-
         //Factory Method
         @JvmStatic
         fun getTransformerWithResource(
@@ -67,7 +66,7 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
                 JsonObject()
             else {
                 JsonArray()
-            }
+            } //Adding empty array to field with cardinality > 1
             segJson.add(segField.name.normalize(), fieldJsonNode)
 
             //Get the value of this field from Message....
@@ -81,14 +80,21 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
                 if (fieldJsonNode.isJsonObject) {
                     segJson.addValueOrNull(fieldRepeat?.get(0), segField.name)
                     fieldJsonNode.asJsonObject.addProperty(segField.name.normalize(), fieldRepeat?.get(0))
-                } else
-                    if (fieldRepeat != null && fieldRepeat[0].isNotEmpty()) {
-                        fieldRepeat.forEach { element ->
-                            fieldJsonNode.asJsonArray.add(element)
+                } else {
+                    if (fieldRepeat == null || fieldRepeat[0].isEmpty()) {
+                        segJson.add(segField.name.normalize(), JsonNull.INSTANCE)
+                    } else {
+                        fieldRepeat.forEach { fieldRepeatItem ->
+                            fieldJsonNode.asJsonArray.add(fieldRepeatItem)
                         }
                     }
+
+                }
             } else {
-                fieldRepeat?.forEach { fieldRepeatItem ->
+                if (fieldRepeat == null || fieldRepeat[0].isEmpty()) {
+                    segJson.add(segField.name.normalize(), JsonNull.INSTANCE)
+                }
+                else fieldRepeat.forEach { fieldRepeatItem ->
                     val compJsonObj = JsonObject()
                     val compArray = fieldRepeatItem.split("^")
                     var compHasValue:Boolean = false
@@ -149,15 +155,13 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
             try {
                 "${end.toInt()}"
             } catch (e: NumberFormatException) {
-                 "?"
+                "?"
             }
     }
 
-   fun JsonObject.addValueOrNull(value: String?, name: String) {
+    fun JsonObject.addValueOrNull(value: String?, name: String) {
         if (!value.isNullOrEmpty())
             this.addProperty(name.normalize(), value)
         else this.add(name.normalize(),JsonNull.INSTANCE)
     }
-
-
 }
