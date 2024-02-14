@@ -24,8 +24,7 @@ import java.util.*
 
 class ValidatorFunction {
     companion object {
-        private const val PHIN_SPEC_PROFILE = "MSH-21[1].1" //Not able to use HL7-PET due to scala version conflicts with NistValidator.
-        private const val ELR_SPEC_PROFILE = "MSH-12"
+        private const val DEFAULT_SPEC_PROFILE = "MSH-12"
         const val PROCESS_STATUS_OK = "SUCCESS"
         const val PROCESS_STATUS_EXCEPTION = "FAILURE"
         private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
@@ -59,12 +58,12 @@ class ValidatorFunction {
                 val startTime = Date().toIsoString()
                 var report = NistReport()
                 var metadata = JsonObject()
-
+                var messageUUID = ""
                 try {
                     val hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
                     metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
                     val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
-                    val messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
+                    messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
                     val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
                     val route = if (messageType.uppercase() == HL7MessageType.CASE.toString()) {
                         ""
@@ -75,14 +74,13 @@ class ValidatorFunction {
 
                     logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
                     //Main FN Logic
-                    report =
-                        validateMessage(hl7Content, messageUUID, filePath, HL7MessageType.valueOf(messageType), route)
+                    report = validateMessage(hl7Content, HL7MessageType.valueOf(messageType), route)
                     //preparing EventHub payload:
                     val processMD = StructureValidatorProcessMetadata(
                         PROCESS_STATUS_OK,
                         report,
                         eventHubMD[msgNumber],
-                        listOf(getProfileName(hl7Content, route))
+                        listOf(getProfileNameAndPaths(hl7Content, route).first)
                     )
 
                     processMD.startProcessTime = startTime
@@ -115,7 +113,7 @@ class ValidatorFunction {
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
                     metadata.addArrayElement("processes", processMD)
-                    val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, e, false, 0, 0)
+                    val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, "Error: ${e.message}")
                     val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
 
                     logger.error("metadata in exception: $metadata")
@@ -123,21 +121,14 @@ class ValidatorFunction {
 
                     inputEvent.add("summary", summary.toJsonElement())
                     outList.add(gson.toJson(inputEvent))
-                    logger.info(
-                        "Sent Message to Err Event Hub for Message Id ${
-                            JsonHelper.getValueFromJson(
-                                "message_uuid",
-                                inputEvent
-                            ).asString
-                        }"
-                    )
+                    logger.info("Sent Message to Error Event Hub for Message Id $messageUUID")
                 }
             } // foreachIndexed
         } catch (ex: Exception) {
             logger.error("An unexpected error occurred: ${ex.message}")
         }
         try {
-            fnConfig.evHubSender.send(fnConfig.evHubSendName, outList)
+            fnConfig.evHubSender.send(outList)
         } catch (e : Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
@@ -146,35 +137,46 @@ class ValidatorFunction {
     } //.eventHubProcessor
 
 
-    fun getProfileName(hl7Content: String, route: String): String {
+    fun getProfileNameAndPaths(hl7Content: String, route: String): Pair<String, List<String>> {
         val routeName = route.uppercase().trim()
         val profileList = fnConfig.profileConfig.profileIdentifiers.filter { it.route.uppercase().trim() == routeName }
-        if (profileList.isNotEmpty()) {
-            val profileIdPaths = profileList[0].identifierPaths
-            val prefix = if (routeName.isNotEmpty()) "$routeName-" else ""
-            val profileName = prefix + profileIdPaths.map { path ->
+        // if the route is not specified in the config file, assume the default of MSH-12
+        val profileIdPaths = if (profileList.isNotEmpty()) {
+            profileList[0].identifierPaths
+        } else listOf(DEFAULT_SPEC_PROFILE)
+
+        val prefix = if (routeName.isNotEmpty()) "$routeName-" else ""
+        val profileName = try {
+            prefix + profileIdPaths.map { path ->
                 HL7StaticParser.getFirstValue(hl7Content, path).get().uppercase()
             }.reduce { acc, map -> "$acc-$map" }
-            return profileName
-        } else {
-            throw InvalidMessageException("Invalid Route: $route. Could not determine validation profile")
+        } catch (e: NoSuchElementException) {
+            throw InvalidMessageException("Unable to load validation profile: " +
+                    "One or more values in the profile path(s)" +
+                    " ${profileIdPaths.joinToString()} are missing.")
         }
+        return Pair(profileName, profileIdPaths)
+
     }
 
-    private fun validateMessage(hl7Message: String, messageUUID: String, filePath: String, messageType: HL7MessageType, route: String): NistReport {
+    private fun validateMessage(hl7Message: String, messageType: HL7MessageType, route: String): NistReport {
         validateHL7Delimiters(hl7Message)
-        val profileName =  try {
-            getProfileName(hl7Message, route)
-        } catch (e: NoSuchElementException) {
-            logger.error("Unable to retrieve Profile Name")
-            val exMessage = if (filePath != "N/A") {  "for messageUUID: $messageUUID, filePath: $filePath." }
-                else { "." } // do not add file information if processed via https request
-            throw InvalidMessageException("Unable to process message: Unable to retrieve profile identifier $exMessage")
+        if (messageType == HL7MessageType.ELR && route.isEmpty()) {
+            throw InvalidMessageException("ELR message type must have a Route specified.")
         }
-
+        val profileNameAndPaths = getProfileNameAndPaths(hl7Message, route)
+        val profileName =  profileNameAndPaths.first
+        val profilePaths = profileNameAndPaths.second
         val nistValidator = fnConfig.getNistValidator(profileName)
         if (nistValidator == null) {
-            throw InvalidMessageException("Unsupported route $profileName")
+            if (messageType == HL7MessageType.ELR) {
+                throw InvalidMessageException(
+                    "Unable to find validation profile named $profileName."
+                            + " Either the route '$route' or the data in HL7 path '${profilePaths.joinToString()}' is invalid."
+                )
+            } else {
+                throw InvalidMessageException("Unable to find validation profile $profileName.")
+            }
         } else {
             val report = nistValidator.validate(hl7Message)
             report.status = if ("ERROR" in report.status + "") {
@@ -249,8 +251,7 @@ class ValidatorFunction {
         if (route.isNotEmpty()) { logger.info("Message route received: $route") }
         return try {
             val report =  validateMessage(
-                    hl7Message, "N/A", "N/A",
-                    messageType.let { HL7MessageType.valueOf(it) }, route
+                    hl7Message, messageType.let { HL7MessageType.valueOf(it) }, route
                 )
             logger.info("Validation report created OK")
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)

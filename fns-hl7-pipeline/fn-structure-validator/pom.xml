@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>structure-validator</artifactId>
-    <version>0.0.33-SNAPSHOT</version>
+    <version>0.0.38-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Java Functions</name>
     <scm>
@@ -15,14 +15,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <functionAppName>ocio-ede-${environment-id}-hl7-structure-validator</functionAppName>
-        <AzureBom.version>1.2.18</AzureBom.version>
+        <AzureBom.version>1.2.20</AzureBom.version>
         <java.version>17</java.version>
-        <azure.functions.maven.plugin.version>1.26.0</azure.functions.maven.plugin.version>
-        <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
+        <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
+        <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
         <kotlin.version>1.9.0</kotlin.version>
-        <lib-dex-commons.version>1.0.20-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.38-SNAPSHOT</lib-dex-commons.version>
         <lib-nist-validator.version>1.3.5-SNAPSHOT</lib-nist-validator.version>
-        <hl7-pet.version>1.2.7.2</hl7-pet.version>
+        <hl7-pet.version>1.2.9</hl7-pet.version>
 
     </properties>
     <dependencyManagement>
@@ -110,11 +110,6 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <source>src/main/kotlin</source>
-                            </sourceDirs>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>test-compile</id>
@@ -124,9 +119,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <jvmTarget>${java.version}</jvmTarget>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
@@ -155,10 +147,6 @@
                             <value>${project.version}</value>
                         </property>
                         <property>
-                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
-                            <value>1</value>
-                        </property>
-                        <property>
                             <name>FUNCTIONS_EXTENSION_VERSION</name>
                             <value>~4</value>
                         </property>
@@ -166,18 +154,7 @@
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
                         </property>
-                        <property>
-                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
-                            <value>true</value>
-                        </property>
-                        <property>
-                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
-                            <value>None</value>
-                        </property>
-                        <property>
-                            <name>EventHubSendName</name>
-                            <value>hl7-structure-out</value>
-                        </property>
+
                     </appSettings>
                 </configuration>
                 <executions>
@@ -202,37 +179,7 @@
                     </filesets>
                 </configuration>
             </plugin>
-	        <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.1.1</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>testCompile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
+           
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -249,8 +196,7 @@
                     <environmentVariables>
                         <FN_VERSION>${project.version}</FN_VERSION>
                         <EventHubConnectionString>${ehString}</EventHubConnectionString>
-                        <EventHubSendOkName>hl7-structure-ok</EventHubSendOkName>
-                        <EventHubSendErrsName>hl7-structure-err</EventHubSendErrsName>
+                        <EventHubSendName>hl7-structure-out</EventHubSendName>
                     </environmentVariables>
                 </configuration>
             </plugin>
@@ -328,6 +274,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

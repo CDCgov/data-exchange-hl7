@@ -1,7 +1,8 @@
 package gov.cdc.dex.hl7
 
-import com.fasterxml.jackson.databind.JsonMappingException
 import com.google.gson.*
+import com.microsoft.azure.functions.*
+import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
@@ -10,11 +11,8 @@ import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.bumblebee.HL7JsonTransformer
-import java.util.*
-import com.google.gson.JsonObject
-import com.microsoft.azure.functions.*
-import com.microsoft.azure.functions.annotation.*
 import org.slf4j.LoggerFactory
+import java.util.*
 
 
 /**
@@ -34,17 +32,19 @@ class Function {
 
     @FunctionName("HL7_JSON_LAKE_TRANSFORMER")
     fun eventHubProcessor(
-            @EventHubTrigger(
-                    name = "msg",
-                    eventHubName = "%EventHubReceiveName%",
-                    consumerGroup = "%EventHubConsumerGroup%",
-                    connection = "EventHubConnectionString")
-            messages: List<String>?,
-            @BindingName("SystemPropertiesArray")eventHubMD:List<EventHubMetadata>,
-            context:ExecutionContext): JsonObject {
+        @EventHubTrigger(
+            name = "msg",
+            eventHubName = "%EventHubReceiveName%",
+            consumerGroup = "%EventHubConsumerGroup%",
+            connection = "EventHubConnectionString"
+        )
+        messages: List<String>?,
+        @BindingName("SystemPropertiesArray") eventHubMD: List<EventHubMetadata>,
+        context: ExecutionContext
+    ): JsonObject {
 
         logger.info("DEX::${context.functionName}")
-        if ( messages == null) {
+        if (messages == null) {
             return JsonObject()
         }
         val outList = mutableListOf<String>()
@@ -87,11 +87,11 @@ class Function {
                     // message is bad, can't extract fields based on schema expected
                     context.logger.severe("Unable to process Message due to exception: ${e.message}")
                     returnValue = updateMetadataAndDeliver(
-                            startTime, JsonObject(), PROCESS_STATUS_EXCEPTION,
-                            null, eventHubMD[messageIndex], gsonWithNullsOn,
-                            JsonObject(), e,
-                            listOf(FunctionConfig.PROFILE_FILE_PATH),
-                            outList
+                        startTime, JsonObject(), PROCESS_STATUS_EXCEPTION,
+                        null, eventHubMD[messageIndex], gsonWithNullsOn,
+                        JsonObject(), e,
+                        listOf(FunctionConfig.PROFILE_FILE_PATH),
+                        outList
                     )
                 } // .catch
             } // .for
@@ -101,8 +101,8 @@ class Function {
         }
 
         try {
-            fnConfig.evHubSender.send(fnConfig.evHubSendName, outList)
-        } catch (e : Exception) {
+            fnConfig.evHubSender.send(outList)
+        } catch (e: Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
         return returnValue
@@ -110,13 +110,14 @@ class Function {
 
 
     private fun updateMetadataAndDeliver(
-            startTime: String, metadata: JsonObject, status: String,
-            report: JsonObject?, eventHubMD: EventHubMetadata, gsonWithNullsOn: Gson,
-            inputEvent: JsonObject, exception: Exception?,
-            config: List<String>,
-            outData: MutableList<String>) : JsonObject {
+        startTime: String, metadata: JsonObject, status: String,
+        report: JsonObject?, eventHubMD: EventHubMetadata, gsonWithNullsOn: Gson,
+        inputEvent: JsonObject, exception: Exception?,
+        config: List<String>,
+        outData: MutableList<String>
+    ): JsonObject {
 
-        val processMD = HL7JSONLakeProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, config)
+        val processMD = HL7JSONLakeProcessMetadata(status = status, output = report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
         metadata.addArrayElement("processes", processMD)
@@ -170,9 +171,17 @@ class Function {
 
 } // .Function
 
-private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+private fun buildHttpResponse(
+    message: String,
+    status: HttpStatus,
+    request: HttpRequestMessage<Optional<String>>
+): HttpResponseMessage {
     // need to be able to send plain text exception message that is not formatted as json
-    val contentType = if (status == HttpStatus.OK) { "application/json" } else { "text/plain" }
+    val contentType = if (status == HttpStatus.OK) {
+        "application/json"
+    } else {
+        "text/plain"
+    }
     return request
         .createResponseBuilder(status)
         .header("Content-Type", contentType)
@@ -180,7 +189,7 @@ private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpR
         .build()
 }
 
-private fun buildJson(message:String) : JsonObject{
+private fun buildJson(message: String): JsonObject {
     val bumblebee =
         HL7JsonTransformer.getTransformerWithResource(message, FunctionConfig.PROFILE_FILE_PATH)
     return bumblebee.transformMessage()

@@ -1,4 +1,5 @@
 package gov.cdc.dex.hl7
+import gov.cdc.dex.azure.DedicatedEventHubSender
 import gov.cdc.dex.azure.EventHubSender
 import gov.cdc.dex.hl7.model.ProfileConfiguration
 import gov.cdc.dex.util.JsonHelper.gson
@@ -14,13 +15,13 @@ class FunctionConfig {
     val functionVersion = System.getenv("FN_VERSION")?.toString() ?: "Unknown"
     private var logger = LoggerFactory.getLogger(FunctionConfig::class.java.simpleName)
     val evHubSendName: String = System.getenv("EventHubSendName")
-    val evHubSender : EventHubSender
+    val evHubSender : DedicatedEventHubSender
     val profileConfig : ProfileConfiguration
 
     init {
         //Init Event Hub connections
         val evHubConnStr = System.getenv("EventHubConnectionString")
-        evHubSender = EventHubSender(evHubConnStr)
+        evHubSender = DedicatedEventHubSender(evHubConnStr, evHubSendName)
         val profileConfigJson = FunctionConfig::class.java.getResource("/$PROFILE_CONFIG_FILE_PATH")?.readText()
         profileConfig = gson.fromJson(profileConfigJson, ProfileConfiguration::class.java)
     }

@@ -9,18 +9,25 @@ reg_all0s = "^[0]{4,24}$"
 reg_all9s = "^[9]{4,24}$"
 reg_DT = "^(\d{4}|\d{6}|\d{8})$"
 reg_DTM = "^(\d{4}|\d{6}|\d{8}|\d{10}|\d{12}|\d{14}|\d{14}\.\d|\d{14}\.\d{2}|\d{14}\.\d{3}|\d{14}\.\d{4})([+-]\d{4})?$"
+reg_DTM2 = "^(\d{14}\.\d{1,4}|\d{14}|\d{12}|\d{10}|\d{8}|\d{6}|\d{4})((\\x2D|\\x2B)\d{4})?$"
 reg_DTM8 = "^(\d{8}|\d{10}|\d{12}|\d{14}|\d{14}\.\d|\d{14}\.\d{2}|\d{14}\.\d{3}|\d{14}\.\d{4})([+-]\d{4})?$"
+reg_DTM82 = "^(\d{14}\.\d{1,4}|\d{14}|\d{12}|\d{10}|\d{8})((\\x2D|\\x2B)\d{4})?$"
 reg_DTM_14 = "^(\d{14}|\d{14}\.\d|\d{14}\.\d{2}|\d{14}\.\d{3}|\d{14}\.\d{4})([+-]\d{4})?$"
 reg_DTM_12_TZ = "^(\d{12}|\d{14}|\d{14}\.\d|\d{14}\.\d{2}|\d{14}\.\d{3}|\d{14}\.\d{4})([+-]\d{4})$"
+reg_DTM_14_TZ = "^(\d{14}\.\d{1,4}|\d{14})((\\x2D|\\x2B)\d{4})$"
 reg_SN_Separator = "^[-+\/.:]$"
 reg_SN_Comparator = "^&lt;=$|^&gt;=$|^&lt;&gt;$|^&lt;$|^&gt;$|^=$"
 reg_ID_SSN = "^\d{3}-\d{2}-\d{4}$"
 reg_LOINC = "^\d{3,8}-\d$"
+reg_LOINC2 = "^\d{2,6}[-]\d{1}$"
 reg_CLIA = "^\d{2}D\d{7}$"
+reg_CLIA2 = "^\d{2}[D]{1}\d{7}$"
 reg_StagDev = "^.*(S[tT][aA][gG]|D[eE][vV]).*$"
 reg_Prod = "^.*(P[rR][oO][dD]).*$" 
 reg_Collab = "^US WHO C[Oo][Ll][Ll][Aa][Bb]\sL[Aa][Bb][Ss][Yy][Ss]$"
 reg_EpiSurv = "^CDC-EPI\sS[Uu][Rr][Vv]\sB[Rr][Aa][Nn][Cc][Hh]$"
+reg_postal = "^\d{5}$|^\d{5}-\d{4}$|^[A-Z]{1}\d{1}[A-Z]{1}\d{1}[A-Z]{1}\d{1}$"
+reg_county_parish = "^\d{5}$"
 
 def fix_descriptions(filePath):
     xmldoc = ET.parse(filePath)
@@ -77,12 +84,18 @@ def replace_regex(text):
         text = text.replace(f"{match} '{reg_all9s}'", "be all 9s")        
     if reg_DTM in text:
         text = text.replace(f"{match} '{reg_DTM}'", f"{be_a_date} 'YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]'")
+    if reg_DTM2 in text:
+        text = text.replace(f"{match} '{reg_DTM2}'", f"{be_a_date} 'YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]'")        
     if reg_DTM8 in text:
         text = text.replace(f"{match} '{reg_DTM8}'", f"{be_a_date} 'YYYYMMDD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]'")
+    if reg_DTM82 in text:
+        text = text.replace(f"{match} '{reg_DTM82}'", f"{be_a_date} 'YYYYMMDD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]'")        
     if reg_DTM_14 in text:
-        text = text.replace(f"{match} '{reg_DTM_14}'", f"{be_a_date} 'YYYYMMDDHHMMSS[.S[S[S[S]]]][+/-ZZZZ]]'")   
+        text = text.replace(f"{match} '{reg_DTM_14}'", f"{be_a_date} 'YYYYMMDDHHMMSS[.S[S[S[S]]]][+/-ZZZZ]'") 
+    if reg_DTM_14_TZ in text:
+        text = text.replace(f"{match} '{reg_DTM_14_TZ}'", f"{be_a_date} 'YYYYMMDDHHMMSS[.S[S[S[S]]]]+/-ZZZZ'")           
     if reg_DTM_12_TZ in text:
-        text = text.replace(f"{match} '{reg_DTM_12_TZ}'", f"{be_a_date} 'YYYYMMDDHHMM[SS[.S[S[S[S]]]]]]]]]+/-ZZZZ'")
+        text = text.replace(f"{match} '{reg_DTM_12_TZ}'", f"{be_a_date} 'YYYYMMDDHHMM[SS[.S[S[S[S]]]]]+/-ZZZZ'")
     if reg_DT in text:
         text = text.replace(f"{match} '{reg_DT}'", f"{be_a_date} 'YYYY[MM[DD]]'")
     if reg_SN_Separator in text:
@@ -93,8 +106,12 @@ def replace_regex(text):
         text = text.replace(f"{match} '{reg_ID_SSN}'", "be valued with a Social Security Number")
     if reg_LOINC in text:
         text = text.replace(f"{match} '{reg_LOINC}'", "be valued with a LOINC code")
+    if reg_LOINC2 in text:
+        text = text.replace(f"{match} '{reg_LOINC2}'", "be valued with a LOINC code")
     if reg_CLIA in text:
         text = text.replace(f"{match} '{reg_CLIA}'", "be valued with a CLIA identifier")
+    if reg_CLIA2 in text:
+        text = text.replace(f"{match} '{reg_CLIA2}'", "be valued with a CLIA identifier")        
     if reg_StagDev in text:
         text = text.replace(f"{match} '{reg_StagDev}'", "contain the value 'Stag' or the value 'Dev' (case insensitive)")
     if reg_Prod in text:
@@ -103,6 +120,10 @@ def replace_regex(text):
         text = text.replace(f"{match} '{reg_Collab}'", "contain the value 'US WHO Collab LabSys'")
     if reg_EpiSurv in text:
         text = text.replace(f"{match} '{reg_EpiSurv}'", "contain the value 'CDC-EPI Surv Branch'")
+    if reg_postal in text:
+        text = text.replace(f"{match} '{reg_postal}'", "be valued with a postal code")
+    if reg_county_parish in text:
+        text = text.replace(f"{match} '{reg_county_parish}'", "be valued with a 5-digit county/parish code")        
     return text
 
 def remove_empty_attributes(xmldoc):

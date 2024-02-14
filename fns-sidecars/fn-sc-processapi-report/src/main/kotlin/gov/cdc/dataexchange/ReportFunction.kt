@@ -1,13 +1,12 @@
 package gov.cdc.dataexchange
 
-import com.azure.core.amqp.AmqpTransportType
-import com.azure.messaging.servicebus.ServiceBusClientBuilder
 import com.azure.messaging.servicebus.ServiceBusMessage
+import com.azure.messaging.servicebus.models.CreateMessageBatchOptions
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dataexchange.model.ProcessingStatusSchema
+import gov.cdc.dex.util.JsonHelper
 import org.slf4j.LoggerFactory
-import java.lang.System
 import java.util.*
 
 /**
@@ -19,19 +18,9 @@ class ReportFunction {
 
     companion object {
         private val logger = LoggerFactory.getLogger(ReportFunction::class.java.simpleName)
-        private val gson by lazy { Gson() }
-
-        private val CONN_STR = System.getenv("ServiceBusConnectionString")
-        private val QUEUE = System.getenv("ServiceBusQueue")
-
-        private val serviceBusClient by lazy {
-            ServiceBusClientBuilder()
-                .connectionString(CONN_STR)
-                .transportType(AmqpTransportType.AMQP_WEB_SOCKETS)
-                .sender()
-                .queueName(QUEUE)
-                .buildAsyncClient()
-        }
+        val fnConfig = FunctionConfig()
+        val batchOptions = CreateMessageBatchOptions()
+        val MAX_MESSAGE_SIZE = 262144
     }
 
     /**
@@ -44,24 +33,38 @@ class ReportFunction {
             name = "msg",
             eventHubName = "%EventHubReceiveName%",
             connection = "EventHubConnectionString",
-            consumerGroup = "%EventHubConsumerGroup%"
+            consumerGroup = "%EventHubConsumerGroup%",
+            cardinality = Cardinality.MANY
         ) records: List<String>
     ) {
         val inputRecordCount = records.size
         logger.info("REPORT::Receiving $inputRecordCount records.")
-        records.forEachIndexed { i, record ->
+        var batch = fnConfig.serviceBusSender.createMessageBatch(
+            batchOptions.setMaximumSizeInBytes(MAX_MESSAGE_SIZE)
+        )
+
+        for ((i, record) in records.withIndex()) {
             try {
                 val processingStatusSchema = createProcessingStatusSchema(record)
-                val processingStatusJson = gson.toJson(processingStatusSchema)
-                logger.info(
-                    "REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} sent to queue: $QUEUE" +
-                            "\n$processingStatusJson"
-                )
-                // send message to Processing Status API Service Bus asynchronously
-                serviceBusClient.sendMessage(ServiceBusMessage(processingStatusJson)).subscribe(
-                    {}, { e -> logger.error("Error sending message to Service Bus: ${e.message}\n" +
-                            "upload_id: ${processingStatusSchema.uploadId}") }
-                )
+                val processingStatusJson = JsonHelper.gson.toJson(processingStatusSchema)
+                val sbMessage = ServiceBusMessage(processingStatusJson)
+                // add message to batch
+                if (!batch.tryAddMessage(sbMessage)) {
+                    fnConfig.serviceBusSender.sendMessages(batch)
+                    logger.info("REPORT::Sending batch of ${batch.count} messages")
+                    batch = fnConfig.serviceBusSender.createMessageBatch(
+                        batchOptions.setMaximumSizeInBytes(MAX_MESSAGE_SIZE)
+                    )
+                    logger.info("REPORT::Batch send completed")
+                    // add the message we could not add before
+                    if (!batch.tryAddMessage(sbMessage)) {
+                        logger.error("REPORT::[${i + 1}] MESSAGE TOO LARGE ERROR: upload_id: ${processingStatusSchema.uploadId}")
+                    } else {
+                        logger.info("REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} added to batch")
+                    }
+                }  else {
+                    logger.info("REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} added to batch")
+                }//.if
             } catch (e: JsonSyntaxException) {
                 logger.error("REPORT::JSON Syntax Error: ${e.message}")
             } catch (e: IllegalStateException) {
@@ -70,31 +73,52 @@ class ReportFunction {
                 e.printStackTrace()
                 logger.error("REPORT::General Error: ${e.message}")
             }
+        } //.for
+        if (batch.count > 0) {
+            try {
+                logger.info("REPORT::Sending batch of ${batch.count} messages")
+                fnConfig.serviceBusSender.sendMessages(batch)
+                logger.info("REPORT::Batch send completed")
+            } catch (e: Exception) {
+                logger.error("REPORT::ERROR sending batch to Service Bus queue ${fnConfig.sbQueue}: ${e.message}")
+                //TODO: Unsure what else to do at this point? Send to Storage Account?
+            }
         }
     }
 
     private fun createProcessingStatusSchema(record: String): ProcessingStatusSchema {
-        val content = gson.fromJson(record, JsonObject::class.java)
+        val content = JsonHelper.gson.fromJson(record, JsonObject::class.java)
         content.remove("content")
 
-        val uploadIdJson = extractValueFromPath(content, "upload_id")
+        val uploadIdJson = extractValueFromPath(content, "routing_metadata.upload_id")
         val uploadId = if (uploadIdJson == null || uploadIdJson.isJsonNull) {
             UUID.randomUUID().toString()
         } else { uploadIdJson.asString }
 
-        val destinationIdJson = extractValueFromPath(content, "destination_id")
+        val destinationIdJson = extractValueFromPath(content, "routing_metadata.destination_id")
         val destinationId = if (destinationIdJson == null || destinationIdJson.isJsonNull) {
             "UNKNOWN"
         } else { destinationIdJson.asString }
 
-        val eventTypeJson = extractValueFromPath(content, "destination_event")
+        val eventTypeJson = extractValueFromPath(content, "routing_metadata.destination_event")
         val eventType = if (eventTypeJson == null || eventTypeJson.isJsonNull) {
             "UNKNOWN"
         } else { eventTypeJson.asString }
 
         // Extract the last process from the processes array
-        val lastProcess = extractValueFromPath(content, "metadata.processes")?.asJsonArray?.lastOrNull()
-        val stageName = lastProcess?.asJsonObject?.get("process_name")?.asString ?: "Unknown Stage"
+        val processes = extractValueFromPath(content, "metadata.processes")
+
+       val stageName = if (!(processes == null || processes.isJsonNull)) {
+            if (processes.asJsonArray.size() > 0) {
+                val lastProcess = processes.asJsonArray.last().asJsonObject
+                lastProcess.remove("output")
+                lastProcess.get("process_name").asString
+            } else {
+                "Unknown Stage"
+            }
+        } else {
+            "Unknown Stage"
+        }
 
         return ProcessingStatusSchema(
             uploadId, destinationId, eventType, stageName, content = content)

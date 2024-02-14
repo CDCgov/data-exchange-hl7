@@ -23,10 +23,11 @@ import org.slf4j.LoggerFactory
 class Function {
 
     companion object {
-        val gson: Gson = GsonBuilder().serializeNulls().create()
+        val gson: Gson = GsonBuilder().disableHtmlEscaping().serializeNulls().create()
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
         val fnConfig = FunctionConfig()
     }
+
     @FunctionName("redactor")
     fun eventHubProcessor(
         @EventHubTrigger(
@@ -94,7 +95,7 @@ class Function {
                         //Update Summary element.
                         val summary = SummaryInfo("REDACTED")
                         inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                        logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
+                        logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.evHubSendName}")
                         outList.add(gson.toJson(inputEvent))
                     }
                 } catch (e: Exception) {
@@ -112,7 +113,7 @@ class Function {
             logger.error("DEX:error occurred: ${ex.message}")
         }
         try {
-            fnConfig.evHubSender.send(fnConfig.evHubSendName, outList)
+            fnConfig.evHubSender.send(outList)
         } catch (e : Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
@@ -162,7 +163,6 @@ class Function {
             noBodyResponse(request)
         }
     }
-
 }
 
 private fun noBodyResponse(request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
@@ -174,6 +174,7 @@ private fun noBodyResponse(request: HttpRequestMessage<Optional<String>>) : Http
 }
 
 private fun buildHttpResponse(message:String, status: HttpStatus, request: HttpRequestMessage<Optional<String>>) : HttpResponseMessage {
+
     var contentType = "application/json"
     if (status != HttpStatus.OK) {
         contentType = "text/plain"

@@ -4,7 +4,17 @@
       "id": "Microsoft.Azure.Functions.ExtensionBundle",
       "version": "[4.*, 5.0.0)"
   },
-
+  "extensions": {
+    "eventHubs": {
+      "batchCheckpointFrequency": 1,
+      "maxEventBatchSize": 10,
+      "prefetchCount": 20,
+      "initialOffsetOptions": {
+        "type": "fromStart",
+        "enqueuedTimeUtc": ""
+      }
+    }
+  },
   "logLevel": {
     "default": "Warning",
     "Function": "Information",

@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>lake-segs-transfomer</artifactId>
-    <version>0.0.34-SNAPSHOT</version>
+    <version>0.0.38-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DEX Fns-Pipeline :: lake-segs-transformer</name>
 
@@ -19,18 +19,18 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <AzureBom.version>1.2.18</AzureBom.version>
+        <AzureBom.version>1.2.20</AzureBom.version>
         <java.version>17</java.version>
         <kotlin.version>1.9.0</kotlin.version>
-        <functions.version>3.0.0</functions.version>
-        <functions.plugin.version>1.26.0</functions.plugin.version>
+        <functions.version>3.1.0</functions.version>
+        <functions.plugin.version>1.30.0</functions.plugin.version>
 
         <functionAppName>ocio-ede-${environment-id}-hl7-lake-segments-transformer</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
 
         <gson.version>2.10.1</gson.version>
         <junit.version>5.9.2</junit.version>
-        <libdexcommon.version>1.0.20-SNAPSHOT</libdexcommon.version>
+        <libdexcommon.version>0.0.38-SNAPSHOT</libdexcommon.version>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
 
@@ -146,10 +146,6 @@
                             <value>${project.version}</value>
                         </property>
                         <property>
-                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
-                            <value>1</value>
-                        </property>
-                        <property>
                             <name>FUNCTIONS_EXTENSION_VERSION</name>
                             <value>~4</value>
                         </property>
@@ -157,19 +153,7 @@
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
                         </property>
-                        <property>
-                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
-                            <value>true</value>
-                        </property>
-                        <property>
-                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
-                            <value>None</value>
-                        </property>
-                        <property>
-                            <name>EventHubSendName</name>
-                            <value>hl7-lake-segments-out</value>
-                        </property>
-                    </appSettings>
+                     </appSettings>
                 </configuration>
                 <executions>
                     <execution>

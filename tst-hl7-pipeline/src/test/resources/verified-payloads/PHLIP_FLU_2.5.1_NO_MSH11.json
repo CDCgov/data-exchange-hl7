@@ -1,0 +1,10 @@
+{
+  "line": 1,
+  "column": 1,
+  "path": "MSH[1]-11[1]",
+  "description": "The required Field MSH-11 (Processing ID) is missing",
+  "category": "Usage",
+  "classification": "Error",
+  "stackTrace": null,
+  "metaData": null
+}

@@ -1,0 +1,27 @@
+{
+  "line": 3,
+  "column": 138,
+  "path": "PID[1]-22[1]",
+  "description": "CWE-3-Usage - If CWE.1 (Identifier) is valued then CWE.3 (Name of Coding System) shall not be empty.",
+  "category": "Constraint Failure",
+  "classification": "Error",
+  "stackTrace": [
+    {
+      "assertion": "PID-22.1[1] SHALL not be present OR ()PID-22.3[1] SHALL match '^(?!\\s*$).+' regular expression",
+      "reasons": []
+    },
+    {
+      "assertion": "PID-22.1[1] SHALL not be present",
+      "reasons": [
+        "[3, 138] The inner expression is true"
+      ]
+    },
+    {
+      "assertion": "()PID-22.3[1] SHALL match '^(?!\\s*$).+' regular expression",
+      "reasons": [
+        "[3, 138] Path 3[1] resolution from Field PID-22 (Ethnic Group) returned no element"
+      ]
+    }
+  ],
+  "metaData": {}
+}
