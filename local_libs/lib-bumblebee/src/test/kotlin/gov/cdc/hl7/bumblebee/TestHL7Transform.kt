@@ -168,7 +168,7 @@ class TestHL7Transform {
     fun testHL7Transformer() {
 //        val message = this::class.java.getResource("/COVID.txt").readText()
         val message = this::class.java.getResource("/testFile.hl7").readText()
-        val gson = GsonBuilder().serializeNulls().create()
+        val gson = GsonBuilder().create()
 
 
         val xformer = HL7JsonTransformer.getTransformerWithResource(message, "PhinGuideProfile.json")

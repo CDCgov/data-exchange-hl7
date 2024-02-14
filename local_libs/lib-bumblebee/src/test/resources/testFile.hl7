@@ -1,20 +1,842 @@
-MSH|^~\&#|STARLIMS.AR.STAG^2.16.840.1.114222.4.3.3.2.5.2^ISO|AR.LittleRock.SPHL^2.16.840.1.114222.4.1.20083^ISO|US WHO Collab LabSys^2.16.840.1.114222.4.3.3.7^ISO|CDC-EPI Surv Branch^2.16.840.1.114222.4.1.10416^ISO|201904221322362236-0500||ORU^R01^ORU_R01|1312-2|T|2.5.1|||NE|NE|USA||||PHLabReport-NoAck^phLabResultsELRv251^2.16.840.1.113883.9.11^ISO~PHLabReport-NoAck^phLabResultsELRv251^2.16.840.1.113883.9.11^ISO
-SFT|Software Vendor|v12|Software Name|Binary ID unknown|Test|20181008
-PID|1||PID13295039^^^STARLIMS.AR.STAG&2.16.840.1.114222.4.3.3.2.5.2&ISO&ISO^PI^~PID13295040^^^STARLIMS.AR.STAG&2.16.840.1.114222.4.3.3.2.5.2&ISO&ISO^PI^~PID13295041^^^STARLIMS.AR.STAG&2.16.840.1.114222.4.3.3.2.5.2&ISO&ISO^PI^~PID13295042^^^STARLIMS.AR.STAG&2.16.840.1.114222.4.3.3.2.5.2&ISO&ISO^PI^||^^^^^^S|Morgan|19340726|F||2106-3^White^CDCREC^^^^^^White|^^Little Rock^AR^72016^USA^^^Hill|||||||||||U^Unknown^HL70189^^^^^^Unknown|||||||201904221322362236-0500|Y|||20204221322362236-0500
-PD1|1||TEST^PUBLIC^HL70005||Y|N|||||||||||20220101010101||Army|PFC|Active
-NK1|1|Johnson^Mary^Jane^^Ms.^PHD|FTH^Father^Parent^1^PH^^^O|123 Main St^^Anytown^TX^77777^USA^P^H~456 Maple Ave^^Othertown^CA^88888^USA^P^H^Hill|(555)555-1234^HOME^PH||(555)555-4321^WORK^CP|(555)555-5678^CELL^CP|19800101|M|English|A|111-11-1111|9876543210|123456789|XYZ Hospital|Doctor Smith|9876|ORC|RE|1905700000286-12^PHLIP-Test-EHR^2.16.840.1.113883.3.72.5.24^ISO|1905700000286-176^STARLIMS.AR.STAG^2.16.840.1.114222.4.3.3.2.5.2^ISO|||||||||||123^WPN^PH^^1^707^2643378|||||||Little Rock General Hospital Lab^D^^^^NPI&2.16.840.1.113883.4.6&ISO^NPI^^^1255402921|2217 Trancas^Suite 22^Little Rock^AR^72205^USA^M|^WPN^PH^^1^707^5549876
-PV1|1|E|2E^2W^02^General Surgery^SI^Clinic^A^2^Hallway^123^456|R|||789^Doe^Jane^^^Dr.|123^Smith^John^D.^^Dr.|||Ward 201^Room 3|789^Doe^Jane^^^Dr.|3||None||||||||A1234567^123-45-6789|||||||||||20220114124500|20220115114500|A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z5||||||||20190402082143-0500|20190403082143-0500|
-PV2|1||201|1234^Doe^John^^^Dr.|5678^Smith^Jane^^^Dr.|||||5|2||||||||||||Clinic|20220424123000|||Stable||201902281257-0500|||||||N|||A|B|C|D||||201902281257-0500
-OBR|1|1905700000286-12^PHLIP-Test-EHR^2.16.840.1.113883.3.72.5.24^ISO|1905700000286-176^STARLIMS.AR.STAG^2.16.840.1.114222.4.3.3.2.5.2^ISO|94306-8^SARS-CoV-2 RNA Pnl XXX NAA+probe^LN|||201902281257-0500||||||None|201904221322362236-0500||1412941681^Smith^John^C^^DR^^^NPI&2.16.840.1.113883.4.6&ISO^L^^^NPI^^^^^^^^MD|7708881247^WPN^PH^^1^707^2643378|||||20190402082143-0500||356|F|None|||234||Test|||||||||||||||||||678
-OBX|1|CWE|94307-6^SARS-CoV-2 N gene XXX Ql NAA N1^LN||260415000^Not detected^SCT^45678^Negative^Coding^1^2^Free Negative Text||0.5|W|||F|||201902281257-0500|||12^15^16^^17|42~43|201904020721-0500||||Public Health Laboratory^D^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^05D0897628|3434 Industrial Loop^^Little Rock^AR^72205^USA^B^^Hill
-OBX|2|CWE|94308-4^SARS-CoV-2 N gene XXX Ql NAA N2^LN||260415000^Not detected^SCT||||||F|||201902281257-0500|||||201904020721-0500||||Public Health Laboratory^D^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^05D0897628|3434 Industrial Loop^^Little Rock^AR^72205^USA^B
-OBX|3|CWE|68993-5^Human RNase P RNA XXX Ql NAA+probe^LN||260415000^Not detected^SCT||||||F|||201902281257-0500|||||201904020721-0500||||Public Health Laboratory^D^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^05D0897628|3434 Industrial Loop^^Little Rock^AR^72205^USA^B
-OBX|4|NM|94311-8^SARS-CoV-2 N gene Ct XXX Qn NAA N1^LN||99|{Ct}^CrossingThreshold^UCUM|||||F|||201902281257-0500|||||201904020721-0500||||Public Health Laboratory^D^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^05D0897628|3434 Industrial Loop^^Little Rock^AR^72205^USA^B
-OBX|5|NM|94312-6^SARS-CoV-2 N gene Ct XXX Qn NAA N2^LN||100|{Ct}^CrossingThreshold^UCUM|||||F|||201902281257-0500|||||201904020721-0500||||Public Health Laboratory^D^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^05D0897628|3434 Industrial Loop^^Little Rock^AR^72205^USA^B
-OBX|6|NM|86316-7^Human RNase P RNA Ct XXX Qn NAA+probe^LN||0|{Ct}^CrossingThreshold^UCUM|||||F|||201902281257-0500|||||201904020721-0500||||Public Health Laboratory^D^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^05D0897628|3434 Industrial Loop^^Little Rock^AR^72205^USA^B
-SPM|1|123&456&789^1905700000286-12&STARLIMS.AR.STAG&2.16.840.1.114222.4.3.3.2.5.2&ISO|123456|258500001^Nasopharyngeal swab (specimen)^SCT^^^^^^Free Text||||123^Test^UU|||||||||201902281257-0500|201903011118-0500||||G||G
-ORC|RE|1905700000286-13^PHLIP-Test-EHR^2.16.840.1.113883.3.72.5.24^ISO|1905700000286-177^STARLIMS.AR.STAG^2.16.840.1.114222.4.3.3.2.5.2^ISO|||||||||1412941681^Smith^John^C^^DR^^^NPI&2.16.840.1.113883.4.6&ISO^L^^^NPI^^^^^^^^MD||^WPN^PH^^1^707^2643378|20190402082143-0500|1234^None^N|||||Little Rock General Hospital Lab^D^^^^NPI&2.16.840.1.113883.4.6&ISO^NPI^^^1255402921|2217 Trancas^Suite 22^Little Rock^AR^72205^USA^M^^Hill|7705549876^WPN^PH^^1^707^5549876|123 Main^^Little Rock^AR^55555^^^^Hill
-OBR|2|1905700000286-13^PHLIP-Test-EHR^2.16.840.1.113883.3.72.5.24^ISO|1905700000286-177^STARLIMS.AR.STAG^2.16.840.1.114222.4.3.3.2.5.2^ISO|94309-2^SARS-CoV-2 RNA XXX NAA+probe-Imp^LN|||201902281257-0500|||||||||1412941681^Smith^John^C^^DR^^^NPI&2.16.840.1.113883.4.6&ISO^L^^^NPI^^^^^^^^MD|^WPN^PH^^1^707^2643378|||||20190402082143-0500|||F
-OBX|1|CWE|94309-2^SARS-CoV-2 RNA XXX NAA+probe-Imp^LN||125154007^Specimen unsatisfactory for evaluation^SCT||||||F|||201902281257-0500|||||201904020721-0500||||Public Health Laboratory^D^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^05D0897628|3434 Industrial Loop^^Little Rock^AR^72205^USA^B
-NTE|1|L|94309-2 is a report code. It should be conditional in the panel = either this OR all the target codes MUST be used; both may be used also.
-SPM|1|^1905700000286-12&STARLIMS.AR.STAG&2.16.840.1.114222.4.3.3.2.5.2&ISO||258500001^Nasopharyngeal swab (specimen)^SCT|||||||||||||201902281257-0500|201903011118-0500
+MSH|^~\&|UT-NEDSS^2.16.840.1.114222.4.3.3.43^ISO|UT_DOH_PROD^2.16.840.1.114222.4.1.3684^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20210323030635||ORU^R01^ORU_R01|UTNEDSS20210323_1176586|P|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~COVID19_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+PID|1||788788^^^UT-NEDSS&2.16.840.1.114222.4.3.3.43&ISO||~^^^^^^S||19970417|M||2131-1^Other Race^CDCREC|^^^49^84115^^^^49035|||||||||||2186-5^Not Hispanic or Latino^CDCREC
+OBR|1||20201611471^UT-NEDSS^2.16.840.1.114222.4.3.3.43^ISO|68991-9^Epidemiologic Information^LN|||20210301171527|||||||||||||||20210323101549|||C||||||11065^2019 Novel Coronavirus (2019-nCoV)^NND
+OBX|1|CWE|309904001^Hospital ICU^SCT||N^No^HL70136||||||F
+OBX|2|ST|94659-0^CDC 2019-nCoV ID^LN||UT20201611471||||||F
+OBX|3|DT|95366-1^First Positive Specimen Date^LN||20210104||||||F
+OBX|4|CWE|95369-5^Tribal Affiliation^LN||N^No^HL70136||||||F
+OBX|5|ST|77969-4^Jurisdiction Code^LN||42|||AA|||F
+OBX|6|DT|77995-9^Date Reported^LN||20201008|||BB~CC|||F
+OBX|7|TS|77972-8^Earliest Date Reported to County^LN||20201008||||||F
+OBX|8|TS|77973-6^Earliest Date Reported to State^LN||20201008||||||F
+OBX|9|CWE|77974-4^Hospitalized^LN||||||||F
+OBX|10|TS|77975-1^Diagnosis Date^LN||20210106||||||F
+OBX|11|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
+OBX|12|DT|77979-3^Case Investigation Start Date^LN||20210106||||||F
+OBX|13|CWE|77990-0^Case Class Status Code^LN||410605003^Confirmed present^SCT||||||F
+OBX|14|SN|77991-8^MMWR Week^LN||^1||||||F
+OBX|15|DT|77992-6^MMWR Year^LN||2021||||||F
+OBX|16|ST|77993-4^State Case Identifier^LN||20201611471||||||F
+OBX|17|DT|77970-2^Date First Reported to PHD^LN||20201008||||||F
+OBX|18|ST|74549-7^Person Reporting to CDC - Name^LN||DCP Informatics Program||||||F
+OBX|19|ST|74548-9^Person Reporting to CDC - Phone Number^LN||801-538-6191||||||F
+OBX|20|ST|74547-1^Email of Reporter to CDC^LN||edx@utah.gov||||||F
+OBX|21|ST|77997-5^Legacy Case Identifier^LN||20201611471||||||F
+OBX|22|SN|77998-3^Age at Case Investigation^LN||^23|a^year [time]^UCUM|||||F
+OBX|23|CWE|77983-5^Country of Usual Residence^LN||USA^UNITED STATES^ISO3166_1||||||F
+OBX|24|CWE|77966-0^Reporting State^LN||49^Utah^FIPS5_2||||||F
+OBX|25|CWE|77967-8^Reporting County^LN||49035^Salt Lake, UT^FIPS6_4||||||F
+OBX|26|CWE|77968-6^National Reporting Jurisdiction^LN||49^UT^FIPS5_2||||||F
+OBX|27|CWE|75321-0^Clinical Finding^LN|1|67782005^Acute respiratory distress syndrome (ARDS)^SCT||||||F
+OBX|28|CWE|31208-2^This indicates the source of the specimen tested.^LN|10|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|29|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|10|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|30|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|10|260385009^Negative^SCT||||||F
+OBX|31|TS|68963-8^Specimen Collection Date/Time^LN|10|20210318||||||F
+OBX|32|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|10|107740299||||||F
+OBX|33|CWE|82771-7^Type of labs that were used^LN|10|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|34|CWE|31208-2^This indicates the source of the specimen tested.^LN|100|119297000^Blood specimen^SCT||||||F
+OBX|35|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|100|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|36|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|100|260385009^Negative^SCT||||||F
+OBX|37|TS|68963-8^Specimen Collection Date/Time^LN|100|20201221||||||F
+OBX|38|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|100|103948426||||||F
+OBX|39|CWE|82771-7^Type of labs that were used^LN|100|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|40|CWE|31208-2^This indicates the source of the specimen tested.^LN|101|445297001^Swab of internal nose^SCT||||||F
+OBX|41|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|101|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|42|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|101|260385009^Negative^SCT||||||F
+OBX|43|TS|68963-8^Specimen Collection Date/Time^LN|101|20201221||||||F
+OBX|44|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|101|980230563||||||F
+OBX|45|CWE|82771-7^Type of labs that were used^LN|101|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|46|CWE|31208-2^This indicates the source of the specimen tested.^LN|102|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|47|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|102|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|48|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|102|260385009^Negative^SCT||||||F
+OBX|49|TS|68963-8^Specimen Collection Date/Time^LN|102|20201220||||||F
+OBX|50|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|102|103914486||||||F
+OBX|51|CWE|82771-7^Type of labs that were used^LN|102|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|52|CWE|31208-2^This indicates the source of the specimen tested.^LN|103|445297001^Swab of internal nose^SCT||||||F
+OBX|53|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|103|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|54|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|103|260385009^Negative^SCT||||||F
+OBX|55|TS|68963-8^Specimen Collection Date/Time^LN|103|20201217||||||F
+OBX|56|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|103|980223266||||||F
+OBX|57|CWE|82771-7^Type of labs that were used^LN|103|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|58|CWE|31208-2^This indicates the source of the specimen tested.^LN|104|445297001^Swab of internal nose^SCT||||||F
+OBX|59|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|104|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|60|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|104|260385009^Negative^SCT||||||F
+OBX|61|TS|68963-8^Specimen Collection Date/Time^LN|104|20201220||||||F
+OBX|62|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|104|103945009||||||F
+OBX|63|CWE|82771-7^Type of labs that were used^LN|104|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|64|CWE|31208-2^This indicates the source of the specimen tested.^LN|105|445297001^Swab of internal nose^SCT||||||F
+OBX|65|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|105|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|66|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|105|260385009^Negative^SCT||||||F
+OBX|67|TS|68963-8^Specimen Collection Date/Time^LN|105|20201219||||||F
+OBX|68|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|105|103903713||||||F
+OBX|69|CWE|82771-7^Type of labs that were used^LN|105|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|70|CWE|31208-2^This indicates the source of the specimen tested.^LN|106|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|71|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|106|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|72|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|106|260385009^Negative^SCT||||||F
+OBX|73|TS|68963-8^Specimen Collection Date/Time^LN|106|20201219||||||F
+OBX|74|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|106|103903701||||||F
+OBX|75|CWE|82771-7^Type of labs that were used^LN|106|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|76|CWE|31208-2^This indicates the source of the specimen tested.^LN|107|445297001^Swab of internal nose^SCT||||||F
+OBX|77|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|107|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|78|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|107|260385009^Negative^SCT||||||F
+OBX|79|TS|68963-8^Specimen Collection Date/Time^LN|107|20201218||||||F
+OBX|80|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|107|103854583||||||F
+OBX|81|CWE|82771-7^Type of labs that were used^LN|107|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|82|CWE|31208-2^This indicates the source of the specimen tested.^LN|108|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|83|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|108|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|84|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|108|260385009^Negative^SCT||||||F
+OBX|85|TS|68963-8^Specimen Collection Date/Time^LN|108|20201218||||||F
+OBX|86|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|108|103804430||||||F
+OBX|87|CWE|82771-7^Type of labs that were used^LN|108|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|88|CWE|31208-2^This indicates the source of the specimen tested.^LN|109|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|89|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|109|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|90|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|109|260385009^Negative^SCT||||||F
+OBX|91|TS|68963-8^Specimen Collection Date/Time^LN|109|20201217||||||F
+OBX|92|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|109|980222640||||||F
+OBX|93|CWE|82771-7^Type of labs that were used^LN|109|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|94|CWE|31208-2^This indicates the source of the specimen tested.^LN|11|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|95|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|11|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|96|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|11|260385009^Negative^SCT||||||F
+OBX|97|TS|68963-8^Specimen Collection Date/Time^LN|11|20210317||||||F
+OBX|98|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|11|107709613||||||F
+OBX|99|CWE|82771-7^Type of labs that were used^LN|11|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|100|CWE|31208-2^This indicates the source of the specimen tested.^LN|110|445297001^Swab of internal nose^SCT||||||F
+OBX|101|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|110|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|102|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|110|260385009^Negative^SCT||||||F
+OBX|103|TS|68963-8^Specimen Collection Date/Time^LN|110|20201216||||||F
+OBX|104|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|110|103755855||||||F
+OBX|105|CWE|82771-7^Type of labs that were used^LN|110|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|106|CWE|31208-2^This indicates the source of the specimen tested.^LN|111|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|107|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|111|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|108|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|111|260385009^Negative^SCT||||||F
+OBX|109|TS|68963-8^Specimen Collection Date/Time^LN|111|20201216||||||F
+OBX|110|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|111|103706558||||||F
+OBX|111|CWE|82771-7^Type of labs that were used^LN|111|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|112|CWE|31208-2^This indicates the source of the specimen tested.^LN|112|445297001^Swab of internal nose^SCT||||||F
+OBX|113|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|112|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|114|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|112|260385009^Negative^SCT||||||F
+OBX|115|TS|68963-8^Specimen Collection Date/Time^LN|112|20201215||||||F
+OBX|116|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|112|103695640||||||F
+OBX|117|CWE|82771-7^Type of labs that were used^LN|112|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|118|CWE|31208-2^This indicates the source of the specimen tested.^LN|113|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|119|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|113|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|120|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|113|260385009^Negative^SCT||||||F
+OBX|121|TS|68963-8^Specimen Collection Date/Time^LN|113|20201215||||||F
+OBX|122|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|113|103649639||||||F
+OBX|123|CWE|82771-7^Type of labs that were used^LN|113|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|124|CWE|31208-2^This indicates the source of the specimen tested.^LN|114|445297001^Swab of internal nose^SCT||||||F
+OBX|125|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|114|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|126|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|114|260385009^Negative^SCT||||||F
+OBX|127|TS|68963-8^Specimen Collection Date/Time^LN|114|20201214||||||F
+OBX|128|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|114|103637505||||||F
+OBX|129|CWE|82771-7^Type of labs that were used^LN|114|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|130|CWE|31208-2^This indicates the source of the specimen tested.^LN|115|445297001^Swab of internal nose^SCT||||||F
+OBX|131|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|115|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|132|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|115|260385009^Negative^SCT||||||F
+OBX|133|TS|68963-8^Specimen Collection Date/Time^LN|115|20201213||||||F
+OBX|134|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|115|103606845||||||F
+OBX|135|CWE|82771-7^Type of labs that were used^LN|115|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|136|CWE|31208-2^This indicates the source of the specimen tested.^LN|116|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|137|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|116|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|138|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|116|260385009^Negative^SCT||||||F
+OBX|139|TS|68963-8^Specimen Collection Date/Time^LN|116|20201214||||||F
+OBX|140|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|116|103613923||||||F
+OBX|141|CWE|82771-7^Type of labs that were used^LN|116|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|142|CWE|31208-2^This indicates the source of the specimen tested.^LN|117|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|143|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|117|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|144|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|117|260385009^Negative^SCT||||||F
+OBX|145|TS|68963-8^Specimen Collection Date/Time^LN|117|20201212||||||F
+OBX|146|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|117|103571913||||||F
+OBX|147|CWE|82771-7^Type of labs that were used^LN|117|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|148|CWE|31208-2^This indicates the source of the specimen tested.^LN|118|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|149|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|118|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|150|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|118|260385009^Negative^SCT||||||F
+OBX|151|TS|68963-8^Specimen Collection Date/Time^LN|118|20201212||||||F
+OBX|152|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|118|103527590||||||F
+OBX|153|CWE|82771-7^Type of labs that were used^LN|118|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|154|CWE|31208-2^This indicates the source of the specimen tested.^LN|119|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|155|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|119|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|156|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|119|260385009^Negative^SCT||||||F
+OBX|157|TS|68963-8^Specimen Collection Date/Time^LN|119|20201211||||||F
+OBX|158|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|119|103500674||||||F
+OBX|159|CWE|82771-7^Type of labs that were used^LN|119|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|160|CWE|31208-2^This indicates the source of the specimen tested.^LN|12|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|161|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|12|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|162|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|12|260385009^Negative^SCT||||||F
+OBX|163|TS|68963-8^Specimen Collection Date/Time^LN|12|20210316||||||F
+OBX|164|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|12|107662799||||||F
+OBX|165|CWE|82771-7^Type of labs that were used^LN|12|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|166|CWE|31208-2^This indicates the source of the specimen tested.^LN|120|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|167|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|120|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|168|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|120|260385009^Negative^SCT||||||F
+OBX|169|TS|68963-8^Specimen Collection Date/Time^LN|120|20201210||||||F
+OBX|170|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|120|103430861||||||F
+OBX|171|CWE|82771-7^Type of labs that were used^LN|120|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|172|CWE|31208-2^This indicates the source of the specimen tested.^LN|121|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|173|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|121|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|174|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|121|260385009^Negative^SCT||||||F
+OBX|175|TS|68963-8^Specimen Collection Date/Time^LN|121|20201209||||||F
+OBX|176|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|121|103368216||||||F
+OBX|177|CWE|82771-7^Type of labs that were used^LN|121|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|178|CWE|31208-2^This indicates the source of the specimen tested.^LN|122|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|179|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|122|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|180|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|122|260385009^Negative^SCT||||||F
+OBX|181|TS|68963-8^Specimen Collection Date/Time^LN|122|20201208||||||F
+OBX|182|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|122|103312863||||||F
+OBX|183|CWE|82771-7^Type of labs that were used^LN|122|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|184|CWE|31208-2^This indicates the source of the specimen tested.^LN|123|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|185|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|123|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|186|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|123|260385009^Negative^SCT||||||F
+OBX|187|TS|68963-8^Specimen Collection Date/Time^LN|123|20201207||||||F
+OBX|188|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|123|103265984||||||F
+OBX|189|CWE|82771-7^Type of labs that were used^LN|123|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|190|CWE|31208-2^This indicates the source of the specimen tested.^LN|124|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|191|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|124|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|192|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|124|260385009^Negative^SCT||||||F
+OBX|193|TS|68963-8^Specimen Collection Date/Time^LN|124|20201203||||||F
+OBX|194|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|124|103086006||||||F
+OBX|195|CWE|82771-7^Type of labs that were used^LN|124|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|196|CWE|31208-2^This indicates the source of the specimen tested.^LN|125|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|197|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|125|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|198|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|125|260385009^Negative^SCT||||||F
+OBX|199|TS|68963-8^Specimen Collection Date/Time^LN|125|20201206||||||F
+OBX|200|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|125|103240585||||||F
+OBX|201|CWE|82771-7^Type of labs that were used^LN|125|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|202|CWE|31208-2^This indicates the source of the specimen tested.^LN|126|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|203|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|126|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|204|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|126|260385009^Negative^SCT||||||F
+OBX|205|TS|68963-8^Specimen Collection Date/Time^LN|126|20201205||||||F
+OBX|206|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|126|103201339||||||F
+OBX|207|CWE|82771-7^Type of labs that were used^LN|126|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|208|CWE|31208-2^This indicates the source of the specimen tested.^LN|127|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|209|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|127|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|210|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|127|260385009^Negative^SCT||||||F
+OBX|211|TS|68963-8^Specimen Collection Date/Time^LN|127|20201204||||||F
+OBX|212|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|127|103146914||||||F
+OBX|213|CWE|82771-7^Type of labs that were used^LN|127|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|214|CWE|31208-2^This indicates the source of the specimen tested.^LN|128|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|215|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|128|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|216|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|128|260385009^Negative^SCT||||||F
+OBX|217|TS|68963-8^Specimen Collection Date/Time^LN|128|20201202||||||F
+OBX|218|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|128|103026887||||||F
+OBX|219|CWE|82771-7^Type of labs that were used^LN|128|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|220|CWE|31208-2^This indicates the source of the specimen tested.^LN|129|119297000^Blood specimen^SCT||||||F
+OBX|221|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|129|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|222|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|129|260385009^Negative^SCT||||||F
+OBX|223|TS|68963-8^Specimen Collection Date/Time^LN|129|20201130||||||F
+OBX|224|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|129|102923270||||||F
+OBX|225|CWE|82771-7^Type of labs that were used^LN|129|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|226|CWE|31208-2^This indicates the source of the specimen tested.^LN|13|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|227|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|13|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|228|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|13|260385009^Negative^SCT||||||F
+OBX|229|TS|68963-8^Specimen Collection Date/Time^LN|13|20210315||||||F
+OBX|230|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|13|107609808||||||F
+OBX|231|CWE|82771-7^Type of labs that were used^LN|13|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|232|CWE|31208-2^This indicates the source of the specimen tested.^LN|130|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|233|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|130|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|234|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|130|260385009^Negative^SCT||||||F
+OBX|235|TS|68963-8^Specimen Collection Date/Time^LN|130|20201201||||||F
+OBX|236|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|130|102970232||||||F
+OBX|237|CWE|82771-7^Type of labs that were used^LN|130|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|238|CWE|31208-2^This indicates the source of the specimen tested.^LN|131|445297001^Swab of internal nose^SCT||||||F
+OBX|239|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|131|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|240|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|131|260385009^Negative^SCT||||||F
+OBX|241|TS|68963-8^Specimen Collection Date/Time^LN|131|20201129||||||F
+OBX|242|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|131|SC889597A6CESQ0||||||F
+OBX|243|CWE|82771-7^Type of labs that were used^LN|131|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|244|CWE|31208-2^This indicates the source of the specimen tested.^LN|132|119297000^Blood specimen^SCT||||||F
+OBX|245|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|132|94762-2^SARS coronavirus 2 Ab [Presence] in Serum or Plasma by Immunoassay^LN||||||F
+OBX|246|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|132|260385009^Negative^SCT||||||F
+OBX|247|TS|68963-8^Specimen Collection Date/Time^LN|132|20201128||||||F
+OBX|248|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|132|102886997||||||F
+OBX|249|CWE|82771-7^Type of labs that were used^LN|132|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|250|CWE|31208-2^This indicates the source of the specimen tested.^LN|133|119297000^Blood specimen^SCT||||||F
+OBX|251|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|133|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|252|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|133|260385009^Negative^SCT||||||F
+OBX|253|TS|68963-8^Specimen Collection Date/Time^LN|133|20201128||||||F
+OBX|254|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|133|102886947||||||F
+OBX|255|CWE|82771-7^Type of labs that were used^LN|133|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|256|CWE|31208-2^This indicates the source of the specimen tested.^LN|134|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|257|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|134|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|258|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|134|260385009^Negative^SCT||||||F
+OBX|259|TS|68963-8^Specimen Collection Date/Time^LN|134|20201016||||||F
+OBX|260|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|134|SC852298A6ByTpE||||||F
+OBX|261|CWE|82771-7^Type of labs that were used^LN|134|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|262|CWE|31208-2^This indicates the source of the specimen tested.^LN|135|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|263|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|135|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|264|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|135|260385009^Negative^SCT||||||F
+OBX|265|TS|68963-8^Specimen Collection Date/Time^LN|135|20201013||||||F
+OBX|266|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|135|SC848613A6BxRii||||||F
+OBX|267|CWE|82771-7^Type of labs that were used^LN|135|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|268|CWE|31208-2^This indicates the source of the specimen tested.^LN|136|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|269|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|136|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|270|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|136|260385009^Negative^SCT||||||F
+OBX|271|TS|68963-8^Specimen Collection Date/Time^LN|136|20201006||||||F
+OBX|272|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|136|SC841621A6BusPw||||||F
+OBX|273|CWE|82771-7^Type of labs that were used^LN|136|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|274|CWE|31208-2^This indicates the source of the specimen tested.^LN|14|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|275|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|14|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|276|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|14|260385009^Negative^SCT||||||F
+OBX|277|TS|68963-8^Specimen Collection Date/Time^LN|14|20210314||||||F
+OBX|278|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|14|980428672||||||F
+OBX|279|CWE|82771-7^Type of labs that were used^LN|14|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|280|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|141|413839001^Chronic lung disease (asthma/emphysema/COPD)^SCT||||||F
+OBX|281|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|142|73211009^Diabetes Mellitus^SCT||||||F
+OBX|282|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|143|38341003^Hypertension^SCT||||||F
+OBX|283|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|144|83911000119104^Severe obesity (BMI >= 40)^SCT||||||F
+OBX|284|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|145|49601007^Cardiovascular disease^SCT||||||F
+OBX|285|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|146|709044004^Chronic renal disease^SCT||||||F
+OBX|286|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|147|328383001^Chronic liver disease^SCT||||||F
+OBX|287|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|148|85828009^Autoimmune condition^SCT||||||F
+OBX|288|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|149|38013005^Immunosuppressive condition^SCT||||||F
+OBX|289|CWE|31208-2^This indicates the source of the specimen tested.^LN|15|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|290|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|15|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|291|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|15|260385009^Negative^SCT||||||F
+OBX|292|TS|68963-8^Specimen Collection Date/Time^LN|15|20210313||||||F
+OBX|293|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|15|980426737||||||F
+OBX|294|CWE|82771-7^Type of labs that were used^LN|15|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|295|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|150|21134002^Disability^SCT||||||F
+OBX|296|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|151|74732009^Psychological/psychiatric condition^SCT||||||F
+OBX|297|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|152|361055000^Substance abuse or misuse^SCT||||||F
+OBX|298|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|153|OTH^Other underlying condition/risk factors (specify)^NULLFL||||||F
+OBX|299|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|154|77176002^Current smoker^SCT||||||F
+OBX|300|CWE|INV1117^Patient Epidemiological Risk Factors^PHINQUESTION|155|8517006^Former smoker^SCT||||||F
+OBX|301|CWE|55753-8^Treatment Type^LN|157|40617009^Mechanical ventilation/intubation^SCT||||||F
+OBX|302|CWE|55753-8^Treatment Type^LN|159|233573008^ECMO^SCT||||||F
+OBX|303|CWE|31208-2^This indicates the source of the specimen tested.^LN|16|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|304|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|16|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|305|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|16|260385009^Negative^SCT||||||F
+OBX|306|TS|68963-8^Specimen Collection Date/Time^LN|16|20210313||||||F
+OBX|307|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|16|980423896||||||F
+OBX|308|CWE|82771-7^Type of labs that were used^LN|16|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|309|CWE|31208-2^This indicates the source of the specimen tested.^LN|17|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|310|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|17|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|311|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|17|260385009^Negative^SCT||||||F
+OBX|312|TS|68963-8^Specimen Collection Date/Time^LN|17|20210312||||||F
+OBX|313|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|17|980422817||||||F
+OBX|314|CWE|82771-7^Type of labs that were used^LN|17|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|315|CWE|31208-2^This indicates the source of the specimen tested.^LN|18|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|316|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|18|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|317|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|18|260385009^Negative^SCT||||||F
+OBX|318|TS|68963-8^Specimen Collection Date/Time^LN|18|20210311||||||F
+OBX|319|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|18|980420558||||||F
+OBX|320|CWE|82771-7^Type of labs that were used^LN|18|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|321|CWE|31208-2^This indicates the source of the specimen tested.^LN|19|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|322|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|19|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|323|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|19|260385009^Negative^SCT||||||F
+OBX|324|TS|68963-8^Specimen Collection Date/Time^LN|19|20210311||||||F
+OBX|325|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|19|980419287||||||F
+OBX|326|CWE|82771-7^Type of labs that were used^LN|19|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|327|CWE|75321-0^Clinical Finding^LN|2|233604007^Pneumonia^SCT||||||F
+OBX|328|CWE|31208-2^This indicates the source of the specimen tested.^LN|20|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|329|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|20|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|330|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|20|260385009^Negative^SCT||||||F
+OBX|331|TS|68963-8^Specimen Collection Date/Time^LN|20|20210310||||||F
+OBX|332|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|20|980417672||||||F
+OBX|333|CWE|82771-7^Type of labs that were used^LN|20|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|334|CWE|31208-2^This indicates the source of the specimen tested.^LN|21|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|335|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|21|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|336|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|21|260385009^Negative^SCT||||||F
+OBX|337|TS|68963-8^Specimen Collection Date/Time^LN|21|20210309||||||F
+OBX|338|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|21|980414539||||||F
+OBX|339|CWE|82771-7^Type of labs that were used^LN|21|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|340|CWE|31208-2^This indicates the source of the specimen tested.^LN|22|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|341|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|22|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|342|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|22|260385009^Negative^SCT||||||F
+OBX|343|TS|68963-8^Specimen Collection Date/Time^LN|22|20210308||||||F
+OBX|344|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|22|980412137||||||F
+OBX|345|CWE|82771-7^Type of labs that were used^LN|22|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|346|CWE|31208-2^This indicates the source of the specimen tested.^LN|23|119342007^Saliva specimen^SCT||||||F
+OBX|347|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|23|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|348|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|23|260385009^Negative^SCT||||||F
+OBX|349|TS|68963-8^Specimen Collection Date/Time^LN|23|20210306||||||F
+OBX|350|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|23|sd065601787989||||||F
+OBX|351|CWE|82771-7^Type of labs that were used^LN|23|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|352|CWE|31208-2^This indicates the source of the specimen tested.^LN|24|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|353|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|24|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|354|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|24|260385009^Negative^SCT||||||F
+OBX|355|TS|68963-8^Specimen Collection Date/Time^LN|24|20210307||||||F
+OBX|356|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|24|980409511||||||F
+OBX|357|CWE|82771-7^Type of labs that were used^LN|24|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|358|CWE|31208-2^This indicates the source of the specimen tested.^LN|25|119342007^Saliva specimen^SCT||||||F
+OBX|359|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|25|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|360|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|25|260385009^Negative^SCT||||||F
+OBX|361|TS|68963-8^Specimen Collection Date/Time^LN|25|20210305||||||F
+OBX|362|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|25|sd255794751634||||||F
+OBX|363|CWE|82771-7^Type of labs that were used^LN|25|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|364|CWE|31208-2^This indicates the source of the specimen tested.^LN|26|119342007^Saliva specimen^SCT||||||F
+OBX|365|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|26|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|366|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|26|260385009^Negative^SCT||||||F
+OBX|367|TS|68963-8^Specimen Collection Date/Time^LN|26|20210304||||||F
+OBX|368|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|26|sd065521945409||||||F
+OBX|369|CWE|82771-7^Type of labs that were used^LN|26|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|370|CWE|31208-2^This indicates the source of the specimen tested.^LN|27|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|371|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|27|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|372|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|27|260385009^Negative^SCT||||||F
+OBX|373|TS|68963-8^Specimen Collection Date/Time^LN|27|20210302||||||F
+OBX|374|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|27|947474273||||||F
+OBX|375|CWE|82771-7^Type of labs that were used^LN|27|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|376|CWE|31208-2^This indicates the source of the specimen tested.^LN|28|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|377|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|28|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|378|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|28|260385009^Negative^SCT||||||F
+OBX|379|TS|68963-8^Specimen Collection Date/Time^LN|28|20210303||||||F
+OBX|380|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|28|107135543||||||F
+OBX|381|CWE|82771-7^Type of labs that were used^LN|28|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|382|CWE|31208-2^This indicates the source of the specimen tested.^LN|29|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|383|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|29|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|384|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|29|260385009^Negative^SCT||||||F
+OBX|385|TS|68963-8^Specimen Collection Date/Time^LN|29|20210301||||||F
+OBX|386|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|29|947468269||||||F
+OBX|387|CWE|82771-7^Type of labs that were used^LN|29|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|388|CWE|75321-0^Clinical Finding^LN|3|168734001^Abnormal chest X-ray^SCT||||||F
+OBX|389|CWE|31208-2^This indicates the source of the specimen tested.^LN|30|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|390|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|30|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|391|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|30|260385009^Negative^SCT||||||F
+OBX|392|TS|68963-8^Specimen Collection Date/Time^LN|30|20210226||||||F
+OBX|393|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|30|947444589||||||F
+OBX|394|CWE|82771-7^Type of labs that were used^LN|30|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|395|CWE|31208-2^This indicates the source of the specimen tested.^LN|31|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|396|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|31|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|397|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|31|260385009^Negative^SCT||||||F
+OBX|398|TS|68963-8^Specimen Collection Date/Time^LN|31|20210228||||||F
+OBX|399|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|31|947462370||||||F
+OBX|400|CWE|82771-7^Type of labs that were used^LN|31|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|401|CWE|31208-2^This indicates the source of the specimen tested.^LN|32|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|402|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|32|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|403|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|32|260385009^Negative^SCT||||||F
+OBX|404|TS|68963-8^Specimen Collection Date/Time^LN|32|20210227||||||F
+OBX|405|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|32|947453635||||||F
+OBX|406|CWE|82771-7^Type of labs that were used^LN|32|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|407|CWE|31208-2^This indicates the source of the specimen tested.^LN|33|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|408|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|33|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|409|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|33|260385009^Negative^SCT||||||F
+OBX|410|TS|68963-8^Specimen Collection Date/Time^LN|33|20210225||||||F
+OBX|411|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|33|980382889||||||F
+OBX|412|CWE|82771-7^Type of labs that were used^LN|33|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|413|CWE|31208-2^This indicates the source of the specimen tested.^LN|34|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|414|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|34|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|415|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|34|260385009^Negative^SCT||||||F
+OBX|416|TS|68963-8^Specimen Collection Date/Time^LN|34|20210224||||||F
+OBX|417|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|34|980380447||||||F
+OBX|418|CWE|82771-7^Type of labs that were used^LN|34|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|419|CWE|31208-2^This indicates the source of the specimen tested.^LN|35|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|420|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|35|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|421|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|35|260385009^Negative^SCT||||||F
+OBX|422|TS|68963-8^Specimen Collection Date/Time^LN|35|20210223||||||F
+OBX|423|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|35|980378060||||||F
+OBX|424|CWE|82771-7^Type of labs that were used^LN|35|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|425|CWE|31208-2^This indicates the source of the specimen tested.^LN|36|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|426|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|36|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|427|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|36|260385009^Negative^SCT||||||F
+OBX|428|TS|68963-8^Specimen Collection Date/Time^LN|36|20210222||||||F
+OBX|429|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|36|980374878||||||F
+OBX|430|CWE|82771-7^Type of labs that were used^LN|36|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|431|CWE|31208-2^This indicates the source of the specimen tested.^LN|37|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|432|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|37|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|433|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|37|260385009^Negative^SCT||||||F
+OBX|434|TS|68963-8^Specimen Collection Date/Time^LN|37|20210220||||||F
+OBX|435|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|37|980370355||||||F
+OBX|436|CWE|82771-7^Type of labs that were used^LN|37|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|437|CWE|31208-2^This indicates the source of the specimen tested.^LN|38|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|438|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|38|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|439|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|38|260385009^Negative^SCT||||||F
+OBX|440|TS|68963-8^Specimen Collection Date/Time^LN|38|20210221||||||F
+OBX|441|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|38|980371810||||||F
+OBX|442|CWE|82771-7^Type of labs that were used^LN|38|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|443|CWE|31208-2^This indicates the source of the specimen tested.^LN|39|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|444|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|39|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|445|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|39|260385009^Negative^SCT||||||F
+OBX|446|TS|68963-8^Specimen Collection Date/Time^LN|39|20210219||||||F
+OBX|447|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|39|980367213||||||F
+OBX|448|CWE|82771-7^Type of labs that were used^LN|39|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|449|CWE|75321-0^Clinical Finding^LN|4|102594003^Abnormal EKG^SCT||||||F
+OBX|450|CWE|31208-2^This indicates the source of the specimen tested.^LN|40|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|451|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|40|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|452|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|40|260385009^Negative^SCT||||||F
+OBX|453|TS|68963-8^Specimen Collection Date/Time^LN|40|20210218||||||F
+OBX|454|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|40|980364844||||||F
+OBX|455|CWE|82771-7^Type of labs that were used^LN|40|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|456|CWE|31208-2^This indicates the source of the specimen tested.^LN|41|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|457|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|41|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|458|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|41|260385009^Negative^SCT||||||F
+OBX|459|TS|68963-8^Specimen Collection Date/Time^LN|41|20210217||||||F
+OBX|460|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|41|980362712||||||F
+OBX|461|CWE|82771-7^Type of labs that were used^LN|41|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|462|CWE|31208-2^This indicates the source of the specimen tested.^LN|42|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|463|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|42|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|464|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|42|260385009^Negative^SCT||||||F
+OBX|465|TS|68963-8^Specimen Collection Date/Time^LN|42|20210216||||||F
+OBX|466|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|42|980359953||||||F
+OBX|467|CWE|82771-7^Type of labs that were used^LN|42|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|468|CWE|31208-2^This indicates the source of the specimen tested.^LN|43|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|469|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|43|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|470|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|43|260385009^Negative^SCT||||||F
+OBX|471|TS|68963-8^Specimen Collection Date/Time^LN|43|20210215||||||F
+OBX|472|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|43|980358334||||||F
+OBX|473|CWE|82771-7^Type of labs that were used^LN|43|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|474|CWE|31208-2^This indicates the source of the specimen tested.^LN|44|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|475|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|44|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|476|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|44|260385009^Negative^SCT||||||F
+OBX|477|TS|68963-8^Specimen Collection Date/Time^LN|44|20210212||||||F
+OBX|478|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|44|980349813||||||F
+OBX|479|CWE|82771-7^Type of labs that were used^LN|44|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|480|CWE|31208-2^This indicates the source of the specimen tested.^LN|45|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|481|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|45|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|482|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|45|260385009^Negative^SCT||||||F
+OBX|483|TS|68963-8^Specimen Collection Date/Time^LN|45|20210214||||||F
+OBX|484|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|45|980354798||||||F
+OBX|485|CWE|82771-7^Type of labs that were used^LN|45|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|486|CWE|31208-2^This indicates the source of the specimen tested.^LN|46|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|487|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|46|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|488|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|46|260385009^Negative^SCT||||||F
+OBX|489|TS|68963-8^Specimen Collection Date/Time^LN|46|20210213||||||F
+OBX|490|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|46|980351808||||||F
+OBX|491|CWE|82771-7^Type of labs that were used^LN|46|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|492|CWE|31208-2^This indicates the source of the specimen tested.^LN|47|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|493|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|47|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|494|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|47|260385009^Negative^SCT||||||F
+OBX|495|TS|68963-8^Specimen Collection Date/Time^LN|47|20210211||||||F
+OBX|496|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|47|980345885||||||F
+OBX|497|CWE|82771-7^Type of labs that were used^LN|47|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|498|CWE|31208-2^This indicates the source of the specimen tested.^LN|48|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|499|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|48|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|500|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|48|260385009^Negative^SCT||||||F
+OBX|501|TS|68963-8^Specimen Collection Date/Time^LN|48|20210210||||||F
+OBX|502|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|48|980344497||||||F
+OBX|503|CWE|82771-7^Type of labs that were used^LN|48|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|504|CWE|31208-2^This indicates the source of the specimen tested.^LN|49|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|505|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|49|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|506|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|49|260385009^Negative^SCT||||||F
+OBX|507|TS|68963-8^Specimen Collection Date/Time^LN|49|20210209||||||F
+OBX|508|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|49|980340973||||||F
+OBX|509|CWE|82771-7^Type of labs that were used^LN|49|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|510|CWE|31208-2^This indicates the source of the specimen tested.^LN|5|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|511|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|5|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|512|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|5|260385009^Negative^SCT||||||F
+OBX|513|TS|68963-8^Specimen Collection Date/Time^LN|5|20210319||||||F
+OBX|514|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|5|947613654||||||F
+OBX|515|CWE|82771-7^Type of labs that were used^LN|5|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|516|CWE|31208-2^This indicates the source of the specimen tested.^LN|50|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|517|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|50|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|518|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|50|260385009^Negative^SCT||||||F
+OBX|519|TS|68963-8^Specimen Collection Date/Time^LN|50|20210208||||||F
+OBX|520|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|50|980339609||||||F
+OBX|521|CWE|82771-7^Type of labs that were used^LN|50|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|522|CWE|31208-2^This indicates the source of the specimen tested.^LN|51|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|523|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|51|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|524|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|51|260385009^Negative^SCT||||||F
+OBX|525|TS|68963-8^Specimen Collection Date/Time^LN|51|20210204||||||F
+OBX|526|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|51|947248554||||||F
+OBX|527|CWE|82771-7^Type of labs that were used^LN|51|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|528|CWE|31208-2^This indicates the source of the specimen tested.^LN|52|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|529|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|52|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|530|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|52|260385009^Negative^SCT||||||F
+OBX|531|TS|68963-8^Specimen Collection Date/Time^LN|52|20210205||||||F
+OBX|532|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|52|947259002||||||F
+OBX|533|CWE|82771-7^Type of labs that were used^LN|52|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|534|CWE|31208-2^This indicates the source of the specimen tested.^LN|53|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|535|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|53|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|536|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|53|260385009^Negative^SCT||||||F
+OBX|537|TS|68963-8^Specimen Collection Date/Time^LN|53|20210207||||||F
+OBX|538|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|53|947274518||||||F
+OBX|539|CWE|82771-7^Type of labs that were used^LN|53|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|540|CWE|31208-2^This indicates the source of the specimen tested.^LN|54|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|541|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|54|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|542|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|54|260385009^Negative^SCT||||||F
+OBX|543|TS|68963-8^Specimen Collection Date/Time^LN|54|20210206||||||F
+OBX|544|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|54|947269205||||||F
+OBX|545|CWE|82771-7^Type of labs that were used^LN|54|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|546|CWE|31208-2^This indicates the source of the specimen tested.^LN|55|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|547|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|55|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|548|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|55|260385009^Negative^SCT||||||F
+OBX|549|TS|68963-8^Specimen Collection Date/Time^LN|55|20210203||||||F
+OBX|550|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|55|980329427||||||F
+OBX|551|CWE|82771-7^Type of labs that were used^LN|55|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|552|CWE|31208-2^This indicates the source of the specimen tested.^LN|56|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|553|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|56|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|554|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|56|260385009^Negative^SCT||||||F
+OBX|555|TS|68963-8^Specimen Collection Date/Time^LN|56|20210202||||||F
+OBX|556|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|56|980326485||||||F
+OBX|557|CWE|82771-7^Type of labs that were used^LN|56|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|558|CWE|31208-2^This indicates the source of the specimen tested.^LN|57|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|559|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|57|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|560|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|57|260385009^Negative^SCT||||||F
+OBX|561|TS|68963-8^Specimen Collection Date/Time^LN|57|20210131||||||F
+OBX|562|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|57|980323177||||||F
+OBX|563|CWE|82771-7^Type of labs that were used^LN|57|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|564|CWE|31208-2^This indicates the source of the specimen tested.^LN|58|119297000^Blood specimen^SCT||||||F
+OBX|565|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|58|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|566|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|58|260385009^Negative^SCT||||||F
+OBX|567|TS|68963-8^Specimen Collection Date/Time^LN|58|20210129||||||F
+OBX|568|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|58|980320493||||||F
+OBX|569|CWE|82771-7^Type of labs that were used^LN|58|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|570|CWE|31208-2^This indicates the source of the specimen tested.^LN|59|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|571|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|59|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|572|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|59|10828004^Positive^SCT||||||F
+OBX|573|TS|68963-8^Specimen Collection Date/Time^LN|59|20210129||||||F
+OBX|574|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|59|980320493||||||F
+OBX|575|CWE|82771-7^Type of labs that were used^LN|59|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|576|CWE|31208-2^This indicates the source of the specimen tested.^LN|6|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|577|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|6|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|578|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|6|260385009^Negative^SCT||||||F
+OBX|579|TS|68963-8^Specimen Collection Date/Time^LN|6|20210321||||||F
+OBX|580|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|6|107850837||||||F
+OBX|581|CWE|82771-7^Type of labs that were used^LN|6|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|582|CWE|31208-2^This indicates the source of the specimen tested.^LN|60|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|583|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|60|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|584|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|60|260385009^Negative^SCT||||||F
+OBX|585|TS|68963-8^Specimen Collection Date/Time^LN|60|20210128||||||F
+OBX|586|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|60|980319747||||||F
+OBX|587|CWE|82771-7^Type of labs that were used^LN|60|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|588|CWE|31208-2^This indicates the source of the specimen tested.^LN|61|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|589|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|61|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|590|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|61|10828004^Positive^SCT||||||F
+OBX|591|TS|68963-8^Specimen Collection Date/Time^LN|61|20210128||||||F
+OBX|592|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|61|980318627||||||F
+OBX|593|CWE|82771-7^Type of labs that were used^LN|61|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|594|CWE|31208-2^This indicates the source of the specimen tested.^LN|62|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|595|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|62|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|596|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|62|260385009^Negative^SCT||||||F
+OBX|597|TS|68963-8^Specimen Collection Date/Time^LN|62|20210127||||||F
+OBX|598|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|62|980317517||||||F
+OBX|599|CWE|82771-7^Type of labs that were used^LN|62|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|600|CWE|31208-2^This indicates the source of the specimen tested.^LN|63|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|601|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|63|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|602|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|63|260385009^Negative^SCT||||||F
+OBX|603|TS|68963-8^Specimen Collection Date/Time^LN|63|20210126||||||F
+OBX|604|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|63|980315242||||||F
+OBX|605|CWE|82771-7^Type of labs that were used^LN|63|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|606|CWE|31208-2^This indicates the source of the specimen tested.^LN|64|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|607|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|64|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|608|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|64|260385009^Negative^SCT||||||F
+OBX|609|TS|68963-8^Specimen Collection Date/Time^LN|64|20210124||||||F
+OBX|610|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|64|980311121||||||F
+OBX|611|CWE|82771-7^Type of labs that were used^LN|64|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|612|CWE|31208-2^This indicates the source of the specimen tested.^LN|65|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|613|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|65|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|614|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|65|260385009^Negative^SCT||||||F
+OBX|615|TS|68963-8^Specimen Collection Date/Time^LN|65|20210122||||||F
+OBX|616|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|65|980307112||||||F
+OBX|617|CWE|82771-7^Type of labs that were used^LN|65|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|618|CWE|31208-2^This indicates the source of the specimen tested.^LN|66|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|619|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|66|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|620|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|66|260385009^Negative^SCT||||||F
+OBX|621|TS|68963-8^Specimen Collection Date/Time^LN|66|20210122||||||F
+OBX|622|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|66|980306467||||||F
+OBX|623|CWE|82771-7^Type of labs that were used^LN|66|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|624|CWE|31208-2^This indicates the source of the specimen tested.^LN|67|445297001^Swab of internal nose^SCT||||||F
+OBX|625|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|67|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|626|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|67|10828004^Positive^SCT||||||F
+OBX|627|TS|68963-8^Specimen Collection Date/Time^LN|67|20210121||||||F
+OBX|628|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|67|SC939875A6CXePg||||||F
+OBX|629|CWE|82771-7^Type of labs that were used^LN|67|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|630|CWE|31208-2^This indicates the source of the specimen tested.^LN|68|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|631|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|68|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|632|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|68|10828004^Positive^SCT||||||F
+OBX|633|TS|68963-8^Specimen Collection Date/Time^LN|68|20210119||||||F
+OBX|634|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|68|980299229||||||F
+OBX|635|CWE|82771-7^Type of labs that were used^LN|68|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|636|CWE|31208-2^This indicates the source of the specimen tested.^LN|69|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|637|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|69|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|638|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|69|260385009^Negative^SCT||||||F
+OBX|639|TS|68963-8^Specimen Collection Date/Time^LN|69|20210117||||||F
+OBX|640|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|69|980294584||||||F
+OBX|641|CWE|82771-7^Type of labs that were used^LN|69|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|642|CWE|31208-2^This indicates the source of the specimen tested.^LN|7|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|643|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|7|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|644|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|7|260385009^Negative^SCT||||||F
+OBX|645|TS|68963-8^Specimen Collection Date/Time^LN|7|20210320||||||F
+OBX|646|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|7|107837006||||||F
+OBX|647|CWE|82771-7^Type of labs that were used^LN|7|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|648|CWE|31208-2^This indicates the source of the specimen tested.^LN|70|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|649|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|70|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|650|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|70|260385009^Negative^SCT||||||F
+OBX|651|TS|68963-8^Specimen Collection Date/Time^LN|70|20210118||||||F
+OBX|652|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|70|980297102||||||F
+OBX|653|CWE|82771-7^Type of labs that were used^LN|70|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|654|CWE|31208-2^This indicates the source of the specimen tested.^LN|71|445297001^Swab of internal nose^SCT||||||F
+OBX|655|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|71|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|656|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|71|10828004^Positive^SCT||||||F
+OBX|657|TS|68963-8^Specimen Collection Date/Time^LN|71|20210105||||||F
+OBX|658|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|71|104607390||||||F
+OBX|659|CWE|82771-7^Type of labs that were used^LN|71|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|660|CWE|31208-2^This indicates the source of the specimen tested.^LN|72|119297000^Blood specimen^SCT||||||F
+OBX|661|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|72|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|662|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|72|260385009^Negative^SCT||||||F
+OBX|663|TS|68963-8^Specimen Collection Date/Time^LN|72|20210104||||||F
+OBX|664|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|72|946977551||||||F
+OBX|665|CWE|82771-7^Type of labs that were used^LN|72|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|666|CWE|31208-2^This indicates the source of the specimen tested.^LN|73|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|667|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|73|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|668|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|73|10828004^Positive^SCT||||||F
+OBX|669|TS|68963-8^Specimen Collection Date/Time^LN|73|20210104||||||F
+OBX|670|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|73|946977551||||||F
+OBX|671|CWE|82771-7^Type of labs that were used^LN|73|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|672|CWE|31208-2^This indicates the source of the specimen tested.^LN|74|445297001^Swab of internal nose^SCT||||||F
+OBX|673|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|74|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|674|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|74|260385009^Negative^SCT||||||F
+OBX|675|TS|68963-8^Specimen Collection Date/Time^LN|74|20210104||||||F
+OBX|676|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|74|946981646||||||F
+OBX|677|CWE|82771-7^Type of labs that were used^LN|74|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|678|CWE|31208-2^This indicates the source of the specimen tested.^LN|75|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|679|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|75|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|680|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|75|260385009^Negative^SCT||||||F
+OBX|681|TS|68963-8^Specimen Collection Date/Time^LN|75|20210102||||||F
+OBX|682|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|75|980260757||||||F
+OBX|683|CWE|82771-7^Type of labs that were used^LN|75|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|684|CWE|31208-2^This indicates the source of the specimen tested.^LN|76|445297001^Swab of internal nose^SCT||||||F
+OBX|685|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|76|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|686|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|76|260385009^Negative^SCT||||||F
+OBX|687|TS|68963-8^Specimen Collection Date/Time^LN|76|20210102||||||F
+OBX|688|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|76|980260755||||||F
+OBX|689|CWE|82771-7^Type of labs that were used^LN|76|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|690|CWE|31208-2^This indicates the source of the specimen tested.^LN|77|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|691|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|77|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|692|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|77|260385009^Negative^SCT||||||F
+OBX|693|TS|68963-8^Specimen Collection Date/Time^LN|77|20210101||||||F
+OBX|694|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|77|980258867||||||F
+OBX|695|CWE|82771-7^Type of labs that were used^LN|77|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|696|CWE|31208-2^This indicates the source of the specimen tested.^LN|78|445297001^Swab of internal nose^SCT||||||F
+OBX|697|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|78|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|698|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|78|260385009^Negative^SCT||||||F
+OBX|699|TS|68963-8^Specimen Collection Date/Time^LN|78|20210103||||||F
+OBX|700|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|78|946975664||||||F
+OBX|701|CWE|82771-7^Type of labs that were used^LN|78|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|702|CWE|31208-2^This indicates the source of the specimen tested.^LN|79|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|703|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|79|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|704|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|79|260385009^Negative^SCT||||||F
+OBX|705|TS|68963-8^Specimen Collection Date/Time^LN|79|20201231||||||F
+OBX|706|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|79|980255309||||||F
+OBX|707|CWE|82771-7^Type of labs that were used^LN|79|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|708|CWE|31208-2^This indicates the source of the specimen tested.^LN|8|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|709|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|8|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|710|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|8|260385009^Negative^SCT||||||F
+OBX|711|TS|68963-8^Specimen Collection Date/Time^LN|8|20210320||||||F
+OBX|712|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|8|107829681||||||F
+OBX|713|CWE|82771-7^Type of labs that were used^LN|8|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|714|CWE|31208-2^This indicates the source of the specimen tested.^LN|80|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|715|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|80|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|716|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|80|260385009^Negative^SCT||||||F
+OBX|717|TS|68963-8^Specimen Collection Date/Time^LN|80|20210103||||||F
+OBX|718|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|80|946974357||||||F
+OBX|719|CWE|82771-7^Type of labs that were used^LN|80|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|720|CWE|31208-2^This indicates the source of the specimen tested.^LN|81|445297001^Swab of internal nose^SCT||||||F
+OBX|721|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|81|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|722|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|81|260385009^Negative^SCT||||||F
+OBX|723|TS|68963-8^Specimen Collection Date/Time^LN|81|20201212||||||F
+OBX|724|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|81|103560138||||||F
+OBX|725|CWE|82771-7^Type of labs that were used^LN|81|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|726|CWE|31208-2^This indicates the source of the specimen tested.^LN|82|445297001^Swab of internal nose^SCT||||||F
+OBX|727|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|82|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|728|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|82|260385009^Negative^SCT||||||F
+OBX|729|TS|68963-8^Specimen Collection Date/Time^LN|82|20201231||||||F
+OBX|730|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|82|980256467||||||F
+OBX|731|CWE|82771-7^Type of labs that were used^LN|82|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|732|CWE|31208-2^This indicates the source of the specimen tested.^LN|83|445297001^Swab of internal nose^SCT||||||F
+OBX|733|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|83|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|734|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|83|260385009^Negative^SCT||||||F
+OBX|735|TS|68963-8^Specimen Collection Date/Time^LN|83|20201230||||||F
+OBX|736|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|83|980254358||||||F
+OBX|737|CWE|82771-7^Type of labs that were used^LN|83|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|738|CWE|31208-2^This indicates the source of the specimen tested.^LN|84|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|739|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|84|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|740|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|84|260385009^Negative^SCT||||||F
+OBX|741|TS|68963-8^Specimen Collection Date/Time^LN|84|20201230||||||F
+OBX|742|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|84|980253429||||||F
+OBX|743|CWE|82771-7^Type of labs that were used^LN|84|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|744|CWE|31208-2^This indicates the source of the specimen tested.^LN|85|445297001^Swab of internal nose^SCT||||||F
+OBX|745|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|85|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|746|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|85|260385009^Negative^SCT||||||F
+OBX|747|TS|68963-8^Specimen Collection Date/Time^LN|85|20201229||||||F
+OBX|748|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|85|980251852||||||F
+OBX|749|CWE|82771-7^Type of labs that were used^LN|85|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|750|CWE|31208-2^This indicates the source of the specimen tested.^LN|86|119297000^Blood specimen^SCT||||||F
+OBX|751|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|86|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|752|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|86|260385009^Negative^SCT||||||F
+OBX|753|TS|68963-8^Specimen Collection Date/Time^LN|86|20201229||||||F
+OBX|754|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|86|980250644||||||F
+OBX|755|CWE|82771-7^Type of labs that were used^LN|86|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|756|CWE|31208-2^This indicates the source of the specimen tested.^LN|87|445297001^Swab of internal nose^SCT||||||F
+OBX|757|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|87|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|758|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|87|260385009^Negative^SCT||||||F
+OBX|759|TS|68963-8^Specimen Collection Date/Time^LN|87|20201228||||||F
+OBX|760|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|87|946928497||||||F
+OBX|761|CWE|82771-7^Type of labs that were used^LN|87|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|762|CWE|31208-2^This indicates the source of the specimen tested.^LN|88|119297000^Blood specimen^SCT||||||F
+OBX|763|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|88|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|764|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|88|260385009^Negative^SCT||||||F
+OBX|765|TS|68963-8^Specimen Collection Date/Time^LN|88|20201228||||||F
+OBX|766|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|88|946923390||||||F
+OBX|767|CWE|82771-7^Type of labs that were used^LN|88|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|768|CWE|31208-2^This indicates the source of the specimen tested.^LN|89|445297001^Swab of internal nose^SCT||||||F
+OBX|769|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|89|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|770|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|89|260385009^Negative^SCT||||||F
+OBX|771|TS|68963-8^Specimen Collection Date/Time^LN|89|20201227||||||F
+OBX|772|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|89|980246348||||||F
+OBX|773|CWE|82771-7^Type of labs that were used^LN|89|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|774|CWE|31208-2^This indicates the source of the specimen tested.^LN|9|258500001^Nasopharyngeal swab^SCT||||||F
+OBX|775|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|9|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|776|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|9|260385009^Negative^SCT||||||F
+OBX|777|TS|68963-8^Specimen Collection Date/Time^LN|9|20210319||||||F
+OBX|778|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|9|107760068||||||F
+OBX|779|CWE|82771-7^Type of labs that were used^LN|9|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|780|CWE|31208-2^This indicates the source of the specimen tested.^LN|90|119297000^Blood specimen^SCT||||||F
+OBX|781|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|90|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|782|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|90|260385009^Negative^SCT||||||F
+OBX|783|TS|68963-8^Specimen Collection Date/Time^LN|90|20201226||||||F
+OBX|784|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|90|980245424||||||F
+OBX|785|CWE|82771-7^Type of labs that were used^LN|90|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|786|CWE|31208-2^This indicates the source of the specimen tested.^LN|91|445297001^Swab of internal nose^SCT||||||F
+OBX|787|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|91|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|788|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|91|260385009^Negative^SCT||||||F
+OBX|789|TS|68963-8^Specimen Collection Date/Time^LN|91|20201226||||||F
+OBX|790|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|91|980243659||||||F
+OBX|791|CWE|82771-7^Type of labs that were used^LN|91|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|792|CWE|31208-2^This indicates the source of the specimen tested.^LN|92|119297000^Blood specimen^SCT||||||F
+OBX|793|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|92|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|794|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|92|260385009^Negative^SCT||||||F
+OBX|795|TS|68963-8^Specimen Collection Date/Time^LN|92|20201226||||||F
+OBX|796|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|92|980243652||||||F
+OBX|797|CWE|82771-7^Type of labs that were used^LN|92|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|798|CWE|31208-2^This indicates the source of the specimen tested.^LN|93|119297000^Blood specimen^SCT||||||F
+OBX|799|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|93|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|800|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|93|260385009^Negative^SCT||||||F
+OBX|801|TS|68963-8^Specimen Collection Date/Time^LN|93|20201225||||||F
+OBX|802|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|93|980241156||||||F
+OBX|803|CWE|82771-7^Type of labs that were used^LN|93|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|804|CWE|31208-2^This indicates the source of the specimen tested.^LN|94|445297001^Swab of internal nose^SCT||||||F
+OBX|805|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|94|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|806|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|94|260385009^Negative^SCT||||||F
+OBX|807|TS|68963-8^Specimen Collection Date/Time^LN|94|20201224||||||F
+OBX|808|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|94|980238505||||||F
+OBX|809|CWE|82771-7^Type of labs that were used^LN|94|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|810|CWE|31208-2^This indicates the source of the specimen tested.^LN|95|119297000^Blood specimen^SCT||||||F
+OBX|811|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|95|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|812|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|95|260385009^Negative^SCT||||||F
+OBX|813|TS|68963-8^Specimen Collection Date/Time^LN|95|20201224||||||F
+OBX|814|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|95|980236817||||||F
+OBX|815|CWE|82771-7^Type of labs that were used^LN|95|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|816|CWE|31208-2^This indicates the source of the specimen tested.^LN|96|445297001^Swab of internal nose^SCT||||||F
+OBX|817|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|96|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|818|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|96|260385009^Negative^SCT||||||F
+OBX|819|TS|68963-8^Specimen Collection Date/Time^LN|96|20201223||||||F
+OBX|820|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|96|980235785||||||F
+OBX|821|CWE|82771-7^Type of labs that were used^LN|96|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|822|CWE|31208-2^This indicates the source of the specimen tested.^LN|97|119297000^Blood specimen^SCT||||||F
+OBX|823|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|97|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|824|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|97|260385009^Negative^SCT||||||F
+OBX|825|TS|68963-8^Specimen Collection Date/Time^LN|97|20201223||||||F
+OBX|826|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|97|980234317||||||F
+OBX|827|CWE|82771-7^Type of labs that were used^LN|97|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|828|CWE|31208-2^This indicates the source of the specimen tested.^LN|98|445297001^Swab of internal nose^SCT||||||F
+OBX|829|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|98|95409-9^SARS-CoV-2 (COVID-19) N gene [Presence] in Nose by NAA with probe detection^LN||||||F
+OBX|830|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|98|260385009^Negative^SCT||||||F
+OBX|831|TS|68963-8^Specimen Collection Date/Time^LN|98|20201222||||||F
+OBX|832|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|98|980232922||||||F
+OBX|833|CWE|82771-7^Type of labs that were used^LN|98|PHC645^Commercial Laboratory^CDCPHINVS||||||F
+OBX|834|CWE|31208-2^This indicates the source of the specimen tested.^LN|99|119297000^Blood specimen^SCT||||||F
+OBX|835|CWE|INV290^Epidemiologic interpretation of the type of test(s) performed for this case^PHINQUESTION|99|94640-0^SARS coronavirus 2 S gene [Presence] in Respiratory specimen by NAA with probe detection^LN||||||F
+OBX|836|CWE|INV291^Epidemiologic interpretation of the results of the test(s) performed for this case. This is a qualitative test result.  (e.g. positive, detected, negative)^PHINQUESTION|99|260385009^Negative^SCT||||||F
+OBX|837|TS|68963-8^Specimen Collection Date/Time^LN|99|20201222||||||F
+OBX|838|ST|LAB202^Performing Laboratory Specimen ID^PHINQUESTION|99|980231741||||||F
+OBX|839|CWE|82771-7^Type of labs that were used^LN|99|PHC645^Commercial Laboratory^CDCPHINVS||||||F
