@@ -1,4 +1,7 @@
+import com.google.gson.GsonBuilder
 import gov.cdc.dex.hl7.FunctionConfig
+import gov.cdc.dex.util.JsonHelper
+import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.bumblebee.HL7JsonTransformer
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
@@ -36,5 +39,16 @@ class HL7TransformerTest {
         assertTrue(jsonObject.toString().contains("mood_code"))
         assertTrue(jsonObject.toString().contains("performing_organization_name"))
         assertTrue(jsonObject.toString().contains("Performing Organization Address1"))
+    }
+
+    @Test
+    fun testBuildJsonNoNulls() {
+        val text = this::class.java.getResource("bigmessage.txt").readText()
+        val bumblebee = HL7JsonTransformer.getTransformerWithResource(text, FunctionConfig.PROFILE_FILE_PATH)
+        val jsonObject = bumblebee.transformMessage()
+        val gsonNoNulls = GsonBuilder().create()
+        val jsonNoNulls = gsonNoNulls.toJsonTree(jsonObject).asJsonObject
+        print(jsonNoNulls)
+
     }
 }
