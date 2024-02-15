@@ -6,16 +6,14 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
-
 import gov.cdc.dex.hl7.model.Segment
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
-import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-import java.util.*
 import org.slf4j.LoggerFactory
+import java.util.*
 import java.util.Base64.*
 
 /**
@@ -130,7 +128,7 @@ class Function {
         processMD.endProcessTime = Date().toIsoString()
 
         val metadata =  JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
-        metadata.addArrayElement("processes", processMD)
+        metadata.add("stage", processMD.toJsonElement())
 
         if (exception != null) {
             //TODO::  - update retry counts
