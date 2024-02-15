@@ -8,7 +8,6 @@ import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
-import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.bumblebee.HL7JsonTransformer
 import org.slf4j.LoggerFactory
@@ -124,7 +123,7 @@ class Function {
         val processMD = HL7JSONLakeProcessMetadata(status = status, output = report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
-        metadata.addArrayElement("processes", processMD)
+        metadata.add("stage", processMD.toJsonElement())
 
         if (exception != null) {
             //TODO::  - update retry counts

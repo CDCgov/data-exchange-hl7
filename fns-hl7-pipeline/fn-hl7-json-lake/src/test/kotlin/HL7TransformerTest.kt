@@ -1,7 +1,5 @@
 import com.google.gson.GsonBuilder
 import gov.cdc.dex.hl7.FunctionConfig
-import gov.cdc.dex.util.JsonHelper
-import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.bumblebee.HL7JsonTransformer
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
