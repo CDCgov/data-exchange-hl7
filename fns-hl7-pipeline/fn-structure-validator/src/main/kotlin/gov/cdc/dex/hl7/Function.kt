@@ -1,20 +1,19 @@
 package gov.cdc.dex.hl7
 
+import com.azure.messaging.eventhubs.*
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
-import com.azure.messaging.eventhubs.*
 import gov.cdc.dex.azure.EventHubMetadata
+import gov.cdc.dex.hl7.model.StructureValidatorProcessMetadata
 import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
-import gov.cdc.dex.hl7.model.StructureValidatorProcessMetadata
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
-import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
@@ -86,7 +85,7 @@ class ValidatorFunction {
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
 
-                    metadata.addArrayElement("processes", processMD)
+                    metadata.add("stage", processMD.toJsonElement())
                     //Update Summary element.
                     val summary = SummaryInfo(report.status ?: "Unknown")
                     if (NIST_VALID_MESSAGE != report.status) {
@@ -112,7 +111,7 @@ class ValidatorFunction {
                     )
                     processMD.startProcessTime = startTime
                     processMD.endProcessTime = Date().toIsoString()
-                    metadata.addArrayElement("processes", processMD)
+                    metadata.add("stage", processMD.toJsonElement())
                     val problem = Problem(StructureValidatorProcessMetadata.VALIDATOR_PROCESS, "Error: ${e.message}")
                     val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
 
