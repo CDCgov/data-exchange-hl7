@@ -105,17 +105,12 @@ class ReportFunction {
             "UNKNOWN"
         } else { eventTypeJson.asString }
 
-        // Extract the last process from the processes array
-        val processes = extractValueFromPath(content, "metadata.processes")
+        // Extract the current stage
+        val stage = extractValueFromPath(content, "metadata.stage")?.asJsonObject
 
-       val stageName = if (!(processes == null || processes.isJsonNull)) {
-            if (processes.asJsonArray.size() > 0) {
-                val lastProcess = processes.asJsonArray.last().asJsonObject
-                lastProcess.remove("output")
-                lastProcess.get("process_name").asString
-            } else {
-                "Unknown Stage"
-            }
+       val stageName = if (!(stage == null || stage.isJsonNull)) {
+            stage.remove("output")
+            stage.get("process_name").asString
         } else {
             "Unknown Stage"
         }
