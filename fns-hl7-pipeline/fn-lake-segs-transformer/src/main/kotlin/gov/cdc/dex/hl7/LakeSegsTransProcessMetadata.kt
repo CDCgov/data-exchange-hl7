@@ -1,12 +1,11 @@
 package gov.cdc.dex.hl7
 
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.metadata.ProcessMetadata
-
 import gov.cdc.dex.hl7.model.Segment
+import gov.cdc.dex.metadata.StageMetadata
 
 data class LakeSegsTransProcessMetadata (override val status: String, val output: List<Segment>?, @Transient val eventHubMD: EventHubMetadata, @Transient val config : List<String>) //
-    : ProcessMetadata(PROCESS_NAME, PROCESS_VERSION,status,eventHubMD,config) {
+    : StageMetadata(PROCESS_NAME, PROCESS_VERSION,status,eventHubMD,config) {
 
         companion object  {
             const val PROCESS_NAME = "LAKE-SEGMENTS-TRANSFORMER"
