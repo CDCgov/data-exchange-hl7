@@ -85,10 +85,10 @@ class Function {
                         )
                         processMD.startProcessTime = startTime
                         processMD.endProcessTime = Date().toIsoString()
-                        logger.info("Process MD: ${processMD} ")
+                        logger.info("Process MD: $processMD ")
 
 
-                        metadata.addArrayElement("processes", processMD)
+                        metadata.add("stage", processMD.toJsonElement())
                         val newContentBase64 =
                             Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
                         inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))

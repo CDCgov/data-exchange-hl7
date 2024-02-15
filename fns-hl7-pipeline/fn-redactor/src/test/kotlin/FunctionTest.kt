@@ -8,6 +8,7 @@ import gov.cdc.dex.hl7.model.RedactorReport
 import gov.cdc.dex.metadata.DexMetadata
 import gov.cdc.dex.metadata.Provenance
 import gov.cdc.dex.util.JsonHelper.addArrayElement
+import gov.cdc.dex.util.JsonHelper.toJsonElement
 import org.junit.jupiter.api.Test
 
 class FunctionTest {
@@ -88,12 +89,12 @@ class FunctionTest {
             println(processMD)
 
             val prov = Provenance("event1", "123", "123", "test", "123", 123, "single", "a", "b", "c', 1", 1, "123")
-            val md = DexMetadata(prov, listOf())
+            val md = DexMetadata(prov, processMD)
 
             val mdJsonStr = gson.toJson(md)
 
             val mdJson = JsonParser.parseString(mdJsonStr) as JsonObject
-            mdJson.addArrayElement("processes", processMD)
+            mdJson.add("stage", processMD.toJsonElement())
             mdJson.addProperty("test", "test")
 
             println("MD: $mdJson")
