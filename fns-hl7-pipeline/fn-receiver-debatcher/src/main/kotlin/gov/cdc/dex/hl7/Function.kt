@@ -392,7 +392,7 @@ class Function {
             summary = SummaryInfo("REJECTED")
             summary.problem = Problem(ReceiverProcessMetadata.RECEIVER_PROCESS, null, null, errorMessage, false, 0, 0)
         }
-        return DexMetadata(provenance, listOf(processMD)) to summary
+        return DexMetadata(provenance, processMD) to summary
     }
 
     private fun buildMetadata2(
@@ -440,9 +440,6 @@ class Function {
     ): DexEventPayload {
 
         return DexEventPayload(
-            //      uploadID = uploadID,
-            //       destinationID = metaDataMap["meta_destination_id"],
-            //       destinationEvent = metaDataMap["meta_ext_event"],
             messageInfo = messageInfo,
             metadata = metadata,
             summary = summary,
@@ -506,7 +503,7 @@ class Function {
                 .createResponseBuilder(HttpStatus.OK)
                 .header("Content-Type", "application/json")
                 .body("UP")
-                .build();
+                .build()
     }
 
     @FunctionName("receiverdebatcher002")

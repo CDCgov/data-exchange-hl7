@@ -36,9 +36,8 @@ class Function {
             if (!message.isNullOrEmpty()) {
                 try {
                     val mappedMessage = JsonParser.parseString(message).asJsonObject
-                    val processes = JsonHelper.getValueFromJson("metadata.processes", mappedMessage).asJsonArray
-                    val lastProcess = processes.last().asJsonObject
-                    val processName = JsonHelper.getValueFromJson("process_name", lastProcess).asString
+                    val stage = JsonHelper.getValueFromJson("metadata.stage", mappedMessage).asJsonObject
+                    val processName = JsonHelper.getValueFromJson("process_name", stage).asString
                     val messageUuid = mappedMessage["message_uuid"].asString
                     val summaryInfo = mappedMessage["summary"].asJsonObject
                     val currentStatus = summaryInfo["current_status"].asString

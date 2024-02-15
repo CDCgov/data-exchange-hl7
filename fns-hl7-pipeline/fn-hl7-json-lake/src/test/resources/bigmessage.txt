@@ -5,11 +5,11 @@ OBX|1|CWE|309904001^Hospital ICU^SCT||N^No^HL70136||||||F
 OBX|2|ST|94659-0^CDC 2019-nCoV ID^LN||UT20201611471||||||F
 OBX|3|DT|95366-1^First Positive Specimen Date^LN||20210104||||||F
 OBX|4|CWE|95369-5^Tribal Affiliation^LN||N^No^HL70136||||||F
-OBX|5|ST|77969-4^Jurisdiction Code^LN||42|||AA|||F
-OBX|6|DT|77995-9^Date Reported^LN||20201008|||BB~CC|||F
+OBX|5|ST|77969-4^Jurisdiction Code^LN||42||||||F
+OBX|6|DT|77995-9^Date Reported^LN||20201008||||||F
 OBX|7|TS|77972-8^Earliest Date Reported to County^LN||20201008||||||F
 OBX|8|TS|77973-6^Earliest Date Reported to State^LN||20201008||||||F
-OBX|9|CWE|77974-4^Hospitalized^LN||||||||F
+OBX|9|CWE|77974-4^Hospitalized^LN||N^No^HL70136||||||F
 OBX|10|TS|77975-1^Diagnosis Date^LN||20210106||||||F
 OBX|11|CWE|77978-5^Subject Died^LN||N^No^HL70136||||||F
 OBX|12|DT|77979-3^Case Investigation Start Date^LN||20210106||||||F
