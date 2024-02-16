@@ -1,10 +1,13 @@
 package gov.cdc.dex.hl7
 
+import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.OutputBinding
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.DexEventPayload
 import gov.cdc.dex.metadata.HL7MessageType
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.parallel.Execution
+import java.util.logging.Logger
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -14,11 +17,9 @@ class FunctionTest {
     private fun processFile(filename: String): DexEventPayload? {
         println("Start processing $filename ")
         val text = this::class.java.getResource("/$filename").readText()
-        val messages = listOf(text)
-        val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
 
         val function = Function()
-        return function.eventHubProcessor(messages, eventHubMDList)
+        return function.processEventGrid(text, getExecutionContext())
     }
 
     @Test
@@ -73,6 +74,21 @@ class FunctionTest {
 
             override fun setValue(p0:T?) {
                 inner = p0
+            }
+        }
+    }
+    private fun getExecutionContext():ExecutionContext {
+        return object :ExecutionContext {
+            override fun getLogger(): Logger {
+                return Logger.getLogger(Function:: class.java.name)
+            }
+
+            override fun getInvocationId():String {
+                return "null"
+            }
+
+            override fun getFunctionName():String {
+                return "HL7_JSON_LAKE_TRANSFORMER"
             }
         }
     }
