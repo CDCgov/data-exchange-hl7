@@ -7,6 +7,7 @@ import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
+import gov.cdc.dex.util.EventSizeExceededException
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.bumblebee.HL7JsonTransformer
@@ -104,13 +105,52 @@ class Function {
         }
 
         try {
-            fnConfig.evHubSender.send(outList)
+            val errors = fnConfig.evHubSender.send(outList)
+            for (i in errors) {
+                val failedMessage = JsonParser.parseString(outList[i]).asJsonObject
+                resendEventWithoutOutput(failedMessage)
+            }
+            logger.info("Send to event hub completed")
         } catch (e: Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
         return returnValue
     }
 
+    private fun resendEventWithoutOutput(message: JsonObject) {
+        val stage = JsonHelper.getValueFromJson("metadata.stage", message).asJsonObject
+        // remove output to reduce size
+        stage.remove("output")
+        // change stage status to Error
+        stage.addProperty("status", PROCESS_STATUS_EXCEPTION)
+        // change summary status to Error
+        val summary = message["summary"].asJsonObject
+        summary.addProperty("current_status", SUMMARY_STATUS_ERROR)
+        // add problem description
+        val msgId = message["message_uuid"].asString
+        val uploadId = JsonHelper.getValueFromJson("routing_metadata.upload_id", message).asString
+        val description = "DELIVERY FAILED: Message too large. Message UUID $msgId, Upload ID $uploadId"
+        summary.add(
+            "problem",
+            Problem(processName = HL7JSONLakeProcessMetadata.PROCESS_NAME,
+                errorMessage = description).toJsonElement()
+        )
+        logger.error(description)
+        logger.info("Retrying send without output for message UUID $msgId")
+        val msg = gsonWithNullsOn.toJson(message)
+        try {
+            val errors = fnConfig.evHubSender.send(msg)
+            if (errors.isEmpty()) {
+                logger.info("Second attempt successful for message UUID $msgId")
+            } else {
+                // not much else we can do
+                logger.error("SECOND ATTEMPT FAILED for message UUID $msgId. Message still too large.")
+            }
+        } catch (e: Exception) {
+            logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
+        }
+
+    }
 
     private fun updateMetadataAndDeliver(
         startTime: String, metadata: JsonObject, status: String,
