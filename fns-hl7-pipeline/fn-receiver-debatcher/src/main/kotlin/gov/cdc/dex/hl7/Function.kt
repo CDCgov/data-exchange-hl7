@@ -507,7 +507,7 @@ class Function {
     }
 
     @FunctionName("receiverdebatcher002")
-    fun recdeb(@EventGridTrigger(name = "eventGridEvent") events: Array<Map<String,Any>>,
+    fun recdeb(@EventGridTrigger(name = "eventGridEvent") messageEvent:String?,
            //@BindingName("SystemPropertiesArray") eventGridMD: EventGridMetadata,
 
             context: ExecutionContext)  {
@@ -515,22 +515,25 @@ class Function {
         logger.info("DEX::Received BLOB_CREATED event!")
         var msgEvent: DexEventPayload2? = null
         val eventReportList = mutableListOf<String>()
-        context.logger.info("payload recdeb002:$events")
+        context.logger.info("payload recdeb002:$messageEvent")
        // val eventmsg =  gson.fromJson(event, Array<AzBlobCreateEventMessage2>::class.java)
        // context.logger.info("payload recdeb002:$eventmsg")
 
        // val eventsArray: JSONArray? =  gson.fromJson(events.toString(), JSONArray::class.java)
        // if (eventsArray != null) {
-            for ((eventIndex, eventMessage) in events.withIndex()) {
-                if (!eventMessage.isNullOrEmpty()) {
-                    val eventArr = try {
-                        gson.fromJson(gson.toJson(eventMessage), AzBlobCreateEventMessage2::class.java)
+            //for ((eventIndex, eventMessage) in events.withIndex()) {
+                //if (!eventMessage.isNullOrEmpty()) {
+                   /* val event = try {
+                        gson.fromJson(messageEvent, AzBlobCreateEventMessage2::class.java)
                     } catch (e: Exception) {
                         logger.error("ERROR : Unable to read event received: ${e.message}")
-                        continue
-                    }
-                    context.logger.info("payload recdeb002:$eventArr[0]")
-                    val event = eventArr
+                       // continue
+                    }*/
+                  //  context.logger.info("payload recdeb002:$eventArr[0]")
+               try {
+                      val event = gson.fromJson(messageEvent, AzBlobCreateEventMessage2::class.java)
+
+                   // val event = eventArr
                     val startTime = Date().toIsoString()
 
                     // Pick up blob metadata
@@ -544,28 +547,9 @@ class Function {
                     // Create blob reader
                     logger.info("DEX::Reading blob: $blobName")
                     val blobClient = fnConfig.azBlobProxy.getBlobClient(blobName)
-                    /*} catch (e: Exception) {
-                        logger.error("ERROR : Unable to create blob client for $blobName: ${e.message}")
-                        addErrorToReport(
-                            eventReport = eventReport,
-                            errorMessage = "Unable to create blob client: ${e.message}"
-                        )
-                        eventReport.notPropogatedCount++
-                        eventReportList.add(gson.toJson(eventReport))
-                       // continue
-                    }*/
-
-                    // Create Map of Blob Metadata with lower case keys
+                   // Create Map of Blob Metadata with lower case keys
                     val metaDataMap = blobClient.properties.metadata.mapKeys { it.key.lowercase() }
-                    /* } catch (e: Exception) {
-                        logger.error("ERROR: Unable to read metadata from blob $blobName: ${e.message}")
-                        addErrorToReport(eventReport = eventReport, errorMessage = "Unable to read metadata: ${e.message}")
-                        eventReport.notPropogatedCount++
-                        eventReportList.add(gson.toJson(eventReport))
-                       // continue
-                    }*/
-
-                    // filter out known/required metadata and store the rest in
+                   // filter out known/required metadata and store the rest in
                     // Provenance.sourceMetadata
                     val dynamicMetadata: MutableMap<String, String?> = HashMap()
                     metaDataMap.forEach { (k, v) ->
@@ -720,16 +704,23 @@ class Function {
                     eventReport.totalMessageCount = provenance.messageIndex
                     eventReportList.add(gson.toJson(eventReport))
                     logger.info("file event report --> ${gson.toJson(eventReport)}")
-                } // . if
+              //  } // . if
 
-        } // .for
+       // } // .for
 
         // send recdeb event reports to separate event hub
-        try {
-            fnConfig.evHubSenderReports.send(eventReportList)
-        } catch (e: Exception) {
-            logger.error("Unable to send to event hub ${fnConfig.evReportsHubName}: ${e.message}")
-        }
+
+               } catch (e:Exception){
+                   logger.error("Failure in Recdeb fn: ${e.message}")
+                   //throw Exception("Failure in Recdeb function ::${e.message}")
+               } finally{
+                   try{
+                       fnConfig.evHubSenderReports.send(eventReportList)
+                   }catch(e:Exception){
+                       logger.error("Unable to send to event hub ${fnConfig.evReportsHubName}: ${e.message}")
+                   }
+
+               }
        // return msgEvent*/
     }
 } // .class  Function
