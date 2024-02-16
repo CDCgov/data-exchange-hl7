@@ -167,7 +167,7 @@ class Function {
         val messageType = if (metaDataMap.containsKey("message_type")) {
             metaDataMap["message_type"]?.uppercase() ?: HL7MessageType.UNKNOWN.name
         } else {
-            ""
+            "UNKNOWN"
         }
         val route = metaDataMap["route"]
         val reportingJurisdiction = metaDataMap["reporting_jurisdiction"]
@@ -206,13 +206,6 @@ class Function {
             // Create Map of Blob Metadata with lower case keys
             val metaDataMap = blobClient.properties.metadata.mapKeys { it.key.lowercase() }
             // filter out known/required metadata and store the rest in
-            // Provenance.sourceMetadata
-//            val dynamicMetadata: MutableMap<String, String?> = HashMap()
-//            metaDataMap.forEach { (k, v) ->
-//                if (!knownMetadata.contains(k)) {
-//                    dynamicMetadata[k] = v
-//                }
-//            }
             val dynamicMetadata = metaDataMap.filter { e -> !knownMetadata.contains(e.key)}
 
             // Create Metadata for Provenance
@@ -361,21 +354,17 @@ class Function {
             eventReport.totalMessageCount = provenance.messageIndex
             eventReportList.add(gson.toJson(eventReport))
             logger.info("file event report --> ${gson.toJson(eventReport)}")
-            //  } // . if
 
-            // } // .for
-
-            // send recdeb event reports to separate event hub
         } catch (e: Exception) {
             logger.error("Failure in Recdeb fn: ${e.message}")
             //throw Exception("Failure in Recdeb function ::${e.message}")
         } finally {
             try {
+                // send ingest-file event reports to separate event hub
                 fnConfig.evHubSenderReports.send(eventReportList)
             } catch (e: Exception) {
                 logger.error("Unable to send to event hub ${fnConfig.evReportsHubName}: ${e.message}")
             }
-
         }
          return msgEvent
     }
