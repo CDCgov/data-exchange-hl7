@@ -7,7 +7,6 @@ import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
-import gov.cdc.dex.util.EventSizeExceededException
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.bumblebee.HL7JsonTransformer
