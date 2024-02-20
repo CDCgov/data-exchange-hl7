@@ -45,7 +45,6 @@ class Function {
         messages: List<String?>,
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
     ): List<String> {
-        val processedMsgs = mutableListOf<JsonObject>() // only needed for integration testing
         val outList = mutableListOf<String>()
         val profileFilePath = "/BasicProfile.json"
         val config = listOf(profileFilePath)
@@ -147,7 +146,6 @@ class Function {
         }
         inputEvent.remove("content")
         // add to out event hub list
-        println(gsonWithNullsOn.toJson(inputEvent))
         outList.add(gsonWithNullsOn.toJson(inputEvent))
     }
 
