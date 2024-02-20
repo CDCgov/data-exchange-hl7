@@ -44,7 +44,7 @@ class Function {
             consumerGroup = "%EventHubConsumerGroup%",)
         messages: List<String?>,
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
-    ): List<JsonObject> {
+    ): List<String> {
         val processedMsgs = mutableListOf<JsonObject>() // only needed for integration testing
         val outList = mutableListOf<String>()
         val profileFilePath = "/BasicProfile.json"
@@ -86,26 +86,24 @@ class Function {
                         lakeSegsModel = null
                         exception = e
                     } // .catch
-                    // update Metadata
-                    val transformedMessage = updateMetadata(
+                    // update Metadata and add to batch for delivery
+                     updateMetadataAndDeliver(
                         startTime,
                         status,
                         lakeSegsModel,
                         eventHubMD[messageIndex],
                         inputEvent,
                         exception,
-                        config
+                        config,
+                        outList
                     )
-                    // add to out event hub list
-                    outList.add(gsonWithNullsOn.toJson(transformedMessage))
-                    processedMsgs.add(inputEvent)
+
                 } catch (e: Exception) {
                     //TODO::  - update retry counts
                     logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
-                    val problem = Problem(LakeSegsTransProcessMetadata.PROCESS_NAME, e, false, 0, 0)
-                    val summary = SummaryInfo("FAILURE", problem)
-                    inputEvent.add("summary", summary.toJsonElement())
-                    outList.add(gsonWithNullsOn.toJson(inputEvent))
+                    updateMetadataAndDeliver(startTime = startTime, status = PROCESS_STATUS_EXCEPTION,
+                        report =null, eventHubMD = eventHubMD[messageIndex], inputEvent = inputEvent,
+                        exception = e, config = config, outList = outList)
                 } // .try
             } // .if
         }// .foreach
@@ -113,21 +111,30 @@ class Function {
         // send everything to out event hub
         try {
             fnConfig.evHubSender.send(outList)
+            logger.info("Sent batch of ${outList.size} messages to ${fnConfig.evHubSendName}")
         } catch (e : Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
 
-        return processedMsgs.toList()
+        return outList
 
     } // .eventHubProcessor
 
-    private fun updateMetadata(startTime: String, status: String, report: List<Segment>?, eventHubMD: EventHubMetadata, inputEvent: JsonObject, exception: Exception?, config: List<String>): JsonObject {
+    private fun updateMetadataAndDeliver(startTime: String,
+                                         status: String,
+                                         report: List<Segment>?,
+                                         eventHubMD: EventHubMetadata,
+                                         inputEvent: JsonObject,
+                                         exception: Exception?,
+                                         config: List<String>,
+                                         outList: MutableList<String>) {
 
         val processMD = LakeSegsTransProcessMetadata(status=status, output=report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
 
         val metadata =  JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
+        metadata.remove("processes")
         metadata.add("stage", processMD.toJsonElement())
 
         if (exception != null) {
@@ -138,7 +145,10 @@ class Function {
         } else {
             inputEvent.add("summary", (SummaryInfo(SUMMARY_STATUS_OK, null).toJsonElement()))
         }
-        return inputEvent
+        inputEvent.remove("content")
+        // add to out event hub list
+        println(gsonWithNullsOn.toJson(inputEvent))
+        outList.add(gsonWithNullsOn.toJson(inputEvent))
     }
 
 

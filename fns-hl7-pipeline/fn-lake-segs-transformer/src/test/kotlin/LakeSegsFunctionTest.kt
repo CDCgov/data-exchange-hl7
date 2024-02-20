@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import java.util.logging.Logger
 import com.google.gson.JsonObject
 import com.google.gson.JsonArray
+import com.google.gson.JsonParser
 import com.microsoft.azure.functions.OutputBinding
 import org.junit.jupiter.api.Assertions
 
@@ -16,14 +17,14 @@ public class LakeSegsFunctionTest {
         val messages = listOf(text)
         val eventHubMDList = listOf(EventHubMetadata(1, 99, "", ""))
         val function = Function()
-        val inputEvents : List<JsonObject> = function.eventHubProcessor(messages, eventHubMDList)
-        val inputEvent : JsonObject = inputEvents[0]
-        // Validate Metadata.processes has been added to the array of processes
+        val inputEvents : List<String> = function.eventHubProcessor(messages, eventHubMDList)
+        val inputEvent : JsonObject = JsonParser.parseString(inputEvents[0]).asJsonObject
+        // Validate Metadata.processes has NOT been added to the array of processes
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
 
         if(metadata != null){
-            val processes: JsonArray? = metadata.get("processes").asJsonArray
-            Assertions.assertTrue(processes != null)
+            val stage = metadata.get("stage").asJsonObject
+            Assertions.assertTrue(stage != null)
         }
         val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
         println("the summary object: $summaryObj")
