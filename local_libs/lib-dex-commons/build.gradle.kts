@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "0.0.39-SNAPSHOT"
+version = "0.0.41-SNAPSHOT"
 
 repositories {
     maven {
@@ -22,11 +22,12 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     //Azure:
     implementation("com.azure:azure-messaging-eventhubs:5.18.0")
-    implementation("redis.clients:jedis:4.3.1")
-    implementation("com.azure:azure-cosmos:4.51.0")
+    implementation("redis.clients:jedis:5.1.0")
+    implementation("com.azure:azure-cosmos:4.55.1")
     testImplementation("org.mockito:mockito-core:5.6.0")
 
     testImplementation("org.apache.logging.log4j:log4j-slf4j18-impl:2.18.0")
+//    implementation("org.apache.maven:maven-model:3.3.9")
 
 }
 

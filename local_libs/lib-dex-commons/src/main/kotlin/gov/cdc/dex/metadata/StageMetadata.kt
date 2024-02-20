@@ -6,20 +6,38 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 import java.util.*
 
 abstract class StageMetadata(
-    @SerializedName("process_name") val processName: String,
-    @SerializedName("process_version") val processVersion: String,
-    @SerializedName("eventhub_queued_time") val eventhubQueuedTime: String,
-    @SerializedName("eventhub_offset") val eventHubOffSet: Long,
-    @SerializedName("eventhub_sequence_number") val eventHubSeqNbr: Int,
+    @Transient  open val stageName: String,
+    @Transient open val stageVersion: String,
     @Transient open val status: String?,
-    @SerializedName("configs") val configs: List<String>
-) {
-    @SerializedName("start_processing_time")
-    var startProcessTime: String = Date().toIsoString()
-    @SerializedName("end_processing_time")
-    var endProcessTime: String? = null
+    @Transient  open val configs: List<String>?,
+    @Transient open val eventTimestamp: String
+    ) {
+        @SerializedName("start_processing_time")
+        var startProcessTime: String = Date().toIsoString()
+        @SerializedName("end_processing_time")
+        var endProcessTime: String? = null
+}
 
-    constructor(processName:String, processVersion:String, status: String?, eventHubMetadata: EventHubMetadata, configs: List<String> ):
-            this(processName, processVersion, eventHubMetadata.EnqueuedTimeUtc, eventHubMetadata.Offset, eventHubMetadata.SequenceNumber, status, configs)
+abstract class EventGridStageMetadata(
+    @SerializedName("process_name") override val  stageName: String,
+    @SerializedName("process_version")override val stageVersion: String,
+    @Transient override val status: String?,
+    @SerializedName("configs") override val configs: List<String>?,
+    @SerializedName("event_timestamp")  override val eventTimestamp: String): StageMetadata(stageName, stageVersion, status, configs, eventTimestamp, ) {
+
+}
+
+abstract class EventHubStageMetadata(
+    @SerializedName("process_name") override val stageName: String,
+    @SerializedName("process_version") override val stageVersion: String,
+    @Transient override val status: String?,
+    @SerializedName("configs") override val configs: List<String>?,
+    @SerializedName("event_timestamp") override val eventTimestamp: String,
+    @SerializedName("eventhub_offset") val eventHubOffSet: Long,
+    @SerializedName("eventhub_sequence_number") val eventHubSeqNbr: Int):StageMetadata(stageName, stageVersion, status, configs, eventTimestamp) {
+
+        constructor(stageName:String, stageVersion:String, status: String?,  configs: List<String>,eventHubMetadata: EventHubMetadata,):
+            this(stageName, stageVersion, status, configs, eventHubMetadata.EnqueuedTimeUtc, eventHubMetadata.Offset, eventHubMetadata.SequenceNumber, )
+
 }
 
