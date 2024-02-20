@@ -19,12 +19,18 @@ public class LakeSegsFunctionTest {
         val function = Function()
         val inputEvents : List<String> = function.eventHubProcessor(messages, eventHubMDList)
         val inputEvent : JsonObject = JsonParser.parseString(inputEvents[0]).asJsonObject
-        // Validate Metadata.processes has NOT been added to the array of processes
+        // Validate that 'stage' has been added to metadata
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
 
         if(metadata != null){
             val stage = metadata.get("stage").asJsonObject
             Assertions.assertTrue(stage != null)
+        }
+
+        // Validate that 'processes' does not exist in metadata
+        if (metadata !=  null) {
+            val processes = metadata.get("processes")?.asJsonArray
+            Assertions.assertTrue(processes == null)
         }
         val summaryObj : JsonObject? = inputEvent.get("summary").asJsonObject
         println("the summary object: $summaryObj")
