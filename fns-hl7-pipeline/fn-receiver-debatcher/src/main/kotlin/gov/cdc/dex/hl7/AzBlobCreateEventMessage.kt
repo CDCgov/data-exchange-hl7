@@ -8,13 +8,13 @@ data class AzBlobCreateEventMessage (
   @SerializedName("subject"         ) var subject         : String,
   @SerializedName("eventType"       ) var eventType       : String,
   @SerializedName("id"              ) var id              : String,
-  @SerializedName("data"            ) var evHubData       : EvHubData,
+  @SerializedName("data"            ) var eventData       : EventData,
   @SerializedName("dataVersion"     ) var dataVersion     : String,
   @SerializedName("metadataVersion" ) var metadataVersion : String,
   @SerializedName("eventTime"       ) var eventTime       : String
 )
 
-data class EvHubData (
+data class EventData (
   @SerializedName("api"                ) var api                     : String,
   @SerializedName("clientRequestId"    ) var clientRequestId         : String,
   @SerializedName("requestId"          ) var requestId               : String,
