@@ -13,6 +13,7 @@ import gov.cdc.hl7.HL7StaticParser
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.Base64.getEncoder
 
@@ -52,7 +53,13 @@ class Function {
     private fun sendMessageAndUpdateEventReport(payload: DexEventPayload, eventReport: ReceiverEventReport) {
         try {
             logger.info("DEX::Processed messageUUID: ${payload.messageUUID}")
-            fnConfig.evHubSenderOut.send(gson.toJson(payload))
+            val errors = fnConfig.evHubSenderOut.send(gson.toJson(payload))
+            if (errors.isEmpty()) {
+                logger.info("DEX::Sent messageUUID ${payload.messageUUID} to ${fnConfig.evHubSendName}")
+            } else {
+                throw IllegalArgumentException("Message ${payload.messageUUID} is too large for Event Hub")
+            }
+
         } catch (e: Exception) {
             addErrorToReport(
                 eventReport = eventReport,
