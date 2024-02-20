@@ -23,7 +23,7 @@ public class LakeSegsFunctionTest {
         val metadata: JsonObject? = inputEvent.get("metadata").asJsonObject
 
         if(metadata != null){
-            val stage = metadata.get("stage").asJsonObject
+            val stage = metadata.get("stage")?.asJsonObject
             Assertions.assertTrue(stage != null)
         }
 
