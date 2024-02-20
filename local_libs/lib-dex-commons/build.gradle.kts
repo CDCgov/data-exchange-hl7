@@ -66,8 +66,8 @@ publishing {
             url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
             name = "nexus"
             credentials(PasswordCredentials::class){           
-                username= "mcq1" //System.getenv("IMAGEHUB_USERNAME")
-                password= "mtbAllTheWay2028" //System.getenv("IMAGEHUB_PASSWORD")
+                username= System.getenv("IMAGEHUB_USERNAME")
+                password= System.getenv("IMAGEHUB_PASSWORD")
            }
         }
     }
