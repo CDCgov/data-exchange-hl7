@@ -94,20 +94,20 @@ class MetadataTest {
 
     private fun getEventHubStageMDInstance(): EventHubStageMetadata {
         val eventHubMD  = EventHubMetadata(1,1,null, "20230101")
-        val processMD = EventHubStageMetadata("TEST-STAGE", getPOMVersion(), "UNIT-TEST", listOf(),eventHubMD)
-        processMD.startProcessTime = Date().toIsoString()
+        val processMD =object: EventHubStageMetadata("TEST-STAGE", getPOMVersion(), "UNIT-TEST", listOf(),eventHubMD){}
+         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
         return processMD
     }
 
     private fun getEventGridStageMDInstance(): EventGridStageMetadata {
-        val processMD = EventGridStageMetadata(
+        val processMD = object: EventGridStageMetadata(
             "TEST-STAGE",
             getPOMVersion(),
             "UNIT_TEST",
             listOf(),
             "20240216T09:59:00"
-        )
+        ){}
         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
         return processMD

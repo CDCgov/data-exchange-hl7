@@ -20,6 +20,8 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
+
     //Azure:
     implementation("com.azure:azure-messaging-eventhubs:5.18.0")
     implementation("redis.clients:jedis:5.1.0")
