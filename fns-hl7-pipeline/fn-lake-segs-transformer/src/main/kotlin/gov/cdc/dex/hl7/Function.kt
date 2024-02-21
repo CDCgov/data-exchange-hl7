@@ -6,16 +6,14 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
-
 import gov.cdc.dex.hl7.model.Segment
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
-import gov.cdc.dex.util.JsonHelper.addArrayElement
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-import java.util.*
 import org.slf4j.LoggerFactory
+import java.util.*
 import java.util.Base64.*
 
 /**
@@ -46,8 +44,7 @@ class Function {
             consumerGroup = "%EventHubConsumerGroup%",)
         messages: List<String?>,
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
-    ): List<JsonObject> {
-        val processedMsgs = mutableListOf<JsonObject>() // only needed for integration testing
+    ): List<String> {
         val outList = mutableListOf<String>()
         val profileFilePath = "/BasicProfile.json"
         val config = listOf(profileFilePath)
@@ -88,26 +85,24 @@ class Function {
                         lakeSegsModel = null
                         exception = e
                     } // .catch
-                    // update Metadata
-                    val transformedMessage = updateMetadata(
+                    // update Metadata and add to batch for delivery
+                     updateMetadataAndDeliver(
                         startTime,
                         status,
                         lakeSegsModel,
                         eventHubMD[messageIndex],
                         inputEvent,
                         exception,
-                        config
+                        config,
+                        outList
                     )
-                    // add to out event hub list
-                    outList.add(gsonWithNullsOn.toJson(transformedMessage))
-                    processedMsgs.add(inputEvent)
+
                 } catch (e: Exception) {
                     //TODO::  - update retry counts
                     logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
-                    val problem = Problem(LakeSegsTransProcessMetadata.PROCESS_NAME, e, false, 0, 0)
-                    val summary = SummaryInfo("FAILURE", problem)
-                    inputEvent.add("summary", summary.toJsonElement())
-                    outList.add(gsonWithNullsOn.toJson(inputEvent))
+                    updateMetadataAndDeliver(startTime = startTime, status = PROCESS_STATUS_EXCEPTION,
+                        report =null, eventHubMD = eventHubMD[messageIndex], inputEvent = inputEvent,
+                        exception = e, config = config, outList = outList)
                 } // .try
             } // .if
         }// .foreach
@@ -115,22 +110,31 @@ class Function {
         // send everything to out event hub
         try {
             fnConfig.evHubSender.send(outList)
+            logger.info("Sent batch of ${outList.size} messages to ${fnConfig.evHubSendName}")
         } catch (e : Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
 
-        return processedMsgs.toList()
+        return outList
 
     } // .eventHubProcessor
 
-    private fun updateMetadata(startTime: String, status: String, report: List<Segment>?, eventHubMD: EventHubMetadata, inputEvent: JsonObject, exception: Exception?, config: List<String>): JsonObject {
+    private fun updateMetadataAndDeliver(startTime: String,
+                                         status: String,
+                                         report: List<Segment>?,
+                                         eventHubMD: EventHubMetadata,
+                                         inputEvent: JsonObject,
+                                         exception: Exception?,
+                                         config: List<String>,
+                                         outList: MutableList<String>) {
 
-        val processMD = LakeSegsTransProcessMetadata(status=status, report=report, eventHubMD = eventHubMD, config)
+        val processMD = LakeSegsTransProcessMetadata(status=status, output=report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
 
         val metadata =  JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
-        metadata.addArrayElement("processes", processMD)
+        metadata.remove("processes")
+        metadata.add("stage", processMD.toJsonElement())
 
         if (exception != null) {
             //TODO::  - update retry counts
@@ -140,7 +144,9 @@ class Function {
         } else {
             inputEvent.add("summary", (SummaryInfo(SUMMARY_STATUS_OK, null).toJsonElement()))
         }
-        return inputEvent
+        inputEvent.remove("content")
+        // add to out event hub list
+        outList.add(gsonWithNullsOn.toJson(inputEvent))
     }
 
 

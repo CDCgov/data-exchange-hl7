@@ -1,0 +1,76 @@
+{
+	"id": "04e99422-67b9-4c24-8f06-4ffdd05b5315",
+	"message_uuid": "04e99422-67b9-4c24-8f06-4ffdd05b5315",
+	"message_info": {
+		"event_code": "",
+		"route": "phlip_vpd",
+		"mmgs": null,
+		"reporting_jurisdiction": "55",
+		"type": "ELR",
+		"local_record_id": "Starlims Lab"
+	},
+	"routing_metadata": {
+		"upload_id": "UNKNOWN",
+		"trace_id": null,
+		"parent_span_id": null,
+		"destination_id": null,
+		"destination_event": null
+	},
+	"metadata": {
+		"provenance": {
+			"event_id": "ea1c0b88-f01e-001e-71a5-5eeb8b0662ae",
+			"event_timestamp": "2024-02-13T17:49:37.9145208Z",
+			"file_uuid": "e2df1b60-b997-4c8d-a3dc-aacf381c0b09",
+			"file_path": "https://ocioedemessagesadev.blob.core.windows.net/hl7ingress/postman-quq6-c321e1cc-dd9a-403b-948b-80d59c0d112f.txt",
+			"file_timestamp": "2024-02-13T17:49:37+00:00",
+			"file_size": 2583,
+			"single_or_batch": "SINGLE",
+			"message_hash": "cc9c74e68487cceda8f8b21db435c928",
+			"ext_system_provider": "POSTMAN",
+			"ext_original_file_name": "postman-quq6-c321e1cc-dd9a-403b-948b-80d59c0d112f.txt",
+			"message_index": 1,
+			"ext_original_file_timestamp": "",
+			"source_metadata": {
+				"orginal_file_name": "stateLocalFile_3db810b4-18dd-4a35-bad7-f4d33db0b275.txt"
+			}
+		},
+		"stage": {
+			"status": "SUCCESS",
+			"report": {
+				"entries": {
+					"structure": [],
+					"content": [],
+					"value-set": []
+				},
+				"error-count": {
+					"structure": 0,
+					"value-set": 0,
+					"content": 0
+				},
+				"warning-count": {
+					"structure": 0,
+					"value-set": 0,
+					"content": 0
+				},
+				"status": "VALID_MESSAGE"
+			},
+			"process_name": "STRUCTURE-VALIDATOR",
+			"process_version": "1.0.0",
+			"eventhub_queued_time": "2024-02-13T19:36:19.042",
+			"eventhub_offset": 21483511168,
+			"eventhub_sequence_number": 1503,
+			"configs": [
+				"PHLIP_VPD-2.5.1"
+			],
+			"start_processing_time": "2024-02-13T19:36:19.086+00:00",
+			"end_processing_time": "2024-02-13T19:36:19.098+00:00"
+		}
+	},
+	"summary": {
+		"current_status": "STRUCTURE VALID",
+		"problem": null
+	},
+	"schema_version": "0.0.1",
+	"schema_name": "DEX HL7v2",
+	"meta_ext_event": "hl7_out_struct"
+}

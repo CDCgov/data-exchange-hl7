@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>fn-sc-processapi-report</artifactId>
-    <version>0.0.35-SNAPSHOT</version>
+    <version>0.0.39-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Kotlin Function :: fn-sc-processapi-report</name>
     <scm>
@@ -17,15 +17,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <functionAppName>hl7-processingstatus-${receiveFn}-${environment-id}</functionAppName>
-       <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
+        <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <AzureBom.version>1.2.20</AzureBom.version>
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
-        <functions.version>3.1.0</functions.version>
         <kotlin.version>1.9.0</kotlin.version>
         <hl7pet.version>1.2.7.2</hl7pet.version>
-        <lib-dex-commons.version>1.0.24-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.39-SNAPSHOT</lib-dex-commons.version>
         <gson.version>2.10.1</gson.version>
     </properties>
 
@@ -74,12 +73,11 @@
         <dependency>
             <groupId>com.microsoft.azure.functions</groupId>
             <artifactId>azure-functions-java-library</artifactId>
-            <version>${functions.version}</version>
+            <version>${azure.functions.java.library.version}</version>
         </dependency>
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-messaging-servicebus</artifactId>
-            <version>7.14.6</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -117,7 +115,6 @@
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-messaging-eventhubs</artifactId>
-            <version>5.16.0</version>
         </dependency>
 
         <dependency>
@@ -133,13 +130,12 @@
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob</artifactId>
-            <version>12.23.0</version>
         </dependency>
     </dependencies>
 
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
-       <!-- <testSourceDirectory>src/test/kotlin</testSourceDirectory>-->
+        <!-- <testSourceDirectory>src/test/kotlin</testSourceDirectory>-->
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
@@ -151,10 +147,10 @@
                     <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan6</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-                    <auth>
+                    <!--<auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
-                    </auth>
+                    </auth>-->
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
@@ -186,11 +182,7 @@
                             <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
                             <value>true</value>
                         </property>
-                        <property>
-                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
-                            <value>None</value>
-                        </property>
-                    </appSettings>
+                     </appSettings>
                 </configuration>
                 <executions>
                     <execution>

@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.39] - 2024-02-21
+	- Setting batchCheckpointFrequency to 1 on all Pipeline functions
+	- Refactored all functions to reuse azure resource connections - event hub, service bus, cosmos db, storage account, etc.
+	- Added health check to all functions and sidecar functions and configured Health Checks on DEV
+	- Removed transformation Jsons from Processing status report (hl7-json and lake of segments)
+	- HL7-Json now no longer serialize attributes with no values
+	- Replaced processes array on metadata for a single Stage attribute (remove duplication of information on payloads)
+	- Refactored Receiver debatcher to be called from EventGrid events to avoid the Event hub duplication (Receiver cannot afford to receive duplicate events, otherwise the data will be fully duplicated across the pipeline with a new message-uuid.
+	- Improved EventHub sender to bypass messages that are too big (and Report on them accordingly
+	- Moved transformation output from "report" node to "output" node in JSON
+
 
 ### [0.0.38] - 2024-02-07
 	- Upgrade azure-functions maven plugin due to strange bug

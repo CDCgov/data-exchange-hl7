@@ -24,9 +24,9 @@ data class ReceiverEventError (
 // "mocked" metadata simulates structure of ProcessMetadata with only the
 // elements needed for the Processing Status API.
 data class MockedMetadata (
-    @SerializedName("processes") val processes: List<MockedProcess> = listOf(MockedProcess())
+    @SerializedName("stage") val stage: MockedStage = MockedStage()
         )
 
-data class MockedProcess (
+data class MockedStage (
     @SerializedName("process_name") val processName: String = "RECEIVER"
 )

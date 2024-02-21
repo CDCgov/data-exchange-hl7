@@ -89,7 +89,7 @@ class DebatcherTest {
                             val messageInfo = getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n"))
                             val (metadata, summary) = buildMetadata(
                                 Function.STATUS_SUCCESS,
-                                eventHubMD,
+                                "20240216",
                                 startTime,
                                 provenance
                             )
@@ -106,13 +106,13 @@ class DebatcherTest {
         provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
         if (mshCount > 0) {
             val messageInfo = getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n"))
-            val (metadata, summary) = buildMetadata(Function.STATUS_SUCCESS, eventHubMD, startTime, provenance)
+            val (metadata, summary) = buildMetadata(Function.STATUS_SUCCESS, "20240216", startTime, provenance)
             prepareAndSend(currentLinesArr, messageInfo, metadata, summary, metaDataMap)
         } else {
             // no valid message -- send to error queue
             val (metadata, summary) = buildMetadata(
                 Function.STATUS_ERROR,
-                eventHubMD,
+                "20240216",
                 startTime,
                 provenance,
                 "No valid message found."
@@ -136,12 +136,12 @@ class DebatcherTest {
 
     private fun buildMetadata(
         status: String,
-        eventHubMD: EventHubMetadata,
+        eventTimestamp: String,
         startTime: String,
         provenance: Provenance,
         errorMessage: String? = null
     ): Pair<DexMetadata, SummaryInfo> {
-        val processMD = ReceiverProcessMetadata(status, eventHubMD)
+        val processMD = ReceiverProcessMetadata(status, eventTimestamp)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")
@@ -149,7 +149,7 @@ class DebatcherTest {
             summary = SummaryInfo("REJECTED")
             summary.problem = Problem(ReceiverProcessMetadata.RECEIVER_PROCESS, null, null, errorMessage, false, 0, 0)
         }
-        return DexMetadata(provenance, listOf(processMD)) to summary
+        return DexMetadata(provenance, processMD) to summary
     }
 
     private fun getRoutingData(metaDataMap: Map<String, String?>): RoutingMetadata {
@@ -179,9 +179,6 @@ class DebatcherTest {
     ): DexEventPayload {
 
         val msgEvent = DexEventPayload(
-            //      uploadID = uploadID,
-            //       destinationID = metaDataMap["meta_destination_id"],
-            //       destinationEvent = metaDataMap["meta_ext_event"],
             messageInfo = messageInfo,
             metadata = metadata,
             summary = summary,

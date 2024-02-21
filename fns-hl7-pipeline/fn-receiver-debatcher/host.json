@@ -5,13 +5,17 @@
       "version": "[4.*, 5.0.0)"
   },
   "extensions": {
-    "eventHubs": {
-      "batchCheckpointFrequency": 10,
-      "maxEventBatchSize": 10,
-      "prefetchCount": 20,
-      "initialOffsetOptions": {
-        "type": "fromStart",
-        "enqueuedTimeUtc": ""
+    "http": {
+      "routePrefix": "api",
+      "maxOutstandingRequests": 200,
+      "maxConcurrentRequests": 100,
+      "dynamicThrottlesEnabled": true,
+      "hsts": {
+        "isEnabled": true,
+        "maxAge": "10"
+      },
+      "customHeaders": {
+        "X-Content-Type-Options": "nosniff"
       }
     }
   },

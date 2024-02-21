@@ -85,17 +85,17 @@ class Function {
                         )
                         processMD.startProcessTime = startTime
                         processMD.endProcessTime = Date().toIsoString()
-                        logger.info("Process MD: ${processMD} ")
+                        logger.info("Process MD: $processMD ")
 
 
-                        metadata.addArrayElement("processes", processMD)
+                        metadata.add("stage", processMD.toJsonElement())
                         val newContentBase64 =
                             Base64.getEncoder().encodeToString((report._1()?.toByteArray() ?: "") as ByteArray?)
                         inputEvent.add("content", JsonParser.parseString(gson.toJson(newContentBase64)))
                         //Update Summary element.
                         val summary = SummaryInfo("REDACTED")
                         inputEvent.add("summary", JsonParser.parseString(gson.toJson(summary)))
-                        logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: $fnConfig.evHubOkName")
+                        logger.info("DEX:: Handled Redaction for messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.evHubSendName}")
                         outList.add(gson.toJson(inputEvent))
                     }
                 } catch (e: Exception) {
