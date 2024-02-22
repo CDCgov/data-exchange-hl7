@@ -538,7 +538,7 @@
           "notes": ""
         },{
         "fieldNumber": 2,
-        "name": "Place Order Number",
+        "name": "Placer Order Number",
         "dataType": "EI",
         "usage": "O",
         "cardinality": "[0..1]",
@@ -2075,7 +2075,7 @@
         "conformance": "",
         "notes": ""
       },{
-        "fieldNumber": 2,
+        "fieldNumber": 22,
         "name": "Advance Directive Last Verified Date",
         "dataType": "DT",
         "usage": "O",
@@ -2192,7 +2192,7 @@
         "notes": ""
       },{
         "fieldNumber": 14,
-        "name": "Admin Source",
+        "name": "Admit Source",
         "dataType": "CWE",
         "usage": "O",
         "cardinality": "[0..1]",
@@ -2432,7 +2432,7 @@
         "notes": ""
       },{
         "fieldNumber": 44,
-        "name": "Admin Date/Time",
+        "name": "Admit Date/Time",
         "dataType": "DTM",
         "usage": "O",
         "cardinality": "[0..1]",
