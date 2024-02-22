@@ -74,4 +74,11 @@ internal class StringUtilsTest {
         val spanId = pSClientUtility.sendTraceToProcessingStatus("https://ocio-ede-dev-pstatus-api.azurewebsites.net","1000","1000-1","startSpan","Redactor")
         println("spanId:$spanId")
     }
+
+    @Test
+    fun teststopTrace() {
+        val pSClientUtility = PSClientUtility()
+        val spanId = pSClientUtility.stopTrace("https://ocio-ede-dev-pstatus-api.azurewebsites.net","1000","1000-1")
+        println("spanId11:$spanId")
+    }
 }
