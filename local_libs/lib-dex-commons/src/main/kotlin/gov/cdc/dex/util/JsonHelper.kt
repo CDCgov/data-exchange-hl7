@@ -1,7 +1,7 @@
 package gov.cdc.dex.util
 
 import com.google.gson.*
-import gov.cdc.dex.metadata.ProcessMetadata
+
 import java.util.*
 
 object JsonHelper {
@@ -12,14 +12,7 @@ object JsonHelper {
         return JsonParser.parseString(jsonStr)
     }
 
-    fun JsonObject.addArrayElement(arrayName: String, processMD: ProcessMetadata) {
-        val currentProcessPayload = this[arrayName]
-        if (currentProcessPayload == null) {
-            this.add(arrayName,  JsonArray())
-        }
-        val currentArray = this[arrayName].asJsonArray
-        currentArray.add(processMD.toJsonElement())
-    }
+
     @Throws(UnknownPropertyError::class)
     fun getValueFromJson(path: String, element: JsonElement): JsonElement {
         val paths = path.split(".")

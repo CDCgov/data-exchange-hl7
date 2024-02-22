@@ -1,6 +1,8 @@
 package gov.cdc.dex.metadata
 
+import com.google.gson.annotations.SerializedName
+
 data class DexMetadata(
-    val provenance: Provenance,
+    @SerializedName("message_metadata") val messageMetadata: MessageMetadata,
     var stage: StageMetadata
 )
