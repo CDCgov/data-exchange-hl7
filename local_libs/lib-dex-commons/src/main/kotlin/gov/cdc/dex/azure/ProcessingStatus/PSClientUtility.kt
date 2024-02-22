@@ -26,7 +26,7 @@ class PSClientUtility {
         span: String,
         stageName : String
     ): String {
-        logger.info("CALLING sendTraceToProcessingStatus")
+        logger.info("DEX:calling sendTraceToProcessingStatus")
         val url = "$psURL/api/trace/$span/$traceId/$parentSpanId?stageName=$stageName"
         logger.info(url)
 
@@ -40,7 +40,7 @@ class PSClientUtility {
 
             is Result.Failure -> {
                 val error = result.error
-                logger.error("Failure in sending trace to Processing status API:$error")
+                logger.error("Failure in sending trace to Processing status API:${error.message}")
                 ""
             }
         }
