@@ -8,5 +8,6 @@ data class DexHL7Metadata(
     @SerializedName("message_metadata") val messageMetadata: MessageMetadata,
     @SerializedName("routing_metadata") val routingInfo: RoutingMetadata,
     var stage: StageMetadata,
-    var summary: SummaryInfo
+    var summary: SummaryInfo,
+    val content: String
 )

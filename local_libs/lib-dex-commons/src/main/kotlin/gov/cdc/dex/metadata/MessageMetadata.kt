@@ -7,5 +7,5 @@ class MessageMetadata(
     @SerializedName("single_or_batch") val singleOrBatch: String,
     @SerializedName("message_index") val messageIndex: Int =1,
     @SerializedName("message_hash") val messageHash: String,
-    val content: String
+
 )
