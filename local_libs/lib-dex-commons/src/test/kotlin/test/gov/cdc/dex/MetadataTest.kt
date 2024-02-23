@@ -50,16 +50,16 @@ class MetadataTest {
 
     @Test
     fun testV2Metadata() {
-        val tracing = DEXTracingHeader("traceID", "parentSpan")
-        val dataStream = DEXDataStream("dataStreamID", "dataStreamRoute")
-        val provenance = DEXProvenance("senderID", "system", "filePath", "fileTS", 10, null)
-        val fileMD = DEXFileMetadata(reportingJurisdiction = "13", uploadID = "", provenance = provenance, dataStream = dataStream, tracing = tracing)
+//        val tracing = DEXTracingHeader("traceID", "parentSpan")
+//        val dataStream = DEXDataStream("dataStreamID", "dataStreamRoute")
+//        val provenance = DEXProvenance("senderID", "system", "filePath", "fileTS", 10, null)
+//        val fileMD = DEXFileMetadata(reportingJurisdiction = "13", uploadID = "", provenance = provenance, dataStream = dataStream, tracing = tracing)
 
+        val routingInfo = RoutingMetadata("filePPath", "fileTS", 10, "orgA", "uploadID", "dsid", "dsroute", "trace", "span")
         val stageMD = MockEventGridStageMetadata("stgName", "stgVersion", "sttus", listOf(), "ts")
-        val messageMD = MessageMetadata("SINGLE", 1, "hash", "file", "MSH|", "msgUUID")
-        val dexMD = DexMetadata(messageMD, stageMD)
+        val messageMD = MessageMetadata("msgUUID","SINGLE", 1, "hash", "MSH|")
         val summary = SummaryInfo("All good!")
-        val fullMD = DexEventPayload(fileMD, dexMD, summary)
+        val fullMD = DexHL7Metadata(messageMetadata = messageMD, routingInfo = routingInfo, stage = stageMD, summary = summary)
 
         val json = gson.toJson(fullMD)
         println(json)
