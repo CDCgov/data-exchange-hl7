@@ -1,7 +1,7 @@
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.hl7.Function
 import gov.cdc.dex.hl7.Function.Companion.UTF_BOM
-import gov.cdc.dex.hl7.ReceiverProcessMetadata
+import gov.cdc.dex.hl7.ReceiverStageMetadata
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
@@ -141,13 +141,13 @@ class DebatcherTest {
         provenance: Provenance,
         errorMessage: String? = null
     ): Pair<DexMetadata, SummaryInfo> {
-        val processMD = ReceiverProcessMetadata(status, eventTimestamp)
+        val processMD = ReceiverStageMetadata(status, eventTimestamp)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")
         if (status == Function.STATUS_ERROR) {
             summary = SummaryInfo("REJECTED")
-            summary.problem = Problem(ReceiverProcessMetadata.RECEIVER_PROCESS, null, null, errorMessage, false, 0, 0)
+            summary.problem = Problem(ReceiverStageMetadata.RECEIVER_PROCESS, null, null, errorMessage, false, 0, 0)
         }
         return DexMetadata(provenance, processMD) to summary
     }
