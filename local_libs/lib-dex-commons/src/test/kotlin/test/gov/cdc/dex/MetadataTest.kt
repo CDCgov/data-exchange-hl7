@@ -29,7 +29,7 @@ class MetadataTest {
             "UNIT_TEST",
             listOf(),
             "20240216T09:59:00"
-        ){}
+        )
         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
         return processMD
