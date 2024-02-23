@@ -7,7 +7,7 @@ class RoutingMetadata (
     @SerializedName("ingested_file_timestamp") val ingestedFileTimestamp: String,
     @SerializedName("ingested_file_size") val ingestedFileSize: Int,
     @SerializedName("data_producer_id") val dataProducerId: String,
-    @SerializedName("jursidiction") val jurisdiction: String,
+    @SerializedName("jurisdiction") val jurisdiction: String,
     @SerializedName("upload_id") val uploadId: String,
     @SerializedName("data_stream_id") val dataStreamId: String,
     @SerializedName("data_stream_route") val dataStreamRoute: String,
