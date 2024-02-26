@@ -21,7 +21,7 @@ abstract class StageMetadata(
 abstract class EventGridStageMetadata(
     @SerializedName("stage_name") override val  stageName: String,
     @SerializedName("stage_version")override val stageVersion: String,
-     override val status: String?,
+    @Transient override val status: String?,
     @SerializedName("configs") override val configs: List<String>?,
     @SerializedName("event_timestamp")  override val eventTimestamp: String): StageMetadata(stageName, stageVersion, status, configs, eventTimestamp, ) {
 
@@ -30,7 +30,7 @@ abstract class EventGridStageMetadata(
 abstract class EventHubStageMetadata(
     @SerializedName("stage_name") override val stageName: String,
     @SerializedName("stage_version") override val stageVersion: String,
-     override val status: String?,
+    @Transient override val status: String?,
     @SerializedName("configs") override val configs: List<String>?,
     @SerializedName("event_timestamp") override val eventTimestamp: String,
     @SerializedName("eventhub_offset") val eventHubOffSet: Long,
