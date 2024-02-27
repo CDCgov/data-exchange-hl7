@@ -4,6 +4,7 @@ import com.azure.core.util.BinaryData
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.util.JsonHelper
+import gov.cdc.dex.util.UnknownPropertyError
 import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,49 +38,59 @@ class Function {
                 logger.error("ERROR: Unable to parse event message with index $index as JSON. Aborting save.")
                 null
             } ?: continue
-            //remove content
-            inputEvent.remove("content")
 
             val messageUUID = try {
                 // this is where the value will be in hl7 message json
                 JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
             } catch (e: Exception) {
-                "ERROR: Unable to locate message_uuid or file_uuid for event message with index $index." +
-                        " Aborting save."
                 null
-            } ?: continue
-
+            }
+            val uploadId = try {
+                JsonHelper.getValueFromJson("routing_metadata.upload_id", inputEvent).asString
+            } catch (e: Exception) {
+                null
+            }
+            if (messageUUID == null && uploadId == null) {
+                logger.error("DEX::ERROR -- No Message UUID or Upload ID found. Aborting save for message index $index")
+                continue
+            }
+            val newBlobName = messageUUID ?: uploadId
             // get the metadata needed for routing
-            val routingMeta = inputEvent["routing_metadata"]
-            if (!(routingMeta == null || routingMeta.isJsonNull)) {
+            val metaToAttach = mutableMapOf<String, String>()
+            val routingMeta = try {
+                JsonHelper.getValueFromJson("routing_metadata", inputEvent)
+            } catch (e: UnknownPropertyError) {
+                JsonNull.INSTANCE
+            }
+            if (!routingMeta.isJsonNull) {
                 val routingMetadata = routingMeta.asJsonObject
-                val supportingMetadata = routingMetadata.remove("supporting_metadata")
-                val metaToAttach = mutableMapOf<String, String>()
+                val supportingMeta = routingMetadata.remove("supporting_metadata")
                 routingMetadata.asMap().forEach { entry ->
                     if (!entry.value.isJsonNull) {
                         metaToAttach[entry.key] = entry.value.asString
                     }
                 }
-                if (!supportingMetadata.isJsonNull) {
-                    supportingMetadata.asJsonObject.asMap().forEach { entry ->
+                if (!supportingMeta.isJsonNull) {
+                    val supportingMetadata = supportingMeta.asJsonObject
+                    supportingMetadata.asMap().forEach { entry ->
                         if (!entry.value.isJsonNull) {
                             metaToAttach.putIfAbsent(entry.key, entry.value.asString)
                         }
                     }
                 }
             } else {
-                logger.error("DEX::ERROR:Unable to locate routing_metadata")
+                logger.error("DEX::ERROR:Unable to locate routing_metadata for message $newBlobName")
             }
-            logger.info("DEX::Processing message $messageUUID")
+            logger.info("DEX::Saving message $newBlobName")
             try {
                 val folderStructure = SimpleDateFormat("YYYY/MM/dd").format(Date())
                 // save to storage container
                 this.saveBlobToContainer(
-                    "${fnConfig.blobStorageFolderName}/$folderStructure/$messageUUID.txt",
+                    "${fnConfig.blobStorageFolderName}/$folderStructure/$newBlobName.txt",
                     gson.toJson(inputEvent),
                     metaToAttach
                 )
-                logger.info("DEX::Saved message $messageUUID.txt to sink ${fnConfig.blobStorageContainerName}/${fnConfig.blobStorageFolderName}")
+                logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/${fnConfig.blobStorageFolderName}")
             } catch (e: Exception) {
                 // TODO send to quarantine?
                 logger.error("DEX::Error processing message", e)

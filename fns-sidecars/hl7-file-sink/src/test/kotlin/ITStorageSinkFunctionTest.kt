@@ -1,7 +1,5 @@
 package gov.cdc.dataexchange
 
-import com.google.gson.JsonObject
-import gov.cdc.dex.azure.EventHubMetadata
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
