@@ -65,17 +65,17 @@ class Function {
             if (!routingMeta.isJsonNull) {
                 val routingMetadata = routingMeta.asJsonObject
                 val supportingMeta = routingMetadata.remove("supporting_metadata")
-                routingMetadata.asMap().forEach { entry ->
-                    if (!entry.value.isJsonNull) {
-                        metaToAttach[entry.key] = entry.value.asString
+                routingMetadata.keySet().forEach { key ->
+                    if (!routingMetadata[key].isJsonNull) {
+                        metaToAttach[key] = routingMetadata[key].asString
                     }
                 }
-                if (!supportingMeta.isJsonNull) {
+                if (!supportingMeta.isJsonNull ) {
                     val supportingMetadata = supportingMeta.asJsonObject
-                    supportingMetadata.asMap().forEach { entry ->
-                        if (!entry.value.isJsonNull) {
-                            metaToAttach.putIfAbsent(entry.key, entry.value.asString)
-                        }
+                    supportingMetadata.keySet().forEach { key ->
+                        if (!supportingMetadata[key].isJsonNull)
+                            metaToAttach.putIfAbsent(key, supportingMetadata[key].asString)
+
                     }
                 }
             } else {
