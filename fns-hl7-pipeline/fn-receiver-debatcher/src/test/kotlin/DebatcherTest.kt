@@ -217,7 +217,7 @@ class DebatcherTest {
         startTime: String,
         errorMessage: String? = null
     ): Pair<StageMetadata, SummaryInfo> {
-        val stageMetadata = ReceiverStageMetadata(status = status, eventTimestamp = eventTimestamp)
+        val stageMetadata = ReceiverStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
         stageMetadata.startProcessTime = startTime
         stageMetadata.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")
