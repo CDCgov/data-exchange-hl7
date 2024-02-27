@@ -3,13 +3,13 @@ package gov.cdc.dex.hl7
 import gov.cdc.dex.metadata.EventGridStageMetadata
 
 data class ReceiverStageMetadata(
-    override val status: String?,
+    @Transient val receiverStatus: String?,
     override val eventTimestamp: String
 ) :
     EventGridStageMetadata(
         stageName = RECEIVER_PROCESS,
         stageVersion = RECEIVER_VERSION,
-        status = status,
+        status = receiverStatus,
         configs = listOf(),
         eventTimestamp = eventTimestamp
     ) {
