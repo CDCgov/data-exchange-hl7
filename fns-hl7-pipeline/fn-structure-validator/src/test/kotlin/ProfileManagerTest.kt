@@ -8,25 +8,12 @@ class ProfileManagerTest {
     @Test
     fun testLoadProfiles() {
         try {
-            val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/NND_ORU_V2.0")
-            println(nistValidator)
+            val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/NNDSS-NND_ORU_V2.0")
+            println(nistValidator.profile)
         } catch (e: InvalidFileException) {
             throw RuntimeException(e)
         }
     }
-    @Test
-    fun testTryCatch() {
-        try {
-            try {
-                val array = arrayOf("")
-                array[3]
-            } catch (e: ArrayIndexOutOfBoundsException) {
-                println("got ArrayIndexOutOfBoundException")
-                throw e
-            }
-        } catch (e: Exception) {
-            println("got Exception")
-        }
-    }
+
 
 }

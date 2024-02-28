@@ -7,6 +7,6 @@ data class ProfileConfiguration(
 )
 
 data class ProfileIdentifier(
-    val route : String,
+    @SerializedName("data_stream") val dataStream : String,
     @SerializedName("identifier_paths") val identifierPaths: List<String>
 )
