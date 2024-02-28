@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import java.util.logging.Logger
 
 class HL7JsonLakeFunctionTest {
-
+ //TODO: Fix mock event data so these tests will work
     private fun processFile(filename:String, isHappyPath:Boolean) {
         println("Start processing $filename ")
         val text = this:: class.java.getResource("/$filename").readText()
