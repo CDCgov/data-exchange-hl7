@@ -95,12 +95,12 @@ class ReportFunction {
             UUID.randomUUID().toString()
         } else { uploadIdJson.asString }
 
-        val destinationIdJson = extractValueFromPath(content, "routing_metadata.destination_id")
+        val destinationIdJson = extractValueFromPath(content, "routing_metadata.data_stream_id")
         val destinationId = if (destinationIdJson == null || destinationIdJson.isJsonNull) {
             "UNKNOWN"
         } else { destinationIdJson.asString }
 
-        val eventTypeJson = extractValueFromPath(content, "routing_metadata.destination_event")
+        val eventTypeJson = extractValueFromPath(content, "routing_metadata.data_stream_route")
         val eventType = if (eventTypeJson == null || eventTypeJson.isJsonNull) {
             "UNKNOWN"
         } else { eventTypeJson.asString }
@@ -110,7 +110,7 @@ class ReportFunction {
 
        val stageName = if (!(stage == null || stage.isJsonNull)) {
             stage.remove("output")
-            stage.get("process_name").asString
+            stage.get("stage_name").asString
         } else {
             "Unknown Stage"
         }
