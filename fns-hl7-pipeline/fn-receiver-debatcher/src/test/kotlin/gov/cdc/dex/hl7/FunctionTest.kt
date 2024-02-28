@@ -19,7 +19,7 @@ class FunctionTest {
         val text = this::class.java.getResource("/$filename").readText()
 
         val function = Function()
-        return function.processEventGrid(text, getExecutionContext())
+        return function.processQueue(text, getExecutionContext())
     }
 
     @Test
