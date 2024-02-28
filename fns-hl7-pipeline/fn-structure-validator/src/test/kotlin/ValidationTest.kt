@@ -43,7 +43,7 @@ class ValidationTest {
     fun testPHLIPVPDMessage() {
         val testMessage = this::class.java.getResource("/VPD_Measles.txt")?.readText()
 
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/PHLIP_VPD-2.5.1")
+        val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/PHLIP-VPD_VERSION_1.0-2.5.1")
 
         val report = nistValidator.validate(testMessage!!)
         println("report: -->\n\n${gson.toJson(report)}\n")

@@ -9,7 +9,6 @@ import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.hl7.model.StructureValidatorProcessMetadata
-import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
@@ -56,30 +55,22 @@ class ValidatorFunction {
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
                 val startTime = Date().toIsoString()
                 var report = NistReport()
-                var metadata = JsonObject()
                 var messageUUID = ""
                 try {
                     val hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
-                    metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
-                    val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
-                    messageUUID = JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
-                    val messageType = JsonHelper.getValueFromJson("message_info.type", inputEvent).asString
-                    val route = if (messageType.uppercase() == HL7MessageType.CASE.toString()) {
-                        ""
-                    } else {
-                        val routeJson = JsonHelper.getValueFromJson("message_info.route", inputEvent)
-                        if (routeJson is JsonPrimitive) routeJson.asString.uppercase() else ""
-                    }
+                    val filePath = JsonHelper.getValueFromJson("routing_metadata.ingested_file_path", inputEvent).asString
+                    messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
+                    val dataStream = JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString.lowercase()
 
-                    logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $messageType")
+                    logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $dataStream")
                     //Main FN Logic
-                    report = validateMessage(hl7Content, HL7MessageType.valueOf(messageType), route)
+                    report = validateMessage(hl7Content, dataStream)
                     //preparing EventHub payload:
                     val processMD = StructureValidatorProcessMetadata(
                         PROCESS_STATUS_OK,
                         report,
                         eventHubMD[msgNumber],
-                        listOf(getProfileNameAndPaths(hl7Content, route).first)
+                        listOf(getProfileNameAndPaths(hl7Content, dataStream).first)
                     )
 
                     processMD.startProcessTime = startTime
@@ -158,11 +149,8 @@ class ValidatorFunction {
 
     }
 
-    private fun validateMessage(hl7Message: String, messageType: HL7MessageType, route: String): NistReport {
+    private fun validateMessage(hl7Message: String, route: String): NistReport {
         validateHL7Delimiters(hl7Message)
-        if (messageType == HL7MessageType.ELR && route.isEmpty()) {
-            throw InvalidMessageException("ELR message type must have a Route specified.")
-        }
         val profileNameAndPaths = getProfileNameAndPaths(hl7Message, route)
         val profileName =  profileNameAndPaths.first
         val profilePaths = profileNameAndPaths.second
