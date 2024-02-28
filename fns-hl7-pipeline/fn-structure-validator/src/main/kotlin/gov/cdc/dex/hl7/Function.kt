@@ -62,17 +62,19 @@ class ValidatorFunction {
                         JsonHelper.getValueFromJson("routing_metadata.ingested_file_path", inputEvent).asString
                     messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
                     val dataStream =
-                        JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString.lowercase()
+                        JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString.uppercase()
 
                     logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $dataStream")
+
                     // generate NIST report
-                    report = validateMessage(hl7Content, dataStream)
+                    val profileInfo = getProfileNameAndPaths(hl7Content, dataStream)
+                    report = validateMessage(hl7Content, dataStream, profileInfo)
                     // prepare EventHub payload
                     val stageMD = StructureValidatorStageMetadata(
                         PROCESS_STATUS_OK,
                         report,
                         eventHubMD[msgNumber],
-                        listOf(getProfileNameAndPaths(hl7Content, dataStream).first)
+                        listOf(profileInfo.first)
                     )
 
                     stageMD.startProcessTime = startTime
@@ -107,9 +109,6 @@ class ValidatorFunction {
                     inputEvent.add("stage", stageMD.toJsonElement())
                     val problem = Problem(StructureValidatorStageMetadata.VALIDATOR_PROCESS, "Error: ${e.message}")
                     val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
-
-                    logger.info("inputEvent in exception:$inputEvent")
-
                     inputEvent.add("summary", summary.toJsonElement())
                     outList.add(gson.toJson(inputEvent))
                     logger.info("Sent Message to Error Event Hub for Message Id $messageUUID")
@@ -129,6 +128,7 @@ class ValidatorFunction {
 
 
     fun getProfileNameAndPaths(hl7Content: String, dataStream: String): Pair<String, List<String>> {
+        validateHL7Delimiters(hl7Content)
         val dataStreamName = dataStream.uppercase().trim()
         val profileList = fnConfig.profileConfig.profileIdentifiers.filter {
             it.dataStream.uppercase().trim() == dataStreamName
@@ -155,31 +155,37 @@ class ValidatorFunction {
     }
 
     private fun validateMessage(hl7Message: String, dataStream: String): NistReport {
-        validateHL7Delimiters(hl7Message)
         val profileNameAndPaths = getProfileNameAndPaths(hl7Message, dataStream)
-        val profileName = profileNameAndPaths.first
-        val profilePaths = profileNameAndPaths.second
+        return validateMessage(hl7Message, dataStream, profileNameAndPaths)
+    }
+
+    private fun validateMessage(
+        hl7Message: String,
+        dataStream: String,
+        profileInfo: Pair<String, List<String>>
+    ): NistReport {
+        val profileName = profileInfo.first
+        val profilePaths = profileInfo.second
         val nistValidator = fnConfig.getNistValidator(profileName)
-        if (nistValidator == null) {
+        if (nistValidator != null) {
+            val report = nistValidator.validate(hl7Message)
+            report.status = if (!report.status.isNullOrEmpty() && ("ERROR" !in report.status + "")) {
+                report.status + ""
+            } else if ("ERROR" in report.status + "") {
+                NIST_INVALID_MESSAGE
+            } else {
+                "UNKNOWN"
+            }
+            return report
+        } else {
             throw InvalidMessageException(
                 "Unable to find validation profile named $profileName."
-                        + " Either the route '$dataStream' or the data in HL7 path " +
+                        + " Either the data stream ID '$dataStream' or the data in HL7 path(s) " +
                         "'${profilePaths.joinToString()}' is invalid."
             )
-
-        } else {
-            val report = nistValidator.validate(hl7Message)
-            report.status = if ("ERROR" in report.status + "") {
-                NIST_INVALID_MESSAGE
-            } else if (report.status.isNullOrEmpty()) {
-                "Unknown"
-            } else {
-                report.status + ""
-            }
-
-            return report
         }
     }
+
 
     private fun validateHL7Delimiters(hl7Message: String) {
         val msg = hl7Message.trim()
@@ -218,20 +224,20 @@ class ValidatorFunction {
         val dataStream = if (!request.headers["x-tp-data_stream_id"].isNullOrEmpty()) {
             request.headers["x-tp-data_stream_id"].toString()
         } else {
-                return buildHttpResponse(
-                    "BAD REQUEST: You must specify a data stream ID" +
-                            " in the HTTP header as 'x-tp-data_stream_id'. " +
-                            "Please correct the HTTP header and try again.",
-                    HttpStatus.BAD_REQUEST,
-                    request
-                )
+            return buildHttpResponse(
+                "BAD REQUEST: You must specify a data stream ID" +
+                        " in the HTTP header as 'x-tp-data_stream_id'. " +
+                        "Please correct the HTTP header and try again.",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
         }
         if (dataStream.isNotEmpty()) {
             logger.info("Message data stream ID received: $dataStream")
         }
         return try {
             val report = validateMessage(
-                hl7Message,  dataStream
+                hl7Message, dataStream
             )
             logger.info("Validation report created OK")
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
