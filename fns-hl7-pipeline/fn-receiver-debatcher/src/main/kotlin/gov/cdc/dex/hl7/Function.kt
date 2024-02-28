@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.EventGridTrigger
 import com.microsoft.azure.functions.annotation.FunctionName
+import com.microsoft.azure.functions.annotation.QueueTrigger
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
@@ -46,16 +47,20 @@ class Function {
     }
 
     @FunctionName("ingest-file")
-    fun processEventGrid(
+   /* fun processEventGrid(
         @EventGridTrigger(name = "eventGridEvent") messageEvent: String?,
+        context: ExecutionContext
+    ): DexHL7Metadata? {*/
+    fun processQueue(
+        @QueueTrigger(name = "message", queueName = "hl7-file-drop", connection = "BlobIngestConnectionString") message: String?,
         context: ExecutionContext
     ): DexHL7Metadata? {
         logger.info("DEX::Received BLOB_CREATED event!")
         var msgEvent: DexHL7Metadata? = null
         val eventReportList = mutableListOf<String>()
-        context.logger.fine("payload ingest-file:$messageEvent")
+        context.logger.fine("payload ingest-file:$message")
         try {
-            val event = gson.fromJson(messageEvent, AzBlobCreateEventMessage::class.java)
+            val event = gson.fromJson(message, AzBlobCreateEventMessage::class.java)
             val startTime = Date().toIsoString()
             // Pick up blob metadata
             val blobName = event.eventData.url.substringAfter("/${fnConfig.blobIngestContName}/")
@@ -238,7 +243,7 @@ class Function {
         startTime: String,
         errorMessage: String? = null
     ): Pair<StageMetadata, SummaryInfo> {
-        val stageMetadata = ReceiverStageMetadata(status = status, eventTimestamp = eventTimestamp)
+        val stageMetadata = ReceiverStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
         stageMetadata.startProcessTime = startTime
         stageMetadata.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")
@@ -280,8 +285,8 @@ class Function {
             ingestedFilePath = metaDataMap["file_path"] ?: "",
             ingestedFileTimestamp = metaDataMap["file_timestamp"] ?: "",
             ingestedFileSize = metaDataMap["file_size"] ?: "",
-            dataProducerId = metaDataMap["data_producer_id"],
-            jurisdiction = getValueOrNullString(
+            dataProducerId = metaDataMap["data_producer_id"]?:"",
+            jurisdiction = getValueOrDefaultString(
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
