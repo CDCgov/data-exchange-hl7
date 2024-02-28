@@ -38,7 +38,8 @@ class Function {
                     val mappedMessage = JsonParser.parseString(message).asJsonObject
                     val stage = JsonHelper.getValueFromJson("stage", mappedMessage).asJsonObject
                     val stageName = JsonHelper.getValueFromJson("stage_name", stage).asString
-                    val messageUuid = mappedMessage["message_uuid"].asString
+                    val messageMD = JsonHelper.getValueFromJson("message_metadata", mappedMessage).asJsonObject
+                    val messageUuid = JsonHelper.getValueFromJson("message_uuid", messageMD).asString
                     val summaryInfo = mappedMessage["summary"].asJsonObject
                     val currentStatus = summaryInfo["current_status"].asString
 
@@ -51,7 +52,7 @@ class Function {
                     }
                 } catch (e: Exception) {
                     // TODO send to quarantine?
-                    logger.error("Error processing message", e)
+                    logger.error("Error processing message, ${e.message}")
                 }
             }
         }
@@ -63,7 +64,7 @@ class Function {
                 fnConfig.evHubSenderErr.send(outErrList)
             }
         } catch (e : Exception) {
-            logger.error("Error sending to event hubs", e)
+            logger.error("Error sending to event hubs, ${e.message}")
         }
 
     }
