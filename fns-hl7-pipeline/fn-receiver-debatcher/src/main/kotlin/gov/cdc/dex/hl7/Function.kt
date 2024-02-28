@@ -267,10 +267,10 @@ class Function {
     private fun getValueOrNullString(
         metaDataMap: Map<String, String?>,
         keysToTry: List<String>
-    ): String {
+    ): String? {
         val value = getValueOrDefaultString(metaDataMap, keysToTry)
         return if (value == "UNKNOWN") {
-            ""
+            null
         } else {
             value
         }
@@ -286,7 +286,7 @@ class Function {
             ingestedFileTimestamp = metaDataMap["file_timestamp"] ?: "",
             ingestedFileSize = metaDataMap["file_size"] ?: "",
             dataProducerId = metaDataMap["data_producer_id"]?:"",
-            jurisdiction = getValueOrNullString(
+            jurisdiction = getValueOrDefaultString(
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
