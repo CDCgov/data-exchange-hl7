@@ -64,6 +64,11 @@ class Function {
             if (!routingMeta.isJsonNull) {
                 val routingMetadata = routingMeta.asJsonObject
                 val supportingMeta = routingMetadata.remove("supporting_metadata")
+
+                // update data_stream_route to match destination folder name
+                routingMetadata.addProperty("data_stream_route", fnConfig.blobStorageFolderName)
+
+                // add all routing metadata json elements to blob metadata we will attach on upload
                 routingMetadata.keySet().forEach { key ->
                     if (!routingMetadata[key].isJsonNull) {
                         metaToAttach[key] = routingMetadata[key].asString
@@ -78,8 +83,11 @@ class Function {
                     }
                 }
             } else {
+                // add data_stream_route to reflect the destination folder
+                metaToAttach["data_stream_route"] = fnConfig.blobStorageFolderName
                 logger.error("DEX::ERROR:Unable to locate routing_metadata for message $newBlobName")
             }
+
             logger.info("DEX::Saving message $newBlobName")
             try {
                 val folderStructure = SimpleDateFormat("YYYY/MM/dd").format(Date())
