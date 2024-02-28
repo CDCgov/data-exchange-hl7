@@ -2,7 +2,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.hl7.HL7JSONLakeProcessMetadata
+import gov.cdc.dex.hl7.HL7JSONLakeStageMetadata
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
@@ -24,17 +24,16 @@ class MetadataTest {
         val jsonObject = bumblebee.transformMessage()
         // load test json as if it were metadata coming from previous process
         val testMessage = this::class.java.getResource("test.json").readText()
-        val inputEvent = JsonParser.parseString(testMessage)
-        val metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
-        val processMD = HL7JSONLakeProcessMetadata(
-            status = "SUCCESS",
+        val inputEvent = JsonParser.parseString(testMessage).asJsonObject
+         val processMD = HL7JSONLakeStageMetadata(
+            jsonLakeStatus = "SUCCESS",
             output = gsonNoNulls.toJsonTree(jsonObject).asJsonObject,
             eventHubMD = EventHubMetadata(1, 99, "", ""),
             config = listOf(PROFILE_FILE_PATH))
         processMD.startProcessTime = Date().toIsoString()
         processMD.endProcessTime = Date().toIsoString()
         // overwrite existing stage
-        metadata.add("stage", processMD.toJsonElement())
+        inputEvent.add("stage", processMD.toJsonElement())
         println(inputEvent)
     }
 

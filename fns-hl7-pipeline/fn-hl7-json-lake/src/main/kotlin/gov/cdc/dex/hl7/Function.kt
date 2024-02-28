@@ -54,9 +54,8 @@ class Function {
                 val startTime = Date().toIsoString()
                 try {
                     val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
-                    val metadata = JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
-                    val filePath = JsonHelper.getValueFromJson("metadata.provenance.file_path", inputEvent).asString
-                    val messageUUID = inputEvent["message_uuid"].asString
+                    val filePath = JsonHelper.getValueFromJson("routing_metadata.ingested_file_path", inputEvent).asString
+                    val messageUUID = inputEvent["message_metadata.message_uuid"].asString
 
                     logger.info("DEX::Processing messageUUID:$messageUUID")
                     try {
@@ -66,7 +65,7 @@ class Function {
                         val fullHL7 = gsonNoNulls.toJsonTree(fullHL7WithNulls).asJsonObject
 
                         returnValue = updateMetadataAndDeliver(
-                            startTime, metadata, PROCESS_STATUS_OK,
+                            startTime, PROCESS_STATUS_OK,
                             fullHL7, eventHubMD[messageIndex], gsonWithNullsOn,
                             inputEvent, null,
                             listOf(FunctionConfig.PROFILE_FILE_PATH),
@@ -77,7 +76,7 @@ class Function {
                         context.logger.severe("Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
                         //publishing the message  to the eventhubSendErrsName topic using EventHub
                         returnValue = updateMetadataAndDeliver(
-                            startTime, metadata, PROCESS_STATUS_EXCEPTION,
+                            startTime, PROCESS_STATUS_EXCEPTION,
                             null, eventHubMD[messageIndex], gsonWithNullsOn,
                             inputEvent, e,
                             listOf(FunctionConfig.PROFILE_FILE_PATH),
@@ -90,7 +89,7 @@ class Function {
                     // message is bad, can't extract fields based on schema expected
                     context.logger.severe("Unable to process Message due to exception: ${e.message}")
                     returnValue = updateMetadataAndDeliver(
-                        startTime, JsonObject(), PROCESS_STATUS_EXCEPTION,
+                        startTime, PROCESS_STATUS_EXCEPTION,
                         null, eventHubMD[messageIndex], gsonWithNullsOn,
                         JsonObject(), e,
                         listOf(FunctionConfig.PROFILE_FILE_PATH),
@@ -131,7 +130,7 @@ class Function {
         val description = "DELIVERY FAILED: Message too large. Message UUID $msgId, Upload ID $uploadId"
         summary.add(
             "problem",
-            Problem(processName = HL7JSONLakeProcessMetadata.PROCESS_NAME,
+            Problem(processName = HL7JSONLakeStageMetadata.PROCESS_NAME,
                 errorMessage = description).toJsonElement()
         )
         logger.error(description)
@@ -152,21 +151,21 @@ class Function {
     }
 
     private fun updateMetadataAndDeliver(
-        startTime: String, metadata: JsonObject, status: String,
+        startTime: String, status: String,
         report: JsonObject?, eventHubMD: EventHubMetadata, gsonWithNullsOn: Gson,
         inputEvent: JsonObject, exception: Exception?,
         config: List<String>,
         outData: MutableList<String>
     ): JsonObject {
 
-        val processMD = HL7JSONLakeProcessMetadata(status = status, output = report, eventHubMD = eventHubMD, config)
+        val processMD = HL7JSONLakeStageMetadata(jsonLakeStatus = status, output = report, eventHubMD = eventHubMD, config)
         processMD.startProcessTime = startTime
         processMD.endProcessTime = Date().toIsoString()
-        metadata.add("stage", processMD.toJsonElement())
+        inputEvent.add("stage", processMD.toJsonElement())
 
         if (exception != null) {
             //TODO::  - update retry counts
-            val problem = Problem(HL7JSONLakeProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
+            val problem = Problem(HL7JSONLakeStageMetadata.PROCESS_NAME, exception, false, 0, 0)
             val summary = SummaryInfo(SUMMARY_STATUS_ERROR, problem)
             inputEvent.add("summary", summary.toJsonElement())
         } else {
