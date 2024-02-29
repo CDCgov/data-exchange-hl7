@@ -1,7 +1,8 @@
-import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.hl7.Function
 import gov.cdc.dex.hl7.Function.Companion.UTF_BOM
-import gov.cdc.dex.hl7.ReceiverProcessMetadata
+import gov.cdc.dex.hl7.ReceiverEventError
+import gov.cdc.dex.hl7.ReceiverEventReport
+import gov.cdc.dex.hl7.ReceiverStageMetadata
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
@@ -11,7 +12,9 @@ import org.junit.jupiter.api.Test
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
+import java.lang.IllegalArgumentException
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DebatcherTest {
 
@@ -42,8 +45,6 @@ class DebatcherTest {
         val filePath = "genV1/Genv1-Case-TestMessage1.HL7"
         val startTime = Date().toIsoString()
         val metaDataMap: Map<String, String?> = mapOf(
-            Pair("message_type", "CASE"),
-            Pair("route", null),
             Pair("reporting_jurisdiction", "16"),
             Pair("original_file_name", "Genv1-Case-TestMessage1.HL7"),
             Pair("meta_destination_id", "arboviral diseases"),
@@ -51,80 +52,104 @@ class DebatcherTest {
             Pair("tus_tguid", UUID.randomUUID().toString()),
             Pair("meta_ext_uploadid", UUID.randomUUID().toString()),
             Pair("trace_id", "unknown"),
-            Pair("parent_span_id", "unknown")
+            Pair("parent_span_id", "unknown"),
+            Pair("file_path", filePath)
         )
-        val testFileIS = this::class.java.getResource(filePath).openStream()
-        val provenance = Provenance(
-            eventId = "123",
-            eventTimestamp = startTime,
-            filePath = filePath,
-            fileTimestamp = startTime,
-            fileSize = 1234,
-            singleOrBatch = Provenance.SINGLE_FILE,
-            originalFileName = "blobName",
-            systemProvider = "BLOB",
-            originalFileTimestamp = startTime,
-        )
-        // Read Blob File by Lines
-        // -------------------------------------
-        val reader = InputStreamReader(testFileIS)
-        val currentLinesArr = arrayListOf<String>()
-        var mshCount = 0
-        val eventHubMD = EventHubMetadata(1, 1, null, "20230101")
-        BufferedReader(reader).use { br ->
-            br.forEachLine { line ->
-                val lineClean = line.trim().let { if (it.startsWith(UTF_BOM)) it.substring(1) else it }
-                if (lineClean.startsWith("FHS") || lineClean.startsWith("BHS") || lineClean.startsWith("BTS") || lineClean.startsWith(
-                        "FTS"
-                    )
-                ) {
-                    // batch line --Nothing to do here
-                    provenance.singleOrBatch = Provenance.BATCH_FILE
-                } else {
-                    if (lineClean.startsWith("MSH")) {
-                        mshCount++
-                        if (mshCount > 1) {
-                            provenance.singleOrBatch = Provenance.BATCH_FILE
-                            provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
-                            val messageInfo = getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n"))
-                            val (metadata, summary) = buildMetadata(
-                                Function.STATUS_SUCCESS,
-                                "20240216",
-                                startTime,
-                                provenance
-                            )
-                            prepareAndSend(currentLinesArr, messageInfo, metadata, summary, metaDataMap)
-                            provenance.messageIndex++
-                        }
-                        currentLinesArr.clear()
-                    } // .if
-                    currentLinesArr.add(lineClean)
-                } // .else
-            } // .forEachLine
-        } // .BufferedReader
-        // Send last message
-        provenance.messageHash = currentLinesArr.joinToString("\n").hashMD5()
-        if (mshCount > 0) {
-            val messageInfo = getMessageInfo(metaDataMap, currentLinesArr.joinToString("\n"))
-            val (metadata, summary) = buildMetadata(Function.STATUS_SUCCESS, "20240216", startTime, provenance)
-            prepareAndSend(currentLinesArr, messageInfo, metadata, summary, metaDataMap)
-        } else {
-            // no valid message -- send to error queue
-            val (metadata, summary) = buildMetadata(
-                Function.STATUS_ERROR,
-                "20240216",
-                startTime,
-                provenance,
-                "No valid message found."
-            )
-            prepareAndSend(
-                arrayListOf(),
-                DexMessageInfo(null, null, null, null, HL7MessageType.CASE),
-                metadata,
-                summary,
-                metaDataMap
-            )
+        var msgEvent: DexHL7Metadata? = null
+        val eventReportList = mutableListOf<String>()
+        try {
+            val testFileIS = this::class.java.getResource(filePath).openStream()
+            // Add routing data to Report object for this file
+            val eventReport = ReceiverEventReport()
+            val routingMetadata = buildRoutingMetadata(metaDataMap, null)
+            eventReport.routingData = routingMetadata
+
+            // Read Blob File by Lines
+            // -------------------------------------
+            val reader = InputStreamReader(testFileIS, Charsets.UTF_8)
+            val currentLinesArr = arrayListOf<String>()
+            var mshCount = 0
+            var messageIndex = 1
+            var singleOrBatch = MessageMetadata.SINGLE_FILE
+            BufferedReader(reader).use { br ->
+                br.forEachLine { line ->
+                    val lineClean =
+                        line.trim().let { if (it.startsWith(UTF_BOM)) it.substring(1) else it }
+                    if (lineClean.startsWith("FHS") ||
+                        lineClean.startsWith("BHS") ||
+                        lineClean.startsWith("BTS") ||
+                        lineClean.startsWith("FTS")
+                    ) {
+                        singleOrBatch = MessageMetadata.BATCH_FILE
+                        // batch line --Nothing to do here
+                    } else if (lineClean.isNotEmpty()) {
+                        if (lineClean.startsWith("MSH")) {
+                            mshCount++
+                            if (mshCount > 1) {
+                                singleOrBatch = MessageMetadata.BATCH_FILE
+                                buildAndSendMessage(
+                                    messageIndex = messageIndex,
+                                    singleOrBatch = singleOrBatch,
+                                    status = Function.STATUS_SUCCESS,
+                                    currentLinesArr = currentLinesArr,
+                                    eventTime = startTime,
+                                    startTime = startTime,
+                                    routingMetadata = routingMetadata,
+                                    eventReport = eventReport
+                                )
+                                messageIndex++
+                            }
+                            currentLinesArr.clear()
+                        } // .if
+                        currentLinesArr.add(lineClean)
+                    } // .else
+                } // .forEachLine
+            } // .BufferedReader
+
+            msgEvent = if (mshCount > 0) {
+                // Send last message
+                buildAndSendMessage(
+                    messageIndex = messageIndex,
+                    singleOrBatch = singleOrBatch,
+                    status = Function.STATUS_SUCCESS,
+                    currentLinesArr = currentLinesArr,
+                    eventTime = startTime,
+                    startTime = startTime,
+                    routingMetadata = routingMetadata,
+                    eventReport = eventReport
+                )
+            } else {
+                // no valid message -- send to error queue
+                // send empty array as message content when content is invalid
+                val errorMessage = "No valid message found."
+                buildAndSendMessage(
+                    messageIndex = messageIndex,
+                    singleOrBatch = singleOrBatch,
+                    status = Function.STATUS_ERROR,
+                    currentLinesArr = arrayListOf(),
+                    eventTime = startTime,
+                    startTime = startTime,
+                    routingMetadata = routingMetadata,
+                    eventReport = eventReport,
+                    errorMessage = errorMessage
+                )
+
+            }
+
+            eventReport.messageBatch = singleOrBatch
+            eventReport.totalMessageCount = messageIndex
+            eventReportList.add(Function.gson.toJson(eventReport))
+            println("file event report --> ${Function.gson.toJson(eventReport)}")
+
+        } catch (e: Exception) {
+            println("Failure in Debatcher Test: ${e.message}")
+        } finally {
+            // send ingest-file event reports to separate event hub
+            println("Simulating sending event report")
+
         }
+
+
     } // .test
 
 
@@ -134,89 +159,137 @@ class DebatcherTest {
         else ""
     }
 
-    private fun buildMetadata(
+    private fun buildAndSendMessage(
+        messageIndex: Int,
+        singleOrBatch: String,
+        status: String,
+        currentLinesArr: ArrayList<String>,
+        eventTime: String,
+        startTime: String,
+        routingMetadata: RoutingMetadata,
+        eventReport: ReceiverEventReport,
+        errorMessage: String? = null
+    ): DexHL7Metadata {
+        val messageMetadata = MessageMetadata(
+            singleOrBatch = singleOrBatch,
+            messageIndex = messageIndex,
+            messageHash = currentLinesArr.joinToString("\n").hashMD5()
+        )
+
+        val (stage, summary) = buildStageAndSummaryMetadata(
+            status = status,
+            eventTimestamp = eventTime,
+            startTime = startTime,
+            errorMessage = errorMessage
+        )
+        return preparePayload(
+            messageMetadata = messageMetadata,
+            routingMetadata = routingMetadata,
+            stage = stage,
+            messageContent = currentLinesArr,
+            summary = summary
+        ).apply {
+            //Send message to eh and update event report
+            sendMessageAndUpdateEventReport(this, eventReport)
+        }
+    }
+
+    private fun sendMessageAndUpdateEventReport(payload: DexHL7Metadata, eventReport: ReceiverEventReport) {
+
+        val jsonMessage = Function.gson.toJson(payload)
+        println(jsonMessage)
+        println("Simulating Sending new Event to event hub Message: --> messageUUID: ${payload.messageMetadata.messageUUID}, messageIndex: ${payload.messageMetadata.messageIndex}, fileName: ${payload.routingMetadata.ingestedFilePath}")
+        println("Processed and Sent to console Message: --> messageUUID: ${payload.messageMetadata.messageUUID}, messageIndex: ${payload.messageMetadata.messageIndex}, fileName: ${payload.routingMetadata.ingestedFilePath}")
+    }
+
+    private fun addErrorToReport(
+        eventReport: ReceiverEventReport,
+        errorMessage: String,
+        messageUUID: String? = null,
+        messageIndex: Int = 1
+    ) {
+        eventReport.errorMessages.add(ReceiverEventError(messageIndex, messageUUID, errorMessage))
+    }
+
+    private fun buildStageAndSummaryMetadata(
         status: String,
         eventTimestamp: String,
         startTime: String,
-        provenance: Provenance,
         errorMessage: String? = null
-    ): Pair<DexMetadata, SummaryInfo> {
-        val processMD = ReceiverProcessMetadata(status, eventTimestamp)
-        processMD.startProcessTime = startTime
-        processMD.endProcessTime = Date().toIsoString()
+    ): Pair<StageMetadata, SummaryInfo> {
+        val stageMetadata = ReceiverStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
+        stageMetadata.startProcessTime = startTime
+        stageMetadata.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")
         if (status == Function.STATUS_ERROR) {
             summary = SummaryInfo("REJECTED")
-            summary.problem = Problem(ReceiverProcessMetadata.RECEIVER_PROCESS, null, null, errorMessage, false, 0, 0)
+            summary.problem =
+                errorMessage?.let { Problem(processName = ReceiverStageMetadata.RECEIVER_PROCESS, errorMessage = it) }
         }
-        return DexMetadata(provenance, processMD) to summary
+        return stageMetadata to summary
     }
 
-    private fun getRoutingData(metaDataMap: Map<String, String?>): RoutingMetadata {
-        val uploadID = if (!metaDataMap["meta_ext_uploadid"].isNullOrEmpty()) {
-            metaDataMap["meta_ext_uploadid"]
-        } else if (!metaDataMap["tus_tguid"].isNullOrEmpty()) {
-            metaDataMap["tus_tguid"]
-        } else "UNKNOWN"
-        val traceID = metaDataMap["trace_id"]
-        val parentSpanID = metaDataMap["parent_span_id"]
+    private fun getValueOrDefaultString(
+        metaDataMap: Map<String, String?>,
+        keysToTry: List<String>,
+        defaultReturnValue: String = "UNKNOWN"
+    ): String {
+        keysToTry.forEach { if (!metaDataMap[it].isNullOrEmpty()) return metaDataMap[it]!! }
+        return defaultReturnValue
+    }
+
+    private fun getValueOrNullString(
+        metaDataMap: Map<String, String?>,
+        keysToTry: List<String>
+    ): String {
+        val value = getValueOrDefaultString(metaDataMap, keysToTry)
+        return if (value == "UNKNOWN") {
+            ""
+        } else {
+            value
+        }
+    }
+
+    private fun buildRoutingMetadata(
+        metaDataMap: Map<String, String?>,
+        supportingMetadata: Map<String, String>?
+    ): RoutingMetadata {
 
         return RoutingMetadata(
-            uploadID = uploadID,
-            traceID = traceID,
-            parentSpanID = parentSpanID,
-            destinationID = metaDataMap["meta_destination_id"],
-            destinationEvent = metaDataMap["meta_ext_event"]
+            ingestedFilePath = metaDataMap["file_path"] ?: "",
+            ingestedFileTimestamp = metaDataMap["file_timestamp"] ?: "",
+            ingestedFileSize = metaDataMap["file_size"] ?: "",
+            dataProducerId = metaDataMap["data_producer_id"]?:"",
+            jurisdiction = getValueOrNullString(
+                metaDataMap,
+                listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
+            ),
+            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "meta_ext_uploadid", "tus_tguid")),
+            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
+            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
+            traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
+            spanId = getValueOrDefaultString(metaDataMap, listOf("parent_span_id", "span_id")),
+            supportingMetadata = supportingMetadata
         )
     }
 
-    private fun prepareAndSend(
+    private fun preparePayload(
+        messageMetadata: MessageMetadata,
+        routingMetadata: RoutingMetadata,
+        stage: StageMetadata,
         messageContent: ArrayList<String>,
-        messageInfo: DexMessageInfo,
-        metadata: DexMetadata,
         summary: SummaryInfo,
-        metaDataMap: Map<String, String?>
-    ): DexEventPayload {
+    ): DexHL7Metadata {
 
-        val msgEvent = DexEventPayload(
-            messageInfo = messageInfo,
-            metadata = metadata,
-            summary = summary,
-            routingMetadata = getRoutingData(metaDataMap),
-            content = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray())
-        )
-        val jsonMessage = Function.gson.toJson(msgEvent)
-        println(jsonMessage)
-        println("Simulating Sending new Event to event hub Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
-        println("Processed and Sent to console Message: --> messageUUID: ${msgEvent.messageUUID}, messageIndex: ${msgEvent.metadata.provenance.messageIndex}, fileName: ${msgEvent.metadata.provenance.filePath}")
-        return msgEvent
-    }
-
-    private fun getMessageInfo(metaDataMap: Map<String, String?>, message: String): DexMessageInfo {
-        val eventCode = extractValue(message, Function.EVENT_CODE_PATH)
-        val localRecordID = extractValue(message, Function.LOCAL_RECORD_ID_PATH)
-        val messageType = metaDataMap["message_type"]
-
-        //READ FROM METADATA FOR ELR
-        if (messageType == HL7MessageType.ELR.name) {
-            val route = metaDataMap["route"]?.normalize()
-            val reportingJurisdiction = metaDataMap["reporting_jurisdiction"]
-            return DexMessageInfo(eventCode, route, null, reportingJurisdiction, HL7MessageType.ELR, localRecordID)
-        }
-
-        var jurisdictionCode = extractValue(message, Function.JURISDICTION_CODE_PATH)
-        if (jurisdictionCode.isEmpty()) {
-            jurisdictionCode = extractValue(message, Function.ALT_JURISDICTION_CODE_PATH)
-        }
-
-        return DexMessageInfo(
-            eventCode = eventCode,
-            route = Function.fnConfig.eventCodes[eventCode]?.get("category"),
-            mmgKeyList = null,
-            jurisdictionCode = jurisdictionCode,
-            type = HL7MessageType.CASE,
-            localRecordID = localRecordID
+        return DexHL7Metadata(
+            messageMetadata = messageMetadata,
+            routingMetadata = routingMetadata,
+            stage = stage,
+            content = Base64.getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray()),
+            summary = summary
         )
     }
+
+//    }
 
 }

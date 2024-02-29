@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>lake-segs-transformer</artifactId>
-    <version>0.0.39-SNAPSHOT</version>
+    <version>0.0.40-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DEX Fns-Pipeline :: lake-segs-transformer</name>
 
@@ -30,7 +30,7 @@
 
         <gson.version>2.10.1</gson.version>
         <junit.version>5.9.2</junit.version>
-        <libdexcommon.version>0.0.39-SNAPSHOT</libdexcommon.version>
+        <libdexcommon.version>0.0.42-SNAPSHOT</libdexcommon.version>
 
         <hl7pet.version>1.2.7.2</hl7pet.version>
 

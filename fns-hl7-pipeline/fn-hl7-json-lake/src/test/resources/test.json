@@ -1,76 +1,38 @@
 {
-	"id": "04e99422-67b9-4c24-8f06-4ffdd05b5315",
-	"message_uuid": "04e99422-67b9-4c24-8f06-4ffdd05b5315",
-	"message_info": {
-		"event_code": "",
-		"route": "phlip_vpd",
-		"mmgs": null,
-		"reporting_jurisdiction": "55",
-		"type": "ELR",
-		"local_record_id": "Starlims Lab"
+	"schema_name": "DEX HL7v2",
+	"schema_version": "2.0.0",
+	"message_metadata": {
+		"message_uuid": "b5c567a1-2716-458d-a7a7-83da6844ae5f",
+		"single_or_batch": "SINGLE",
+		"message_index": 1,
+		"message_hash": "ce9e2ad87708e6a60efef7ebfa302a01"
 	},
 	"routing_metadata": {
-		"upload_id": "UNKNOWN",
-		"trace_id": null,
-		"parent_span_id": null,
-		"destination_id": null,
-		"destination_event": null
+		"ingested_file_path": "genV1/Genv1-Case-TestMessage1.HL7",
+		"ingested_file_timestamp": "",
+		"ingested_file_size": "",
+		"data_producer_id": null,
+		"jurisdiction": "16",
+		"upload_id": "bb797349-e554-4eb4-9029-c96c009c1b06",
+		"data_stream_id": "arboviral diseases",
+		"data_stream_route": "case notification",
+		"trace_id": "unknown",
+		"span_id": "unknown",
+		"supporting_metadata": null
 	},
-	"metadata": {
-		"provenance": {
-			"event_id": "ea1c0b88-f01e-001e-71a5-5eeb8b0662ae",
-			"event_timestamp": "2024-02-13T17:49:37.9145208Z",
-			"file_uuid": "e2df1b60-b997-4c8d-a3dc-aacf381c0b09",
-			"file_path": "https://ocioedemessagesadev.blob.core.windows.net/hl7ingress/postman-quq6-c321e1cc-dd9a-403b-948b-80d59c0d112f.txt",
-			"file_timestamp": "2024-02-13T17:49:37+00:00",
-			"file_size": 2583,
-			"single_or_batch": "SINGLE",
-			"message_hash": "cc9c74e68487cceda8f8b21db435c928",
-			"ext_system_provider": "POSTMAN",
-			"ext_original_file_name": "postman-quq6-c321e1cc-dd9a-403b-948b-80d59c0d112f.txt",
-			"message_index": 1,
-			"ext_original_file_timestamp": "",
-			"source_metadata": {
-				"orginal_file_name": "stateLocalFile_3db810b4-18dd-4a35-bad7-f4d33db0b275.txt"
-			}
-		},
-		"stage": {
-			"status": "SUCCESS",
-			"report": {
-				"entries": {
-					"structure": [],
-					"content": [],
-					"value-set": []
-				},
-				"error-count": {
-					"structure": 0,
-					"value-set": 0,
-					"content": 0
-				},
-				"warning-count": {
-					"structure": 0,
-					"value-set": 0,
-					"content": 0
-				},
-				"status": "VALID_MESSAGE"
-			},
-			"process_name": "STRUCTURE-VALIDATOR",
-			"process_version": "1.0.0",
-			"eventhub_queued_time": "2024-02-13T19:36:19.042",
-			"eventhub_offset": 21483511168,
-			"eventhub_sequence_number": 1503,
-			"configs": [
-				"PHLIP_VPD-2.5.1"
-			],
-			"start_processing_time": "2024-02-13T19:36:19.086+00:00",
-			"end_processing_time": "2024-02-13T19:36:19.098+00:00"
-		}
+	"stage": {
+		"status": "SUCCESS",
+		"eventTimestamp": "2024-02-26T14:23:11.278-0500",
+		"stage_name": "RECEIVER",
+		"stage_version": "2.0.0",
+		"configs": [],
+		"event_timestamp": "2024-02-26T14:23:11.278-0500",
+		"start_processing_time": "2024-02-26T14:23:11.278-0500",
+		"end_processing_time": "2024-02-26T14:23:11.426-0500"
 	},
 	"summary": {
-		"current_status": "STRUCTURE VALID",
+		"current_status": "RECEIVED",
 		"problem": null
 	},
-	"schema_version": "0.0.1",
-	"schema_name": "DEX HL7v2",
-	"meta_ext_event": "hl7_out_struct"
+	"content": "TVNIfF5+XCZ8U1lTV...."
 }

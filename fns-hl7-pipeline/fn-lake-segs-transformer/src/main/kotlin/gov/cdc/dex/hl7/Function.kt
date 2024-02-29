@@ -13,6 +13,7 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import org.slf4j.LoggerFactory
+import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.Base64.*
 
@@ -46,65 +47,68 @@ class Function {
         @BindingName("SystemPropertiesArray") eventHubMD:List<EventHubMetadata>,
     ): List<String> {
         val outList = mutableListOf<String>()
-        val profileFilePath = "/BasicProfile.json"
+        val profileFilePath = "/basicProfile.json"
         val config = listOf(profileFilePath)
 
         messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
-            if (!singleMessage.isNullOrEmpty()) {
-                val startTime = Date().toIsoString()
-                val inputEvent = JsonParser.parseString(singleMessage) as JsonObject
-                val hl7Content: String
-                val metadata: JsonObject
-                val filePath: String
-                val messageUUID: String
-                try {
-                    val hl7ContentBase64 = inputEvent["content"].asString
-                    val hl7ContentDecodedBytes = getDecoder().decode(hl7ContentBase64)
-                    hl7Content = String(hl7ContentDecodedBytes)
-                    metadata = inputEvent["metadata"].asJsonObject
-                    val provenance = metadata["provenance"].asJsonObject
-                    filePath = provenance["file_path"].asString
-                    messageUUID = inputEvent["message_uuid"].asString
-
-                    var status: String
-                    var lakeSegsModel: List<Segment>?
-                    var exception: Exception?
-
-                    logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+            try {
+                if (!singleMessage.isNullOrEmpty()) {
+                    val startTime = Date().toIsoString()
+                    val inputEvent = JsonParser.parseString(singleMessage) as JsonObject
+                    val hl7Content: String
+                    val filePath: String
+                    val messageUUID: String
                     try {
-                        // read the profile
-                        val profile = this::class.java.getResource(profileFilePath).readText()
-                        // Transform to Lake of Segments
-                        lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
-                        status = PROCESS_STATUS_OK
-                        exception = null
-                        logger.info("DEX::Processed OK for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.evHubSendName}")
-                    } catch (e: Exception) {
-                        status = PROCESS_STATUS_EXCEPTION
-                        logger.error("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
-                        lakeSegsModel = null
-                        exception = e
-                    } // .catch
-                    // update Metadata and add to batch for delivery
-                     updateMetadataAndDeliver(
-                        startTime,
-                        status,
-                        lakeSegsModel,
-                        eventHubMD[messageIndex],
-                        inputEvent,
-                        exception,
-                        config,
-                        outList
-                    )
+                        hl7Content = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
+                        filePath =
+                            JsonHelper.getValueFromJson("routing_metadata.ingested_file_path", inputEvent).asString
+                        messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
 
-                } catch (e: Exception) {
-                    //TODO::  - update retry counts
-                    logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
-                    updateMetadataAndDeliver(startTime = startTime, status = PROCESS_STATUS_EXCEPTION,
-                        report =null, eventHubMD = eventHubMD[messageIndex], inputEvent = inputEvent,
-                        exception = e, config = config, outList = outList)
-                } // .try
-            } // .if
+                        var status: String
+                        var lakeSegsModel: List<Segment>?
+                        var exception: Exception?
+
+                        logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+                        try {
+                            // read the profile
+                            val profile = this::class.java.getResource(profileFilePath)?.readText()
+                                ?: throw IllegalArgumentException("Unable to load profile $profileFilePath")
+                            // Transform to Lake of Segments
+                            lakeSegsModel = TransformerSegments().hl7ToSegments(hl7Content, profile)
+                            status = PROCESS_STATUS_OK
+                            exception = null
+                            logger.info("DEX::Processed OK for Lake of Segments messageUUID: $messageUUID, filePath: $filePath, ehDestination: ${fnConfig.evHubSendName}")
+                        } catch (e: Exception) {
+                            status = PROCESS_STATUS_EXCEPTION
+                            logger.error("DEX::Exception: Unable to process Message messageUUID: $messageUUID, filePath: $filePath, due to exception: ${e.message}")
+                            lakeSegsModel = null
+                            exception = e
+                        } // .catch
+                        // update Metadata and add to batch for delivery
+                        updateMetadataAndDeliver(
+                            startTime,
+                            status,
+                            lakeSegsModel,
+                            eventHubMD[messageIndex],
+                            inputEvent,
+                            exception,
+                            config,
+                            outList
+                        )
+
+                    } catch (e: Exception) {
+                        //TODO::  - update retry counts
+                        logger.error("DEX:: Unable to process Message due to exception: ${e.message}")
+                        updateMetadataAndDeliver(
+                            startTime = startTime, status = PROCESS_STATUS_EXCEPTION,
+                            report = null, eventHubMD = eventHubMD[messageIndex], inputEvent = inputEvent,
+                            exception = e, config = config, outList = outList
+                        )
+                    } // .try
+                } // .if
+            } catch (e : Exception) {
+                logger.error("ERROR: An unexpected error occurred: ${e.message}")
+            }
         }// .foreach
 
         // send everything to out event hub
@@ -128,17 +132,15 @@ class Function {
                                          config: List<String>,
                                          outList: MutableList<String>) {
 
-        val processMD = LakeSegsTransProcessMetadata(status=status, output=report, eventHubMD = eventHubMD, config)
-        processMD.startProcessTime = startTime
-        processMD.endProcessTime = Date().toIsoString()
+        val stageMD = LakeSegsTransStageMetadata(lakeSegStatus = status, output=report, eventHubMD = eventHubMD, config)
+        stageMD.startProcessTime = startTime
+        stageMD.endProcessTime = Date().toIsoString()
 
-        val metadata =  JsonHelper.getValueFromJson("metadata", inputEvent).asJsonObject
-        metadata.remove("processes")
-        metadata.add("stage", processMD.toJsonElement())
+        inputEvent.add("stage", stageMD.toJsonElement())
 
         if (exception != null) {
             //TODO::  - update retry counts
-            val problem = Problem(LakeSegsTransProcessMetadata.PROCESS_NAME, exception, false, 0, 0)
+            val problem = Problem(LakeSegsTransStageMetadata.PROCESS_NAME, exception, false, 0, 0)
             val summary = SummaryInfo(SUMMARY_STATUS_ERROR, problem)
             inputEvent.add("summary", summary.toJsonElement())
         } else {
