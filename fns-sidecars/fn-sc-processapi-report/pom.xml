@@ -16,7 +16,7 @@
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <functionAppName>hl7-processingstatus-${receiveFn}-${environment-id}</functionAppName>
+        <functionAppName>hl7-processingstatus-${FUNC}-${environment-id}</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <AzureBom.version>1.2.20</AzureBom.version>
         <java.version>17</java.version>
@@ -147,10 +147,10 @@
                     <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan6</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-                    <!--<auth>
+                    <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
-                    </auth>-->
+                    </auth>
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
