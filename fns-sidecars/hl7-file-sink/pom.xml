@@ -16,7 +16,7 @@
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <functionAppName>hl7-file-sink-${receiveFn}-${environment-id}</functionAppName>
+        <functionAppName>hl7-file-sink-${FUNC}-${environment-id}</functionAppName>
         <AzureBom.version>1.2.21</AzureBom.version>
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
