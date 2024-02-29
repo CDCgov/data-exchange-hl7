@@ -30,6 +30,6 @@ data class ProcessingStatusSchema(
     val contentType: String = "json",
 
     @SerializedName("content")
-    var content: JsonObject,
+    var content: JsonObject
 
 )
