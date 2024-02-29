@@ -53,6 +53,8 @@ class Function {
                 logger.error("DEX::ERROR -- No Message UUID or Upload ID found. Aborting save for message index $index")
                 continue
             }
+            //remove content except structure report
+            if(fnConfig.blobStorageFolderName != "hl7_out_validation_report")   inputEvent.remove("content")
             val newBlobName = messageUUID ?: uploadId
             // get the metadata needed for routing
             val metaToAttach = mutableMapOf<String, String>()
