@@ -115,13 +115,15 @@ class ReportFunction {
             "Unknown Stage"
         }
 
+        // update schema_name to reflect this stage
+        inputEvent.addProperty("schema_name", "DEX HL7v2 $stageName")
+
         return ProcessingStatusSchema(
             uploadId = uploadId,
             destinationId =  destinationId,
             eventType =  eventType,
             stageName =  stageName,
-            content = inputEvent,
-            schemaName = "DEX HL7 $stageName")
+            content = inputEvent)
     }
 
 }
