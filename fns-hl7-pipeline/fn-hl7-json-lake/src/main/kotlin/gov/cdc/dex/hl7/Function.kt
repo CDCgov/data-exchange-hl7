@@ -55,7 +55,7 @@ class Function {
                 try {
                     val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
                     val filePath = JsonHelper.getValueFromJson("routing_metadata.ingested_file_path", inputEvent).asString
-                    val messageUUID = inputEvent["message_metadata.message_uuid"].asString
+                    val messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
 
                     logger.info("DEX::Processing messageUUID:$messageUUID")
                     try {
