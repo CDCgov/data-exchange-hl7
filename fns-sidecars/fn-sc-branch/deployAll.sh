@@ -12,5 +12,5 @@ do
   echo "@@@ Deploying $i on $1 Environment"
   echo "@@@"
   mvn clean package -DskipTests -Paz-"$1" -DFUNC="$i"
-  mvn azure-functions:deploy -DFUNC="$i"
+  mvn azure-functions:deploy -Paz-"$1" -DFUNC="$i"
 done
