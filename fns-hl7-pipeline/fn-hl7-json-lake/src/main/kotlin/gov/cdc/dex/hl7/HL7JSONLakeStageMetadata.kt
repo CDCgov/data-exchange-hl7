@@ -3,8 +3,6 @@ package gov.cdc.dex.hl7
 import com.google.gson.JsonObject
 import gov.cdc.dex.azure.EventHubMetadata
 import gov.cdc.dex.metadata.EventHubStageMetadata
-import java.io.File
-import javax.xml.parsers.DocumentBuilderFactory
 
 data class HL7JSONLakeStageMetadata(
     @Transient val jsonLakeStatus: String,
@@ -19,14 +17,6 @@ data class HL7JSONLakeStageMetadata(
 
     companion object {
         const val PROCESS_NAME = "HL7-JSON-LAKE-TRANSFORMER"
-        val PROCESS_VERSION = readVersionFromPomxml()
-
-        private fun readVersionFromPomxml(): String {
-            val xmlFile = File("pom.xml")
-            val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile)
-            val versionNode = doc.documentElement.getElementsByTagName("version").item(0)
-
-            return versionNode.textContent
-        }
+        val PROCESS_VERSION = System.getenv("FN_VERSION")?.toString() ?: "Unknown"
     }
 }
