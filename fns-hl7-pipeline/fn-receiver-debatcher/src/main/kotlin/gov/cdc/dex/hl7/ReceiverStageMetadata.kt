@@ -15,6 +15,6 @@ data class ReceiverStageMetadata(
     ) {
     companion object {
         const val RECEIVER_PROCESS = "RECEIVER"
-        const val RECEIVER_VERSION = "2.0.0"
+        val RECEIVER_VERSION = System.getenv("FN_VERSION")?.toString() ?: "Unknown"
     }
 }
