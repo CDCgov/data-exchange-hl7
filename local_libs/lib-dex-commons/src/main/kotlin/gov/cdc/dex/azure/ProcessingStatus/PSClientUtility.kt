@@ -49,8 +49,9 @@ class PSClientUtility {
      fun stopTrace( psURL: String,
                            traceId: String,
                            childSpanId: String,
+                           stageName : String
                           ) {
-        val url = "$psURL/trace/stopSpan/$traceId/$childSpanId"
+        val url = "$psURL/api/trace/stopSpan/$traceId/$childSpanId?stageName=$stageName&spanMark=stop"
         url.httpPut().responseString()
         }
 
