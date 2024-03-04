@@ -173,7 +173,7 @@ Batch submissions are expected to include messages that are all the same message
                     ExampleObject(
                         name = "Missing Data Stream ID", value = """{
     "http_status": 400,
-    "timestamp": "2023-10-20T13:59:39.566241200Z",
+    "timestamp": "2024-03-04T13:59:39.566241200Z",
     "error_message": "BAD REQUEST: Message header must specify a data stream ID using query parameter 'data_stream_id'. Please try again."
 }"""
                     )
@@ -187,7 +187,7 @@ Batch submissions are expected to include messages that are all the same message
                     required = true,
                     type = "string"),
                 description = "Required. Indicates the type of data in the message and is used to load the appropriate validation profile.")
-       @QueryValue dataStream: String,
+       @QueryValue data_stream_id: String,
         @RequestBody(content = [Content(mediaType = "text/plain", schema = Schema(type = "string") , examples = [
                 ExampleObject(name = "Single NNDSS message", value = """MSH|^~\&|^2.16.840.1.114222.4.1.144.2^ISO|^2.16.840.1.114222.4.1.144^ISO|^^ISO|^2.16.840.1.114222^ISO|20091130133708||ORU^R01^ORU_R01|182012_20091130133708|P|2.5|||||||||NND_ORU_v2.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Gen_Case_Map_v1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
 PID|1||182012^^^&2.16.840.1.114222.4.1.144.2&ISO||~^^^^^^S||19490214000000|M||1002-5^Amer.Ind./Alask.Nat.^2.16.840.1.113883.6.238~2106-3^White^2.16.840.1.113883.6.238|^^^08^^^^^101|||||||||||2186-5^Not Hispanic^2.16.840.1.113883.6.238
@@ -332,7 +332,7 @@ OBX|56|CWE|85702-9^Did Mother Ever Receive a Vaccine Against This Disease^LN||N^
                 content: String,
         request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
-        val dataStreamValue = dataStream
+        val dataStreamValue = data_stream_id.trim().uppercase()
 
         if (dataStreamValue.isEmpty()) {
             log.error("Missing data_stream_id parameter")
