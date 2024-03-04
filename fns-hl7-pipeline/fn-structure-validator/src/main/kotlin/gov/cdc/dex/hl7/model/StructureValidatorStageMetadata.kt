@@ -18,7 +18,7 @@ data class StructureValidatorStageMetadata(
 ) {
     companion object {
         const val VALIDATOR_PROCESS = "STRUCTURE-VALIDATOR"
-        const val VALIDATOR_VERSION = "1.0.0"
+        val VALIDATOR_VERSION = System.getenv("FN_VERSION")?.toString() ?: "Unknown"
     }
 
 }
