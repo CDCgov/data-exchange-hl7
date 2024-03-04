@@ -18,7 +18,7 @@ data class RedactorStageMetadata(
 ) {
     companion object {
         const val REDACTOR_PROCESS = "REDACTOR"
-        const val REDACTOR_VERSION = "1.0.0"
+        val REDACTOR_VERSION = System.getenv("FN_VERSION")?.toString() ?: "Unknown"
     }
 
 
