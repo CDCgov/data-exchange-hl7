@@ -6,7 +6,7 @@
 		},
 		{
 			"data_stream": "PHLIP",
-			"identifier_paths": [ "MSH-21[1].1", "MSH-12" ]
+			"identifier_paths": [ "MSH-21[2].1", "MSH-12" ]
 		},
 		{
 			"data_stream": "DAART",
