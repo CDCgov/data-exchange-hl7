@@ -22,7 +22,7 @@ If a single message is submitted to the validator, The full report of errors is 
 
  
 
-If multiple messages are submitted to the validator, a summary report of errors is returned. This summary will provide only counts of errors: how many total errors were found, and groupings of errors by type, category, path. It will also list how many errors were in each message.
+If multiple messages are submitted to the validator, a summary report of errors is returned. This summary will provide only counts of errors: how many total errors were found, and groupings of errors by type, category, and path. It will also list how many errors were found in each message.
 
  
 

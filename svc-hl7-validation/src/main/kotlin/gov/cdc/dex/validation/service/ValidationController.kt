@@ -2,7 +2,6 @@ package gov.cdc.dex.validation.service
 
 
 import com.google.gson.*
-import gov.cdc.dex.metadata.HL7MessageType
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.dex.validation.service.model.ErrorCounts
@@ -34,11 +33,10 @@ import kotlin.jvm.optionals.getOrNull
 
 
 @Controller("/")
-class ValidationController(@Client("redactor") redactorClient: HttpClient, @Client("structure") structureClient: HttpClient ) {
+class ValidationController(@Client("redactor") redactorClient: HttpClient,
+                           @Client("structure") structureClient: HttpClient ) {
     private var redactorClient: HttpClient
     private var structureClient: HttpClient
-
-    //private HttpClient client;
 
     companion object {
         private val log = LoggerFactory.getLogger(ValidationController::class.java.name)
@@ -74,16 +72,13 @@ If a single message is submitted, then a full validation report is returned that
         of all errors and warnings encountered, along with an overall status of either "VALID_MESSAGE" if no errors are found or "STRUCTURE_ERRORS" if errors are found.
 ## Batch Message Submission and Response     
 If a batch of messages is submitted, then a summary report is returned that includes the total error count and a breakdown of counts by type, by category, by message location (HL7 path), and by message.
-## Message Type and Route Parameters        
-HL7 messages submitted are expected to be either CASE (following a CDC Message Mapping Guide) or ELR (lab report) messages. The type of message must be specified in the query parameter **message_type**.
-
-Messages also conform to a specific implementation profile, which this function refers to as the **route**.
-- For CASE messages, the MMG used to create the message is determined from the message content and need not be specified in the "route" parameter.
-- For ELR messages, the implementation guide used to create the message ***must*** be specified in the "route" parameter.
+## Data Stream ID Parameter        
+HL7 messages submitted are expected to conform to a program-specific implementation profile. 
+To indicate what profile is being used, the parameter *data_stream_id* must be supplied. Examples of valid data_stream_id values include "CELR", "DAART", "NNDSS", "NRSS", and "PHLIP".
         
-Batch submissions are expected to include messages that are all the same message type.
-- For CASE, messages in a batch do not all have to use the same MMG.
-- For ELR, all messages in a batch ***do*** have to conform to the same implementation profile.
+Batch submissions are expected to include messages that are all the same message type, i.e., all messages in the batch conform to the same implementation profile.
+- For NNDSS (case reporting), messages in a batch do not all have to use the same PHIN Specification or MMG.
+- For all other types, all messages in a batch do have to conform to the same implementation profile.
     """
     )
     @ApiResponses(
@@ -176,10 +171,10 @@ Batch submissions are expected to include messages that are all the same message
                 schema = Schema(implementation = ErrorResponse::class),
                 examples = [
                     ExampleObject(
-                        name = "Missing Route", value = """{
+                        name = "Missing Data Stream ID", value = """{
     "http_status": 400,
     "timestamp": "2023-10-20T13:59:39.566241200Z",
-    "error_message": "BAD REQUEST: ELR message must specify a route using query parameter 'route'. Please try again."
+    "error_message": "BAD REQUEST: Message header must specify a data stream ID using query parameter 'data_stream_id'. Please try again."
 }"""
                     )
                 ]
@@ -187,15 +182,14 @@ Batch submissions are expected to include messages that are all the same message
         )
     ) // .ApiResponses
     fun validate(
-            @Parameter(name="message_type",
-                schema = Schema(allowableValues = ["ELR", "CASE"], required = true, type = "string"),
-                description = "The type of data represented in the HL7 message.")
-                @QueryValue message_type: String,
-            @Parameter(name="route", schema = Schema(allowableValues = ["COVID19_ELR", "PHLIP_FLU", "PHLIP_VPD", "DAART"], type = "string"),
-                description = "Required for ELR only: the profile/specification name.")
-                @QueryValue route:Optional<String>,
-            @RequestBody(content = [Content(mediaType = "text/plain", schema = Schema(type = "string") , examples = [
-                ExampleObject(name = "Single CASE message", value = """MSH|^~\&|^2.16.840.1.114222.4.1.144.2^ISO|^2.16.840.1.114222.4.1.144^ISO|^^ISO|^2.16.840.1.114222^ISO|20091130133708||ORU^R01^ORU_R01|182012_20091130133708|P|2.5|||||||||NND_ORU_v2.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Gen_Case_Map_v1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+        @Parameter(name="data_stream_id",
+                schema = Schema(allowableValues = ["CELR", "DAART", "NNDSS", "NRSS","PHLIP"],
+                    required = true,
+                    type = "string"),
+                description = "Required. Indicates the type of data in the message and is used to load the appropriate validation profile.")
+       @QueryValue dataStream: String,
+        @RequestBody(content = [Content(mediaType = "text/plain", schema = Schema(type = "string") , examples = [
+                ExampleObject(name = "Single NNDSS message", value = """MSH|^~\&|^2.16.840.1.114222.4.1.144.2^ISO|^2.16.840.1.114222.4.1.144^ISO|^^ISO|^2.16.840.1.114222^ISO|20091130133708||ORU^R01^ORU_R01|182012_20091130133708|P|2.5|||||||||NND_ORU_v2.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Gen_Case_Map_v1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
 PID|1||182012^^^&2.16.840.1.114222.4.1.144.2&ISO||~^^^^^^S||19490214000000|M||1002-5^Amer.Ind./Alask.Nat.^2.16.840.1.113883.6.238~2106-3^White^2.16.840.1.113883.6.238|^^^08^^^^^101|||||||||||2186-5^Not Hispanic^2.16.840.1.113883.6.238
 OBR|1||182012^^2.16.840.1.114222.4.1.144.2^ISO|PERSUBJ^Person Subject^2.16.840.1.114222.4.5.274|||20091125|||||||||||||||20091130133708|||X||||||10230^Tuleremia^2.16.840.1.114222.4.5.277
 OBR|2||182012^^2.16.840.1.114222.4.1.144.2^ISO|NOTF^CASE NOTIFICATION^2.16.840.1.114222.4.5.274|||20091125000000|||||||||||||||20091130133708|||X||||||10230^Tuleremia^2.16.840.1.114222.4.5.277
@@ -222,7 +216,7 @@ OBX|20|CWE|INV128^Was the patient hospitalized as a result of this event^2.16.84
 OBX|21|TS|INV146^Date Of Death^2.16.840.1.114222.4.5.232||||||||F
 OBX|22|CWE|INV145^Did the patient die from the condition under investigation^2.16.840.1.114222.4.5.232||N^No^2.16.840.1.113883.12.136||||||F
                 """),
-                ExampleObject(name = "Single ELR message", value = """MSH|^~\&|USVI.PHL.Horizon.PRO^2.16.840.1.113883.3.8589.4.2.78.1^ISO|USVI.PHL^2.16.840.1.113883.3.8589.4.1.125^ISO|US WHO Collab LabSys^2.16.840.1.114222.4.3.3.7^ISO|CDC-EPI Surv Branch^2.16.840.1.114222.4.1.10416^ISO|20221205134200.000-0500||ORU^R01^ORU_R01|6479|P|2.5.1|||NE|NE|USA||||PHLabReport-NoAck^ELR251R1_Rcvr_Prof^2.16.840.1.113883.9.11^ISO~PHLIP_ELSM_251^PHLIP_Profile_Flu^2.16.840.1.113883.9.179^ISO
+                ExampleObject(name = "Single PHLIP message", value = """MSH|^~\&|USVI.PHL.Horizon.PRO^2.16.840.1.113883.3.8589.4.2.78.1^ISO|USVI.PHL^2.16.840.1.113883.3.8589.4.1.125^ISO|US WHO Collab LabSys^2.16.840.1.114222.4.3.3.7^ISO|CDC-EPI Surv Branch^2.16.840.1.114222.4.1.10416^ISO|20221205134200.000-0500||ORU^R01^ORU_R01|6479|P|2.5.1|||NE|NE|USA||||PHLabReport-NoAck^ELR251R1_Rcvr_Prof^2.16.840.1.113883.9.11^ISO~PHLIP_ELSM_251^PHLIP_Profile_Flu^2.16.840.1.113883.9.179^ISO
 SFT|HorizonLIMS|13.2.0|HORIZON|N/A||20221127172748
 PID|1||19348^^^USVI.PHL.Horizon.PRO&2.16.840.1.113883.3.8589.4.2.78.1&ISO^PI||Pid5|^^^^^^M|20070209|M||2106-3^White^HL70005|^^^VI|||||||||||N^Not Hispanic or Latino^HL70189^NH^Not Hispanic^L
 ORC|RE||17981001^USVI.PHL.Horizon.PRO^2.16.840.1.113883.3.8589.4.2.78.1^ISO||||||202212051342||||||||||||ChemWare Test Client^D|1324 Hospital Way^^^VI^^USA|^WPN^PH^^^123^4567891
@@ -232,7 +226,7 @@ OBX|2|CWE|92142-9^FLUAV RNA Resp Ql NAA+probe^LN^FLUA^Influenza A^L||260415000^N
 OBX|3|CWE|92141-1^FLUBV RNA Resp Ql NAA+probe^LN^FLUB^Influenza B^L||260373001^Detected^SCT^260373001^Detected^L||||||F|||20221116010000.000-0500|||Influenza SARS-CoV-2 (Flu SC2) Multiplex Assay_Centers for Disease Control and Prevention (CDC)_EUA^^99ELR^00^PCR^L||20221117113900.000-0500||||US Virgin Islands Department of Health^D^^^^CLIA&2.16.840.1.113883.19.4.6&ISO^XX^^^48D2179122|3500 Richmond Estate^^Christiansted^VI^00820-4370
 SPM|1|^17981001&USVI.PHL.Horizon.PRO&2.16.840.1.113883.3.8589.4.2.78.1&ISO||258500001^Nasopharyngeal swab^SCT^SN^Swab - NP^L|||||||||||||20221116010000.000-0500|20221117113500.000-0500                  
                 """),
-                ExampleObject(name = "Batch of CASE messages", value = """MSH|^~\&|SendAppName^2.16.840.1.114222.1111^ISO|Sending-Facility^2.16.840.1.114222.1111^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~CRS_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
+                ExampleObject(name = "Batch of NNDSS messages", value = """MSH|^~\&|SendAppName^2.16.840.1.114222.1111^ISO|Sending-Facility^2.16.840.1.114222.1111^ISO|PHINCDS^2.16.840.1.114222.4.3.2.10^ISO|PHIN^2.16.840.1.114222^ISO|20140630120030.1234-0500||ORU^R01^ORU_R01|MESSAGE CONTROL ID|D|2.5.1|||||||||NOTF_ORU_v3.0^PHINProfileID^2.16.840.1.114222.4.10.3^ISO~Generic_MMG_V2.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO~CRS_MMG_V1.0^PHINMsgMapID^2.16.840.1.114222.4.10.4^ISO
 PID|1||test 7 nyc-CRS^^^SendAppName&2.16.840.1.114222.1111&ISO||~^^^^^^S||20111107|M||2106-3^White^CDCREC|^^^36^10001^^^^36061|||||||||||UNK^unknown^NULLFL
 NK1|1||MTH^Mother^HL70063
 OBR|1||TEST 7^SendAppName^2.16.840.1.114222.1111^ISO|68991-9^Epidemiologic Information^LN|||20160111143800|||||||||||||||20160111143800|||F||||||10370^Rubella, congenital syndrome^NND
@@ -336,26 +330,20 @@ OBX|55|CX|LAB125^VPD Lab Message Specimen Identifier^PHINQUESTION|1|14VR006693||
 OBX|56|CWE|85702-9^Did Mother Ever Receive a Vaccine Against This Disease^LN||N^No^HL70136||||||F
                 """)])])
                 content: String,
-            request: HttpRequest<Any>): HttpResponse<String> {
+        request: HttpRequest<Any>): HttpResponse<String> {
         log.info("AUDIT::Executing Validation of message....")
-        val routeValue = route.orElse("")
-        val metadata: HashMap<String, String> = HashMap()
-        metadata["message_type"]= message_type
-        metadata["route"]= routeValue
+        val dataStreamValue = dataStream
 
-        if (message_type.isEmpty()) {
-            log.error("Missing Header for message_type")
-            return badRequest("BAD REQUEST: Message Type ('CASE' or 'ELR') must be specified using query parameter 'message_type'. Please try again.")
-        }
-        if (message_type == HL7MessageType.ELR.name && routeValue.isNullOrEmpty()) {
-            log.error("Missing Header for route when Message_type == ELR")
-            return badRequest("BAD REQUEST: ELR message must specify a route using query parameter 'route'. Please try again.")
+        if (dataStreamValue.isEmpty()) {
+            log.error("Missing data_stream_id parameter")
+            return badRequest("BAD REQUEST: Message header must specify a data stream ID using query " +
+                    "parameter 'data_stream_id'. Please try again.")
         }
         // since content is a required parameter, we can be certain it has a value.
         // otherwise, 'bad request' would have been returned by Micronaut.
         val arrayOfMessages = debatchMessages(content)
         return if (arrayOfMessages.size == 1) {
-            val resultData = this.validateMessage(arrayOfMessages[0], metadata)
+            val resultData = this.validateMessage(arrayOfMessages[0], dataStreamValue)
             if (!resultData.startsWith("Error")) {
                 log.info("message successfully redacted and validated")
                 HttpResponse.ok(resultData).contentEncoding(MediaType.APPLICATION_JSON)
@@ -364,7 +352,7 @@ OBX|56|CWE|85702-9^Did Mother Ever Receive a Vaccine Against This Disease^LN||N^
                 badRequest(resultData)
             }
         } else {
-            val resultSummary = this.validateBatch(arrayOfMessages, metadata)
+            val resultSummary = this.validateBatch(arrayOfMessages, dataStreamValue)
             log.info("batch summary created successfully")
             HttpResponse.ok(resultSummary).contentEncoding(MediaType.APPLICATION_JSON)
         }
@@ -376,10 +364,10 @@ OBX|56|CWE|85702-9^Did Mother Ever Receive a Vaccine Against This Disease^LN||N^
         return HttpResponse.badRequest(JsonHelper.gson.toJson(error)).contentEncoding(MediaType.APPLICATION_JSON)
     }
 
-    private fun validateBatch(arrayOfMessages: ArrayList<String>, metadata: Map<String, String>): String {
+    private fun validateBatch(arrayOfMessages: ArrayList<String>, dataStreamId: String): String {
         val mapOfResults = mutableMapOf<String, String>()
         arrayOfMessages.forEachIndexed { index, message ->
-            val result = validateMessage(message, metadata)
+            val result = validateMessage(message, dataStreamId)
             mapOfResults.putIfAbsent("message-${index + 1}", result)
         }
         return prepareSummaryFromMap(mapOfResults)
@@ -480,24 +468,23 @@ OBX|56|CWE|85702-9^Did Mother Ever Receive a Vaccine Against This Disease^LN||N^
         return messagesArr
     }
 
-    private fun validateMessage(hl7Content: String, metadata: Map<String, String>): String {
-        val redactedMessage = getRedactedContent(hl7Content, metadata)
+    private fun validateMessage(hl7Content: String, dataStreamId: String): String {
+        val redactedMessage = getRedactedContent(hl7Content, dataStreamId)
         return if (redactedMessage.isEmpty()) {
             "Error: Redacted message is empty"
         } else if (redactedMessage.startsWith("Error")) {
             redactedMessage
         } else {
-            getStructureReport(redactedMessage, metadata)
+            getStructureReport(redactedMessage, dataStreamId)
         }
     }
 
-    private fun postApiRequest(client: HttpClient, url: String, bodyContent: String, metadata: Map<String, String>) : String {
+    private fun postApiRequest(client: HttpClient, url: String, bodyContent: String, dataStreamId: String) : String {
         val call =
             client.exchange(
                 POST(url, bodyContent)
                     .contentType(MediaType.TEXT_PLAIN)
-                    .header("x-tp-message_type", metadata["message_type"])
-                    .header("x-tp-route", metadata["route"] ?: ""),
+                    .header("x-tp-data_stream_id", dataStreamId),
                 String::class.java
             )
         return try {
@@ -509,10 +496,10 @@ OBX|56|CWE|85702-9^Did Mother Ever Receive a Vaccine Against This Disease^LN||N^
         }
     }
 
-    private fun getRedactedContent(hl7Content: String, metadata: Map<String, String>): String {
+    private fun getRedactedContent(hl7Content: String, dataStreamId: String): String {
         log.info("redacting message....")
         val message = postApiRequest(redactorClient, "/api/redactorReport",
-            hl7Content, metadata)
+            hl7Content, dataStreamId)
         return try {
             val json = JsonParser.parseString(message).asJsonObject
             log.info("message redacted!")
@@ -523,10 +510,10 @@ OBX|56|CWE|85702-9^Did Mother Ever Receive a Vaccine Against This Disease^LN||N^
 
     }
 
-    private fun getStructureReport(hl7Content: String, metadata: Map<String, String>): String {
+    private fun getStructureReport(hl7Content: String, dataStreamId: String): String {
         log.info("Validating message...")
         val structReport = postApiRequest(structureClient, "/api/structure",
-            hl7Content, metadata)
+            hl7Content, dataStreamId)
         log.info("message Validated")
         return structReport
     }
