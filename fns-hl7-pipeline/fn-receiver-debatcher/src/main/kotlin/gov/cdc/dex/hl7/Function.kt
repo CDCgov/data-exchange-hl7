@@ -58,8 +58,9 @@ class Function {
             val event = gson.fromJson(message, AzBlobCreateEventMessage::class.java)
             val startTime = Date().toIsoString()
             // Initialize event report metadata
-            val eventMetadata = ReceiverEventMetadata(startProcessingTime = startTime,
-                eventTimestamp = event.eventTime)
+            val eventMetadata = ReceiverEventMetadata(stage =
+                ReceiverEventStageMetadata(startProcessingTime = startTime,
+                eventTimestamp = event.eventTime))
             // Pick up blob metadata
             val blobName = event.eventData.url.substringAfter("/${fnConfig.blobIngestContName}/")
             logger.info("DEX::Reading blob: $blobName")
@@ -153,8 +154,8 @@ class Function {
             // finalize event report and attach to event metadata
             eventReport.messageBatch = singleOrBatch
             eventReport.totalMessageCount = messageIndex
-            eventMetadata.endProcessingTime = Date().toIsoString()
-            eventMetadata.report = eventReport
+            eventMetadata.stage.endProcessingTime = Date().toIsoString()
+            eventMetadata.stage.report = eventReport
             // add event metadata + report to list of reports to be sent later
             eventReportList.add(gson.toJson(eventMetadata))
             logger.debug("file event report --> ${gson.toJson(eventMetadata)}")
@@ -244,7 +245,7 @@ class Function {
         startTime: String,
         errorMessage: String? = null
     ): Pair<StageMetadata, SummaryInfo> {
-        val stageMetadata = ReceiverStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
+        val stageMetadata = ReceiverMessageStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
         stageMetadata.startProcessTime = startTime
         stageMetadata.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")

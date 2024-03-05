@@ -1,6 +1,5 @@
 package gov.cdc.dex.hl7
 import com.google.gson.annotations.SerializedName
-import com.microsoft.azure.functions.annotation.ServiceBusQueueOutput
 import gov.cdc.dex.metadata.RoutingMetadata
 
 data class ReceiverEventReport(
@@ -16,14 +15,18 @@ data class ReceiverEventError (
     @SerializedName("error_message") val error: String?
         )
 
-data class ReceiverEventMetadata (
+data class ReceiverEventStageMetadata (
    @SerializedName("stage_name")  val stageName : String = ProcessInfo.RECEIVER_PROCESS,
    @SerializedName("stage_version")  val stageVersion : String = ProcessInfo.RECEIVER_VERSION,
-   @SerializedName("schema_name") val schemaName: String = "DEX HL7v2 RECEIVER",
-   @SerializedName("schema_version") val schemaVersion: String = "2.0.0",
-   @SerializedName("routing_metadata") var routingData: RoutingMetadata? = null,
    @SerializedName("event_timestamp") var eventTimestamp: String? = null,
    @SerializedName("start_processing_time") val startProcessingTime : String,
    @SerializedName("end_processing_time") var endProcessingTime: String? = null,
     var report : ReceiverEventReport? = null
+        )
+
+data class ReceiverEventMetadata (
+    @SerializedName("schema_name") val schemaName: String = "DEX HL7v2 RECEIVER",
+    @SerializedName("schema_version") val schemaVersion: String = "2.0.0",
+    @SerializedName("routing_metadata") var routingData: RoutingMetadata? = null,
+    var stage : ReceiverEventStageMetadata
         )

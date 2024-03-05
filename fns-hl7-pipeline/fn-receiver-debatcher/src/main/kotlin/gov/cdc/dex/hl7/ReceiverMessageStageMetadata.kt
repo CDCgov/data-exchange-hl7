@@ -2,7 +2,7 @@ package gov.cdc.dex.hl7
 
 import gov.cdc.dex.metadata.EventGridStageMetadata
 
-data class ReceiverStageMetadata(
+data class ReceiverMessageStageMetadata(
     @Transient val receiverStatus: String?,
     override val eventTimestamp: String
 ) :

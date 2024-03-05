@@ -4,13 +4,10 @@ import gov.cdc.dex.hl7.Function.Companion.UTF_BOM
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
-import gov.cdc.dex.util.StringUtils.Companion.normalize
-import gov.cdc.hl7.HL7StaticParser
 import org.junit.jupiter.api.Test
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
-import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -57,8 +54,9 @@ class DebatcherTest {
         val eventReportList = mutableListOf<String>()
         try {
             // initialize event report metadata
-            val eventMetadata = ReceiverEventMetadata(startProcessingTime = Date().toIsoString(),
-            eventTimestamp = Date().toIsoString())
+            val eventMetadata = ReceiverEventMetadata(stage =
+                    ReceiverEventStageMetadata(startProcessingTime = startTime,
+                         eventTimestamp = Date().toIsoString()))
             val testFileIS = this::class.java.getResource(filePath).openStream()
             // Add routing data to Report object for this file
             val eventReport = ReceiverEventReport()
@@ -139,8 +137,8 @@ class DebatcherTest {
             // finalize event report
             eventReport.messageBatch = singleOrBatch
             eventReport.totalMessageCount = messageIndex
-            eventMetadata.endProcessingTime = Date().toIsoString()
-            eventMetadata.report = eventReport
+            eventMetadata.stage.endProcessingTime = Date().toIsoString()
+            eventMetadata.stage.report = eventReport
             eventReportList.add(Function.gson.toJson(eventMetadata))
             println("file event report --> ${Function.gson.toJson(eventMetadata)}")
 
@@ -214,7 +212,7 @@ class DebatcherTest {
         startTime: String,
         errorMessage: String? = null
     ): Pair<StageMetadata, SummaryInfo> {
-        val stageMetadata = ReceiverStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
+        val stageMetadata = ReceiverMessageStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
         stageMetadata.startProcessTime = startTime
         stageMetadata.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")
