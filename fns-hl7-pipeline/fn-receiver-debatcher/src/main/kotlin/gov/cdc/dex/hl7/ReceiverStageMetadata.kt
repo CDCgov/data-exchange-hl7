@@ -7,14 +7,11 @@ data class ReceiverStageMetadata(
     override val eventTimestamp: String
 ) :
     EventGridStageMetadata(
-        stageName = RECEIVER_PROCESS,
-        stageVersion = RECEIVER_VERSION,
+        stageName = ProcessInfo.RECEIVER_PROCESS,
+        stageVersion = ProcessInfo.RECEIVER_VERSION,
         status = receiverStatus,
         configs = listOf(),
         eventTimestamp = eventTimestamp
     ) {
-    companion object {
-        const val RECEIVER_PROCESS = "RECEIVER"
-        val RECEIVER_VERSION = System.getenv("FN_VERSION")?.toString() ?: "Unknown"
-    }
+
 }

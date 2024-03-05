@@ -117,7 +117,7 @@ class Function {
                     val id = JsonHelper.getValueFromJson("message_metadata.message_uuid", erredMessage).asString
                     logger.error(
                         "DEX::ERROR: Event with messageUUID $id could not be delivered" +
-                                "because it is too large"
+                                " because it is too large"
                     )
                 }
                 throw Exception("Could not deliver ${errors.size} messages due to excessive size")
