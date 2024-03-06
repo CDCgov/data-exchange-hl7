@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>hl7-file-sink</artifactId>
-    <version>0.0.38-SNAPSHOT</version>
+    <version>0.0.40-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Kotlin Function :: hl7-file-sink</name>
     <scm>
@@ -16,15 +16,15 @@
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <functionAppName>hl7-file-sink-${receiveFn}-${environment-id}</functionAppName>
-        <AzureBom.version>1.2.20</AzureBom.version>
+        <functionAppName>hl7-file-sink-${FUNC}-${environment-id}</functionAppName>
+        <AzureBom.version>1.2.21</AzureBom.version>
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
         <functions.version>3.0.0</functions.version>
         <kotlin.version>1.9.0</kotlin.version>
         <hl7pet.version>1.2.7.2</hl7pet.version>
-        <lib-dex-commons.version>0.0.37-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.42-SNAPSHOT</lib-dex-commons.version>
         <gson.version>2.10.1</gson.version>
     </properties>
 

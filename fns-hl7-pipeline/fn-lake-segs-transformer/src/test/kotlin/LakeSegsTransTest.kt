@@ -33,7 +33,7 @@ class LakeSegsTransTest {
         logger.info("testReadLocalResources...")
 
         // read the profile
-        val profileFilePath = "/BasicProfile.json"
+        val profileFilePath = "/basicProfile.json"
         val profile = this::class.java.getResource(profileFilePath).readText()
 
         assertEquals(100, profile.substring(0, 100).length)

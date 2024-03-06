@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>receiver-debatcher</artifactId>
-    <version>0.0.39-SNAPSHOT</version>
+    <version>0.0.40-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DEX Fns-Pipeline :: receiver-debatcher</name>
     <scm>
@@ -25,7 +25,7 @@
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <gson.version>2.10.1</gson.version>
         <hl7pet.version>1.2.7.1</hl7pet.version>
-        <lib-dex-commons.version>0.0.41-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.42-SNAPSHOT</lib-dex-commons.version>
         <junitjupiter.version>5.9.2</junitjupiter.version>
     </properties>
     <dependencyManagement>
@@ -263,15 +263,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
     <distributionManagement>

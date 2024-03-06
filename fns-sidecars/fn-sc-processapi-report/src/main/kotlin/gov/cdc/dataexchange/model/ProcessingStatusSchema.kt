@@ -31,4 +31,5 @@ data class ProcessingStatusSchema(
 
     @SerializedName("content")
     var content: JsonObject
+
 )

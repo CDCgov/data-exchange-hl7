@@ -20,7 +20,6 @@ class ReportFunction {
         private val logger = LoggerFactory.getLogger(ReportFunction::class.java.simpleName)
         val fnConfig = FunctionConfig()
         val batchOptions = CreateMessageBatchOptions()
-        val MAX_MESSAGE_SIZE = 262144
     }
 
     /**
@@ -40,7 +39,7 @@ class ReportFunction {
         val inputRecordCount = records.size
         logger.info("REPORT::Receiving $inputRecordCount records.")
         var batch = fnConfig.serviceBusSender.createMessageBatch(
-            batchOptions.setMaximumSizeInBytes(MAX_MESSAGE_SIZE)
+            batchOptions.setMaximumSizeInBytes(fnConfig.maxMessageSize)
         )
 
         for ((i, record) in records.withIndex()) {
@@ -53,7 +52,7 @@ class ReportFunction {
                     fnConfig.serviceBusSender.sendMessages(batch)
                     logger.info("REPORT::Sending batch of ${batch.count} messages")
                     batch = fnConfig.serviceBusSender.createMessageBatch(
-                        batchOptions.setMaximumSizeInBytes(MAX_MESSAGE_SIZE)
+                        batchOptions.setMaximumSizeInBytes(fnConfig.maxMessageSize)
                     )
                     logger.info("REPORT::Batch send completed")
                     // add the message we could not add before
@@ -87,46 +86,44 @@ class ReportFunction {
     }
 
     private fun createProcessingStatusSchema(record: String): ProcessingStatusSchema {
-        val content = JsonHelper.gson.fromJson(record, JsonObject::class.java)
-        content.remove("content")
+        val inputEvent = JsonParser.parseString(record).asJsonObject
+        inputEvent.remove("content")
 
-        val uploadIdJson = extractValueFromPath(content, "routing_metadata.upload_id")
-        val uploadId = if (uploadIdJson == null || uploadIdJson.isJsonNull) {
+        val uploadIdJson = JsonHelper.getValueFromJson( "routing_metadata.upload_id", inputEvent)
+        val uploadId = if (uploadIdJson.isJsonNull) {
             UUID.randomUUID().toString()
         } else { uploadIdJson.asString }
 
-        val destinationIdJson = extractValueFromPath(content, "routing_metadata.destination_id")
-        val destinationId = if (destinationIdJson == null || destinationIdJson.isJsonNull) {
+        val destinationIdJson = JsonHelper.getValueFromJson( "routing_metadata.data_stream_id", inputEvent)
+        val destinationId = if (destinationIdJson.isJsonNull) {
             "UNKNOWN"
         } else { destinationIdJson.asString }
 
-        val eventTypeJson = extractValueFromPath(content, "routing_metadata.destination_event")
-        val eventType = if (eventTypeJson == null || eventTypeJson.isJsonNull) {
+        val eventTypeJson = JsonHelper.getValueFromJson( "routing_metadata.data_stream_route", inputEvent)
+        val eventType = if (eventTypeJson.isJsonNull) {
             "UNKNOWN"
         } else { eventTypeJson.asString }
 
         // Extract the current stage
-        val stage = extractValueFromPath(content, "metadata.stage")?.asJsonObject
+        val stageJson = JsonHelper.getValueFromJson("stage", inputEvent)
+        val stage = if (!stageJson.isJsonNull) stageJson.asJsonObject else null
 
-       val stageName = if (!(stage == null || stage.isJsonNull)) {
+       val stageName = if (stage != null) {
             stage.remove("output")
-            stage.get("process_name").asString
+            stage.get("stage_name").asString
         } else {
             "Unknown Stage"
         }
 
+        // update schema_name to reflect this stage
+        inputEvent.addProperty("schema_name", "DEX HL7v2 $stageName")
+
         return ProcessingStatusSchema(
-            uploadId, destinationId, eventType, stageName, content = content)
+            uploadId = uploadId,
+            destinationId =  destinationId,
+            eventType =  eventType,
+            stageName =  stageName,
+            content = inputEvent)
     }
 
-    private fun extractValueFromPath(jsonObject: JsonObject, path: String): JsonElement? {
-        return try {
-            val pathSegments: List<String> = path.split(".")
-            var currentElement: JsonElement = jsonObject
-            for (segment in pathSegments) {
-                currentElement = currentElement.asJsonObject[segment] ?: return null
-            }
-            currentElement
-        } catch (e: Exception) { null }
-    }
 }

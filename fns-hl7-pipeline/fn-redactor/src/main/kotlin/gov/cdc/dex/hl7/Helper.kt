@@ -9,9 +9,9 @@ import java.io.FileNotFoundException
 
 class Helper {
 
-    fun getRedactedReport(msg: String, messageType: String, route: String = ""): Tuple2<String, List<RedactInfo>>? {
+    fun getRedactedReport(msg: String, route: String = "elr"): Tuple2<String, List<RedactInfo>>? {
         val dIdentifier = DeIdentifier()
-        val configFile = "/${getConfigFileName(messageType, route)}"
+        val configFile = "/${getConfigFileName(route)}"
         val rules = if (this::class.java.getResource(configFile) != null) {
             this::class.java.getResource(configFile)!!.readText().lines()
         } else {
@@ -26,10 +26,10 @@ class Helper {
         else ""
     }
 
-    fun getConfigFileName(messageType:String, route:String = "") : String{
+    fun getConfigFileName(route:String) : String{
         val fileSuffix = "_config.txt"
         val routeConfigFile = "${route.lowercase()}$fileSuffix"
-        val typeConfigFile = "${messageType.lowercase()}$fileSuffix"
+        val typeConfigFile = "elr$fileSuffix"
         // return without the '/' in front of the name for use in metadata
         return if (route.isNotEmpty() && this::class.java.getResource("/$routeConfigFile") != null) {
             routeConfigFile

@@ -4,6 +4,7 @@ import com.azure.core.util.BinaryData
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.util.JsonHelper
+import gov.cdc.dex.util.UnknownPropertyError
 import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,54 +34,72 @@ class Function {
             val inputEvent = try {
                 JsonParser.parseString(message) as JsonObject
             } catch (e: Exception) {
-                logger.error("ERROR: Unable to parse event message #$index as JSON. Aborting save.")
+                logger.error("ERROR: Unable to parse event message with index $index as JSON. Aborting save.")
                 null
             } ?: continue
-            //remove content
-            inputEvent.remove("content")
 
             val messageUUID = try {
                 // this is where the value will be in hl7 message json
-                JsonHelper.getValueFromJson("message_uuid", inputEvent).asString
+                JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
             } catch (e: Exception) {
-                try {
-                    // this is where the value will be in recdeb-reports json
-                    JsonHelper.getValueFromJson("file_uuid", inputEvent).asString
-                } catch (e: Exception) {
-                    logger.error(
-                        "ERROR: Unable to locate message_uuid or file_uuid for event message #$index." +
-                                " Aborting save."
-                    )
-                    null
+                null
+            }
+            val uploadId = try {
+                JsonHelper.getValueFromJson("routing_metadata.upload_id", inputEvent).asString
+            } catch (e: Exception) {
+                null
+            }
+            if (messageUUID == null && uploadId == null) {
+                logger.error("DEX::ERROR -- No Message UUID or Upload ID found. Aborting save for message index $index")
+                continue
+            }
+            //remove content except structure report
+            if(fnConfig.blobStorageFolderName != "hl7_out_validation_report")   inputEvent.remove("content")
+            val newBlobName = messageUUID ?: uploadId
+            // get the metadata needed for routing
+            val metaToAttach = mutableMapOf<String, String>()
+            val routingMeta = try {
+                JsonHelper.getValueFromJson("routing_metadata", inputEvent)
+            } catch (e: UnknownPropertyError) {
+                JsonNull.INSTANCE
+            }
+            if (!routingMeta.isJsonNull) {
+                val routingMetadata = routingMeta.asJsonObject
+                val supportingMeta = routingMetadata.remove("supporting_metadata")
+
+                // update data_stream_route to match destination folder name
+                routingMetadata.addProperty("data_stream_route", fnConfig.blobStorageFolderName)
+
+                // add all routing metadata json elements to blob metadata we will attach on upload
+                routingMetadata.keySet().forEach { key ->
+                    if (!routingMetadata[key].isJsonNull) {
+                        metaToAttach[key] = routingMetadata[key].asString
+                    }
                 }
-            } ?: continue
+                if (!supportingMeta.isJsonNull ) {
+                    val supportingMetadata = supportingMeta.asJsonObject
+                    supportingMetadata.keySet().forEach { key ->
+                        if (!supportingMetadata[key].isJsonNull)
+                            metaToAttach.putIfAbsent(key, supportingMetadata[key].asString)
 
-            val originalDestId = getValueOrUnknown("routing_metadata.destination_id", inputEvent)
-            val uploadID = getValueOrUnknown("routing_metadata.upload_id", inputEvent)
-            val traceID = getValueOrUnknown("routing_metadata.trace_id", inputEvent)
-            val parentSpanID = getValueOrUnknown("routing_metadata.parent_span_id", inputEvent)
+                    }
+                }
+            } else {
+                // add data_stream_route to reflect the destination folder
+                metaToAttach["data_stream_route"] = fnConfig.blobStorageFolderName
+                logger.error("DEX::ERROR:Unable to locate routing_metadata for message $newBlobName")
+            }
 
-            logger.info("DEX::Processing message $messageUUID")
+            logger.info("DEX::Saving message $newBlobName")
             try {
-                // add metadata
-                val newMetadata = mutableMapOf<String, String>()
-                newMetadata["meta_destination_id"] = originalDestId
-
-                newMetadata["meta_ext_uploadid"] = uploadID
-                newMetadata["trace_id"] = traceID
-                newMetadata["parent_span_id"] = parentSpanID
-                // change event to match destination folder name
-                inputEvent.addProperty("meta_ext_event", fnConfig.blobStorageFolderName)
-                newMetadata["meta_ext_event"] = fnConfig.blobStorageFolderName
                 val folderStructure = SimpleDateFormat("YYYY/MM/dd").format(Date())
-
                 // save to storage container
                 this.saveBlobToContainer(
-                    "${fnConfig.blobStorageFolderName}/$folderStructure/$messageUUID.txt",
+                    "${fnConfig.blobStorageFolderName}/$folderStructure/$newBlobName.txt",
                     gson.toJson(inputEvent),
-                    newMetadata
+                    metaToAttach
                 )
-                logger.info("DEX::Saved message $messageUUID.txt to sink ${fnConfig.blobStorageContainerName}/${fnConfig.blobStorageFolderName}")
+                logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/${fnConfig.blobStorageFolderName}")
             } catch (e: Exception) {
                 // TODO send to quarantine?
                 logger.error("DEX::Error processing message", e)
@@ -88,14 +107,6 @@ class Function {
             }
         }
 
-    }
-
-    private fun getValueOrUnknown(jsonPath: String, inputEvent: JsonObject): String {
-        return try {
-            JsonHelper.getValueFromJson(jsonPath, inputEvent).asString
-        } catch (e: Exception) {
-            "UNKNOWN"
-        }
     }
 
     fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>) {

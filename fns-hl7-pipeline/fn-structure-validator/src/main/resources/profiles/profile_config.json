@@ -1,11 +1,15 @@
 {
 	"profile_identifiers": [
 		{
-			"route": "",
+			"data_stream": "NNDSS",
 			"identifier_paths": [ "MSH-21[1].1" ]
 		},
 		{
-			"route": "DAART",
+			"data_stream": "PHLIP",
+			"identifier_paths": [ "MSH-21[2].1", "MSH-12" ]
+		},
+		{
+			"data_stream": "DAART",
 			"identifier_paths": [ "MSH-21[1].1", "MSH-6.1" ]
 		}
 	]

@@ -1,29 +1,13 @@
 package gov.cdc.dex.util
 
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import gov.cdc.dex.metadata.DexMessageInfo
-import gov.cdc.dex.metadata.HL7MessageType
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
-import kotlin.reflect.typeOf
 
 internal class JsonHelperTest {
 
-    @Test
-    fun getArrayOfStringFromJsonArray() {
-        val dmi = DexMessageInfo("10030", "some route", listOf("varicella_message_mapping_guide_v2_01", "VaricellaCaseNationalNotificationMap_v1_0"),
-          "13", HL7MessageType.CASE)
-        val gson = Gson()
-        val dmiString = gson.toJson(dmi)
-        val jsonObj = JsonParser.parseString(dmiString) as JsonObject
-        println(jsonObj["mmgs"])
-        println(jsonObj["mmgs"].javaClass.name)
-        val mmgs = JsonHelper.getStringArrayFromJsonArray(jsonObj["mmgs"].asJsonArray)
-        assert(mmgs is Array<String>)
-    }
+
     @Test
     fun getValueFromJson() {
         val testFile = this::class.java.getResource("/mockEventHubPayload.json").readText()

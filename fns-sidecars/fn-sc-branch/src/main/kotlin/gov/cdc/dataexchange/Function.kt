@@ -36,22 +36,23 @@ class Function {
             if (!message.isNullOrEmpty()) {
                 try {
                     val mappedMessage = JsonParser.parseString(message).asJsonObject
-                    val stage = JsonHelper.getValueFromJson("metadata.stage", mappedMessage).asJsonObject
-                    val processName = JsonHelper.getValueFromJson("process_name", stage).asString
-                    val messageUuid = mappedMessage["message_uuid"].asString
+                    val stage = JsonHelper.getValueFromJson("stage", mappedMessage).asJsonObject
+                    val stageName = JsonHelper.getValueFromJson("stage_name", stage).asString
+                    val messageMD = JsonHelper.getValueFromJson("message_metadata", mappedMessage).asJsonObject
+                    val messageUuid = JsonHelper.getValueFromJson("message_uuid", messageMD).asString
                     val summaryInfo = mappedMessage["summary"].asJsonObject
                     val currentStatus = summaryInfo["current_status"].asString
 
                     if (summaryInfo["problem"] is JsonNull) {
-                        logger.info("DEX::To OK eventhub [${i + 1}] message_uuid: $messageUuid, processName=$processName, status=$currentStatus")
+                        logger.info("DEX::To OK eventhub [${i + 1}] message_uuid: $messageUuid, processName=$stageName, status=$currentStatus")
                         outOkList.add(message)
                     } else {
-                        logger.info("DEX::To ERR eventhub [${i + 1}] message_uuid: $messageUuid, processName=$processName, status=$currentStatus")
+                        logger.info("DEX::To ERR eventhub [${i + 1}] message_uuid: $messageUuid, processName=$stageName, status=$currentStatus")
                         outErrList.add(message)
                     }
                 } catch (e: Exception) {
                     // TODO send to quarantine?
-                    logger.error("Error processing message", e)
+                    logger.error("Error processing message, ${e.message}")
                 }
             }
         }
@@ -63,7 +64,7 @@ class Function {
                 fnConfig.evHubSenderErr.send(outErrList)
             }
         } catch (e : Exception) {
-            logger.error("Error sending to event hubs", e)
+            logger.error("Error sending to event hubs, ${e.message}")
         }
 
     }
