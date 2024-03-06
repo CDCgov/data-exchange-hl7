@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.40] - 2024-03-06
+	- Fixed some typos on PhinGuideProfile used to generate HL7 Json
+	- Implemented  Metadata V2 on all functions.
+	- Changed Receiver Fn to Read events from Storage Queue instead of EH to avoid duplication
+	- All functions now provide the actual stage.version instead of hardcoded
+	- All PS Reports have unique schema names (PS Requirement)
+	- Improved Receiver/Debatcher Reporting schema to be standard with other stages.
+
+
 ### [0.0.39] - 2024-02-21
 	- Setting batchCheckpointFrequency to 1 on all Pipeline functions
 	- Refactored all functions to reuse azure resource connections - event hub, service bus, cosmos db, storage account, etc.
