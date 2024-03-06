@@ -32,7 +32,7 @@ class Function {
             "data_producer_id",
             "jurisdiction", "reporting_jurisdiction", "meta_organization",
             "sender_id", "user_id", "meta_username",
-            "upload_id", "meta_ext_uploadid", "tus_tguid",
+            "upload_id", "tus_tguid",
             "trace_id",
             "parent_span_id"
         )
@@ -280,7 +280,7 @@ class Function {
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
-            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "meta_ext_uploadid", "tus_tguid")),
+            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
             dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
             dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
             traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
