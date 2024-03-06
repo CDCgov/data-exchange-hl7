@@ -247,7 +247,7 @@ class DebatcherTest {
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
-            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "meta_ext_uploadid", "tus_tguid")),
+            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
             dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
             dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
             traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
