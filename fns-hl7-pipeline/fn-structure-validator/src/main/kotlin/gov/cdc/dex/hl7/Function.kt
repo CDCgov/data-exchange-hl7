@@ -11,6 +11,7 @@ import gov.cdc.dex.hl7.model.StructureValidatorStageMetadata
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
+import gov.cdc.dex.util.InvalidMessageException
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.HL7StaticParser
@@ -131,7 +132,7 @@ class ValidatorFunction {
         validateHL7Delimiters(hl7Content)
         val dataStreamName = dataStream.uppercase().trim()
         val profileList = fnConfig.profileConfig.profileIdentifiers.filter {
-            it.dataStream.uppercase().trim() == dataStreamName
+            it.dataStreamId.uppercase().trim() == dataStreamName
         }
         // if the route is not specified in the config file, assume the default of MSH-12
         val profileIdPaths = if (profileList.isNotEmpty()) {
