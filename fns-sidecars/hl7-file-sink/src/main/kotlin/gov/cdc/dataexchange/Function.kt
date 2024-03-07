@@ -6,8 +6,9 @@ import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.UnknownPropertyError
 import org.slf4j.LoggerFactory
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.ZoneId
+import java.time.ZonedDateTime
+
 
 class Function {
 
@@ -92,14 +93,15 @@ class Function {
 
             logger.info("DEX::Saving message $newBlobName")
             try {
-                val folderStructure = SimpleDateFormat("YYYY/MM/dd").format(Date())
+                val folderStructure = foldersToPath(fnConfig.blobStorageFolderName.split("/", "\\"))
+                logger.info("folderStructure: ${folderStructure}")
                 // save to storage container
                 this.saveBlobToContainer(
-                    "${fnConfig.blobStorageFolderName}/$folderStructure/$newBlobName.txt",
+                    "$folderStructure/$newBlobName.txt",
                     gson.toJson(inputEvent),
                     metaToAttach
                 )
-                logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/${fnConfig.blobStorageFolderName}")
+                logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/${folderStructure}")
             } catch (e: Exception) {
                 // TODO send to quarantine?
                 logger.error("DEX::Error processing message", e)
@@ -116,4 +118,24 @@ class Function {
         client.setMetadata(newMetadata)
 
     }
+
+    fun foldersToPath( folders:List<String>): String {
+        val t= ZonedDateTime.now( ZoneId.of("US/Eastern") )
+        val path = mutableListOf<String>()
+        folders.forEach {
+            path.add( when (it) {
+                ":f" -> "sourceFolderPath"
+                ":y" -> "${t.year}"
+                ":m" -> "${t.monthValue}"
+                ":d" -> "${t.dayOfMonth}"
+                ":h" -> "${t.hour}h"
+                ":mm" -> "${t.minute}m"
+                else -> it
+            })
+        }
+        return path.joinToString("/")
+    }
+
+
+
 }
