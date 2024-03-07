@@ -11,6 +11,7 @@ import gov.cdc.dex.hl7.model.StructureValidatorStageMetadata
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
+import gov.cdc.dex.util.InvalidMessageException
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
 import gov.cdc.hl7.HL7StaticParser
