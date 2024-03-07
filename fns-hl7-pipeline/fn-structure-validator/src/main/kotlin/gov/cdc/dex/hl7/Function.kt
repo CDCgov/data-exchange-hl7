@@ -131,7 +131,7 @@ class ValidatorFunction {
         validateHL7Delimiters(hl7Content)
         val dataStreamName = dataStream.uppercase().trim()
         val profileList = fnConfig.profileConfig.profileIdentifiers.filter {
-            it.dataStream.uppercase().trim() == dataStreamName
+            it.dataStreamId.uppercase().trim() == dataStreamName
         }
         // if the route is not specified in the config file, assume the default of MSH-12
         val profileIdPaths = if (profileList.isNotEmpty()) {

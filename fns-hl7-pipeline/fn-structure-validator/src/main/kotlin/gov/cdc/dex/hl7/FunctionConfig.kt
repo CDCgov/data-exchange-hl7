@@ -1,7 +1,6 @@
 package gov.cdc.dex.hl7
 import gov.cdc.dex.azure.DedicatedEventHubSender
-import gov.cdc.dex.azure.EventHubSender
-import gov.cdc.dex.hl7.model.ProfileConfiguration
+import gov.cdc.dex.util.ProfileConfiguration
 import gov.cdc.dex.util.JsonHelper.gson
 import gov.cdc.nist.validator.ProfileManager
 import gov.cdc.nist.validator.ResourceFileFetcher
