@@ -6,7 +6,7 @@ data class ReceiverEventReport(
     @SerializedName("single_or_batch") var messageBatch : String = "SINGLE",
     @SerializedName("number_of_messages") var totalMessageCount: Int = 0,
     @SerializedName("number_of_messages_not_propagated") var notPropogatedCount: Int = 0,
-    @SerializedName("error_messages") val errorMessages: MutableList<ReceiverEventError> = mutableListOf()
+    @SerializedName("error_messages") var errorMessages: MutableList<ReceiverEventError> = mutableListOf()
     )
 
 data class ReceiverEventError (

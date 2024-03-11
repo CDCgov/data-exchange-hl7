@@ -42,12 +42,8 @@ class Function {
     }
 
     @FunctionName("ingest-file")
-   /* fun processEventGrid(
-        @EventGridTrigger(name = "eventGridEvent") messageEvent: String?,
-        context: ExecutionContext
-    ): DexHL7Metadata? {*/
     fun processQueue(
-        @QueueTrigger(name = "message", queueName = "hl7-file-drop", connection = "BlobIngestConnectionString") message: String?,
+        @QueueTrigger(name = "message", queueName = "%queueName%", connection = "BlobIngestConnectionString") message: String?,
         context: ExecutionContext
     ): DexHL7Metadata? {
         logger.info("DEX::Received BLOB_CREATED event!")
@@ -184,6 +180,7 @@ class Function {
         eventReport: ReceiverEventReport,
         errorMessage: String? = null
     ): DexHL7Metadata {
+
         val messageMetadata = MessageMetadata(
             singleOrBatch = singleOrBatch,
             messageIndex = messageIndex,
@@ -196,6 +193,9 @@ class Function {
             startTime = startTime,
             errorMessage = errorMessage
         )
+        val receiverEventError = ReceiverEventError(messageIndex,messageMetadata.messageUUID, errorMessage)
+        eventReport.errorMessages = mutableListOf(receiverEventError)
+
         return preparePayload(
             messageMetadata = messageMetadata,
             routingMetadata = routingMetadata,
