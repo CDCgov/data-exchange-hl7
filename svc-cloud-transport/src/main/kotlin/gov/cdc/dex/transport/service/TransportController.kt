@@ -105,18 +105,14 @@ class TransportController(private val cloudStorage: CloudStorage) {
     }
 
     private fun validateMetadata(metadataMap: Map<String, String>) : String {
-        return if (metadataMap.containsKey("message_type")) {
-            if (metadataMap["message_type"] == "ELR") {
-                if (metadataMap.containsKey("route") && metadataMap["route"]?.isEmpty() == false) {
-                    "OK"
-                } else {
-                    "ERROR: missing parameter x-tp-route, required for ELR message type"
-                }
-            } else {
-                "OK"
-            }
+        return if (!metadataMap.containsKey("data_stream_id")) {
+            "ERROR: missing parameter x-tp-data_stream_id"
+        } else if (!metadataMap.containsKey("data_stream_route")) {
+            "ERROR: missing parameter x-tp-data_stream_route"
+        } else if (!metadataMap.containsKey("upload_id")) {
+            "ERROR: missing parameter x-tp-upload_id"
         } else {
-            "ERROR: missing parameter x-tp-message_type ('CASE' or 'ELR')"
+            "OK"
         }
     }
 

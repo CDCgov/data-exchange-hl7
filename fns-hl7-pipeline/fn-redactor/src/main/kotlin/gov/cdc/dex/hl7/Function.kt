@@ -7,15 +7,15 @@ import com.google.gson.JsonParser
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
-import gov.cdc.dex.hl7.model.RedactorStageMetadata
 import gov.cdc.dex.hl7.model.RedactorReport
+import gov.cdc.dex.hl7.model.RedactorStageMetadata
 import gov.cdc.dex.metadata.Problem
 import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-import java.util.*
 import org.slf4j.LoggerFactory
+import java.util.*
 
 /**
  * Azure function with event hub trigger to redact messages   */
@@ -58,26 +58,22 @@ class Function {
                     filePath = JsonHelper.getValueFromJson("routing_metadata.ingested_file_path", inputEvent).asString
                     messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
 
-                    val routeElement = JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent)
-
-                    val route = if (routeElement.isJsonNull) {
-                        "elr"
-                    } else {
-                        routeElement.asString
-                    }
+                    val dataStreamId = JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString
 
                     logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
-                    val report = helper.getRedactedReport(hl7Content, route)
+                    val configFileName = helper.getConfigFileName(hl7Content = hl7Content,
+                        profileConfig = fnConfig.profileConfig, dataStreamId= dataStreamId)
+
+                    val report = helper.getRedactedReport(msg=hl7Content, configFileName= configFileName)
 
                     if (report != null) {
                         val rReport = RedactorReport(report._2())
-                        val configFileName: List<String> = listOf(helper.getConfigFileName(route))
                         val stageMD = RedactorStageMetadata(
                             redactorStatus = rReport.status,
                             report = rReport,
                             eventHubMetadata = eventHubMD[msgIndex],
-                            config = configFileName
+                            config = listOf(configFileName)
                         )
                         stageMD.startProcessTime = startTime
                         stageMD.endProcessTime = Date().toIsoString()
@@ -149,21 +145,26 @@ class Function {
         }
 
         return try {
-            val route: String = request.headers["x-tp-data_stream_id"] ?: ""
+            val dataStreamId: String = request.headers["x-tp-data_stream_id"] ?: ""
 
-            if (route.isEmpty()) {
+            if (dataStreamId.isEmpty()) {
                 return buildHttpResponse(
                     "Error: Data Stream ID must be specified in message header using key 'x-tp-data_stream_id'.",
                     HttpStatus.BAD_REQUEST,
                     request
                 )
             }
-
-            val report = helper.getRedactedReport(hl7Message, route)
+            val configFileName = helper.getConfigFileName(hl7Content = hl7Message,
+                profileConfig = fnConfig.profileConfig, dataStreamId= dataStreamId)
+            val report = helper.getRedactedReport(hl7Message, configFileName)
 
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)
         } catch (e: Exception) {
-            noBodyResponse(request)
+            buildHttpResponse(
+                "Error: ${e.message}",
+                HttpStatus.BAD_REQUEST,
+                request
+            )
         }
     }
 }
