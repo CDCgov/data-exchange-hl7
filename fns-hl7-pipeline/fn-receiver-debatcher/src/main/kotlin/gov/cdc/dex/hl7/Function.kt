@@ -195,8 +195,7 @@ class Function {
         )
 
         if(!errorMessage.isNullOrEmpty()) {
-            val receiverEventError = ReceiverEventError(messageIndex, messageMetadata.messageUUID, errorMessage)
-            eventReport.errorMessages = mutableListOf(receiverEventError)
+            addErrorToReport(eventReport,errorMessage,messageMetadata.messageUUID,messageIndex)
             eventReport.notPropogatedCount++
         }
 
