@@ -1,18 +1,13 @@
+import gov.cdc.dex.hl7.*
 import gov.cdc.dex.hl7.Function
 import gov.cdc.dex.hl7.Function.Companion.UTF_BOM
-import gov.cdc.dex.hl7.ReceiverEventError
-import gov.cdc.dex.hl7.ReceiverEventReport
-import gov.cdc.dex.hl7.ReceiverStageMetadata
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
-import gov.cdc.dex.util.StringUtils.Companion.normalize
-import gov.cdc.hl7.HL7StaticParser
 import org.junit.jupiter.api.Test
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
-import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -47,10 +42,10 @@ class DebatcherTest {
         val metaDataMap: Map<String, String?> = mapOf(
             Pair("reporting_jurisdiction", "16"),
             Pair("original_file_name", "Genv1-Case-TestMessage1.HL7"),
-            Pair("meta_destination_id", "arboviral diseases"),
-            Pair("meta_ext_event", "case notification"),
+            Pair("meta_destination_id", "NNDSS"),
+            Pair("meta_ext_event", "hl7_out_recdeb"),
             Pair("tus_tguid", UUID.randomUUID().toString()),
-            Pair("meta_ext_uploadid", UUID.randomUUID().toString()),
+            Pair("meta_ext_uploadid", "123456789"),
             Pair("trace_id", "unknown"),
             Pair("parent_span_id", "unknown"),
             Pair("file_path", filePath)
@@ -58,11 +53,15 @@ class DebatcherTest {
         var msgEvent: DexHL7Metadata? = null
         val eventReportList = mutableListOf<String>()
         try {
+            // initialize event report metadata
+            val eventMetadata = ReceiverEventMetadata(stage =
+                    ReceiverEventStageMetadata(startProcessingTime = startTime,
+                         eventTimestamp = Date().toIsoString()))
             val testFileIS = this::class.java.getResource(filePath).openStream()
             // Add routing data to Report object for this file
             val eventReport = ReceiverEventReport()
             val routingMetadata = buildRoutingMetadata(metaDataMap, null)
-            eventReport.routingData = routingMetadata
+            eventMetadata.routingData = routingMetadata
 
             // Read Blob File by Lines
             // -------------------------------------
@@ -135,11 +134,13 @@ class DebatcherTest {
                 )
 
             }
-
+            // finalize event report
             eventReport.messageBatch = singleOrBatch
             eventReport.totalMessageCount = messageIndex
-            eventReportList.add(Function.gson.toJson(eventReport))
-            println("file event report --> ${Function.gson.toJson(eventReport)}")
+            eventMetadata.stage.endProcessingTime = Date().toIsoString()
+            eventMetadata.stage.report = eventReport
+            eventReportList.add(Function.gson.toJson(eventMetadata))
+            println("file event report --> ${Function.gson.toJson(eventMetadata)}")
 
         } catch (e: Exception) {
             println("Failure in Debatcher Test: ${e.message}")
@@ -152,12 +153,6 @@ class DebatcherTest {
 
     } // .test
 
-
-    private fun extractValue(msg: String, path: String): String {
-        val value = HL7StaticParser.getFirstValue(msg, path)
-        return if (value.isDefined) value.get()
-        else ""
-    }
 
     private fun buildAndSendMessage(
         messageIndex: Int,
@@ -217,14 +212,14 @@ class DebatcherTest {
         startTime: String,
         errorMessage: String? = null
     ): Pair<StageMetadata, SummaryInfo> {
-        val stageMetadata = ReceiverStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
+        val stageMetadata = ReceiverMessageStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
         stageMetadata.startProcessTime = startTime
         stageMetadata.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")
         if (status == Function.STATUS_ERROR) {
             summary = SummaryInfo("REJECTED")
             summary.problem =
-                errorMessage?.let { Problem(processName = ReceiverStageMetadata.RECEIVER_PROCESS, errorMessage = it) }
+                errorMessage?.let { Problem(processName = ProcessInfo.RECEIVER_PROCESS, errorMessage = it) }
         }
         return stageMetadata to summary
     }
@@ -238,18 +233,6 @@ class DebatcherTest {
         return defaultReturnValue
     }
 
-    private fun getValueOrNullString(
-        metaDataMap: Map<String, String?>,
-        keysToTry: List<String>
-    ): String {
-        val value = getValueOrDefaultString(metaDataMap, keysToTry)
-        return if (value == "UNKNOWN") {
-            ""
-        } else {
-            value
-        }
-    }
-
     private fun buildRoutingMetadata(
         metaDataMap: Map<String, String?>,
         supportingMetadata: Map<String, String>?
@@ -260,11 +243,11 @@ class DebatcherTest {
             ingestedFileTimestamp = metaDataMap["file_timestamp"] ?: "",
             ingestedFileSize = metaDataMap["file_size"] ?: "",
             dataProducerId = metaDataMap["data_producer_id"]?:"",
-            jurisdiction = getValueOrNullString(
+            jurisdiction = getValueOrDefaultString(
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
-            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "meta_ext_uploadid", "tus_tguid")),
+            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
             dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
             dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
             traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),

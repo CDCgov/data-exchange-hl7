@@ -19,7 +19,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <functionAppName>hl7-branch-${receiveFn}-${environment-id}</functionAppName>
+        <functionAppName>hl7-branch-${FUNC}-${environment-id}</functionAppName>
         <AzureBom.version>1.2.20</AzureBom.version>
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
@@ -163,15 +163,15 @@
                     <appName>${functionAppName}</appName>
                     <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan4</appServicePlanName>
                     <region>${functionRegion}</region>
-                    <subscriptionId>${subscriptionID}</subscriptionId>
-                    <auth>
+		    <subscriptionId>${subscriptionID}</subscriptionId>
+		    <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
                     </auth>
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
-                        <os>linux</os>
-                        <javaVersion>${java.version}</javaVersion>
+			    <os>linux</os>
+			    <javaVersion>${java.version}</javaVersion>
                     </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->

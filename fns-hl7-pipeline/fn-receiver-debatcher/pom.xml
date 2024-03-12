@@ -17,7 +17,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <functionAppName>ocio-ede-${environment-id}-hl7-receiver-debatcher</functionAppName>
-        <AzureBom.version>1.2.18</AzureBom.version>
+        <AzureBom.version>1.2.21</AzureBom.version>
         <java.version>17</java.version>
         <kotlin.version>1.9.0</kotlin.version>
         <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
@@ -263,15 +263,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
     <distributionManagement>

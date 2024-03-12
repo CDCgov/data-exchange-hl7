@@ -25,10 +25,6 @@ class Function {
         const val UTF_BOM = "\uFEFF"
         const val STATUS_SUCCESS = "SUCCESS"
         const val STATUS_ERROR = "ERROR"
-        const val EVENT_CODE_PATH = "OBR-31.1"
-        const val JURISDICTION_CODE_PATH = "OBX[@3.1='77968-6']-5.1"
-        const val ALT_JURISDICTION_CODE_PATH = "OBX[@3.1='NOT116']-5.1"
-        const val LOCAL_RECORD_ID_PATH = "OBR-3.1"
         val gson: Gson = GsonBuilder().serializeNulls().create()
         val knownMetadata: Set<String> = setOf(
             "data_stream_id", "meta_destination_id",
@@ -36,7 +32,7 @@ class Function {
             "data_producer_id",
             "jurisdiction", "reporting_jurisdiction", "meta_organization",
             "sender_id", "user_id", "meta_username",
-            "upload_id", "meta_ext_uploadid", "tus_tguid",
+            "upload_id", "tus_tguid",
             "trace_id",
             "parent_span_id"
         )
@@ -46,21 +42,21 @@ class Function {
     }
 
     @FunctionName("ingest-file")
-   /* fun processEventGrid(
-        @EventGridTrigger(name = "eventGridEvent") messageEvent: String?,
-        context: ExecutionContext
-    ): DexHL7Metadata? {*/
     fun processQueue(
-        @QueueTrigger(name = "message", queueName = "hl7-file-drop", connection = "BlobIngestConnectionString") message: String?,
+        @QueueTrigger(name = "message", queueName = "%queueName%", connection = "BlobIngestConnectionString") message: String?,
         context: ExecutionContext
     ): DexHL7Metadata? {
         logger.info("DEX::Received BLOB_CREATED event!")
-        var msgEvent: DexHL7Metadata? = null
+        var msgMetadata: DexHL7Metadata? = null
         val eventReportList = mutableListOf<String>()
         context.logger.fine("payload ingest-file:$message")
         try {
             val event = gson.fromJson(message, AzBlobCreateEventMessage::class.java)
             val startTime = Date().toIsoString()
+            // Initialize event report metadata
+            val eventMetadata = ReceiverEventMetadata(stage =
+                ReceiverEventStageMetadata(startProcessingTime = startTime,
+                eventTimestamp = event.eventTime))
             // Pick up blob metadata
             val blobName = event.eventData.url.substringAfter("/${fnConfig.blobIngestContName}/")
             logger.info("DEX::Reading blob: $blobName")
@@ -75,10 +71,10 @@ class Function {
             metaDataMap["file_timestamp"] = blobClient.properties.lastModified.toIsoString()
             metaDataMap["file_size"] = blobClient.properties.blobSize.toString()
 
-            // Add routing data to Report object for this file
+            // Add routing data and Report object for this file
             val eventReport = ReceiverEventReport()
             val routingMetadata = buildRoutingMetadata(metaDataMap, sourceMetadata)
-            eventReport.routingData = routingMetadata
+            eventMetadata.routingData = routingMetadata
 
             // Read Blob File by Lines
             // -------------------------------------
@@ -122,7 +118,7 @@ class Function {
                 } // .forEachLine
             } // .BufferedReader
 
-            msgEvent = if (mshCount > 0) {
+            msgMetadata = if (mshCount > 0) {
                 // Send last message
                 buildAndSendMessage(
                     messageIndex = messageIndex,
@@ -151,14 +147,17 @@ class Function {
                 )
 
             }
-
+            // finalize event report and attach to event metadata
             eventReport.messageBatch = singleOrBatch
             eventReport.totalMessageCount = messageIndex
-            eventReportList.add(gson.toJson(eventReport))
-            logger.info("file event report --> ${gson.toJson(eventReport)}")
+            eventMetadata.stage.endProcessingTime = Date().toIsoString()
+            eventMetadata.stage.report = eventReport
+            // add event metadata + report to list of reports to be sent later
+            eventReportList.add(gson.toJson(eventMetadata))
+            logger.debug("file event report --> ${gson.toJson(eventMetadata)}")
 
         } catch (e: Exception) {
-            logger.error("Failure in Recdeb fn: ${e.message}")
+            logger.error("Failure in Receiver-Debatcher function: ${e.message}")
         } finally {
             try {
                 // send ingest-file event reports to separate event hub
@@ -167,7 +166,7 @@ class Function {
                 logger.error("Unable to send to event hub ${fnConfig.evReportsHubName}: ${e.message}")
             }
         }
-        return msgEvent
+        return msgMetadata
     }
 
     private fun buildAndSendMessage(
@@ -181,6 +180,7 @@ class Function {
         eventReport: ReceiverEventReport,
         errorMessage: String? = null
     ): DexHL7Metadata {
+
         val messageMetadata = MessageMetadata(
             singleOrBatch = singleOrBatch,
             messageIndex = messageIndex,
@@ -193,6 +193,13 @@ class Function {
             startTime = startTime,
             errorMessage = errorMessage
         )
+
+        if(!errorMessage.isNullOrEmpty()) {
+            addErrorToReport(eventReport,errorMessage,messageMetadata.messageUUID,messageIndex)
+            eventReport.notPropogatedCount++
+        }
+
+
         return preparePayload(
             messageMetadata = messageMetadata,
             routingMetadata = routingMetadata,
@@ -205,7 +212,7 @@ class Function {
         }
     }
 
-    private fun sendMessageAndUpdateEventReport(payload: DexHL7Metadata, eventReport: ReceiverEventReport) : DexHL7Metadata? {
+    private fun sendMessageAndUpdateEventReport(payload: DexHL7Metadata, eventReport: ReceiverEventReport) : DexHL7Metadata {
         try {
             logger.info("DEX::Processed messageUUID: ${payload.messageMetadata.messageUUID}")
             val errors = fnConfig.evHubSenderOut.send(gson.toJson(payload))
@@ -242,14 +249,14 @@ class Function {
         startTime: String,
         errorMessage: String? = null
     ): Pair<StageMetadata, SummaryInfo> {
-        val stageMetadata = ReceiverStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
+        val stageMetadata = ReceiverMessageStageMetadata(receiverStatus = status, eventTimestamp = eventTimestamp)
         stageMetadata.startProcessTime = startTime
         stageMetadata.endProcessTime = Date().toIsoString()
         var summary = SummaryInfo("RECEIVED")
         if (status == STATUS_ERROR) {
             summary = SummaryInfo("REJECTED")
             summary.problem =
-                errorMessage?.let { Problem(processName = ReceiverStageMetadata.RECEIVER_PROCESS, errorMessage = it) }
+                errorMessage?.let { Problem(processName = ProcessInfo.RECEIVER_PROCESS, errorMessage = it) }
         }
         return stageMetadata to summary
     }
@@ -261,18 +268,6 @@ class Function {
     ): String {
         keysToTry.forEach { if (!metaDataMap[it].isNullOrEmpty()) return metaDataMap[it]!! }
         return defaultReturnValue
-    }
-
-    private fun getValueOrNullString(
-        metaDataMap: Map<String, String?>,
-        keysToTry: List<String>
-    ): String? {
-        val value = getValueOrDefaultString(metaDataMap, keysToTry)
-        return if (value == "UNKNOWN") {
-            null
-        } else {
-            value
-        }
     }
 
     private fun buildRoutingMetadata(
@@ -289,7 +284,7 @@ class Function {
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
-            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "meta_ext_uploadid", "tus_tguid")),
+            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
             dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
             dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
             traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),

@@ -20,7 +20,7 @@ data class LakeSegsTransStageMetadata(
 
     companion object {
         const val PROCESS_NAME = "LAKE-SEGMENTS-TRANSFORMER"
-        const val PROCESS_VERSION = "1.0.0"
+        val PROCESS_VERSION = System.getenv("FN_VERSION")?.toString() ?: "Unknown"
     } // .companion object
 
 }
