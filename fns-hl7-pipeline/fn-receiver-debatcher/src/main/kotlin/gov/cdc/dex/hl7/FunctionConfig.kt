@@ -38,6 +38,8 @@ class FunctionConfig {
         logger.error ("FATAL: Missing environment variable EventReportsHubName")
         throw e
     }
+    val psURL = System.getenv("ProcessingStatusBaseURL")
+
 
     init {
          //Init Azure Storage connection

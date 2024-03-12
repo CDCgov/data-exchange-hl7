@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.FunctionName
 import com.microsoft.azure.functions.annotation.QueueTrigger
+import gov.cdc.dex.azure.ProcessingStatus.PSClientUtility
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
@@ -180,6 +181,23 @@ class Function {
         eventReport: ReceiverEventReport,
         errorMessage: String? = null
     ): DexHL7Metadata {
+        val psClientUtility = PSClientUtility()
+
+        logger.info("Span ID batch111: ${ routingMetadata.spanId}")
+
+        fnConfig.psURL?.let {
+             psClientUtility.sendTraceToProcessingStatus(
+                fnConfig.psURL,
+                routingMetadata.traceId,
+                routingMetadata.spanId,
+                "startSpan",
+                 ProcessInfo.RECEIVER_PROCESS
+            ).let { it ->
+                if(it.isNotEmpty() && it.toString() != "TracingDisabled") routingMetadata.spanId = it.toString()
+            }
+            logger.info("Setting processing status spanId to routingMetadata: ${routingMetadata.spanId}")
+        }
+
 
         val messageMetadata = MessageMetadata(
             singleOrBatch = singleOrBatch,

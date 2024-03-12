@@ -7,6 +7,7 @@ import com.google.gson.JsonParser
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.EventHubMetadata
+import gov.cdc.dex.azure.ProcessingStatus.PSClientUtility
 import gov.cdc.dex.hl7.model.RedactorReport
 import gov.cdc.dex.hl7.model.RedactorStageMetadata
 import gov.cdc.dex.metadata.Problem
@@ -41,6 +42,10 @@ class Function {
         val helper = Helper()
         val outList = mutableListOf<String>()
         var inputEvent = JsonObject()
+        val psClientUtility = PSClientUtility()
+        var traceId :String =""
+        var spanId :String =""
+        var childSpanId :String =""
 
         try {
             message.forEachIndexed { msgIndex: Int, singleMessage: String? ->
@@ -59,8 +64,21 @@ class Function {
                     messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
 
                     val dataStreamId = JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString
+                    traceId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
+                    spanId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
 
                     logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
+
+                    fnConfig.psURL?.let  {
+                         childSpanId =  psClientUtility.sendTraceToProcessingStatus(
+                            fnConfig.psURL,
+                            traceId,
+                            spanId,
+                            "startSpan",
+                            RedactorStageMetadata.REDACTOR_PROCESS
+                        )
+                        logger.info("Span ID of messageUUID: $messageUUID : ${childSpanId}")
+                    }
 
                     val configFileName = helper.getConfigFileName(hl7Content = hl7Content,
                         profileConfig = fnConfig.profileConfig, dataStreamId= dataStreamId)
@@ -120,7 +138,16 @@ class Function {
             }
         } catch (e: Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
+        }  finally {
+            psClientUtility.stopTrace(
+                fnConfig.psURL,
+                traceId,
+                childSpanId,
+                RedactorStageMetadata.REDACTOR_PROCESS
+            )
         }
+
+
 
         return inputEvent
     }
