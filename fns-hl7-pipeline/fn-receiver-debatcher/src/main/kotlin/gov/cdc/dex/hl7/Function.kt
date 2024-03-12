@@ -193,8 +193,13 @@ class Function {
             startTime = startTime,
             errorMessage = errorMessage
         )
-        val receiverEventError = ReceiverEventError(messageIndex,messageMetadata.messageUUID, errorMessage)
-        eventReport.errorMessages = mutableListOf(receiverEventError)
+
+        if(!errorMessage.isNullOrEmpty()) {
+            val receiverEventError = ReceiverEventError(messageIndex, messageMetadata.messageUUID, errorMessage)
+            eventReport.errorMessages = mutableListOf(receiverEventError)
+            eventReport.notPropogatedCount++
+        }
+
 
         return preparePayload(
             messageMetadata = messageMetadata,
