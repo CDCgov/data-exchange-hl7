@@ -43,9 +43,8 @@ class DebatcherTest {
             Pair("reporting_jurisdiction", "16"),
             Pair("original_file_name", "Genv1-Case-TestMessage1.HL7"),
             Pair("meta_destination_id", "NNDSS"),
-            Pair("meta_ext_event", "hl7_out_recdeb"),
-            Pair("tus_tguid", UUID.randomUUID().toString()),
-            Pair("meta_ext_uploadid", "123456789"),
+            Pair("meta_ext_event", "hl7"),
+            Pair("tus_tguid", ""),
             Pair("trace_id", "unknown"),
             Pair("parent_span_id", "unknown"),
             Pair("file_path", filePath)
@@ -62,65 +61,85 @@ class DebatcherTest {
             val eventReport = ReceiverEventReport()
             val routingMetadata = buildRoutingMetadata(metaDataMap, null)
             eventMetadata.routingData = routingMetadata
-
-            // Read Blob File by Lines
-            // -------------------------------------
-            val reader = InputStreamReader(testFileIS, Charsets.UTF_8)
-            val currentLinesArr = arrayListOf<String>()
-            var mshCount = 0
             var messageIndex = 1
             var singleOrBatch = MessageMetadata.SINGLE_FILE
-            BufferedReader(reader).use { br ->
-                br.forEachLine { line ->
-                    val lineClean =
-                        line.trim().let { if (it.startsWith(UTF_BOM)) it.substring(1) else it }
-                    if (lineClean.startsWith("FHS") ||
-                        lineClean.startsWith("BHS") ||
-                        lineClean.startsWith("BTS") ||
-                        lineClean.startsWith("FTS")
-                    ) {
-                        singleOrBatch = MessageMetadata.BATCH_FILE
-                        // batch line --Nothing to do here
-                    } else if (lineClean.isNotEmpty()) {
-                        if (lineClean.startsWith("MSH")) {
-                            mshCount++
-                            if (mshCount > 1) {
-                                singleOrBatch = MessageMetadata.BATCH_FILE
-                                buildAndSendMessage(
-                                    messageIndex = messageIndex,
-                                    singleOrBatch = singleOrBatch,
-                                    status = Function.STATUS_SUCCESS,
-                                    currentLinesArr = currentLinesArr,
-                                    eventTime = startTime,
-                                    startTime = startTime,
-                                    routingMetadata = routingMetadata,
-                                    eventReport = eventReport
-                                )
-                                messageIndex++
-                            }
-                            currentLinesArr.clear()
-                        } // .if
-                        currentLinesArr.add(lineClean)
-                    } // .else
-                } // .forEachLine
-            } // .BufferedReader
 
-            msgEvent = if (mshCount > 0) {
-                // Send last message
-                buildAndSendMessage(
-                    messageIndex = messageIndex,
-                    singleOrBatch = singleOrBatch,
-                    status = Function.STATUS_SUCCESS,
-                    currentLinesArr = currentLinesArr,
-                    eventTime = startTime,
-                    startTime = startTime,
-                    routingMetadata = routingMetadata,
-                    eventReport = eventReport
-                )
+            if (validateMetadata(routingMetadata)) {
+                // Read Blob File by Lines
+                // -------------------------------------
+                val reader = InputStreamReader(testFileIS, Charsets.UTF_8)
+                val currentLinesArr = arrayListOf<String>()
+                var mshCount = 0
+
+                BufferedReader(reader).use { br ->
+                    br.forEachLine { line ->
+                        val lineClean =
+                            line.trim().let { if (it.startsWith(UTF_BOM)) it.substring(1) else it }
+                        if (lineClean.startsWith("FHS") ||
+                            lineClean.startsWith("BHS") ||
+                            lineClean.startsWith("BTS") ||
+                            lineClean.startsWith("FTS")
+                        ) {
+                            singleOrBatch = MessageMetadata.BATCH_FILE
+                            // batch line --Nothing to do here
+                        } else if (lineClean.isNotEmpty()) {
+                            if (lineClean.startsWith("MSH")) {
+                                mshCount++
+                                if (mshCount > 1) {
+                                    singleOrBatch = MessageMetadata.BATCH_FILE
+                                    buildAndSendMessage(
+                                        messageIndex = messageIndex,
+                                        singleOrBatch = singleOrBatch,
+                                        status = Function.STATUS_SUCCESS,
+                                        currentLinesArr = currentLinesArr,
+                                        eventTime = startTime,
+                                        startTime = startTime,
+                                        routingMetadata = routingMetadata,
+                                        eventReport = eventReport
+                                    )
+                                    messageIndex++
+                                }
+                                currentLinesArr.clear()
+                            } // .if
+                            currentLinesArr.add(lineClean)
+                        } // .else
+                    } // .forEachLine
+                } // .BufferedReader
+
+                msgEvent = if (mshCount > 0) {
+                    // Send last message
+                    buildAndSendMessage(
+                        messageIndex = messageIndex,
+                        singleOrBatch = singleOrBatch,
+                        status = Function.STATUS_SUCCESS,
+                        currentLinesArr = currentLinesArr,
+                        eventTime = startTime,
+                        startTime = startTime,
+                        routingMetadata = routingMetadata,
+                        eventReport = eventReport
+                    )
+                } else {
+                    // no valid message -- send to error queue
+                    // send empty array as message content when content is invalid
+                    val errorMessage = "No valid message found."
+                    buildAndSendMessage(
+                        messageIndex = messageIndex,
+                        singleOrBatch = singleOrBatch,
+                        status = Function.STATUS_ERROR,
+                        currentLinesArr = arrayListOf(),
+                        eventTime = startTime,
+                        startTime = startTime,
+                        routingMetadata = routingMetadata,
+                        eventReport = eventReport,
+                        errorMessage = errorMessage
+                    )
+
+                }
             } else {
-                // no valid message -- send to error queue
-                // send empty array as message content when content is invalid
-                val errorMessage = "No valid message found."
+                val errorMessage = "Message is missing required metadata. " +
+                        "data stream id is ${routingMetadata.dataStreamId}, upload id is ${routingMetadata.uploadId}, " +
+                        "data stream route is ${routingMetadata.dataStreamRoute}"
+
                 buildAndSendMessage(
                     messageIndex = messageIndex,
                     singleOrBatch = singleOrBatch,
@@ -177,6 +196,11 @@ class DebatcherTest {
             startTime = startTime,
             errorMessage = errorMessage
         )
+
+        if (!errorMessage.isNullOrEmpty()) {
+            addErrorToReport(eventReport,errorMessage,messageMetadata.messageUUID,messageIndex)
+            eventReport.notPropogatedCount++
+        }
         return preparePayload(
             messageMetadata = messageMetadata,
             routingMetadata = routingMetadata,
@@ -190,13 +214,15 @@ class DebatcherTest {
     }
 
     private fun sendMessageAndUpdateEventReport(payload: DexHL7Metadata, eventReport: ReceiverEventReport) {
-
         val jsonMessage = Function.gson.toJson(payload)
         println(jsonMessage)
         println("Simulating Sending new Event to event hub Message: --> messageUUID: ${payload.messageMetadata.messageUUID}, messageIndex: ${payload.messageMetadata.messageIndex}, fileName: ${payload.routingMetadata.ingestedFilePath}")
         println("Processed and Sent to console Message: --> messageUUID: ${payload.messageMetadata.messageUUID}, messageIndex: ${payload.messageMetadata.messageIndex}, fileName: ${payload.routingMetadata.ingestedFilePath}")
     }
-
+    private fun validateMetadata(routingMetadata: RoutingMetadata) : Boolean {
+        return !(routingMetadata.dataStreamId.isEmpty() || routingMetadata.uploadId.isEmpty()
+                || routingMetadata.dataStreamRoute.isEmpty())
+    }
     private fun addErrorToReport(
         eventReport: ReceiverEventReport,
         errorMessage: String,
@@ -247,9 +273,9 @@ class DebatcherTest {
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
-            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
-            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
-            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
+            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid"), ""),
+            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id"), ""),
+            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event"), ""),
             traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
             spanId = getValueOrDefaultString(metaDataMap, listOf("parent_span_id", "span_id")),
             supportingMetadata = supportingMetadata
@@ -272,7 +298,5 @@ class DebatcherTest {
             summary = summary
         )
     }
-
-//    }
 
 }

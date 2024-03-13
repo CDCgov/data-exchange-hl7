@@ -1,5 +1,9 @@
 package gov.cdc.dex.hl7
 
+import com.azure.core.util.Context
+import com.azure.storage.blob.BlobClient
+import com.azure.storage.blob.models.BlobProperties
+import com.azure.storage.blob.models.BlobStorageException
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.microsoft.azure.functions.ExecutionContext
@@ -11,10 +15,8 @@ import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.lang.IllegalArgumentException
-import java.util.Date
+import java.util.*
 import java.util.Base64.getEncoder
-import kotlin.collections.ArrayList
 
 
 /**
@@ -34,7 +36,7 @@ class Function {
             "sender_id", "user_id", "meta_username",
             "upload_id", "tus_tguid",
             "trace_id",
-            "parent_span_id"
+            "parent_span_id", "span_id"
         )
 
         val fnConfig = FunctionConfig()
@@ -57,83 +59,107 @@ class Function {
             val eventMetadata = ReceiverEventMetadata(stage =
                 ReceiverEventStageMetadata(startProcessingTime = startTime,
                 eventTimestamp = event.eventTime))
-            // Pick up blob metadata
+            // create blob client
             val blobName = event.eventData.url.substringAfter("/${fnConfig.blobIngestContName}/")
             logger.info("DEX::Reading blob: $blobName")
             val blobClient = fnConfig.azBlobProxy.getBlobClient(blobName)
+
+            // Get properties and metadata of blob -- should retry if failure, per retry policy
+            // or throw exception if blob not found
+            val blobProperties = getBlobProperties(blobClient)
             // Create Map of Blob Metadata with lower case keys
-            val metaDataMap = blobClient.properties.metadata.mapKeys { it.key.lowercase() }.toMutableMap()
+            val metaDataMap = blobProperties.metadata.mapKeys { it.key.lowercase() }.toMutableMap()
             // filter out unknown metadata and store in dynamicMetadata
             val dynamicMetadata = metaDataMap.filter { e -> !knownMetadata.contains(e.key) }
             val sourceMetadata = dynamicMetadata.ifEmpty { null }
             // add other event/blob properties we need
             metaDataMap["file_path"] = event.eventData.url
-            metaDataMap["file_timestamp"] = blobClient.properties.lastModified.toIsoString()
-            metaDataMap["file_size"] = blobClient.properties.blobSize.toString()
+            metaDataMap["file_timestamp"] = blobProperties.lastModified.toIsoString()
+            metaDataMap["file_size"] = blobProperties.blobSize.toString()
 
             // Add routing data and Report object for this file
             val eventReport = ReceiverEventReport()
             val routingMetadata = buildRoutingMetadata(metaDataMap, sourceMetadata)
             eventMetadata.routingData = routingMetadata
-
-            // Read Blob File by Lines
-            // -------------------------------------
-            val reader = InputStreamReader(blobClient.openInputStream(), Charsets.UTF_8)
-            val currentLinesArr = arrayListOf<String>()
-            var mshCount = 0
             var messageIndex = 1
             var singleOrBatch = MessageMetadata.SINGLE_FILE
-            BufferedReader(reader).use { br ->
-                br.forEachLine { line ->
-                    val lineClean =
-                        line.trim().let { if (it.startsWith(UTF_BOM)) it.substring(1) else it }
-                    if (lineClean.startsWith("FHS") ||
-                        lineClean.startsWith("BHS") ||
-                        lineClean.startsWith("BTS") ||
-                        lineClean.startsWith("FTS")
-                    ) {
-                        singleOrBatch = MessageMetadata.BATCH_FILE
-                        // batch line --Nothing to do here
-                    } else if (lineClean.isNotEmpty()) {
-                        if (lineClean.startsWith("MSH")) {
-                            mshCount++
-                            if (mshCount > 1) {
-                                singleOrBatch = MessageMetadata.BATCH_FILE
-                                buildAndSendMessage(
-                                    messageIndex = messageIndex,
-                                    singleOrBatch = singleOrBatch,
-                                    status = STATUS_SUCCESS,
-                                    currentLinesArr = currentLinesArr,
-                                    eventTime = event.eventTime,
-                                    startTime = startTime,
-                                    routingMetadata = routingMetadata,
-                                    eventReport = eventReport
-                                )
-                                messageIndex++
-                            }
-                            currentLinesArr.clear()
-                        } // .if
-                        currentLinesArr.add(lineClean)
-                    } // .else
-                } // .forEachLine
-            } // .BufferedReader
 
-            msgMetadata = if (mshCount > 0) {
-                // Send last message
-                buildAndSendMessage(
-                    messageIndex = messageIndex,
-                    singleOrBatch = singleOrBatch,
-                    status = STATUS_SUCCESS,
-                    currentLinesArr = currentLinesArr,
-                    eventTime = event.eventTime,
-                    startTime = startTime,
-                    routingMetadata = routingMetadata,
-                    eventReport = eventReport
-                )
+            // error out if required metadata is missing
+            if (validateMetadata(routingMetadata)) {
+                // Read Blob File by Lines
+                // -------------------------------------
+                val reader = InputStreamReader(blobClient.openInputStream(), Charsets.UTF_8)
+                val currentLinesArr = arrayListOf<String>()
+                var mshCount = 0
+                BufferedReader(reader).use { br ->
+                    br.forEachLine { line ->
+                        val lineClean =
+                            line.trim().let { if (it.startsWith(UTF_BOM)) it.substring(1) else it }
+                        if (lineClean.startsWith("FHS") ||
+                            lineClean.startsWith("BHS") ||
+                            lineClean.startsWith("BTS") ||
+                            lineClean.startsWith("FTS")
+                        ) {
+                            singleOrBatch = MessageMetadata.BATCH_FILE
+                            // batch line --Nothing to do here
+                        } else if (lineClean.isNotEmpty()) {
+                            if (lineClean.startsWith("MSH")) {
+                                mshCount++
+                                if (mshCount > 1) {
+                                    singleOrBatch = MessageMetadata.BATCH_FILE
+                                    buildAndSendMessage(
+                                        messageIndex = messageIndex,
+                                        singleOrBatch = singleOrBatch,
+                                        status = STATUS_SUCCESS,
+                                        currentLinesArr = currentLinesArr,
+                                        eventTime = event.eventTime,
+                                        startTime = startTime,
+                                        routingMetadata = routingMetadata,
+                                        eventReport = eventReport
+                                    )
+                                    messageIndex++
+                                }
+                                currentLinesArr.clear()
+                            } // .if
+                            currentLinesArr.add(lineClean)
+                        } // .else
+                    } // .forEachLine
+                } // .BufferedReader
+
+                msgMetadata = if (mshCount > 0) {
+                    // Send last message
+                    buildAndSendMessage(
+                        messageIndex = messageIndex,
+                        singleOrBatch = singleOrBatch,
+                        status = STATUS_SUCCESS,
+                        currentLinesArr = currentLinesArr,
+                        eventTime = event.eventTime,
+                        startTime = startTime,
+                        routingMetadata = routingMetadata,
+                        eventReport = eventReport
+                    )
+                } else {
+                    // no valid message -- send to error queue
+                    // send empty array as message content when content is invalid
+                    val errorMessage = "No valid message found."
+                    buildAndSendMessage(
+                        messageIndex = messageIndex,
+                        singleOrBatch = singleOrBatch,
+                        status = STATUS_ERROR,
+                        currentLinesArr = arrayListOf(),
+                        eventTime = event.eventTime,
+                        startTime = startTime,
+                        routingMetadata = routingMetadata,
+                        eventReport = eventReport,
+                        errorMessage = errorMessage
+                    )
+
+                }
             } else {
-                // no valid message -- send to error queue
-                // send empty array as message content when content is invalid
-                val errorMessage = "No valid message found."
+                val errorMessage = "One or more required metadata elements are missing. " +
+                        "data stream id is ${routingMetadata.dataStreamId}, upload id is ${routingMetadata.uploadId}, " +
+                        "data stream route is ${routingMetadata.dataStreamRoute}"
+
                 buildAndSendMessage(
                     messageIndex = messageIndex,
                     singleOrBatch = singleOrBatch,
@@ -145,7 +171,6 @@ class Function {
                     eventReport = eventReport,
                     errorMessage = errorMessage
                 )
-
             }
             // finalize event report and attach to event metadata
             eventReport.messageBatch = singleOrBatch
@@ -167,6 +192,26 @@ class Function {
             }
         }
         return msgMetadata
+    }
+
+    private fun validateMetadata(routingMetadata: RoutingMetadata) : Boolean {
+        return !(routingMetadata.dataStreamId.isEmpty() || routingMetadata.uploadId.isEmpty()
+                || routingMetadata.dataStreamRoute.isEmpty())
+    }
+    private fun getBlobProperties(blobClient: BlobClient) : BlobProperties {
+        val blobProperties: BlobProperties?
+        try {
+            blobProperties = blobClient.getPropertiesWithResponse(
+                null,
+                fnConfig.azBlobProxy.tryTimeout,
+                Context.NONE
+            ).value
+
+        } catch (e: BlobStorageException) {
+            logger.error("Unable to read properties: blob ${blobClient.blobName} not found")
+            throw e
+        }
+        return blobProperties
     }
 
     private fun buildAndSendMessage(
@@ -194,7 +239,7 @@ class Function {
             errorMessage = errorMessage
         )
 
-        if(!errorMessage.isNullOrEmpty()) {
+        if (!errorMessage.isNullOrEmpty()) {
             addErrorToReport(eventReport,errorMessage,messageMetadata.messageUUID,messageIndex)
             eventReport.notPropogatedCount++
         }
@@ -229,7 +274,9 @@ class Function {
                 messageUUID = payload.messageMetadata.messageUUID,
                 messageIndex = payload.messageMetadata.messageIndex
             )
-            eventReport.notPropogatedCount++
+            // avoid adding to notPropagatedCount if the message has already been put in error status
+            if (eventReport.errorMessages.count { it.messageUUID == payload.messageMetadata.messageUUID } == 1)
+                eventReport.notPropogatedCount++
         }
         return payload
     }
@@ -284,9 +331,9 @@ class Function {
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
-            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
-            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
-            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
+            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid"), ""),
+            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id"), ""),
+            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event"), ""),
             traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
             spanId = getValueOrDefaultString(metaDataMap, listOf( "parent_span_id", "span_id")),
             supportingMetadata = supportingMetadata
