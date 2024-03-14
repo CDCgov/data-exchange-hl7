@@ -16,6 +16,7 @@ import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.time.Duration
 import java.util.*
 import java.util.Base64.getEncoder
 import java.util.concurrent.TimeUnit
@@ -251,7 +252,7 @@ class Function {
                 if (retries < 3) logger.info("RETRYING read of blob properties for blob ${blobClient.blobName}")
                 response = blobClient.getPropertiesWithResponse(
                     null,
-                    fnConfig.azBlobProxy.tryTimeout,
+                    Duration.ofSeconds(60), //this is the default http response timeout
                     Context.NONE
                 )
                 retries--
