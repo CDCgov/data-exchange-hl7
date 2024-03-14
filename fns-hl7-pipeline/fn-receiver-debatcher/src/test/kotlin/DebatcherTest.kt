@@ -1,11 +1,3 @@
-import com.azure.storage.blob.models.AccessTier
-import com.azure.storage.blob.models.ArchiveStatus
-import com.azure.storage.blob.models.BlobProperties
-import com.azure.storage.blob.models.BlobType
-import com.azure.storage.blob.models.CopyStatusType
-import com.azure.storage.blob.models.LeaseDurationType
-import com.azure.storage.blob.models.LeaseStateType
-import com.azure.storage.blob.models.LeaseStatusType
 import gov.cdc.dex.hl7.*
 import gov.cdc.dex.hl7.Function
 import gov.cdc.dex.hl7.Function.Companion.UTF_BOM
@@ -16,11 +8,7 @@ import org.junit.jupiter.api.Test
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
-import java.sql.Blob
-import java.time.OffsetDateTime
 import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 class DebatcherTest {
 
