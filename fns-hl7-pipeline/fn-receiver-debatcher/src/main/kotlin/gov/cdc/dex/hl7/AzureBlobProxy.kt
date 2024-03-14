@@ -18,7 +18,8 @@ class AzureBlobProxy(connectionStr: String, container: String) {
 
     private val blobContainerClient: BlobContainerClient = BlobServiceClientBuilder()
        .connectionString(connectionStr)
-       .retryOptions(retryOptions)
+            // try it without the sdk retry options
+     //  .retryOptions(retryOptions)
        .buildClient()
        .getBlobContainerClient(container)
 
