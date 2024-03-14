@@ -1,3 +1,11 @@
+import com.azure.storage.blob.models.AccessTier
+import com.azure.storage.blob.models.ArchiveStatus
+import com.azure.storage.blob.models.BlobProperties
+import com.azure.storage.blob.models.BlobType
+import com.azure.storage.blob.models.CopyStatusType
+import com.azure.storage.blob.models.LeaseDurationType
+import com.azure.storage.blob.models.LeaseStateType
+import com.azure.storage.blob.models.LeaseStatusType
 import gov.cdc.dex.hl7.*
 import gov.cdc.dex.hl7.Function
 import gov.cdc.dex.hl7.Function.Companion.UTF_BOM
@@ -8,7 +16,10 @@ import org.junit.jupiter.api.Test
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
+import java.sql.Blob
+import java.time.OffsetDateTime
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 class DebatcherTest {
@@ -220,8 +231,7 @@ class DebatcherTest {
         println("Processed and Sent to console Message: --> messageUUID: ${payload.messageMetadata.messageUUID}, messageIndex: ${payload.messageMetadata.messageIndex}, fileName: ${payload.routingMetadata.ingestedFilePath}")
     }
     private fun validateMetadata(routingMetadata: RoutingMetadata) : Boolean {
-        return !(routingMetadata.dataStreamId.isEmpty() || routingMetadata.uploadId.isEmpty()
-                || routingMetadata.dataStreamRoute.isEmpty())
+        return !(routingMetadata.dataStreamId == Function.UNKNOWN_VALUE || routingMetadata.uploadId == Function.UNKNOWN_VALUE)
     }
     private fun addErrorToReport(
         eventReport: ReceiverEventReport,
@@ -253,7 +263,7 @@ class DebatcherTest {
     private fun getValueOrDefaultString(
         metaDataMap: Map<String, String?>,
         keysToTry: List<String>,
-        defaultReturnValue: String = "UNKNOWN"
+        defaultReturnValue: String = Function.UNKNOWN_VALUE
     ): String {
         keysToTry.forEach { if (!metaDataMap[it].isNullOrEmpty()) return metaDataMap[it]!! }
         return defaultReturnValue
@@ -273,9 +283,9 @@ class DebatcherTest {
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
-            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid"), ""),
-            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id"), ""),
-            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event"), ""),
+            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
+            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
+            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
             traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
             spanId = getValueOrDefaultString(metaDataMap, listOf("parent_span_id", "span_id")),
             supportingMetadata = supportingMetadata
