@@ -9,7 +9,6 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DebatcherTest {
 
@@ -220,8 +219,7 @@ class DebatcherTest {
         println("Processed and Sent to console Message: --> messageUUID: ${payload.messageMetadata.messageUUID}, messageIndex: ${payload.messageMetadata.messageIndex}, fileName: ${payload.routingMetadata.ingestedFilePath}")
     }
     private fun validateMetadata(routingMetadata: RoutingMetadata) : Boolean {
-        return !(routingMetadata.dataStreamId.isEmpty() || routingMetadata.uploadId.isEmpty()
-                || routingMetadata.dataStreamRoute.isEmpty())
+        return !(routingMetadata.dataStreamId == Function.UNKNOWN_VALUE || routingMetadata.uploadId == Function.UNKNOWN_VALUE)
     }
     private fun addErrorToReport(
         eventReport: ReceiverEventReport,
@@ -253,7 +251,7 @@ class DebatcherTest {
     private fun getValueOrDefaultString(
         metaDataMap: Map<String, String?>,
         keysToTry: List<String>,
-        defaultReturnValue: String = "UNKNOWN"
+        defaultReturnValue: String = Function.UNKNOWN_VALUE
     ): String {
         keysToTry.forEach { if (!metaDataMap[it].isNullOrEmpty()) return metaDataMap[it]!! }
         return defaultReturnValue
@@ -273,9 +271,9 @@ class DebatcherTest {
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
-            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid"), ""),
-            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id"), ""),
-            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event"), ""),
+            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
+            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
+            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
             traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
             spanId = getValueOrDefaultString(metaDataMap, listOf("parent_span_id", "span_id")),
             supportingMetadata = supportingMetadata

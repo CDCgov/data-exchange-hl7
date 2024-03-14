@@ -1,5 +1,6 @@
 package gov.cdc.dex.hl7
 
+import com.azure.core.http.rest.Response
 import com.azure.core.util.Context
 import com.azure.storage.blob.BlobClient
 import com.azure.storage.blob.models.BlobProperties
@@ -17,6 +18,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 import java.util.Base64.getEncoder
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -27,6 +29,7 @@ class Function {
         const val UTF_BOM = "\uFEFF"
         const val STATUS_SUCCESS = "SUCCESS"
         const val STATUS_ERROR = "ERROR"
+        const val UNKNOWN_VALUE = "UNKNOWN"
         val gson: Gson = GsonBuilder().serializeNulls().create()
         val knownMetadata: Set<String> = setOf(
             "data_stream_id", "meta_destination_id",
@@ -45,7 +48,11 @@ class Function {
 
     @FunctionName("ingest-file")
     fun processQueue(
-        @QueueTrigger(name = "message", queueName = "%queueName%", connection = "BlobIngestConnectionString") message: String?,
+        @QueueTrigger(
+            name = "message",
+            queueName = "%queueName%",
+            connection = "BlobIngestConnectionString"
+        ) message: String?,
         context: ExecutionContext
     ): DexHL7Metadata? {
         logger.info("DEX::Received BLOB_CREATED event!")
@@ -56,9 +63,13 @@ class Function {
             val event = gson.fromJson(message, AzBlobCreateEventMessage::class.java)
             val startTime = Date().toIsoString()
             // Initialize event report metadata
-            val eventMetadata = ReceiverEventMetadata(stage =
-                ReceiverEventStageMetadata(startProcessingTime = startTime,
-                eventTimestamp = event.eventTime))
+            val eventMetadata = ReceiverEventMetadata(
+                stage =
+                ReceiverEventStageMetadata(
+                    startProcessingTime = startTime,
+                    eventTimestamp = event.eventTime
+                )
+            )
             // create blob client
             val blobName = event.eventData.url.substringAfter("/${fnConfig.blobIngestContName}/")
             logger.info("DEX::Reading blob: $blobName")
@@ -157,20 +168,34 @@ class Function {
                 }
             } else {
                 val errorMessage = "One or more required metadata elements are missing. " +
-                        "data stream id is ${routingMetadata.dataStreamId}, upload id is ${routingMetadata.uploadId}, " +
-                        "data stream route is ${routingMetadata.dataStreamRoute}"
-
-                buildAndSendMessage(
-                    messageIndex = messageIndex,
-                    singleOrBatch = singleOrBatch,
-                    status = STATUS_ERROR,
-                    currentLinesArr = arrayListOf(),
-                    eventTime = event.eventTime,
-                    startTime = startTime,
-                    routingMetadata = routingMetadata,
-                    eventReport = eventReport,
-                    errorMessage = errorMessage
-                )
+                        "data stream id is ${routingMetadata.dataStreamId}, upload id is ${routingMetadata.uploadId}"
+                // if no upload_id, substitute blob name so file-sink does not overwrite "UNKNOWN.txt" record
+                if (routingMetadata.uploadId == UNKNOWN_VALUE) {
+                    val newRoutingMetadata = replaceUploadId(blobName, routingMetadata)
+                    buildAndSendMessage(
+                        messageIndex = messageIndex,
+                        singleOrBatch = singleOrBatch,
+                        status = STATUS_ERROR,
+                        currentLinesArr = arrayListOf(),
+                        eventTime = event.eventTime,
+                        startTime = startTime,
+                        routingMetadata = newRoutingMetadata,
+                        eventReport = eventReport,
+                        errorMessage = errorMessage
+                    )
+                } else {
+                    buildAndSendMessage(
+                        messageIndex = messageIndex,
+                        singleOrBatch = singleOrBatch,
+                        status = STATUS_ERROR,
+                        currentLinesArr = arrayListOf(),
+                        eventTime = event.eventTime,
+                        startTime = startTime,
+                        routingMetadata = routingMetadata,
+                        eventReport = eventReport,
+                        errorMessage = errorMessage
+                    )
+                }
             }
             // finalize event report and attach to event metadata
             eventReport.messageBatch = singleOrBatch
@@ -194,19 +219,54 @@ class Function {
         return msgMetadata
     }
 
-    private fun validateMetadata(routingMetadata: RoutingMetadata) : Boolean {
-        return !(routingMetadata.dataStreamId.isEmpty() || routingMetadata.uploadId.isEmpty()
-                || routingMetadata.dataStreamRoute.isEmpty())
+    private fun validateMetadata(routingMetadata: RoutingMetadata): Boolean {
+        return !(routingMetadata.dataStreamId == UNKNOWN_VALUE || routingMetadata.uploadId == UNKNOWN_VALUE)
     }
-    private fun getBlobProperties(blobClient: BlobClient) : BlobProperties {
-        val blobProperties: BlobProperties?
-        try {
-            blobProperties = blobClient.getPropertiesWithResponse(
-                null,
-                fnConfig.azBlobProxy.tryTimeout,
-                Context.NONE
-            ).value
 
+    private fun replaceUploadId(uploadId: String, currentMetadata: RoutingMetadata) : RoutingMetadata {
+     return RoutingMetadata(
+         ingestedFilePath = currentMetadata.ingestedFilePath,
+         ingestedFileTimestamp = currentMetadata.ingestedFileTimestamp,
+         ingestedFileSize = currentMetadata.ingestedFileSize,
+         dataProducerId = currentMetadata.dataProducerId,
+         jurisdiction = currentMetadata.jurisdiction,
+         uploadId = uploadId,
+         dataStreamId = currentMetadata.dataStreamId,
+         dataStreamRoute = currentMetadata.dataStreamRoute,
+         traceId = currentMetadata.dataStreamId,
+         spanId = currentMetadata.spanId,
+         supportingMetadata = currentMetadata.supportingMetadata
+     )
+    }
+
+    private fun getBlobProperties(blobClient: BlobClient): BlobProperties {
+        val blobProperties: BlobProperties?
+        var response : Response<BlobProperties>
+        var timeToWait = 0L
+        var mustRetry : Boolean
+        try {
+            var retries = 3
+
+            do {
+                if (retries < 3) logger.info("RETRYING read of blob properties for blob ${blobClient.blobName}")
+                response = blobClient.getPropertiesWithResponse(
+                    null,
+                    fnConfig.azBlobProxy.tryTimeout,
+                    Context.NONE
+                )
+                retries--
+                mustRetry = (response.statusCode != 200 || response.value.metadata.isEmpty())
+                if (mustRetry) {
+                    logger.info("RETRY is TRUE: Response status code was ${response.statusCode}")
+                    try {
+                        TimeUnit.SECONDS.sleep(timeToWait++)
+                    } catch (ex: InterruptedException) {
+                        logger.debug("Timer interrupted")
+                    }
+                }
+            } while (mustRetry && retries > 0)
+
+            blobProperties = response.value
         } catch (e: BlobStorageException) {
             logger.error("Unable to read properties: blob ${blobClient.blobName} not found")
             throw e
@@ -240,7 +300,7 @@ class Function {
         )
 
         if (!errorMessage.isNullOrEmpty()) {
-            addErrorToReport(eventReport,errorMessage,messageMetadata.messageUUID,messageIndex)
+            addErrorToReport(eventReport, errorMessage, messageMetadata.messageUUID, messageIndex)
             eventReport.notPropogatedCount++
         }
 
@@ -257,7 +317,10 @@ class Function {
         }
     }
 
-    private fun sendMessageAndUpdateEventReport(payload: DexHL7Metadata, eventReport: ReceiverEventReport) : DexHL7Metadata {
+    private fun sendMessageAndUpdateEventReport(
+        payload: DexHL7Metadata,
+        eventReport: ReceiverEventReport
+    ): DexHL7Metadata {
         try {
             logger.info("DEX::Processed messageUUID: ${payload.messageMetadata.messageUUID}")
             val errors = fnConfig.evHubSenderOut.send(gson.toJson(payload))
@@ -311,7 +374,7 @@ class Function {
     private fun getValueOrDefaultString(
         metaDataMap: Map<String, String?>,
         keysToTry: List<String>,
-        defaultReturnValue: String = "UNKNOWN"
+        defaultReturnValue: String = UNKNOWN_VALUE
     ): String {
         keysToTry.forEach { if (!metaDataMap[it].isNullOrEmpty()) return metaDataMap[it]!! }
         return defaultReturnValue
@@ -326,16 +389,16 @@ class Function {
             ingestedFilePath = metaDataMap["file_path"] ?: "",
             ingestedFileTimestamp = metaDataMap["file_timestamp"] ?: "",
             ingestedFileSize = metaDataMap["file_size"] ?: "",
-            dataProducerId = metaDataMap["data_producer_id"]?:"",
+            dataProducerId = metaDataMap["data_producer_id"] ?: "",
             jurisdiction = getValueOrDefaultString(
                 metaDataMap,
                 listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
             ),
-            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid"), ""),
-            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id"), ""),
-            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event"), ""),
+            uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
+            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
+            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
             traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
-            spanId = getValueOrDefaultString(metaDataMap, listOf( "parent_span_id", "span_id")),
+            spanId = getValueOrDefaultString(metaDataMap, listOf("parent_span_id", "span_id")),
             supportingMetadata = supportingMetadata
         )
     }
