@@ -4,7 +4,6 @@ import com.azure.core.http.rest.Response
 import com.azure.core.util.Context
 import com.azure.storage.blob.BlobClient
 import com.azure.storage.blob.models.BlobProperties
-import com.azure.storage.blob.models.BlobStorageException
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.microsoft.azure.functions.ExecutionContext
@@ -75,18 +74,19 @@ class Function {
             logger.info("DEX::Reading blob: $blobName")
             val blobClient = fnConfig.azBlobProxy.getBlobClient(blobName)
 
-            // Get properties and metadata of blob -- should retry if failure, per retry policy
-            // or throw exception if blob not found
+            // Get properties and metadata of blob -- should retry if failure.
+            // if it cannot get properties after retrying, blobProperties will be null,
+            // and we will log this blob as a failure (will fail validateMetadata)
             val blobProperties = getBlobProperties(blobClient)
             // Create Map of Blob Metadata with lower case keys
-            val metaDataMap = blobProperties.metadata.mapKeys { it.key.lowercase() }.toMutableMap()
+            val metaDataMap = blobProperties?.metadata?.mapKeys { it.key.lowercase() }?.toMutableMap() ?: mutableMapOf()
             // filter out unknown metadata and store in dynamicMetadata
             val dynamicMetadata = metaDataMap.filter { e -> !knownMetadata.contains(e.key) }
             val sourceMetadata = dynamicMetadata.ifEmpty { null }
             // add other event/blob properties we need
             metaDataMap["file_path"] = event.eventData.url
-            metaDataMap["file_timestamp"] = blobProperties.lastModified.toIsoString()
-            metaDataMap["file_size"] = blobProperties.blobSize.toString()
+            metaDataMap["file_timestamp"] = blobProperties?.lastModified.toIsoString()
+            metaDataMap["file_size"] = blobProperties?.blobSize.toString()
 
             // Add routing data and Report object for this file
             val eventReport = ReceiverEventReport()
@@ -223,54 +223,58 @@ class Function {
         return !(routingMetadata.dataStreamId == UNKNOWN_VALUE || routingMetadata.uploadId == UNKNOWN_VALUE)
     }
 
-    private fun replaceUploadId(uploadId: String, currentMetadata: RoutingMetadata) : RoutingMetadata {
-     return RoutingMetadata(
-         ingestedFilePath = currentMetadata.ingestedFilePath,
-         ingestedFileTimestamp = currentMetadata.ingestedFileTimestamp,
-         ingestedFileSize = currentMetadata.ingestedFileSize,
-         dataProducerId = currentMetadata.dataProducerId,
-         jurisdiction = currentMetadata.jurisdiction,
-         uploadId = uploadId,
-         dataStreamId = currentMetadata.dataStreamId,
-         dataStreamRoute = currentMetadata.dataStreamRoute,
-         traceId = currentMetadata.dataStreamId,
-         spanId = currentMetadata.spanId,
-         supportingMetadata = currentMetadata.supportingMetadata
-     )
+    private fun replaceUploadId(uploadId: String, currentMetadata: RoutingMetadata): RoutingMetadata {
+        return RoutingMetadata(
+            ingestedFilePath = currentMetadata.ingestedFilePath,
+            ingestedFileTimestamp = currentMetadata.ingestedFileTimestamp,
+            ingestedFileSize = currentMetadata.ingestedFileSize,
+            dataProducerId = currentMetadata.dataProducerId,
+            jurisdiction = currentMetadata.jurisdiction,
+            uploadId = uploadId,
+            dataStreamId = currentMetadata.dataStreamId,
+            dataStreamRoute = currentMetadata.dataStreamRoute,
+            traceId = currentMetadata.dataStreamId,
+            spanId = currentMetadata.spanId,
+            supportingMetadata = currentMetadata.supportingMetadata
+        )
     }
 
-    private fun getBlobProperties(blobClient: BlobClient): BlobProperties {
-        val blobProperties: BlobProperties?
-        var response : Response<BlobProperties>
+    private fun getBlobProperties(blobClient: BlobClient): BlobProperties? {
+        var blobProperties: BlobProperties? = null
+        var response: Response<BlobProperties>
         var timeToWait = 0L
-        var mustRetry : Boolean
-        try {
-            var retries = 3
+        var mustRetry: Boolean
+        var retries = 3
 
-            do {
-                if (retries < 3) logger.info("RETRYING read of blob properties for blob ${blobClient.blobName}")
+        do {
+            if (retries < 3) logger.info("RETRYING read of blob properties for blob ${blobClient.blobName}")
+            try {
                 response = blobClient.getPropertiesWithResponse(
                     null,
                     fnConfig.azBlobProxy.tryTimeout,
                     Context.NONE
                 )
-                retries--
                 mustRetry = (response.statusCode != 200 || response.value.metadata.isEmpty())
                 if (mustRetry) {
                     logger.info("RETRY is TRUE: Response status code was ${response.statusCode}")
-                    try {
-                        TimeUnit.SECONDS.sleep(timeToWait++)
-                    } catch (ex: InterruptedException) {
-                        logger.debug("Timer interrupted")
-                    }
+                } else {
+                    blobProperties = response.value
                 }
-            } while (mustRetry && retries > 0)
+            } catch (e: Exception) {
+                logger.info("ERROR in getBlobProperties: ${e.javaClass.canonicalName}: ${e.message}")
+                mustRetry = true
+            }
+            retries--
 
-            blobProperties = response.value
-        } catch (e: BlobStorageException) {
-            logger.error("Unable to read properties: blob ${blobClient.blobName} not found")
-            throw e
-        }
+            if (mustRetry) {
+                try {
+                    TimeUnit.SECONDS.sleep(timeToWait++)
+                } catch (ex: InterruptedException) {
+                    logger.debug("Timer interrupted")
+                }
+            }
+        } while (mustRetry && retries > 0)
+
         return blobProperties
     }
 
