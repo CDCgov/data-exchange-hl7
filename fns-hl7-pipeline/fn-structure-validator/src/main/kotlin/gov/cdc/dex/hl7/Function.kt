@@ -55,7 +55,7 @@ class ValidatorFunction {
         val psClientUtility = PSClientUtility()
         var traceId :String =""
         var spanId :String =""
-        var childSpanId :String =""
+        var childSpanId :String? =null
         try {
             message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
@@ -70,7 +70,7 @@ class ValidatorFunction {
                     val dataStream =
                         JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString.uppercase()
                     traceId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
-                    spanId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
+                    spanId = JsonHelper.getValueFromJson("routing_metadata.span_id", inputEvent).asString
 
                     logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $dataStream")
 
@@ -79,7 +79,6 @@ class ValidatorFunction {
                             fnConfig.psURL,
                             traceId,
                             spanId,
-                            "startSpan",
                             StructureValidatorStageMetadata.VALIDATOR_PROCESS
                         )
                         logger.info("Span ID of messageUUID: $messageUUID : ${childSpanId}")
@@ -134,12 +133,14 @@ class ValidatorFunction {
                 }
                 finally { // closing the span for the msg
                     fnConfig.psURL?.let {
-                        psClientUtility.stopTrace(
-                            fnConfig.psURL,
-                            traceId,
-                            childSpanId,
-                            StructureValidatorStageMetadata.VALIDATOR_PROCESS
-                        )
+                        childSpanId?.let {
+                            psClientUtility.stopTrace(
+                                fnConfig.psURL,
+                                traceId,
+                                it,
+                                StructureValidatorStageMetadata.VALIDATOR_PROCESS
+                            )
+                        }
                     }
                 }
 
