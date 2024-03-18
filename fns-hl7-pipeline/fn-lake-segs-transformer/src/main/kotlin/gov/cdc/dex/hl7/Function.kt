@@ -53,7 +53,7 @@ class Function {
         val psClientUtility = PSClientUtility()
         var traceId :String =""
         var spanId :String =""
-        var childSpanId :String =""
+        var childSpanId :String? = null
 
         messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
             try {
@@ -69,7 +69,7 @@ class Function {
                             JsonHelper.getValueFromJson("routing_metadata.ingested_file_path", inputEvent).asString
                         messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
                         traceId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
-                        spanId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
+                        spanId = JsonHelper.getValueFromJson("routing_metadata.span_id", inputEvent).asString
 
                         var status: String
                         var lakeSegsModel: List<Segment>?
@@ -82,7 +82,6 @@ class Function {
                                     fnConfig.psURL,
                                     traceId,
                                     spanId,
-                                    "startSpan",
                                     LakeSegsTransStageMetadata.PROCESS_NAME
                                 )
                                 logger.info("Span ID of messageUUID: $messageUUID : ${childSpanId}")
@@ -125,12 +124,14 @@ class Function {
                     } // .try
                     finally { // closing the span for the msg
                         fnConfig.psURL?.let {
-                            psClientUtility.stopTrace(
-                                fnConfig.psURL,
-                                traceId,
-                                childSpanId,
-                                LakeSegsTransStageMetadata.PROCESS_NAME
-                            )
+                            childSpanId?.let {
+                                psClientUtility.stopTrace(
+                                    fnConfig.psURL,
+                                    traceId,
+                                    it,
+                                    LakeSegsTransStageMetadata.PROCESS_NAME
+                                )
+                            }
                         }
                     }
 
