@@ -39,6 +39,8 @@ class FunctionConfig {
         throw e
     }
 
+    val psURL = System.getenv("ProcessingStatusBaseURL")
+
     init {
          //Init Azure Storage connection
         val ingestBlobConnStr = try {
