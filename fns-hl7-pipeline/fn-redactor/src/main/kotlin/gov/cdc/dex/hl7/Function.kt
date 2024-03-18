@@ -45,7 +45,7 @@ class Function {
         val psClientUtility = PSClientUtility()
         var traceId :String =""
         var spanId :String =""
-        var childSpanId :String =""
+        var childSpanId : String? =null
 
         try {
             message.forEachIndexed { msgIndex: Int, singleMessage: String? ->
@@ -65,7 +65,7 @@ class Function {
 
                     val dataStreamId = JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString
                     traceId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
-                    spanId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
+                    spanId = JsonHelper.getValueFromJson("routing_metadata.span_id", inputEvent).asString
 
                     logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
@@ -74,7 +74,6 @@ class Function {
                             fnConfig.psURL,
                             traceId,
                             spanId,
-                            "startSpan",
                             RedactorStageMetadata.REDACTOR_PROCESS
                         )
                         logger.info("Span ID of messageUUID: $messageUUID : ${childSpanId}")
@@ -119,13 +118,16 @@ class Function {
                 }
                 finally { // closing the span for the msg
                     fnConfig.psURL?.let {
-                        psClientUtility.stopTrace(
-                            fnConfig.psURL,
-                            traceId,
-                            childSpanId,
-                            RedactorStageMetadata.REDACTOR_PROCESS
-                        )
+                        childSpanId?.let {
+                            psClientUtility.stopTrace(
+                                fnConfig.psURL,
+                                traceId,
+                                it,
+                                RedactorStageMetadata.REDACTOR_PROCESS
+                            )
+                        }
                     }
+
                 }
 
             } // .eventHubProcessor
