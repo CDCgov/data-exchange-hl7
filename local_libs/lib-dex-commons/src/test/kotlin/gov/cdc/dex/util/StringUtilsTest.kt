@@ -1,6 +1,6 @@
 package gov.cdc.dex.util
 
-import gov.cdc.dex.azure.ProcessingStatus.PSClientUtility
+import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.junit.jupiter.api.Test
 

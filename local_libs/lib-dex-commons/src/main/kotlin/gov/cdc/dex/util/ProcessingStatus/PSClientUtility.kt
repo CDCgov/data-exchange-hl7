@@ -1,4 +1,4 @@
-package gov.cdc.dex.azure.ProcessingStatus
+package gov.cdc.dex.util.ProcessingStatus
 
 
 
