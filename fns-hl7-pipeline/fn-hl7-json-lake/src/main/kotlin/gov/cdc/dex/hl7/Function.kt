@@ -53,7 +53,7 @@ class Function {
         val psClientUtility = PSClientUtility()
         var traceId :String =""
         var spanId :String =""
-        var childSpanId :String =""
+        var childSpanId :String? =null
         try {
             messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
                 val startTime = Date().toIsoString()
@@ -62,7 +62,7 @@ class Function {
                     val filePath = JsonHelper.getValueFromJson("routing_metadata.ingested_file_path", inputEvent).asString
                     val messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
                     traceId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
-                    spanId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
+                    spanId = JsonHelper.getValueFromJson("routing_metadata.span_id", inputEvent).asString
 
                     logger.info("DEX::Processing messageUUID:$messageUUID")
                     try {
@@ -71,7 +71,6 @@ class Function {
                                 fnConfig.psURL,
                                 traceId,
                                 spanId,
-                                "startSpan",
                                 HL7JSONLakeStageMetadata.PROCESS_NAME
                             )
                             logger.info("Span ID of messageUUID: $messageUUID : ${childSpanId}")
@@ -104,12 +103,14 @@ class Function {
                     } // .catch
                     finally { // closing the span for the msg
                         fnConfig.psURL?.let {
-                            psClientUtility.stopTrace(
-                                fnConfig.psURL,
-                                traceId,
-                                childSpanId,
-                                HL7JSONLakeStageMetadata.PROCESS_NAME
-                            )
+                            childSpanId?.let {
+                                psClientUtility.stopTrace(
+                                    fnConfig.psURL,
+                                    traceId,
+                                    it,
+                                    HL7JSONLakeStageMetadata.PROCESS_NAME
+                                )
+                            }
                         }
                     }
 
