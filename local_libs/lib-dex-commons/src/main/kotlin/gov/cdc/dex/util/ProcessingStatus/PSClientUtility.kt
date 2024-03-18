@@ -23,11 +23,10 @@ class PSClientUtility {
         psURL: String,
         traceId: String,
         parentSpanId: String,
-        span: String,
         stageName : String
     ): String {
         logger.info("DEX:calling sendTraceToProcessingStatus")
-        val url = "$psURL/api/trace/$span/$traceId/$parentSpanId?stageName=$stageName"
+        val url = "$psURL/api/trace/startSpan/$traceId/$parentSpanId?stageName=$stageName"
         logger.info(url)
 
         val (_, response, result) = url.httpPut().responseString()

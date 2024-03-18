@@ -71,7 +71,7 @@ internal class StringUtilsTest {
     @Test
     fun testSendTraceToProcessingStatus() {
         val pSClientUtility = PSClientUtility()
-        val spanId = pSClientUtility.sendTraceToProcessingStatus("https://ocio-ede-dev-pstatus-api.azurewebsites.net","1000","1000-1","startSpan","Redactor")
+        val spanId = pSClientUtility.sendTraceToProcessingStatus("https://ocio-ede-dev-pstatus-api.azurewebsites.net","1000","1000-1","Redactor")
         println("spanId:$spanId")
     }
 
