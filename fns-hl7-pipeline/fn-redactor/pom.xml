@@ -27,7 +27,7 @@
         <slf4j.version>2.0.5</slf4j.version>
         <hl7pet.version>1.2.9</hl7pet.version>
         <kotlin.version>1.9.0</kotlin.version>
-        <lib-dex-commons.version>0.0.43-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.44-SNAPSHOT</lib-dex-commons.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -94,10 +94,10 @@
                     <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan2</appServicePlanName>
                     <region>${functionRegion}</region>
                     <subscriptionId>${subscriptionID}</subscriptionId>
-                    <auth>
+                   <!-- <auth>
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
-                    </auth>
+                    </auth>-->
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
