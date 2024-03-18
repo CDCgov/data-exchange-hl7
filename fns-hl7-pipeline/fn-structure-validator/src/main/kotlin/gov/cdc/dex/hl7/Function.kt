@@ -14,6 +14,7 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.InvalidMessageException
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
+import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
 import org.slf4j.LoggerFactory
@@ -51,6 +52,10 @@ class ValidatorFunction {
     ): JsonObject {
         logger.info("Function triggered. Version: ${fnConfig.functionVersion}")
         val outList = mutableListOf<String>()
+        val psClientUtility = PSClientUtility()
+        var traceId :String =""
+        var spanId :String =""
+        var childSpanId :String =""
         try {
             message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
@@ -64,8 +69,21 @@ class ValidatorFunction {
                     messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
                     val dataStream =
                         JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString.uppercase()
+                    traceId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
+                    spanId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
 
                     logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $dataStream")
+
+                    fnConfig.psURL?.let  {
+                        childSpanId =  psClientUtility.sendTraceToProcessingStatus(
+                            fnConfig.psURL,
+                            traceId,
+                            spanId,
+                            "startSpan",
+                            StructureValidatorStageMetadata.VALIDATOR_PROCESS
+                        )
+                        logger.info("Span ID of messageUUID: $messageUUID : ${childSpanId}")
+                    }
 
                     // generate NIST report
                     val profileInfo = getProfileNameAndPaths(hl7Content, dataStream)
@@ -114,6 +132,17 @@ class ValidatorFunction {
                     outList.add(gson.toJson(inputEvent))
                     logger.info("Sent Message to Error Event Hub for Message Id $messageUUID")
                 }
+                finally { // closing the span for the msg
+                    fnConfig.psURL?.let {
+                        psClientUtility.stopTrace(
+                            fnConfig.psURL,
+                            traceId,
+                            childSpanId,
+                            StructureValidatorStageMetadata.VALIDATOR_PROCESS
+                        )
+                    }
+                }
+
             } // foreachIndexed
         } catch (ex: Exception) {
             logger.error("An unexpected error occurred: ${ex.message}")
