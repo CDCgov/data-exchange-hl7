@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	- Added retries to read metadata out of blob files (Azure SDK bug?)
 	- Bug fixes - fixed Debatcher report on counts
 	- Added eventhub health check on lib-dex-commons
+ 	- Added configuration to file-sink to customize output directories.
 
 ### [0.0.40] - 2024-03-06
 	- Fixed some typos on PhinGuideProfile used to generate HL7 Json
