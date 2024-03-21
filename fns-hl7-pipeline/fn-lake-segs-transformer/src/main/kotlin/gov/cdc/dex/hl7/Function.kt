@@ -12,6 +12,7 @@ import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
+import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import org.slf4j.LoggerFactory
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -49,6 +50,10 @@ class Function {
         val outList = mutableListOf<String>()
         val profileFilePath = "/basicProfile.json"
         val config = listOf(profileFilePath)
+        val psClientUtility = PSClientUtility()
+        var traceId :String =""
+        var spanId :String =""
+        var childSpanId :String? = null
 
         messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
             try {
@@ -63,6 +68,8 @@ class Function {
                         filePath =
                             JsonHelper.getValueFromJson("routing_metadata.ingested_file_path", inputEvent).asString
                         messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
+                        traceId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
+                        spanId = JsonHelper.getValueFromJson("routing_metadata.span_id", inputEvent).asString
 
                         var status: String
                         var lakeSegsModel: List<Segment>?
@@ -70,6 +77,16 @@ class Function {
 
                         logger.info("DEX::Received and Processing messageUUID: $messageUUID, filePath: $filePath")
                         try {
+                            fnConfig.psURL?.let  {
+                                childSpanId =  psClientUtility.sendTraceToProcessingStatus(
+                                    fnConfig.psURL,
+                                    traceId,
+                                    spanId,
+                                    LakeSegsTransStageMetadata.PROCESS_NAME
+                                )
+                                logger.info("Span ID of messageUUID: $messageUUID : ${childSpanId}")
+                            }
+
                             // read the profile
                             val profile = this::class.java.getResource(profileFilePath)?.readText()
                                 ?: throw IllegalArgumentException("Unable to load profile $profileFilePath")
@@ -105,6 +122,19 @@ class Function {
                             exception = e, config = config, outList = outList
                         )
                     } // .try
+                    finally { // closing the span for the msg
+                        fnConfig.psURL?.let {
+                            childSpanId?.let {
+                                psClientUtility.stopTrace(
+                                    fnConfig.psURL,
+                                    traceId,
+                                    it,
+                                    LakeSegsTransStageMetadata.PROCESS_NAME
+                                )
+                            }
+                        }
+                    }
+
                 } // .if
             } catch (e : Exception) {
                 logger.error("ERROR: An unexpected error occurred: ${e.message}")
