@@ -1,11 +1,16 @@
 package gov.cdc.dataexchange
 
 import com.azure.core.util.BinaryData
+import com.azure.storage.blob.models.AccessTier
+import com.azure.storage.blob.models.BlobHttpHeaders
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.UnknownPropertyError
 import org.slf4j.LoggerFactory
+import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -116,11 +121,16 @@ class Function {
     }
 
     fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>) {
-        val data = BinaryData.fromString(blobContent)
-        val client = fnConfig.azureBlobProxy.getBlobClient(blobName)
-        client.upload(data, true)
-        client.setMetadata(newMetadata)
-
+        val length = blobContent.length.toLong()
+        val dataStream = BinaryData.fromString(blobContent).toStream()
+        val md5 = MessageDigest.getInstance("MD5").digest(blobContent.toByteArray(StandardCharsets.UTF_8))
+        val headers = BlobHttpHeaders()
+            .setContentMd5(md5)
+            .setContentLanguage("en-US")
+            .setContentType("binary")
+        val client = fnConfig.azureBlobProxy.getBlobClient(blobName).blockBlobClient
+        client.uploadWithResponse(dataStream, length, headers, newMetadata, AccessTier.HOT, md5,
+            null, Duration.ofSeconds(2), null)
     }
 
     fun getFolderDate( folder:String): Pair<String,String> {
