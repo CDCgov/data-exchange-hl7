@@ -5,6 +5,20 @@ import com.azure.messaging.eventhubs.EventData
 import com.azure.messaging.eventhubs.EventHubClientBuilder
 import com.azure.messaging.eventhubs.EventHubProducerClient
 
+Object EventProcessClientSingleton {
+    private val eventProcesClient? :  EventProcessClient = null
+
+    fun getEventProcessClient(evHubConnStr: String, evHubTopicName: String) : EventProcessClient {
+        if (eventProcesClient == null) {
+            eventProcesClient = EventProcessorClientBuilder()
+                .connectionString(this.evHubConnStr, this.evHubTopicName)
+                .buildEventProcessorClient()
+        }
+
+        return eventProcesClient
+    }
+}
+
 class DedicatedEventHubSender( evHubConnStr: String, evHubTopicName: String) {
     private val producer: EventHubProducerClient = EventHubClientBuilder()
         .connectionString(evHubConnStr, evHubTopicName)
@@ -59,4 +73,26 @@ class DedicatedEventHubSender( evHubConnStr: String, evHubTopicName: String) {
         }
         return errors
     } // .send
+
+    private fun checkEventHubHealth(connectionString: String, eventHubName: String): Boolean {
+        // Create a conection and return eventProcessor singleton instances
+        val eventProcessor = EventProcessClientSingleton.getEventProcessClient(connectionString, eventHubName);
+
+        // Connect to Event Hub and check if it's healthy
+        return try {
+            if (!eventProcessor.isRunning) {
+                // Start the EventProcessor to further test connectivity
+                eventProcessor.start()
+            }
+            // Event Hub is considered healthy if no exceptions are thrown
+            true
+        } catch (e: Exception) {
+            false
+        } finally {
+            if (eventProcessor.isRunning) {
+                eventProcessor.stop()
+            }
+        }
+    }
+
 }

@@ -37,6 +37,7 @@ class DebatcherTest {
     fun testDebatcher() {
         println("Starting debatcher test")
         val filePath = "genV1/Genv1-Case-TestMessage1.HL7"
+        val blobName = "Genv1-Case-TestMessage1.HL7"
         val startTime = Date().toIsoString()
         val metaDataMap: Map<String, String?> = mapOf(
             Pair("reporting_jurisdiction", "16"),
@@ -135,10 +136,15 @@ class DebatcherTest {
 
                 }
             } else {
-                val errorMessage = "Message is missing required metadata. " +
-                        "data stream id is ${routingMetadata.dataStreamId}, upload id is ${routingMetadata.uploadId}, " +
-                        "data stream route is ${routingMetadata.dataStreamRoute}"
-
+                val errorMessage = "One or more required metadata elements are missing. " +
+                        "data stream id is ${routingMetadata.dataStreamId}, upload id is ${routingMetadata.uploadId}"
+                // if no upload_id, substitute blob name so file-sink does not overwrite "UNKNOWN.txt" record
+                val newRoutingMetadata = if (routingMetadata.uploadId == Function.UNKNOWN_VALUE) {
+                    replaceUploadId(blobName, routingMetadata)
+                } else {
+                    routingMetadata
+                }
+                eventMetadata.routingData = newRoutingMetadata
                 buildAndSendMessage(
                     messageIndex = messageIndex,
                     singleOrBatch = singleOrBatch,
@@ -146,7 +152,7 @@ class DebatcherTest {
                     currentLinesArr = arrayListOf(),
                     eventTime = startTime,
                     startTime = startTime,
-                    routingMetadata = routingMetadata,
+                    routingMetadata = newRoutingMetadata,
                     eventReport = eventReport,
                     errorMessage = errorMessage
                 )
@@ -170,8 +176,25 @@ class DebatcherTest {
 
 
     } // .test
+    private fun validateMetadata(routingMetadata: RoutingMetadata): Boolean {
+        return !(routingMetadata.dataStreamId == Function.UNKNOWN_VALUE || routingMetadata.uploadId == Function.UNKNOWN_VALUE)
+    }
 
-
+    private fun replaceUploadId(uploadId: String, currentMetadata: RoutingMetadata): RoutingMetadata {
+        return RoutingMetadata(
+            ingestedFilePath = currentMetadata.ingestedFilePath,
+            ingestedFileTimestamp = currentMetadata.ingestedFileTimestamp,
+            ingestedFileSize = currentMetadata.ingestedFileSize,
+            dataProducerId = currentMetadata.dataProducerId,
+            jurisdiction = currentMetadata.jurisdiction,
+            uploadId = uploadId,
+            dataStreamId = currentMetadata.dataStreamId,
+            dataStreamRoute = currentMetadata.dataStreamRoute,
+            traceId = currentMetadata.dataStreamId,
+            spanId = currentMetadata.spanId,
+            supportingMetadata = currentMetadata.supportingMetadata
+        )
+    }
     private fun buildAndSendMessage(
         messageIndex: Int,
         singleOrBatch: String,
@@ -218,9 +241,7 @@ class DebatcherTest {
         println("Simulating Sending new Event to event hub Message: --> messageUUID: ${payload.messageMetadata.messageUUID}, messageIndex: ${payload.messageMetadata.messageIndex}, fileName: ${payload.routingMetadata.ingestedFilePath}")
         println("Processed and Sent to console Message: --> messageUUID: ${payload.messageMetadata.messageUUID}, messageIndex: ${payload.messageMetadata.messageIndex}, fileName: ${payload.routingMetadata.ingestedFilePath}")
     }
-    private fun validateMetadata(routingMetadata: RoutingMetadata) : Boolean {
-        return !(routingMetadata.dataStreamId == Function.UNKNOWN_VALUE || routingMetadata.uploadId == Function.UNKNOWN_VALUE)
-    }
+
     private fun addErrorToReport(
         eventReport: ReceiverEventReport,
         errorMessage: String,

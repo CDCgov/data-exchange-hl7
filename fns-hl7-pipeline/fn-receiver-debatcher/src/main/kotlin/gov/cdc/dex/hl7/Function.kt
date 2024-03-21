@@ -170,32 +170,23 @@ class Function {
                 val errorMessage = "One or more required metadata elements are missing. " +
                         "data stream id is ${routingMetadata.dataStreamId}, upload id is ${routingMetadata.uploadId}"
                 // if no upload_id, substitute blob name so file-sink does not overwrite "UNKNOWN.txt" record
-                if (routingMetadata.uploadId == UNKNOWN_VALUE) {
-                    val newRoutingMetadata = replaceUploadId(blobName, routingMetadata)
-                    buildAndSendMessage(
-                        messageIndex = messageIndex,
-                        singleOrBatch = singleOrBatch,
-                        status = STATUS_ERROR,
-                        currentLinesArr = arrayListOf(),
-                        eventTime = event.eventTime,
-                        startTime = startTime,
-                        routingMetadata = newRoutingMetadata,
-                        eventReport = eventReport,
-                        errorMessage = errorMessage
-                    )
+                val newRoutingMetadata = if (routingMetadata.uploadId == UNKNOWN_VALUE) {
+                    replaceUploadId(blobName, routingMetadata)
                 } else {
-                    buildAndSendMessage(
-                        messageIndex = messageIndex,
-                        singleOrBatch = singleOrBatch,
-                        status = STATUS_ERROR,
-                        currentLinesArr = arrayListOf(),
-                        eventTime = event.eventTime,
-                        startTime = startTime,
-                        routingMetadata = routingMetadata,
-                        eventReport = eventReport,
-                        errorMessage = errorMessage
-                    )
+                    routingMetadata
                 }
+                eventMetadata.routingData = newRoutingMetadata
+                buildAndSendMessage(
+                    messageIndex = messageIndex,
+                    singleOrBatch = singleOrBatch,
+                    status = STATUS_ERROR,
+                    currentLinesArr = arrayListOf(),
+                    eventTime = event.eventTime,
+                    startTime = startTime,
+                    routingMetadata = newRoutingMetadata,
+                    eventReport = eventReport,
+                    errorMessage = errorMessage
+                )
             }
             // finalize event report and attach to event metadata
             eventReport.messageBatch = singleOrBatch
