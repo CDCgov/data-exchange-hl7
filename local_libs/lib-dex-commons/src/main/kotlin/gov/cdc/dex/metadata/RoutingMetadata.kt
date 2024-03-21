@@ -12,6 +12,6 @@ class RoutingMetadata (
     @SerializedName("data_stream_id") val dataStreamId: String,
     @SerializedName("data_stream_route") val dataStreamRoute: String,
     @SerializedName("trace_id") val traceId: String,
-    @SerializedName("span_id") val spanId: String,
+    @SerializedName("span_id") var spanId: String,
     @SerializedName("supporting_metadata") var supportingMetadata: Map<String, String>? = null
 )

@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "0.0.43-SNAPSHOT"
+version = "0.0.44-SNAPSHOT"
 
 repositories {
     maven {
@@ -20,6 +20,8 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
+
     //Azure:
     implementation("com.azure:azure-messaging-eventhubs:5.18.0")
     implementation("com.azure:azure-messaging-servicebus:7.15.1")
