@@ -118,9 +118,8 @@ class Function {
     fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>) {
         val data = BinaryData.fromString(blobContent)
         val client = fnConfig.azureBlobProxy.getBlobClient(blobName)
-        client.upload(data, true)
         client.setMetadata(newMetadata)
-
+        client.upload(data, true)
     }
 
     fun getFolderDate( folder:String): Pair<String,String> {
