@@ -290,7 +290,7 @@ class Function {
                 fnConfig.psURL,
                 routingMetadata.traceId,
                 routingMetadata.spanId,
-                "startSpan"
+                ProcessInfo.RECEIVER_PROCESS
             ).let {
                 if(it.isNotEmpty()) routingMetadata.spanId = it
             }
