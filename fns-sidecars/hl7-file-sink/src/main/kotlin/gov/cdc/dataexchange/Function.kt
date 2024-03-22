@@ -14,6 +14,8 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 
 class Function {
@@ -121,16 +123,40 @@ class Function {
     }
 
     fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>) {
-        val length = blobContent.length.toLong()
-        val dataStream = BinaryData.fromString(blobContent).toStream()
+        val data = BinaryData.fromString(blobContent)
+        val length = data.length
         val md5 = MessageDigest.getInstance("MD5").digest(blobContent.toByteArray(StandardCharsets.UTF_8))
         val headers = BlobHttpHeaders()
             .setContentMd5(md5)
             .setContentLanguage("en-US")
             .setContentType("binary")
         val client = fnConfig.azureBlobProxy.getBlobClient(blobName).blockBlobClient
-        client.uploadWithResponse(dataStream, length, headers, newMetadata, AccessTier.HOT, md5,
-            null, Duration.ofSeconds(2), null)
+        var timeToWait = 0L
+        var mustRetry: Boolean
+        var retries = 3
+        do {
+            if (retries < 3) logger.info("RETRYING upload of blob ${client.blobName}")
+            mustRetry = try {
+                val dataStream = data.toStream()
+                val response = client.uploadWithResponse(
+                    dataStream, length, headers, newMetadata, AccessTier.HOT, md5,
+                    null, Duration.ofSeconds(2), null
+                )
+                (response.statusCode !in listOf(200, 201))
+            } catch (e: Exception) {
+                logger.info("ERROR in uploadWithResponse: ${e.javaClass.canonicalName}: ${e.message}")
+                true
+            }
+            retries--
+            if (mustRetry) {
+                try {
+                    TimeUnit.SECONDS.sleep(timeToWait++)
+                } catch (ex: InterruptedException) {
+                    logger.debug("Timer interrupted")
+                }
+            }
+
+        } while (mustRetry && retries > 0)
     }
 
     fun getFolderDate( folder:String): Pair<String,String> {
