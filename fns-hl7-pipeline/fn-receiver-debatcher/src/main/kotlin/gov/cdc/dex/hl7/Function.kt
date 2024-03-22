@@ -290,10 +290,9 @@ class Function {
                 fnConfig.psURL,
                 routingMetadata.traceId,
                 routingMetadata.spanId,
-                "startSpan",
                 ProcessInfo.RECEIVER_PROCESS
-            ).let { it ->
-                if(it.isNotEmpty()) routingMetadata.spanId = it.toString()
+            ).let {
+                if(it.isNotEmpty()) routingMetadata.spanId = it
             }
             logger.info("Setting processing status spanId to routingMetadata.spanId: ${routingMetadata.spanId}")
         }
