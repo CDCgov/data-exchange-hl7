@@ -26,6 +26,7 @@ class ValidatorFunction {
         private const val DEFAULT_SPEC_PROFILE = "MSH-12"
         const val PROCESS_STATUS_OK = "SUCCESS"
         const val PROCESS_STATUS_EXCEPTION = "FAILURE"
+        private const val VALIDATION_FAILURE = "VALIDATION_FAILURE"
         private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
         private const val NIST_INVALID_MESSAGE = "STRUCTURE_ERRORS"
         private const val HL7_MSH = "MSH|"
@@ -111,14 +112,14 @@ class ValidatorFunction {
                     inputEvent.add("summary", summary.toJsonElement())
 
                     outList.add(gson.toJson(inputEvent))
-                    logger.info("Processed structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
+                    logger.info("Processed OK for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
 
                 } catch (e: Exception) {
                     //TODO::  - update retry counts
                     logger.error("Unable to process Message due to exception: ${e.message}")
                     val stageMD = StructureValidatorStageMetadata(
                         PROCESS_STATUS_EXCEPTION,
-                        report,
+                        null,
                         eventHubMD[msgNumber],
                         listOf()
                     )
@@ -126,10 +127,10 @@ class ValidatorFunction {
                     stageMD.endProcessTime = Date().toIsoString()
                     inputEvent.add("stage", stageMD.toJsonElement())
                     val problem = Problem(StructureValidatorStageMetadata.VALIDATOR_PROCESS, "Error: ${e.message}")
-                    val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
+                    val summary = SummaryInfo(VALIDATION_FAILURE, problem)
                     inputEvent.add("summary", summary.toJsonElement())
                     outList.add(gson.toJson(inputEvent))
-                    logger.info("Sent Message to Error Event Hub for Message Id $messageUUID")
+                    logger.info("Processed ERROR for Message Id $messageUUID")
                 }
                 finally { // closing the span for the msg
                     fnConfig.psURL?.let {
