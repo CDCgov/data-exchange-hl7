@@ -7,6 +7,7 @@ import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.UnknownPropertyError
+import io.netty.channel.unix.Errors.NativeIoException
 import org.slf4j.LoggerFactory
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
@@ -15,7 +16,6 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 
 class Function {
@@ -104,15 +104,19 @@ class Function {
             logger.info("DEX::Saving message $newBlobName")
             try {
                 //get date in folder structure
-               val dateStructure = createDatefolders(datePattern)
+               val dateStructure = createDateFolders(datePattern)
                 logger.info("DEX::dateStructure $dateStructure")
                // save to storage container
-                this.saveBlobToContainer(
+               val succeeded =  this.saveBlobToContainer(
                     "$blobStorageFolderName/$dateStructure/$newBlobName.txt",
                     gson.toJson(inputEvent),
                     metaToAttach
                 )
-                logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dateStructure")
+                if (succeeded) {
+                    logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dateStructure")
+                } else {
+                    logger.error("DEX::ERROR: Unable to save message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dateStructure")
+                }
             } catch (e: Exception) {
                 // TODO send to quarantine?
                 logger.error("DEX::Error processing message", e)
@@ -122,7 +126,7 @@ class Function {
 
     }
 
-    fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>) {
+    fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>) : Boolean {
         val data = BinaryData.fromString(blobContent)
         val length = data.length
         val md5 = MessageDigest.getInstance("MD5").digest(blobContent.toByteArray(StandardCharsets.UTF_8))
@@ -130,21 +134,28 @@ class Function {
             .setContentMd5(md5)
             .setContentLanguage("en-US")
             .setContentType("binary")
-        val client = fnConfig.azureBlobProxy.getBlobClient(blobName).blockBlobClient
+
         var timeToWait = 0L
         var mustRetry: Boolean
         var retries = 3
         do {
-            if (retries < 3) logger.info("RETRYING upload of blob ${client.blobName}")
+            if (retries < 3) logger.info("RETRYING upload of blob $blobName")
             mustRetry = try {
+                val client = fnConfig.azureBlobProxy.getBlobClient(blobName).blockBlobClient
                 val dataStream = data.toStream()
                 val response = client.uploadWithResponse(
                     dataStream, length, headers, newMetadata, AccessTier.HOT, md5,
                     null, Duration.ofSeconds(2), null
                 )
                 (response.statusCode !in listOf(200, 201))
+            } catch (ex: NativeIoException) {
+                logger.error("Error in connection: ${ex.message}")
+                // reestablish connection
+                fnConfig.azureBlobProxy =
+                    AzureBlobProxy(fnConfig.blobStorageConnectionString, fnConfig.blobStorageContainerName)
+                true
             } catch (e: Exception) {
-                logger.info("ERROR in uploadWithResponse: ${e.javaClass.canonicalName}: ${e.message}")
+                logger.error("ERROR in saveBlobToContainer: ${e.javaClass.canonicalName}: ${e.message}")
                 true
             }
             retries--
@@ -157,20 +168,21 @@ class Function {
             }
 
         } while (mustRetry && retries > 0)
+
+        return !mustRetry
     }
 
-    fun getFolderDate( folder:String): Pair<String,String> {
+    private fun getFolderDate(folder:String): Pair<String,String> {
         val splitPattern = folder.split("/")
         val datePattern = splitPattern.drop(1).joinToString("/")
         val folderName = splitPattern.first()
         return Pair(datePattern, folderName)
     }
 
-    fun createDatefolders(datePattern:String): String {
+    private fun createDateFolders(datePattern: String): String {
         val currDateTime = LocalDateTime.now(ZoneOffset.UTC)
         val formatter = DateTimeFormatter.ofPattern(datePattern)
-        val formatDateTimeStr = currDateTime.format(formatter)
-        return formatDateTimeStr
+        return currDateTime.format(formatter)
 
     }
 
