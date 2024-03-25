@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 
 
 /**
- * Azure Functions with Event Hub Trigger.
+ * Azure Functions with Queue Trigger.
  */
 class Function {
     companion object {

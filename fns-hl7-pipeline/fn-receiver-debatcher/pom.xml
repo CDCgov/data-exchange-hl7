@@ -20,7 +20,7 @@
         <AzureBom.version>1.2.21</AzureBom.version>
         <java.version>17</java.version>
         <kotlin.version>1.9.0</kotlin.version>
-        <azure.functions.maven.plugin.version>1.30.0</azure.functions.maven.plugin.version>
+        <azure.functions.maven.plugin.version>1.27.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <gson.version>2.10.1</gson.version>
@@ -122,24 +122,27 @@
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <version>${azure.functions.maven.plugin.version}</version>
                 <configuration>
-                    <resourceGroup>${functionResourceGroup}</resourceGroup>
-                    <appName>${functionAppName}</appName>
-                    <appServicePlanName>ocio-ede-${environment-id}-hl7-elastic-service-plan2</appServicePlanName>
+                    <resourceGroup>ocio-ede-dev-moderate-hl7-rg</resourceGroup>
+                    <appName>dex-hl7-flex-receiver-debatcher</appName>
                     <!-- function app region-->
                     <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details#supported-regions for all valid values -->
-                    <region>${functionRegion}</region>
-                    <subscriptionId>${subscriptionID}</subscriptionId>
-                   <auth>
-                        <type>service_principal</type>
-                        <serverId>azure-service-principal</serverId>
-                    </auth>
+                    <region>eastus</region>
+                    <subscriptionId>01f9b1b1-a130-4031-ba25-71771007d3ca</subscriptionId>
+                    <pricingTier>Flex Consumption</pricingTier>
+                    <disableAppInsights>false</disableAppInsights>
+                    <alwaysReadyInstances>2</alwaysReadyInstances>
+                    <instanceSize>2048</instanceSize>
+                    <maximumInstances>1000</maximumInstances>
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
-                        <javaVersion>${java.version}</javaVersion>
+                        <javaVersion>17</javaVersion>
                     </runtime>
                     <appSettings>
-                        <!-- Run Azure Function from package file by default -->
+                        <property>
+                            <name>FUNCTIONS_EXTENSION_VERSION</name>
+                            <value>~4</value>
+                        </property>
                         <property>
                             <name>FN_VERSION</name>
                             <value>${project.version}</value>
