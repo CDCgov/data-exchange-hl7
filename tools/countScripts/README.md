@@ -73,3 +73,16 @@ Because we store the files in UTC-based folders, we need to query the dashboard 
 For example, if we want al the files submitted on March 25, 2024 - we need from 00:00 UTC to 23:59 UCT. That, during daylights savings is 3/24 20:00 to 3/25 20:00
 
 ![image](https://github.com/CDCgov/data-exchange-hl7/assets/3239945/31e7cbbc-72bc-47fd-a2ed-93a4e611bbbb)
+
+## Reporting
+
+All counts should be copied to this spreadsheet in TEAMS https://cdc.sharepoint.com/:x:/r/teams/CDC-Data-Exchange/Shared%20Documents/HL7v2/RecordCounts_CELR_2024.xlsb?d=w110584680172479384a54dc294def0ca&csf=1&web=1&e=mgkF5h
+
+### Note on column K -> HL7 INvalid counts
+
+This number is extracted from Azure portal for the hl7-struct-err messages graph for the appropraite timeframe.
+The count only works if we have less than 1000 errors, otherwise azure rounds the number and we don't have access to the exact number of messages.
+(This also assumes we did not get any duplicate events).
+
+But the diff between HL7-JSON or LAKE-SEGs and Validation Reports should be this same number. Also the PS report on invalid reports submiited should match!
+
