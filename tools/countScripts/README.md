@@ -64,3 +64,12 @@ where
 * {HL7 outputs} is a space separated list of all reports: RECDEB REDACTION VALIDATION HL7-JSON LAKE-SEG
 * {EZDX provisioned is a space separated list of all files copied to ezdx on the same order as hl7 outputs: RECDEB REDACTION VALIDATION HL7-JSON LAKE-SEG
 
+
+## APHL Dashboard
+
+To check how many files APHL sent, you can use their dashboard: https://dash.aimsplatform.org/
+
+Because we store the files in UTC-based folders, we need to query the dashboard for UTC. 
+For example, if we want al the files submitted on March 25, 2024 - we need from 00:00 UTC to 23:59 UCT. That, during daylights savings is 3/24 20:00 to 3/25 20:00
+
+![image](https://github.com/CDCgov/data-exchange-hl7/assets/3239945/31e7cbbc-72bc-47fd-a2ed-93a4e611bbbb)
