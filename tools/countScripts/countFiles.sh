@@ -11,11 +11,11 @@ echo "@@@ Counting Upload API"
 echo "@@@"
 
 echo "Counting HL7"
-az storage blob list -c "aims-celr-hl7" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefi "2024/$1" --num-results 2147483647
+az storage blob list -c "aims-celr-hl7" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefix "2024/$1" --num-results 2147483647
 
 
 echo "Counting CSV"
-az storage blob list -c "aims-celr-csv" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefi "2024/$1" --num-results 2147483647
+az storage blob list -c "aims-celr-csv" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefix "2024/$1" --num-results 2147483647
 
 
 echo "@@@"
