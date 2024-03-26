@@ -5,8 +5,9 @@ import kotlin.system.exitProcess
 
 class FunctionConfig {
     val blobStorageContainerName: String
-    val azureBlobProxy: AzureBlobProxy
+    var azureBlobProxy: AzureBlobProxy
     val blobStorageFolderName: String
+    val blobStorageConnectionString: String
     private var logger = LoggerFactory.getLogger(FunctionConfig::class.java.simpleName)
 
     init {
@@ -25,8 +26,8 @@ class FunctionConfig {
         }
 
         try {
-            val storageBlobConnStr = System.getenv("BlobStorageConnectionString")
-            azureBlobProxy = AzureBlobProxy(storageBlobConnStr, blobStorageContainerName)
+            blobStorageConnectionString = System.getenv("BlobStorageConnectionString")
+            azureBlobProxy = AzureBlobProxy(blobStorageConnectionString, blobStorageContainerName)
         } catch (e: NullPointerException) {
             logger.error("ERROR: BlobStorageConnectionString not provided")
             exitProcess(1)
