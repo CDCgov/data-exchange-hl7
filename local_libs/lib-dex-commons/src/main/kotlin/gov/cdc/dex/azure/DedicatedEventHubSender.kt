@@ -1,21 +1,19 @@
 package gov.cdc.dex.azure
 
 import com.azure.core.amqp.exception.AmqpException
-import com.azure.messaging.eventhubs.EventData
-import com.azure.messaging.eventhubs.EventHubClientBuilder
-import com.azure.messaging.eventhubs.EventHubProducerClient
+import com.azure.messaging.eventhubs.*
 
-Object EventProcessClientSingleton {
-    private val eventProcesClient? :  EventProcessClient = null
+object EventProcessClientSingleton {
+    private var eventProcessClient:  EventProcessorClient? = null
 
-    fun getEventProcessClient(evHubConnStr: String, evHubTopicName: String) : EventProcessClient {
-        if (eventProcesClient == null) {
-            eventProcesClient = EventProcessorClientBuilder()
-                .connectionString(this.evHubConnStr, this.evHubTopicName)
+    fun getEventProcessClient(evHubConnStr: String, evHubTopicName: String) : EventProcessorClient? {
+        if (eventProcessClient == null) {
+            eventProcessClient = EventProcessorClientBuilder()
+                .connectionString(evHubConnStr, evHubTopicName)
                 .buildEventProcessorClient()
         }
 
-        return eventProcesClient
+        return eventProcessClient
     }
 }
 
@@ -80,17 +78,21 @@ class DedicatedEventHubSender( evHubConnStr: String, evHubTopicName: String) {
 
         // Connect to Event Hub and check if it's healthy
         return try {
-            if (!eventProcessor.isRunning) {
-                // Start the EventProcessor to further test connectivity
-                eventProcessor.start()
+            if (eventProcessor != null) {
+                if (!eventProcessor.isRunning) {
+                    // Start the EventProcessor to further test connectivity
+                    eventProcessor.start()
+                }
             }
             // Event Hub is considered healthy if no exceptions are thrown
             true
         } catch (e: Exception) {
             false
         } finally {
-            if (eventProcessor.isRunning) {
-                eventProcessor.stop()
+            if (eventProcessor != null) {
+                if (eventProcessor.isRunning) {
+                    eventProcessor.stop()
+                }
             }
         }
     }
