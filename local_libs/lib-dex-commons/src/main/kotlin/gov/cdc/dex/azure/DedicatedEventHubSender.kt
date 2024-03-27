@@ -1,23 +1,8 @@
 package gov.cdc.dex.azure
 
 import com.azure.core.amqp.exception.AmqpException
-import com.azure.messaging.eventhubs.EventData
-import com.azure.messaging.eventhubs.EventHubClientBuilder
-import com.azure.messaging.eventhubs.EventHubProducerClient
+import com.azure.messaging.eventhubs.*
 
-Object EventProcessClientSingleton {
-    private val eventProcesClient? :  EventProcessClient = null
-
-    fun getEventProcessClient(evHubConnStr: String, evHubTopicName: String) : EventProcessClient {
-        if (eventProcesClient == null) {
-            eventProcesClient = EventProcessorClientBuilder()
-                .connectionString(this.evHubConnStr, this.evHubTopicName)
-                .buildEventProcessorClient()
-        }
-
-        return eventProcesClient
-    }
-}
 
 class DedicatedEventHubSender( evHubConnStr: String, evHubTopicName: String) {
     private val producer: EventHubProducerClient = EventHubClientBuilder()
@@ -74,13 +59,13 @@ class DedicatedEventHubSender( evHubConnStr: String, evHubTopicName: String) {
         return errors
     } // .send
 
-    private fun checkEventHubHealth(connectionString: String, eventHubName: String): Boolean {
+   private fun checkEventHubHealth(connectionString: String, eventHubName: String): Boolean {
         // Create a conection and return eventProcessor singleton instances
         val eventProcessor = EventProcessClientSingleton.getEventProcessClient(connectionString, eventHubName);
 
         // Connect to Event Hub and check if it's healthy
         return try {
-            if (!eventProcessor.isRunning) {
+            if (eventProcessor?.isRunning == false) {
                 // Start the EventProcessor to further test connectivity
                 eventProcessor.start()
             }
@@ -89,10 +74,23 @@ class DedicatedEventHubSender( evHubConnStr: String, evHubTopicName: String) {
         } catch (e: Exception) {
             false
         } finally {
-            if (eventProcessor.isRunning) {
+            if (eventProcessor?.isRunning == true) {
                 eventProcessor.stop()
             }
         }
     }
+}
 
+object EventProcessClientSingleton {
+    private var eventProcessClient : EventProcessorClient? = null
+
+    fun getEventProcessClient(evHubConnStr: String, evHubTopicName: String) : EventProcessorClient? {
+        if (eventProcessClient == null) {
+            eventProcessClient = EventProcessorClientBuilder()
+                .connectionString(evHubConnStr, evHubTopicName)
+                .buildEventProcessorClient()
+        }
+
+        return eventProcessClient
+    }
 }
