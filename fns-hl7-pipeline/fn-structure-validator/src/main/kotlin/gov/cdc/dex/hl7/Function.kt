@@ -14,6 +14,7 @@ import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.InvalidMessageException
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
+import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.nist.validator.NistReport
 import org.slf4j.LoggerFactory
@@ -25,6 +26,7 @@ class ValidatorFunction {
         private const val DEFAULT_SPEC_PROFILE = "MSH-12"
         const val PROCESS_STATUS_OK = "SUCCESS"
         const val PROCESS_STATUS_EXCEPTION = "FAILURE"
+        private const val VALIDATION_FAILURE = "VALIDATION_FAILURE"
         private const val NIST_VALID_MESSAGE = "VALID_MESSAGE"
         private const val NIST_INVALID_MESSAGE = "STRUCTURE_ERRORS"
         private const val HL7_MSH = "MSH|"
@@ -51,6 +53,10 @@ class ValidatorFunction {
     ): JsonObject {
         logger.info("Function triggered. Version: ${fnConfig.functionVersion}")
         val outList = mutableListOf<String>()
+        val psClientUtility = PSClientUtility()
+        var traceId :String =""
+        var spanId :String =""
+        var childSpanId :String? =null
         try {
             message.forEachIndexed { msgNumber: Int, singleMessage: String? ->
                 val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
@@ -64,8 +70,20 @@ class ValidatorFunction {
                     messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
                     val dataStream =
                         JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString.uppercase()
+                    traceId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
+                    spanId = JsonHelper.getValueFromJson("routing_metadata.span_id", inputEvent).asString
 
                     logger.info("Received and Processing messageUUID: $messageUUID, filePath: $filePath, messageType: $dataStream")
+
+                    fnConfig.psURL?.let  {
+                        childSpanId =  psClientUtility.sendTraceToProcessingStatus(
+                            fnConfig.psURL,
+                            traceId,
+                            spanId,
+                            StructureValidatorStageMetadata.VALIDATOR_PROCESS
+                        )
+                        logger.info("Span ID of messageUUID: $messageUUID : ${childSpanId}")
+                    }
 
                     // generate NIST report
                     val profileInfo = getProfileNameAndPaths(hl7Content, dataStream)
@@ -94,14 +112,14 @@ class ValidatorFunction {
                     inputEvent.add("summary", summary.toJsonElement())
 
                     outList.add(gson.toJson(inputEvent))
-                    logger.info("Processed structure validation for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
+                    logger.info("Processed OK for messageUUID: $messageUUID, filePath: $filePath, report.status: ${report.status}")
 
                 } catch (e: Exception) {
                     //TODO::  - update retry counts
                     logger.error("Unable to process Message due to exception: ${e.message}")
                     val stageMD = StructureValidatorStageMetadata(
                         PROCESS_STATUS_EXCEPTION,
-                        report,
+                        null,
                         eventHubMD[msgNumber],
                         listOf()
                     )
@@ -109,11 +127,24 @@ class ValidatorFunction {
                     stageMD.endProcessTime = Date().toIsoString()
                     inputEvent.add("stage", stageMD.toJsonElement())
                     val problem = Problem(StructureValidatorStageMetadata.VALIDATOR_PROCESS, "Error: ${e.message}")
-                    val summary = SummaryInfo(NIST_INVALID_MESSAGE, problem)
+                    val summary = SummaryInfo(VALIDATION_FAILURE, problem)
                     inputEvent.add("summary", summary.toJsonElement())
                     outList.add(gson.toJson(inputEvent))
-                    logger.info("Sent Message to Error Event Hub for Message Id $messageUUID")
+                    logger.info("Processed ERROR for Message Id $messageUUID")
                 }
+                finally { // closing the span for the msg
+                    fnConfig.psURL?.let {
+                        childSpanId?.let {
+                            psClientUtility.stopTrace(
+                                fnConfig.psURL,
+                                traceId,
+                                it,
+                                StructureValidatorStageMetadata.VALIDATOR_PROCESS
+                            )
+                        }
+                    }
+                }
+
             } // foreachIndexed
         } catch (ex: Exception) {
             logger.error("An unexpected error occurred: ${ex.message}")

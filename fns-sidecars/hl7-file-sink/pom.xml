@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>hl7-file-sink</artifactId>
-    <version>0.0.40-SNAPSHOT</version>
+    <version>0.0.42-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Kotlin Function :: hl7-file-sink</name>
     <scm>
@@ -149,6 +149,7 @@
                         <type>service_principal</type>
                         <serverId>azure-service-principal</serverId>
                     </auth>
+
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>

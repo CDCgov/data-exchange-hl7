@@ -1,5 +1,6 @@
 package gov.cdc.dex.util
 
+import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.junit.jupiter.api.Test
 
@@ -65,5 +66,19 @@ internal class StringUtilsTest {
         assert (name6 != name5)
         val name7 = StringUtils.getNormalizedShortName("Tick Bite Repeating Group", 2)
         println(name7)
+    }
+
+    @Test
+    fun testSendTraceToProcessingStatus() {
+        val pSClientUtility = PSClientUtility()
+        val spanId = pSClientUtility.sendTraceToProcessingStatus("https://ocio-ede-dev-pstatus-api.azurewebsites.net","1000","1000-1","Redactor")
+        println("spanId:$spanId")
+    }
+
+    @Test
+    fun testStopTrace() {
+        val pSClientUtility = PSClientUtility()
+        val spanId = pSClientUtility.stopTrace("https://ocio-ede-dev-pstatus-api.azurewebsites.net","1000","1000-1","Dex-Redactor")
+        println("spanId11:$spanId")
     }
 }

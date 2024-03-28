@@ -9,6 +9,7 @@ import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
+import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import gov.cdc.hl7.bumblebee.HL7JsonTransformer
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -49,6 +50,10 @@ class Function {
         }
         val outList = mutableListOf<String>()
         var returnValue = JsonObject()
+        val psClientUtility = PSClientUtility()
+        var traceId :String =""
+        var spanId :String =""
+        var childSpanId :String? =null
         try {
             messages.forEachIndexed { messageIndex: Int, singleMessage: String? ->
                 val startTime = Date().toIsoString()
@@ -56,9 +61,21 @@ class Function {
                     val inputEvent: JsonObject = JsonParser.parseString(singleMessage) as JsonObject
                     val filePath = JsonHelper.getValueFromJson("routing_metadata.ingested_file_path", inputEvent).asString
                     val messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
+                    traceId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
+                    spanId = JsonHelper.getValueFromJson("routing_metadata.span_id", inputEvent).asString
 
                     logger.info("DEX::Processing messageUUID:$messageUUID")
                     try {
+                        fnConfig.psURL?.let  {
+                            childSpanId =  psClientUtility.sendTraceToProcessingStatus(
+                                fnConfig.psURL,
+                                traceId,
+                                spanId,
+                                HL7JSONLakeStageMetadata.PROCESS_NAME
+                            )
+                            logger.info("Span ID of messageUUID: $messageUUID : ${childSpanId}")
+                        }
+
                         val hl7message = JsonHelper.getValueFromJsonAndBase64Decode("content", inputEvent)
                         val fullHL7WithNulls = buildJson(hl7message)
                         // remove nulls
@@ -84,6 +101,19 @@ class Function {
                         )
                         context.logger.info("Processed ERROR for HL7 JSON Lake messageUUID: $messageUUID, filePath: $filePath")
                     } // .catch
+                    finally { // closing the span for the msg
+                        fnConfig.psURL?.let {
+                            childSpanId?.let {
+                                psClientUtility.stopTrace(
+                                    fnConfig.psURL,
+                                    traceId,
+                                    it,
+                                    HL7JSONLakeStageMetadata.PROCESS_NAME
+                                )
+                            }
+                        }
+                    }
+
 
                 } catch (e: Exception) {
                     // message is bad, can't extract fields based on schema expected
