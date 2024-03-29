@@ -8,7 +8,6 @@ class CosmosDBProxySimple (serviceEndpoint: String, key: String) {
         .endpoint(serviceEndpoint)
         .key(key)
         .buildClient()
-
     fun disconnect() {
         cosmosClient.close()
     }

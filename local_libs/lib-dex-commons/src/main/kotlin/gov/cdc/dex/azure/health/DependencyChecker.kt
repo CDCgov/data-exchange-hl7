@@ -13,12 +13,20 @@ class DependencyChecker {
         COSMOS_DB("Cosmos DB")
     }
     fun checkDependency(dependency: AzureDependency, connectionString: String, target: String) : DependencyHealthData {
-        val dependencyData = DependencyHealthData(dependency.description)
+        val healthData = DependencyHealthData(dependency.description)
         try {
             when (dependency) {
                 AzureDependency.EVENT_HUB -> checkEventHub(connectionString, target)
+                AzureDependency.SERVICE_BUS -> checkServiceBus(connectionString, target)
+                AzureDependency.STORAGE_ACCOUNT -> checkStorageAccount(connectionString, target)
+                AzureDependency.COSMOS_DB -> checkCosmosDB(connectionString, target)
             }
+            healthData.status = "UP"
+        } catch (e: Exception) {
+            healthData.status = "DOWNGRADED"
+            healthData.healthIssues = "${e.message}"
         }
+        return healthData
     }
     fun checkEventHub(connectionString: String, eventHubName: String) {
         val evHub = DedicatedEventHubSender(connectionString, eventHubName)
