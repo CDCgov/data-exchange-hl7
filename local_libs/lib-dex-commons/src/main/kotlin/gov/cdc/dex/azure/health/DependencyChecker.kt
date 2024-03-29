@@ -1,10 +1,7 @@
 package gov.cdc.dex.azure.health
 
-import com.azure.core.amqp.AmqpRetryOptions
 import com.azure.cosmos.CosmosClient
 import com.azure.cosmos.CosmosClientBuilder
-import com.azure.messaging.eventhubs.EventHubClientBuilder
-import com.azure.messaging.eventhubs.EventHubProducerClient
 import com.azure.messaging.servicebus.ServiceBusClientBuilder
 import com.azure.messaging.servicebus.ServiceBusReceiverClient
 import com.azure.storage.blob.BlobServiceClientBuilder
