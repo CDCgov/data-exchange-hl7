@@ -8,6 +8,7 @@ import com.azure.messaging.eventhubs.EventHubProducerClient
 import com.azure.messaging.servicebus.ServiceBusClientBuilder
 import com.azure.messaging.servicebus.ServiceBusReceiverClient
 import com.azure.storage.blob.BlobServiceClientBuilder
+import gov.cdc.dex.azure.DedicatedEventHubSender
 
 class DependencyChecker {
     enum class AzureDependency(val description: String) {
@@ -27,14 +28,9 @@ class DependencyChecker {
         }
         return data
     }
-    fun checkEventHub(connectionString: String, eventHubName: String) : DependencyHealthData {
+    fun checkEventHub(eventHubClient: DedicatedEventHubSender) : DependencyHealthData {
         return checkDependency(AzureDependency.EVENT_HUB) {
-            val producer: EventHubProducerClient = EventHubClientBuilder()
-                .connectionString(connectionString, eventHubName)
-                .retryOptions(AmqpRetryOptions().setMaxRetries(1))
-                .buildProducerClient()
-            producer.partitionIds.map { it -> it.toString() }
-            producer.close()
+            eventHubClient.getPartitionIds()
         }
     }
 
