@@ -1,5 +1,8 @@
 package gov.cdc.dex.azure.health
 
+import com.azure.core.amqp.AmqpRetryOptions
+import com.azure.messaging.eventhubs.EventHubClientBuilder
+import com.azure.messaging.eventhubs.EventHubProducerClient
 import gov.cdc.dex.azure.AzureBlobProxy
 import gov.cdc.dex.azure.CosmosDBProxySimple
 import gov.cdc.dex.azure.DedicatedEventHubSender
@@ -12,39 +15,48 @@ class DependencyChecker {
         STORAGE_ACCOUNT("Storage Account"),
         COSMOS_DB("Cosmos DB")
     }
-    fun checkDependency(dependency: AzureDependency, connectionString: String, target: String) : DependencyHealthData {
-        val healthData = DependencyHealthData(dependency.description)
+    private fun checkDependency(dependency: AzureDependency, action: () -> Any) : DependencyHealthData {
+        val data = DependencyHealthData(dependency.description)
         try {
-            when (dependency) {
-                AzureDependency.EVENT_HUB -> checkEventHub(connectionString, target)
-                AzureDependency.SERVICE_BUS -> checkServiceBus(connectionString, target)
-                AzureDependency.STORAGE_ACCOUNT -> checkStorageAccount(connectionString, target)
-                AzureDependency.COSMOS_DB -> checkCosmosDB(connectionString, target)
-            }
-            healthData.status = "UP"
+            action()
+            data.status = "UP"
         } catch (e: Exception) {
-            healthData.status = "DOWNGRADED"
-            healthData.healthIssues = "${e.message}"
+            data.status = "DOWN"
+            data.healthIssues = "${e.message}"
         }
-        return healthData
+        return data
     }
-    fun checkEventHub(connectionString: String, eventHubName: String) {
-        val evHub = DedicatedEventHubSender(connectionString, eventHubName)
-        evHub.disconnect()
-    }
-
-    fun checkServiceBus(connectionString: String, queueName: String) {
-        val sbHub = ServiceBusProxy(connectionString, queueName)
-        sbHub.disconnect()
-    }
-
-    fun checkStorageAccount(connectionString: String, containerName: String) {
-        val blobProxy = AzureBlobProxy(connectionString, containerName)
-        blobProxy.getAccountInfo()
+    fun checkEventHub(connectionString: String, eventHubName: String) : DependencyHealthData {
+        return checkDependency(AzureDependency.EVENT_HUB) {
+            val producer: EventHubProducerClient = EventHubClientBuilder()
+                .connectionString(connectionString, eventHubName)
+                .retryOptions(AmqpRetryOptions().setMaxRetries(1))
+                .buildProducerClient()
+            producer.partitionIds.map { it -> it.toString() }
+            producer.close()
+        }
     }
 
-    fun checkCosmosDB(serviceEndpoint: String, key: String)  {
-        val cosmosProxy = CosmosDBProxySimple(serviceEndpoint, key)
-        cosmosProxy.disconnect()
+    fun checkServiceBus(connectionString: String, queueName: String) : DependencyHealthData {
+        return checkDependency(AzureDependency.SERVICE_BUS) {
+            val sbHub = ServiceBusProxy(connectionString, queueName)
+            // need to do something to initiate connection
+            sbHub.disconnect()
+        }
+    }
+
+    fun checkStorageAccount(connectionString: String, containerName: String): DependencyHealthData {
+        return checkDependency(AzureDependency.STORAGE_ACCOUNT) {
+            val blobProxy = AzureBlobProxy(connectionString, containerName)
+            blobProxy.getAccountInfo()
+        }
+    }
+
+    fun checkCosmosDB(serviceEndpoint: String, key: String, database: String, container: String) : DependencyHealthData {
+        return checkDependency(AzureDependency.COSMOS_DB) {
+            val cosmosProxy = CosmosDBProxySimple(serviceEndpoint, key)
+            // need to do something to initiate connection
+            cosmosProxy.disconnect()
+        }
     }
 }
