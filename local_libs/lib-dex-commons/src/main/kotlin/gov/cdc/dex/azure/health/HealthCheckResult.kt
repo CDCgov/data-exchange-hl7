@@ -7,5 +7,10 @@ data class HealthCheckResult(
     @SerializedName("total_checks_duration")
     var totalChecksDuration : String? = null,
     @SerializedName("dependency_health_checks")
-    var dependencyHealthDataChecks : MutableList<DependencyHealthData> = mutableListOf()
+    var dependencyHealthChecks : MutableList<DependencyHealthData> = mutableListOf()
+)
+data class DependencyHealthData(
+    val service: String,
+    var status: String = "UP",
+    @SerializedName("health_issues") var healthIssues: String = ""
 )

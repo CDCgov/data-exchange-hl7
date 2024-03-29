@@ -1,12 +1,13 @@
 package gov.cdc.dex.azure.health
 
 import com.azure.core.amqp.AmqpRetryOptions
+import com.azure.cosmos.CosmosClient
+import com.azure.cosmos.CosmosClientBuilder
 import com.azure.messaging.eventhubs.EventHubClientBuilder
 import com.azure.messaging.eventhubs.EventHubProducerClient
-import gov.cdc.dex.azure.AzureBlobProxy
-import gov.cdc.dex.azure.CosmosDBProxySimple
-import gov.cdc.dex.azure.DedicatedEventHubSender
-import gov.cdc.dex.azure.ServiceBusProxy
+import com.azure.messaging.servicebus.ServiceBusClientBuilder
+import com.azure.messaging.servicebus.ServiceBusReceiverClient
+import com.azure.storage.blob.BlobServiceClientBuilder
 
 class DependencyChecker {
     enum class AzureDependency(val description: String) {
@@ -39,24 +40,35 @@ class DependencyChecker {
 
     fun checkServiceBus(connectionString: String, queueName: String) : DependencyHealthData {
         return checkDependency(AzureDependency.SERVICE_BUS) {
-            val sbHub = ServiceBusProxy(connectionString, queueName)
-            // need to do something to initiate connection
-            sbHub.disconnect()
+            val serviceBusClient: ServiceBusReceiverClient = ServiceBusClientBuilder()
+                .connectionString(connectionString)
+                .receiver()
+                .queueName(queueName)
+                .buildClient()
+            serviceBusClient.peekMessage()
+            serviceBusClient.close()
         }
     }
 
     fun checkStorageAccount(connectionString: String, containerName: String): DependencyHealthData {
         return checkDependency(AzureDependency.STORAGE_ACCOUNT) {
-            val blobProxy = AzureBlobProxy(connectionString, containerName)
-            blobProxy.getAccountInfo()
+            val blobServiceClient = BlobServiceClientBuilder()
+                .connectionString(connectionString)
+                .buildClient()
+            val containerClient = blobServiceClient.getBlobContainerClient(containerName)
+            containerClient.properties
         }
     }
 
     fun checkCosmosDB(serviceEndpoint: String, key: String, database: String, container: String) : DependencyHealthData {
         return checkDependency(AzureDependency.COSMOS_DB) {
-            val cosmosProxy = CosmosDBProxySimple(serviceEndpoint, key)
-            // need to do something to initiate connection
-            cosmosProxy.disconnect()
+            val cosmosClient: CosmosClient = CosmosClientBuilder()
+                .endpoint(serviceEndpoint)
+                .key(key)
+                .buildClient()
+            val db = cosmosClient.getDatabase(database)
+            db.getContainer(container).readThroughput()
+            cosmosClient.close()
         }
     }
 }
