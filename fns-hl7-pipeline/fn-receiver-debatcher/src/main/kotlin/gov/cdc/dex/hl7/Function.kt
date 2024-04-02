@@ -216,13 +216,14 @@ class Function {
     }
 
     private fun replaceUploadId(uploadId: String, currentMetadata: RoutingMetadata): RoutingMetadata {
+        val newId = uploadId.substringAfterLast("/")
         return RoutingMetadata(
             ingestedFilePath = currentMetadata.ingestedFilePath,
             ingestedFileTimestamp = currentMetadata.ingestedFileTimestamp,
             ingestedFileSize = currentMetadata.ingestedFileSize,
             dataProducerId = currentMetadata.dataProducerId,
             jurisdiction = currentMetadata.jurisdiction,
-            uploadId = uploadId,
+            uploadId = newId,
             dataStreamId = currentMetadata.dataStreamId,
             dataStreamRoute = currentMetadata.dataStreamRoute,
             traceId = currentMetadata.dataStreamId,
