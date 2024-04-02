@@ -234,12 +234,12 @@ class Function {
     private fun getBlobProperties(blobClient: BlobClient): BlobProperties? {
         var blobProperties: BlobProperties? = null
         var response: Response<BlobProperties>
-        var timeToWait = 0L
+        var timeToWait = fnConfig.azBlobProxy.retryDelay.toSeconds()
         var mustRetry: Boolean
-        var retries = 3
+        var retries = fnConfig.azBlobProxy.maxRetries
 
         do {
-            if (retries < 3) logger.info("RETRYING read of blob properties for blob ${blobClient.blobName}")
+            if (retries < fnConfig.azBlobProxy.maxRetries) logger.info("RETRYING read of blob properties for blob ${blobClient.blobName}")
             try {
                 response = blobClient.getPropertiesWithResponse(
                     null,
@@ -333,7 +333,12 @@ class Function {
         eventReport: ReceiverEventReport
     ): DexHL7Metadata {
         try {
-            logger.info("DEX::Processed messageUUID: ${payload.messageMetadata.messageUUID}")
+            val logStatus = if (payload.stage.status == STATUS_SUCCESS) {
+                "OK"
+            } else {
+                "ERROR"
+            }
+            logger.info("DEX::Processed $logStatus messageUUID: ${payload.messageMetadata.messageUUID}")
             val errors = fnConfig.evHubSenderOut.send(gson.toJson(payload))
             if (errors.isEmpty()) {
                 logger.info("DEX::Sent messageUUID ${payload.messageMetadata.messageUUID} to ${fnConfig.evHubSendName}")
