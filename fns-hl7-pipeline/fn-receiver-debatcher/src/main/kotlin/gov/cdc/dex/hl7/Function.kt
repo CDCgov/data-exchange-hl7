@@ -203,7 +203,7 @@ class Function {
 
         } catch (e: Exception) {
             logger.error("Failure in Receiver-Debatcher function: ${e.message}")
-            if (e.message?.startsWith(METADATA) == true) { throw e }
+            throw e
         } finally {
             try {
                 // send ingest-file event reports to separate event hub
