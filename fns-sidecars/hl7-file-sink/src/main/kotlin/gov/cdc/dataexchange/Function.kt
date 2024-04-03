@@ -135,9 +135,10 @@ class Function {
             .setContentLanguage("en-US")
             .setContentType("binary")
 
-        var timeToWait = 0L
+        var timeToWait = fnConfig.bloblUploadRetryDelay.toLong()
+        val timeout = fnConfig.blobUploadTimeout.toLong()
         var mustRetry: Boolean
-        var retries = 3
+        var retries = fnConfig.blobUploadMaxRetries.toInt()
         do {
             if (retries < 3) logger.info("RETRYING upload of blob $blobName")
             mustRetry = try {
@@ -145,7 +146,7 @@ class Function {
                 val dataStream = data.toStream()
                 val response = client.uploadWithResponse(
                     dataStream, length, headers, newMetadata, AccessTier.HOT, md5,
-                    null, Duration.ofSeconds(2), null
+                    null, Duration.ofSeconds(timeout), null
                 )
                 (response.statusCode !in listOf(200, 201))
             } catch (ex: NativeIoException) {
