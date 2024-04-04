@@ -30,6 +30,7 @@ class Function {
         const val STATUS_SUCCESS = "SUCCESS"
         const val STATUS_ERROR = "ERROR"
         const val UNKNOWN_VALUE = "UNKNOWN"
+        const val METADATA = "Metadata"
         val gson: Gson = GsonBuilder().serializeNulls().create()
         val knownMetadata: Set<String> = setOf(
             "data_stream_id", "meta_destination_id",
@@ -78,9 +79,11 @@ class Function {
             // Get properties and metadata of blob -- should retry if failure.
             // if it cannot get properties after retrying, blobProperties will be null,
             // and we will log this blob as a failure (will fail validateMetadata)
-            val blobProperties = getBlobProperties(blobClient)
+          //  val blobProperties = getBlobProperties(blobClient)
+            val blobProperties = blobClient.properties
             // Create Map of Blob Metadata with lower case keys
             val metaDataMap = blobProperties?.metadata?.mapKeys { it.key.lowercase() }?.toMutableMap() ?: mutableMapOf()
+            if (metaDataMap.isEmpty()) throw Exception("$METADATA is missing or empty")
             // filter out unknown metadata and store in dynamicMetadata
             val dynamicMetadata = metaDataMap.filter { e -> !knownMetadata.contains(e.key) }
             val sourceMetadata = dynamicMetadata.ifEmpty { null }
@@ -200,6 +203,7 @@ class Function {
 
         } catch (e: Exception) {
             logger.error("Failure in Receiver-Debatcher function: ${e.message}")
+            throw e
         } finally {
             try {
                 // send ingest-file event reports to separate event hub
@@ -216,13 +220,14 @@ class Function {
     }
 
     private fun replaceUploadId(uploadId: String, currentMetadata: RoutingMetadata): RoutingMetadata {
+        val newId = uploadId.substringAfterLast("/")
         return RoutingMetadata(
             ingestedFilePath = currentMetadata.ingestedFilePath,
             ingestedFileTimestamp = currentMetadata.ingestedFileTimestamp,
             ingestedFileSize = currentMetadata.ingestedFileSize,
             dataProducerId = currentMetadata.dataProducerId,
             jurisdiction = currentMetadata.jurisdiction,
-            uploadId = uploadId,
+            uploadId = newId,
             dataStreamId = currentMetadata.dataStreamId,
             dataStreamRoute = currentMetadata.dataStreamRoute,
             traceId = currentMetadata.dataStreamId,
@@ -332,8 +337,13 @@ class Function {
         payload: DexHL7Metadata,
         eventReport: ReceiverEventReport
     ): DexHL7Metadata {
+        val logStatus = if (payload.stage.status == STATUS_SUCCESS) {
+            "OK"
+        } else {
+            "ERROR"
+        }
         try {
-            logger.info("DEX::Processed messageUUID: ${payload.messageMetadata.messageUUID}")
+            logger.info("DEX::Processed $logStatus messageUUID: ${payload.messageMetadata.messageUUID}")
             val errors = fnConfig.evHubSenderOut.send(gson.toJson(payload))
             if (errors.isEmpty()) {
                 logger.info("DEX::Sent messageUUID ${payload.messageMetadata.messageUUID} to ${fnConfig.evHubSendName}")
