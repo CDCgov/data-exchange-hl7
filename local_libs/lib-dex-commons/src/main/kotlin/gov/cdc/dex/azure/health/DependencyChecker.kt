@@ -2,6 +2,8 @@ package gov.cdc.dex.azure.health
 
 import com.azure.cosmos.CosmosClient
 import com.azure.cosmos.CosmosClientBuilder
+import com.azure.messaging.eventhubs.EventHubClientBuilder
+import com.azure.messaging.eventhubs.EventHubProducerClient
 import com.azure.messaging.servicebus.ServiceBusClientBuilder
 import com.azure.messaging.servicebus.ServiceBusReceiverClient
 import com.azure.storage.blob.BlobServiceClientBuilder
@@ -28,6 +30,16 @@ class DependencyChecker {
     fun checkEventHub(eventHubClient: DedicatedEventHubSender) : DependencyHealthData {
         return checkDependency(AzureDependency.EVENT_HUB) {
             eventHubClient.getPartitionIds()
+        }
+    }
+
+    fun checkEventHub(connectionString: String, eventHubName: String) : DependencyHealthData {
+        return checkDependency(AzureDependency.EVENT_HUB) {
+            val client: EventHubProducerClient = EventHubClientBuilder()
+                .connectionString(connectionString, eventHubName)
+                .buildProducerClient()
+            client.partitionIds
+            client.close()
         }
     }
 
