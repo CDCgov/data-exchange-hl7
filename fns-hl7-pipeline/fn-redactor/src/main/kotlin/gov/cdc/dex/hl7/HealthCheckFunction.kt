@@ -8,6 +8,7 @@ import gov.cdc.dex.azure.health.*
 import java.time.LocalDate
 
 import java.util.*
+import kotlin.time.measureTime
 
 class HealthCheckFunction {
     @FunctionName("health")
@@ -19,10 +20,17 @@ class HealthCheckFunction {
             )
             request: HttpRequestMessage<Optional<String>>
     ): HttpResponseMessage {
-        val startTime = LocalDate.now()
+        val result = HealthCheckResult()
         val evHubSendName: String = System.getenv("EventHubSendName")
         val evHubConnStr = System.getenv("EventHubConnectionString")
-        val result = DependencyChecker().checkEventHub()
+        val time = measureTime {
+            val ehHealthData = DependencyChecker().checkEventHub(evHubConnStr, evHubSendName)
+            result.dependencyHealthChecks.add(ehHealthData)
+            result.status = if (ehHealthData.status == "UP") "UP" else "DOWNGRADED"
+        }
+        result.totalChecksDuration = time.toComponents { hours, minutes, seconds, nanoseconds ->
+            "%02d:%02d:%02d.%03d".format(hours, minutes, seconds, nanoseconds / 1000000)
+        }
 
         return request
                 .createResponseBuilder(HttpStatus.OK)
