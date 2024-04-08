@@ -1,5 +1,6 @@
 package gov.cdc.dex.azure.health
 
+import com.azure.core.amqp.AmqpRetryMode
 import com.azure.core.amqp.AmqpRetryOptions
 import com.azure.cosmos.CosmosClient
 import com.azure.cosmos.CosmosClientBuilder
@@ -38,6 +39,7 @@ class DependencyChecker {
     fun checkEventHub(connectionString: String, eventHubName: String) : DependencyHealthData {
         val retryOptions = AmqpRetryOptions()
             .setMaxRetries(1)
+            .setMode(AmqpRetryMode.FIXED)
             .setTryTimeout(Duration.ofSeconds(10))
 
         return checkDependency(AzureDependency.EVENT_HUB) {
