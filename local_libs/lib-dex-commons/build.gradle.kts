@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "0.0.44-SNAPSHOT"
+version = "0.0.45-SNAPSHOT"
 
 repositories {
     maven {
@@ -23,8 +23,10 @@ dependencies {
     implementation("com.github.kittinunf.fuel:fuel:2.3.1")
 
     //Azure:
-    implementation("com.azure:azure-messaging-eventhubs:5.18.0")
-    implementation("com.azure:azure-messaging-servicebus:7.15.1")
+    implementation(platform("com.azure:azure-sdk-bom:1.2.21"))
+    implementation("com.azure:azure-messaging-eventhubs")
+    implementation("com.azure:azure-messaging-servicebus")
+    implementation("com.azure:azure-storage-blob")
 
     implementation("redis.clients:jedis:5.1.0")
     implementation("com.azure:azure-cosmos:4.55.1")
