@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.42]  2024-04-03
+	  - Modified file-sink to create blobs and metadata in single call.
+	  - Added retries on file sink when upload fails
+	  - Improved Structure Validator status when critical failures happens (as when no profiles match message) 
+	  - Fixed issues with NRSS validation profile
+	  - Added health checks for resource dependencies on lib-commons
+     - Added retries on Receiver/Debatcher for loading metadata appropriately
+
+
 ### [0.0.41] - 2024-03-20
 	- Added retries to read metadata out of blob files (Azure SDK bug?)
 	- Bug fixes - fixed Debatcher report on counts
