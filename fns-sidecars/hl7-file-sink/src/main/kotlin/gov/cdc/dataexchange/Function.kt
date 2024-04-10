@@ -58,6 +58,11 @@ class Function {
             } catch (e: Exception) {
                 null
             }
+            val dataStreamId = try {
+                JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString
+            } catch (e: Exception) {
+                null
+            }
             if (messageUUID == null && uploadId == null) {
                 logger.error("DEX::ERROR -- No Message UUID or Upload ID found. Aborting save for message index $index")
                 continue
@@ -108,7 +113,7 @@ class Function {
                 logger.info("DEX::dateStructure $dateStructure")
                // save to storage container
                val succeeded =  this.saveBlobToContainer(
-                    "$blobStorageFolderName/$dateStructure/$newBlobName.txt",
+                    "$blobStorageFolderName/$dataStreamId/$dateStructure/$newBlobName.txt",
                     gson.toJson(inputEvent),
                     metaToAttach
                 )
@@ -135,9 +140,10 @@ class Function {
             .setContentLanguage("en-US")
             .setContentType("binary")
 
-        var timeToWait = 0L
+        var timeToWait = fnConfig.bloblUploadRetryDelay.toLong()
+        val timeout = fnConfig.blobUploadTimeout.toLong()
         var mustRetry: Boolean
-        var retries = 3
+        var retries = fnConfig.blobUploadMaxRetries.toInt()
         do {
             if (retries < 3) logger.info("RETRYING upload of blob $blobName")
             mustRetry = try {
@@ -145,7 +151,7 @@ class Function {
                 val dataStream = data.toStream()
                 val response = client.uploadWithResponse(
                     dataStream, length, headers, newMetadata, AccessTier.HOT, md5,
-                    null, Duration.ofSeconds(2), null
+                    null, Duration.ofSeconds(timeout), null
                 )
                 (response.statusCode !in listOf(200, 201))
             } catch (ex: NativeIoException) {

@@ -8,6 +8,10 @@ class FunctionConfig {
     var azureBlobProxy: AzureBlobProxy
     val blobStorageFolderName: String
     val blobStorageConnectionString: String
+    val blobUploadTimeout: String
+    val bloblUploadRetryDelay: String
+    val blobUploadMaxRetries: String
+
     private var logger = LoggerFactory.getLogger(FunctionConfig::class.java.simpleName)
 
     init {
@@ -33,5 +37,8 @@ class FunctionConfig {
             exitProcess(1)
         }
 
+        blobUploadTimeout = System.getenv("BlobUploadTimeoutSeconds") ?: "60"
+        bloblUploadRetryDelay = System.getenv("BlobUploadRetryDelaySeconds") ?: "10"
+        blobUploadMaxRetries = System.getenv("BlobUploadMaxRetries") ?: "3"
     }
 }
