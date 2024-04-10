@@ -58,6 +58,11 @@ class Function {
             } catch (e: Exception) {
                 null
             }
+            val dataStreamId = try {
+                JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString
+            } catch (e: Exception) {
+                null
+            }
             if (messageUUID == null && uploadId == null) {
                 logger.error("DEX::ERROR -- No Message UUID or Upload ID found. Aborting save for message index $index")
                 continue
@@ -108,7 +113,7 @@ class Function {
                 logger.info("DEX::dateStructure $dateStructure")
                // save to storage container
                val succeeded =  this.saveBlobToContainer(
-                    "$blobStorageFolderName/$dateStructure/$newBlobName.txt",
+                    "$blobStorageFolderName/$dataStreamId/$dateStructure/$newBlobName.txt",
                     gson.toJson(inputEvent),
                     metaToAttach
                 )
