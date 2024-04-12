@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
-import java.util.Base64.getEncoder
 import java.util.concurrent.TimeUnit
 
 
@@ -129,6 +128,7 @@ class Function {
                                         currentLinesArr = currentLinesArr,
                                         eventTime = event.eventTime,
                                         startTime = startTime,
+                                        metaDataMap = metaDataMap,
                                         routingMetadata = routingMetadata,
                                         eventReport = eventReport
                                     )
@@ -150,6 +150,7 @@ class Function {
                         currentLinesArr = currentLinesArr,
                         eventTime = event.eventTime,
                         startTime = startTime,
+                        metaDataMap = metaDataMap,
                         routingMetadata = routingMetadata,
                         eventReport = eventReport
                     )
@@ -164,6 +165,7 @@ class Function {
                         currentLinesArr = arrayListOf(),
                         eventTime = event.eventTime,
                         startTime = startTime,
+                        metaDataMap = metaDataMap,
                         routingMetadata = routingMetadata,
                         eventReport = eventReport,
                         errorMessage = errorMessage
@@ -187,6 +189,7 @@ class Function {
                     currentLinesArr = arrayListOf(),
                     eventTime = event.eventTime,
                     startTime = startTime,
+                    metaDataMap = metaDataMap,
                     routingMetadata = newRoutingMetadata,
                     eventReport = eventReport,
                     errorMessage = errorMessage
@@ -282,6 +285,7 @@ class Function {
         currentLinesArr: ArrayList<String>,
         eventTime: String,
         startTime: String,
+        metaDataMap: Map<String, String?>,
         routingMetadata: RoutingMetadata,
         eventReport: ReceiverEventReport,
         errorMessage: String? = null
@@ -301,6 +305,8 @@ class Function {
             }
             logger.info("Setting processing status spanId to routingMetadata.spanId: ${routingMetadata.spanId}")
         }
+       // val dirPath = metadata.provenance.fileUUID // todo: get correct requirement
+       // val hl7Transformer = HL7Transformer(messageContent, dirPath, fnConfig)
 
         val messageMetadata = MessageMetadata(
             singleOrBatch = singleOrBatch,
@@ -325,6 +331,7 @@ class Function {
             messageMetadata = messageMetadata,
             routingMetadata = routingMetadata,
             stage = stage,
+            metaDataMap =metaDataMap,
             messageContent = currentLinesArr,
             summary = summary
         ).apply {
@@ -429,15 +436,19 @@ class Function {
         messageMetadata: MessageMetadata,
         routingMetadata: RoutingMetadata,
         stage: StageMetadata,
+        metaDataMap: Map<String, String?>,
         messageContent: ArrayList<String>,
         summary: SummaryInfo,
     ): DexHL7Metadata {
+        val dirPath = messageMetadata.messageUUID // todo: get correct requirement
+        val hl7Transformer = HL7Transformer(messageContent,metaDataMap,dirPath,fnConfig)
 
         return DexHL7Metadata(
             messageMetadata = messageMetadata,
             routingMetadata = routingMetadata,
             stage = stage,
-            content = getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray()),
+            //content = getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray()),
+            content = hl7Transformer.removeBinaryToBase64(),
             summary = summary
         )
     }
