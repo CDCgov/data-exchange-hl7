@@ -1,0 +1,21 @@
+#!/bin/bash
+
+env=$1
+hl7RG=ocio-ede-$env-moderate-hl7-rg
+
+base_name=az-fun-hl7-receiver-debatcher.zip
+function=ocio-ede-$env-hl7-receiver-debatcher
+
+echo "Building Jar..."
+mvn clean package -DskipTests=true -Paz-$env
+
+echo "Zipping it:"
+
+cd target/azure-functions/$function
+
+zip -r ../../../$base_name *
+cd ../../..
+
+echo "Deploying Zip..."
+
+az functionapp deployment source config-zip -g $hl7RG -n $function --src $base_name
