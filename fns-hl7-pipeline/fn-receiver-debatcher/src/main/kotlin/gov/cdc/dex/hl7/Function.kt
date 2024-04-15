@@ -1,24 +1,19 @@
 package gov.cdc.dex.hl7
 
-import com.azure.core.http.rest.Response
-import com.azure.core.util.Context
-import com.azure.storage.blob.BlobClient
-import com.azure.storage.blob.models.BlobProperties
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.FunctionName
 import com.microsoft.azure.functions.annotation.QueueTrigger
-import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
+import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 import java.util.Base64.getEncoder
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -234,45 +229,6 @@ class Function {
             spanId = currentMetadata.spanId,
             supportingMetadata = currentMetadata.supportingMetadata
         )
-    }
-
-    private fun getBlobProperties(blobClient: BlobClient): BlobProperties? {
-        var blobProperties: BlobProperties? = null
-        var response: Response<BlobProperties>
-        var timeToWait = 0L
-        var mustRetry: Boolean
-        var retries = 3
-
-        do {
-            if (retries < 3) logger.info("RETRYING read of blob properties for blob ${blobClient.blobName}")
-            try {
-                response = blobClient.getPropertiesWithResponse(
-                    null,
-                    fnConfig.azBlobProxy.tryTimeout,
-                    Context.NONE
-                )
-                mustRetry = (response.statusCode != 200 || response.value.metadata.isEmpty())
-                if (mustRetry) {
-                    logger.info("RETRY is TRUE: Response status code was ${response.statusCode}")
-                } else {
-                    blobProperties = response.value
-                }
-            } catch (e: Exception) {
-                logger.info("ERROR in getBlobProperties: ${e.javaClass.canonicalName}: ${e.message}")
-                mustRetry = true
-            }
-            retries--
-
-            if (mustRetry) {
-                try {
-                    TimeUnit.SECONDS.sleep(timeToWait++)
-                } catch (ex: InterruptedException) {
-                    logger.debug("Timer interrupted")
-                }
-            }
-        } while (mustRetry && retries > 0)
-
-        return blobProperties
     }
 
     private fun buildAndSendMessage(
