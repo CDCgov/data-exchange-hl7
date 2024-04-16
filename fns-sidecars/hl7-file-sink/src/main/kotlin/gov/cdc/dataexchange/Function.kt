@@ -5,6 +5,7 @@ import com.azure.storage.blob.models.AccessTier
 import com.azure.storage.blob.models.BlobHttpHeaders
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
+import gov.cdc.dex.azure.AzureBlobProxy
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.UnknownPropertyError
 import io.netty.channel.unix.Errors.NativeIoException
