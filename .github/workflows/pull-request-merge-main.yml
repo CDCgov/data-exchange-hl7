@@ -8,10 +8,10 @@ defaults:
 
 on:
   push: 
-    branches: [development]
+    branches: [HL7-2957]
   pull_request:
-    branches: [development]
-    
+    branches: [HL7-2957]
+
   workflow_dispatch:
     inputs:
       commitID: 
