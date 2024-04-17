@@ -1,0 +1,61 @@
+# Fortify code scan required when merging to Main
+
+name: Fortify code scan Workflow
+
+on:
+  workflow_dispatch:
+
+
+  # pull_request:
+  #   types: []
+  #   branches: [ "HL7-2957" ]
+  #   paths: 
+  #     - fns-hl7-pipeline/**
+  #     # Remaining code bases to be added after above this line are validated.
+  #     # 
+  #     # - fn-cache-loader/**
+  #     # - svc-cloud-transport/**
+  #     # - local_libs/**
+
+permissions:
+  contents: read
+  pull-requests: write # required for `comment-summary-in-pr`
+      
+jobs:
+  invoke-manual-code-scan:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      
+    steps:
+    - name: Gen GitHub App Access Token for Automated Trigger
+      id: github-app-token
+      run: |
+        echo ${{ github.workspace }} 
+        if [ ! -d github-app-token ]; then git clone https://github.com/kave/github-app-token.git; fi;
+        sudo tree -df
+        cd github-app-token
+        sudo gem install jwt
+        echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > app-private-key.pem
+        chmod +x ./get-github-app-access-token.sh;
+        . ./get-github-app-access-token.sh;
+        echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
+      
+    - name: Get Commit SHA
+      id: getsha
+      run: | 
+        echo "commitID=$(echo ${GITHUB_SHA})" >> $GITHUB_OUTPUT
+
+    - name: Automatically Dispatch Remote Scan Event 
+      id: auto-devops-wkflow-dispatch
+      uses: aurelien-baudet/workflow-dispatch@v2.1.1
+      with:
+          workflow: pull-request-code-scan.yaml
+          repo: cdcent/data-exchange-hl7-devops
+          token: ${{ env.GH_TOKEN }}
+          inputs: '{ "commitID": "${{ steps.getsha.outputs.commitID }}" }'
+          ref: 'main'
+          wait-for-completion: true
+          wait-for-completion-timeout: 120m
+          wait-for-completion-interval: 300s
+          display-workflow-run-url: true    
