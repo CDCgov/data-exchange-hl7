@@ -68,7 +68,7 @@ jobs:
           repo: cdcent/data-exchange-hl7-devops
           token: ${{ env.access_token }}
           inputs: '{ "targetEnv": "${{ github.event.inputs.targetEnv }}", "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
-          ref: 'main'
+          ref: 'Fix-HL7-Pipeline' # TODO change this to main
           wait-for-completion: true
           wait-for-completion-timeout: 120m
           wait-for-completion-interval: 300s
@@ -77,7 +77,7 @@ jobs:
     - name: Automatically Dispatch Remote Scan Event 
       uses: aurelien-baudet/workflow-dispatch@v2.1.1
       with:
-          workflow: 
+          workflow: '${{ github.event.inputs.data-exchange-hl7-workflow }}'
           # did not find -> "Fortify Scan on Pull Request to main" 
           # workflow: pull-request-code-scan.yaml # reports not found
           repo: cdcent/data-exchange-hl7-devops
