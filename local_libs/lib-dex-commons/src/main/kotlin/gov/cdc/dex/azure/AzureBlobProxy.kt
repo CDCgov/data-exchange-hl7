@@ -1,4 +1,4 @@
-package gov.cdc.dataexchange
+package gov.cdc.dex.azure
 
 import com.azure.storage.blob.BlobClient
 import com.azure.storage.blob.BlobContainerClient
