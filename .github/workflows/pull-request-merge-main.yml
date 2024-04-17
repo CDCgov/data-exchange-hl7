@@ -1,12 +1,17 @@
 # Fortify code scan required when merging to Main
 
-name: Fortify code scan Workflow
+name: Code Scan Workflow
 
 defaults:
   run:
     shell: bash
 
 on:
+  push: 
+    branches: [development]
+  pull_request:
+    branches: [development]
+    
   workflow_dispatch:
     inputs:
       commitID: 
