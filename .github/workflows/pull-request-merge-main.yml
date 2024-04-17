@@ -60,16 +60,24 @@ jobs:
     #   run: | 
     #     echo "commitID=$(echo ${GITHUB_SHA})" >> $GITHUB_OUTPUT
 
-    - name: Automatically Dispatch Remote Scan Event 
-      uses: aurelien-baudet/workflow-dispatch@v2.1.1
-      with:
-          workflow: "Fortify Scan on Pull Request to main" 
-          # workflow: pull-request-code-scan.yaml # reports not found
-          repo: cdcent/data-exchange-hl7-devops
-          token: ${{ env.GH_TOKEN }}
-          inputs: '{ "commitID": "HaHaHaHaHaHaHa" }'
-          ref: 'main'
-          wait-for-completion: true
-          wait-for-completion-timeout: 120m
-          wait-for-completion-interval: 300s
-          display-workflow-run-url: true    
+    # - name: Automatically Dispatch Remote Scan Event 
+    #   uses: aurelien-baudet/workflow-dispatch@v2.1.1
+    #   with:
+    #       workflow: "Fortify Scan on Pull Request to main" 
+    #       # workflow: pull-request-code-scan.yaml # reports not found
+    #       repo: cdcent/data-exchange-hl7-devops
+    #       token: ${{ env.GH_TOKEN }}
+    #       inputs: '{ "commitID": "HaHaHaHaHaHaHa" }'
+    #       ref: 'main'
+    #       wait-for-completion: true
+    #       wait-for-completion-timeout: 120m
+    #       wait-for-completion-interval: 300s
+    #       display-workflow-run-url: true    
+
+    - name: Code Scan
+      run: |
+        curl -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{ github.token }}" \
+          https:/api.github.com/cdcent/data-exchange-hl7-devops/actions/workflows/pull-request-code-scan.yaml \
+          -d '{"commitID": "HaHaHa"}'
