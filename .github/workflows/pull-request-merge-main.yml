@@ -52,7 +52,9 @@ jobs:
         cd github-app-token
         sudo gem install jwt
         echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > app-private-key.pem
-        echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > this.txt && cat this.txt
+        echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > this.txt 
+        echo "Haha" >> this.txt
+        cat this.txt 
         chmod +x ./get-github-app-access-token.sh;
         . ./get-github-app-access-token.sh;
         echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
