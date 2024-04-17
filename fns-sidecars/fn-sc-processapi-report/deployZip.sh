@@ -29,4 +29,7 @@ for i in "${arr[@]}"
 do
   echo "    Deploying $i on $1 Environment"
   az functionapp deployment source config-zip -g $hl7RG -n $function_rootname-$i-$env --src $base_name
+    ### Set FN_VERSION:
+  fn_version=$(cat pom.xml |grep -oPm1 "(?<=<version>)[^<]+")
+  az functionapp config appsettings set --name $function_rootname-$i-$env --resource-group $hl7RG --settings FN_VERSION=$fn_version
 done
