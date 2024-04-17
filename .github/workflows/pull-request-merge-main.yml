@@ -41,6 +41,7 @@ permissions:
 jobs:
   invoke-manual-code-scan:
     runs-on: ubuntu-latest
+    environment: dev
       
     steps:
     - name: Gen GitHub App Access Token For Manual Trigger
@@ -66,24 +67,24 @@ jobs:
           workflow: '${{ github.event.inputs.data-exchange-hl7-workflow }}'
           repo: cdcent/data-exchange-hl7-devops
           token: ${{ env.access_token }}
-          inputs: '{ "commitID": "${{ env.sha }}" }' #, "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
-          ref: 'Fix-HL7-Pipeline' # TODO change this to main
+          inputs: '{ "targetEnv": "${{ github.event.inputs.targetEnv }}", "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch  }}" }'
+          ref: 'main'
           wait-for-completion: true
           wait-for-completion-timeout: 120m
           wait-for-completion-interval: 300s
           display-workflow-run-url: true
 
-    # - name: Automatically Dispatch Remote Scan Event 
-    #   uses: aurelien-baudet/workflow-dispatch@v2.1.1
-    #   with:
-    #       workflow: 
-    #       # did not find -> "Fortify Scan on Pull Request to main" 
-    #       # workflow: pull-request-code-scan.yaml # reports not found
-    #       repo: cdcent/data-exchange-hl7-devops
-    #       token: ${{ secrets.CDC_COE_BOTFREY_PEM }}
-    #       inputs: '{ "commitID": "HaHaHaHaHaHaHa" }'
-    #       ref: 'Fix-HL7-Pipeline' # TODO change this to main          
-    #       wait-for-completion: true
-    #       wait-for-completion-timeout: 120m
-    #       wait-for-completion-interval: 300s
-    #       display-workflow-run-url: true    
+    - name: Automatically Dispatch Remote Scan Event 
+      uses: aurelien-baudet/workflow-dispatch@v2.1.1
+      with:
+          workflow: 
+          # did not find -> "Fortify Scan on Pull Request to main" 
+          # workflow: pull-request-code-scan.yaml # reports not found
+          repo: cdcent/data-exchange-hl7-devops
+          token: ${{ secrets.CDC_COE_BOTFREY_PEM }}
+          inputs: '{ "commitID": "HaHaHaHaHaHaHa" }'
+          ref: 'Fix-HL7-Pipeline' # TODO change this to main
+          wait-for-completion: true
+          wait-for-completion-timeout: 120m
+          wait-for-completion-interval: 300s
+          display-workflow-run-url: true    
