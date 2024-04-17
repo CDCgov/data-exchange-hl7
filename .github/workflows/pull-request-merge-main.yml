@@ -5,16 +5,17 @@ name: Fortify code scan Workflow
 on:
   workflow_dispatch:
 
-  pull_request:
-    types: []
-    branches: [ "HL7-2957" ]
-    paths: 
-      - fns-hl7-pipeline/**
-      # Remaining code bases to be added after above this line are validated.
-      # 
-      # - fn-cache-loader/**
-      # - svc-cloud-transport/**
-      # - local_libs/**
+
+  # pull_request:
+  #   types: []
+  #   branches: [ "HL7-2957" ]
+  #   paths: 
+  #     - fns-hl7-pipeline/**
+  #     # Remaining code bases to be added after above this line are validated.
+  #     # 
+  #     # - fn-cache-loader/**
+  #     # - svc-cloud-transport/**
+  #     # - local_libs/**
 
 permissions:
   contents: read
@@ -52,7 +53,7 @@ jobs:
           workflow: pull-request-code-scan.yaml
           repo: cdcent/data-exchange-hl7-devops
           token: ${{ env.GH_TOKEN }}
-          inputs: '{"commitID": "${{ steps.getsha.outputs.commitID }}", "data-exchange-hl7-branch": "${{ github.event.inputs.data-exchange-hl7-branch }}" }'
+          inputs: '{ "commitID": "${{ steps.getsha.outputs.commitID }}" }'
           ref: 'main'
           wait-for-completion: true
           wait-for-completion-timeout: 120m
