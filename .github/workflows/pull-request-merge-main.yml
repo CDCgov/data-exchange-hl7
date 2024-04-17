@@ -63,11 +63,11 @@ jobs:
     - name: Automatically Dispatch Remote Scan Event 
       uses: aurelien-baudet/workflow-dispatch@v2.1.1
       with:
-          workflow: pull-request-merge-main.yml
+          workflow: pull-request-code-scan.yml
           # did not find -> "Fortify Scan on Pull Request to main" 
           # workflow: pull-request-code-scan.yaml # reports not found
           repo: cdcent/data-exchange-hl7-devops
-          token: ${{ env.GH_TOKEN }}
+          token: ${{ secrets.CDC_COE_BOTFREY_PEM }}
           inputs: '{ "commitID": "HaHaHaHaHaHaHa" }'
           ref: 'Fix-HL7-Pipeline' # TODO change this to main
           wait-for-completion: true
