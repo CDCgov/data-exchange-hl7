@@ -42,32 +42,31 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       
     steps:
-    - name: Gen GitHub App Access Token for Automated Trigger
-      id: github-app-token
-      run: |
-        echo ${{ github.workspace }} 
-        if [ ! -d github-app-token ]; then git clone https://github.com/kave/github-app-token.git; fi;
-        sudo tree -df
-        cd github-app-token
-        sudo gem install jwt
-        echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > app-private-key.pem
-        chmod +x ./get-github-app-access-token.sh;
-        . ./get-github-app-access-token.sh;
-        echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
+    # - name: Gen GitHub App Access Token for Automated Trigger
+    #   id: github-app-token
+    #   run: |
+    #     echo ${{ github.workspace }} 
+    #     if [ ! -d github-app-token ]; then git clone https://github.com/kave/github-app-token.git; fi;
+    #     sudo tree -df
+    #     cd github-app-token
+    #     sudo gem install jwt
+    #     echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > app-private-key.pem
+    #     chmod +x ./get-github-app-access-token.sh;
+    #     . ./get-github-app-access-token.sh;
+    #     echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
       
-    - name: Get Commit SHA
-      id: getsha
-      run: | 
-        echo "commitID=$(echo ${GITHUB_SHA})" >> $GITHUB_OUTPUT
+    # - name: Get Commit SHA
+    #   id: getsha
+    #   run: | 
+    #     echo "commitID=$(echo ${GITHUB_SHA})" >> $GITHUB_OUTPUT
 
     - name: Automatically Dispatch Remote Scan Event 
-      id: auto-devops-wkflow-dispatch
       uses: aurelien-baudet/workflow-dispatch@v2.1.1
       with:
           workflow: pull-request-code-scan.yaml
           repo: cdcent/data-exchange-hl7-devops
           token: ${{ env.GH_TOKEN }}
-          inputs: '{ "commitID": "${{ steps.getsha.outputs.commitID }}" }'
+          inputs: '{ "commitID": "HaHaHaHaHaHaHa" }'
           ref: 'main'
           wait-for-completion: true
           wait-for-completion-timeout: 120m
