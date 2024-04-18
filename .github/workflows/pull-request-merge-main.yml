@@ -50,7 +50,7 @@ jobs:
           # Loop over each line ouput from git diff
           while IFS= read -r file; do
             # fetch name of top level directory with changes
-            top_dir=$(echo $file | cust -d'/' -fi')
+            top_dir=$(echo "$file" | cust -d'/' -fi)
             
             # store unique changed dir name
             unique_dirs["$top_dir"]=1
