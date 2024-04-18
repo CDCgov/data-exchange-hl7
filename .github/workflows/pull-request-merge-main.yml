@@ -64,7 +64,7 @@ jobs:
       id: manual-devops-wkflow-dispatch
       uses: aurelien-baudet/workflow-dispatch@v2.1.1
       with:
-          workflow: '${{ inputs.data-exchange-hl7-workflow }}'
+          workflow: pull-request-code-scan.yml
           repo: cdcent/data-exchange-hl7-devops
           token: ${{ env.access_token }}
           inputs: '{ "targetEnv": "${{ github.event.inputs.targetEnv }}", "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ inputs.data-exchange-hl7-branch  }}" }'
