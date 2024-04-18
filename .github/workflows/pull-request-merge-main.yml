@@ -47,7 +47,7 @@ jobs:
           # init assoc. array to store unique dir names
           declare -a unique_dirs
 
-          Loop over each line ouput from git diff
+          # Loop over each line ouput from git diff
           while IFS= read -r file; do
             # fetch name of top level directory with changes
             top_dir=$(echo $file | cust -d'/' -fi')
