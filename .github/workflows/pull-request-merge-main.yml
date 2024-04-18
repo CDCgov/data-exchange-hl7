@@ -67,24 +67,24 @@ jobs:
           workflow: pull-request-code-scan.yml
           repo: cdcent/data-exchange-hl7-devops
           token: ${{ env.access_token }}
-          inputs: '{ "targetEnv": "${{ github.event.inputs.targetEnv }}", "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ inputs.data-exchange-hl7-branch  }}" }'
-          ref: 'main'
+          inputs: '{ "commitID": "SOMETHING" }'
+          ref: 'HL7-2957-PR' # 'main'
           wait-for-completion: true
           wait-for-completion-timeout: 120m
           wait-for-completion-interval: 300s
           display-workflow-run-url: true
 
-    - name: Automatically Dispatch Remote Scan Event 
-      uses: aurelien-baudet/workflow-dispatch@v2.1.1
-      with:
-          workflow: '${{ github.event.inputs.data-exchange-hl7-workflow }}'
-          # did not find -> "Fortify Scan on Pull Request to main" 
-          # workflow: pull-request-code-scan.yaml # reports not found
-          repo: cdcent/data-exchange-hl7-devops
-          token: ${{ secrets.CDC_COE_BOTFREY_PEM }}
-          inputs: '{ "commitID": "HaHaHaHaHaHaHa" }'
-          ref: 'main'
-          wait-for-completion: true
-          wait-for-completion-timeout: 120m
-          wait-for-completion-interval: 300s
-          display-workflow-run-url: true    
+    # - name: Automatically Dispatch Remote Scan Event 
+    #   uses: aurelien-baudet/workflow-dispatch@v2.1.1
+    #   with:
+    #       workflow: '${{ github.event.inputs.data-exchange-hl7-workflow }}'
+    #       # did not find -> "Fortify Scan on Pull Request to main" 
+    #       # workflow: pull-request-code-scan.yaml # reports not found
+    #       repo: cdcent/data-exchange-hl7-devops
+    #       token: ${{ secrets.CDC_COE_BOTFREY_PEM }}
+    #       inputs: '{ "commitID": "HaHaHaHaHaHaHa" }'
+    #       ref: 'main'
+    #       wait-for-completion: true
+    #       wait-for-completion-timeout: 120m
+    #       wait-for-completion-interval: 300s
+    #       display-workflow-run-url: true    
