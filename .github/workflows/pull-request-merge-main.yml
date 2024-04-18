@@ -36,10 +36,32 @@ jobs:
           fetch-depth: 0
 
 
-      - name: List all changed files
+      # - name: List all changed files
+      #   id: updated_dirs
+      #   run: |
+      #     git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+
+      - name: List top-level directories with changed files
+        id: top_level_dirs
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
-          git diff
+          # init assoc. array to store unique dir names
+          declare -a unique_dirs
+
+          Loop over each line ouput from git diff
+          while IFS= read -r file; do
+            # fetch name of top level directory with changes
+            top_dir=$(echo $file | cust -d'/' -fi')
+            
+            # store unique changed dir name
+            unique_dirs["$top_dir"]=1
+
+          done <(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+
+          echo display list of changed dirs $unique_dirs
+
+
+
+
   # invoke-manual-code-scan:
   #   runs-on: ubuntu-latest
   #   environment: dev
