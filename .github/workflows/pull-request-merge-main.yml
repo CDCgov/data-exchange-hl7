@@ -35,27 +35,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            src: [ 'src/**' ]
-            docs: [ 'docs/**' ]
-      
-      - name: Report Changed Directories
-        run: |
-          echo "Changes in src directory: ${{ steps.filter.outputs.src }}"
-          echo "Changes in docs directory: ${{ steps.filter.outputs.docs}}"
-          echo "all outputs ${{ steps.filter.outputs }}"
 
-      - uses: dorny/paths-filter@v2
-        id: filter2
-        with:
-          filters: 
-
-      - name: No filtered 
+      - name: List all changed files
         run: |
-          echo Changes in ${{ steps.filter2.outputs }}
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
 
   # invoke-manual-code-scan:
   #   runs-on: ubuntu-latest
