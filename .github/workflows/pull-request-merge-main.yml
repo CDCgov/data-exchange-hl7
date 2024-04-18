@@ -68,7 +68,7 @@ jobs:
           repo: cdcent/data-exchange-hl7-devops
           token: ${{ env.access_token }}
           inputs: '{ "targetEnv": "${{ github.event.inputs.targetEnv }}", "commitID": "${{ env.sha }}", "data-exchange-hl7-branch": "${{ inputs.data-exchange-hl7-branch  }}" }'
-          ref: 'Fix-HL7-Pipeline' # TODO change this to main
+          ref: 'main'
           wait-for-completion: true
           wait-for-completion-timeout: 120m
           wait-for-completion-interval: 300s
@@ -83,7 +83,7 @@ jobs:
           repo: cdcent/data-exchange-hl7-devops
           token: ${{ secrets.CDC_COE_BOTFREY_PEM }}
           inputs: '{ "commitID": "HaHaHaHaHaHaHa" }'
-          ref: 'Fix-HL7-Pipeline' # TODO change this to main
+          ref: 'main'
           wait-for-completion: true
           wait-for-completion-timeout: 120m
           wait-for-completion-interval: 300s
