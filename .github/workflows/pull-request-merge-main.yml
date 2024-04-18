@@ -39,7 +39,7 @@ jobs:
       - name: List all changed files
         run: |
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
-
+          git diff
   # invoke-manual-code-scan:
   #   runs-on: ubuntu-latest
   #   environment: dev
