@@ -55,7 +55,7 @@ jobs:
             # store unique changed dir name
             unique_dirs["$top_dir"]=1
 
-          done <(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+          done < <(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
 
           echo display list of changed dirs $unique_dirs
 
