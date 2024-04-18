@@ -36,10 +36,10 @@ jobs:
           fetch-depth: 0
 
 
-      # - name: List all changed files
-      #   id: updated_dirs
-      #   run: |
-      #     git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+      - name: List all changed files
+        id: updated_dirs
+        run: |
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
 
       - name: List top-level directories with changed files
         id: top_level_dirs
