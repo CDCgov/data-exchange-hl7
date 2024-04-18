@@ -39,7 +39,8 @@ jobs:
       - name: List all changed files
         id: updated_dirs
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+          # git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+          git diff main...${{ github.head_ref }}
 
       - name: List top-level directories with changed files
         id: top_level_dirs
@@ -55,7 +56,8 @@ jobs:
             # store unique changed dir name
             unique_dirs["$top_dir"]=1
 
-          done < <(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+          done < <(git diff main...${{ github.head_ref }})
+          # done < <(git diff main... --name-only ${{ github.event.before }} ${{ github.event.after }})
 
           echo display list of changed dirs $unique_dirs
 
