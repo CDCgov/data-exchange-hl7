@@ -6,7 +6,6 @@ class FunctionConfig {
 
     val evHubSender: DedicatedEventHubSender
     val evHubSendName: String = System.getenv("EventHubSendName")
-    val psURL = System.getenv("ProcessingStatusBaseURL")
 
     init {
          //Init Event Hub connections
