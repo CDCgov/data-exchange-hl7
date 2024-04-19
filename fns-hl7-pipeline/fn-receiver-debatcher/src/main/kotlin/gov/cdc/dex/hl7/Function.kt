@@ -7,7 +7,6 @@ import com.microsoft.azure.functions.annotation.FunctionName
 import com.microsoft.azure.functions.annotation.QueueTrigger
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
-import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
@@ -242,21 +241,6 @@ class Function {
         eventReport: ReceiverEventReport,
         errorMessage: String? = null
     ): DexHL7Metadata {
-
-        val psClientUtility = PSClientUtility()
-        logger.info("Span ID : ${ routingMetadata.spanId}")
-
-        fnConfig.psURL?.let {
-            psClientUtility.sendTraceToProcessingStatus(
-                fnConfig.psURL,
-                routingMetadata.traceId,
-                routingMetadata.spanId,
-                ProcessInfo.RECEIVER_PROCESS
-            ).let {
-                if(it.isNotEmpty()) routingMetadata.spanId = it
-            }
-            logger.info("Setting processing status spanId to routingMetadata.spanId: ${routingMetadata.spanId}")
-        }
 
         val messageMetadata = MessageMetadata(
             singleOrBatch = singleOrBatch,
