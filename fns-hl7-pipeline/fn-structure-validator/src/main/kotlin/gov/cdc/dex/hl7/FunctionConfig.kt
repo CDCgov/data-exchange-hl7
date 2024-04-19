@@ -16,7 +16,6 @@ class FunctionConfig {
     val evHubSendName: String = System.getenv("EventHubSendName")
     val evHubSender : DedicatedEventHubSender
     val profileConfig : ProfileConfiguration
-    val psURL = System.getenv("ProcessingStatusBaseURL")
 
     init {
         //Init Event Hub connections
