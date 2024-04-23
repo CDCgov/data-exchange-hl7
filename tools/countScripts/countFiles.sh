@@ -1,4 +1,3 @@
-#!/bin/bash
 
 if [ -z "$1" ]
 then
@@ -11,11 +10,11 @@ echo "@@@ Counting Upload API"
 echo "@@@"
 
 echo "Counting HL7"
-az storage blob list -c "aims-celr-hl7" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefix "2024/$1" --num-results 2147483647
+az storage blob list -c "aims-celr-hl7" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefi "2024/$1" --num-results 2147483647
 
 
 echo "Counting CSV"
-az storage blob list -c "aims-celr-csv" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefix "2024/$1" --num-results 2147483647
+az storage blob list -c "aims-celr-csv" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefi "2024/$1" --num-results 2147483647
 
 
 echo "@@@"
@@ -53,6 +52,9 @@ do
   count=$(az storage blob list -c "dex" --account-key "${EZDX_ACCT_KEY}" --account-name "stezdxstg" --query "length(@)"  --prefix "$i/2024/$1" --num-results 2147483647)
   echo $(($count-25)) # Remove folder count - make sure there is one folder for each hour of the day 00 to 23, 24 total + parent folder = 25
 done
+
+count=$(az storage blob list -c "dex" --account-key "${EZDX_ACCT_KEY}" --account-name "stezdxstg" --query "length(@)"  --prefix "aims-celr-csv/2024/$1" --num-results 2147483647)
+echo "CSV: $(($count-1))" # Remove root folder counted on query above.
 
 echo "@@@"
 echo "@@@ Checking Dead letter"
