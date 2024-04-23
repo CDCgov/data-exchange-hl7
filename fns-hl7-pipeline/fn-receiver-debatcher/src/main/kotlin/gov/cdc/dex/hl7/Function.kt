@@ -46,7 +46,7 @@ class Function {
         @QueueTrigger(
             name = "message",
             queueName = "%queueName%",
-            connection = "BlobIngestConnectionString"
+            connection = "QueueConnection"
         ) message: String?,
         context: ExecutionContext
     ): DexHL7Metadata? {

@@ -44,9 +44,9 @@ class FunctionConfig {
         }
         azBlobProxy = AzureBlobProxy(ingestBlobUrl, blobIngestContName, tokenCredential)
         val evHubNamespace = try {
-            System.getenv("EventHubNamespaceUrl")
+            System.getenv("EventHubNamespace")
         } catch (e: NullPointerException) {
-            logger.error("FATAL: Missing environment variable EventHubNamespaceUrl")
+            logger.error("FATAL: Missing environment variable EventHubNamespace")
             throw e
         }
         evHubSenderOut = DedicatedEventHubSender(evHubNamespace, evHubSendName, tokenCredential)

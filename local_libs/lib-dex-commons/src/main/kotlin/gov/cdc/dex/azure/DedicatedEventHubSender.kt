@@ -7,10 +7,9 @@ import com.azure.messaging.eventhubs.EventHubClientBuilder
 import com.azure.messaging.eventhubs.EventHubProducerClient
 
 
-class DedicatedEventHubSender( evHubNamespaceUrl: String, evHubTopicName: String, tokenCredential: DefaultAzureCredential) {
+class DedicatedEventHubSender( evHubNamespace: String, evHubTopicName: String, tokenCredential: DefaultAzureCredential) {
     private val producer: EventHubProducerClient = EventHubClientBuilder()
-       // .connectionString(evHubConnStr, evHubTopicName)
-        .credential(evHubNamespaceUrl, evHubTopicName, tokenCredential)
+        .credential(evHubNamespace, evHubTopicName, tokenCredential)
         .buildProducerClient()
 
     fun disconnect() {
