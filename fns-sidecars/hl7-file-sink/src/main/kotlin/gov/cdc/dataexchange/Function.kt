@@ -82,14 +82,18 @@ class Function {
             }
             if (!routingMeta.isJsonNull) {
                 val routingMetadata = routingMeta.asJsonObject
-                val supportingMeta = routingMetadata.remove("supporting_metadata")
+                val supportingMeta = try {
+                    JsonHelper.getValueFromJson("supporting_metadata", routingMetadata)
+                } catch (e: Exception) {
+                    JsonNull.INSTANCE
+                }
 
                 // update data_stream_route to match destination folder name
                 routingMetadata.addProperty("data_stream_route", blobStorageFolderName)
 
                 // add all routing metadata json elements to blob metadata we will attach on upload
                 routingMetadata.keySet().forEach { key ->
-                    if (!routingMetadata[key].isJsonNull) {
+                    if (!routingMetadata[key].isJsonNull && key != "supporting_metadata") {
                         metaToAttach[key] = routingMetadata[key].asString
                     }
                 }
