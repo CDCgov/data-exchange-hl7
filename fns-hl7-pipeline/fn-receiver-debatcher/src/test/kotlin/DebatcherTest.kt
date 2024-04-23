@@ -190,8 +190,8 @@ class DebatcherTest {
             uploadId = uploadId,
             dataStreamId = currentMetadata.dataStreamId,
             dataStreamRoute = currentMetadata.dataStreamRoute,
-            traceId = currentMetadata.dataStreamId,
-            spanId = currentMetadata.spanId,
+            senderId = currentMetadata.senderId,
+            receivedFilename = currentMetadata.receivedFilename,
             supportingMetadata = currentMetadata.supportingMetadata
         )
     }
@@ -295,8 +295,8 @@ class DebatcherTest {
             uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
             dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
             dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
-            traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
-            spanId = getValueOrDefaultString(metaDataMap, listOf("parent_span_id", "span_id")),
+            senderId = metaDataMap["sender_id"] ?: "",
+            receivedFilename = metaDataMap["received_filename"] ?: "",
             supportingMetadata = supportingMetadata
         )
     }
