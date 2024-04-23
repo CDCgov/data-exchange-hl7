@@ -1,15 +1,18 @@
 package gov.cdc.dex.azure
 
+
+import com.azure.identity.DefaultAzureCredential
 import com.azure.storage.blob.BlobClient
 import com.azure.storage.blob.BlobContainerClient
 import com.azure.storage.blob.BlobServiceClientBuilder
 
-class AzureBlobProxy(connectionStr: String, container: String) {
+class AzureBlobProxy(blobStorageUrl: String, container: String, tokenCredential: DefaultAzureCredential) {
     private val blobContainerClient: BlobContainerClient
 
     init {
         blobContainerClient = BlobServiceClientBuilder()
-            .connectionString(connectionStr)
+            .endpoint(blobStorageUrl)
+            .credential(tokenCredential)
             .buildClient()
             .getBlobContainerClient(container)
     }

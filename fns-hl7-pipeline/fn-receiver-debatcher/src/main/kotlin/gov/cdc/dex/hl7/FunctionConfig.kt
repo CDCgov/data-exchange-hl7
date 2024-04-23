@@ -1,5 +1,7 @@
 package gov.cdc.dex.hl7
 
+import com.azure.identity.DefaultAzureCredential
+import com.azure.identity.DefaultAzureCredentialBuilder
 import gov.cdc.dex.azure.AzureBlobProxy
 import gov.cdc.dex.azure.DedicatedEventHubSender
 import org.slf4j.Logger
@@ -9,7 +11,10 @@ class FunctionConfig {
     val azBlobProxy: AzureBlobProxy
     val evHubSenderOut: DedicatedEventHubSender
     val evHubSenderReports: DedicatedEventHubSender
+    private val tokenCredential : DefaultAzureCredential = DefaultAzureCredentialBuilder().build()
     private val logger : Logger = LoggerFactory.getLogger(this.javaClass.simpleName)
+
+
     val blobIngestContName: String = try {
         System.getenv("BlobIngestContainerName")
     } catch (e: NullPointerException) {
@@ -31,21 +36,21 @@ class FunctionConfig {
 
     init {
          //Init Azure Storage connection
-        val ingestBlobConnStr = try {
-            System.getenv("BlobIngestConnectionString")
+        val ingestBlobUrl = try {
+            System.getenv("BlobIngestUrl")
         } catch (e: NullPointerException) {
-            logger.error("FATAL: Missing environment variable BlobIngestConnectionString")
+            logger.error("FATAL: Missing environment variable BlobIngestUrl")
             throw e
         }
-        azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
-        val evHubConnStr = try {
-            System.getenv("EventHubConnectionString")
+        azBlobProxy = AzureBlobProxy(ingestBlobUrl, blobIngestContName, tokenCredential)
+        val evHubNamespace = try {
+            System.getenv("EventHubNamespaceUrl")
         } catch (e: NullPointerException) {
-            logger.error("FATAL: Missing environment variable EventHubConnectionString")
+            logger.error("FATAL: Missing environment variable EventHubNamespaceUrl")
             throw e
         }
-        evHubSenderOut = DedicatedEventHubSender(evHubConnStr, evHubSendName)
-        evHubSenderReports = DedicatedEventHubSender(evHubConnStr, evReportsHubName)
+        evHubSenderOut = DedicatedEventHubSender(evHubNamespace, evHubSendName, tokenCredential)
+        evHubSenderReports = DedicatedEventHubSender(evHubNamespace, evReportsHubName, tokenCredential)
 
     }
 }

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>receiver-debatcher</artifactId>
-    <version>0.0.43-SNAPSHOT</version>
+    <version>0.0.47-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DEX Fns-Pipeline :: receiver-debatcher</name>
     <scm>
@@ -25,7 +25,7 @@
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <gson.version>2.10.1</gson.version>
         <hl7pet.version>1.2.7.1</hl7pet.version>
-        <lib-dex-commons.version>0.0.46-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.47-SNAPSHOT</lib-dex-commons.version>
         <junitjupiter.version>5.9.2</junitjupiter.version>
     </properties>
     <dependencyManagement>
@@ -82,18 +82,18 @@
             <groupId>com.azure</groupId>
             <artifactId>azure-messaging-eventhubs</artifactId>
         </dependency>
-
-       <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-identity</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-blob</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.azure/azure-storage-blob -->
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-storage-blob</artifactId>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -101,7 +101,6 @@
             <version>${junitjupiter.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
