@@ -66,7 +66,7 @@ class Function {
                 )
             )
             // create blob client
-            val blobName = event.eventData.url.substringAfter("/${fnConfig.blobIngestContName}/")
+            val blobName = event.eventData.url.substringAfter("/${fnConfig.blobIngestContainerName}/")
             logger.info("DEX::Reading blob: $blobName")
             val blobClient = fnConfig.azBlobProxy.getBlobClient(blobName)
 

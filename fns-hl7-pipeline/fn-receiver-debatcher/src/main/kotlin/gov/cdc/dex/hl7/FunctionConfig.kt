@@ -11,11 +11,9 @@ class FunctionConfig {
     val azBlobProxy: AzureBlobProxy
     val evHubSenderOut: DedicatedEventHubSender
     val evHubSenderReports: DedicatedEventHubSender
-    private val tokenCredential : DefaultAzureCredential = DefaultAzureCredentialBuilder().build()
-    private val logger : Logger = LoggerFactory.getLogger(this.javaClass.simpleName)
+    private val logger: Logger = LoggerFactory.getLogger(this.javaClass.simpleName)
 
-
-    val blobIngestContName: String = try {
+   val blobIngestContainerName : String = try {
         System.getenv("BlobIngestContainerName")
     } catch (e: NullPointerException) {
         logger.error("FATAL: Missing environment variable BlobIngestContainerName")
@@ -23,26 +21,36 @@ class FunctionConfig {
     }
     val evHubSendName: String = try {
         System.getenv("EventHubSendName")
-    } catch(e: NullPointerException) {
+    } catch (e: NullPointerException) {
         logger.error("FATAL: Missing environment variable EventHubSendName")
         throw e
     }
     val evReportsHubName: String = try {
         System.getenv("EventReportsHubName")
     } catch (e: NullPointerException) {
-        logger.error ("FATAL: Missing environment variable EventReportsHubName")
+        logger.error("FATAL: Missing environment variable EventReportsHubName")
         throw e
     }
-
     init {
-         //Init Azure Storage connection
+        val identityClientId : String = try {
+            System.getenv("QueueConnection__clientId")
+        } catch (e: NullPointerException) {
+            logger.error("FATAL: Missing environment variable QueueConnection__clientId")
+            throw e
+        }
+        // set up the application to use a Managed Identity
+       val tokenCredential = DefaultAzureCredentialBuilder()
+            .managedIdentityClientId(identityClientId)
+            .build()
+
+        //Init Azure Storage connection
         val ingestBlobUrl = try {
             System.getenv("BlobIngestUrl")
         } catch (e: NullPointerException) {
             logger.error("FATAL: Missing environment variable BlobIngestUrl")
             throw e
         }
-        azBlobProxy = AzureBlobProxy(ingestBlobUrl, blobIngestContName, tokenCredential)
+        azBlobProxy = AzureBlobProxy(ingestBlobUrl, blobIngestContainerName, tokenCredential)
         val evHubNamespace = try {
             System.getenv("EventHubNamespace")
         } catch (e: NullPointerException) {
