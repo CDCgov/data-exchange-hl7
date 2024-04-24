@@ -2,6 +2,7 @@ package gov.cdc.dex.azure.health
 
 import com.azure.core.amqp.AmqpRetryMode
 import com.azure.core.amqp.AmqpRetryOptions
+import com.azure.core.credential.TokenCredential
 import com.azure.cosmos.CosmosClient
 import com.azure.cosmos.CosmosClientBuilder
 import com.azure.messaging.eventhubs.EventHubClientBuilder
@@ -45,6 +46,22 @@ class DependencyChecker {
         return checkDependency(AzureDependency.EVENT_HUB) {
             val client: EventHubProducerClient = EventHubClientBuilder()
                 .connectionString(connectionString, eventHubName)
+                .retryOptions(retryOptions)
+                .buildProducerClient()
+            client.partitionIds.count()
+            client.close()
+        }
+    }
+
+    fun checkEventHub(eventHubNamespace: String, eventHubName: String, tokenCredential: TokenCredential) : DependencyHealthData {
+        val retryOptions = AmqpRetryOptions()
+            .setMaxRetries(1)
+            .setMode(AmqpRetryMode.FIXED)
+            .setTryTimeout(Duration.ofSeconds(10))
+
+        return checkDependency(AzureDependency.EVENT_HUB) {
+            val client: EventHubProducerClient = EventHubClientBuilder()
+                .credential(eventHubNamespace, eventHubName, tokenCredential)
                 .retryOptions(retryOptions)
                 .buildProducerClient()
             client.partitionIds.count()

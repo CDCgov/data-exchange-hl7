@@ -32,7 +32,7 @@ class Function {
         @EventHubTrigger(
             name = "msg",
             eventHubName = "%EventHubReceiveName%",
-            connection = "EventHubConnectionString",
+            connection = "EventHubConnection",
             consumerGroup = "%EventHubConsumerGroup%",
         )
         message: List<String?>,
