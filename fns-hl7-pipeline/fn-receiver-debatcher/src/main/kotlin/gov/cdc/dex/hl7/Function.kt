@@ -27,14 +27,13 @@ class Function {
         const val METADATA = "Metadata"
         val gson: Gson = GsonBuilder().serializeNulls().create()
         val knownMetadata: Set<String> = setOf(
-            "data_stream_id", "meta_destination_id",
-            "data_stream_route", "meta_ext_event",
+            "data_stream_id",
+            "data_stream_route",
             "data_producer_id",
-            "jurisdiction", "reporting_jurisdiction", "meta_organization",
-            "sender_id", "user_id", "meta_username",
+            "jurisdiction",
+            "sender_id",
             "upload_id", "tus_tguid",
-            "trace_id",
-            "parent_span_id", "span_id"
+            "received_filename"
         )
 
         val fnConfig = FunctionConfig()
@@ -224,8 +223,8 @@ class Function {
             uploadId = newId,
             dataStreamId = currentMetadata.dataStreamId,
             dataStreamRoute = currentMetadata.dataStreamRoute,
-            traceId = currentMetadata.dataStreamId,
-            spanId = currentMetadata.spanId,
+            senderId = currentMetadata.senderId,
+            receivedFilename = currentMetadata.receivedFilename,
             supportingMetadata = currentMetadata.supportingMetadata
         )
     }
@@ -353,13 +352,13 @@ class Function {
             dataProducerId = metaDataMap["data_producer_id"] ?: "",
             jurisdiction = getValueOrDefaultString(
                 metaDataMap,
-                listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
+                listOf("jurisdiction")
             ),
             uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
-            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
-            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
-            traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
-            spanId = getValueOrDefaultString(metaDataMap, listOf("parent_span_id", "span_id")),
+            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id")),
+            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route")),
+            senderId = metaDataMap["sender_id"] ?: "",
+            receivedFilename = metaDataMap["received_filename"] ?: "",
             supportingMetadata = supportingMetadata
         )
     }
