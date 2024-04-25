@@ -55,7 +55,7 @@ class MetadataTest {
 //        val provenance = DEXProvenance("senderID", "system", "filePath", "fileTS", 10, null)
 //        val fileMD = DEXFileMetadata(reportingJurisdiction = "13", uploadID = "", provenance = provenance, dataStream = dataStream, tracing = tracing)
 
-        val routingInfo = RoutingMetadata("filePPath", "fileTS", "10", "orgA", "uploadID", "dsid", "dsroute", "trace", "span", "span")
+        val routingInfo = RoutingMetadata("filePPath", "fileTS", "10", "orgA", "orgB","uploadID", "dsid", "dsroute", "sender1", "testfile.txt")
         val stageMD = MockEventGridStageMetadata("stgName", "stgVersion", "sttus", listOf(), "ts")
         val messageMD = MessageMetadata("msgUUID","SINGLE", 1, "hash")
         val summary = SummaryInfo("All good!")
