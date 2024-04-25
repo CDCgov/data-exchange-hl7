@@ -1,6 +1,5 @@
 package gov.cdc.dex.hl7
 
-import com.azure.identity.DefaultAzureCredential
 import com.azure.identity.DefaultAzureCredentialBuilder
 import gov.cdc.dex.azure.AzureBlobProxy
 import gov.cdc.dex.azure.DedicatedEventHubSender

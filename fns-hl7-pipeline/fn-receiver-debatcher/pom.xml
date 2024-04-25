@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>receiver-debatcher</artifactId>
-    <version>0.0.47-SNAPSHOT</version>
+    <version>0.0.44-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DEX Fns-Pipeline :: receiver-debatcher</name>
     <scm>
@@ -142,6 +142,10 @@
                         <property>
                             <name>FN_VERSION</name>
                             <value>${project.version}</value>
+                        </property>
+                        <property>
+                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
+                            <value>1</value>
                         </property>
                     </appSettings>
                 </configuration>
