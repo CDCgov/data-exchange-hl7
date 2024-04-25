@@ -2,7 +2,6 @@ package gov.cdc.dex.azure
 
 import com.azure.core.amqp.exception.AmqpException
 import com.azure.core.credential.TokenCredential
-import com.azure.identity.DefaultAzureCredential
 import com.azure.messaging.eventhubs.EventData
 import com.azure.messaging.eventhubs.EventHubClientBuilder
 import com.azure.messaging.eventhubs.EventHubProducerClient
