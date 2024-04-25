@@ -9,7 +9,11 @@ class TestDedicatedEHSender {
     fun testDedicatedSenderCredential() {
         val ehNamespace = "ocio-ede-dev-eventhub-namespace.servicebus.windows.net"
         val ehHubName = "hl7-recdeb-reports"
-        val token = DefaultAzureCredentialBuilder().build()
+        val clientId = System.getenv("EventHubClientId")
+
+        val token = DefaultAzureCredentialBuilder()
+            .managedIdentityClientId(clientId)
+            .build()
 
         val sender = DedicatedEventHubSender(ehNamespace, ehHubName, token)
         val ids = sender.getPartitionIds()
