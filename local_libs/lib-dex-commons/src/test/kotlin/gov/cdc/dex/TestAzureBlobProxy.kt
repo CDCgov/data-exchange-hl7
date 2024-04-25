@@ -10,7 +10,10 @@ class TestAzureBlobProxy {
     fun testBlobProxyCredential() {
         val url = "https://ocioedemessagesadev.core.windows.net"
         val container = "hl7ingress"
-        val credential = DefaultAzureCredentialBuilder().build()
+        val clientId = System.getenv("BlobStorageClientId")
+        val credential = DefaultAzureCredentialBuilder()
+            .managedIdentityClientId(clientId)
+            .build()
 
         val blobProxy = AzureBlobProxy(url, container, credential)
         blobProxy.getBlobClient("unitTests/BatchedMessage.doNotDelete.txt")
