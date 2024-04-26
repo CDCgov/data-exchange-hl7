@@ -122,9 +122,9 @@ class Function {
                     metaToAttach
                 )
                 if (succeeded) {
-                    logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dateStructure")
+                    logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dataStreamId/$dateStructure")
                 } else {
-                    logger.error("DEX::ERROR: Unable to save message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dateStructure")
+                    logger.error("DEX::ERROR: Unable to save message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dataStreamId/$dateStructure")
                 }
             } catch (e: Exception) {
                 // TODO send to quarantine?
