@@ -24,7 +24,7 @@
         <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
         <kotlin.version>1.9.0</kotlin.version>
         <hl7pet.version>1.2.7.2</hl7pet.version>
-        <lib-dex-commons.version>0.0.42-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.47-SNAPSHOT</lib-dex-commons.version>
         <gson.version>2.10.1</gson.version>
     </properties>
 
@@ -78,6 +78,10 @@
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-messaging-servicebus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-identity</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

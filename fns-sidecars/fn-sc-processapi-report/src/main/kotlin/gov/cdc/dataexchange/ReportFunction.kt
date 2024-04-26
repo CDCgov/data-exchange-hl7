@@ -1,6 +1,7 @@
 package gov.cdc.dataexchange
 
 import com.azure.messaging.servicebus.ServiceBusMessage
+import com.azure.messaging.servicebus.ServiceBusMessageBatch
 import com.azure.messaging.servicebus.models.CreateMessageBatchOptions
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
@@ -31,7 +32,7 @@ class ReportFunction {
         @EventHubTrigger(
             name = "msg",
             eventHubName = "%EventHubReceiveName%",
-            connection = "EventHubConnectionString",
+            connection = "EventHubConnection",
             consumerGroup = "%EventHubConsumerGroup%",
             cardinality = Cardinality.MANY
         ) records: List<String>
@@ -49,12 +50,10 @@ class ReportFunction {
                 val sbMessage = ServiceBusMessage(processingStatusJson)
                 // add message to batch
                 if (!batch.tryAddMessage(sbMessage)) {
-                    fnConfig.serviceBusSender.sendMessages(batch)
-                    logger.info("REPORT::Sending batch of ${batch.count} messages")
+                    sendMessages(batch)
                     batch = fnConfig.serviceBusSender.createMessageBatch(
                         batchOptions.setMaximumSizeInBytes(fnConfig.maxMessageSize)
                     )
-                    logger.info("REPORT::Batch send completed")
                     // add the message we could not add before
                     if (!batch.tryAddMessage(sbMessage)) {
                         logger.error("REPORT::[${i + 1}] MESSAGE TOO LARGE ERROR: upload_id: ${processingStatusSchema.uploadId}")
@@ -66,22 +65,29 @@ class ReportFunction {
                 }//.if
             } catch (e: JsonSyntaxException) {
                 logger.error("REPORT::JSON Syntax Error: ${e.message}")
-            } catch (e: IllegalStateException) {
-                logger.error("REPORT::Illegal State Error: ${e.message}")
             } catch (e: Exception) {
-                e.printStackTrace()
                 logger.error("REPORT::General Error: ${e.message}")
             }
         } //.for
         if (batch.count > 0) {
             try {
-                logger.info("REPORT::Sending batch of ${batch.count} messages")
-                fnConfig.serviceBusSender.sendMessages(batch)
-                logger.info("REPORT::Batch send completed")
+                sendMessages(batch)
             } catch (e: Exception) {
                 logger.error("REPORT::ERROR sending batch to Service Bus queue ${fnConfig.sbQueue}: ${e.message}")
                 //TODO: Unsure what else to do at this point? Send to Storage Account?
             }
+        }
+    }
+
+    private fun sendMessages(batch: ServiceBusMessageBatch) {
+        try {
+            logger.info("REPORT::Sending batch of ${batch.count} messages")
+            fnConfig.serviceBusSender.sendMessages(batch)
+            logger.info("REPORT::Batch send completed")
+        } catch (e: Exception) {
+            fnConfig.createServiceBusSender()
+            // try again
+            fnConfig.serviceBusSender.sendMessages(batch)
         }
     }
 
