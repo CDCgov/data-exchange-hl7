@@ -5,7 +5,6 @@ import com.azure.storage.blob.models.AccessTier
 import com.azure.storage.blob.models.BlobHttpHeaders
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
-import gov.cdc.dex.azure.AzureBlobProxy
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.UnknownPropertyError
 import io.netty.channel.unix.Errors.NativeIoException
@@ -32,7 +31,7 @@ class Function {
         @EventHubTrigger(
             name = "msg",
             eventHubName = "%EventHubReceiveName%",
-            connection = "EventHubConnectionString",
+            connection = "EventHubConnection",
             consumerGroup = "%EventHubConsumerGroup%"
         ) messages: List<String?>
     ) {
@@ -145,7 +144,7 @@ class Function {
             .setContentLanguage("en-US")
             .setContentType("binary")
 
-        var timeToWait = fnConfig.bloblUploadRetryDelay.toLong()
+        var timeToWait = fnConfig.blobUploadRetryDelay.toLong()
         val timeout = fnConfig.blobUploadTimeout.toLong()
         var mustRetry: Boolean
         var retries = fnConfig.blobUploadMaxRetries.toInt()
@@ -162,8 +161,7 @@ class Function {
             } catch (ex: NativeIoException) {
                 logger.error("Error in connection: ${ex.message}")
                 // reestablish connection
-                fnConfig.azureBlobProxy =
-                    AzureBlobProxy(fnConfig.blobStorageConnectionString, fnConfig.blobStorageContainerName)
+                fnConfig.connectAzureBlobProxy()
                 true
             } catch (e: Exception) {
                 logger.error("ERROR in saveBlobToContainer: ${e.javaClass.canonicalName}: ${e.message}")

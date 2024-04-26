@@ -24,7 +24,7 @@
         <functions.version>3.0.0</functions.version>
         <kotlin.version>1.9.0</kotlin.version>
         <hl7pet.version>1.2.7.2</hl7pet.version>
-        <lib-dex-commons.version>0.0.46-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.47-SNAPSHOT</lib-dex-commons.version>
         <gson.version>2.10.1</gson.version>
     </properties>
 
@@ -37,6 +37,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -111,9 +112,11 @@
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-messaging-eventhubs</artifactId>
-            <version>5.16.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-identity</artifactId>
+        </dependency>
         <dependency>
             <groupId>gov.cdc.dex</groupId>
             <artifactId>lib-dex-commons</artifactId>
