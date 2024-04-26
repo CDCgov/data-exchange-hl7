@@ -39,10 +39,7 @@ class ReportFunction {
     ) {
         val inputRecordCount = records.size
         logger.info("REPORT::Receiving $inputRecordCount records.")
-        var batch = fnConfig.serviceBusSender.createMessageBatch(
-            batchOptions.setMaximumSizeInBytes(fnConfig.maxMessageSize)
-        )
-
+        var batch = createNewBatch()
         for ((i, record) in records.withIndex()) {
             try {
                 val processingStatusSchema = createProcessingStatusSchema(record)
@@ -51,9 +48,7 @@ class ReportFunction {
                 // add message to batch
                 if (!batch.tryAddMessage(sbMessage)) {
                     sendMessages(batch)
-                    batch = fnConfig.serviceBusSender.createMessageBatch(
-                        batchOptions.setMaximumSizeInBytes(fnConfig.maxMessageSize)
-                    )
+                    batch = createNewBatch()
                     // add the message we could not add before
                     if (!batch.tryAddMessage(sbMessage)) {
                         logger.error("REPORT::[${i + 1}] MESSAGE TOO LARGE ERROR: upload_id: ${processingStatusSchema.uploadId}")
@@ -66,7 +61,7 @@ class ReportFunction {
             } catch (e: JsonSyntaxException) {
                 logger.error("REPORT::JSON Syntax Error: ${e.message}")
             } catch (e: Exception) {
-                logger.error("REPORT::General Error: ${e.message}")
+                logger.error("REPORT::Error: ${e.message}")
             }
         } //.for
         if (batch.count > 0) {
@@ -80,15 +75,15 @@ class ReportFunction {
     }
 
     private fun sendMessages(batch: ServiceBusMessageBatch) {
-        try {
-            logger.info("REPORT::Sending batch of ${batch.count} messages")
-            fnConfig.serviceBusSender.sendMessages(batch)
-            logger.info("REPORT::Batch send completed")
-        } catch (e: Exception) {
-            fnConfig.createServiceBusSender()
-            // try again
-            fnConfig.serviceBusSender.sendMessages(batch)
-        }
+        logger.info("REPORT::Sending batch of ${batch.count} messages")
+        fnConfig.serviceBusSender.sendMessages(batch)
+        logger.info("REPORT::Batch send completed")
+    }
+
+    private fun createNewBatch() : ServiceBusMessageBatch {
+        return fnConfig.serviceBusSender.createMessageBatch(
+            batchOptions.setMaximumSizeInBytes(fnConfig.maxMessageSize)
+        )
     }
 
     private fun createProcessingStatusSchema(record: String): ProcessingStatusSchema {
