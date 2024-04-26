@@ -6,6 +6,7 @@ from azure.cosmos.exceptions import CosmosResourceNotFoundError
 from azure.storage.blob import BlobServiceClient
 from azure.cosmos import CosmosClient, PartitionKey
 
+
 data = {}
 jsonObj = {}
 # Check we have command line argument
@@ -18,7 +19,6 @@ date_arg = sys.argv[1]
 
 
 def get_blog_storage_list_count(container_name, blob_service_client, prefix):
-    print(prefix)
     blobs = blob_service_client.get_container_client(container_name).walk_blobs(name_starts_with=prefix + "/",
                                                                                 delimiter='/')
     # Get the count of blobs
@@ -37,6 +37,17 @@ def fetch_and_prase_json(url):
         print("Error fetching data:", e)
         return None
 
+def count_blobs(container_name, blob_service_client, prefix):
+    # Initialize counts for folders and blobs
+    folder_count = 0
+    blob_count = 0
+    #blobs = blob_service_client.get_container_client(container_name).walk_blobs(name_starts_with=prefix + "/")
+    for blob in  blob_service_client.get_container_client(container_name).list_blobs(name_starts_with=prefix):
+        blob_count += 1
+
+    return blob_count
+
+
 print("@@@")
 print("@@@ Counting Upload API")
 print("@@@")
@@ -54,7 +65,7 @@ data['upload_api_hl7_count'] = count_hl7
 print("Counting CSV")
 count_csv = get_blog_storage_list_count("aims-celr-csv", blob_service_client, "2024/" + date_arg)
 print(count_csv)
-data['upload_api_csv_count'] = count_hl7
+data['upload_api_csv_count'] = count_csv
 
 print("@@@")
 print("@@@ Counting routeingress")
@@ -78,14 +89,14 @@ data['routeingress_csv_count'] = count_csv
 folders = ["hl7_out_recdeb", "hl7_out_redacted", "hl7_out_validation_report", "hl7_out_json", "hl7_out_lake_seg"]
 
 print("@@@")
-print("@@@ Counting hl7 outputs")
+print("@@@ Counting hl7 routeingress outputs")
 print("@@@")
 
 for folder in folders:
     print("Counting  " + folder + "/2024/" + date_arg);
-    count = get_blog_storage_list_count("routeingress", blob_service_client, folder + "/2024/" + date_arg)
+    count = count_blobs("routeingress", blob_service_client, folder + "/2024/" + date_arg)
     print(count)
-    jsonObj['routeingress_' + 'folder'] = count
+    jsonObj['routeingress_' + folder] = count
 
 data['hl7_outputs_count'] = jsonObj
 
@@ -114,10 +125,11 @@ folders = ("hl7_out_recdeb", "hl7_out_redacted", "hl7_validation_report", "hl7_o
 jsonObj = {}
 for folder in folders:
     print("Counting  " + folder + "/2024/" + date_arg);
+    folder_count = get_blog_storage_list_count("dex", blob_service_client, folder + "/2024/" + date_arg)
 
-    count = get_blog_storage_list_count("dex", blob_service_client, folder + "/2024/" + date_arg)
-    if (count > 25):
-        count = count - 25
+    count = count_blobs("dex", blob_service_client, folder + "/2024/" + date_arg)
+    if (count > folder_count):
+        count = count - folder_count-1
     print(count)
     jsonObj['dex_' + folder] = count
 
