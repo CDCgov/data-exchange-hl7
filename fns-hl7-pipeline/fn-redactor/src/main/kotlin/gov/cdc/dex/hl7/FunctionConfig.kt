@@ -12,9 +12,9 @@ class FunctionConfig {
     val evHubSendName: String = System.getenv("EventHubSendName")
     
     init {
-         //Init Event Hub connections
-        val evHubNamespace = System.getenv("EventHubConnection__fullyQualifiedNamespace")
-        val entraClientId = System.getenv("EventHubConnection__clientId")
+         //Init Event Hub connection
+        val entraClientId : String = System.getenv("EventHubConnection__clientId")
+        val evHubNamespace: String = System.getenv("EventHubConnection__fullyQualifiedNamespace")
         val tokenCredential = DefaultAzureCredentialBuilder()
             .managedIdentityClientId(entraClientId)
             .build()
@@ -23,4 +23,5 @@ class FunctionConfig {
         val profileConfigJson = FunctionConfig::class.java.getResource("/$PROFILE_CONFIG_FILE_PATH")?.readText()
         profileConfig = JsonHelper.gson.fromJson(profileConfigJson, ProfileConfiguration::class.java)
     }
+
 }

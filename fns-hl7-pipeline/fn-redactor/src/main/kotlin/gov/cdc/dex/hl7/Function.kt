@@ -121,7 +121,6 @@ class Function {
         } catch (e: Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
         }
-
         return inputEvent
     }
 
