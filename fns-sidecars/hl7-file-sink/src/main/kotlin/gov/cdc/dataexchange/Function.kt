@@ -160,8 +160,6 @@ class Function {
                 (response.statusCode !in listOf(200, 201))
             } catch (ex: NativeIoException) {
                 logger.error("Error in connection: ${ex.message}")
-                // reestablish connection
-                fnConfig.connectAzureBlobProxy()
                 true
             } catch (e: Exception) {
                 logger.error("ERROR in saveBlobToContainer: ${e.javaClass.canonicalName}: ${e.message}")

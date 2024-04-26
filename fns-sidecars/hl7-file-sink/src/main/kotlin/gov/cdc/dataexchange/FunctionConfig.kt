@@ -6,7 +6,7 @@ import kotlin.system.exitProcess
 import gov.cdc.dex.azure.AzureBlobProxy
 class FunctionConfig {
     val blobStorageContainerName: String
-    lateinit var azureBlobProxy: AzureBlobProxy
+    var azureBlobProxy: AzureBlobProxy
     val blobStorageFolderName: String
     private val blobStorageUri: String
     val blobUploadTimeout: String
@@ -44,17 +44,14 @@ class FunctionConfig {
             exitProcess(1)
         }
 
-        connectAzureBlobProxy()
-        blobUploadTimeout = System.getenv("BlobUploadTimeoutSeconds") ?: "60"
-        blobUploadRetryDelay = System.getenv("BlobUploadRetryDelaySeconds") ?: "10"
-        blobUploadMaxRetries = System.getenv("BlobUploadMaxRetries") ?: "3"
-    }
-
-    fun connectAzureBlobProxy() {
         val tokenCredential = DefaultAzureCredentialBuilder()
             .managedIdentityClientId(identityClientId)
             .build()
 
         azureBlobProxy = AzureBlobProxy(blobStorageUri, blobStorageContainerName, tokenCredential)
+        blobUploadTimeout = System.getenv("BlobUploadTimeoutSeconds") ?: "60"
+        blobUploadRetryDelay = System.getenv("BlobUploadRetryDelaySeconds") ?: "10"
+        blobUploadMaxRetries = System.getenv("BlobUploadMaxRetries") ?: "3"
     }
+
 }
