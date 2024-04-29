@@ -109,6 +109,7 @@ class Function {
             logger.info("Send to event hub completed")
         } catch (e: Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
+            throw e
         }
         return returnValue
     }
@@ -134,18 +135,13 @@ class Function {
         logger.error(description)
         logger.info("Retrying send without output for message UUID $msgId")
         val msg = gsonWithNullsOn.toJson(message)
-        try {
-            val errors = fnConfig.evHubSender.send(msg)
-            if (errors.isEmpty()) {
-                logger.info("Second attempt successful for message UUID $msgId")
-            } else {
-                // not much else we can do
-                logger.error("SECOND ATTEMPT FAILED for message UUID $msgId. Message still too large.")
-            }
-        } catch (e: Exception) {
-            logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
+        val errors = fnConfig.evHubSender.send(msg)
+        if (errors.isEmpty()) {
+            logger.info("Second attempt successful for message UUID $msgId")
+        } else {
+            // not much else we can do
+            logger.error("SECOND ATTEMPT FAILED for message UUID $msgId. Message still too large.")
         }
-
     }
 
     private fun updateMetadataAndDeliver(
