@@ -116,6 +116,7 @@ class Function {
             logger.info("Sent batch of ${outList.size} messages to ${fnConfig.evHubSendName}")
         } catch (e : Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
+            throw e
         }
 
         return outList
