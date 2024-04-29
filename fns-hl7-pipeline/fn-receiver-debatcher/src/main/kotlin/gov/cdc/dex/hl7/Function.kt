@@ -203,6 +203,7 @@ class Function {
                 fnConfig.evHubSenderReports.send(eventReportList)
             } catch (e: Exception) {
                 logger.error("Unable to send to event hub ${fnConfig.evReportsHubName}: ${e.message}")
+                throw e
             }
         }
         return msgMetadata
