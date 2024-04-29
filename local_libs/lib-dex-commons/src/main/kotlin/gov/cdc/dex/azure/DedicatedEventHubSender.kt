@@ -1,14 +1,15 @@
 package gov.cdc.dex.azure
 
 import com.azure.core.amqp.exception.AmqpException
+import com.azure.core.credential.TokenCredential
 import com.azure.messaging.eventhubs.EventData
 import com.azure.messaging.eventhubs.EventHubClientBuilder
 import com.azure.messaging.eventhubs.EventHubProducerClient
 
 
-class DedicatedEventHubSender( evHubConnStr: String, evHubTopicName: String) {
+class DedicatedEventHubSender( evHubNamespace: String, evHubTopicName: String, tokenCredential: TokenCredential) {
     private val producer: EventHubProducerClient = EventHubClientBuilder()
-        .connectionString(evHubConnStr, evHubTopicName)
+        .credential(evHubNamespace, evHubTopicName, tokenCredential)
         .buildProducerClient()
 
     fun disconnect() {

@@ -54,8 +54,8 @@ class DebatcherTest {
         try {
             // initialize event report metadata
             val eventMetadata = ReceiverEventMetadata(stage =
-                    ReceiverEventStageMetadata(startProcessingTime = startTime,
-                         eventTimestamp = Date().toIsoString()))
+            ReceiverEventStageMetadata(startProcessingTime = startTime,
+                eventTimestamp = Date().toIsoString()))
             val testFileIS = this::class.java.getResource(filePath).openStream()
             // Add routing data to Report object for this file
             val eventReport = ReceiverEventReport()

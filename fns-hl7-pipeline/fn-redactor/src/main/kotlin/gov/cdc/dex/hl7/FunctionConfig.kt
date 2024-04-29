@@ -1,5 +1,6 @@
 package gov.cdc.dex.hl7
 
+import com.azure.identity.DefaultAzureCredentialBuilder
 import gov.cdc.dex.azure.DedicatedEventHubSender
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.ProfileConfiguration
@@ -11,11 +12,16 @@ class FunctionConfig {
     val evHubSendName: String = System.getenv("EventHubSendName")
     
     init {
-         //Init Event Hub connections
-        val evHubConnStr = System.getenv("EventHubConnectionString")
-        evHubSender = DedicatedEventHubSender(evHubConnStr, evHubSendName)
+         //Init Event Hub connection
+        val entraClientId : String = System.getenv("EventHubConnection__clientId")
+        val evHubNamespace: String = System.getenv("EventHubConnection__fullyQualifiedNamespace")
+        val tokenCredential = DefaultAzureCredentialBuilder()
+            .managedIdentityClientId(entraClientId)
+            .build()
+        evHubSender = DedicatedEventHubSender(evHubNamespace, evHubSendName, tokenCredential)
 
         val profileConfigJson = FunctionConfig::class.java.getResource("/$PROFILE_CONFIG_FILE_PATH")?.readText()
         profileConfig = JsonHelper.gson.fromJson(profileConfigJson, ProfileConfiguration::class.java)
     }
+
 }

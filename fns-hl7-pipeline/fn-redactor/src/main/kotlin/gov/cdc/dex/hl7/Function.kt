@@ -32,7 +32,7 @@ class Function {
         @EventHubTrigger(
             name = "msg",
             eventHubName = "%EventHubReceiveName%",
-            connection = "EventHubConnectionString",
+            connection = "EventHubConnection",
             consumerGroup = "%EventHubConsumerGroup%",
         )
         message: List<String?>,
@@ -122,7 +122,6 @@ class Function {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
             throw e
         }
-
         return inputEvent
     }
 

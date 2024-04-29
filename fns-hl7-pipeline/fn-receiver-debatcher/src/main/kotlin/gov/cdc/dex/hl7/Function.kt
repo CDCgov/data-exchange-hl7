@@ -45,7 +45,7 @@ class Function {
         @QueueTrigger(
             name = "message",
             queueName = "%queueName%",
-            connection = "BlobIngestConnectionString"
+            connection = "QueueConnection"
         ) message: String?,
         context: ExecutionContext
     ): DexHL7Metadata? {
@@ -65,7 +65,7 @@ class Function {
                 )
             )
             // create blob client
-            val blobName = event.eventData.url.substringAfter("/${fnConfig.blobIngestContName}/")
+            val blobName = event.eventData.url.substringAfter("/${fnConfig.blobIngestContainerName}/")
             logger.info("DEX::Reading blob: $blobName")
             val blobClient = fnConfig.azBlobProxy.getBlobClient(blobName)
 
