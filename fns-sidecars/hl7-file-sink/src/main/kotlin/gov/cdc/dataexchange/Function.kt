@@ -125,7 +125,9 @@ class Function {
                 if (succeeded) {
                     logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dateStructure")
                 } else {
-                    logger.error("DEX::ERROR: Unable to save message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dateStructure")
+                    val msg = "Unable to save message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dateStructure"
+                    logger.error("DEX::ERROR: $msg")
+                    throw Exception("Error in file sink: $msg")
                 }
             } catch (e: Exception) {
                 // TODO send to quarantine?
