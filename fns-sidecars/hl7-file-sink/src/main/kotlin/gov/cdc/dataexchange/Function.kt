@@ -6,15 +6,15 @@ import com.azure.storage.blob.models.BlobHttpHeaders
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
 import gov.cdc.dex.azure.AzureBlobProxy
+import gov.cdc.dex.util.DateHelper
+import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.UnknownPropertyError
 import io.netty.channel.unix.Errors.NativeIoException
 import org.slf4j.LoggerFactory
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
@@ -77,7 +77,7 @@ class Function {
             val fileTimestamp = try {
                 JsonHelper.getValueFromJson("routing_metadata.ingested_file_timestamp", inputEvent).asString
             } catch (e: Exception) {
-                LocalDateTime.now(ZoneOffset.UTC).toString()
+                OffsetDateTime.now(ZoneId.of("UTC")).toIsoString()
             }
 
             val dateTimeForStorage = ingestDateTime ?: fileTimestamp
@@ -209,7 +209,8 @@ class Function {
     }
 
     private fun getFoldersFromDateString(datePattern: String, dateTimeString: String): String {
-        val datetime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_DATE_TIME)
+        val datetime = LocalDateTime.parse(dateTimeString,
+            DateTimeFormatter.ofPattern(DateHelper.ISO_8601_24H_FULL_FORMAT))
         val formatter = DateTimeFormatter.ofPattern(datePattern)
         return datetime.format(formatter)
     }

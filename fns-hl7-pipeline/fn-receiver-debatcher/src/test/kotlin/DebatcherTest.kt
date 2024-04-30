@@ -2,12 +2,18 @@ import gov.cdc.dex.hl7.*
 import gov.cdc.dex.hl7.Function
 import gov.cdc.dex.hl7.Function.Companion.UTF_BOM
 import gov.cdc.dex.metadata.*
+import gov.cdc.dex.util.DateHelper.ISO_8601_24H_FULL_FORMAT
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.junit.jupiter.api.Test
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class DebatcherTest {
@@ -40,14 +46,15 @@ class DebatcherTest {
         val blobName = "Genv1-Case-TestMessage1.HL7"
         val startTime = Date().toIsoString()
         val metaDataMap: Map<String, String?> = mapOf(
-            Pair("reporting_jurisdiction", "16"),
+            Pair("jurisdiction", "16"),
             Pair("original_file_name", "Genv1-Case-TestMessage1.HL7"),
             Pair("meta_destination_id", "NNDSS"),
             Pair("meta_ext_event", "hl7"),
-            Pair("tus_tguid", ""),
-            Pair("trace_id", "unknown"),
-            Pair("parent_span_id", "unknown"),
-            Pair("file_path", filePath)
+            Pair("tus_tguid", "01234567898"),
+            Pair("file_path", filePath),
+            Pair("data_stream_id", "NNDSS"),
+            Pair("data_stream_route", "hl7")
+
         )
         var msgEvent: DexHL7Metadata? = null
         val eventReportList = mutableListOf<String>()
@@ -182,6 +189,7 @@ class DebatcherTest {
 
     private fun replaceUploadId(uploadId: String, currentMetadata: RoutingMetadata): RoutingMetadata {
         return RoutingMetadata(
+            dexIngestDateTime = currentMetadata.dexIngestDateTime,
             ingestedFilePath = currentMetadata.ingestedFilePath,
             ingestedFileTimestamp = currentMetadata.ingestedFileTimestamp,
             ingestedFileSize = currentMetadata.ingestedFileSize,
@@ -284,14 +292,13 @@ class DebatcherTest {
     ): RoutingMetadata {
 
         return RoutingMetadata(
+            dexIngestDateTime = getValueOrDefaultString(metaDataMap,listOf("dex_ingest_datetime", "file_timestamp"),
+                OffsetDateTime.now(ZoneId.of("UTC")).toIsoString()),
             ingestedFilePath = metaDataMap["file_path"] ?: "",
             ingestedFileTimestamp = metaDataMap["file_timestamp"] ?: "",
             ingestedFileSize = metaDataMap["file_size"] ?: "",
             dataProducerId = metaDataMap["data_producer_id"]?:"",
-            jurisdiction = getValueOrDefaultString(
-                metaDataMap,
-                listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
-            ),
+            jurisdiction = getValueOrDefaultString(metaDataMap,listOf("jurisdiction")),
             uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
             dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
             dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),

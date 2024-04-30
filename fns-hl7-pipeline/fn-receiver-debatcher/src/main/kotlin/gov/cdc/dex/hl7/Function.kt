@@ -6,11 +6,17 @@ import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.FunctionName
 import com.microsoft.azure.functions.annotation.QueueTrigger
 import gov.cdc.dex.metadata.*
+import gov.cdc.dex.util.DateHelper
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.Base64.getEncoder
 
@@ -33,7 +39,8 @@ class Function {
             "jurisdiction",
             "sender_id",
             "upload_id", "tus_tguid",
-            "received_filename"
+            "received_filename",
+            "dex_ingest_datetime"
         )
 
         val fnConfig = FunctionConfig()
@@ -72,7 +79,6 @@ class Function {
             // Get properties and metadata of blob -- should retry if failure.
             // if it cannot get properties after retrying, blobProperties will be null,
             // and we will log this blob as a failure (will fail validateMetadata)
-          //  val blobProperties = getBlobProperties(blobClient)
             val blobProperties = blobClient.properties
             // Create Map of Blob Metadata with lower case keys
             val metaDataMap = blobProperties?.metadata?.mapKeys { it.key.lowercase() }?.toMutableMap() ?: mutableMapOf()
@@ -216,6 +222,7 @@ class Function {
     private fun replaceUploadId(uploadId: String, currentMetadata: RoutingMetadata): RoutingMetadata {
         val newId = uploadId.substringAfterLast("/")
         return RoutingMetadata(
+            dexIngestDateTime = currentMetadata.dexIngestDateTime,
             ingestedFilePath = currentMetadata.ingestedFilePath,
             ingestedFileTimestamp = currentMetadata.ingestedFileTimestamp,
             ingestedFileSize = currentMetadata.ingestedFileSize,
@@ -347,14 +354,13 @@ class Function {
     ): RoutingMetadata {
 
         return RoutingMetadata(
+            dexIngestDateTime = getValueOrDefaultString(metaDataMap,listOf("dex_ingest_datetime", "file_timestamp"),
+                OffsetDateTime.now(ZoneId.of("UTC")).toIsoString()),
             ingestedFilePath = metaDataMap["file_path"] ?: "",
             ingestedFileTimestamp = metaDataMap["file_timestamp"] ?: "",
             ingestedFileSize = metaDataMap["file_size"] ?: "",
             dataProducerId = metaDataMap["data_producer_id"] ?: "",
-            jurisdiction = getValueOrDefaultString(
-                metaDataMap,
-                listOf("jurisdiction")
-            ),
+            jurisdiction = getValueOrDefaultString(metaDataMap, listOf("jurisdiction")),
             uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
             dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id")),
             dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route")),

@@ -3,6 +3,7 @@ package gov.cdc.dex.metadata
 import com.google.gson.annotations.SerializedName
 
 class RoutingMetadata (
+    @SerializedName("dex_ingest_datetime") val dexIngestDateTime: String,
     @SerializedName("ingested_file_path") val ingestedFilePath: String,
     @SerializedName("ingested_file_timestamp") val ingestedFileTimestamp: String,
     @SerializedName("ingested_file_size") val ingestedFileSize: String,
