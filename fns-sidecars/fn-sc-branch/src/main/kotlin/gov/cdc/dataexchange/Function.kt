@@ -64,7 +64,8 @@ class Function {
                 fnConfig.evHubSenderErr.send(outErrList)
             }
         } catch (e : Exception) {
-            logger.error("Error sending to event hubs, ${e.message}")
+            logger.error("Error sending to event hubs: ${e.message}")
+            throw e
         }
 
     }

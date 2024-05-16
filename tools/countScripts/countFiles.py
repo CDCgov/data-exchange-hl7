@@ -2,8 +2,10 @@ import os
 import sys
 import requests
 import json
+from azure.cosmos.exceptions import CosmosResourceNotFoundError
 from azure.storage.blob import BlobServiceClient
 from azure.cosmos import CosmosClient, PartitionKey
+
 
 data = {}
 jsonObj = {}
@@ -17,7 +19,6 @@ date_arg = sys.argv[1]
 
 
 def get_blog_storage_list_count(container_name, blob_service_client, prefix):
-    print(prefix)
     blobs = blob_service_client.get_container_client(container_name).walk_blobs(name_starts_with=prefix + "/",
                                                                                 delimiter='/')
     # Get the count of blobs
@@ -36,6 +37,17 @@ def fetch_and_prase_json(url):
         print("Error fetching data:", e)
         return None
 
+def count_blobs(container_name, blob_service_client, prefix):
+    # Initialize counts for folders and blobs
+    folder_count = 0
+    blob_count = 0
+    #blobs = blob_service_client.get_container_client(container_name).walk_blobs(name_starts_with=prefix + "/")
+    for blob in  blob_service_client.get_container_client(container_name).list_blobs(name_starts_with=prefix):
+        blob_count += 1
+
+    return blob_count
+
+
 print("@@@")
 print("@@@ Counting Upload API")
 print("@@@")
@@ -53,7 +65,7 @@ data['upload_api_hl7_count'] = count_hl7
 print("Counting CSV")
 count_csv = get_blog_storage_list_count("aims-celr-csv", blob_service_client, "2024/" + date_arg)
 print(count_csv)
-data['upload_api_csv_count'] = count_hl7
+data['upload_api_csv_count'] = count_csv
 
 print("@@@")
 print("@@@ Counting routeingress")
@@ -77,14 +89,14 @@ data['routeingress_csv_count'] = count_csv
 folders = ["hl7_out_recdeb", "hl7_out_redacted", "hl7_out_validation_report", "hl7_out_json", "hl7_out_lake_seg"]
 
 print("@@@")
-print("@@@ Counting hl7 outputs")
+print("@@@ Counting hl7 routeingress outputs")
 print("@@@")
 
 for folder in folders:
     print("Counting  " + folder + "/2024/" + date_arg);
-    count = get_blog_storage_list_count("routeingress", blob_service_client, folder + "/2024/" + date_arg)
+    count = count_blobs("routeingress", blob_service_client, folder + "/2024/" + date_arg)
     print(count)
-    jsonObj['routeingress_'+'folder'] = count
+    jsonObj['routeingress_' + folder] = count
 
 data['hl7_outputs_count'] = jsonObj
 
@@ -98,7 +110,7 @@ for folder in folders:
     print("Counting  " + folder + "/2024/" + date_arg)
     count = get_blog_storage_list_count("route-deadletter", blob_service_client, folder + "/2024/" + date_arg)
     print(count)
-    jsonObj['reoute-deadletter_'+folder] = count
+    jsonObj['reoute-deadletter_' + folder] = count
 
 data['route-deadletter_count'] = jsonObj
 
@@ -113,12 +125,13 @@ folders = ("hl7_out_recdeb", "hl7_out_redacted", "hl7_validation_report", "hl7_o
 jsonObj = {}
 for folder in folders:
     print("Counting  " + folder + "/2024/" + date_arg);
+    folder_count = get_blog_storage_list_count("dex", blob_service_client, folder + "/2024/" + date_arg)
 
-    count = get_blog_storage_list_count("dex", blob_service_client, folder + "/2024/" + date_arg)
-    if (count > 25):
-        count = count - 25
+    count = count_blobs("dex", blob_service_client, folder + "/2024/" + date_arg)
+    if (count > folder_count):
+        count = count - folder_count-1
     print(count)
-    jsonObj['dex_'+folder] = count
+    jsonObj['dex_' + folder] = count
 
 data['dex_count'] = jsonObj
 
@@ -150,18 +163,48 @@ client = CosmosClient(endpoint, cosmos_key)
 database_name = "dex-routing"
 database_client = client.create_database_if_not_exists(id=database_name)
 
-# Create a container if it doesn't exist
+date = "2024/" + date_arg
 container_name = "count_files"
+partition_key_path = "/date"
 container_client = database_client.create_container_if_not_exists(
     id=container_name,
-    partition_key=PartitionKey(path="/partition_key")
+    partition_key=PartitionKey(path=partition_key_path)
 )
 
 # Define your data
 data['hl7_reports_count'] = hl7_reports_count
 data["CSV_reports_count"] = csv_reports_count
 data["Invalid_msg_report"] = invalid_msg_report
+data["date_arg"] = date_arg
+data["date"] = date
 
-# Create and save the document
-container_client.create_item(body=data, enable_automatic_id_generation=True)
-print()
+query = f"SELECT * FROM c WHERE c.date_arg like '" +date_arg +"'"
+
+items = list(container_client.query_items(query=query,enable_cross_partition_query=True))
+
+if items:
+ existing_item = items[0]
+else:
+ existing_item = None
+
+print(existing_item)
+if existing_item:
+     try:
+         id = existing_item.get('id')
+         data["id"] = id
+         container_client.replace_item(item=id, body=data)
+         print("Document updated successfully.")
+     except Exception as e:
+       print("Error occurred while trying to replace document:", e)
+       raise e
+else:
+     try:
+         container_client.create_item(body=data, enable_automatic_id_generation=True)
+         print("New document created successfully.")
+     except Exception as e:
+        print("Error occurred while trying to create document:", e)
+        # Handle the error appropriately
+        raise e
+
+
+

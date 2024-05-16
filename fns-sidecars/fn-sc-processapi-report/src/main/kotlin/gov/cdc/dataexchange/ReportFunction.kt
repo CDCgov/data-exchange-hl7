@@ -64,13 +64,9 @@ class ReportFunction {
                 }  else {
                     logger.info("REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} added to batch")
                 }//.if
-            } catch (e: JsonSyntaxException) {
-                logger.error("REPORT::JSON Syntax Error: ${e.message}")
-            } catch (e: IllegalStateException) {
-                logger.error("REPORT::Illegal State Error: ${e.message}")
             } catch (e: Exception) {
-                e.printStackTrace()
-                logger.error("REPORT::General Error: ${e.message}")
+                logger.error("REPORT::ERROR creating or sending batch to Service Bus queue: ${e.message}")
+                throw e
             }
         } //.for
         if (batch.count > 0) {
@@ -80,7 +76,7 @@ class ReportFunction {
                 logger.info("REPORT::Batch send completed")
             } catch (e: Exception) {
                 logger.error("REPORT::ERROR sending batch to Service Bus queue ${fnConfig.sbQueue}: ${e.message}")
-                //TODO: Unsure what else to do at this point? Send to Storage Account?
+                throw e
             }
         }
     }

@@ -14,7 +14,6 @@ import gov.cdc.dex.metadata.SummaryInfo
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.toJsonElement
-import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -42,10 +41,6 @@ class Function {
         val helper = Helper()
         val outList = mutableListOf<String>()
         var inputEvent = JsonObject()
-        val psClientUtility = PSClientUtility()
-        var traceId :String =""
-        var spanId :String =""
-        var childSpanId : String? =null
 
         try {
             message.forEachIndexed { msgIndex: Int, singleMessage: String? ->
@@ -64,20 +59,8 @@ class Function {
                     messageUUID = JsonHelper.getValueFromJson("message_metadata.message_uuid", inputEvent).asString
 
                     val dataStreamId = JsonHelper.getValueFromJson("routing_metadata.data_stream_id", inputEvent).asString
-                    traceId = JsonHelper.getValueFromJson("routing_metadata.trace_id", inputEvent).asString
-                    spanId = JsonHelper.getValueFromJson("routing_metadata.span_id", inputEvent).asString
 
                     logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
-
-                    fnConfig.psURL?.let  {
-                        childSpanId =  psClientUtility.sendTraceToProcessingStatus(
-                            fnConfig.psURL,
-                            traceId,
-                            spanId,
-                            RedactorStageMetadata.REDACTOR_PROCESS
-                        )
-                        logger.info("Span ID of messageUUID: $messageUUID : ${childSpanId}")
-                    }
 
                     val configFileName = helper.getConfigFileName(hl7Content = hl7Content,
                         profileConfig = fnConfig.profileConfig, dataStreamId= dataStreamId)
@@ -116,19 +99,6 @@ class Function {
                     inputEvent.add("summary", summary.toJsonElement())
                     outList.add(gson.toJson(inputEvent))
                 }
-                finally { // closing the span for the msg
-                    fnConfig.psURL?.let {
-                        childSpanId?.let {
-                            psClientUtility.stopTrace(
-                                fnConfig.psURL,
-                                traceId,
-                                it,
-                                RedactorStageMetadata.REDACTOR_PROCESS
-                            )
-                        }
-                    }
-
-                }
 
             } // .eventHubProcessor
         } catch (ex: Exception) {
@@ -150,6 +120,7 @@ class Function {
             }
         } catch (e: Exception) {
             logger.error("Unable to send to event hub ${fnConfig.evHubSendName}: ${e.message}")
+            throw e
         }
 
         return inputEvent

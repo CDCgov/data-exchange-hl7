@@ -3,10 +3,11 @@ package gov.cdc.dex.util
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 public object DateHelper {
-    private const val ISO_8601_24H_FULL_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    const val ISO_8601_24H_FULL_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
     @JvmName("toIsoStringNullable")
     fun Date?.toIsoString(): String? {
@@ -23,6 +24,7 @@ public object DateHelper {
         return this?.toIsoString()
     }
     fun OffsetDateTime.toIsoString(): String {
-        return Date.from(this.toInstant()).toIsoString()
+       // return Date.from(this.toInstant()).toIsoString() //converts to local time for some reason
+        return this.format(DateTimeFormatter.ofPattern(ISO_8601_24H_FULL_FORMAT))
     }
 }
