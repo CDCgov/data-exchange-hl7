@@ -49,7 +49,7 @@ echo "@@@"
 for i in "${folders[@]}"
 do
   echo "Counting $i/2024/$1"
-  count=$(az storage blob list -c "dex" --account-key "${EZDX_ACCT_KEY}" --account-name "stezdxstg" --query "length(@)"  --prefix "$i/2024/$1" --num-results 2147483647)
+  count=$(az storage blob list -c "dex" --account-key "${EZDX_ACCT_KEY}" --account-name "stezdxstg"  --query "[?properties.contentSettings.contentMd5 != null] | length(@)"  --prefix "$i/2024/$1" --num-results 2147483647)
   echo $(($count-25)) # Remove folder count - make sure there is one folder for each hour of the day 00 to 23, 24 total + parent folder = 25
 done
 
