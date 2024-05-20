@@ -4,5 +4,5 @@ ENV AzureWebJobsScriptRoot=/home/site/wwwroot
 ENV AzureFunctionsJobHost__Logging__Console__IsEnabled=true
 ENV AzureFunctionsJobHost__Logging__LogLevel__Default=Information
 # put application-specific environment variables in a .env file.
-# then pass the data into the container by calling docker run --env-file=.env
+# then pass the data into the container by calling docker run --env-file .env
 COPY ./target/azure-functions/hl7-file-sink /home/site/wwwroot
