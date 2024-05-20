@@ -152,8 +152,8 @@
 
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
-                        <os>linux</os>
-                        <javaVersion>${java.version}</javaVersion>
+                        <os>docker</os>
+                        <image>hl7-file-sink-44</image>
                     </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
