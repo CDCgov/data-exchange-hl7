@@ -16,6 +16,10 @@ def analyze_paths(changed_files, nested_folders):
     """Analyzes file paths and categorizes them based on their presence in nested folders."""
     unique_folders = set()
     for file_path in changed_files:
+        # Skip files ending with '.md'
+        if file_path.endswith('.md'):
+            continue
+        
         path_parts = file_path.split('/')
         top_level_folder = path_parts[0]
         
