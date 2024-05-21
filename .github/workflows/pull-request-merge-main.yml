@@ -1,0 +1,62 @@
+# Fortify code scan required when merging to Main
+env:
+    nestedFolders: fns-hl7-pipeline,fns-sidecars,local_libs
+  
+name: Code Scan Workflow
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write # required for `comment-summary-in-pr`
+      
+jobs:
+  invoke-manual-code-scan:
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Gen GitHub App Access Token For Manual Trigger
+      id: github-app-token
+      run: |
+        echo ${{ github.workspace }} 
+        if [ ! -d data-exchange-hl7 ]; then git clone https://github.com/kave/github-app-token.git; fi;
+        sudo tree -df
+        cd github-app-token
+        sudo gem install jwt
+        echo "${{ secrets.CDC_COE_BOTFREY_PEM }}" > app-private-key.pem
+        chmod +x ./get-github-app-access-token.sh;
+        . ./get-github-app-access-token.sh;
+        echo "access_token=${TOKEN}" >> "$GITHUB_ENV"
+                    
+    - name: List unique top-level directories of changed files
+      id: getdirs2scan
+      run: |
+        unique_paths=$(python3 tools/codeScan/gitDiffAnalysis.py '${{ env.nestedFolders }}')
+        echo "dirs=$unique_paths" >> $GITHUB_OUTPUT
+
+    - name: Dispatch Remote Code Scan Event 
+      id: manual-devops-wkflow-dispatch
+      uses: aurelien-baudet/workflow-dispatch@v2.1.1
+      with:
+        workflow: 'pull-request-code-scan.yml'
+        repo: cdcent/data-exchange-hl7-devops
+        token: ${{ env.access_token }}
+        inputs: '{ "pathsToScan": "${{ steps.getdirs2scan.outputs.dirs }}", "repositoryToScan": "${{ github.repository }}", "prToScan": "${{ github.head_ref || github.ref_name }}" }'
+        ref: 'main'
+        wait-for-completion: true
+        wait-for-completion-timeout: 120m
+        wait-for-completion-interval: 300s
+        display-workflow-run-url: true  
+
+  
