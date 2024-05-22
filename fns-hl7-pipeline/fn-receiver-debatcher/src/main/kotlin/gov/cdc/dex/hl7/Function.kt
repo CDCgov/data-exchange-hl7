@@ -1,23 +1,25 @@
 package gov.cdc.dex.hl7
 
-import com.azure.core.http.rest.Response
-import com.azure.core.util.Context
-import com.azure.storage.blob.BlobClient
-import com.azure.storage.blob.models.BlobProperties
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.FunctionName
 import com.microsoft.azure.functions.annotation.QueueTrigger
-import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import gov.cdc.dex.metadata.*
+import gov.cdc.dex.util.DateHelper
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
+import java.util.Base64.getEncoder
 
 
 /**
@@ -32,14 +34,14 @@ class Function {
         const val METADATA = "Metadata"
         val gson: Gson = GsonBuilder().serializeNulls().create()
         val knownMetadata: Set<String> = setOf(
-            "data_stream_id", "meta_destination_id",
-            "data_stream_route", "meta_ext_event",
+            "data_stream_id",
+            "data_stream_route",
             "data_producer_id",
-            "jurisdiction", "reporting_jurisdiction", "meta_organization",
-            "sender_id", "user_id", "meta_username",
+            "jurisdiction",
+            "sender_id",
             "upload_id", "tus_tguid",
-            "trace_id",
-            "parent_span_id", "span_id"
+            "received_filename",
+            "dex_ingest_datetime"
         )
 
         val fnConfig = FunctionConfig()
@@ -78,7 +80,6 @@ class Function {
             // Get properties and metadata of blob -- should retry if failure.
             // if it cannot get properties after retrying, blobProperties will be null,
             // and we will log this blob as a failure (will fail validateMetadata)
-          //  val blobProperties = getBlobProperties(blobClient)
             val blobProperties = blobClient.properties
             // Create Map of Blob Metadata with lower case keys
             val metaDataMap = blobProperties?.metadata?.mapKeys { it.key.lowercase() }?.toMutableMap() ?: mutableMapOf()
@@ -213,6 +214,7 @@ class Function {
                 fnConfig.evHubSenderReports.send(eventReportList)
             } catch (e: Exception) {
                 logger.error("Unable to send to event hub ${fnConfig.evReportsHubName}: ${e.message}")
+                throw e
             }
         }
         return msgMetadata
@@ -225,6 +227,7 @@ class Function {
     private fun replaceUploadId(uploadId: String, currentMetadata: RoutingMetadata): RoutingMetadata {
         val newId = uploadId.substringAfterLast("/")
         return RoutingMetadata(
+            dexIngestDateTime = currentMetadata.dexIngestDateTime,
             ingestedFilePath = currentMetadata.ingestedFilePath,
             ingestedFileTimestamp = currentMetadata.ingestedFileTimestamp,
             ingestedFileSize = currentMetadata.ingestedFileSize,
@@ -233,49 +236,10 @@ class Function {
             uploadId = newId,
             dataStreamId = currentMetadata.dataStreamId,
             dataStreamRoute = currentMetadata.dataStreamRoute,
-            traceId = currentMetadata.dataStreamId,
-            spanId = currentMetadata.spanId,
+            senderId = currentMetadata.senderId,
+            receivedFilename = currentMetadata.receivedFilename,
             supportingMetadata = currentMetadata.supportingMetadata
         )
-    }
-
-    private fun getBlobProperties(blobClient: BlobClient): BlobProperties? {
-        var blobProperties: BlobProperties? = null
-        var response: Response<BlobProperties>
-        var timeToWait = 0L
-        var mustRetry: Boolean
-        var retries = 3
-
-        do {
-            if (retries < 3) logger.info("RETRYING read of blob properties for blob ${blobClient.blobName}")
-            try {
-                response = blobClient.getPropertiesWithResponse(
-                    null,
-                    fnConfig.azBlobProxy.tryTimeout,
-                    Context.NONE
-                )
-                mustRetry = (response.statusCode != 200 || response.value.metadata.isEmpty())
-                if (mustRetry) {
-                    logger.info("RETRY is TRUE: Response status code was ${response.statusCode}")
-                } else {
-                    blobProperties = response.value
-                }
-            } catch (e: Exception) {
-                logger.info("ERROR in getBlobProperties: ${e.javaClass.canonicalName}: ${e.message}")
-                mustRetry = true
-            }
-            retries--
-
-            if (mustRetry) {
-                try {
-                    TimeUnit.SECONDS.sleep(timeToWait++)
-                } catch (ex: InterruptedException) {
-                    logger.debug("Timer interrupted")
-                }
-            }
-        } while (mustRetry && retries > 0)
-
-        return blobProperties
     }
 
     private fun buildAndSendMessage(
@@ -290,23 +254,6 @@ class Function {
         eventReport: ReceiverEventReport,
         errorMessage: String? = null
     ): DexHL7Metadata {
-
-        val psClientUtility = PSClientUtility()
-        logger.info("Span ID : ${ routingMetadata.spanId}")
-
-        fnConfig.psURL?.let {
-            psClientUtility.sendTraceToProcessingStatus(
-                fnConfig.psURL,
-                routingMetadata.traceId,
-                routingMetadata.spanId,
-                ProcessInfo.RECEIVER_PROCESS
-            ).let {
-                if(it.isNotEmpty()) routingMetadata.spanId = it
-            }
-            logger.info("Setting processing status spanId to routingMetadata.spanId: ${routingMetadata.spanId}")
-        }
-       // val dirPath = metadata.provenance.fileUUID // todo: get correct requirement
-       // val hl7Transformer = HL7Transformer(messageContent, dirPath, fnConfig)
 
         val messageMetadata = MessageMetadata(
             singleOrBatch = singleOrBatch,
@@ -414,19 +361,18 @@ class Function {
     ): RoutingMetadata {
 
         return RoutingMetadata(
+            dexIngestDateTime = getValueOrDefaultString(metaDataMap,listOf("dex_ingest_datetime", "file_timestamp"),
+                OffsetDateTime.now(ZoneId.of("UTC")).toIsoString()),
             ingestedFilePath = metaDataMap["file_path"] ?: "",
             ingestedFileTimestamp = metaDataMap["file_timestamp"] ?: "",
             ingestedFileSize = metaDataMap["file_size"] ?: "",
             dataProducerId = metaDataMap["data_producer_id"] ?: "",
-            jurisdiction = getValueOrDefaultString(
-                metaDataMap,
-                listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
-            ),
+            jurisdiction = getValueOrDefaultString(metaDataMap, listOf("jurisdiction")),
             uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
-            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
-            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
-            traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
-            spanId = getValueOrDefaultString(metaDataMap, listOf("parent_span_id", "span_id")),
+            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id")),
+            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route")),
+            senderId = metaDataMap["sender_id"] ?: "",
+            receivedFilename = metaDataMap["received_filename"] ?: "",
             supportingMetadata = supportingMetadata
         )
     }

@@ -5,16 +5,15 @@ import com.azure.storage.blob.models.AccessTier
 import com.azure.storage.blob.models.BlobHttpHeaders
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
+import gov.cdc.dex.azure.AzureBlobProxy
+import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.UnknownPropertyError
 import io.netty.channel.unix.Errors.NativeIoException
 import org.slf4j.LoggerFactory
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
+import java.time.*
 import java.util.concurrent.TimeUnit
 
 
@@ -67,10 +66,23 @@ class Function {
                 logger.error("DEX::ERROR -- No Message UUID or Upload ID found. Aborting save for message index $index")
                 continue
             }
-            val (datePattern,blobStorageFolderName) = getFolderDate(fnConfig.blobStorageFolderName)
+
+            val ingestDateTime = try {
+                JsonHelper.getValueFromJson("routing_metadata.dex_ingest_datetime", inputEvent).asString
+            } catch (e: Exception) {
+                null
+            }
+            val fileTimestamp = try {
+                JsonHelper.getValueFromJson("routing_metadata.ingested_file_timestamp", inputEvent).asString
+            } catch (e: Exception) {
+                OffsetDateTime.now(ZoneId.of("UTC")).toIsoString()
+            }
+
+            val dateTimeForStorage = ingestDateTime ?: fileTimestamp
+            val (datePattern, blobStorageFolderName) = getDatePatternAndFolderName(fnConfig.blobStorageFolderName)
 
             //remove content except structure report
-            if(blobStorageFolderName != "hl7_out_validation_report")   inputEvent.remove("content")
+            if (blobStorageFolderName != "hl7_out_validation_report") inputEvent.remove("content")
             val newBlobName = messageUUID ?: uploadId
             // get the metadata needed for routing
             val metaToAttach = mutableMapOf<String, String>()
@@ -81,18 +93,22 @@ class Function {
             }
             if (!routingMeta.isJsonNull) {
                 val routingMetadata = routingMeta.asJsonObject
-                val supportingMeta = routingMetadata.remove("supporting_metadata")
+                val supportingMeta = try {
+                    JsonHelper.getValueFromJson("supporting_metadata", routingMetadata)
+                } catch (e: Exception) {
+                    JsonNull.INSTANCE
+                }
 
                 // update data_stream_route to match destination folder name
                 routingMetadata.addProperty("data_stream_route", blobStorageFolderName)
 
                 // add all routing metadata json elements to blob metadata we will attach on upload
                 routingMetadata.keySet().forEach { key ->
-                    if (!routingMetadata[key].isJsonNull) {
+                    if (!routingMetadata[key].isJsonNull && key != "supporting_metadata") {
                         metaToAttach[key] = routingMetadata[key].asString
                     }
                 }
-                if (!supportingMeta.isJsonNull ) {
+                if (!supportingMeta.isJsonNull) {
                     val supportingMetadata = supportingMeta.asJsonObject
                     supportingMetadata.keySet().forEach { key ->
                         if (!supportingMetadata[key].isJsonNull)
@@ -108,19 +124,24 @@ class Function {
 
             logger.info("DEX::Saving message $newBlobName")
             try {
-                //get date in folder structure
-               val dateStructure = createDateFolders(datePattern)
+                // get folder structure from date
+                val dateStructure = getFoldersFromDateString(datePattern, dateTimeForStorage)
                 logger.info("DEX::dateStructure $dateStructure")
-               // save to storage container
-               val succeeded =  this.saveBlobToContainer(
-                    "$blobStorageFolderName/$dataStreamId/$dateStructure/$newBlobName.txt",
+
+                val saveToPath = "$blobStorageFolderName/$dataStreamId/$dateStructure"
+                // save to storage container
+                val succeeded = this.saveBlobToContainer(
+                    "$saveToPath/$newBlobName.txt",
                     gson.toJson(inputEvent),
                     metaToAttach
                 )
                 if (succeeded) {
-                    logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dateStructure")
+                    logger.info("DEX::Saved message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$saveToPath")
                 } else {
-                    logger.error("DEX::ERROR: Unable to save message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$blobStorageFolderName/$dateStructure")
+                    val msg =
+                        "Unable to save message $newBlobName.txt to sink ${fnConfig.blobStorageContainerName}/$saveToPath"
+                    logger.error("DEX::ERROR: $msg")
+                    throw Exception("Error in file sink: $msg")
                 }
             } catch (e: Exception) {
                 // TODO send to quarantine?
@@ -131,7 +152,7 @@ class Function {
 
     }
 
-    fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>) : Boolean {
+    fun saveBlobToContainer(blobName: String, blobContent: String, newMetadata: MutableMap<String, String>): Boolean {
         val data = BinaryData.fromString(blobContent)
         val length = data.length
         val md5 = MessageDigest.getInstance("MD5").digest(blobContent.toByteArray(StandardCharsets.UTF_8))
@@ -178,18 +199,18 @@ class Function {
         return !mustRetry
     }
 
-    private fun getFolderDate(folder:String): Pair<String,String> {
+    private fun getDatePatternAndFolderName(folder: String): Pair<String, String> {
         val splitPattern = folder.split("/")
         val datePattern = splitPattern.drop(1).joinToString("/")
-        val folderName = splitPattern.first()
+        val folderName = splitPattern.first().lowercase()
         return Pair(datePattern, folderName)
     }
 
-    private fun createDateFolders(datePattern: String): String {
-        val currDateTime = LocalDateTime.now(ZoneOffset.UTC)
-        val formatter = DateTimeFormatter.ofPattern(datePattern)
-        return currDateTime.format(formatter)
-
+    private fun getFoldersFromDateString(datePattern: String, dateTimeString: String): String {
+        val importantParts = dateTimeString.substring(0, datePattern.length)
+        return importantParts.replace("-", "/")
+            .replace("T", "/")
+            .replace(":", "/")
     }
 
 }

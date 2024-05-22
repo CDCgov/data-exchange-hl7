@@ -2,7 +2,7 @@ package gov.cdc.dataexchange
 
 import org.slf4j.LoggerFactory
 import kotlin.system.exitProcess
-
+import gov.cdc.dex.azure.AzureBlobProxy
 class FunctionConfig {
     val blobStorageContainerName: String
     var azureBlobProxy: AzureBlobProxy
