@@ -15,15 +15,11 @@
       }
     }
   },
-  "logging": {
-    "fileLoggingMode": "always",
-     "logLevel": {
-      "default": "Warning",
-      "Function.storage-sink": "Information",
-      "Host": "Error",
-      "Worker": "Warning",
-      "Microsoft": "None"
-    }
+   "logLevel": {
+    "default": "Information",
+    "Host": "Error",
+    "Worker": "Warning",
+    "Microsoft": "None"
   }
 
 }

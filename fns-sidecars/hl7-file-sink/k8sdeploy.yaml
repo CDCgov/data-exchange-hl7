@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-sink-recdeb
+  namespace: default
+  labels:
+    app: file-sink-recdeb
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: file-sink-recdeb
+  template:
+    metadata:
+      labels:
+        app: file-sink-recdeb
+    spec:
+      containers:
+        - name: file-sink-recdeb
+          image: localhost:5000/hl7-file-sink
+          envFrom:
+            - secretRef:
+                name: dev-secrets
