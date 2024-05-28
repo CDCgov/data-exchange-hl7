@@ -101,7 +101,7 @@ class TransportController(private val cloudStorage: CloudStorage) {
         return headers
             .filter { it.key.startsWith("x-tp-") }
             .associate {
-                it.key.substring(5) to (it.value.firstOrNull() ?: "") }
+                it.key.substring(5) to (it.value.firstOrNull()?.lowercase() ?: "") }
     }
 
     private fun validateMetadata(metadataMap: Map<String, String>) : String {
