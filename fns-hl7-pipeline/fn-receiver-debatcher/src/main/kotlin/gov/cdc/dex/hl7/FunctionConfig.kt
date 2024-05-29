@@ -9,10 +9,8 @@ class FunctionConfig {
     val azBlobProxy: AzureBlobProxy
     val evHubSenderOut: DedicatedEventHubSender
     val evHubSenderReports: DedicatedEventHubSender
-    var eventCodes : Map<String, Map<String, String>>
     var attachmentBlobProxy: AzureBlobProxy
     val blobAttachmentContName = "hl7-attachments"
-    val logger = LoggerFactory.getLogger(this.javaClass.simpleName)
     private val logger : Logger = LoggerFactory.getLogger(this.javaClass.simpleName)
     val blobIngestContName: String = try {
         System.getenv("BlobIngestContainerName")
