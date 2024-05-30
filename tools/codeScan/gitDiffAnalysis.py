@@ -20,7 +20,9 @@ def analyze_paths(changed_files, nested_folders):
         if file_path.endswith('.md'):
             continue
         # Skip paths that begin with '.github/'
-        if file_path.startswith('.github/'):
+        if file_path.startswith('.github'):
+            continue
+        if file_path.startswith('tools'):
             continue
         
         path_parts = file_path.split('/')
