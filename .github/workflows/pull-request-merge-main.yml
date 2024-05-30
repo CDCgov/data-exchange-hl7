@@ -52,7 +52,7 @@ jobs:
         workflow: 'pull-request-code-scan.yml'
         repo: cdcent/data-exchange-hl7-devops
         token: '${{ env.access_token }}'
-        inputs: '{ "pathsToScan": "${{ steps.getdirs2scan.outputs.dirs }}", "repositoryToScan": "${{ github.repository }}", "prToScan": "${{ github.head_ref || github.ref_name }}" }'
+        inputs: "{ \"pathsToScan\": \"${{ steps.getdirs2scan.outputs.dirs }}\", \"repositoryToScan\": \"${{ github.repository }}\", \"prToScan\": \"${{ github.head_ref || github.ref_name }}\" }"
         ref: 'main'
         wait-for-completion: true
         wait-for-completion-timeout: 120m
