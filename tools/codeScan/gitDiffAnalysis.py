@@ -19,6 +19,8 @@ def analyze_paths(changed_files, nested_folders):
         # Skip files ending with '.md'
         if file_path.endswith('.md'):
             continue
+        if file_path.beginswith('.github'):
+            continue
         
         path_parts = file_path.split('/')
         top_level_folder = path_parts[0]
@@ -52,7 +54,8 @@ def main():
         changed_files = fetch_changed_files()
         unique_folders = analyze_paths(changed_files, nested_folders)
         output = [{"path": folder, "app": get_app_version(folder)} for folder in unique_folders]
-        print(json.dumps(output))
+        escaped_output = json.dumps(output)
+        print(json.dumps(escaped_output))
     except Exception as e:
         print(str(e))
 
