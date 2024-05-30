@@ -5,7 +5,9 @@ ENV AzureFunctionsJobHost__Logging__Console__IsEnabled=true
 ENV WEBSITE_RUN_FROM_PACKAGE=1
 ENV FUNCTIONS_EXTENSION_VERSION=~4
 ENV APPLICATIONINSIGHTS_ENABLE_AGENT=true
-ENV ApplicationInsightsAgent_EXTENSION_VERSION=~3
+ENV FUNCTIONS_WORKER_PROCESS_COUNT=2
+ENV FUNCTIONS_WORKER_RUNTIME=java
+ENV WEBSITE_HEALTHCHECK_MAXPINGFAILURES=2
 
 # put application-specific environment variables in a .env file.
 # then pass the data into the container by calling docker run --env-file .env
