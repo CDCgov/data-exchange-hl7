@@ -9,7 +9,7 @@ defaults:
     shell: bash
 
 on:
-  pull_request:
+  pull_request: # TODO
     # types: [opened, reopened, synchronize]
     # branches: [main]
 
@@ -53,7 +53,7 @@ jobs:
         repo: cdcent/data-exchange-hl7-devops
         token: ${{ env.access_token }}
         inputs: '{ "pathsToScan": ${{ steps.getdirs2scan.outputs.dirs }}, "repositoryToScan": "${{ github.repository }}", "prToScan": "${{ github.head_ref || github.ref_name }}" }'
-        ref: 'main'
+        ref: 'Test' # TODO 'main'
         wait-for-completion: true
         wait-for-completion-timeout: 120m
         wait-for-completion-interval: 300s
