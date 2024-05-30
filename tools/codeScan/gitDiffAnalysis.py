@@ -19,6 +19,8 @@ def analyze_paths(changed_files, nested_folders):
         # Skip files ending with '.md'
         if file_path.endswith('.md'):
             continue
+        if file_path.beginswith('.github'):
+            continue
         
         path_parts = file_path.split('/')
         top_level_folder = path_parts[0]
