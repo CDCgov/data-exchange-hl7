@@ -43,7 +43,7 @@ jobs:
       id: getdirs2scan
       run: |
         unique_paths=$(python3 tools/codeScan/gitDiffAnalysis.py '${{ env.nestedFolders }}')
-        echo "dirs=$unique_paths" >> $GITHUB_OUTPUT
+        echo "dirs=$unique_paths"  | jq -aRs . >> $GITHUB_OUTPUT
 
     - name: Dispatch Remote Code Scan Event 
       id: manual-devops-wkflow-dispatch
