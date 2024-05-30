@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/azure-functions/java:4-java17-appservice
-# specify the function name at build time using --build-arg function_name=<function>
+# specify the function name at build time using --build-arg function_name=<function name>
 ARG function_name
 # static environment variables
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot
