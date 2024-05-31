@@ -101,7 +101,7 @@ class TransportController(private val cloudStorage: CloudStorage) {
         return headers
             .filter { it.key.startsWith("x-tp-") }
             .associate {
-                it.key.substring(5) to (it.value.firstOrNull() ?: "") }
+                it.key.substring(5) to (it.value.firstOrNull()?.lowercase() ?: "") }
     }
 
     private fun validateMetadata(metadataMap: Map<String, String>) : String {
@@ -121,7 +121,7 @@ class TransportController(private val cloudStorage: CloudStorage) {
         return "hello"
     }
 
-    @Get(value = "/{bucket}")
+    @Get(value = "/list/{bucket}")
     fun getListOfFiles(@PathVariable bucket: String, @QueryValue prefix: String? = null): List<String> {
         log.info("AUDIT - Getting List of files")
         return cloudStorage.list(bucket, 100, prefix)
