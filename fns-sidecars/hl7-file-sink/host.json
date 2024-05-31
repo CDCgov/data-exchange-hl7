@@ -15,9 +15,8 @@
       }
     }
   },
-  "logLevel": {
-    "default": "Warning",
-    "Function": "Information",
+   "logLevel": {
+    "default": "Information",
     "Host": "Error",
     "Worker": "Warning",
     "Microsoft": "None"
