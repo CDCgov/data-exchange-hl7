@@ -6,20 +6,14 @@ import com.microsoft.azure.functions.ExecutionContext
 import com.microsoft.azure.functions.annotation.FunctionName
 import com.microsoft.azure.functions.annotation.QueueTrigger
 import gov.cdc.dex.metadata.*
-import gov.cdc.dex.util.DateHelper
 import gov.cdc.dex.util.DateHelper.toIsoString
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.concurrent.TimeUnit
-import java.util.Base64.getEncoder
 
 
 /**
@@ -41,7 +35,8 @@ class Function {
             "sender_id",
             "upload_id", "tus_tguid",
             "received_filename",
-            "dex_ingest_datetime"
+            "dex_ingest_datetime",
+            "version"
         )
 
         val fnConfig = FunctionConfig()
@@ -238,7 +233,8 @@ class Function {
             dataStreamRoute = currentMetadata.dataStreamRoute,
             senderId = currentMetadata.senderId,
             receivedFilename = currentMetadata.receivedFilename,
-            supportingMetadata = currentMetadata.supportingMetadata
+            supportingMetadata = currentMetadata.supportingMetadata,
+            version = currentMetadata.version
         )
     }
 
@@ -373,7 +369,8 @@ class Function {
             dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route")),
             senderId = metaDataMap["sender_id"] ?: "",
             receivedFilename = metaDataMap["received_filename"] ?: "",
-            supportingMetadata = supportingMetadata
+            supportingMetadata = supportingMetadata,
+            version = metaDataMap["version"] ?: ""
         )
     }
 
@@ -393,7 +390,6 @@ class Function {
             messageMetadata = messageMetadata,
             routingMetadata = routingMetadata,
             stage = stage,
-            //content = getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray()),
             content = hl7Transformer.removeBinaryToBase64(),
             summary = summary
         )
