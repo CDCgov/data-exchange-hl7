@@ -365,7 +365,7 @@ class Function {
             dataProducerId = metaDataMap["data_producer_id"] ?: "",
             jurisdiction = getValueOrDefaultString(metaDataMap, listOf("jurisdiction")),
             uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
-            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id")),
+            dataStreamId = metaDataMap["data_stream_id"]?.lowercase() ?: UNKNOWN_VALUE,
             dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route")),
             senderId = metaDataMap["sender_id"] ?: "",
             receivedFilename = metaDataMap["received_filename"] ?: "",
