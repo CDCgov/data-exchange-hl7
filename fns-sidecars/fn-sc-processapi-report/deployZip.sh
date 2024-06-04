@@ -1,6 +1,6 @@
 #!/bin/bash
-declare -a arr=("recdeb" "redacted" "struct" "json-lake" "lake-seg")
-
+#declare -a arr=("recdeb" "redacted" "struct" "json-lake" "lake-seg")
+declare -a arr=("json-lake" )
 if ! [[ "$1" =~ ^(dev|tst|stg|prd)$ ]]; then
 	echo "You must pass the targe environment as paramter: dev, tst, stg or prd"
 	return
