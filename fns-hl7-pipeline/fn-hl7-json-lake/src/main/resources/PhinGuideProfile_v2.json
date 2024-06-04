@@ -608,7 +608,7 @@
       {
         "fieldNumber": 35,
         "name": "Species Code",
-        "dataType": "CE",
+        "dataType": "CWE",
         "usage": "O",
         "cardinality": "[0..1]"
       }

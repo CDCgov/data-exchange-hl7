@@ -14,5 +14,6 @@ class RoutingMetadata (
     @SerializedName("data_stream_route") val dataStreamRoute: String,
     @SerializedName("sender_id") val senderId: String,
     @SerializedName("received_filename") val receivedFilename: String,
-    @SerializedName("supporting_metadata") var supportingMetadata: Map<String, String>? = null
+    @SerializedName("supporting_metadata") var supportingMetadata: Map<String, String>? = null,
+    @SerializedName("version") var version: String? = null
 )
