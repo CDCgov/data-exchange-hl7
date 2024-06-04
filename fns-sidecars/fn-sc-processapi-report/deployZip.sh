@@ -1,6 +1,6 @@
 #!/bin/bash
-#declare -a arr=("recdeb" "redacted" "struct" "json-lake" "lake-seg")
-declare -a arr=("json-lake" )
+declare -a arr=("recdeb" "redacted" "struct" "json-lake" "lake-seg")
+
 if ! [[ "$1" =~ ^(dev|tst|stg|prd)$ ]]; then
 	echo "You must pass the targe environment as paramter: dev, tst, stg or prd"
 	return
@@ -24,6 +24,7 @@ zip -r ../../../$base_name *
 cd ../../..
 
 echo "Deploying Zip..."
+export LANG=C.UTF-8
 
 for i in "${arr[@]}"
 do
