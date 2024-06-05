@@ -1,4 +1,10 @@
 FROM mcr.microsoft.com/azure-functions/java:4-java17-appservice
+# create system user group and user
+RUN groupadd -r dexusers && useradd -r -g dexusers dexuser
+# run as dexuser
+USER dexuser
+
+
 # specify the function name at build time using --build-arg function_name=<function name>
 ARG function_name
 # static environment variables
