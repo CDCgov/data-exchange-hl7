@@ -1,6 +1,6 @@
 
-DATA_STREAM="aims-celr"
-HL7_ROUTE="hl7"
+DATA_STREAM="celr"
+HL7_ROUTE="hl7v2"
 CSV_ROUTE="csv"
 
 if [ -z "$1" ]
@@ -14,11 +14,11 @@ echo "@@@ Counting Upload API"
 echo "@@@"
 
 echo "Counting HL7"
-az storage blob list -c "$DATA_STREAM-$HL7_ROUTE" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefi "2024/$1" --num-results 2147483647
+az storage blob list -c "$DATA_STREAM-$HL7_ROUTE" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefix "2024/$1" --num-results 2147483647
 
 
 echo "Counting CSV"
-az storage blob list -c "$DATA_STREAM-$CSV_ROUTE" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefi "2024/$1" --num-results 2147483647
+az storage blob list -c "$DATA_STREAM-$CSV_ROUTE" --account-key="${UPLOAD_ACCT_KEY}" --account-name="ocioededataexchangestg" --query "length(@)" --prefix "2024/$1" --num-results 2147483647
 
 
 echo "@@@"
@@ -40,7 +40,7 @@ echo "@@@"
 for i in "${folders[@]}"
 do
   echo "Counting $i/2024/$1"
-  az storage blob list -c "routeingress" --account-key "${ROUTE_ACCT_KEY}" --account-name "ocioederoutingdatasastg" --query "length(@)"  --prefix "$i/2024/$1" --num-results 2147483647
+  az storage blob list -c "routeingress" --account-key "${ROUTE_ACCT_KEY}" --account-name "ocioederoutingdatasastg" --query "length(@)"  --prefix "$i/celr/2024/$1" --num-results 2147483647
 
 done
 
@@ -54,11 +54,11 @@ for i in "${folders[@]}"
 do
   echo "Counting $i/2024/$1"
   count=$(az storage blob list -c "dex" --account-key "${EZDX_ACCT_KEY}" --account-name "stezdxstg" --query "[?properties.contentSettings.contentMd5 != null] | length(@)"  --prefix "$i/2024/$1" --num-results 2147483647)
-  echo $(($count-25)) # Remove folder count - make sure there is one folder for each hour of the day 00 to 23, 24 total + parent folder = 25
+  echo $(($count)) # Remove folder count - make sure there is one folder for each hour of the day 00 to 23, 24 total + parent folder = 25
 done
 
-count=$(az storage blob list -c "dex" --account-key "${EZDX_ACCT_KEY}" --account-name "stezdxstg" --query "length(@)"  --prefix "$DATA_STREAM-$CSV_ROUTE/2024/$1" --num-results 2147483647)
-echo "CSV: $(($count-1))" # Remove root folder counted on query above.
+count=$(az storage blob list -c "dex" --account-key "${EZDX_ACCT_KEY}" --account-name "stezdxstg" --query "[?properties.contentSettings.contentMd5 != null] | length(@)"  --prefix "$DATA_STREAM-$CSV_ROUTE/2024/$1" --num-results 2147483647)
+echo "CSV: $(($count))" # Remove root folder counted on query above.
 
 echo "@@@"
 echo "@@@ Checking Dead letter"
