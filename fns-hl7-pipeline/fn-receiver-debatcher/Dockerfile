@@ -6,6 +6,10 @@ RUN chown -R dexuser /etc/ssh
 RUN chown -R dexuser /run
 RUN chown -R dexuser /etc/init.d/ssh
 RUN chown -R dexuser /azure-functions-host
+RUN mkdir -p /home/site/wwwroot
+RUN chown -R dexuser /home/site/wwwroot
+
+EXPOSE 80
 
 # run as dexuser
 USER dexuser
