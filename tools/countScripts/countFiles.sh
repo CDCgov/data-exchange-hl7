@@ -1,4 +1,5 @@
 
+
 DATA_STREAM="celr"
 HL7_ROUTE="hl7v2"
 CSV_ROUTE="csv"
@@ -27,10 +28,10 @@ echo "@@@ Counting routeingress"
 echo "@@@"
 
 echo "Counting HL7"
- az storage blob list -c "routeingress" --account-key "${ROUTE_ACCT_KEY}" --account-name "ocioederoutingdatasa${ENV}" --query "length(@)"  --prefix "$DATA_STREAM-$HL7_ROUTE/2024/$1" --num-results 2147483647
+ az storage blob list -c "routeingress" --account-key "${ROUTE_ACCT_KEY}" --account-name "ocioederoutingdatasa${ENV}" --query "[?properties.contentSettings.contentMd5 != null] | length(@)"  --prefix "$DATA_STREAM-$HL7_ROUTE/2024/$1" --num-results 2147483647
 
 echo "Counting csv"
- az storage blob list -c "routeingress" --account-key "${ROUTE_ACCT_KEY}" --account-name "ocioederoutingdatasa${ENV}" --query "length(@)"  --prefix "$DATA_STREAM-$CSV_ROUTE/2024/$1" --num-results 2147483647
+ az storage blob list -c "routeingress" --account-key "${ROUTE_ACCT_KEY}" --account-name "ocioederoutingdatasa${ENV}" --query "[?properties.contentSettings.contentMd5 != null] | length(@)"  --prefix "$DATA_STREAM-$CSV_ROUTE/2024/$1" --num-results 2147483647
 
 declare -a folders=("hl7_out_recdeb" "hl7_out_redacted" "hl7_out_validation_report" "hl7_out_json" "hl7_out_lake_seg")
 
@@ -41,7 +42,7 @@ echo "@@@"
 for i in "${folders[@]}"
 do
   echo "Counting $i/2024/$1"
-  az storage blob list -c "routeingress" --account-key "${ROUTE_ACCT_KEY}" --account-name "ocioederoutingdatasa${ENV}" --query "length(@)"  --prefix "$i/celr/2024/$1" --num-results 2147483647
+  az storage blob list -c "routeingress" --account-key "${ROUTE_ACCT_KEY}" --account-name "ocioederoutingdatasa${ENV}" --query "[?properties.contentSettings.contentMd5 != null] | length(@)"  --prefix "$i/celr/2024/$1" --num-results 2147483647
 
 done
 
@@ -68,7 +69,7 @@ declare -a folders=("hl7_out_recdeb" "hl7_out_redacted" "hl7_out_validation_repo
 for i in "${folders[@]}"
 do
   echo "Counting $i/2024/$1"
-  az storage blob list -c "route-deadletter" --account-key "${ROUTE_ACCT_KEY}" --account-name "ocioederoutingdatasa${ENV}" --query "length(@)"  --prefix "$i/2024/$1" --num-results 2147483647
+  az storage blob list -c "route-deadletter" --account-key "${ROUTE_ACCT_KEY}" --account-name "ocioederoutingdatasa${ENV}" --query "[?properties.contentSettings.contentMd5 != null] | length(@)"  --prefix "$i/2024/$1" --num-results 2147483647
 done
 
 echo "@@@"
