@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	- Added Fields to PID up to 35
 	- Included Fortify scans for new modules
 	- Dockerized two functions for AKS migration path
+ 	- Removing binary data from HL7 message and saving it as a separate file.
 
 ### [0.0.44] 2024-05-16
 		- Removed Process Status Traces from functions
