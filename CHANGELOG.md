@@ -4,8 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### [0.0.43] 2024-05-17
-	- Add Fortify Scanning to scan code base when code is emrged to main branch.
+### [0.0.47] 2024-06-12
+	- Added version to Routing Metadata
+	- Created DockerFile for all Functions
+
+### [0.0.46] 2024-05-29
+	- Added Fields to PID up to 35
+	- Included Fortify scans for new modules
+	- Dockerized two functions for AKS migration path
 
 ### [0.0.44] 2024-05-16
 		- Removed Process Status Traces from functions
