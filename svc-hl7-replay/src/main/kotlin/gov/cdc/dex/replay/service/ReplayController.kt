@@ -4,9 +4,6 @@ import gov.cdc.dex.azure.EventHubSender
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpHeaders
-import io.micronaut.http.annotation.Body
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Post
 import io.micronaut.http.MediaType
 
 import org.slf4j.LoggerFactory
@@ -16,8 +13,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.Put
+import io.micronaut.http.annotation.*
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -101,7 +97,7 @@ class ReplayController {
         val evHubConnStr: String = System.getenv("EventHubConnectionString")
         private var logger = LoggerFactory.getLogger(Function::class.java.name)
     }
-    @Post("/{message_uuid}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
+    @Post("/{messageUUID}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
     @Operation(summary = "Replays HL7 Message by message UUID")
     @Parameters(
         Parameter(name="message_uuid", `in` = ParameterIn.PATH, description =" Replays by message uuid", required=true, schema=Schema(type = "string"), example = "123e4567-e89b-12d3-a456-426655440000")
@@ -113,12 +109,12 @@ class ReplayController {
         ApiResponse(responseCode =  CommonResponses.not_found_code, description = CommonResponses.not_found_message),
         ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)]
     )
-    fun replayMessageUUIDController(){
+    fun replayMessageUUIDController(@PathVariable messageUUID: String){
 
         logger.info("Controller for replay by message_uuid")
 
     }
-    @Post("/{file_uuid}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
+    @Post("/{fileUUID}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
     @Operation(summary = "Replays HL7 Message both validated and error queued by file UUID")
     @Parameters(
         Parameter(name="file_uuid", `in` = ParameterIn.PATH, description =" Replays HL7 messages by file uuid", required=true, schema=Schema(type = "string"),example = "123e4567-e89b-12d3-a456-426655440000")
@@ -134,13 +130,14 @@ class ReplayController {
     fun replayFileUUIDController(@RequestBody(
         description = " Request Object for replaying messages by message uuid",
         content = [Content(schema = Schema(implementation = RequestReplay::class))]
-    )request: RequestReplay ):HttpResponse<String>{
+    )request: RequestReplay, @PathVariable fileUUID: String
+    ):HttpResponse<String>{
 
         logger.info("Starting the replay of the message by file UUID ${request}")
 
         return HttpResponse.ok()
     }
-    @Put("/{request_id}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
+    @Put("/{requestID}", consumes=[MediaType.APPLICATION_JSON], produces =[MediaType.APPLICATION_JSON])
     @Operation(summary = "Cancels replay by request id")
     @Parameters(
         Parameter(name="request_id", `in` = ParameterIn.PATH, description ="Cancels the replay associated to request_id passed as path parameter", required=true, schema=Schema(type = "string"),example = "123e4567-e89b-12d3-a456-426655440000")
@@ -153,12 +150,12 @@ class ReplayController {
         ApiResponse(responseCode =  CommonResponses.not_found_code, description = CommonResponses.not_found_message),
         ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)
     )
-    fun replayCancelController(){
+    fun replayCancelController(@PathVariable requestID: String){
 
         logger.info("controller to cancel the existing replay")
 
     }
-    @Get("/{request_id}/status", consumes=[MediaType.TEXT_PLAIN], produces =[MediaType.APPLICATION_JSON])
+    @Get("/{requestId}/status", consumes=[MediaType.TEXT_PLAIN], produces =[MediaType.APPLICATION_JSON])
     @Operation(summary = "Returns the status of replay associated with request_id")
     @Parameters(
         Parameter(name="request_id", `in` = ParameterIn.PATH, description =" Returns the status of the replay associated to a request_id", required=true, schema=Schema(type = "string"),example = "Success")
@@ -171,10 +168,10 @@ class ReplayController {
         ApiResponse(responseCode =  CommonResponses.not_found_code, description = CommonResponses.not_found_message),
         ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)
     )
-    fun replayStatusController(){
+    fun replayStatusController(@PathVariable requestId: String){
         logger.info("replayStatusController by request_id")
     }
-    @Get("/{request_id}", consumes=[MediaType.TEXT_PLAIN], produces =[MediaType.APPLICATION_JSON])
+    @Get("/{requestId}", consumes=[MediaType.TEXT_PLAIN], produces =[MediaType.APPLICATION_JSON])
     @Operation(summary = "Returns the full report for a completed request")
     @Parameters(
         Parameter(name="request_id", `in` = ParameterIn.PATH, description =" Returns the full report for a successfully completed request", required=true, schema=Schema(type = "string"),example = "Success")
@@ -187,7 +184,7 @@ class ReplayController {
         ApiResponse(responseCode =  CommonResponses.not_found_code, description = CommonResponses.not_found_message),
         ApiResponse(responseCode =  CommonResponses.internal_error_code, description = CommonResponses.internal_error_message)
     )
-    fun replayReportsController(){
+    fun replayReportsController(@PathVariable requestId: String){
         logger.info("replayReportsController by request_id")
     }
     @Get("/",produces =[MediaType.APPLICATION_JSON])

@@ -24,7 +24,7 @@ zip -r ../../../$base_name *
 cd ../../..
 
 echo "Deploying Zip..."
-
+export LANG=C.UTF-8
 for i in "${arr[@]}"
 do
   echo "    Deploying $i on $1 Environment"
