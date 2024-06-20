@@ -11,6 +11,7 @@ function=ocio-ede-$env-hl7-receiver-debatcher
 
 echo "Building Jar..."
 mvn clean package -DskipTests=true -Paz-$env
+rm base_name
 
 echo "Zipping it:"
 
