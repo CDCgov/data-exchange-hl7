@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "0.0.50-SNAPSHOT"
+version = "0.0.51-SNAPSHOT"
 
 repositories {
     maven {
@@ -27,6 +27,7 @@ dependencies {
     implementation("com.azure:azure-messaging-eventhubs")
     implementation("com.azure:azure-messaging-servicebus")
     implementation("com.azure:azure-storage-blob")
+    implementation("com.azure:azure-storage-queue")
 
     implementation("redis.clients:jedis:5.1.0")
     implementation("com.azure:azure-cosmos:4.55.1")

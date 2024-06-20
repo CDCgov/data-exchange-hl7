@@ -9,6 +9,8 @@ import com.azure.messaging.eventhubs.EventHubProducerClient
 import com.azure.messaging.servicebus.ServiceBusClientBuilder
 import com.azure.messaging.servicebus.ServiceBusReceiverClient
 import com.azure.storage.blob.BlobServiceClientBuilder
+import com.azure.storage.queue.QueueClientBuilder
+import gov.cdc.dex.azure.AzureBlobProxy
 import gov.cdc.dex.azure.DedicatedEventHubSender
 import java.time.Duration
 
@@ -17,10 +19,11 @@ class DependencyChecker {
         EVENT_HUB("Event Hub"),
         SERVICE_BUS("Service Bus"),
         STORAGE_ACCOUNT("Storage Account"),
+        STORAGE_QUEUE("Storage Queue"),
         COSMOS_DB("Cosmos DB")
     }
-    private fun checkDependency(dependency: AzureDependency, action: () -> Any) : DependencyHealthData {
-        val data = DependencyHealthData(dependency.description)
+    private fun checkDependency(dependency: AzureDependency, resourceName: String, action: () -> Any) : DependencyHealthData {
+        val data = DependencyHealthData(dependency.description, resourceName=resourceName)
         try {
             action()
             data.status = "UP"
@@ -31,7 +34,7 @@ class DependencyChecker {
         return data
     }
     fun checkEventHub(eventHubClient: DedicatedEventHubSender) : DependencyHealthData {
-        return checkDependency(AzureDependency.EVENT_HUB) {
+        return checkDependency(AzureDependency.EVENT_HUB, eventHubClient.getEventHubName()) {
             eventHubClient.getPartitionIds()
         }
     }
@@ -42,7 +45,7 @@ class DependencyChecker {
             .setMode(AmqpRetryMode.FIXED)
             .setTryTimeout(Duration.ofSeconds(10))
 
-        return checkDependency(AzureDependency.EVENT_HUB) {
+        return checkDependency(AzureDependency.EVENT_HUB, eventHubName) {
             val client: EventHubProducerClient = EventHubClientBuilder()
                 .connectionString(connectionString, eventHubName)
                 .retryOptions(retryOptions)
@@ -52,8 +55,8 @@ class DependencyChecker {
         }
     }
 
-    fun checkServiceBus(connectionString: String, queueName: String) : DependencyHealthData {
-        return checkDependency(AzureDependency.SERVICE_BUS) {
+    fun checkServiceBusQueue(connectionString: String, queueName: String) : DependencyHealthData {
+        return checkDependency(AzureDependency.SERVICE_BUS, queueName) {
             val serviceBusClient: ServiceBusReceiverClient = ServiceBusClientBuilder()
                 .connectionString(connectionString)
                 .receiver()
@@ -65,7 +68,7 @@ class DependencyChecker {
     }
 
     fun checkStorageAccount(connectionString: String, containerName: String): DependencyHealthData {
-        return checkDependency(AzureDependency.STORAGE_ACCOUNT) {
+        return checkDependency(AzureDependency.STORAGE_ACCOUNT, getAccountName(connectionString)) {
             val blobServiceClient = BlobServiceClientBuilder()
                 .connectionString(connectionString)
                 .buildClient()
@@ -74,8 +77,27 @@ class DependencyChecker {
         }
     }
 
+    fun checkStorageAccount(connectionString: String): DependencyHealthData {
+        return checkDependency(AzureDependency.STORAGE_ACCOUNT, getAccountName(connectionString)) {
+            val blobServiceClient = BlobServiceClientBuilder()
+                .connectionString(connectionString)
+                .buildClient()
+            blobServiceClient.properties
+        }
+    }
+
+    fun checkStorageQueue(connectionString: String, queueName: String) : DependencyHealthData {
+        return checkDependency(AzureDependency.STORAGE_QUEUE, queueName) {
+            val queueClient = QueueClientBuilder()
+                .connectionString(connectionString)
+                .queueName(queueName)
+                .buildClient()
+            queueClient.properties
+        }
+    }
+
     fun checkCosmosDB(serviceEndpoint: String, key: String, database: String, container: String) : DependencyHealthData {
-        return checkDependency(AzureDependency.COSMOS_DB) {
+        return checkDependency(AzureDependency.COSMOS_DB, database) {
             val cosmosClient: CosmosClient = CosmosClientBuilder()
                 .endpoint(serviceEndpoint)
                 .key(key)
@@ -84,5 +106,9 @@ class DependencyChecker {
             db.getContainer(container).readThroughput()
             cosmosClient.close()
         }
+    }
+
+    private fun getAccountName(connectionString: String) : String {
+        return connectionString.substringAfter("AccountName=").substringBefore(";")
     }
 }

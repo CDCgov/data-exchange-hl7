@@ -17,5 +17,9 @@ class AzureBlobProxy(connectionStr: String, container: String) {
         return blobContainerClient.getBlobClient(blobName)
     }
 
+    fun getAccountName() : String {
+        return blobContainerClient.accountName
+    }
+
 
 }
