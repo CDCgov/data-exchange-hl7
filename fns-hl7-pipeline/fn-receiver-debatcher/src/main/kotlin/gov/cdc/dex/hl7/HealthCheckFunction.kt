@@ -28,11 +28,11 @@ class HealthCheckFunction {
         val queueName = System.getenv("queueName")
         val depChecker = DependencyChecker()
         val time = measureTime {
-            addToResult(depChecker.checkEventHub(evHubConnStr, evHubSendName), result)
-            addToResult(depChecker.checkEventHub(evHubConnStr, evHubReportsName), result)
-            addToResult(depChecker.checkStorageAccount(blobIngestConn, blobContainer), result)
-            addToResult(depChecker.checkStorageAccount(blobAttachments), result)
-            addToResult(depChecker.checkStorageQueue(blobIngestConn, queueName), result)
+            addToResult(depChecker.checkEventHub(evHubConnStr, evHubSendName), evHubSendName, result)
+            addToResult(depChecker.checkEventHub(evHubConnStr, evHubReportsName), evHubReportsName, result)
+            addToResult(depChecker.checkStorageAccount(blobIngestConn, blobContainer), getAccountName(blobIngestConn), result)
+            addToResult(depChecker.checkStorageAccount(blobAttachments), getAccountName(blobAttachments), result)
+            addToResult(depChecker.checkStorageQueue(blobIngestConn, queueName), queueName, result)
         }
         result.totalChecksDuration = time.toComponents { hours, minutes, seconds, nanoseconds ->
             "%02d:%02d:%02d.%03d".format(hours, minutes, seconds, nanoseconds / 1000000)
@@ -45,8 +45,13 @@ class HealthCheckFunction {
             .build()
     }
 
-    private fun addToResult(dependencyData: DependencyHealthData, result: HealthCheckResult) {
+    private fun addToResult(dependencyData: DependencyHealthData, resourceName: String,  result: HealthCheckResult) {
+        dependencyData.resourceName = resourceName
         result.dependencyHealthChecks.add(dependencyData)
-        result.status = if (dependencyData.status == "UP") "UP" else "DOWNGRADED"
+        if (dependencyData.status != "UP") result.status = "DOWNGRADED"
+    }
+
+    private fun getAccountName(connectionString: String) : String {
+        return connectionString.substringAfter("AccountName=").substringBefore(";")
     }
 }

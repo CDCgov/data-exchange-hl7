@@ -42,7 +42,7 @@ class FunctionConfig {
         val attachmentBlobConnStr = try {
             System.getenv("attachmentBlobConnString")
         } catch (e: NullPointerException) {
-            logger.error("FATAL: Missing environment variable BlobIngestConnectionString")
+            logger.error("FATAL: Missing environment variable attachmentBlobConnString")
             throw e
         }
         azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
