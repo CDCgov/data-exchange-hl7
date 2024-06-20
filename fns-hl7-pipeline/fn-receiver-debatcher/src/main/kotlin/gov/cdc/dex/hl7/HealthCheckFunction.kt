@@ -19,8 +19,6 @@ class HealthCheckFunction {
         request: HttpRequestMessage<Optional<String>>
     ): HttpResponseMessage {
         val result = HealthCheckResult()
-        val evHubSendName: String = System.getenv("EventHubSendName")
-        val evHubReportsName: String =System.getenv("EventReportsHubName")
         val blobIngestConn = System.getenv("BlobIngestConnectionString")
         val blobContainer = System.getenv("BlobIngestContainerName")
         val blobAttachments = System.getenv("attachmentBlobConnString")
