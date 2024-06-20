@@ -11,6 +11,7 @@ data class HealthCheckResult(
 )
 data class DependencyHealthData(
     val service: String,
+    @SerializedName("resource") var resourceName: String? = null,
     var status: String = "UP",
     @SerializedName("health_issues") var healthIssues: String = ""
 )

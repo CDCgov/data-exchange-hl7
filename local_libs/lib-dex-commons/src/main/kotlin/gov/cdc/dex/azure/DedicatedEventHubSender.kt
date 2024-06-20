@@ -19,6 +19,10 @@ class DedicatedEventHubSender( evHubConnStr: String, evHubTopicName: String) {
         return producer.partitionIds.map { it.toString() }
     }
 
+    fun getEventHubName(): String {
+        return producer.eventHubName
+    }
+
     fun send(message: String) : List<Int> {
         return send(listOf(message))
     }
