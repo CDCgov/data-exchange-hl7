@@ -10,7 +10,6 @@ import com.azure.messaging.servicebus.ServiceBusClientBuilder
 import com.azure.messaging.servicebus.ServiceBusReceiverClient
 import com.azure.storage.blob.BlobServiceClientBuilder
 import com.azure.storage.queue.QueueClientBuilder
-import gov.cdc.dex.azure.AzureBlobProxy
 import gov.cdc.dex.azure.DedicatedEventHubSender
 import java.time.Duration
 
