@@ -19,12 +19,13 @@ class HealthCheckFunction {
             request: HttpRequestMessage<Optional<String>>
     ): HttpResponseMessage {
         val result = HealthCheckResult()
-        val evHubConnStr = System.getenv("EventHubConnectionString")
         val evHubReceiveName = System.getenv("EventHubReceiveName")
-        val checker = DependencyChecker()
+        val evHubConnStr = System.getenv("EventHubConnectionString")
+
+        val dependencyChecker = DependencyChecker()
         val time = measureTime {
-            addToResult(checker.checkEventHub(evHubConnStr, evHubReceiveName), result)
-            addToResult(checker.checkStorageAccount(
+            addToResult(dependencyChecker.checkEventHub(evHubConnStr, evHubReceiveName), result)
+            addToResult(dependencyChecker.checkStorageAccount(
                 Function.fnConfig.blobStorageConnectionString,
                 Function.fnConfig.blobStorageContainerName), result)
         }
