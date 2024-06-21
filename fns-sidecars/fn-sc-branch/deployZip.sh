@@ -15,6 +15,7 @@ base_name=az-fun-$function_rootname.zip
 
 echo "Building Jar..."
 mvn clean package -DskipTests=true -Paz-$env
+rm base_name
 
 echo "Zipping it:"
 
