@@ -40,7 +40,7 @@ class DependencyChecker {
 
     fun checkEventHub(connectionString: String, eventHubName: String) : DependencyHealthData {
         val retryOptions = AmqpRetryOptions()
-            .setMaxRetries(1)
+            .setMaxRetries(0)
             .setMode(AmqpRetryMode.FIXED)
             .setTryTimeout(Duration.ofSeconds(10))
 

@@ -1,7 +1,6 @@
 package gov.cdc.dataexchange
 
 import gov.cdc.dex.azure.DedicatedEventHubSender
-import gov.cdc.dex.azure.EventHubSender
 
 class FunctionConfig {
     val evHubSendOkName: String = System.getenv("EventHubSendOkName")
