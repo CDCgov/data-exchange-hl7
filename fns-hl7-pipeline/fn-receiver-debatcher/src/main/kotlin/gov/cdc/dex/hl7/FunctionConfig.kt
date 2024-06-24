@@ -9,6 +9,8 @@ class FunctionConfig {
     val azBlobProxy: AzureBlobProxy
     val evHubSenderOut: DedicatedEventHubSender
     val evHubSenderReports: DedicatedEventHubSender
+    var attachmentBlobProxy: AzureBlobProxy
+    val blobAttachmentContName = "hl7-attachments"
     private val logger : Logger = LoggerFactory.getLogger(this.javaClass.simpleName)
     val blobIngestContName: String = try {
         System.getenv("BlobIngestContainerName")
@@ -29,14 +31,18 @@ class FunctionConfig {
         throw e
     }
 
-    val psURL = System.getenv("ProcessingStatusBaseURL") ?: ""
-
     init {
          //Init Azure Storage connection
         val ingestBlobConnStr = try {
             System.getenv("BlobIngestConnectionString")
         } catch (e: NullPointerException) {
             logger.error("FATAL: Missing environment variable BlobIngestConnectionString")
+            throw e
+        }
+        val attachmentBlobConnStr = try {
+            System.getenv("attachmentBlobConnString")
+        } catch (e: NullPointerException) {
+            logger.error("FATAL: Missing environment variable attachmentBlobConnString")
             throw e
         }
         azBlobProxy = AzureBlobProxy(ingestBlobConnStr, blobIngestContName)
@@ -46,6 +52,7 @@ class FunctionConfig {
             logger.error("FATAL: Missing environment variable EventHubConnectionString")
             throw e
         }
+        attachmentBlobProxy = AzureBlobProxy(attachmentBlobConnStr, blobAttachmentContName)
         evHubSenderOut = DedicatedEventHubSender(evHubConnStr, evHubSendName)
         evHubSenderReports = DedicatedEventHubSender(evHubConnStr, evReportsHubName)
 

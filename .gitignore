@@ -331,3 +331,6 @@ gradle-app.setting
 # maven release plugin
 pom.xml.tag
 pom.xml.releaseBackup
+
+# zip deploys
+.zip

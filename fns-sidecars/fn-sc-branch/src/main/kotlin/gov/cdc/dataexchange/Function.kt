@@ -10,7 +10,7 @@ class Function {
 
     companion object {
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
-        private var fnConfig = FunctionConfig()
+        var fnConfig = FunctionConfig()
     }
 
     @FunctionName("branch")
@@ -64,7 +64,8 @@ class Function {
                 fnConfig.evHubSenderErr.send(outErrList)
             }
         } catch (e : Exception) {
-            logger.error("Error sending to event hubs, ${e.message}")
+            logger.error("Error sending to event hubs: ${e.message}")
+            throw e
         }
 
     }

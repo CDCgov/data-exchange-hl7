@@ -4,8 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.47] 2024-06-12
+	- Added version to Routing Metadata
+	- Created DockerFile for all Functions
 
- ### [0.0.43] 2024-04-17
+### [0.0.46] 2024-05-29
+	- Added Fields to PID up to 35
+	- Included Fortify scans for new modules
+	- Dockerized two functions for AKS migration path
+ 	- Removing binary data from HL7 message and saving it as a separate file.
+
+### [0.0.44] 2024-05-16
+		- Removed Process Status Traces from functions
+		- Added sender_id and received_filename to metadata
+		- Keep supporting metadata when file sink is copying files
+		- Throw unknown exceptions on all functions for Azure retries
+		- Saving partitioned folders by date using new dex_ingest_datetime
+
+### [0.0.43] 2024-04-17
 	- Moved AzureBlobProxy from receiver-debatcher to lib-dex-commons (to be reused by other Fns)
 	- Created bash scripts to deploy Azure Functions with Zip deploy instead of maven plugin.
 

@@ -15,6 +15,7 @@ base_name=az-fun-$function_rootname.zip
 
 echo "Building Jar..."
 mvn clean package -DskipTests=true -Paz-$env
+rm base_name
 
 echo "Zipping it:"
 
@@ -24,7 +25,7 @@ zip -r ../../../$base_name *
 cd ../../..
 
 echo "Deploying Zip..."
-
+export LANG=C.UTF-8
 for i in "${arr[@]}"
 do
   echo "    Deploying $i on $1 Environment"

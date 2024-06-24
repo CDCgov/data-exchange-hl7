@@ -20,8 +20,8 @@ zip -r ../../../$base_name *
 cd ../../..
 
 echo "Deploying Zip..."
-
+export LANG=C.UTF-8
 az functionapp deployment source config-zip -g $hl7RG -n $function --src $base_name
 ### Set FN_VERSION:
 fn_version=$(cat pom.xml |grep -oPm1 "(?<=<version>)[^<]+")
-az functionapp config appsettings set --name $function --resource-group $hl7RG --settings FN_VERSION=$fn_version
+az functionapp config appsettings set --name $function --resource-group $hl7RG --settings FN_VERSION=$fn_version > /dev/null

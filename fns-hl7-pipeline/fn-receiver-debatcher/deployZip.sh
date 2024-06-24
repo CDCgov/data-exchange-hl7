@@ -11,6 +11,7 @@ function=ocio-ede-$env-hl7-receiver-debatcher
 
 echo "Building Jar..."
 mvn clean package -DskipTests=true -Paz-$env
+rm base_name
 
 echo "Zipping it:"
 
@@ -23,5 +24,6 @@ echo "Deploying Zip..."
 
 az functionapp deployment source config-zip -g $hl7RG -n $function --src $base_name
 ### Set FN_VERSION:
-fn_version=$(cat pom.xml |grep -oPm1 "(?<=<version>)[^<]+")
-az functionapp config appsettings set --name $function --resource-group $hl7RG --settings FN_VERSION=$fn_version
+export LANG=C.UTF-8
+fn_version=$(cat pom.xml | grep -oPm1 "(?<=<version>)[^<]+")
+az functionapp config appsettings set --name $function --resource-group $hl7RG --settings FN_VERSION=$fn_version > /dev/null

@@ -7,13 +7,13 @@ import com.microsoft.azure.functions.annotation.FunctionName
 import com.microsoft.azure.functions.annotation.QueueTrigger
 import gov.cdc.dex.metadata.*
 import gov.cdc.dex.util.DateHelper.toIsoString
-import gov.cdc.dex.util.ProcessingStatus.PSClientUtility
 import gov.cdc.dex.util.StringUtils.Companion.hashMD5
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.util.*
-import java.util.Base64.getEncoder
 
 
 /**
@@ -28,14 +28,15 @@ class Function {
         const val METADATA = "Metadata"
         val gson: Gson = GsonBuilder().serializeNulls().create()
         val knownMetadata: Set<String> = setOf(
-            "data_stream_id", "meta_destination_id",
-            "data_stream_route", "meta_ext_event",
+            "data_stream_id",
+            "data_stream_route",
             "data_producer_id",
-            "jurisdiction", "reporting_jurisdiction", "meta_organization",
-            "sender_id", "user_id", "meta_username",
+            "jurisdiction",
+            "sender_id",
             "upload_id", "tus_tguid",
-            "trace_id",
-            "parent_span_id", "span_id"
+            "received_filename",
+            "dex_ingest_datetime",
+            "version"
         )
 
         val fnConfig = FunctionConfig()
@@ -74,7 +75,6 @@ class Function {
             // Get properties and metadata of blob -- should retry if failure.
             // if it cannot get properties after retrying, blobProperties will be null,
             // and we will log this blob as a failure (will fail validateMetadata)
-          //  val blobProperties = getBlobProperties(blobClient)
             val blobProperties = blobClient.properties
             // Create Map of Blob Metadata with lower case keys
             val metaDataMap = blobProperties?.metadata?.mapKeys { it.key.lowercase() }?.toMutableMap() ?: mutableMapOf()
@@ -124,6 +124,7 @@ class Function {
                                         currentLinesArr = currentLinesArr,
                                         eventTime = event.eventTime,
                                         startTime = startTime,
+                                        metaDataMap = metaDataMap,
                                         routingMetadata = routingMetadata,
                                         eventReport = eventReport
                                     )
@@ -145,6 +146,7 @@ class Function {
                         currentLinesArr = currentLinesArr,
                         eventTime = event.eventTime,
                         startTime = startTime,
+                        metaDataMap = metaDataMap,
                         routingMetadata = routingMetadata,
                         eventReport = eventReport
                     )
@@ -159,6 +161,7 @@ class Function {
                         currentLinesArr = arrayListOf(),
                         eventTime = event.eventTime,
                         startTime = startTime,
+                        metaDataMap = metaDataMap,
                         routingMetadata = routingMetadata,
                         eventReport = eventReport,
                         errorMessage = errorMessage
@@ -182,6 +185,7 @@ class Function {
                     currentLinesArr = arrayListOf(),
                     eventTime = event.eventTime,
                     startTime = startTime,
+                    metaDataMap = metaDataMap,
                     routingMetadata = newRoutingMetadata,
                     eventReport = eventReport,
                     errorMessage = errorMessage
@@ -205,6 +209,7 @@ class Function {
                 fnConfig.evHubSenderReports.send(eventReportList)
             } catch (e: Exception) {
                 logger.error("Unable to send to event hub ${fnConfig.evReportsHubName}: ${e.message}")
+                throw e
             }
         }
         return msgMetadata
@@ -217,6 +222,7 @@ class Function {
     private fun replaceUploadId(uploadId: String, currentMetadata: RoutingMetadata): RoutingMetadata {
         val newId = uploadId.substringAfterLast("/")
         return RoutingMetadata(
+            dexIngestDateTime = currentMetadata.dexIngestDateTime,
             ingestedFilePath = currentMetadata.ingestedFilePath,
             ingestedFileTimestamp = currentMetadata.ingestedFileTimestamp,
             ingestedFileSize = currentMetadata.ingestedFileSize,
@@ -225,9 +231,10 @@ class Function {
             uploadId = newId,
             dataStreamId = currentMetadata.dataStreamId,
             dataStreamRoute = currentMetadata.dataStreamRoute,
-            traceId = currentMetadata.dataStreamId,
-            spanId = currentMetadata.spanId,
-            supportingMetadata = currentMetadata.supportingMetadata
+            senderId = currentMetadata.senderId,
+            receivedFilename = currentMetadata.receivedFilename,
+            supportingMetadata = currentMetadata.supportingMetadata,
+            version = currentMetadata.version
         )
     }
 
@@ -238,25 +245,11 @@ class Function {
         currentLinesArr: ArrayList<String>,
         eventTime: String,
         startTime: String,
+        metaDataMap: Map<String, String?>,
         routingMetadata: RoutingMetadata,
         eventReport: ReceiverEventReport,
         errorMessage: String? = null
     ): DexHL7Metadata {
-
-        val psClientUtility = PSClientUtility()
-        logger.info("Span ID : ${ routingMetadata.spanId}")
-
-        fnConfig.psURL?.let {
-            psClientUtility.sendTraceToProcessingStatus(
-                fnConfig.psURL,
-                routingMetadata.traceId,
-                routingMetadata.spanId,
-                ProcessInfo.RECEIVER_PROCESS
-            ).let {
-                if(it.isNotEmpty()) routingMetadata.spanId = it
-            }
-            logger.info("Setting processing status spanId to routingMetadata.spanId: ${routingMetadata.spanId}")
-        }
 
         val messageMetadata = MessageMetadata(
             singleOrBatch = singleOrBatch,
@@ -281,6 +274,7 @@ class Function {
             messageMetadata = messageMetadata,
             routingMetadata = routingMetadata,
             stage = stage,
+            metaDataMap =metaDataMap,
             messageContent = currentLinesArr,
             summary = summary
         ).apply {
@@ -363,20 +357,20 @@ class Function {
     ): RoutingMetadata {
 
         return RoutingMetadata(
+            dexIngestDateTime = getValueOrDefaultString(metaDataMap,listOf("dex_ingest_datetime", "file_timestamp"),
+                OffsetDateTime.now(ZoneId.of("UTC")).toIsoString()),
             ingestedFilePath = metaDataMap["file_path"] ?: "",
             ingestedFileTimestamp = metaDataMap["file_timestamp"] ?: "",
             ingestedFileSize = metaDataMap["file_size"] ?: "",
             dataProducerId = metaDataMap["data_producer_id"] ?: "",
-            jurisdiction = getValueOrDefaultString(
-                metaDataMap,
-                listOf("jurisdiction", "reporting_jurisdiction", "meta_organization")
-            ),
+            jurisdiction = getValueOrDefaultString(metaDataMap, listOf("jurisdiction")),
             uploadId = getValueOrDefaultString(metaDataMap, listOf("upload_id", "tus_tguid")),
-            dataStreamId = getValueOrDefaultString(metaDataMap, listOf("data_stream_id", "meta_destination_id")),
-            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route", "meta_ext_event")),
-            traceId = getValueOrDefaultString(metaDataMap, listOf("trace_id")),
-            spanId = getValueOrDefaultString(metaDataMap, listOf("parent_span_id", "span_id")),
-            supportingMetadata = supportingMetadata
+            dataStreamId = metaDataMap["data_stream_id"]?.lowercase() ?: UNKNOWN_VALUE,
+            dataStreamRoute = getValueOrDefaultString(metaDataMap, listOf("data_stream_route")),
+            senderId = metaDataMap["sender_id"] ?: "",
+            receivedFilename = metaDataMap["received_filename"] ?: "",
+            supportingMetadata = supportingMetadata,
+            version = metaDataMap["version"] ?: ""
         )
     }
 
@@ -385,15 +379,18 @@ class Function {
         messageMetadata: MessageMetadata,
         routingMetadata: RoutingMetadata,
         stage: StageMetadata,
+        metaDataMap: Map<String, String?>,
         messageContent: ArrayList<String>,
         summary: SummaryInfo,
     ): DexHL7Metadata {
+        val dirPath = messageMetadata.messageUUID // todo: get correct requirement
+        val hl7Transformer = HL7Transformer(messageContent,metaDataMap,dirPath,fnConfig)
 
         return DexHL7Metadata(
             messageMetadata = messageMetadata,
             routingMetadata = routingMetadata,
             stage = stage,
-            content = getEncoder().encodeToString(messageContent.joinToString("\n").toByteArray()),
+            content = hl7Transformer.removeBinaryToBase64(),
             summary = summary
         )
     }

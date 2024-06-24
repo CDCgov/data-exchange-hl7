@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>hl7-file-sink</artifactId>
-    <version>0.0.43-SNAPSHOT</version>
+    <version>0.0.48-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Kotlin Function :: hl7-file-sink</name>
     <scm>
@@ -24,7 +24,7 @@
         <functions.version>3.0.0</functions.version>
         <kotlin.version>1.9.0</kotlin.version>
         <hl7pet.version>1.2.7.2</hl7pet.version>
-        <lib-dex-commons.version>0.0.46-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.51-SNAPSHOT</lib-dex-commons.version>
         <gson.version>2.10.1</gson.version>
     </properties>
 
@@ -111,7 +111,6 @@
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-messaging-eventhubs</artifactId>
-            <version>5.16.0</version>
         </dependency>
 
         <dependency>
@@ -127,7 +126,6 @@
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob</artifactId>
-            <version>12.23.0</version>
         </dependency>
     </dependencies>
 
@@ -153,7 +151,7 @@
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>linux</os>
-                        <javaVersion>${java.version}</javaVersion>
+
                     </runtime>
                     <appSettings>
                         <!-- Run Azure Function from package file by default -->
