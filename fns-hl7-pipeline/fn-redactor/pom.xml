@@ -25,7 +25,7 @@
         <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
         <kotlin.version>1.9.0</kotlin.version>
         <slf4j.version>2.0.5</slf4j.version>
-        <hl7pet.version>1.2.9</hl7pet.version>
+        <hl7pet.version>1.2.10</hl7pet.version>
         <kotlin.version>1.9.0</kotlin.version>
         <lib-dex-commons.version>0.0.51-SNAPSHOT</lib-dex-commons.version>
     </properties>
