@@ -21,6 +21,11 @@ class DependencyChecker {
         STORAGE_QUEUE("Storage Queue"),
         COSMOS_DB("Cosmos DB")
     }
+    val retryOptions = AmqpRetryOptions()
+        .setMaxRetries(0)
+        .setMode(AmqpRetryMode.FIXED)
+        .setTryTimeout(Duration.ofSeconds(10))
+
     private fun checkDependency(dependency: AzureDependency, resourceName: String, action: () -> Any) : DependencyHealthData {
         val data = DependencyHealthData(dependency.description, resourceName=resourceName)
         try {
@@ -39,11 +44,6 @@ class DependencyChecker {
     }
 
     fun checkEventHub(connectionString: String, eventHubName: String) : DependencyHealthData {
-        val retryOptions = AmqpRetryOptions()
-            .setMaxRetries(0)
-            .setMode(AmqpRetryMode.FIXED)
-            .setTryTimeout(Duration.ofSeconds(10))
-
         return checkDependency(AzureDependency.EVENT_HUB, eventHubName) {
             val client: EventHubProducerClient = EventHubClientBuilder()
                 .connectionString(connectionString, eventHubName)
@@ -57,6 +57,7 @@ class DependencyChecker {
     fun checkServiceBusQueue(connectionString: String, queueName: String) : DependencyHealthData {
         return checkDependency(AzureDependency.SERVICE_BUS, queueName) {
             val serviceBusClient: ServiceBusReceiverClient = ServiceBusClientBuilder()
+                .retryOptions(retryOptions)
                 .connectionString(connectionString)
                 .receiver()
                 .queueName(queueName)
