@@ -22,11 +22,12 @@ class HealthCheckFunction {
     ): HttpResponseMessage {
         val result = HealthCheckResult()
         val evHubSendName: String = System.getenv("EventHubSendName")
+        val evHubReceiveName: String = System.getenv("EventHubReceiveName")
         val evHubConnStr = System.getenv("EventHubConnectionString")
+        val depChecker = DependencyChecker()
         val time = measureTime {
-            val ehHealthData = DependencyChecker().checkEventHub(evHubConnStr, evHubSendName)
-            result.dependencyHealthChecks.add(ehHealthData)
-            result.status = if (ehHealthData.status == "UP") "UP" else "DOWNGRADED"
+            addToResult(depChecker.checkEventHub(evHubConnStr, evHubReceiveName), result)
+            addToResult(depChecker.checkEventHub(evHubConnStr, evHubSendName), result)
         }
         result.totalChecksDuration = time.toComponents { hours, minutes, seconds, nanoseconds ->
             "%02d:%02d:%02d.%03d".format(hours, minutes, seconds, nanoseconds / 1000000)
@@ -38,6 +39,8 @@ class HealthCheckFunction {
                 .body(result)
                 .build()
     }
-
-
+    private fun addToResult(dependencyData: DependencyHealthData, result: HealthCheckResult) {
+        result.dependencyHealthChecks.add(dependencyData)
+        if (dependencyData.status != "UP") result.status = "DOWNGRADED"
+    }
 }
