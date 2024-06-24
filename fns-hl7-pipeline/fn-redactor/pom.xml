@@ -121,18 +121,6 @@
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
                         </property>
-                        <property>
-                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
-                            <value>true</value>
-                        </property>
-                        <property>
-                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
-                            <value>None</value>
-                        </property>
-                        <property>
-                            <name>EventHubSendName</name>
-                            <value>hl7-redacted-out</value>
-                        </property>
                     </appSettings>
                 </configuration>
                 <executions>
