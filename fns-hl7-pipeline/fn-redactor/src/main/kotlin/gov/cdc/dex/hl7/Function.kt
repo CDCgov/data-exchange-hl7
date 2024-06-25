@@ -62,8 +62,7 @@ class Function {
 
                     logger.info("DEX:: Received and Processing messageUUID: $messageUUID, filePath: $filePath")
 
-                    val configFileName = helper.getConfigFileName(hl7Content = hl7Content,
-                        profileConfig = fnConfig.profileConfig, dataStreamId= dataStreamId)
+                    val configFileName = helper.getConfigFileName( dataStreamId= dataStreamId)
 
                     val report = helper.getRedactedReport(msg=hl7Content, configFileName= configFileName)
 
@@ -155,8 +154,7 @@ class Function {
                     request
                 )
             }
-            val configFileName = helper.getConfigFileName(hl7Content = hl7Message,
-                profileConfig = fnConfig.profileConfig, dataStreamId= dataStreamId)
+            val configFileName = helper.getConfigFileName(dataStreamId= dataStreamId)
             val report = helper.getRedactedReport(hl7Message, configFileName)
 
             buildHttpResponse(gson.toJson(report), HttpStatus.OK, request)

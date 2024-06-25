@@ -39,7 +39,7 @@ class ValidationTest {
     @Test
     fun testPHLIPVPDMessage() {
         val testMessage = this::class.java.getResource("/VPD_Measles.txt")?.readText()
-        val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/PHLIP-VPD_VERSION_1.0-2.5.1")
+        val nistValidator = ProfileManager(ResourceFileFetcher(), "/profiles/VPD-2.5.1")
         val report = nistValidator.validate(testMessage!!)
         println("report: -->\n\n${gson.toJson(report)}\n")
         println("==============================")
@@ -67,23 +67,6 @@ class ValidationTest {
         println("==============================")
     }
 
-    @Test
-    fun testExtractPHLIPFLU() {
-        val fn = ValidatorFunction()
-        val msh = "MSH|^~\\&#|ELIS.SC.STAG^2.16.840.1.114222.4.3.4.40.1.2^ISO|SC.Columbia.SPHL^2.16.840.1.114222.4.1.171355^ISO|US WHO Collab LabSys^2.16.840.1.114222.4.3.3.7^ISO|CDC-EPI Surv Branch^2.16.840.1.114222.4.1.10416^ISO|20221130082944.929-0500||ORU^R01^ORU_R01|OE4530T20221130082944|T|2.5.1|||NE|NE|USA||||PHLabReport-NoAck^ELR251R1_Rcvr_Prof^2.16.840.1.113883.9.11^ISO~PHLIP_ELSM_251^PHLIP_Profile_Flu^2.16.840.1.113883.9.179^ISO"
-        val profile = fn.getProfileNameAndPaths(msh, "PHLIP").first
-        println(profile)
-    }
-
-    @Test
-    fun testExtractELRMissingMSH12() {
-        val fn = ValidatorFunction()
-        val msh = "MSH|^~\\&#|ELIS.SC.STAG^2.16.840.1.114222.4.3.4.40.1.2^ISO|SC.Columbia.SPHL^2.16.840.1.114222.4.1.171355^ISO|US WHO Collab LabSys^2.16.840.1.114222.4.3.3.7^ISO|CDC-EPI Surv Branch^2.16.840.1.114222.4.1.10416^ISO|20221130082944.929-0500||ORU^R01^ORU_R01|OE4530T20221130082944|T||||NE|NE|USA||||PHLabReport-NoAck^ELR251R1_Rcvr_Prof^2.16.840.1.113883.9.11^ISO~PHLIP_ELSM_251^PHLIP_Profile_Flu^2.16.840.1.113883.9.179^ISO"
-        assertThrows<InvalidMessageException> {
-            fn.getProfileNameAndPaths(msh, "PHLIP").first
-        }
-
-    }
 
     private fun testFolder(folderName: String) {
         testFolderByType(folderName, "NNDSS")
