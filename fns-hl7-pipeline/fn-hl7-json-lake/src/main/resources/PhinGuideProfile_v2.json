@@ -643,7 +643,7 @@
       },
       {
         "fieldNumber": 4,
-        "name": "Place Group Number",
+        "name": "Placer Group Number",
         "dataType": "EI",
         "usage": "O",
         "cardinality": "[0..1]",
@@ -934,7 +934,7 @@
       },
       {
         "fieldNumber": 2,
-        "name": "Place Order Number",
+        "name": "Placer Order Number",
         "dataType": "EI",
         "maxLength": "427",
         "usage": "RE",
