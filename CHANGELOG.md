@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.0.48] 2024-06-26
+	- Enhanced all FN health checks to check dependencies.
+	- Improved Redactor when redacting fields with multiple values 
+ 	- Separated PHLIP into two data streams: PHLIP_FLU and VPD
+ 	- SImplified redactor profile loading by data_stream_id
+
 ### [0.0.47] 2024-06-12
 	- Added version to Routing Metadata
 	- Created DockerFile for all Functions
