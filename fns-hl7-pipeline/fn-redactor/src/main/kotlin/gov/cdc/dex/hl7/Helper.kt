@@ -1,13 +1,10 @@
 package gov.cdc.dex.hl7
 
-import gov.cdc.dex.util.InvalidMessageException
-import gov.cdc.dex.util.ProfileConfiguration
 import gov.cdc.hl7.DeIdentifier
 import gov.cdc.hl7.HL7StaticParser
 import gov.cdc.hl7.RedactInfo
 import scala.Tuple2
 import java.io.FileNotFoundException
-import java.util.NoSuchElementException
 
 
 class Helper {
@@ -29,32 +26,12 @@ class Helper {
         else ""
     }
 
-    fun getConfigFileName(hl7Content: String, profileConfig: ProfileConfiguration, dataStreamId: String ) : String{
+    fun getConfigFileName(dataStreamId: String ) : String {
         val fileSuffix = "-config.txt"
         val dataStreamName = dataStreamId.uppercase().trim()
-        val profileList = profileConfig.profileIdentifiers.filter {
-            it.dataStreamId.uppercase().trim() == dataStreamName
-        }
-        val dataStreamConfigFile = if (profileList.isNotEmpty()) {
-            val profileIdPaths = profileList[0].identifierPaths
-            val profileName = try {
-                "$dataStreamName-" + profileIdPaths.map { path ->
-                    HL7StaticParser.getFirstValue(hl7Content, path).get().uppercase()
-                }.reduce { acc, map -> "$acc-$map" }
-            } catch (e: NoSuchElementException) {
-                throw InvalidMessageException(
-                    "Unable to load redaction profile for data stream id $dataStreamId: " +
-                            "One or more values in the profile path(s)" +
-                            " ${profileIdPaths.joinToString()} are missing."
-                )
-            }
-            "$profileName$fileSuffix"
-        } else {
-            "$dataStreamName$fileSuffix"
-        }
         // return without the '/' in front of the name for use in metadata
-        return if (this::class.java.getResource("/profiles/$dataStreamConfigFile") != null) {
-            dataStreamConfigFile
+        return if (this::class.java.getResource("/profiles/$dataStreamName$fileSuffix") != null) {
+            "$dataStreamName$fileSuffix"
         } else {
             // Use default (ELR) config if nothing else exists
             "DEFAULT$fileSuffix"
