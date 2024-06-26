@@ -5,7 +5,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>redactor</artifactId>
-    <version>0.0.43-SNAPSHOT</version>
+    <version>0.0.48-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Azure Java Functions</name>
     
@@ -25,9 +25,9 @@
         <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
         <kotlin.version>1.9.0</kotlin.version>
         <slf4j.version>2.0.5</slf4j.version>
-        <hl7pet.version>1.2.9</hl7pet.version>
+        <hl7pet.version>1.2.10</hl7pet.version>
         <kotlin.version>1.9.0</kotlin.version>
-        <lib-dex-commons.version>0.0.45-SNAPSHOT</lib-dex-commons.version>
+        <lib-dex-commons.version>0.0.51-SNAPSHOT</lib-dex-commons.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -120,18 +120,6 @@
                         <property>
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
-                        </property>
-                        <property>
-                            <name>APPLICATIONINSIGHTS_ENABLE_AGENT</name>
-                            <value>true</value>
-                        </property>
-                        <property>
-                            <name>AzureFunctionsJobHost__logging__logLevel__Host.Function.Console</name>
-                            <value>None</value>
-                        </property>
-                        <property>
-                            <name>EventHubSendName</name>
-                            <value>hl7-redacted-out</value>
                         </property>
                     </appSettings>
                 </configuration>

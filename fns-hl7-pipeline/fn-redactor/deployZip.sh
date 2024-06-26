@@ -11,6 +11,7 @@ function=ocio-ede-$env-hl7-redactor
 
 echo "Building Jar..."
 mvn clean package -DskipTests=true -Paz-$env
+rm base_name
 
 echo "Zipping it:"
 
@@ -20,7 +21,9 @@ zip -r ../../../$base_name *
 cd ../../..
 
 echo "Deploying Zip..."
+
 export LANG=C.UTF-8
+
 az functionapp deployment source config-zip -g $hl7RG -n $function --src $base_name
 ### Set FN_VERSION:
 fn_version=$(cat pom.xml |grep -oPm1 "(?<=<version>)[^<]+")

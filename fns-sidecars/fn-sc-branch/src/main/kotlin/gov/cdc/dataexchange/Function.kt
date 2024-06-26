@@ -10,7 +10,7 @@ class Function {
 
     companion object {
         private var logger = LoggerFactory.getLogger(Function::class.java.simpleName)
-        private var fnConfig = FunctionConfig()
+        var fnConfig = FunctionConfig()
     }
 
     @FunctionName("branch")

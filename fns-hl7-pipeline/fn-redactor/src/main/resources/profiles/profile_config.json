@@ -1,8 +1,0 @@
-{
-	"profile_identifiers": [
-		{
-			"data_stream_id": "PHLIP",
-			"identifier_paths": [ "MSH-21[2].1", "MSH-12" ]
-		}
-	]
-}
