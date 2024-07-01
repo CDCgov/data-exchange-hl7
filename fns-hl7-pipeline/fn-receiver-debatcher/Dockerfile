@@ -17,6 +17,7 @@ EXPOSE 8080
 USER dexuser
 
 # static environment variables
+ENV PORT=8080
 ENV ASPNETCORE_URLS=http://*:8080
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot
 ENV AzureFunctionsJobHost__Logging__Console__IsEnabled=true
