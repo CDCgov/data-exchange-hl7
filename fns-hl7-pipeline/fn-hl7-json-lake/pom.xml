@@ -6,7 +6,7 @@
 
     <groupId>gov.cdc.dataexchange</groupId>
     <artifactId>hl7-json-lake-fn</artifactId>
-    <version>0.0.48-SNAPSHOT</version>
+    <version>0.0.49-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>DEX Fns-Pipeline :: hl7-json-lake-fn</name>
@@ -20,7 +20,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <functionAppName>ocio-ede-${environment-id}-hl7-json-lake-transformer</functionAppName>
+        <functionAppName>${baseFunctionName}-json-lake-transformer</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <AzureBom.version>1.2.20</AzureBom.version>
         <java.version>17</java.version>
