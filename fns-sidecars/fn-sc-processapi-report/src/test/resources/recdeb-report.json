@@ -1,0 +1,40 @@
+{
+	"schema_name": "DEX HL7v2 RECEIVER",
+	"schema_version": "2.0.0",
+	"routing_metadata": {
+		"dex_ingest_datetime": "2024-05-22T19:58:50+00:00",
+		"ingested_file_path": "https://ocioedemessagesatst.blob.core.windows.net/hl7ingress/VPDMumpsGM .txt",
+		"ingested_file_timestamp": "2024-05-22T19:58:50+00:00",
+		"ingested_file_size": "2583",
+		"data_producer_id": "",
+		"jurisdiction": "UNKNOWN",
+		"upload_id": "VPDMumpsGM .txt",
+		"data_stream_id": "phlip",
+		"data_stream_route": "hl7_out_recdeb",
+		"sender_id": "",
+		"received_filename": "",
+		"supporting_metadata": {
+			"meta_ext_uploadid": "pio646646tst",
+			"reporting_jurisdiction": "13"
+		}
+	},
+	"stage": {
+		"stage_name": "RECEIVER",
+		"stage_version": "0.0.44-SNAPSHOT",
+		"event_timestamp": "2024-05-22T19:58:50.6881554Z",
+		"start_processing_time": "2024-05-22T19:59:02.603+00:00",
+		"end_processing_time": "2024-05-22T19:59:03.146+00:00",
+		"report": {
+			"single_or_batch": "SINGLE",
+			"number_of_messages": 1,
+			"number_of_messages_not_propagated": 1,
+			"error_messages": [
+				{
+					"message_index": 1,
+					"message_uuid": "ca97c7e9-2651-42ce-bdec-fe43544db903",
+					"error_message": "One or more required metadata elements are missing. data stream id is phlip, upload id is UNKNOWN"
+				}
+			]
+		}
+	}
+}
