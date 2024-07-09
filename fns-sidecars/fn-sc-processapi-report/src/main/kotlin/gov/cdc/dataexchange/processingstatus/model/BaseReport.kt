@@ -15,12 +15,13 @@ data class BaseReport(
     /** Metadata associated with the message this report belong to. */
     val message_metadata: MessageMetadata? = null,
     /** Describes the stage that is providing this report. */
-    val stage_info: Any,
+    val stage_info: StageInfo,
     /** Optional tag(s) associated with this report. */
     val tags: Map<String, Any>? = null,
     /** Optional data associated with this report. */
     val data: Map<String, Any>? = null,
     val content_type: String = "application/json"
+    var content: Any
 )
 
 /**
@@ -34,14 +35,14 @@ data class MessageMetadata(
     /** Enumeration: [single, batch]. */
     val aggregation: AggregationType = AggregationType.SINGLE,
     /** Index of the message; e.g. row if csv. */
-    val message_index: Long? = null
+    val message_index: Long = 1
 )
 
 data class StageInfo(
     /** "Name of the service associated with this report." **/
     val service: String,
     /**     Action the stage was conducting when providing this report." **/
-    val stage:String,
+    val stage: String,
     /**     Version of the stage providing this report" **/
     val version: String,
     /** use Status enum: ["SUCCESS", "FAILURE"] **/
