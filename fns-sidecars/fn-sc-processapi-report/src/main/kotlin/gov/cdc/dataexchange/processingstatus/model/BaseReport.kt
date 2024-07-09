@@ -1,4 +1,4 @@
-package gov.cdc.dataexchange.model
+package gov.cdc.dataexchange.processingstatus.model
 
 data class BaseReport(
     val report_schema_version: String,

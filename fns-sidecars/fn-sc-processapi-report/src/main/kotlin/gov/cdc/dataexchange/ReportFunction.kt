@@ -4,7 +4,7 @@ import com.azure.messaging.servicebus.ServiceBusMessage
 import com.azure.messaging.servicebus.models.CreateMessageBatchOptions
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
-import gov.cdc.dataexchange.model.ProcessingStatusSchema
+import gov.cdc.dataexchange.processingstatus.model.ProcessingStatusSchema
 import gov.cdc.dex.util.JsonHelper
 import org.slf4j.LoggerFactory
 import java.util.*

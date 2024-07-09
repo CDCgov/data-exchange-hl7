@@ -1,4 +1,4 @@
-package gov.cdc.dataexchange.model
+package gov.cdc.dataexchange.processingstatus.model
 
 enum class AggregationType {
     SINGLE,

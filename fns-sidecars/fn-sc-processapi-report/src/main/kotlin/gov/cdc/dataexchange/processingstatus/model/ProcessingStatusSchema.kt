@@ -1,4 +1,4 @@
-package gov.cdc.dataexchange.model
+package gov.cdc.dataexchange.processingstatus.model
 
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
