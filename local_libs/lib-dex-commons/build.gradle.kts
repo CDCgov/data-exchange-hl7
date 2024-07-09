@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "gov.cdc.dex"
-version = "0.0.51-SNAPSHOT"
+version = "0.0.52-SNAPSHOT"
 
 repositories {
     maven {
@@ -31,6 +31,7 @@ dependencies {
 
     implementation("redis.clients:jedis:5.1.0")
     implementation("com.azure:azure-cosmos:4.55.1")
+    implementation("gov.cdc.dex:lib-nist-validator:1.3.5-SNAPSHOT")
     testImplementation("org.mockito:mockito-core:5.6.0")
 
     testImplementation("org.apache.logging.log4j:log4j-slf4j18-impl:2.18.0")
