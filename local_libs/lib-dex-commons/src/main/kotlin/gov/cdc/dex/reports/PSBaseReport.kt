@@ -30,8 +30,8 @@ data class PSBaseReport
     )
 
     enum class AggregationType {
-        @SerializedName("single") SINGLE,
-        @SerializedName("batch") BATCH
+        SINGLE,
+        BATCH
     }
 
     data class StageInfo(

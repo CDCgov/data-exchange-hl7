@@ -1,24 +1,19 @@
 package gov.cdc.dex.reports
+import gov.cdc.hl7.RedactInfo
 
-data class Hl7RedactorReport (
+data class HL7RedactorReport (
     val report: RedactorReportData?,
     val configs: List<String>?
 ): StageContent (
-    contentSchemaName = "DEX HL7v2 REDACTOR",
+    contentSchemaName = "hl7v2-debatch.1.0.0.schema.json",
     contentSchemaVersion = "2.0.0"
 )
 
 
     data class RedactorReportData (
-        val entries: List<RedactionEntry>? = null
+        val entries: List<RedactInfo>
     )
 
-    data class RedactionEntry (
-        val path: String,
-        val rule: String,
-        val lineNumber: Long,
-        val fieldIndex: Long? = null
-    )
 
 
 

@@ -1,10 +1,10 @@
 package gov.cdc.dex.reports
-import gov.cdc.nist.validator.NistReport
+import com.google.gson.JsonObject
 
 data class HL7StructureValidatorReport (
-    val report: NistReport?,
+    val report: JsonObject,
     val configs: List<String>?
 ) : StageContent (
-    contentSchemaName = "DEX HL7v2 Validation Report",
+    contentSchemaName = "hl7v2-structure-validation.1.0.0.schema.json",
     contentSchemaVersion = "2.0.0"
         )

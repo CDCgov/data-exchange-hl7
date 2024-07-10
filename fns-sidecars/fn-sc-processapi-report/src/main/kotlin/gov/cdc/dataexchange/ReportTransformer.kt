@@ -1,16 +1,25 @@
 package gov.cdc.dataexchange
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.google.gson.reflect.TypeToken
 import gov.cdc.dex.reports.*
+import gov.cdc.dex.util.JsonHelper
+import gov.cdc.dex.util.JsonHelper.gson
+import gov.cdc.hl7.RedactInfo
+import gov.cdc.nist.validator.NistReport
+import java.lang.reflect.Type
 
 class ReportTransformer {
+    private inline fun <reified T> genericType(): Type = object: TypeToken<T>() {}.type
+
     fun mapDataToBaseReport(record: String) : PSBaseReport {
         val inputEvent = JsonParser.parseString(record).asJsonObject
         val messageMetadata = inputEvent["message_metadata"]?.asJsonObject
         val routingMetadata = inputEvent["routing_metadata"].asJsonObject
         val stageMetadata = inputEvent["stage"].asJsonObject
-        val summary = inputEvent["summary"].asJsonObject
+        val summary = inputEvent["summary"]?.asJsonObject
 
         val psMessageMetadata = mapMessageMetadata(messageMetadata)
         val psStageInfo = mapStageInfo(stageMetadata, summary)
@@ -31,7 +40,7 @@ class ReportTransformer {
         )
     }
 
-    fun mapMessageMetadata(messageMetadata: JsonObject?) : MessageMetadata? {
+    private fun mapMessageMetadata(messageMetadata: JsonObject?) : MessageMetadata? {
         if (messageMetadata == null) return null
         return MessageMetadata(
             messageUuid = messageMetadata["message_uuid"].asString,
@@ -42,8 +51,8 @@ class ReportTransformer {
         )
     }
 
-    fun mapStageInfo(stageMetadata: JsonObject, summaryInfo: JsonObject) : StageInfo {
-        val problem = summaryInfo["problem"].asJsonObject
+    private fun mapStageInfo(stageMetadata: JsonObject, summaryInfo: JsonObject?) : StageInfo {
+        val problem = summaryInfo?.get("problem")
         var status = stageMetadata["status"]?.asString
         if (status == null) status = "SUCCESS"
 
@@ -51,10 +60,10 @@ class ReportTransformer {
             stage = stageMetadata["stage_name"].asString,
             version = stageMetadata["stage_version"].asString,
             status = if (status == "SUCCESS") StageStatus.SUCCESS else StageStatus.FAILURE,
-            issues = if (problem.isJsonNull) null else listOf(
+            issues = if (problem == null || problem.isJsonNull) null else listOf(
                 Issue(
                 level = IssueLevel.ERROR,
-                message = problem["error_message"].asString
+                message = problem.asJsonObject["error_message"].asString
             )
             ),
             startProcessingTime = stageMetadata["start_processing_time"].asString,
@@ -62,25 +71,21 @@ class ReportTransformer {
         )
     }
 
-    fun mapStageContent(stageMetadata: JsonObject, routingMetadata: JsonObject) : StageContent? {
+    private fun mapStageContent(stageMetadata: JsonObject, routingMetadata: JsonObject) : StageContent? {
         val stage = stageMetadata["stage_name"].asString
         when (stage) {
             "RECEIVER" -> { return mapReceiverReport(stageMetadata, routingMetadata) }
-//            "REDACTOR" -> {}
-//            "STRUCTURE-VALIDATOR" -> {}
-//            "HL7-JSON-LAKE-TRANSFORMER" -> {}
-//            "LAKE-SEGMENTS-TRANSFORMER" -> {}
+            "REDACTOR" -> { return mapRedactorReport(stageMetadata) }
+            "STRUCTURE-VALIDATOR" -> { return mapStructureValidatorReport(stageMetadata) }
+            "HL7-JSON-LAKE-TRANSFORMER" -> {  return HL7JsonLakeReport(configs = getConfigs(stageMetadata)) }
+            "LAKE-SEGMENTS-TRANSFORMER" -> { return HL7LakeSegmentsReport(configs = getConfigs(stageMetadata)) }
         }
         return null
     }
 
-    fun mapReceiverReport(stageMetadata: JsonObject, routingMetadata: JsonObject) : HL7ReceiverReport {
-        val supportingData = mutableMapOf<String,String>()
+    private fun mapReceiverReport(stageMetadata: JsonObject, routingMetadata: JsonObject) : HL7ReceiverReport {
         val ingestErrors = mutableListOf<IngestError>()
-
-        val supportingMetadata = routingMetadata["supporting_metadata"]?.asJsonObject?.asMap()
-        supportingMetadata?.keys?.forEach { k -> supportingData[k] = supportingMetadata[k].toString() }
-
+        val supportingMetadata = routingMetadata["supporting_metadata"]?.asJsonObject
         val stageReport = stageMetadata["report"].asJsonObject
         val errors = stageReport["error_messages"]?.asJsonArray
         errors?.forEach {
@@ -94,18 +99,55 @@ class ReportTransformer {
             )
         }
 
-        val report = ReceiverReportData(
-            ingestedFilePath = routingMetadata["ingested_file_path"]?.asString,
-            ingestedFileTimestamp = routingMetadata["ingested_file_timestamp"]?.asString,
-            ingestedFileSize = (routingMetadata["ingested_file_size"].asString ?: "0").toLong(),
-            receivedFileName = routingMetadata["received_filename"].asString,
-            supportingMetadata = if (supportingMetadata == null) null else supportingData,
-            aggregation = if (stageReport["single_or_batch"].asString == "BATCH") AggregationType.BATCH else AggregationType.SINGLE,
-            numberOfMessages = stageReport["number_of_messages"].asLong,
-            numberOfMessagesNotPropagated = stageReport["number_of_messages_not_propagated"].asLong,
-            errorMessages = ingestErrors
+        return HL7ReceiverReport(
+            report = ReceiverReportData(
+                ingestedFilePath = routingMetadata["ingested_file_path"]?.asString,
+                ingestedFileTimestamp = routingMetadata["ingested_file_timestamp"]?.asString,
+                ingestedFileSize = (routingMetadata["ingested_file_size"].asString ?: "0").toLong(),
+                receivedFileName = routingMetadata["received_filename"].asString,
+                supportingMetadata = convertJsonToStringMap(supportingMetadata),
+                aggregation = if (stageReport["single_or_batch"].asString == "BATCH") AggregationType.BATCH else AggregationType.SINGLE,
+                numberOfMessages = stageReport["number_of_messages"].asLong,
+                numberOfMessagesNotPropagated = stageReport["number_of_messages_not_propagated"].asLong,
+                errorMessages = ingestErrors
+            )
         )
-        return HL7ReceiverReport(report)
+    }
+
+    private fun mapRedactorReport(stageMetadata: JsonObject) : HL7RedactorReport {
+        val configs = getConfigs(stageMetadata)
+        val stageReport = stageMetadata["report"].asJsonObject
+        val entries = stageReport["entries"].asJsonArray
+        val redactInfoListType = genericType<List<RedactInfo>>()
+        val newEntries : List<RedactInfo> = gson.fromJson(entries, redactInfoListType)
+        return HL7RedactorReport(
+            RedactorReportData(
+                entries = newEntries
+            ),
+            configs = configs
+        )
+    }
+
+    private fun mapStructureValidatorReport(stageMetadata: JsonObject) : HL7StructureValidatorReport {
+        val stageReport = stageMetadata["report"].asJsonObject
+        val configs = getConfigs(stageMetadata)
+        return HL7StructureValidatorReport(
+            report = stageReport,
+            configs = configs
+        )
+
+    }
+
+    private fun getConfigs(stageMetadata: JsonObject) : List<String> {
+        val configs = stageMetadata["configs"].asJsonArray
+        val listType = genericType<List<String>>()
+        return gson.fromJson(configs, listType)
+    }
+
+    private fun convertJsonToStringMap(jsonObject: JsonObject?) : Map<String, String>? {
+        if (jsonObject == null) return null
+        val mapType = genericType<Map<String, String>>()
+        return gson.fromJson(jsonObject, mapType)
     }
 
 }

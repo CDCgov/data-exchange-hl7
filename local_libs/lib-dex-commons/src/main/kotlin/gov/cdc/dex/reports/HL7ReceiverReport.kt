@@ -1,9 +1,10 @@
 package gov.cdc.dex.reports
 
+import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
 data class HL7ReceiverReport(val report: ReceiverReportData) : StageContent (
-    contentSchemaName = "DEX HL7v2 RECEIVER",
+    contentSchemaName = "hl7v2-redact.1.0.0.schema.json",
     contentSchemaVersion = "2.0.0",
 )
 

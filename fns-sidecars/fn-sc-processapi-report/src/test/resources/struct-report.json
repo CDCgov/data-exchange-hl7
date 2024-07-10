@@ -1,0 +1,106 @@
+{
+	"schema_name": "DEX HL7v2",
+	"schema_version": "2.0.0",
+	"message_metadata": {
+		"message_uuid": "f8d26a2e-0201-415b-94d9-f0943b441381",
+		"single_or_batch": "SINGLE",
+		"message_index": 1,
+		"message_hash": "cba16527b2aa66ce192e20aec2d51816"
+	},
+	"routing_metadata": {
+		"dex_ingest_datetime": "2024-07-03T16:48:40+00:00",
+		"ingested_file_path": "https://ocioedemessagesatst.blob.core.windows.net/hl7ingress/postman-quq6-96a5ef52-6caa-400c-99d2-25a6b8c82f6e.txt",
+		"ingested_file_timestamp": "2024-07-03T16:48:40+00:00",
+		"ingested_file_size": "2933",
+		"data_producer_id": "",
+		"jurisdiction": "UNKNOWN",
+		"upload_id": "quq6-5e6584e9-4f07-4eac-a96e-1d3c789d4ca6",
+		"data_stream_id": "phlip-flu",
+		"data_stream_route": "hl7_out_validation_report",
+		"sender_id": "",
+		"received_filename": "",
+		"supporting_metadata": {
+			"meta_ext_source": "dev-test",
+			"reporting_jurisdiction": "55",
+			"system_provider": "postman",
+			"original_file_timestamp": "",
+			"orginal_file_name": "7b52a273-33bd-4aeb-b99f-20b797cd181b.txt"
+		},
+		"version": ""
+	},
+	"stage": {
+		"report": {
+			"entries": {
+				"structure": [
+					{
+						"line": 7,
+						"column": 199,
+						"path": "OBX[1]-17[1].1",
+						"description": "The length of Component OBX-17.1 (Identifier) must be within the range [1, 20]. Value = 'Influenza SARS-CoV-2 (Flu SC2) Multiplex Assay_Centers for Disease Control and Prevention (CDC)_EUA'",
+						"category": "Length",
+						"classification": "Warning",
+						"stackTrace": null,
+						"metaData": null
+					},
+					{
+						"line": 9,
+						"column": 189,
+						"path": "OBX[2]-17[1].1",
+						"description": "The length of Component OBX-17.1 (Identifier) must be within the range [1, 20]. Value = 'Influenza SARS-CoV-2 (Flu SC2) Multiplex Assay_Centers for Disease Control and Prevention (CDC)_EUA'",
+						"category": "Length",
+						"classification": "Warning",
+						"stackTrace": null,
+						"metaData": null
+					},
+					{
+						"line": 5,
+						"column": 122,
+						"path": "ORC[1]-22[1].1",
+						"description": "The required Component ORC-22.1 (Street Address) is missing",
+						"category": "Usage",
+						"classification": "Error",
+						"stackTrace": null,
+						"metaData": null
+					}
+				],
+				"content": [],
+				"value-set": []
+			},
+			"error-count": {
+				"structure": 1,
+				"value-set": 0,
+				"content": 0
+			},
+			"warning-count": {
+				"structure": 2,
+				"value-set": 0,
+				"content": 0
+			},
+			"status": "STRUCTURE_ERRORS"
+		},
+		"stage_name": "STRUCTURE-VALIDATOR",
+		"stage_version": "0.0.48-SNAPSHOT",
+		"status": "SUCCESS",
+		"configs": [
+			"PHLIP-FLU-2.5.1"
+		],
+		"event_timestamp": "2024-07-03T16:49:04.461",
+		"eventhub_offset": 717259538432,
+		"eventhub_sequence_number": 251846,
+		"start_processing_time": "2024-07-03T16:49:05.855+00:00",
+		"end_processing_time": "2024-07-03T16:49:07.488+00:00"
+	},
+	"summary": {
+		"current_status": "STRUCTURE_ERRORS",
+		"problem": {
+			"process_name": "STRUCTURE-VALIDATOR",
+			"exception_class": null,
+			"stacktrace": null,
+			"error_message": "Message failed Structure Validation",
+			"should_retry": false,
+			"retry_count": 0,
+			"max_retries": 0
+		}
+	},
+	"content": "TVNIfF5+XCYjfENoZW13YXJlLkFMLlN0YWdeMi4xNi44NDAuMS4xMTQyMjIuNC4zLjMuMi4xMi4yXklTT3xBTC5Nb250Z29tZXJ5LlNQSExeMi4xNi44NDAuMS4xMTQyMjIuNC4xLjExNDc2XklTT3xVUyBXSE8gQ29sbGFiIExhYlN5c14yLjE2Ljg0MC4xLjExNDIyMi40LjMuMy43XklTT3xDREMtRVBJIFN1cnYgQnJhbmNoXjIuMTYuODQwLjEuMTE0MjIyLjQuMS4xMDQxNl5JU098MjAyMjExMDExMjEwMjYuODQ2LTA2MDB8fE9SVV5SMDFeT1JVX1IwMXw3MzMwMDYyX00yMjEwMDAwMTM0LTAxfFR8Mi41LjF8fHx8fFVTQXx8fHxQSExhYlJlcG9ydC1Ob0Fja15FTFIyNTFSMV9SY3ZyX1Byb2ZeMi4xNi44NDAuMS4xMTM4ODMuOS4xMV5JU09+UEhMSVBfRUxTTV8yNTFeUEhMSVBfUHJvZmlsZV9GbHVeMi4xNi44NDAuMS4xMTM4ODMuOS4xNzleSVNPClNGVHxPcmlvbnw0LjB8UmhhcHNvZHl8MQpQSUR8MXx8MTk1NjReXl5DaGVtd2FyZS5BTC5TdGFnJjIuMTYuODQwLjEuMTE0MjIyLjQuMy4zLjIuMTIuMiZJU09eUEleQUwuTW9udGdvbWVyeS5TUEhMJjIuMTYuODQwLjEuMTE0MjIyLjQuMS4xMTQ3NiZJU098fH5eXl5eXl5TfHwyMDA1MDEyNDAwMDB8TXx8MjA1NC01XkJsYWNrIG9yIEFmcmljYW4gQW1lcmljYW5eSEw3MDAwNV4yMDU0LTVeQmxhY2sgb3IgQWZyaWNhbiBBbWVyaWNhbl5MfF5eXkFMXjM2MTE3XlVTQV5eXjAxMTAxfHx8fHx8fHx8fHxOXk5vdCBIaXNwYW5pYyBvciBMYXRpbm9eSEw3MDE4OV4yMTg2LTVeTm90IEhpc3BhbmljIG9yIExhdGlub15MCk5URXwxfEx8U2FtcGxlIHdhcyB0ZXN0ZWQgZm9yIGluZmx1ZW56YSBBLCBpbmZsdWVuemEgQiwgYW5kIFNBUlMtQ29WLTIgYW5kIHRoaXMgc2VydmVzIGFzIHRoZSBmaW5hbCByZXN1bHQgZm9yIHRob3NlIGFuYWx5dGVzLiBBZGRpdGlvbmFsIGFuYWx5dGVzIG1heSBiZSBpbmNsdWRlZCBmb3Igc3VydmVpbGxhbmNlIHB1cnBvc2VzIGFuZCB0byBkZXRlcm1pbmUgc3VpdGFiaWxpdHkgZm9yIHNlcXVlbmNpbmcgdGVzdGluZy4gQW55IHNlcXVlbmNpbmcgcmVzdWx0cyBwcm9kdWNlZCBmb3Igc3VydmVpbGxhbmNlIHB1cnBvc2VzIGFyZSBub3QgcmVwb3J0YWJsZSBhbmQgd2lsbCBub3QgYmUgYXZhaWxhYmxlIHRvIHN1Ym1pdHRlcnMuIEZvciBzdXJ2ZWlsbGFuY2UgZGF0YSBzZWUgaHR0cHM6Ly93d3cuYWxhYmFtYXB1YmxpY2hlYWx0aC5nb3YvY292aWQxOS8uIFRoaXMgdGVzdCB3YXMgZGV2ZWxvcGVkIHVuZGVyIGEgRVVBIGlzc3VlZCBieSBGREEgZm9yIHN1cnZlaWxsYW5jZSBhbmQgcHVibGljIGhlYWx0aCBhY3Rpb25zLiBQbGVhc2UgaW50ZXJwcmV0IHRoZSByZXN1bHRzIGFjY29yZGluZ2x5IHVzaW5nIHRoZSBGYWN0IFNoZWV0cyBhdCBodHRwczovL3d3dy5mZGEuZ292L21lZGlhLzEzOTc0Mi9kb3dubG9hZCBhbmQgaHR0cHM6Ly93d3cuZmRhLmdvdi9tZWRpYS8xMzk3NDUvZG93bmxvYWQuCk9SQ3xSRXx8TTIyMTAwMDAxMzQtMDFeQ2hlbXdhcmUuQUwuU3RhZ14yLjE2Ljg0MC4xLjExNDIyMi40LjMuMy4yLjEyLjJeSVNPfHx8fHx8fHx8fHx8fHx8fHx8QkFQVElTVCBNRUQgQ1RSIChQUkFUVFZJTExFKXxeXl5BTF4zNjA2OF5VU0FeXl4wMTAwMXxeV1BOXlBIXl4xXjMzNF4zNjUwNjUxfF5eXkFMXjM2MDY4XlVTQV5eXjAxMDAxCk9CUnwxfHxNMjIxMDAwMDEzNC0wMV5DaGVtd2FyZS5BTC5TdGFnXjIuMTYuODQwLjEuMTE0MjIyLjQuMy4zLjIuMTIuMl5JU098OTU0MjItMl5GbHVBQiArIFNBUlMtQ29WLTIgUG5sIFJlc3AgTkFBK3ByYl5MTl5GTFUtQ09WXklORkxVRU5aQSBDT1ZJRC0xOSBQQU5FTF5MfHx8MjAyMjEwMzEwMDAwfHx8fHx8fHx8fHx8fHx8MjAyMjEwMzExMjEwLTA2MDB8fHxGCk9CWHwxfENXRXw5NTQyMy0wXkZsdUFCICsgU0FSUy1Db1YtMiBSZXNwIE5BQStwcm9iZV5MTl5GTFUtQ09WMV5JbmZsdWVuemEgQ09WSUQtMTkgUGFuZWwgMV5MfDF8NDA3NDc5MDA5XkluZmx1ZW56YSBBIHZpcnVzXlNDVF40MDc0NzkwMDleUE9TSVRJVkUgZm9yIEluZmx1ZW56YSBBIGJ5IFJULVBDUl5MfHx8fHx8Rnx8fDIwMjIxMDMxMDAwMHx8fEluZmx1ZW56YSBTQVJTLUNvVi0yIChGbHUgU0MyKSBNdWx0aXBsZXggQXNzYXlfQ2VudGVycyBmb3IgRGlzZWFzZSBDb250cm9sIGFuZCBQcmV2ZW50aW9uIChDREMpX0VVQV5eOTlFTFJeUnReUlQtUENSIChDT1ZJRC0xOS9GbHUpXkx8fDIwMjIxMDMxMTE0Mnx8fHxBbGFiYW1hIFN0YXRlIFB1YmxpYyBIZWFsdGggTGFifDgxNDAgQVVNIERyaXZlXl5Nb250Z29tZXJ5XkFMXjM2MTE3Ck5URXwxfEx8Tm9ybWFsIFZhbHVlOiBOb3QgZm91bmQgaW4gYSBoZWFsdGh5IHBvcHVsYXRpb24KT0JYfDJ8Q1dFfDk1NDIzLTBeRmx1QUIgKyBTQVJTLUNvVi0yIFJlc3AgTkFBK3Byb2JlXkxOXkZMVS1DT1YyXkluZmx1ZW56YSBDT1ZJRC0xOSBQYW5lbCAyXkx8Mnw4NDA1MzMwMDdeU0FSUy1Db1YtMl5TQ1ReODQwNTMzMDA3XlBPU0lUSVZFIGZvciBDT1ZJRC0xOSBieSBSVC1QQ1JeTHx8fHx8fEZ8fHwyMDIyMTAzMTAwMDB8fHxJbmZsdWVuemEgU0FSUy1Db1YtMiAoRmx1IFNDMikgTXVsdGlwbGV4IEFzc2F5X0NlbnRlcnMgZm9yIERpc2Vhc2UgQ29udHJvbCBhbmQgUHJldmVudGlvbiAoQ0RDKV9FVUFeXjk5RUxSXlJ0XlJULVBDUiAoQ09WSUQtMTkvRmx1KV5MfHwyMDIyMTAzMTExNDJ8fHx8QWxhYmFtYSBTdGF0ZSBQdWJsaWMgSGVhbHRoIExhYnw4MTQwIEFVTSBEcml2ZV5eTW9udGdvbWVyeV5BTF4zNjExNwpTUE18MXxeTTIyMTAwMDAxMzQtMDEmQ2hlbXdhcmUuQUwuU3RhZyYyLjE2Ljg0MC4xLjExNDIyMi40LjMuMy4yLjEyLjImSVNPfHwyNTg1MDAwMDFeTmFzb3BoYXJ5bmdlYWwgU3dhYiBeU0NUXm5zXk5hc29waGFyeW5nZWFsIFN3YWJeTHx8fHx8fHx8fHx8fHwyMDIyMTAzMTAwMDB8MjAyMjEwMzExMTM4Cg=="
+}
