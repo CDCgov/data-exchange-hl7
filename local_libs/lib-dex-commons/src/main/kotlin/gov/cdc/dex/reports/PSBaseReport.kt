@@ -7,15 +7,15 @@ data class PSBaseReport
         @SerializedName("user_id") val userId: String?,
         @SerializedName("data_stream_id") val dataStreamId: String,
         @SerializedName("data_stream_route") val dataStreamRoute: String,
-        @SerializedName("jurisdiction") val jurisdiction: String,
+        @SerializedName("jurisdiction") val jurisdiction: String?,
         @SerializedName("sender_id") val senderId: String,
-        @SerializedName("data_producer_id") val dataProducerId: String,
+        @SerializedName("data_producer_id") val dataProducerId: String?,
         @SerializedName("dex_ingest_timestamp") val dexIngestTimestamp: String,
         @SerializedName("message_metadata") val messageMetadata: MessageMetadata?,
         @SerializedName("stage_info") val stageInfo: StageInfo,
-        @SerializedName("tags") val tags: Map<String, String>?,
-        @SerializedName("data") val data: Map<String, String>?,
-        @SerializedName("content") var content: StageContent
+        @SerializedName("tags") val tags: Map<String, String>? = null,
+        @SerializedName("data") val data: Map<String, String>? = null,
+        @SerializedName("content") var content: StageContent?
     ) {
         @SerializedName("report_schema_version") val reportSchemaVersion: String = "1.0.0"
         @SerializedName("content_type") val contentType: String = "application/json"
@@ -35,7 +35,7 @@ data class PSBaseReport
     }
 
     data class StageInfo(
-        @SerializedName("service") val service: String,
+        @SerializedName("service") val service: String = "HL7v2 Pipeline",
         @SerializedName("stage") val stage: String,
         @SerializedName("version")  val version: String,
         @SerializedName("status") val status: StageStatus,
