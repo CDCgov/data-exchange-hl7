@@ -29,4 +29,9 @@ class TestReports {
     fun testJsonReport() {
         testReport("/json-lake-report.json")
     }
+
+    @Test
+    fun testLakeSegReport() {
+        testReport("/lake-seg-report.json")
+    }
 }
