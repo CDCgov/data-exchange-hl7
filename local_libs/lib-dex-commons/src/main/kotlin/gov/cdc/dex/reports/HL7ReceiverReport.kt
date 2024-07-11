@@ -4,8 +4,8 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
 data class HL7ReceiverReport(val report: ReceiverReportData) : StageContent (
-    contentSchemaName = "hl7v2-redact.1.0.0.schema.json",
-    contentSchemaVersion = "2.0.0",
+    contentSchemaName = "hl7v2-debatch",
+    contentSchemaVersion = "1.0.0",
 )
 
 data class ReceiverReportData(
