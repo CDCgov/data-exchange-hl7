@@ -4,7 +4,6 @@ import com.azure.messaging.servicebus.ServiceBusMessage
 import com.azure.messaging.servicebus.models.CreateMessageBatchOptions
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
-import gov.cdc.dex.metadata.RoutingMetadata
 import gov.cdc.dex.reports.*
 import gov.cdc.dex.util.JsonHelper
 import org.slf4j.LoggerFactory
