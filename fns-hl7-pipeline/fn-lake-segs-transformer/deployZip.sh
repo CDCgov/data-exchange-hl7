@@ -9,16 +9,16 @@ hl7RG=ocio-ede-$env-moderate-hl7-rg
 base_name=az-fun-hl7-lake-segments-transformer.zip
 function=ocio-ede-$env-hl7-lake-segments-transformer
 
-#echo "Building Jar..."
-#mvn clean package -DskipTests=true -Paz-$env
-#rm base_name
-#
-#echo "Zipping it:"
-#
-#cd target/azure-functions/$function
-#
-#zip -r ../../../$base_name *
-#cd ../../..
+echo "Building Jar..."
+mvn clean package -DskipTests=true -Paz-$env
+rm ./$base_name
+
+echo "Zipping it:"
+
+cd target/azure-functions/$function
+
+zip -r ../../../$base_name *
+cd ../../..
 
 echo "Deploying Zip..."
 export LANG=C.UTF-8
