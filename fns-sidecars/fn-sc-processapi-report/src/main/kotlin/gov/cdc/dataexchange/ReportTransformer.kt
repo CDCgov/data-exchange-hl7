@@ -1,14 +1,11 @@
 package gov.cdc.dataexchange
 
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import gov.cdc.dex.reports.*
-import gov.cdc.dex.util.JsonHelper
 import gov.cdc.dex.util.JsonHelper.gson
 import gov.cdc.hl7.RedactInfo
-import gov.cdc.nist.validator.NistReport
 import java.lang.reflect.Type
 
 class ReportTransformer {
@@ -46,15 +43,44 @@ class ReportTransformer {
             messageUuid = messageMetadata["message_uuid"].asString,
             messageHash = messageMetadata["message_hash"].asString,
             aggregation = if (messageMetadata["single_or_batch"].asString == "BATCH") AggregationType.BATCH else AggregationType.SINGLE,
-            messageIndex = messageMetadata["message_index"].asBigInteger.toInt()
+            messageIndex = messageMetadata["message_index"].asInt
 
         )
     }
 
+    private fun mapReceiverStageInfo(stageMetadata: JsonObject) : StageInfo {
+        val report = stageMetadata["report"].asJsonObject
+        var status = StageStatus.SUCCESS
+        val issues = mutableListOf<Issue>()
+        if (report["number_of_messages_not_propagated"].asInt > 0) {
+            if (report["number_of_messages_not_propagated"].asInt == report["number_of_messages"].asInt) {
+                status = StageStatus.FAILURE
+                report["error_messages"]?.asJsonArray?.forEach {
+                    issues.add(Issue(level = IssueLevel.ERROR, message = it.asJsonObject["error_message"].asString))
+                }
+            }
+        }
+        return StageInfo(
+            stage = stageMetadata["stage_name"].asString,
+            version = stageMetadata["stage_version"].asString,
+            status = status,
+            issues = issues,
+            startProcessingTime = stageMetadata["start_processing_time"].asString,
+            endProcessingTime = stageMetadata["end_processing_time"].asString
+        )
+
+    }
+
     private fun mapStageInfo(stageMetadata: JsonObject, summaryInfo: JsonObject?) : StageInfo {
-        val problem = summaryInfo?.get("problem")
-        var status = stageMetadata["status"]?.asString
-        if (status == null) status = "SUCCESS"
+        if (summaryInfo == null) { return mapReceiverStageInfo(stageMetadata) }
+        val problem = summaryInfo.get("problem")
+        val issues = if (problem == null || problem.isJsonNull) null else listOf(
+            Issue(
+                level = IssueLevel.ERROR,
+                message = problem.asJsonObject["error_message"].asString
+            )
+        )
+        val status = if (issues != null) "FAILURE" else stageMetadata["status"]?.asString
 
         return StageInfo(
             stage = stageMetadata["stage_name"].asString,

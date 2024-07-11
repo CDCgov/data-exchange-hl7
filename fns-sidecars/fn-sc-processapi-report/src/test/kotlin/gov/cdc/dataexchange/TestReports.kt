@@ -24,4 +24,9 @@ class TestReports {
     fun testStructReport() {
         testReport("/struct-report.json")
     }
+
+    @Test
+    fun testJsonReport() {
+        testReport("/json-lake-report.json")
+    }
 }
