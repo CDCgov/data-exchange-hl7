@@ -1,0 +1,81 @@
+{
+	"schema_name": "DEX HL7v2",
+	"schema_version": "2.0.0",
+	"message_metadata": {
+		"message_uuid": "15677288-b182-4349-aefc-81f94368cb97",
+		"single_or_batch": "BATCH",
+		"message_index": 1,
+		"message_hash": "515a539636fdb2e5476d3eb6d4e072eb"
+	},
+	"routing_metadata": {
+		"dex_ingest_datetime": "2024-05-30T19:27:58Z",
+		"ingested_file_path": "https://ocioedemessagesatst.blob.core.windows.net/hl7ingress/dex-routing/COVID_ELR_BATCH 1_3bae31815dac272083d1c22a6aae082d.txt",
+		"ingested_file_timestamp": "2024-05-30T19:28:07+00:00",
+		"ingested_file_size": "13393",
+		"data_producer_id": "dex demo day producer",
+		"jurisdiction": "DEX",
+		"upload_id": "3bae31815dac272083d1c22a6aae082d",
+		"data_stream_id": "celr",
+		"data_stream_route": "hl7_out_redacted",
+		"sender_id": "APHL",
+		"received_filename": "COVID_ELR_BATCH 1.txt",
+		"supporting_metadata": {
+			"meta_ext_source": "dex demo day src",
+			"meta_ext_filestatus": "dex demo day status",
+			"meta_ext_file_timestamp": "dex demo day timestamp",
+			"system_provider": "DEX-ROUTING",
+			"version": "2.0",
+			"meta_ext_uploadid": "dex demo day upload id",
+			"meta_ext_objectkey": "dex demo day object key",
+			"filename": "COVID_ELR_BATCH 1.txt",
+			"reporting_jurisdiction": "unknown"
+		}
+	},
+	"stage": {
+		"report": {
+			"entries": [
+				{
+					"path": "PID-5.1",
+					"rule": "Redacted PID-5.1 with value 'REDACTED'",
+					"lineNumber": 2
+				},
+				{
+					"path": "PID-5.1",
+					"rule": "Redacted PID-5.1 with value 'REDACTED'",
+					"lineNumber": 2
+				},
+				{
+					"path": "PID-5.2",
+					"rule": "Redacted PID-5.2 with value 'REDACTED'",
+					"lineNumber": 2
+				},
+				{
+					"path": "PID-5.2",
+					"rule": "Redacted PID-5.2 with value 'REDACTED'",
+					"lineNumber": 2
+				},
+				{
+					"path": "PID-13",
+					"rule": "Redacted PID-13 with value 'REDACTED'",
+					"lineNumber": 2
+				}
+			],
+			"status": "SUCCESS"
+		},
+		"stage_name": "REDACTOR",
+		"stage_version": "0.0.43-SNAPSHOT",
+		"status": "SUCCESS",
+		"configs": [
+			"CELR-config.txt"
+		],
+		"event_timestamp": "2024-05-30T19:28:25.897",
+		"eventhub_offset": 352187318272,
+		"eventhub_sequence_number": 64522,
+		"start_processing_time": "2024-05-30T19:28:25.983+00:00",
+		"end_processing_time": "2024-05-30T19:28:25.987+00:00"
+	},
+	"summary": {
+		"current_status": "REDACTED",
+		"problem": null
+	}
+}
