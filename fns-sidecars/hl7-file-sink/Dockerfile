@@ -1,14 +1,7 @@
-FROM mcr.microsoft.com/azure-functions/java:4-java17-appservice
+FROM mcr.microsoft.com/azure-functions/java:4-java17
+
 # create system user group and user
 RUN groupadd -r dexuser && useradd -rmg dexuser dexuser
-RUN chown -R dexuser /FuncExtensionBundles
-RUN chown -R dexuser /etc/profile
-RUN chown -R dexuser /etc/ssh
-RUN chown -R dexuser /run
-RUN chown -R dexuser /etc/init.d/ssh
-RUN chown -R dexuser /azure-functions-host
-RUN mkdir -p /home/site/wwwroot
-RUN chown -R dexuser /home/site/wwwroot
 
 # specify the function name at build time using --build-arg function_name=<function name>
 ARG function_name
