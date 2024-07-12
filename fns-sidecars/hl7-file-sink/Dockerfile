@@ -1,8 +1,7 @@
-FROM mcr.microsoft.com/azure-functions/java:4-java17-appservice
+FROM mcr.microsoft.com/azure-functions/java:4-java17
 
 # create system user group and user
 RUN groupadd -r dexuser && useradd -rmg dexuser dexuser
-RUN mkdir /etc/ssh/sshd_not_to_be_run
 
 # specify the function name at build time using --build-arg function_name=<function name>
 ARG function_name
