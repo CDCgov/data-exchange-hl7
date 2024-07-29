@@ -1,0 +1,125 @@
+{
+	"schema_name": "DEX HL7v2",
+	"schema_version": "2.0.0",
+	"message_metadata": {
+		"message_uuid": "c64e09a5-0032-45b1-b3ce-eb564d304300",
+		"single_or_batch": "SINGLE",
+		"message_index": 1,
+		"message_hash": "cc9c74e68487cceda8f8b21db435c928"
+	},
+	"routing_metadata": {
+		"dex_ingest_datetime": "2024-07-02T18:22:26+00:00",
+		"ingested_file_path": "https://ocioedemessagesadev.blob.core.windows.net/hl7ingress/VPD-99276f64-9f69-4fa2-bc01-89968ac35d20.txt",
+		"ingested_file_timestamp": "2024-07-02T18:22:26+00:00",
+		"ingested_file_size": "2583",
+		"data_producer_id": "",
+		"jurisdiction": "UNKNOWN",
+		"upload_id": "postman21_05_10:50pm",
+		"data_stream_id": "celr",
+		"data_stream_route": "hl7_out_lake_seg",
+		"sender_id": "",
+		"received_filename": "",
+		"supporting_metadata": {
+			"route": "phlip_vpd",
+			"reporting_jurisdiction": "13",
+			"system_provider": "postman",
+			"message_type": "elr",
+			"original_file_timestamp": "2024-05-21t10:50:04.074",
+			"orginal_file_name": "goodfile_b734ebad-6f79-428e-99b1-650fcf2a0a39.txt"
+		},
+		"version": ""
+	},
+	"stage": {
+		"output": [
+			{
+				"segment": "MSH|^~\\&#|CA StarLIMS Stage^2.16.840.1.114222.4.3.3.2.3.2^ISO|CA PHL VRDL^2.16.840.1.114222.4.1.10765^ISO|PHLIP-VPD^2.16.840.1.114222.4.3.6.1^ISO|NCIRD-VPD^2.16.840.1.114222.4.1.214275^ISO|20170227140211.773-0800||ORU^R01^ORU_R01|V17T01279-01_9993|T|2.5.1|||||||||PHLabReport-NoAck^phLabResultsELRv251^2.16.840.1.113883.9.11^ISO~VPD_Version_1.0^VPDMsgMapID^2.16.840.1.113883.9.30^ISO",
+				"segment_number": 1,
+				"segment_id": "MSH[1]",
+				"parent_segments": []
+			},
+			{
+				"segment": "PID|1||PID00104402^^^CA.PHL&2.16.840.1.114222.4.1.10413&ISO^PI||~^^^^^^S||19930924||||^^^CA^^USA^P",
+				"segment_number": 2,
+				"segment_id": "PID[1]",
+				"parent_segments": [
+					"MSH[1]"
+				]
+			},
+			{
+				"segment": "ORC|RE|CA-V17T01279-01^^2.16.840.1.114222.4.1.10765^ISO|Starlims Lab^CA StarLIMS Stage^2.16.840.1.114222.4.3.3.2.3.2^ISO|||||||||05D0643850^Viral and Rickettsial Disease Laboratory^^^^^^^CLIA&2.16.840.1.113883.4.7&ISO^^^^XX|||||||||Viral and Rickettsial Disease Laboratory^D^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^05D0643850|850 Marina Bay Parkway^^94804-6403^CA|^WPN^PH^^^510^6206275",
+				"segment_number": 3,
+				"segment_id": "ORC[1]",
+				"parent_segments": [
+					"MSH[1]"
+				]
+			},
+			{
+				"segment": "OBR|1|CA-V17T01279-01^^2.16.840.1.114222.4.1.10765^ISO|Starlims Lab^CA StarLIMS Stage^2.16.840.1.114222.4.3.3.2.3.2^ISO|68991-9^Epidemiologically important info pnl^LN^11454^V_RTPCR_Mumps^L^2.34|||20170217|||||||||05D0643850^Viral and Rickettsial Disease Laboratory^^^^^^^CLIA&2.16.840.1.113883.4.7&ISO^^^^XX||||||20170227140211.976-0800|||F",
+				"segment_number": 4,
+				"segment_id": "OBR[1]",
+				"parent_segments": [
+					"MSH[1]"
+				]
+			},
+			{
+				"segment": "OBX|1|TS|11368-8^Illness or injury onset date and time^LN||20170213||||||F|||20170217|||||20170217||||Viral and Rickettsial Disease Laboratory^L^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^05D0643850|850 Marina Bay Parkway^^Richmond^CA^94804-6403^USA^B",
+				"segment_number": 5,
+				"segment_id": "OBX[1]",
+				"parent_segments": [
+					"OBR[1]",
+					"MSH[1]"
+				]
+			},
+			{
+				"segment": "OBX|2|SN|21612-7^Age - Reported^LN||^23|a^year^UCUM|||||F|||20170217|||||20170217||||Viral and Rickettsial Disease Laboratory^L^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^05D0643850|850 Marina Bay Parkway^^Richmond^CA^94804-6403^USA^B",
+				"segment_number": 6,
+				"segment_id": "OBX[2]",
+				"parent_segments": [
+					"OBR[1]",
+					"MSH[1]"
+				]
+			},
+			{
+				"segment": "OBR|2|CA-V17T01279-01^^2.16.840.1.114222.4.1.10765^ISO|Starlims Lab^CA StarLIMS Stage^2.16.840.1.114222.4.3.3.2.3.2^ISO|47532-7^MuV RNA XXX Ql PCR^LN^11454^V_RTPCR_Mumps^L^2.34|||20170217|||||||||05D0643850^Viral and Rickettsial Disease Laboratory^^^^^^^CLIA&2.16.840.1.113883.4.7&ISO^^^^XX||||||20170227140211.990-0800|||F",
+				"segment_number": 7,
+				"segment_id": "OBR[2]",
+				"parent_segments": [
+					"MSH[1]"
+				]
+			},
+			{
+				"segment": "OBX|1|CWE|47532-7^MuV RNA XXX Ql PCR^LN|1|260373001^Detected (qualifier value)^SCT||||||F|||20170217|||||20170217||||Viral and Rickettsial Disease Laboratory^L^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^05D0643850|850 Marina Bay Parkway^^Richmond^CA^94804-6403^USA^B",
+				"segment_number": 8,
+				"segment_id": "OBX[3]",
+				"parent_segments": [
+					"OBR[2]",
+					"MSH[1]"
+				]
+			},
+			{
+				"segment": "SPM|1|B76821151&CA StarLIMS Prod&2.16.840.1.114222.4.3.3.2.3.1&ISO^V17T01279&CA StarLIMS Stage&2.16.840.1.114222.4.3.3.2.3.1&ISO||ERROR^ERROR^ERROR^^^^^^Throat Swab|||||||||||||20170217|20170224||||||COOL^Cool^HL70493",
+				"segment_number": 9,
+				"segment_id": "SPM[1]",
+				"parent_segments": [
+					"OBR[2]",
+					"MSH[1]"
+				]
+			}
+		],
+		"stage_name": "LAKE-SEGMENTS-TRANSFORMER",
+		"stage_version": "0.0.48-SNAPSHOT",
+		"status": "SUCCESS",
+		"configs": [
+			"/basicProfile.json"
+		],
+		"event_timestamp": "2024-07-02T18:22:35.711",
+		"eventhub_offset": 184683593728,
+		"eventhub_sequence_number": 8363,
+		"start_processing_time": "2024-07-02T18:22:35.787+00:00",
+		"end_processing_time": "2024-07-02T18:22:35.798+00:00"
+	},
+	"summary": {
+		"current_status": "LAKE-SEGMENTS-TRANSFORMED",
+		"problem": null
+	}
+}

@@ -4,7 +4,7 @@ import com.azure.messaging.servicebus.ServiceBusMessage
 import com.azure.messaging.servicebus.models.CreateMessageBatchOptions
 import com.google.gson.*
 import com.microsoft.azure.functions.annotation.*
-import gov.cdc.dataexchange.model.ProcessingStatusSchema
+import gov.cdc.dex.reports.*
 import gov.cdc.dex.util.JsonHelper
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -41,10 +41,10 @@ class ReportFunction {
         var batch = fnConfig.serviceBusSender.createMessageBatch(
             batchOptions.setMaximumSizeInBytes(fnConfig.maxMessageSize)
         )
-
+        val reportTransformer = ReportTransformer()
         for ((i, record) in records.withIndex()) {
             try {
-                val processingStatusSchema = createProcessingStatusSchema(record)
+                val processingStatusSchema = reportTransformer.mapDataToBaseReport(record)
                 val processingStatusJson = JsonHelper.gson.toJson(processingStatusSchema)
                 val sbMessage = ServiceBusMessage(processingStatusJson)
                 // add message to batch
@@ -79,47 +79,6 @@ class ReportFunction {
                 throw e
             }
         }
-    }
-
-    private fun createProcessingStatusSchema(record: String): ProcessingStatusSchema {
-        val inputEvent = JsonParser.parseString(record).asJsonObject
-        inputEvent.remove("content")
-
-        val uploadIdJson = JsonHelper.getValueFromJson( "routing_metadata.upload_id", inputEvent)
-        val uploadId = if (uploadIdJson.isJsonNull) {
-            UUID.randomUUID().toString()
-        } else { uploadIdJson.asString }
-
-        val destinationIdJson = JsonHelper.getValueFromJson( "routing_metadata.data_stream_id", inputEvent)
-        val destinationId = if (destinationIdJson.isJsonNull) {
-            "UNKNOWN"
-        } else { destinationIdJson.asString }
-
-        val eventTypeJson = JsonHelper.getValueFromJson( "routing_metadata.data_stream_route", inputEvent)
-        val eventType = if (eventTypeJson.isJsonNull) {
-            "UNKNOWN"
-        } else { eventTypeJson.asString }
-
-        // Extract the current stage
-        val stageJson = JsonHelper.getValueFromJson("stage", inputEvent)
-        val stage = if (!stageJson.isJsonNull) stageJson.asJsonObject else null
-
-       val stageName = if (stage != null) {
-            stage.remove("output")
-            stage.get("stage_name").asString
-        } else {
-            "Unknown Stage"
-        }
-
-        // update schema_name to reflect this stage
-        inputEvent.addProperty("schema_name", "DEX HL7v2 $stageName")
-
-        return ProcessingStatusSchema(
-            uploadId = uploadId,
-            destinationId =  destinationId,
-            eventType =  eventType,
-            stageName =  stageName,
-            content = inputEvent)
     }
 
 }

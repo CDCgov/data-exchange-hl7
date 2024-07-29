@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+### [0.0.50] 2024-07-24
+	- Updated Processing Status Report schema to new consolidated version
+	- Updated docker file to use a smaller image that does not require ssh
+	- Updated docker file to perform multistage builds to build code + create image.
+
 ### [0.0.49] 2024-07-10
 	- Configured port 8080 on Dockerfile 
 	- Minor changes to Pom.xml to support deployment of both K8s and serverless

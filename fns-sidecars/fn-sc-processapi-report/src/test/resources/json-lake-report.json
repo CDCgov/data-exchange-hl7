@@ -1,0 +1,546 @@
+{
+	"schema_name": "DEX HL7v2",
+	"schema_version": "2.0.0",
+	"message_metadata": {
+		"message_uuid": "705812dc-8985-4f59-ac80-f4c1862f65f1",
+		"single_or_batch": "SINGLE",
+		"message_index": 1,
+		"message_hash": "85687bbb7890bbef005c7f2d55b6d5cf"
+	},
+	"routing_metadata": {
+		"dex_ingest_datetime": "2024-07-03T17:32:33+00:00",
+		"ingested_file_path": "https://ocioedemessagesatst.blob.core.windows.net/hl7ingress/postman-quq6-b1de9b39-95e5-45d7-8a1b-727dab693c47.txt",
+		"ingested_file_timestamp": "2024-07-03T17:32:33+00:00",
+		"ingested_file_size": "3362",
+		"data_producer_id": "",
+		"jurisdiction": "UNKNOWN",
+		"upload_id": "quq6-8dbb4c4a-1251-4c09-b60f-735e6a03f387",
+		"data_stream_id": "vpd",
+		"data_stream_route": "hl7_out_json",
+		"sender_id": "",
+		"received_filename": "",
+		"supporting_metadata": {
+			"meta_ext_source": "dev-test",
+			"reporting_jurisdiction": "55",
+			"system_provider": "postman",
+			"original_file_timestamp": "",
+			"orginal_file_name": "60f83883-e959-4608-89ae-1d578442ba88.txt"
+		},
+		"version": ""
+	},
+	"stage": {
+		"output": {
+			"MSH": {
+				"field_separator": "|",
+				"encoding_characters": "^~\\&",
+				"sending_application": {
+					"namespace_id": "CA StarLIMS Stage",
+					"universal_id": "2.16.840.1.114222.4.3.3.2.3.1",
+					"universal_id_type": "ISO"
+				},
+				"sending_facility": {
+					"namespace_id": "CA PHL VRDL",
+					"universal_id": "2.16.840.1.114222.4.1.10765",
+					"universal_id_type": "ISO"
+				},
+				"receiving_application": {
+					"namespace_id": "PHLIP-VPD",
+					"universal_id": "2.16.840.1.114222.4.3.6.1",
+					"universal_id_type": "ISO"
+				},
+				"receiving_facility": {
+					"namespace_id": "NCIRD-VPD",
+					"universal_id": "2.16.840.1.114222.4.1.214275",
+					"universal_id_type": "ISO"
+				},
+				"date_time_of_message": "20180323155725.310-0700",
+				"message_type": {
+					"message_code": "ORU",
+					"trigger_event": "R01",
+					"universal_id_type": "ORU_R01"
+				},
+				"message_control_id": "V18T01602-01_14187",
+				"processing_id": {
+					"processing_id": "T"
+				},
+				"version_id": {
+					"version_id": "2.5.1"
+				},
+				"accept_acknowledgement_type": "NE",
+				"application_acknowledgement_type": "NE",
+				"country_code": "USA",
+				"message_profile_identifier": [
+					{
+						"entity_identifier": "PHLabReport-NoAck",
+						"namespace_id": "phLabResultsELRv251",
+						"universal_id": "2.16.840.1.113883.9.11",
+						"universal_id_type": "ISO"
+					},
+					{
+						"entity_identifier": "VPD_Version_1.0",
+						"namespace_id": "VPDMsgMapID",
+						"universal_id": "2.16.840.1.113883.9.30",
+						"universal_id_type": "ISO"
+					}
+				],
+				"children": [
+					{
+						"SFT": {
+							"software_vendor_organization": {
+								"organization_name": "CA StarLIMS Stage",
+								"assigning_authority": {
+									"namespace_id": "VRDL",
+									"universal_id": "2.16.840.1.114222.4.3.3.2.3.1",
+									"universal_id_type": "ISO"
+								},
+								"identifier_type_code": "XX",
+								"organization_identifier": "05D0643850"
+							},
+							"software_certified_version_or_release_number": "11",
+							"software_product_name": "Cal-LIMS",
+							"software_binary_id": "Binary ID unknown"
+						}
+					},
+					{
+						"PID": {
+							"set_id": "1",
+							"patient_identifier_list": [
+								{
+									"id_number": "PID00128669",
+									"assigning_authority": {
+										"namespace_id": "CA PHL VRDL",
+										"universal_id": "2.16.840.1.114222.4.1.10413",
+										"universal_id_type": "ISO"
+									},
+									"identifier_type_code": "PI"
+								}
+							],
+							"patient_name": [
+								{
+									"family_name": "XXXXXXXX"
+								},
+								{
+									"name_type_code": "S"
+								}
+							],
+							"date_time_of_birth": "20160422",
+							"administrative_sex": "F",
+							"patient_address": [
+								{
+									"state_or_province": "CA",
+									"country": "USA",
+									"address_type": "H",
+									"county_parish_code": "06021"
+								}
+							]
+						}
+					},
+					{
+						"ORC": {
+							"order_control": "RE",
+							"placer_order_number": {
+								"entity_identifier": "CA-V18T01602-01",
+								"namespace_id": "CA PHL VRDL",
+								"universal_id": "2.16.840.1.114222.4.1.10765",
+								"universal_id_type": "ISO"
+							},
+							"filler_order_number": {
+								"entity_identifier": "V18T01602-01",
+								"namespace_id": "CDPH_PHL_LIMS",
+								"universal_id": "2.14.1.2.3.4.5.7",
+								"universal_id_type": "ISO"
+							},
+							"ordering_provider": [
+								{
+									"person_identifier": "05D0643850",
+									"family_name": {
+										"surname": "Viral and Rickettsial Disease Laboratory"
+									},
+									"assigning_authority": {
+										"namespace_id": "CLIA",
+										"universal_id": "2.16.840.1.113883.4.7",
+										"universal_id_type": "ISO"
+									},
+									"identifier_type_code": "XX"
+								}
+							],
+							"ordering_facility_name": [
+								{
+									"organization_name": "Viral and Rickettsial Disease Laboratory",
+									"organization_name_type_code": "D",
+									"assigning_authority": {
+										"namespace_id": "CLIA",
+										"universal_id": "2.16.840.1.113883.4.7",
+										"universal_id_type": "ISO"
+									},
+									"identifier_type_code": "XX",
+									"organization_identifier": "05D0643850"
+								}
+							],
+							"ordering_facility_address": [
+								{
+									"street_address": "850 Marina Bay Parkway",
+									"city": "94804-6403",
+									"state_or_province": "CA"
+								}
+							],
+							"ordering_facility_phone_number": [
+								{
+									"area_city_code": "510",
+									"local_number": "6206275"
+								}
+							]
+						}
+					},
+					{
+						"OBR": {
+							"set_id": "1",
+							"placer_order_number": {
+								"entity_identifier": "CA-V18T01602-01",
+								"namespace_id": "CA PHL VRDL",
+								"universal_id": "2.16.840.1.114222.4.1.10765",
+								"universal_id_type": "ISO"
+							},
+							"filler_order_number": {
+								"entity_identifier": "V18T01602-01",
+								"namespace_id": "CDPH_PHL_LIMS",
+								"universal_id": "2.14.1.2.3.4.5.7",
+								"universal_id_type": "ISO"
+							},
+							"universal_service_identifier": {
+								"identifier": "68991-9",
+								"text": "Epidemiologically important information for public health reporting",
+								"name_of_coding_system": "LN"
+							},
+							"observation_date_time": "20180321",
+							"ordering_provider": {
+								"person_identifier": "05D0643850",
+								"family_name": {
+									"surname": "Viral and Rickettsial Disease Laboratory"
+								},
+								"assigning_authority": {
+									"namespace_id": "CLIA",
+									"universal_id": "2.16.840.1.113883.4.7",
+									"universal_id_type": "ISO"
+								},
+								"identifier_type_code": "XX"
+							},
+							"results_report_status_change_date_time": "201803231557-0700",
+							"result_status": "P",
+							"children": [
+								{
+									"OBX": {
+										"set_id": "1",
+										"value_type": "TS",
+										"observation_identifier": {
+											"identifier": "11368-8",
+											"text": "Illness or injury onset date and time",
+											"name_of_coding_system": "LN"
+										},
+										"observation_value": [
+											"20180312"
+										],
+										"observation_result_status": "F",
+										"date_time_of_the_observation": "20180321",
+										"date_time_of_the_analysis": "20180321",
+										"performing_organization_name": {
+											"organization_name": "Viral and Rickettsial Disease Laboratory",
+											"organization_name_type_code": "L",
+											"assigning_authority": {
+												"namespace_id": "CLIA",
+												"universal_id": "2.16.840.1.113883.4.7",
+												"universal_id_type": "ISO"
+											},
+											"identifier_type_code": "XX",
+											"organization_identifier": "05D0643850"
+										},
+										"performing_organization_address": {
+											"street_address": "850 Marina Bay Parkway",
+											"city": "Richmond",
+											"state_or_province": "CA",
+											"postal_code": "94804-6403",
+											"country": "USA",
+											"address_type": "B"
+										}
+									}
+								},
+								{
+									"OBX": {
+										"set_id": "2",
+										"value_type": "SN",
+										"observation_identifier": {
+											"identifier": "21612-7",
+											"text": "Age - Reported",
+											"name_of_coding_system": "LN"
+										},
+										"observation_value": [
+											{
+												"number1": "1"
+											}
+										],
+										"units": {
+											"identifier": "a",
+											"text": "Year",
+											"name_of_coding_system": "UCUM"
+										},
+										"observation_result_status": "F",
+										"date_time_of_the_observation": "20180321",
+										"date_time_of_the_analysis": "20180321",
+										"performing_organization_name": {
+											"organization_name": "Viral and Rickettsial Disease Laboratory",
+											"organization_name_type_code": "L",
+											"assigning_authority": {
+												"namespace_id": "CLIA",
+												"universal_id": "2.16.840.1.113883.4.7",
+												"universal_id_type": "ISO"
+											},
+											"identifier_type_code": "XX",
+											"organization_identifier": "05D0643850"
+										},
+										"performing_organization_address": {
+											"street_address": "850 Marina Bay Parkway",
+											"city": "Richmond",
+											"state_or_province": "CA",
+											"postal_code": "94804-6403",
+											"country": "USA",
+											"address_type": "B"
+										}
+									}
+								},
+								{
+									"SPM": {
+										"set_id": "1",
+										"specimen_id": {
+											"placer_assigned_identifier": {
+												"entity_identifier": "2018-0387",
+												"namespace_id": "CA StarLIMS Stage",
+												"universal_id": "2.16.840.1.114222.4.3.3.2.3.1",
+												"universal_id_type": "ISO"
+											},
+											"filler_assigned_identifier": {
+												"entity_identifier": "V18T01602",
+												"namespace_id": "Cal-LIMS",
+												"universal_id": "2.16.840.1.114222.4.3.3.2.3.1",
+												"universal_id_type": "ISO"
+											}
+										},
+										"specimen_type": {
+											"identifier": "258529004",
+											"text": "Throat swab (specimen)",
+											"name_of_coding_system": "SCT",
+											"original_text": "Throat Swab"
+										},
+										"specimen_collection_date_time": {
+											"range_start_date_time": "20180321"
+										},
+										"specimen_received_date_time": "20180323",
+										"specimen_condition": [
+											{
+												"identifier": "COOL",
+												"text": "Cool",
+												"name_of_coding_system": "HL70493"
+											}
+										]
+									}
+								}
+							]
+						}
+					},
+					{
+						"ORC": {
+							"order_control": "RE",
+							"placer_order_number": {
+								"entity_identifier": "CA-V18T01602-01",
+								"namespace_id": "CA PHL VRDL",
+								"universal_id": "2.16.840.1.114222.4.1.10765",
+								"universal_id_type": "ISO"
+							},
+							"filler_order_number": {
+								"entity_identifier": "V18T01602-01_48508-6",
+								"namespace_id": "CDPH_PHL_LIMS",
+								"universal_id": "2.14.1.2.3.4.5.7",
+								"universal_id_type": "ISO"
+							},
+							"ordering_provider": [
+								{
+									"person_identifier": "05D0643850",
+									"family_name": {
+										"surname": "Viral and Rickettsial Disease Laboratory"
+									},
+									"assigning_authority": {
+										"namespace_id": "CLIA",
+										"universal_id": "2.16.840.1.113883.4.7",
+										"universal_id_type": "ISO"
+									},
+									"identifier_type_code": "XX"
+								}
+							],
+							"ordering_facility_name": [
+								{
+									"organization_name": "Viral and Rickettsial Disease Laboratory",
+									"organization_name_type_code": "D",
+									"assigning_authority": {
+										"namespace_id": "CLIA",
+										"universal_id": "2.16.840.1.113883.4.7",
+										"universal_id_type": "ISO"
+									},
+									"identifier_type_code": "XX",
+									"organization_identifier": "05D0643850"
+								}
+							],
+							"ordering_facility_address": [
+								{
+									"street_address": "850 Marina Bay Parkway",
+									"city": "94804-6403",
+									"state_or_province": "CA"
+								}
+							],
+							"ordering_facility_phone_number": [
+								{
+									"area_city_code": "510",
+									"local_number": "6206275"
+								}
+							]
+						}
+					},
+					{
+						"OBR": {
+							"set_id": "2",
+							"placer_order_number": {
+								"entity_identifier": "CA-V18T01602-01",
+								"namespace_id": "CA PHL VRDL",
+								"universal_id": "2.16.840.1.114222.4.1.10765",
+								"universal_id_type": "ISO"
+							},
+							"filler_order_number": {
+								"entity_identifier": "V18T01602-01_48508-6",
+								"namespace_id": "CDPH_PHL_LIMS",
+								"universal_id": "2.14.1.2.3.4.5.7",
+								"universal_id_type": "ISO"
+							},
+							"universal_service_identifier": {
+								"identifier": "48508-6",
+								"text": "MeV RNA XXX Ql PCR",
+								"name_of_coding_system": "LN",
+								"alternate_identifier": "11436",
+								"alternate_text": "V_RTPCR_Measles",
+								"name_of_alternate_coding_system": "L"
+							},
+							"observation_date_time": "20180321",
+							"ordering_provider": {
+								"person_identifier": "05D0643850",
+								"family_name": {
+									"surname": "Viral and Rickettsial Disease Laboratory"
+								},
+								"assigning_authority": {
+									"namespace_id": "CLIA",
+									"universal_id": "2.16.840.1.113883.4.7",
+									"universal_id_type": "ISO"
+								},
+								"identifier_type_code": "XX"
+							},
+							"results_report_status_change_date_time": "201803231536-0700",
+							"result_status": "P",
+							"children": [
+								{
+									"OBX": {
+										"set_id": "1",
+										"value_type": "CWE",
+										"observation_identifier": {
+											"identifier": "48508-6",
+											"text": "MeV RNA XXX Ql PCR",
+											"name_of_coding_system": "LN"
+										},
+										"observation_value": [
+											{
+												"identifier": "260415000",
+												"text": "Not Detected",
+												"name_of_coding_system": "SCT"
+											}
+										],
+										"abnormal_flags": [
+											"N^Normal^HL70078^^^^2.7^^^^^^^2.16.840.1.113883.12.78"
+										],
+										"observation_result_status": "F",
+										"date_time_of_the_observation": "20180321",
+										"date_time_of_the_analysis": "20180323",
+										"performing_organization_name": {
+											"organization_name": "Viral and Rickettsial Disease Laboratory",
+											"organization_name_type_code": "L",
+											"assigning_authority": {
+												"namespace_id": "CLIA",
+												"universal_id": "2.16.840.1.113883.4.7",
+												"universal_id_type": "ISO"
+											},
+											"identifier_type_code": "XX",
+											"organization_identifier": "05D0643850"
+										},
+										"performing_organization_address": {
+											"street_address": "850 Marina Bay Parkway",
+											"city": "Richmond",
+											"state_or_province": "CA",
+											"postal_code": "94804-6403",
+											"country": "USA",
+											"address_type": "B"
+										}
+									}
+								},
+								{
+									"SPM": {
+										"set_id": "1",
+										"specimen_id": {
+											"placer_assigned_identifier": {
+												"entity_identifier": "2018-0387",
+												"namespace_id": "CA StarLIMS Stage",
+												"universal_id": "2.16.840.1.114222.4.3.3.2.3.1",
+												"universal_id_type": "ISO"
+											},
+											"filler_assigned_identifier": {
+												"entity_identifier": "V18T01602",
+												"namespace_id": "Cal-LIMS",
+												"universal_id": "2.16.840.1.114222.4.3.3.2.3.1",
+												"universal_id_type": "ISO"
+											}
+										},
+										"specimen_type": {
+											"identifier": "258529004",
+											"text": "Throat swab (specimen)",
+											"name_of_coding_system": "SCT",
+											"original_text": "Throat Swab"
+										},
+										"specimen_collection_date_time": {
+											"range_start_date_time": "20180321"
+										},
+										"specimen_received_date_time": "20180323",
+										"specimen_condition": [
+											{
+												"identifier": "COOL",
+												"text": "Cool",
+												"name_of_coding_system": "HL70493"
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		"stage_name": "HL7-JSON-LAKE-TRANSFORMER",
+		"stage_version": "0.0.48-SNAPSHOT",
+		"status": "SUCCESS",
+		"configs": [
+			"PhinGuideProfile_v2.json"
+		],
+		"event_timestamp": "2024-07-03T17:33:03.879",
+		"eventhub_offset": 781684047872,
+		"eventhub_sequence_number": 302628,
+		"start_processing_time": "2024-07-03T17:33:04.547+00:00",
+		"end_processing_time": "2024-07-03T17:33:05.117+00:00"
+	},
+	"summary": {
+		"current_status": "HL7-JSON-LAKE-TRANSFORMED",
+		"problem": null
+	}
+}
