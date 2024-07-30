@@ -7,9 +7,7 @@ import com.azure.cosmos.CosmosClientBuilder
 import com.azure.messaging.eventhubs.EventHubClientBuilder
 import com.azure.messaging.eventhubs.EventHubProducerClient
 import com.azure.messaging.servicebus.ServiceBusClientBuilder
-import com.azure.messaging.servicebus.ServiceBusMessage
 import com.azure.messaging.servicebus.ServiceBusReceiverClient
-import com.azure.messaging.servicebus.ServiceBusSenderClient
 import com.azure.storage.blob.BlobServiceClientBuilder
 import com.azure.storage.queue.QueueClientBuilder
 import com.microsoft.azure.servicebus.jms.ServiceBusJmsConnectionFactory
@@ -17,7 +15,6 @@ import com.microsoft.azure.servicebus.jms.ServiceBusJmsConnectionFactorySettings
 import gov.cdc.dex.azure.DedicatedEventHubSender
 import java.time.Duration
 import javax.jms.ConnectionFactory
-import javax.jms.Destination
 
 
 class DependencyChecker {
