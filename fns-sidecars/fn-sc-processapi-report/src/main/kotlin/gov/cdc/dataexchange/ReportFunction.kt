@@ -65,7 +65,7 @@ class ReportFunction {
                     logger.info("REPORT::[${i + 1}] upload_id: ${processingStatusSchema.uploadId} added to batch")
                 }//.if
             } catch (e: Exception) {
-                logger.error("REPORT::ERROR creating or sending batch to Service Bus queue: ${e.message}")
+                logger.error("REPORT::ERROR creating or sending batch to Service Bus topic: ${e.message}")
                 throw e
             }
         } //.for
@@ -75,7 +75,7 @@ class ReportFunction {
                 fnConfig.serviceBusSender.sendMessages(batch)
                 logger.info("REPORT::Batch send completed")
             } catch (e: Exception) {
-                logger.error("REPORT::ERROR sending batch to Service Bus queue ${fnConfig.sbQueue}: ${e.message}")
+                logger.error("REPORT::ERROR sending batch to Service Bus topic ${fnConfig.sbTopic}: ${e.message}")
                 throw e
             }
         }

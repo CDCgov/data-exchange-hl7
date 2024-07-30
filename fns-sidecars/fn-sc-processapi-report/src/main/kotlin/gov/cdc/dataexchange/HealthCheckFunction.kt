@@ -24,9 +24,9 @@ class HealthCheckFunction {
         val checker = DependencyChecker()
         val time = measureTime {
             addToResult(checker.checkEventHub(evHubConnStr, evHubReceiveName), result)
-            addToResult(checker.checkServiceBusQueue(
+            addToResult(checker.checkServiceBusTopic(
                 ReportFunction.fnConfig.sbConnString,
-                ReportFunction.fnConfig.sbQueue), result)
+                ReportFunction.fnConfig.sbTopic), result)
         }
         result.totalChecksDuration = time.toComponents { hours, minutes, seconds, nanoseconds ->
             "%02d:%02d:%02d.%03d".format(hours, minutes, seconds, nanoseconds / 1000000)
