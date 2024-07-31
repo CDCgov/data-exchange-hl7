@@ -10,8 +10,12 @@ import com.azure.messaging.servicebus.ServiceBusClientBuilder
 import com.azure.messaging.servicebus.ServiceBusReceiverClient
 import com.azure.storage.blob.BlobServiceClientBuilder
 import com.azure.storage.queue.QueueClientBuilder
+import com.microsoft.azure.servicebus.jms.ServiceBusJmsConnectionFactory
+import com.microsoft.azure.servicebus.jms.ServiceBusJmsConnectionFactorySettings
 import gov.cdc.dex.azure.DedicatedEventHubSender
 import java.time.Duration
+import javax.jms.ConnectionFactory
+
 
 class DependencyChecker {
     enum class AzureDependency(val description: String) {
@@ -51,6 +55,19 @@ class DependencyChecker {
                 .buildProducerClient()
             client.partitionIds.count()
             client.close()
+        }
+    }
+
+    fun checkServiceBusTopic(connectionString: String, topicName: String) : DependencyHealthData {
+        return checkDependency(AzureDependency.SERVICE_BUS, topicName) {
+            val connFactorySettings = ServiceBusJmsConnectionFactorySettings()
+            connFactorySettings.connectionIdleTimeoutMS = 20000
+            connFactorySettings.setShouldReconnect(false)
+            val factory: ConnectionFactory =
+                ServiceBusJmsConnectionFactory(connectionString, connFactorySettings)
+            val connection = factory.createContext()
+            connection.createTemporaryTopic()
+            connection.close()
         }
     }
 

@@ -5,7 +5,7 @@ import com.azure.messaging.servicebus.ServiceBusSenderClient
 
 class FunctionConfig {
     val sbConnString = System.getenv("ServiceBusConnectionString")
-    val sbQueue = System.getenv("ServiceBusQueue")
+    val sbTopic = System.getenv("ServiceBusTopic")
     val maxMessageSize = try {
         System.getenv("MAX_SERVICE_BUS_MESSAGE_SIZE").toInt()
     } catch (e : Exception) {
@@ -15,7 +15,7 @@ class FunctionConfig {
     val serviceBusSender : ServiceBusSenderClient = ServiceBusClientBuilder()
         .connectionString(sbConnString)
         .sender()
-        .queueName(sbQueue)
+        .topicName(sbTopic)
         .buildClient()
 
 }
