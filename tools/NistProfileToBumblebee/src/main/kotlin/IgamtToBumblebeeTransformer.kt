@@ -61,7 +61,7 @@ class IgamtToBumblebeeTransformer () {
         val fieldList = mutableListOf<HL7SegmentField>()
         var fieldNumber = 0
         if (segment.childNodes.length > 2) {
-            for (i in 3 until segment.childNodes.length step(2)) {
+            for (i in 1 until segment.childNodes.length step(2)) {
                 val field = segment.childNodes.item(i)
                 fieldNumber++
                 val name = field.attributes.getNamedItem("Name").textContent
