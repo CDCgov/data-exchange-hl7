@@ -167,7 +167,7 @@ class IgamtToBumblebeeTransformer () {
             processSegment(mainNode, nodeMap, newNodeMap)
         } else {
             processSegment(child, nodeMap)
-            processGroup(child.nextSibling.nextSibling, nodeMap, startWith + 2)
+            child.nextSibling?.nextSibling?.let { processGroup(it, nodeMap, startWith + 2) }
         }
     }
 
