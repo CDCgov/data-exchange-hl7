@@ -16,7 +16,7 @@ import cdc.gov.StringUtils.Companion.normalize
 class IgamtToBumblebeeTransformer () {
     private val gson: Gson = GsonBuilder().create()
     fun transformProfile(igamtProfilePath: String, outputPath: String, outputProfileName: String? = null) {
-        try {
+//        try {
             val doc = loadDocumentFromFile(igamtProfilePath)
             val outputProfile = mutableMapOf<String, Any>()
             val profileName = if(outputProfileName.isNullOrEmpty()) {
@@ -32,9 +32,9 @@ class IgamtToBumblebeeTransformer () {
             dataTypesProfile["segmentFields"] = getFieldData(doc, "Datatypes", "Label")
             saveFile("$outputPath/profile-${profileName}.json", gson.toJsonTree(outputProfile))
             saveFile("$outputPath/fields-${profileName}.json", gson.toJsonTree(dataTypesProfile))
-        } catch (e: Exception) {
-            println("Error in transformer: ${e.message}")
-        }
+//        } catch (e: Exception) {
+//            println("Error in transformer: ${e.message}")
+//        }
     }
 
     private fun saveFile(fileName: String, contents: JsonElement) {
@@ -63,37 +63,39 @@ class IgamtToBumblebeeTransformer () {
         if (segment.childNodes.length > 2) {
             for (i in 1 until segment.childNodes.length step(2)) {
                 val field = segment.childNodes.item(i)
-                fieldNumber++
-                val name = field.attributes.getNamedItem("Name").textContent
-                val datatype = field.attributes.getNamedItem("Datatype").textContent
-                val maxLength = try {
-                    field.attributes.getNamedItem("MaxLength").textContent.toInt()
-                } catch (e: NumberFormatException) {
-                    0
-                }
+                if (field.hasAttributes()) {
+                    fieldNumber++
+                    val name = field.attributes.getNamedItem("Name").textContent
+                    val datatype = field.attributes.getNamedItem("Datatype").textContent
+                    val maxLength = try {
+                        field.attributes.getNamedItem("MaxLength").textContent.toInt()
+                    } catch (e: NumberFormatException) {
+                        0
+                    }
 
-                val usage = field.attributes.getNamedItem("Usage").textContent
-                val min = try {
-                    field.attributes.getNamedItem("Min").textContent
-                } catch (e: Exception) {
-                    "1"
+                    val usage = field.attributes.getNamedItem("Usage").textContent
+                    val min = try {
+                        field.attributes.getNamedItem("Min").textContent
+                    } catch (e: Exception) {
+                        "1"
+                    }
+                    val max = try {
+                        field.attributes.getNamedItem("Max").textContent
+                    } catch (e: Exception) {
+                        "1"
+                    }
+                    val hl7Field = HL7SegmentField(
+                        fieldNumber = fieldNumber,
+                        name = name,
+                        dataType = datatype,
+                        maxLength = maxLength,
+                        usage = usage,
+                        cardinality = "[$min..$max]",
+                        conformance = "",
+                        notes = ""
+                    )
+                    fieldList.add(hl7Field)
                 }
-                val max = try {
-                    field.attributes.getNamedItem("Max").textContent
-                } catch (e: Exception) {
-                    "1"
-                }
-                val hl7Field = HL7SegmentField(
-                    fieldNumber = fieldNumber,
-                    name = name,
-                    dataType = datatype,
-                    maxLength = maxLength,
-                    usage = usage,
-                    cardinality = "[$min..$max]",
-                    conformance = "",
-                    notes = ""
-                )
-                fieldList.add(hl7Field)
             }
         }
         return fieldList
