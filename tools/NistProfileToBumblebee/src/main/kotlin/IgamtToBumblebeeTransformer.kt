@@ -16,7 +16,7 @@ import cdc.gov.StringUtils.Companion.normalize
 class IgamtToBumblebeeTransformer () {
     private val gson: Gson = GsonBuilder().create()
     fun transformProfile(igamtProfilePath: String, outputPath: String, outputProfileName: String? = null) {
-        try {
+   //     try {
             val doc = loadDocumentFromFile(igamtProfilePath)
             val outputProfile = mutableMapOf<String, Any>()
             val profileName = if(outputProfileName.isNullOrEmpty()) {
@@ -33,9 +33,9 @@ class IgamtToBumblebeeTransformer () {
             saveFile("$outputPath/profile-${profileName}.json", gson.toJsonTree(outputProfile))
             saveFile("$outputPath/fields-${profileName}.json", gson.toJsonTree(dataTypesProfile))
             println("Saved files to $outputPath")
-        } catch (e: Exception) {
-            println("Error in transformer: ${e.message}")
-        }
+//        } catch (e: Exception) {
+//            println("Error in transformer: ${e.message}")
+//        }
     }
 
     private fun saveFile(fileName: String, contents: JsonElement) {
@@ -142,27 +142,33 @@ class IgamtToBumblebeeTransformer () {
         }
     }
 
-    private fun processGroup(groupNode: Node, nodeMap:MutableMap<String, Any>) {
+    private fun processGroup(groupNode: Node, nodeMap:MutableMap<String, Any>, startWith: Int = 3) {
         var child = groupNode
         while (child.nodeName != "Segment") {  child = child.childNodes.item(1) }
-        // now we are at the top of the group -- this one has "children"
-        val mainNode = child.cloneNode(false)
-        // set cardinality of main node to that of the group
-        val minAttrib = mainNode.attributes.getNamedItem("Min")
-        val maxAttrib = mainNode.attributes.getNamedItem("Max")
-        val parentGroup = child.parentNode
-        minAttrib.textContent = parentGroup.attributes.getNamedItem("Min").textContent
-        maxAttrib.textContent = parentGroup.attributes.getNamedItem("Max").textContent
+        // now we are at the top of the group -- this one has "children" IF its min cardinality > 0
 
-        val newNodeMap = mutableMapOf<String, Any>()
-        for (j in 3 until parentGroup.childNodes.length step(2)) {
-            if (parentGroup.childNodes.item(j).nodeName == "Segment")
-                processSegment(parentGroup.childNodes.item(j), newNodeMap)
-            else if (parentGroup.childNodes.item(j).nodeName == "Group") {
-                processGroup(parentGroup.childNodes.item(j), newNodeMap)
+        // set cardinality of main node to that of the group
+        val minAttrib = child.attributes.getNamedItem("Min")
+        if (minAttrib.textContent.toInt() > 0) {
+            val mainNode = child.cloneNode(false)
+            val maxAttrib = mainNode.attributes.getNamedItem("Max")
+            val parentGroup = child.parentNode
+            minAttrib.textContent = parentGroup.attributes.getNamedItem("Min").textContent
+            maxAttrib.textContent = parentGroup.attributes.getNamedItem("Max").textContent
+
+            val newNodeMap = mutableMapOf<String, Any>()
+            for (j in startWith until parentGroup.childNodes.length step (2)) {
+                if (parentGroup.childNodes.item(j).nodeName == "Segment")
+                    processSegment(parentGroup.childNodes.item(j), newNodeMap)
+                else if (parentGroup.childNodes.item(j).nodeName == "Group") {
+                    processGroup(parentGroup.childNodes.item(j), newNodeMap)
+                }
             }
+            processSegment(mainNode, nodeMap, newNodeMap)
+        } else {
+            processSegment(child, nodeMap)
+            processGroup(child.nextSibling.nextSibling, nodeMap, startWith + 2)
         }
-        processSegment(mainNode, nodeMap, newNodeMap)
     }
 
 
