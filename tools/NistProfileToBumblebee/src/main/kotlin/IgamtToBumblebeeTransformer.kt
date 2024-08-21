@@ -16,7 +16,7 @@ import cdc.gov.StringUtils.Companion.normalize
 class IgamtToBumblebeeTransformer () {
     private val gson: Gson = GsonBuilder().create()
     fun transformProfile(igamtProfilePath: String, outputPath: String, outputProfileName: String? = null) {
-   //     try {
+        try {
             val doc = loadDocumentFromFile(igamtProfilePath)
             val outputProfile = mutableMapOf<String, Any>()
             val profileName = if(outputProfileName.isNullOrEmpty()) {
@@ -33,9 +33,9 @@ class IgamtToBumblebeeTransformer () {
             saveFile("$outputPath/profile-${profileName}.json", gson.toJsonTree(outputProfile))
             saveFile("$outputPath/fields-${profileName}.json", gson.toJsonTree(dataTypesProfile))
             println("Saved files to $outputPath")
-//        } catch (e: Exception) {
-//            println("Error in transformer: ${e.message}")
-//        }
+        } catch (e: Exception) {
+            println("Error in transformer: ${e.message}")
+        }
     }
 
     private fun saveFile(fileName: String, contents: JsonElement) {
