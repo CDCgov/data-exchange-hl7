@@ -39,7 +39,6 @@ into the structure and data type JSON configuration files.
 
 
 ## Usage
-### Standalone Execution
 The NistProfileToBumblebee tool can be used as a standalone executable jar
 that is run from the command line. As such, it takes up to 3 parameters:
 1. The full path to the PROFILE.xml file
@@ -52,14 +51,31 @@ PROFILE.xml will be used as the base name.
 
 Example usage:
 ```
-> java -jar NistProfileToBumblebee.jar C:/Profiles/PROFILE.xml C:/Profiles/output MyNewProfile
+java -jar NistProfileToBumblebee.jar C:/Profiles/PROFILE.xml C:/Profiles/output MyNewProfile
 ```
 Note that regardless of operating system, the tool requires forward slashes `/` to separate
 directory names.
 
-### Use In Other Programs
-
+Using the example command above, the two files output would be as follows:
+```
+fields-MyNewProfile.json
+profile-MyNewProfile.json
+```
+The files would be used with the lib-hl7v2-bumblebee HL7JsonTransformer class as follows:
+```kotlin
+val transformer = HL7JsonTransformer.getTransformerWithResource(message,
+    "profile-MyNewProfile.json",
+    "fields-MyNewProfile.json")
+val fullHL7json = transformer.transformMessage()
+```
+Please see the  [lib-hl7v2-bumblebee documentation](https://github.com/CDCgov/lib-hl7v2-bumblebee) for 
+more information on how to use the bumblebee library for transformations.
 
 ## Build
+This project can be built using Maven build tools:
+```
+mvn package -f pom.xml
+```
 
 ## Dependencies
+This project uses the Java 17 SDK and Maven. It has no other external dependencies.
