@@ -1,3 +1,17 @@
+# REPOSITORY ARCHIVED.
+
+This repository is being permatently archived and will no longer be udpated.
+Some of its components will live in other repositories and will continue to be maintained. But this repo as is, will no longer be in use.
+Please refer to these repositories for the components that continues to be updated:
+
+All our pipeline services are now available as microservices with docker images on this new [repo](https://github.com/CDCgov/hl7v2-processes-rest)
+
+* **lib-nist-validator** now lives [here](https://github.com/CDCgov/lib-hl7v2-nist-validator) and you can use the library directly from Maven Central
+* **lib-bumblebee** now lives [here](https://github.com/CDCgov/lib-hl7v2-bumblebee)  and you can use the library directly from Maven Central
+* **lib-cloud-proxy** now lives [here](https://github.com/CDCgov/lib-cloud-proxy) (for JVM languages) and [here](https://github.com/CDCgov/lib-cloud-proxy-go) For GoLang Projects
+
+  Also, the hl7-pet library (which lib-bumblebee depends on) has its own [Repo](https://github.com/CDCgov/hl7-pet) and is available on Maven Central.
+
 # CDC Data Exchange HL7
 
 A repository for the CDC data exchange building block HL7.
