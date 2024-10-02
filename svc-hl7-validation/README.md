@@ -1,3 +1,10 @@
+# DEPRECATED
+
+This project has been deprecated and moved to another repository.
+All our pipeline services are now available as microservices with docker images on this new [repo](https://github.com/CDCgov/hl7v2-processes-rest)
+
+For future updates and enhacements, please refer to the repository above. this repo is being archived and no longer will be updated.
+
 # HL7 v2 Validation API
 
 The HL7v2 Validation API is designed to assist public health agencies in validating messages
