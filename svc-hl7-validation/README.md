@@ -1,3 +1,10 @@
+
+# DEPRECATED
+
+This project has been deprecated. We have new services available as docker images examples [here](https://github.com/CDCgov/hl7v2-processes-rest). This repo contains this validation service as well as a debatcher, a redactor and a json transformer.
+
+Please refer to the repo above for future updates and enhancements. 
+
 # HL7 v2 Validation API
 
 The HL7v2 Validation API is designed to assist public health agencies in validating messages
